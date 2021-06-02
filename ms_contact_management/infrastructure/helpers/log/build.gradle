@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':model')
+    compile 'org.springframework:spring-context'
+    compile group: 'co.com.bancolombia', name: 'technical-log', version: '1.1'
+}

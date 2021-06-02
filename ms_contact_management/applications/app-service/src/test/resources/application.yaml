@@ -1,0 +1,43 @@
+##Spring Configuration
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+springdoc:
+  version: 1
+
+spring:
+  application:
+    name: ms_conctact_management
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: local
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: OFF
+
+adapters:
+  secrets-manager:
+    cache-size: 300
+    cache-time: 2
+    endpoint: http://localhost:4566
+
+entries:
+  reactive-web:
+    path-base: /api/v1/contact-management
+    save_contacts: /contact/save
+    find_contacts: /contact/find
+    update_contacts: /contact/update
+    delete_contacts: /contact/delete
+
+secrets:
+  postgres: secret
+
