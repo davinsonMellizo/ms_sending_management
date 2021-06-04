@@ -32,7 +32,7 @@ public class ParamsUtil {
                 .documentNumber(getHeader(request, DOCUMENT_NUMBER))
                 .documentType(getHeader(request, DOCUMENT_TYPE))
                 .contactMedium(getHeader(request, CONTACT_MEDIUM))
-                .enrollmentContact(getHeader(request,ENROLLMENT_CONTACT))
+                .enrollmentContact(getHeader(request, ENROLLMENT_CONTACT))
                 .build());
     }
 

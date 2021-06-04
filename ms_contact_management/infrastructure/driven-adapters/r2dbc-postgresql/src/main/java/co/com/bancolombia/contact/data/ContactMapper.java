@@ -13,5 +13,6 @@ public interface ContactMapper {
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "modifiedDate", ignore = true)
     Contact toEntity(ContactData contactData);
+
     ContactData toData(Contact contact);
 }

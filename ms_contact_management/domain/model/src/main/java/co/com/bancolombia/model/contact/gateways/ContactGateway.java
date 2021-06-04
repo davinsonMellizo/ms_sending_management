@@ -7,9 +7,13 @@ import reactor.core.publisher.Mono;
 
 public interface ContactGateway {
     Flux<Contact> findAllContactsByClient(Client client);
+
     Mono<Integer> findIdContact(Contact contact);
+
     Mono<Contact> saveContact(Contact contact);
+
     Mono<Contact> updateContact(Contact contact);
+
     Mono<Integer> deleteContact(Integer id);
 
 }

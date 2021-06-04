@@ -1,6 +1,5 @@
 package co.com.bancolombia.api.commons.handlers;
 
-import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
@@ -8,11 +7,11 @@ import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.logging.technical.LoggerFactory;
 import co.com.bancolombia.logging.technical.logger.TechLogger;
 import co.com.bancolombia.logging.technical.message.ObjectTechMsg;
+import co.com.bancolombia.model.error.Error;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
-import co.com.bancolombia.model.error.Error;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.http.codec.ServerCodecConfigurer;

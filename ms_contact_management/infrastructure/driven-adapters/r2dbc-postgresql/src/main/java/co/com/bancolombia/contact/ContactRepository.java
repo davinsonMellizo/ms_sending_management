@@ -9,14 +9,22 @@ import reactor.core.publisher.Mono;
 
 public interface ContactRepository extends ReactiveCrudRepository<ContactData, Integer> {
 
-    @Query("select * from contact_view cv " +
-            "where cv.document_number::int8 = :documentNumber and cv.document_type::int2 = :documentType")
+    @Query("select c.* , e.code as enrollment_contact, m.code as contact_medium, s.name as state " +
+            "from contact c " +
+            "inner join enrollment_contact e on c.id_enrollment_contact = e.id " +
+            "inner join contact_medium m on c.id_contact_medium = m.id " +
+            "inner join state s on c.id_state = s.id " +
+            "where c.document_number::int8 = :documentNumber and c.document_type::int2 = :documentType")
     Flux<ContactData> findAllContactsByClient(@Param("documentNumber") Long documentNumber,
-                                          @Param("documentType") Integer documentType);
+                                              @Param("documentType") Integer documentType);
 
-    @Query("select * from contact_view cv " +
-            "where cv.document_number::int8 = :documentNumber and cv.document_type::int2 = :documentType " +
-            "and cv.contact_medium = :contactMedium and cv.enrollment_contact = :enrollmentContact")
+    @Query("select c.* , e.code as enrollment_contact, m.code as contact_medium, s.name as state " +
+            "FROM contact c " +
+            "inner join enrollment_contact e on c.id_enrollment_contact = e.id " +
+            "inner join contact_medium m on c.id_contact_medium = m.id " +
+            "inner join state s on c.id_state = s.id " +
+            "where c.document_number::int8 = :documentNumber and c.document_type::int2 = :documentType " +
+            "and m.code = :contactMedium and e.code = :enrollmentContact")
     Mono<ContactData> findContact(@Param("documentNumber") Long documentNumber,
                                   @Param("documentType") Integer documentType,
                                   @Param("contactMedium") String contactMedium,

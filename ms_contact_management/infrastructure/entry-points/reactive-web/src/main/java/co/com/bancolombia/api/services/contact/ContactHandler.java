@@ -19,12 +19,12 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADERS_MI
 
 @Component
 @RequiredArgsConstructor
-public class Handler {
-    private  final ContactUseCase contactUseCase;
+public class ContactHandler {
+    private final ContactUseCase contactUseCase;
     private final ValidatorHandler validatorHandler;
 
     public Mono<ServerResponse> findContacts(ServerRequest serverRequest) {
-        return  ParamsUtil.getClientHeaders(serverRequest)
+        return ParamsUtil.getClientHeaders(serverRequest)
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
                 .flatMap(ClientHeader::toModel)
@@ -33,25 +33,25 @@ public class Handler {
     }
 
     public Mono<ServerResponse> saveContact(ServerRequest serverRequest) {
-        return  serverRequest.bodyToMono(Contact.class)
+        return serverRequest.bodyToMono(Contact.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObjectHeaders)
+                .doOnNext(validatorHandler::validateObject)
                 .flatMap(Contact::toModel)
                 .flatMap(contactUseCase::saveContact)
                 .flatMap(ResponseUtil::responseOk);
     }
 
     public Mono<ServerResponse> updateContact(ServerRequest serverRequest) {
-        return  serverRequest.bodyToMono(Contact.class)
+        return serverRequest.bodyToMono(Contact.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObjectHeaders)
+                .doOnNext(validatorHandler::validateObject)
                 .flatMap(Contact::toModel)
                 .flatMap(contactUseCase::updateContact)
                 .flatMap(ResponseUtil::responseOk);
     }
 
     public Mono<ServerResponse> deleteContact(ServerRequest serverRequest) {
-        return  ParamsUtil.getContactHeaders(serverRequest)
+        return ParamsUtil.getContactHeaders(serverRequest)
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
                 .flatMap(ContactHeader::toModel)

@@ -24,7 +24,7 @@ public class ContactRepositoryImplement
 
     @Autowired
     public ContactRepositoryImplement(ContactRepository repository, ContactMapper mapper) {
-        super(repository,mapper::toData, mapper::toEntity);
+        super(repository, mapper::toData, mapper::toEntity);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class ContactRepositoryImplement
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactMedium(), contact.getEnrollmentContact())
                 .map(ContactData::getId)
+                .doOnNext(integer -> System.out.println("Davinson id" + integer))
                 .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_CONTACT_ERROR));
     }
 
@@ -52,10 +53,11 @@ public class ContactRepositoryImplement
 
     @Override
     public Mono<Contact> updateContact(Contact contact) {
-        return  findContact(contact)
+        return findContact(contact)
                 .map(contactData -> contactData.toBuilder()
                         .modifiedDate(timeFactory.now())
-                        //add field to update
+                        .value(contact.getValue())
+                        .idState(contact.getIdState())
                         .build())
                 .map(this::saveData)
                 .flatMap(this::doQuery)

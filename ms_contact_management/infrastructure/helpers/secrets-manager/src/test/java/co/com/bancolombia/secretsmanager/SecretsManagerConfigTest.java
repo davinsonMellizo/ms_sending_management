@@ -1,8 +1,7 @@
 package co.com.bancolombia.secretsmanager;
 
-import connector.AWSSecretManagerConnector;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,12 +15,9 @@ public class SecretsManagerConfigTest {
     private SecretsManagerConfig secretsManagerConfig;
 
     @Mock
-    private AWSSecretManagerConnector awsSecretManagerConnector;
-
-    @Mock
     private SecretsManagerProperties properties;
 
-    @BeforeAll
+    @BeforeEach
     public void init() {
         MockitoAnnotations.initMocks(this);
         when(properties.getCacheTime()).thenReturn(3600);
@@ -31,13 +27,13 @@ public class SecretsManagerConfigTest {
     @Test
     public void beanConnectionSecretsManagerTest() {
         assertThat(secretsManagerConfig.connectionAws())
-            .isNotNull();
+                .isNotNull();
     }
 
     @Test
     public void beanConnectionLocalSecretsManagerTest() {
         assertThat(secretsManagerConfig.connectionLocal("http://localhost:4566"))
-            .isNotNull();
+                .isNotNull();
     }
 
 }

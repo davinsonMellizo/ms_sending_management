@@ -1,6 +1,9 @@
 package co.com.bancolombia.api.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotBlank;

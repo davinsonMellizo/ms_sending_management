@@ -1,6 +1,5 @@
 package co.com.bancolombia.model.response;
 
-import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -16,13 +16,13 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACT_NOT_
 public class ContactUseCase {
     private final ContactGateway contactGateway;
 
-    public Mono<ContactsResponse> findContactsByClient(Client client){
+    public Mono<ContactsResponse> findContactsByClient(Client client) {
         return contactGateway.findAllContactsByClient(client)
                 .collectList()
                 .map(contacts -> ContactsResponse.builder().contacts(contacts).build());
     }
 
-    public Mono<Contact> saveContact(Contact contact){
+    public Mono<Contact> saveContact(Contact contact) {
         return contactGateway.saveContact(contact.toBuilder()
                 .idContactMedium(0)
                 .idEnrollmentContact(0)
@@ -30,16 +30,16 @@ public class ContactUseCase {
                 .build());
     }
 
-    public Mono<ContactsResponse> updateContact(Contact contact){
-        return contactGateway.updateContact(contact)
+    public Mono<ContactsResponse> updateContact(Contact contact) {
+        return contactGateway.updateContact(contact.toBuilder().idState(0).build())
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
                 .map(contactUpdate -> List.of(contactUpdate, contact))
                 .map(contactUpdated -> ContactsResponse.builder().contacts(contactUpdated).build());
     }
 
-    public Mono<Integer> deleteContact(Contact contact){
+    public Mono<Integer> deleteContact(Contact contact) {
         return contactGateway.findIdContact(contact)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
-                .flatMap(integer -> contactGateway.deleteContact(integer));
+                .flatMap(contactGateway::deleteContact);
     }
 }

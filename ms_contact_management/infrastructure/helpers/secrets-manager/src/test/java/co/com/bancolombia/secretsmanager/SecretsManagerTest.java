@@ -7,25 +7,16 @@ import connector.AWSSecretManagerConnector;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static reactor.core.publisher.Mono.just;
 
@@ -40,17 +31,26 @@ public class SecretsManagerTest {
     @Mock
     private AWSSecretManagerConnector secretsConnector;
 
+    @Mock
+    private LoggerBuilder loggerBuilder;
+
+    @Mock
+    protected TechLogger techLogger;
+
+    @BeforeTestMethod
+    public void init() {
+        ReflectionTestUtils.setField(loggerBuilder, "logger", techLogger);
+    }
+
     @Test
     public void getSecretWhenExistSecretThenReturnObject() {
         when(secretsConnector.getSecret(SECRET, ClassTest.class))
-            .thenReturn(just(ClassTest.builder()
-                .host("localhost")
-                .build()));
-        ClassTest f = secretsConnector.getSecret(SECRET, ClassTest.class).block();
-        System.out.println("Davinson "+f);
+                .thenReturn(just(ClassTest.builder()
+                        .host("localhost")
+                        .build()));
         StepVerifier.create(secretsManager.getSecret(SECRET, ClassTest.class))
-            .expectNextMatches(classTest -> classTest.getHost().equals("localhost"))
-            .verifyComplete();
+                .expectNextMatches(classTest -> classTest.getHost().equals("localhost"))
+                .verifyComplete();
     }
 
     @Test

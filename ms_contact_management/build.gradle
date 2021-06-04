@@ -1,22 +1,22 @@
 buildscript {
-	ext {
-		cleanArchitectureVersion = '1.9.4'
-		springBootVersion = '2.4.2'
+    ext {
+        cleanArchitectureVersion = '1.9.4'
+        springBootVersion = '2.4.2'
         springCloudVersion = 'Hoxton.SR6'
-		sonarVersion = '3.0'
-		jacocoVersion = '0.8.5'
+        sonarVersion = '3.0'
+        jacocoVersion = '0.8.5'
         lombokVersion = '1.18.16'
-	}
+    }
     repositories {
         maven { url "https://artifactory.apps.bancolombia.com/maven-bancolombia" }
     }
 }
 
 plugins {
-	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
-	id 'org.springframework.boot' version "${springBootVersion}"
-	id 'org.sonarqube' version "${sonarVersion}"
-	id 'jacoco'
+    id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'org.sonarqube' version "${sonarVersion}"
+    id 'jacoco'
 }
 
 sonarqube {
