@@ -1,6 +1,5 @@
 package co.com.bancolombia.contact;
 
-import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.contact.data.ContactMapper;
 import co.com.bancolombia.model.client.Client;
@@ -24,11 +23,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class ContactRepositoryImplWithExceptionTest {
-    private static final String VIOLATES_UNIQUE_CONSTRAINT =
-            "duplicate key value violates unique constraint";
-    private static final String VIOLATES_FOREIGN_KEY_CONSTRAINT = "violates foreign key constraint";
-    public static final String APQ = "APQ";
-    public static final String APP_PERSONAS = "APP personas";
 
     private final Client client = new Client(new Long(1061772353), 0);
     private final Contact contact = new Contact();
@@ -37,8 +31,6 @@ public class ContactRepositoryImplWithExceptionTest {
     private ContactRepositoryImplement repositoryImpl;
     @Mock
     private ContactRepository repository;
-    @Mock
-    private AdapterOperations adapterOperations;
     @Spy
     private ContactMapper mapper = Mappers.getMapper(ContactMapper.class);
 

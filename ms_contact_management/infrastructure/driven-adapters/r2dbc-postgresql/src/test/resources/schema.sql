@@ -165,11 +165,5 @@ CREATE TABLE IF NOT EXISTS contact (
  	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, document_type) REFERENCES client(document_number, document_type)
 );
 
-CREATE VIEW contact_view AS
-    SELECT c.* , e.code as "enrollment_contact", m.code as "contact_medium", s.name as "state"
-    FROM contact c
-    inner join enrollment_contact e on c.id_enrollment_contact = e.id
-    inner join contact_medium m on c.id_contact_medium = m.id
-    inner join state s on c.id_state = s.id ;
 
 

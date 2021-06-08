@@ -4,6 +4,12 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
+import co.com.bancolombia.model.contactmedium.ContactMedium;
+import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
+import co.com.bancolombia.model.enrollmentcontact.EnrollmentContact;
+import co.com.bancolombia.model.enrollmentcontact.gateways.EnrollmentContactGateway;
+import co.com.bancolombia.model.state.State;
+import co.com.bancolombia.model.state.gateways.StateGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +32,16 @@ public class ContactUseCaseTest {
 
     @Mock
     private ContactGateway contactGateway;
+    @Mock
+    private StateGateway stateGateway;
+    @Mock
+    private EnrollmentContactGateway enrollmentGateway;
+    @Mock
+    private ContactMediumGateway mediumGateway;
 
+    private final State state = new State(0, "Activo");
+    private final ContactMedium medium = new ContactMedium(1, "Mail");
+    private final EnrollmentContact enrollment = new EnrollmentContact(0, "ALM");
     private final Client client = new Client(new Long(1061772353), 0);
     private final Contact contact = new Contact();
 
@@ -37,7 +52,7 @@ public class ContactUseCaseTest {
         contact.setDocumentNumber(new Long(1061772353));
         contact.setDocumentType(0);
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("Activo");
     }
 
     @Test
@@ -55,27 +70,37 @@ public class ContactUseCaseTest {
     public void saveContact() {
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
-        final Mono<Contact> result = useCase.saveContact(contact);
+        when(stateGateway.findStateByName(any()))
+                .thenReturn(Mono.just(state));
+        when(enrollmentGateway.findEnrollmentContactByCode(any()))
+                .thenReturn(Mono.just(enrollment));
+        when(mediumGateway.findContactMediumByCode(any()))
+                .thenReturn(Mono.just(medium));
         StepVerifier
-                .create(result)
+                .create(useCase.saveContact(contact))
                 .assertNext(response -> response
                         .getDocumentNumber()
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).saveContact(any());
+        verify(enrollmentGateway).findEnrollmentContactByCode(any());
+        verify(mediumGateway).findContactMediumByCode(any());
     }
 
     @Test
     public void updateContact() {
         when(contactGateway.updateContact(any()))
                 .thenReturn(Mono.just(contact));
+        when(stateGateway.findStateByName(any()))
+                .thenReturn(Mono.just(state));
         StepVerifier
                 .create(useCase.updateContact(contact))
                 .assertNext(response -> response
                         .getContacts().get(0).getDocumentNumber()
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
-        verify(contactGateway).updateContact(contact);
+        verify(contactGateway).updateContact(any());
+        verify(stateGateway).findStateByName(any());
     }
 
     @Test
@@ -95,6 +120,8 @@ public class ContactUseCaseTest {
     public void updateContactWithException() {
         when(contactGateway.updateContact(any()))
                 .thenReturn(Mono.empty());
+        when(stateGateway.findStateByName(any()))
+                .thenReturn(Mono.just(state));
         useCase.updateContact(contact)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)

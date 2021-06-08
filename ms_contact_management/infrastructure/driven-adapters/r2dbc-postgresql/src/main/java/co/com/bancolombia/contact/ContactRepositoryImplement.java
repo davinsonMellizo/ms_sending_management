@@ -41,7 +41,6 @@ public class ContactRepositoryImplement
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactMedium(), contact.getEnrollmentContact())
                 .map(ContactData::getId)
-                .doOnNext(integer -> System.out.println("Davinson id" + integer))
                 .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_CONTACT_ERROR));
     }
 

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BusinessErrorMessage {
 
+    INVALID_DATA("372", "Base data is not valid"),
     CONTACT_NOT_FOUND("373", "Contact Not Found");
 
     private final String code;
