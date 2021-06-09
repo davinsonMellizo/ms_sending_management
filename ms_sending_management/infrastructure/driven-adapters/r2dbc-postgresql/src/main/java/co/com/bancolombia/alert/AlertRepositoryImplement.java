@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class AlertRepositoryImplement
-        extends AdapterOperations<Alert, AlertData, Integer, AlertRepository>
+        extends AdapterOperations<Alert, AlertData, String, AlertRepository>
         implements AlertGateway {
 
     @Autowired
@@ -23,24 +23,32 @@ public class AlertRepositoryImplement
         super(repository, mapper::toData, mapper::toEntity);
     }
 
-
     @Override
-    public Mono<Alert> findAlertById(Integer id) {
-        return null;
+    public Mono<Alert> findAlertById(String id) {
+        return findById(id);
     }
 
     @Override
     public Mono<Alert> saveAlert(Alert alert) {
-        return null;
+        return Mono.just(alert)
+                .map(this::convertToData)
+                .map(alertData ->alertData.toBuilder()
+                        .newAlert(true)
+                        .createdDate(timeFactory.now())
+                        .build())
+                .flatMap(this::saveData)
+                .map(this::convertToEntity);
     }
 
     @Override
     public Mono<Alert> updateAlert(Alert alert) {
-        return null;
+        return
+        save(alert);
     }
 
     @Override
-    public Mono<Integer> deleteAlert(Integer id) {
-        return null;
+    public Mono<String> deleteAlert(String id) {
+        return deleteById(id)
+                .thenReturn(id);
     }
 }

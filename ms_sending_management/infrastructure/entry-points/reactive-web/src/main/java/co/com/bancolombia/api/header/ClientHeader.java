@@ -1,6 +1,5 @@
 package co.com.bancolombia.api.header;
 
-import co.com.bancolombia.model.client.Client;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -27,11 +26,11 @@ public class ClientHeader {
     @PositiveOrZero(message = "{constraint.number_not_negative}")
     private String documentNumber;
 
-    public Mono<Client> toModel() {
+   /* public Mono<Client> toModel() {
         return Mono.just(Client.builder()
                 .documentType(Integer.parseInt(this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
                 .build());
-    }
+    }*/
 }
 

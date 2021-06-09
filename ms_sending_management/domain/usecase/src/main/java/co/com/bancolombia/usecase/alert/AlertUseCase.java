@@ -10,12 +10,12 @@ import reactor.core.publisher.Mono;
 public class AlertUseCase {
     private final AlertGateway alertGateway;
 
-    public Mono<ContactsResponse> findAlertById(Integer id) {
-        return null;
+    public Mono<Alert> findAlertById(String id) {
+        return alertGateway.findAlertById(id);
     }
 
     public Mono<Alert> saveAlert(Alert alert) {
-        return null;
+        return alertGateway.saveAlert(alert);
     }
 
 
@@ -23,7 +23,7 @@ public class AlertUseCase {
         return null;
     }
 
-    public Mono<Integer> deleteAlert(Alert alert) {
-        return null;
+    public Mono<String> deleteAlert(String id) {
+        return alertGateway.deleteAlert(id);
     }
 }

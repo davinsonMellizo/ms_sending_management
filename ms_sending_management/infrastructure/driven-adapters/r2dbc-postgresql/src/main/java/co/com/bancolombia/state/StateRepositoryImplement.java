@@ -3,7 +3,6 @@ package co.com.bancolombia.state;
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import co.com.bancolombia.state.data.StateData;

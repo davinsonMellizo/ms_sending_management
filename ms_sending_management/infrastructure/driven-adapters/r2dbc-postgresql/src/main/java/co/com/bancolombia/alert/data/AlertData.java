@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -14,23 +16,35 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table("contact")
-public class AlertData {
+@Table("alert")
+public class AlertData implements Persistable<String> {
 
     @Id
-    private Integer id;
-    @ReadOnlyProperty
-    private String enrollmentContact;
-    @ReadOnlyProperty
-    private String contactMedium;
-    private Integer idEnrollmentContact;
-    private Integer idContactMedium;
-    private Long documentNumber;
-    private Integer documentType;
-    private String value;
-    @ReadOnlyProperty
-    private String state;
+    private String id;
+    private Integer idTemplate;
+    private Integer idProviderMail;
+    private Integer idProviderSms;
+    private Integer idRemitter;
+    private Integer idService;
     private Integer idState;
+    private Integer priority;
+    private String description;
+    private String nature;
+    private String message;
+    private String subjectMail;
+    private String attentionLine;
+    private String pathAttachedMail;
+    private Boolean obligatory;
+    private Boolean visibleChannel;
+    private String creationUser;
     private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    @Transient
+    private Boolean newAlert;
+
+    @Override
+    @Transient
+    public boolean isNew() {
+        return this.newAlert;
+    }
+
 }

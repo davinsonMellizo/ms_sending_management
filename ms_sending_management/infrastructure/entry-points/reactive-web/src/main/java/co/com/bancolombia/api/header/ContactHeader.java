@@ -34,12 +34,12 @@ public class ContactHeader {
     private String enrollmentContact;
 
     public Mono<Alert> toModel() {
-        return Mono.just(Alert.builder()
+        return /*Mono.just(Alert.builder()
                 .documentType(Integer.parseInt(this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
                 .contactMedium(this.contactMedium)
                 .enrollmentContact(this.enrollmentContact)
-                .build());
+                .build())*/null;
     }
 }
 

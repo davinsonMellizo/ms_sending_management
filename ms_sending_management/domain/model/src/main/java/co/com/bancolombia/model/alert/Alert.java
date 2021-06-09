@@ -12,16 +12,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Alert {
-    private Integer id;
-    private String enrollmentContact;
-    private String contactMedium;
-    private Integer idEnrollmentContact;
-    private Integer idContactMedium;
-    private Long documentNumber;
-    private Integer documentType;
-    private String value;
-    private String state;
+    private String id;
+    private Integer idTemplate;
+    private Integer idProviderMail;
+    private Integer idProviderSms;
+    private Integer idRemitter;
+    private Integer idService;
     private Integer idState;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private Integer priority;
+    private String description;
+    private String nature;
+    private String message;
+    private String subjectMail;
+    private String attentionLine;
+    private String pathAttachedMail;
+    private Boolean obligatory;
+    private Boolean visibleChannel;
+    private String creationUser;
 }

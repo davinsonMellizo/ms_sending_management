@@ -6,13 +6,9 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AlertMapper {
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "idState", ignore = true)
-    @Mapping(target = "idEnrollmentContact", ignore = true)
-    @Mapping(target = "idContactMedium", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "modifiedDate", ignore = true)
     Alert toEntity(AlertData alertData);
 
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "newAlert", ignore = true)
     AlertData toData(Alert alert);
 }
