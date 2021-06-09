@@ -36,10 +36,10 @@ adapters:
 entries:
   reactive-web:
     path-base: ${PATH_BASE}
-    save_contacts: ${SAVE_CONTACTS}
-    find_contacts: ${FIND_CONTACTS}
-    update_contacts: ${UPDATE_CONTACTS}
-    delete_contacts: ${DELETE_CONTACTS}
+    save_alert: ${SAVE_ALERT}
+    find_alert: ${FIND_ALERT}
+    update_alert: ${UPDATE_ALERT}
+    delete_alert: ${DELETE_ALERT}
 
 management:
   health:

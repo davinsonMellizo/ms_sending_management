@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.header;
 
-import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.alert.Alert;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -33,8 +33,8 @@ public class ContactHeader {
     @NotNull(message = "{constraint.not_null}")
     private String enrollmentContact;
 
-    public Mono<Contact> toModel() {
-        return Mono.just(Contact.builder()
+    public Mono<Alert> toModel() {
+        return Mono.just(Alert.builder()
                 .documentType(Integer.parseInt(this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
                 .contactMedium(this.contactMedium)

@@ -18,7 +18,7 @@ public class UseCasesConfig {
     @Bean
     public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
         return new OpenAPI()
-                .info(new Info().title("Alerts - Contact Management").version(appVersion)
-                        .description("Alert contact management micro service"));
+                .info(new Info().title("Alerts - Sending Management").version(appVersion)
+                        .description("Alert Sending management micro service"));
     }
 }

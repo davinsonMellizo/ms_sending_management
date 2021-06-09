@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "entries.reactive-web")
 public class ApiProperties {
     private String pathBase;
-    private String saveContacts;
-    private String findContacts;
-    private String updateContacts;
-    private String deleteContacts;
+    private String saveAlert;
+    private String findAlert;
+    private String updateAlert;
+    private String deleteAlert;
 }

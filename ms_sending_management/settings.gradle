@@ -1,4 +1,4 @@
-rootProject.name = 'ms_contact_management'
+rootProject.name = 'ms_sending_management'
 
 include ':app-service'
 include ':model'

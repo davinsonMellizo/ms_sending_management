@@ -1,5 +1,6 @@
 package co.com.bancolombia.api.dto;
 
+import co.com.bancolombia.model.alert.Alert;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -37,8 +38,8 @@ public class Contact {
     @NotNull(message = "{constraint.not_null}")
     private String state;
 
-    public Mono<co.com.bancolombia.model.contact.Contact> toModel() {
-        return Mono.just(co.com.bancolombia.model.contact.Contact.builder()
+    public Mono<Alert> toModel() {
+        return Mono.just(Alert.builder()
                 .documentType(Integer.parseInt(this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
                 .contactMedium(this.contactMedium)
