@@ -1,0 +1,16 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation project(':reactive-web')
+    implementation project(':r2dbc-postgresql')
+    implementation project(':model')
+    implementation project(':usecase')
+    compile 'org.springframework.boot:spring-boot-starter'
+    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}
