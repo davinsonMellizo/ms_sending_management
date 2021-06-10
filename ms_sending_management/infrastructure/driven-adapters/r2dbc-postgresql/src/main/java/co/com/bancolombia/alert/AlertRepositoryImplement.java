@@ -18,6 +18,7 @@ public class AlertRepositoryImplement
         extends AdapterOperations<Alert, AlertData, String, AlertRepository>
         implements AlertGateway {
 
+    @Autowired
     private TimeFactory timeFactory;
 
     @Autowired
