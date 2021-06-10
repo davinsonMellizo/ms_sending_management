@@ -6,12 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ContactsResponse {
-    private List<Alert> alerts;
+public class StatusResponse {
+    private String description;
+    private Alert before;
+    private Alert actual;
 }

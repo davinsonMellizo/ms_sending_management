@@ -1,123 +1,107 @@
 package co.com.bancolombia.usecase.alert;
 
 
+import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.alert.gateways.AlertGateway;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AlertUseCaseTest {
 
-   /* @InjectMocks
+    @InjectMocks
     private AlertUseCase useCase;
 
     @Mock
     private AlertGateway alertGateway;
-    @Mock
-    private StateGateway stateGateway;
-    @Mock
-    private EnrollmentContactGateway enrollmentGateway;
-    @Mock
-    private ContactMediumGateway mediumGateway;
 
-    private final State state = new State(0, "Activo");
-    private final ContactMedium medium = new ContactMedium(1, "Mail");
-    private final EnrollmentContact enrollment = new EnrollmentContact(0, "ALM");
-    private final Client client = new Client(new Long(1061772353), 0);
     private final Alert alert = new Alert();
 
     @BeforeEach
-    public void init() {
-        alert.setIdContactMedium(1);
-        alert.setIdEnrollmentContact(0);
-        alert.setDocumentNumber(new Long(1061772353));
-        alert.setDocumentType(0);
-        alert.setValue("correo@gamail.com");
-        alert.setState("Activo");
+    private void init() {
+        alert.setId("ALT");
     }
 
     @Test
-    public void findAllContactByClient() {
-        when(alertGateway.findAlertById(anyInt()))
-                .thenReturn(Flux.just(alert));
+    public void findAllAlertByClient() {
+        when(alertGateway.findAlertById(anyString()))
+                .thenReturn(Mono.just(alert));
         StepVerifier
-                .create(useCase.findAlertById(1))
+                .create(useCase.findAlertByIdRequest("ALT"))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(alertGateway).findAlertById(client);
+        verify(alertGateway).findAlertById(anyString());
     }
 
     @Test
-    public void saveContact() {
+    public void saveAlert() {
         when(alertGateway.saveAlert(any()))
                 .thenReturn(Mono.just(alert));
-        when(stateGateway.findStateByName(any()))
-                .thenReturn(Mono.just(state));
-        when(enrollmentGateway.findEnrollmentContactByCode(any()))
-                .thenReturn(Mono.just(enrollment));
-        when(mediumGateway.findContactMediumByCode(any()))
-                .thenReturn(Mono.just(medium));
         StepVerifier
-                .create(useCase.saveAlert(alert))
+                .create(useCase.saveAlertRequest(alert))
                 .assertNext(response -> response
-                        .getDocumentNumber()
-                        .equals(alert.getDocumentNumber()))
+                        .getId().equals(alert.getId()))
                 .verifyComplete();
         verify(alertGateway).saveAlert(any());
-        verify(enrollmentGateway).findEnrollmentContactByCode(any());
-        verify(mediumGateway).findContactMediumByCode(any());
     }
 
     @Test
-    public void updateContact() {
-        when(alertGateway.updateAlert(any()))
+    public void updateAlert() {
+        when(alertGateway.updateAlert(any(), any()))
                 .thenReturn(Mono.just(alert));
-        when(stateGateway.findStateByName(any()))
-                .thenReturn(Mono.just(state));
+        when(alertGateway.findAlertById(anyString()))
+                .thenReturn(Mono.just(alert));
         StepVerifier
-                .create(useCase.updateAlert(alert))
+                .create(useCase.updateAlertRequest(alert))
                 .assertNext(response -> response
-                        .getAlerts().get(0).getDocumentNumber()
-                        .equals(alert.getDocumentNumber()))
+                        .getActual().getId()
+                        .equals(alert.getId()))
                 .verifyComplete();
-        verify(alertGateway).updateAlert(any());
-        verify(stateGateway).findStateByName(any());
+        verify(alertGateway).updateAlert(any(), any());
+        verify(alertGateway).findAlertById(any());
     }
 
     @Test
-    public void deleteContact() {
-        when(alertGateway.findIdContact(any()))
-                .thenReturn(Mono.just(1));
+    public void deleteAlert() {
+        when(alertGateway.findAlertById(anyString()))
+                .thenReturn(Mono.just(alert));
         when(alertGateway.deleteAlert(any()))
-                .thenReturn(Mono.just(1));
-        StepVerifier.create(useCase.deleteAlert(alert))
+                .thenReturn(Mono.just("ALT"));
+        StepVerifier.create(useCase.deleteAlertRequest(alert.getId()))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(alertGateway).findIdContact(alert);
         verify(alertGateway).deleteAlert(any());
     }
 
     @Test
-    public void updateContactWithException() {
-        when(alertGateway.updateAlert(any()))
+    public void updateAlertWithException() {
+        when(alertGateway.findAlertById(anyString()))
                 .thenReturn(Mono.empty());
-        when(stateGateway.findStateByName(any()))
-                .thenReturn(Mono.just(state));
-        useCase.updateAlert(alert)
+        useCase.updateAlertRequest(alert)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
     }
 
     @Test
-    public void deleteContactWithException() {
-        when(alertGateway.findIdContact(any()))
+    public void deleteAlertWithException() {
+        when(alertGateway.findAlertById(anyString()))
                 .thenReturn(Mono.empty());
-        useCase.deleteAlert(alert)
+        useCase.deleteAlertRequest("ALT")
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
-    }*/
+    }
 }

@@ -44,6 +44,7 @@ public class AdapterOperations<E, D, I, R extends ReactiveCrudRepository<D, I>> 
     protected Mono<Void> deleteById(I id) {
         return repository.deleteById(id);
     }
+
     protected Mono<E> findById(I id) {
         return repository.findById(id)
                 .map(this::convertToEntity);

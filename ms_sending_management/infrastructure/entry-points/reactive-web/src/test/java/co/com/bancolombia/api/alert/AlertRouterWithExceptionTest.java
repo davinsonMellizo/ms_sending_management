@@ -1,4 +1,4 @@
-package co.com.bancolombia.api.contact;
+package co.com.bancolombia.api.alert;
 
 import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegrationTest;
@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -44,47 +44,44 @@ public class AlertRouterWithExceptionTest extends BaseIntegrationTest {
 
     @BeforeEach
     public void init() {
-        alert.setIdContactMedium(1);
-        alert.setIdEnrollmentContact(0);
-        alert.setDocumentNumber(new Long(1061772353));
-        alert.setDocumentType(0);
-        alert.setValue("correo@gamail.com");
-        alert.setIdState(0);
-
-        request = loadFileConfig("contactRequest.json", String.class);
+        request = loadFileConfig("AlertRequest.json", String.class);
     }
 
     @Test
-    public void saveContactsWithException() {
-        when(useCase.saveAlert(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
+    public void saveAlertWithException() {
+        when(useCase.saveAlertRequest(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
         statusAssertionsWebClientPost(properties.getSaveAlert(),
                 request)
                 .is5xxServerError();
-        verify(useCase).saveAlert(any());
+        verify(useCase).saveAlertRequest(any());
     }
 
     @Test
-    public void updateContactsWithException() {
-        when(useCase.updateAlert(any())).thenReturn(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
+    public void updateAlertsWithException() {
+        when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
         statusAssertionsWebClientPut(properties.getUpdateAlert(),
                 request)
                 .is5xxServerError();
     }
 
     @Test
-    public void deleteContactsWithException() {
-        when(useCase.deleteAlert(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert())
-                .header("document-number", "1061772353")
-                .header("document-type", "0")
-                .header("contact-medium", "SMS")
-                .header("enrollment-contact", "ALM")
+    public void saveAlertWithExceptionTechnical() {
+        when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
+        statusAssertionsWebClientPut(properties.getUpdateAlert(),
+                "{}")
+                .is5xxServerError();
+    }
+
+    @Test
+    public void deleteAlertsWithException() {
+        when(useCase.deleteAlertRequest(any())).thenReturn(Mono.error(new Exception()));
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() + "?id=ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }
 
     @Test
-    public void deleteContactsWithExceptionHeaders() {
+    public void deleteAlertsWithExceptionHeaders() {
         final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert())
                 .exchange();
         spec.expectStatus().is5xxServerError();

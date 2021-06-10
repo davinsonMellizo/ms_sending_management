@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADERS_MISSING_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.QUERY_MISSING_ERROR;
 
 @Component
 @RequiredArgsConstructor
@@ -22,13 +22,6 @@ public class ValidatorHandler {
         Set<ConstraintViolation<T>> constraints = validator.validate(object);
         if (!constraints.isEmpty()) {
             throw new TechnicalException(getMessage(constraints), BODY_MISSING_ERROR);
-        }
-    }
-
-    public <T> void validateObjectHeaders(T object) {
-        Set<ConstraintViolation<T>> constraints = validator.validate(object);
-        if (!constraints.isEmpty()) {
-            throw new TechnicalException(getMessage(constraints), HEADERS_MISSING_ERROR);
         }
     }
 

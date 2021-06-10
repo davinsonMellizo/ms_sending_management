@@ -1,6 +1,7 @@
 package co.com.bancolombia.state;
 
 import co.com.bancolombia.AdapterOperations;
+import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
@@ -9,8 +10,6 @@ import co.com.bancolombia.state.data.StateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
-
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_STATE_ERROR;
 
 @Repository
 public class StateRepositoryImplement
@@ -26,6 +25,6 @@ public class StateRepositoryImplement
     @Override
     public Mono<State> findStateByName(String name) {
         return doQuery(repository.findById(name))
-                .onErrorMap(e -> new TechnicalException(e, FIND_STATE_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_STATE_ERROR));
     }
 }

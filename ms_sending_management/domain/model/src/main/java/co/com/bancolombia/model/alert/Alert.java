@@ -29,4 +29,5 @@ public class Alert {
     private Boolean obligatory;
     private Boolean visibleChannel;
     private String creationUser;
+    private LocalDateTime createdDate;
 }

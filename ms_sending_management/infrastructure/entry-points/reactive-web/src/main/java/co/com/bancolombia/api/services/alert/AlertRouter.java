@@ -18,10 +18,10 @@ public class AlertRouter extends DocumentationApi {
     private final ApiProperties apiProperties;
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunctionContact(AlertHandler alertHandler) {
-        return route().POST(apiProperties.getSaveAlert(), accept(APPLICATION_JSON), alertHandler::saveAlert, saveContactAPI()).build()
-                .and(route().GET(apiProperties.getFindAlert(), accept(APPLICATION_JSON), alertHandler::findAlert, findContactAPI()).build())
-                .and(route().PUT(apiProperties.getUpdateAlert(), accept(APPLICATION_JSON), alertHandler::updateAlert, updateContactAPI()).build())
-                .and(route().DELETE(apiProperties.getDeleteAlert(), accept(APPLICATION_JSON), alertHandler::deleteAlert, deleteContactAPI()).build());
+    public RouterFunction<ServerResponse> routerFunctionAlert(AlertHandler alertHandler) {
+        return route().POST(apiProperties.getSaveAlert(), accept(APPLICATION_JSON), alertHandler::saveAlert, saveAlertAPI()).build()
+                .and(route().GET(apiProperties.getFindAlert(), accept(APPLICATION_JSON), alertHandler::findAlert, findAlertAPI()).build())
+                .and(route().PUT(apiProperties.getUpdateAlert(), accept(APPLICATION_JSON), alertHandler::updateAlert, updateAlertAPI()).build())
+                .and(route().DELETE(apiProperties.getDeleteAlert(), accept(APPLICATION_JSON), alertHandler::deleteAlert, deleteAlertAPI()).build());
     }
 }

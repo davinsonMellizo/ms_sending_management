@@ -1,64 +1,62 @@
 package co.com.bancolombia.api.services.alert;
 
-import co.com.bancolombia.api.dto.Contact;
+import co.com.bancolombia.api.dto.AlertDTO;
+import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.error.Error;
-import co.com.bancolombia.model.response.ContactsResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
 
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 
 public class DocumentationApi {
 
-    private final String tag = "Contacts";
+    private final String tag = "Alerts";
     private final String error = "Error";
     private final String successful = "successful";
 
-    protected Consumer<Builder> saveContactAPI() {
+    protected Consumer<Builder> saveAlertAPI() {
         return ops -> ops.tag(tag)
-                .operationId("SaveContact").summary("Save contact")
-                .description("save a Client contact").tags(new String[]{tag})
-                .requestBody(requestBodyBuilder().description("Contact to create").required(true).implementation(Contact.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Contact.class))
+                .operationId("SaveAlert").summary("Save Alert")
+                .description("Create new Alert").tags(new String[]{tag})
+                .requestBody(requestBodyBuilder().description("Alert to create").required(true).implementation(AlertDTO.class))
+                .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
+                .response(responseBuilder().responseCode("400").description("Bad Request").implementation(Error.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findContactAPI() {
+    protected Consumer<Builder> findAlertAPI() {
         return ops -> ops.tag(tag)
-                .operationId("findContacts").summary("Find contacts")
-                .description("Find contacts by client").tags(new String[]{tag})
-                .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
-                .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(ContactsResponse.class))
-                .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
+                .operationId("findAlerts").summary("Find Alerts")
+                .description("Find Alerts by id").tags(new String[]{tag})
+                .parameter(createHeader(String.class, "id", "Alert identifier"))
+                .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateContactAPI() {
+    protected Consumer<Builder> updateAlertAPI() {
         return ops -> ops.tag(tag)
-                .operationId("updateContact").summary("Update contact")
-                .description("Update client contact ").tags(new String[]{tag})
-                .requestBody(requestBodyBuilder().description("Contact to Update").required(true).implementation(String.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(ContactsResponse.class))
+                .operationId("updateAlert").summary("Update Alert")
+                .description("Update Alert by id").tags(new String[]{tag})
+                .requestBody(requestBodyBuilder().description("Alert to Update").required(true).implementation(AlertDTO.class))
+                .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
+                .response(responseBuilder().responseCode("400").description("Bad Request").implementation(Error.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteContactAPI() {
+    protected Consumer<Builder> deleteAlertAPI() {
         return ops -> ops.tag(tag)
-                .operationId("deleteContact").summary("Delete contact")
-                .description("Delete a client contact").tags(new String[]{tag})
-                .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
-                .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
-                .parameter(createHeader(String.class,"contact-medium", "Type of contact"))
-                .parameter(createHeader(String.class, "enrollment-contact", "Origin of enrollment"))
+                .operationId("deleteAlert").summary("Delete Alert")
+                .description("Delete a Alert by id").tags(new String[]{tag})
+                .parameter(createHeader(String.class, "id", "Alert identifier"))
                 .response(responseBuilder().responseCode("200").description(successful).implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
+
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
-        return  parameterBuilder().in(HEADER).implementation(clazz).required(true).name(name).description(description);
+        return parameterBuilder().in(QUERY).implementation(clazz).required(true).name(name).description(description);
     }
 }

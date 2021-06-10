@@ -1,0 +1,19 @@
+{
+  "id": "ALT",
+  "idTemplate": 0,
+  "idProviderMail": 0,
+  "idProviderSms": 1,
+  "idRemitter": 0,
+  "idService": 0,
+  "idState": 0,
+  "priority": 10,
+  "description": "alert",
+  "nature": "NM",
+  "message": "message",
+  "subjectMail": "subject",
+  "attentionLine": "3216958714",
+  "pathAttachedMail": "url",
+  "obligatory": true,
+  "visibleChannel": true,
+  "creationUser": "userName"
+}

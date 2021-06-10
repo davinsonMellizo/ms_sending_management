@@ -8,7 +8,7 @@ public interface AlertGateway {
 
     Mono<Alert> saveAlert(Alert alert);
 
-    Mono<Alert> updateAlert(Alert alert);
+    Mono<Alert> updateAlert(Alert alert, Alert alertBefore);
 
     Mono<String> deleteAlert(String id);
 
