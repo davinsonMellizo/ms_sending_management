@@ -1,0 +1,62 @@
+##Spring Configuration
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+springdoc:
+  version: 1
+
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: OFF
+
+adapters:
+  secrets-manager:
+    secret-rds: ${SECRET-RDS}
+    cache-size: ${CACHE_SECRETS_SIZE}
+    cache-time: ${CACHE_SECRETS_SECONDS}
+    endpoint: http://localhost:4566
+
+entries:
+  reactive-web:
+    path-base: ${PATH_BASE}
+    save_alert: ${SAVE_ALERT}
+    find_alert: ${FIND_ALERT}
+    update_alert: ${UPDATE_ALERT}
+    delete_alert: ${DELETE_ALERT}
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: never
+      enabled: true
+      cache:
+        time-to-live: 10s
+  endpoints:
+    web:
+      exposure:
+        include: health, liveness, readiness
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness

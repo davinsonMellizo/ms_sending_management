@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
+
 @Repository
 public class ContactRepositoryImplement
         extends AdapterOperations<Contact, ContactData, Integer, ContactRepository>
@@ -41,13 +43,13 @@ public class ContactRepositoryImplement
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactMedium(), contact.getEnrollmentContact())
                 .map(ContactData::getId)
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_CONTACT_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
 
     @Override
     public Mono<Contact> saveContact(Contact contact) {
         return save(contact.toBuilder().createdDate(timeFactory.now()).modifiedDate(timeFactory.now()).build())
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.SAVE_CONTACT_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, SAVE_CONTACT_ERROR));
     }
 
     @Override
@@ -60,19 +62,19 @@ public class ContactRepositoryImplement
                         .build())
                 .map(this::saveData)
                 .flatMap(this::doQuery)
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.UPDATE_CONTACT_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, UPDATE_CONTACT_ERROR));
     }
 
     @Override
     public Mono<Integer> deleteContact(Integer id) {
         return deleteById(id)
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.DELETE_CONTACT_ERROR))
+                .onErrorMap(e -> new TechnicalException(e, DELETE_CONTACT_ERROR))
                 .thenReturn(id);
     }
 
     private Mono<ContactData> findContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactMedium(), contact.getEnrollmentContact())
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_CONTACT_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
 }

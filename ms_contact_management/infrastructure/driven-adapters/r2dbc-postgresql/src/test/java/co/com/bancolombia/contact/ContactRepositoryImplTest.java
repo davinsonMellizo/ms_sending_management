@@ -44,7 +44,7 @@ public class ContactRepositoryImplTest {
         contact.setContactMedium("SMS");
         contact.setEnrollmentContact("ALM");
         StepVerifier.create(contactRepositoryImplement.findIdContact(contact))
-                .consumeNextWith(id -> assertEquals(id, 1))
+                .consumeNextWith(id -> assertEquals(1, id))
                 .verifyComplete();
     }
 
@@ -54,7 +54,7 @@ public class ContactRepositoryImplTest {
         contact.setEnrollmentContact("ALM");
         contact.setValue("3216931596");
         StepVerifier.create(contactRepositoryImplement.updateContact(contact))
-                .consumeNextWith(contactU -> assertEquals(contactU.getValue(), "3216931596"))
+                .consumeNextWith(contactU -> assertEquals("3216931596", contactU.getValue()))
                 .verifyComplete();
     }
 

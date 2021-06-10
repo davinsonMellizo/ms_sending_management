@@ -2,11 +2,11 @@ name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
 
 variables:
   - name: 'artifactory.Repository'
-    value: 'build-NU0154_Alertas/NU0154001_Alertas/ms_contact_management'
+    value: 'build-NU0154_Alertas/NU0154001_Alertas/ms_sending_management'
   - name: 'projectName'
-    value: 'ms_contact_management'
+    value: 'ms_sending_management'
   - name: 'artifactName'
-    value: 'ms_contact_management'
+    value: 'ms_sending_management'
   - name: 'NU'
     value: 'NU0154001_Alertas_MR'
 
@@ -20,7 +20,7 @@ trigger:
       - feature/*
   paths:
     include:
-      - 'ms_contact_management/*'
+      - 'ms_sending_management/*'
 
 jobs:
   - job: BuildJob
@@ -44,7 +44,7 @@ jobs:
           extraProperties: |
             sonar.sources=$(Build.SourcesDirectory)/$(artifactName)/src/main/java
             sonar.junit.reportPaths=$(Build.SourcesDirectory)/$(artifactName)/applications/app-service/build/test-results/test
-            sonar.branch.name=$(Build.SourceBranchName)
+            sonar.branch.name=master
             sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/$(artifactName)/build/jacoco/report.xml
 
       - task: Gradle@2
