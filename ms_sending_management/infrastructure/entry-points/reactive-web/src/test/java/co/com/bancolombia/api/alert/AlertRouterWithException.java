@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.alert;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
+import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alert.AlertHandler;
@@ -10,6 +10,8 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -35,7 +38,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterWithExceptionTest extends BaseIntegrationTest {
+public class AlertRouterWithException extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
@@ -59,17 +62,26 @@ public class AlertRouterWithExceptionTest extends BaseIntegrationTest {
     @Test
     public void updateAlertsWithException() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        statusAssertionsWebClientPut(properties.getUpdateAlert(),
+        JsonNode response = statusAssertionsWebClientPut(properties.getUpdateAlert(),
                 request)
-                .is5xxServerError();
+                .is5xxServerError()
+                .expectBody(JsonNode.class)
+                .returnResult()
+                .getResponseBody();
+
+        Assertions.assertEquals(ALERT_NOT_FOUND.getCode(), response.get("code").textValue());
     }
 
     @Test
     public void saveAlertWithExceptionTechnical() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        statusAssertionsWebClientPut(properties.getUpdateAlert(),
+        JsonNode response = statusAssertionsWebClientPut(properties.getUpdateAlert(),
                 "{}")
-                .is5xxServerError();
+                .is5xxServerError()
+                .expectBody(JsonNode.class)
+                .returnResult()
+                .getResponseBody();
+        Assertions.assertEquals(BODY_MISSING_ERROR.getCode(), response.get("code").textValue());
     }
 
     @Test

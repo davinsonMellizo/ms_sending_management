@@ -1,6 +1,8 @@
 package co.com.bancolombia.contact;
 
 
+import co.com.bancolombia.client.ClientRepositoryImplement;
+import co.com.bancolombia.client.data.ClientId;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +21,9 @@ public class ContactRepositoryImplTest {
 
     @Autowired
     private ContactRepositoryImplement contactRepositoryImplement;
-    private final Client client = new Client(new Long(1061772353), 0);
+    @Autowired
+    private ClientRepositoryImplement clientRepositoryImplement;
+    private Client client /*= new Client(new Long(1061772353), 0)*/;
     private final Contact contact = new Contact();
 
     @BeforeEach
@@ -30,6 +34,11 @@ public class ContactRepositoryImplTest {
         contact.setDocumentType(0);
         contact.setValue("correo@gamail.com");
         contact.setIdState(0);
+    }
+
+    @Test
+    public void testClient(){
+        clientRepositoryImplement.findContact(new ClientId(new Long(1061772353),0));
     }
 
     @Test

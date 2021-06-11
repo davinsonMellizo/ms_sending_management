@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class BaseIntegrationTest {
+public class BaseIntegration {
 
 
     @Autowired

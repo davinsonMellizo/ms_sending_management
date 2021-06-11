@@ -1,11 +1,10 @@
 package co.com.bancolombia.api.alert;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
+import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alert.AlertHandler;
-import co.com.bancolombia.api.services.alert.AlertRouter;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
@@ -27,13 +26,13 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        AlertRouter.class,
+        co.com.bancolombia.api.services.alert.AlertRouter.class,
         AlertHandler.class,
         ApiProperties.class,
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterTest extends BaseIntegrationTest {
+public class AlertRouter extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;

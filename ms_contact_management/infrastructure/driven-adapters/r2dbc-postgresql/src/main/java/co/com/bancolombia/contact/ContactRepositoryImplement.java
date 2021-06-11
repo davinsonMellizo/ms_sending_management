@@ -31,11 +31,11 @@ public class ContactRepositoryImplement
 
     @Override
     public Flux<Contact> findAllContactsByClient(Client client) {
-        return repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
+        return /*repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
                 .map(Mono::just)
                 .flatMap(this::doQuery)
                 .map(contact -> contact.toBuilder().id(null).build())
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_ALL_CONTACT_BY_CLIENT_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_ALL_CONTACT_BY_CLIENT_ERROR))*/Flux.empty();
     }
 
     @Override
