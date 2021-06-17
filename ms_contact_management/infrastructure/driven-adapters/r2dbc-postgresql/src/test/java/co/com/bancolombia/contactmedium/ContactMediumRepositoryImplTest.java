@@ -1,8 +1,6 @@
 package co.com.bancolombia.contactmedium;
 
 
-import co.com.bancolombia.contact.ContactRepositoryImplement;
-import co.com.bancolombia.enrollmentcontact.EnrollmentContactRepositoryImplement;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,6 @@
 package co.com.bancolombia.contact;
 
 
-import co.com.bancolombia.client.ClientRepositoryImplement;
-import co.com.bancolombia.client.data.ClientId;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -21,9 +21,8 @@ public class ContactRepositoryImplTest {
 
     @Autowired
     private ContactRepositoryImplement contactRepositoryImplement;
-    @Autowired
-    private ClientRepositoryImplement clientRepositoryImplement;
-    private Client client /*= new Client(new Long(1061772353), 0)*/;
+
+    private final Client client = new Client();
     private final Contact contact = new Contact();
 
     @BeforeEach
@@ -34,11 +33,10 @@ public class ContactRepositoryImplTest {
         contact.setDocumentType(0);
         contact.setValue("correo@gamail.com");
         contact.setIdState(0);
-    }
+        contact.setCreatedDate(LocalDateTime.now());
 
-    @Test
-    public void testClient(){
-        clientRepositoryImplement.findContact(new ClientId(new Long(1061772353),0));
+        client.setDocumentNumber(new Long(1061772353));
+        client.setDocumentType(0);
     }
 
     @Test
@@ -63,7 +61,7 @@ public class ContactRepositoryImplTest {
         contact.setEnrollmentContact("ALM");
         contact.setValue("3216931596");
         StepVerifier.create(contactRepositoryImplement.updateContact(contact))
-                .consumeNextWith(contactU -> assertEquals("3216931596", contactU.getValue()))
+                .consumeNextWith(response -> assertEquals("3216931596", response.getActual().getValue()))
                 .verifyComplete();
     }
 

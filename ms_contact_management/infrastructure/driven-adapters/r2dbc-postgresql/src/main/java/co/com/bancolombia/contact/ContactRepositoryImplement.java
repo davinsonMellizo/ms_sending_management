@@ -1,7 +1,6 @@
 package co.com.bancolombia.contact;
 
 import co.com.bancolombia.AdapterOperations;
-import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.contact.data.ContactData;
 import co.com.bancolombia.contact.data.ContactMapper;
@@ -9,6 +8,7 @@ import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
+import co.com.bancolombia.model.response.StatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -31,11 +31,11 @@ public class ContactRepositoryImplement
 
     @Override
     public Flux<Contact> findAllContactsByClient(Client client) {
-        return /*repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
+        return repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
                 .map(Mono::just)
                 .flatMap(this::doQuery)
                 .map(contact -> contact.toBuilder().id(null).build())
-                .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_ALL_CONTACT_BY_CLIENT_ERROR))*/Flux.empty();
+                .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
     }
 
     @Override
@@ -52,17 +52,25 @@ public class ContactRepositoryImplement
                 .onErrorMap(e -> new TechnicalException(e, SAVE_CONTACT_ERROR));
     }
 
-    @Override
-    public Mono<Contact> updateContact(Contact contact) {
-        return findContact(contact)
+    private Mono<StatusResponse<Contact>> update(ContactData before, Contact actual) {
+        return Mono.just(before)
                 .map(contactData -> contactData.toBuilder()
                         .modifiedDate(timeFactory.now())
-                        .value(contact.getValue())
-                        .idState(contact.getIdState())
+                        .value(actual.getValue())
+                        .idState(actual.getIdState())
                         .build())
-                .map(this::saveData)
-                .flatMap(this::doQuery)
-                .onErrorMap(e -> new TechnicalException(e, UPDATE_CONTACT_ERROR));
+                .flatMap(this::saveData)
+                .map(this::convertToEntity)
+                .flatMap(contact -> doQuery(Mono.just(before))
+                        .map(beforeEntity -> StatusResponse.<Contact>builder().before(beforeEntity)
+                                .actual(contact).description("Contacto Actualizado Exitosamente").build())
+                ).onErrorMap(e -> new TechnicalException(e, UPDATE_CONTACT_ERROR));
+    }
+
+    @Override
+    public Mono<StatusResponse<Contact>> updateContact(Contact contact) {
+        return findContact(contact)
+                .flatMap(contactData -> update(contactData, contact));
     }
 
     @Override

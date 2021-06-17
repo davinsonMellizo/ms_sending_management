@@ -10,8 +10,6 @@ public interface ContactMapper {
     @Mapping(target = "idState", ignore = true)
     @Mapping(target = "idEnrollmentContact", ignore = true)
     @Mapping(target = "idContactMedium", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "modifiedDate", ignore = true)
     Contact toEntity(ContactData contactData);
 
     ContactData toData(Contact contact);

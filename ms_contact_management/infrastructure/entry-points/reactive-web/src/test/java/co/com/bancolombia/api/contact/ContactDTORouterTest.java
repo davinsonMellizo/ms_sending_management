@@ -8,6 +8,7 @@ import co.com.bancolombia.api.services.contact.ContactHandler;
 import co.com.bancolombia.api.services.contact.ContactRouter;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.response.ContactsResponse;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ContactRouterTest extends BaseIntegrationTest {
+public class ContactDTORouterTest extends BaseIntegrationTest {
 
     @MockBean
     private ContactUseCase useCase;
@@ -80,8 +81,8 @@ public class ContactRouterTest extends BaseIntegrationTest {
 
     @Test
     public void updateContacts() {
-        when(useCase.updateContact(any())).thenReturn(Mono.just(ContactsResponse.builder()
-                .contacts(List.of(contact)).build()));
+        when(useCase.updateContact(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
+                .actual(contact).before(contact).build()));
         statusAssertionsWebClientPut(properties.getUpdateContacts(),
                 request)
                 .isOk()

@@ -5,15 +5,34 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("client")
-public class ClientData {
+public class ClientData implements Persistable<Long> {
     @Id
-    private ClientId id;
+    private Long documentNumber;
+    private Integer documentType;
     private String keyMdm;
+    private String enrollmentOrigin;
+    private Integer idState;
+    private String creationUser;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+
+    @Transient
+    private Long id;
+
+    @Override
+    @Transient
+    public boolean isNew() {
+        return true;
+    }
 }

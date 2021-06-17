@@ -14,7 +14,7 @@ public class ParamsUtil {
     }
 
     public static Mono<String> getIdAlert(ServerRequest request) {
-        return ofEmpty(request.queryParams().getFirst(ID));
+        return ofEmpty(request.pathVariable(ID));
     }
 
 

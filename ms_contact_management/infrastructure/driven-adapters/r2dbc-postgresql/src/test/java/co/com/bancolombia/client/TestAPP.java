@@ -1,0 +1,25 @@
+package co.com.bancolombia.client;
+
+import co.com.bancolombia.drivenadapters.TimeFactory;
+import org.reactivecommons.utils.ObjectMapper;
+import org.reactivecommons.utils.ObjectMapperImp;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import static org.springframework.boot.SpringApplication.run;
+
+@SpringBootApplication
+public class TestAPP {
+    public static void main(String[] args) {
+        run(TestAPP.class, args);
+    }
+
+    @Bean
+    public TimeFactory timeFactory() {
+        return new TimeFactory();
+    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapperImp();
+    }
+}

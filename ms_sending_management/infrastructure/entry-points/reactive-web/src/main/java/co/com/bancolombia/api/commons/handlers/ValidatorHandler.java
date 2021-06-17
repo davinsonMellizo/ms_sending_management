@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.QUERY_MISSING_ERROR;
 
 @Component
 @RequiredArgsConstructor

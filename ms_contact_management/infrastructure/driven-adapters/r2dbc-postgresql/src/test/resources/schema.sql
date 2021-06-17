@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS schalertd;
-
 --
 -- base tables creation
 --
@@ -135,7 +133,6 @@ CREATE TABLE IF NOT EXISTS log_send (
 --  Gestion Contacto tables creation
 --
 CREATE TABLE IF NOT EXISTS client (
-	id int8 unique,
 	document_number int8 NOT NULL,
 	document_type int2 NOT NULL,
 	key_MDM varchar(20) NOT NULL,
@@ -144,7 +141,6 @@ CREATE TABLE IF NOT EXISTS client (
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
 	modified_date timestamp NULL,
-	optinal varchar(10) NULL,
  	CONSTRAINT client_state_fkey FOREIGN KEY (id_state) REFERENCES state(id),
  	CONSTRAINT client_document_type_fkey FOREIGN KEY (document_type) REFERENCES document_type(id)
 );
