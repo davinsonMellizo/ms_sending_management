@@ -7,16 +7,16 @@ import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
 
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 
 public class DocumentationApi {
 
-    private final String tag = "Alerts";
-    private final String error = "Error";
-    private final String successful = "successful";
+    private final static String tag = "Alerts";
+    private final static String error = "Error";
+    private final static String successful = "successful";
 
     protected Consumer<Builder> saveAlertAPI() {
         return ops -> ops.tag(tag)
@@ -24,7 +24,6 @@ public class DocumentationApi {
                 .description("Create new Alert").tags(new String[]{tag})
                 .requestBody(requestBodyBuilder().description("Alert to create").required(true).implementation(AlertDTO.class))
                 .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
-                .response(responseBuilder().responseCode("400").description("Bad Request").implementation(Error.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
@@ -33,7 +32,6 @@ public class DocumentationApi {
                 .operationId("findAlerts").summary("Find Alerts")
                 .description("Find Alerts by id").tags(new String[]{tag})
                 .parameter(createHeader(String.class, "id", "Alert identifier"))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
@@ -43,7 +41,6 @@ public class DocumentationApi {
                 .description("Update Alert by id").tags(new String[]{tag})
                 .requestBody(requestBodyBuilder().description("Alert to Update").required(true).implementation(AlertDTO.class))
                 .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
-                .response(responseBuilder().responseCode("400").description("Bad Request").implementation(Error.class))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
@@ -57,6 +54,6 @@ public class DocumentationApi {
     }
 
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
-        return parameterBuilder().in(QUERY).implementation(clazz).required(true).name(name).description(description);
+        return parameterBuilder().in(PATH).implementation(clazz).required(true).name(name).description(description);
     }
 }

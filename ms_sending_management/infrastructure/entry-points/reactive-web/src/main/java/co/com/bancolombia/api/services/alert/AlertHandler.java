@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.QUERY_MISSING_ERROR;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class AlertHandler {
 
     public Mono<ServerResponse> findAlert(ServerRequest serverRequest) {
         return ParamsUtil.getIdAlert(serverRequest)
-                .switchIfEmpty(Mono.error(new TechnicalException(QUERY_MISSING_ERROR)))
                 .flatMap(alertUseCase::findAlertByIdRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
@@ -48,7 +46,6 @@ public class AlertHandler {
 
     public Mono<ServerResponse> deleteAlert(ServerRequest serverRequest) {
         return ParamsUtil.getIdAlert(serverRequest)
-                .switchIfEmpty(Mono.error(new TechnicalException(QUERY_MISSING_ERROR)))
                 .flatMap(alertUseCase::deleteAlertRequest)
                 .flatMap(ResponseUtil::responseOk);
     }

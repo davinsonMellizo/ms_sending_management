@@ -3,13 +3,13 @@ package co.com.bancolombia.api.dto;
 import co.com.bancolombia.model.alert.Alert;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.*;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

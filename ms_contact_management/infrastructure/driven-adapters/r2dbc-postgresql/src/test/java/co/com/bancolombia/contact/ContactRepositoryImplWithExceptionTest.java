@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class ContactRepositoryImplWithExceptionTest {
 
-    private final Client client = new Client(new Long(1061772353), 0);
+    private final Client client = new Client();
     private final Contact contact = new Contact();
 
     @InjectMocks
@@ -42,6 +42,9 @@ public class ContactRepositoryImplWithExceptionTest {
         contact.setDocumentType(0);
         contact.setValue("correo@gamail.com");
         contact.setIdState(0);
+
+        client.setDocumentType(0);
+        client.setDocumentNumber(new Long(1061772353));
     }
 
     @Test

@@ -14,7 +14,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 @RequiredArgsConstructor
-public class ContactRouter extends DocumentationApi {
+public class ContactRouter extends ContactDocumentationApi {
     private final ApiProperties apiProperties;
 
     @Bean

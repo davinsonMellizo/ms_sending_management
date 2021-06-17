@@ -8,6 +8,7 @@ import co.com.bancolombia.model.contactmedium.ContactMedium;
 import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
 import co.com.bancolombia.model.enrollmentcontact.EnrollmentContact;
 import co.com.bancolombia.model.enrollmentcontact.gateways.EnrollmentContactGateway;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,7 @@ public class ContactUseCaseTest {
     private final State state = new State(0, "Activo");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
     private final EnrollmentContact enrollment = new EnrollmentContact(0, "ALM");
-    private final Client client = new Client(new Long(1061772353), 0);
+    private final Client client = new Client();
     private final Contact contact = new Contact();
 
     @BeforeEach
@@ -53,6 +54,9 @@ public class ContactUseCaseTest {
         contact.setDocumentType(0);
         contact.setValue("correo@gamail.com");
         contact.setState("Activo");
+
+        client.setDocumentNumber(new Long(1061772353));
+        client.setDocumentType(0);
     }
 
     @Test
@@ -90,13 +94,15 @@ public class ContactUseCaseTest {
     @Test
     public void updateContact() {
         when(contactGateway.updateContact(any()))
-                .thenReturn(Mono.just(contact));
+                .thenReturn(Mono.just(StatusResponse.<Contact>builder()
+                        .before(contact).actual(contact)
+                        .build()));
         when(stateGateway.findStateByName(any()))
                 .thenReturn(Mono.just(state));
         StepVerifier
                 .create(useCase.updateContact(contact))
                 .assertNext(response -> response
-                        .getContacts().get(0).getDocumentNumber()
+                        .getActual().getDocumentNumber()
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).updateContact(any());

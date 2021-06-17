@@ -15,7 +15,6 @@ public enum TechnicalExceptionEnum {
     DELETE_ALERT_ERROR("DST0004", "An error occurred while delete a alert"),
     SECRET_EXCEPTION("DST0009", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("DST0010", "Internal server error"),
-    QUERY_MISSING_ERROR("301", "Missing parameters per Query"),
     BODY_MISSING_ERROR("301", "Missing parameters per body");
 
     private final String code;

@@ -17,4 +17,8 @@ public class ApiProperties {
     private String findContacts;
     private String updateContacts;
     private String deleteContacts;
+    private String saveClient;
+    private String findClient;
+    private String updateClient;
+    private String deleteClient;
 }

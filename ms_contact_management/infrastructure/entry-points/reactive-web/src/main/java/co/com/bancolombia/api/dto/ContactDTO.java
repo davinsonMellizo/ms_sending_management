@@ -1,46 +1,49 @@
 package co.com.bancolombia.api.dto;
 
+import co.com.bancolombia.model.contact.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 
-@Setter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Contact {
+@Builder(toBuilder = true)
+public class ContactDTO {
 
     @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
+    @Size(max = 10, message = "{constraint.maximum_length}")
     private String enrollmentContact;
     @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
+    @Size(max = 10, message = "{constraint.maximum_length}")
     private String contactMedium;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
-    private String documentType;
-    @NotBlank(message = "{constraint.not_blank}")
+    @Max(value = 99, message = "{constraint.maximum_value}")
+    private Integer documentType;
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
-    private String documentNumber;
+    private Long documentNumber;
     @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
+    @Size(max = 60, message = "{constraint.maximum_length}")
     private String value;
     @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
+    @Size(max = 10, message = "{constraint.maximum_length}")
     private String state;
 
-    public Mono<co.com.bancolombia.model.contact.Contact> toModel() {
+    public Mono<Contact> toModel() {
         return Mono.just(co.com.bancolombia.model.contact.Contact.builder()
-                .documentType(Integer.parseInt(this.documentType))
-                .documentNumber(Long.parseLong(this.documentNumber))
+                .documentType(this.documentType)
+                .documentNumber(this.documentNumber)
                 .contactMedium(this.contactMedium)
                 .enrollmentContact(this.enrollmentContact)
                 .value(this.value)

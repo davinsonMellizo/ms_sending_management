@@ -9,15 +9,15 @@ import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
 import co.com.bancolombia.model.enrollmentcontact.EnrollmentContact;
 import co.com.bancolombia.model.enrollmentcontact.gateways.EnrollmentContactGateway;
 import co.com.bancolombia.model.response.ContactsResponse;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple3;
 
-import java.util.List;
-
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA;
 
 @RequiredArgsConstructor
 public class ContactUseCase {
@@ -39,7 +39,7 @@ public class ContactUseCase {
                 .map(data -> contact.toBuilder()
                         .idState(data.getT1().getId())
                         .idEnrollmentContact(data.getT2().getId())
-                        .idContactMedium(data.getT1().getId())
+                        .idContactMedium(data.getT3().getId())
                         .build())
                 .flatMap(contactGateway::saveContact);
     }
@@ -52,14 +52,12 @@ public class ContactUseCase {
         return Mono.zip(state, enrollment, medium);
     }
 
-    public Mono<ContactsResponse> updateContact(Contact contact) {
+    public Mono<StatusResponse<Contact>> updateContact(Contact contact) {
         return stateGateway.findStateByName(contact.getState())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_DATA)))
                 .map(state -> contact.toBuilder().idState(state.getId()).build())
                 .flatMap(contactGateway::updateContact)
-                .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
-                .map(contactUpdate -> List.of(contactUpdate, contact))
-                .map(contactUpdated -> ContactsResponse.builder().contacts(contactUpdated).build());
+                .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
     }
 
     public Mono<Integer> deleteContact(Contact contact) {

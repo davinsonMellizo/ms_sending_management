@@ -1,4 +1,5 @@
-package co.com.bancolombia.model.state;
+package co.com.bancolombia.model.response;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class State {
-    private Integer id;
-    private String name;
+public class StatusResponse<T> {
+    private String description;
+    private T before;
+    private T actual;
 }

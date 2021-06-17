@@ -2,7 +2,7 @@ name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
 
 variables:
   - name: 'artifactory.Repository'
-    value: 'build-NU0154_Alertas/NU0154001_Alertas/ms_sending_management'
+    value: 'build-NU0154_AlertasyNotificaciones/NU0154001_ms_sending_management'
   - name: 'projectName'
     value: 'ms_sending_management'
   - name: 'artifactName'

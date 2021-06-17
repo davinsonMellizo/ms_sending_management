@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ContactRouterWithExceptionTest extends BaseIntegrationTest {
+public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
 
     @MockBean
     private ContactUseCase useCase;
