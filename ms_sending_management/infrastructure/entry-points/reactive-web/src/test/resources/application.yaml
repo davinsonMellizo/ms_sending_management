@@ -1,7 +1,7 @@
 entries:
   reactive-web:
     path-base: /api/v1/alert-management
-    save_alert: /alert/save
-    find_alert: /alert/find
-    update_alert: /alert/update
-    delete_alert: /alert/delete
+    save_alert: /alert
+    find_alert: /alert/{id}
+    update_alert: /alert
+    delete_alert: /alert/{id}

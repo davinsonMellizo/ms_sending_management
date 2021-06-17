@@ -8,7 +8,6 @@ import co.com.bancolombia.api.services.alert.AlertHandler;
 import co.com.bancolombia.api.services.alert.AlertRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Assertions;
@@ -38,12 +37,11 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterWithException extends BaseIntegration {
+public class AlertRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
     private String request;
-    private final Alert alert = new Alert();
 
     @BeforeEach
     public void init() {
@@ -87,14 +85,7 @@ public class AlertRouterWithException extends BaseIntegration {
     @Test
     public void deleteAlertsWithException() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() + "?id=ALT")
-                .exchange();
-        spec.expectStatus().is5xxServerError();
-    }
-
-    @Test
-    public void deleteAlertsWithExceptionHeaders() {
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert())
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() , "ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

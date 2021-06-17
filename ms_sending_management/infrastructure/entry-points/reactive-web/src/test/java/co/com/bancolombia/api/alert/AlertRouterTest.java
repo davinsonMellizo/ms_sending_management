@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouter extends BaseIntegration {
+public class AlertRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
@@ -47,7 +47,7 @@ public class AlertRouter extends BaseIntegration {
     @Test
     public void findAllAlertsByClient() {
         when(useCase.findAlertByIdRequest(any())).thenReturn(Mono.just(alert));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getFindAlert() + "?id=ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getFindAlert(), "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findAlertByIdRequest(any());
@@ -60,8 +60,7 @@ public class AlertRouter extends BaseIntegration {
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
-                .returnResult()
-                .getResponseBody();
+                .returnResult();
         verify(useCase).saveAlertRequest(any());
     }
 
@@ -75,15 +74,14 @@ public class AlertRouter extends BaseIntegration {
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
-                .returnResult()
-                .getResponseBody();
+                .returnResult();
         verify(useCase).updateAlertRequest(any());
     }
 
     @Test
     public void deleteAlerts() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.just("ALT"));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() + "?id=ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() , "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteAlertRequest(any());
