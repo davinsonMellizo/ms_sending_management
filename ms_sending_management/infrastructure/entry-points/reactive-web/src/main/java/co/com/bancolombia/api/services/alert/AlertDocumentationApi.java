@@ -12,7 +12,7 @@ import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 
-public class DocumentationApi {
+public class AlertDocumentationApi {
 
     private final static String tag = "Alerts";
     private final static String error = "Error";
@@ -29,7 +29,7 @@ public class DocumentationApi {
 
     protected Consumer<Builder> findAlertAPI() {
         return ops -> ops.tag(tag)
-                .operationId("findAlerts").summary("Find Alerts")
+                .operationId("findAlert").summary("Find Alert")
                 .description("Find Alerts by id").tags(new String[]{tag})
                 .parameter(createHeader(String.class, "id", "Alert identifier"))
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));

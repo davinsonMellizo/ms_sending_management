@@ -4,6 +4,7 @@ package co.com.bancolombia.usecase.alert;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
+import co.com.bancolombia.model.response.StatusResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ public class AlertUseCaseTest {
         when(alertGateway.findAlertById(anyString()))
                 .thenReturn(Mono.just(alert));
         StepVerifier
-                .create(useCase.findAlertByIdRequest("ALT"))
+                .create(useCase.findAlertByIdRequest(alert.getId()))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(alertGateway).findAlertById(anyString());
@@ -59,18 +60,15 @@ public class AlertUseCaseTest {
 
     @Test
     public void updateAlert() {
-        when(alertGateway.updateAlert(any(), any()))
-                .thenReturn(Mono.just(alert));
-        when(alertGateway.findAlertById(anyString()))
-                .thenReturn(Mono.just(alert));
+        when(alertGateway.updateAlert(any()))
+                .thenReturn(Mono.just(StatusResponse.<Alert>builder().actual(alert).before(alert).build()));
         StepVerifier
                 .create(useCase.updateAlertRequest(alert))
                 .assertNext(response -> response
                         .getActual().getId()
                         .equals(alert.getId()))
                 .verifyComplete();
-        verify(alertGateway).updateAlert(any(), any());
-        verify(alertGateway).findAlertById(any());
+        verify(alertGateway).updateAlert(any());
     }
 
     @Test
@@ -78,7 +76,7 @@ public class AlertUseCaseTest {
         when(alertGateway.findAlertById(anyString()))
                 .thenReturn(Mono.just(alert));
         when(alertGateway.deleteAlert(any()))
-                .thenReturn(Mono.just("ALT"));
+                .thenReturn(Mono.just(alert.getId()));
         StepVerifier.create(useCase.deleteAlertRequest(alert.getId()))
                 .expectNextCount(1)
                 .verifyComplete();
@@ -87,7 +85,7 @@ public class AlertUseCaseTest {
 
     @Test
     public void updateAlertWithException() {
-        when(alertGateway.findAlertById(anyString()))
+        when(alertGateway.updateAlert(any()))
                 .thenReturn(Mono.empty());
         useCase.updateAlertRequest(alert)
                 .as(StepVerifier::create)
@@ -99,7 +97,7 @@ public class AlertUseCaseTest {
     public void deleteAlertWithException() {
         when(alertGateway.findAlertById(anyString()))
                 .thenReturn(Mono.empty());
-        useCase.deleteAlertRequest("ALT")
+        useCase.deleteAlertRequest(alert.getId())
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();

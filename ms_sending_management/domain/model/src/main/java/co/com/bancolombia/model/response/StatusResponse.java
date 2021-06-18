@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class StatusResponse {
+public class StatusResponse<T> {
     private String description;
-    private Alert before;
-    private Alert actual;
+    private T before;
+    private T actual;
 }

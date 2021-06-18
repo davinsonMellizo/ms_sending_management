@@ -18,12 +18,6 @@ public class AdapterOperations<E, D, I, R extends ReactiveCrudRepository<D, I>> 
         this.toEntity = toEntity;
     }
 
-    public Mono<E> save(E entity) {
-        return Mono.just(entity)
-                .map(this::convertToData)
-                .flatMap(this::saveData)
-                .thenReturn(entity);
-    }
 
     protected Mono<E> doQuery(Mono<D> query) {
         return query.map(this::convertToEntity);
@@ -37,17 +31,5 @@ public class AdapterOperations<E, D, I, R extends ReactiveCrudRepository<D, I>> 
         return toEntity.apply(data);
     }
 
-    protected Mono<D> saveData(D data) {
-        return repository.save(data);
-    }
-
-    protected Mono<Void> deleteById(I id) {
-        return repository.deleteById(id);
-    }
-
-    protected Mono<E> findById(I id) {
-        return repository.findById(id)
-                .map(this::convertToEntity);
-    }
 
 }

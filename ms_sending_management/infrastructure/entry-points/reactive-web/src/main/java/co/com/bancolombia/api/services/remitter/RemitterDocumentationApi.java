@@ -1,0 +1,58 @@
+package co.com.bancolombia.api.services.remitter;
+
+import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.model.remitter.Remitter;
+import org.springdoc.core.fn.builders.operation.Builder;
+
+import java.util.function.Consumer;
+
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
+import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
+import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
+import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
+
+public class RemitterDocumentationApi {
+
+    private final static String tag = "Remitter";
+    private final static String error = "Error";
+    private final static String successful = "successful";
+
+    protected Consumer<Builder> saveRemitterAPI() {
+        return ops -> ops.tag(tag)
+                .operationId("SaveRemitter").summary("Save Remitter")
+                .description("Create new Remitter").tags(new String[]{tag})
+                .requestBody(requestBodyBuilder().description("Remitter to create").required(true).implementation(Remitter.class))
+                .response(responseBuilder().responseCode("200").description(successful).implementation(Remitter.class))
+                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+    }
+
+    protected Consumer<Builder> findRemitterAPI() {
+        return ops -> ops.tag(tag)
+                .operationId("findRemitter").summary("Find Remitter")
+                .description("Find Remitters by id").tags(new String[]{tag})
+                .parameter(createHeader(String.class, "id", "Remitter identifier"))
+                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+    }
+
+    protected Consumer<Builder> updateRemitterAPI() {
+        return ops -> ops.tag(tag)
+                .operationId("updateRemitter").summary("Update Remitter")
+                .description("Update Remitter by id").tags(new String[]{tag})
+                .requestBody(requestBodyBuilder().description("Remitter to Update").required(true).implementation(Remitter.class))
+                .response(responseBuilder().responseCode("200").description(successful).implementation(Remitter.class))
+                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+    }
+
+    protected Consumer<Builder> deleteRemitterAPI() {
+        return ops -> ops.tag(tag)
+                .operationId("deleteRemitter").summary("Delete Remitter")
+                .description("Delete a Remitter by id").tags(new String[]{tag})
+                .parameter(createHeader(String.class, "id", "Remitter identifier"))
+                .response(responseBuilder().responseCode("200").description(successful).implementation(String.class))
+                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+    }
+
+    private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
+        return parameterBuilder().in(PATH).implementation(clazz).required(true).name(name).description(description);
+    }
+}

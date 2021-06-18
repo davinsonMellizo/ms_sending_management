@@ -20,7 +20,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     @Override
     @Bean
     public ConnectionFactory connectionFactory() {
-        return H2ConnectionFactory.inMemory("testdb");
+        return H2ConnectionFactory.inMemory("testDb");
     }
 
     @Bean

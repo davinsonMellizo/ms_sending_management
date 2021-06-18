@@ -38,12 +38,12 @@ public class AlertData implements Persistable<String> {
     private String creationUser;
     private LocalDateTime createdDate;
     @Transient
-    private Boolean newAlert;
+    private Boolean isNew;
 
     @Override
     @Transient
     public boolean isNew() {
-        return this.newAlert;
+        return this.isNew;
     }
 
 }

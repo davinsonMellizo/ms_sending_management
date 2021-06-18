@@ -38,6 +38,7 @@ public class AlertRouterTest extends BaseIntegration {
     private AlertUseCase useCase;
     private String request;
     private final Alert alert = new Alert();
+    private final static String ID = "/{id}";
 
     @BeforeEach
     public void init() {
@@ -45,18 +46,18 @@ public class AlertRouterTest extends BaseIntegration {
     }
 
     @Test
-    public void findAllAlertsByClient() {
+    public void findAlertsById() {
         when(useCase.findAlertByIdRequest(any())).thenReturn(Mono.just(alert));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getFindAlert(), "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getAlert()+ID, "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findAlertByIdRequest(any());
     }
 
     @Test
-    public void saveAlerts() {
+    public void saveAlert() {
         when(useCase.saveAlertRequest(any())).thenReturn(Mono.just(alert));
-        statusAssertionsWebClientPost(properties.getSaveAlert(),
+        statusAssertionsWebClientPost(properties.getAlert(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
@@ -65,12 +66,12 @@ public class AlertRouterTest extends BaseIntegration {
     }
 
     @Test
-    public void updateAlerts() {
-        when(useCase.updateAlertRequest(any())).thenReturn(Mono.just(StatusResponse.builder()
+    public void updateAlert() {
+        when(useCase.updateAlertRequest(any())).thenReturn(Mono.just(StatusResponse.<Alert>builder()
                 .before(alert)
                 .actual(alert)
                 .build()));
-        statusAssertionsWebClientPut(properties.getUpdateAlert(),
+        statusAssertionsWebClientPut(properties.getAlert(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
@@ -79,9 +80,9 @@ public class AlertRouterTest extends BaseIntegration {
     }
 
     @Test
-    public void deleteAlerts() {
+    public void deleteAlert() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.just("ALT"));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() , "ALT")
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert()+ID , "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteAlertRequest(any());

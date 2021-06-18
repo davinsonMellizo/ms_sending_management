@@ -23,20 +23,9 @@ public class AlertUseCase {
     }
 
 
-    public Mono<StatusResponse> updateAlertRequest(Alert alert) {
-        return alertGateway.findAlertById(alert.getId())
-                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
-                .flatMap(alertBefore -> updateAlert(alert, alertBefore));
-    }
-
-    private Mono<StatusResponse> updateAlert(Alert alert, Alert alertBefore) {
-        return alertGateway.updateAlert(alert, alertBefore)
-                .map(alertActual -> StatusResponse.builder()
-                        .description("Actualización de Alerta Exitosamente")
-                        .before(alertBefore)
-                        .actual(alertActual)
-                        .build()
-                );
+    public Mono<StatusResponse<Alert>> updateAlertRequest(Alert alert) {
+        return alertGateway.updateAlert(alert)
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
     }
 
     public Mono<String> deleteAlertRequest(String id) {

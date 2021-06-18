@@ -13,8 +13,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "entries.reactive-web")
 public class ApiProperties {
     private String pathBase;
-    private String saveAlert;
-    private String findAlert;
-    private String updateAlert;
-    private String deleteAlert;
+    private String alert;
+    private String provider;
+    private String service;
+    private String remitter;
+
 }

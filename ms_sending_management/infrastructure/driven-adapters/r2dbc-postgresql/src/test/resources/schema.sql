@@ -5,7 +5,7 @@ CREATE SCHEMA IF NOT EXISTS schalertd;
 --
 CREATE TABLE IF NOT EXISTS state (
 	id int2 NOT NULL,
-	name varchar(10) NOT NULL,
+	name varchar(10) UNIQUE NOT NULL,
 	CONSTRAINT state_pkey PRIMARY KEY (id)
 );
 
@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS document_type (
 
 CREATE TABLE IF NOT EXISTS enrollment_contact (
 	id int2 NOT NULL,
-	code varchar(10) NOT NULL,
+	code varchar(10) UNIQUE NOT NULL,
 	CONSTRAINT enrollment_contact_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS contact_medium (
 	id int2 NOT NULL,
-	code varchar(10) NOT NULL,
+	code varchar(10) UNIQUE NOT NULL,
 	CONSTRAINT contact_medium_pkey PRIMARY KEY (id)
 );
 
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS contact_medium (
 --  Gestion Envìo tables creation
 --
 CREATE TABLE IF NOT EXISTS provider (
-	id int2 NOT NULL,
+	id varchar(3) NOT NULL,
 	name varchar(20) NOT NULL,
-	type varchar(20) NOT NULL,
+	type_service varchar(20) NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
 	CONSTRAINT provider_pkey PRIMARY KEY (id)
@@ -52,12 +52,11 @@ CREATE TABLE IF NOT EXISTS template_alert (
 
 CREATE TABLE IF NOT EXISTS remitter (
 	id int2 NOT NULL,
-	remitter_mail varchar(70) NOT NULL,
-	state int2 NOT NULL,
+	mail varchar(70) NOT NULL,
+	state varchar(10) NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
-	CONSTRAINT remitter_pkey PRIMARY KEY (id),
-	CONSTRAINT remitter_state_fkey FOREIGN KEY (state) REFERENCES state(id)
+	CONSTRAINT remitter_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS service (
@@ -71,13 +70,13 @@ CREATE TABLE IF NOT EXISTS service (
 CREATE TABLE IF NOT EXISTS alert (
 	id varchar(3) NOT NULL,
 	id_template int2 NOT NULL,
-	id_provider_mail int2 NOT NULL,
-	id_provider_sms int2 NOT NULL,
+	id_provider_mail varchar(3) NOT NULL,
+	id_provider_sms varchar(3) NOT NULL,
 	id_remitter int2 NOT NULL,
 	id_service int2 NOT NULL,
 	description varchar(50) NOT NULL,
 	nature varchar(2) NOT NULL,
-	obligatory boolean NOT NULL,
+	obligatory boolean NOT NULL, 
 	message varchar(500) NOT NULL,
 	priority int2 NOT NULL,
 	subject_mail varchar(50) NOT NULL,
@@ -119,7 +118,7 @@ CREATE TABLE IF NOT EXISTS alert_client (
 	association_origin varchar(3) NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
-	modified_date timestamp NULL,
+	modified_date timestamp NULL, 
 	transaction_date timestamp NULL,
 	CONSTRAINT alert_client_pkey PRIMARY KEY (id_alert, document_number, id_document_type),
 	CONSTRAINT alert_client_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id)
@@ -135,22 +134,21 @@ CREATE TABLE IF NOT EXISTS log_send (
 --  Gestion Contacto tables creation
 --
 CREATE TABLE IF NOT EXISTS client (
-	id int8 unique,
 	document_number int8 NOT NULL,
 	document_type int2 NOT NULL,
-	key_MDM varchar(20) NOT NULL,
+	key_mdm varchar(20) NOT NULL,
 	enrollment_origin varchar(3) NULL,
 	id_state int2 NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
-	modified_date timestamp NULL,
-	optinal varchar(10) NULL,
+	modified_date timestamp NULL, 
+ 	CONSTRAINT client_pkey PRIMARY KEY (document_number, document_type),
  	CONSTRAINT client_state_fkey FOREIGN KEY (id_state) REFERENCES state(id),
  	CONSTRAINT client_document_type_fkey FOREIGN KEY (document_type) REFERENCES document_type(id)
 );
 
 CREATE TABLE IF NOT EXISTS contact (
-	id serial unique,
+	id int2 UNIQUE,
 	document_number int8 NOT NULL,
 	document_type int2 NOT NULL,
 	id_enrollment_contact int2 NOT NULL,
@@ -158,12 +156,10 @@ CREATE TABLE IF NOT EXISTS contact (
 	value varchar(60) NOT NULL,
 	id_state int2 NOT NULL,
 	created_date timestamp NOT NULL,
-	modified_date timestamp NULL,
+	modified_date timestamp NULL, 
+ 	CONSTRAINT contact_pkey PRIMARY KEY (document_number, document_type,id_enrollment_contact,id_contact_medium),
  	CONSTRAINT contact_enrollment_contact_fkey FOREIGN KEY (id_enrollment_contact) REFERENCES enrollment_contact(id),
  	CONSTRAINT contact_contact_medium_fkey FOREIGN KEY (id_contact_medium) REFERENCES contact_medium(id),
  	CONSTRAINT contact_state_fkey FOREIGN KEY (id_state) REFERENCES state(id),
- 	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, document_type) REFERENCES client(document_number, document_type)
+ 	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, document_type) REFERENCES client(document_number, document_type) on delete cascade
 );
-
-
-
