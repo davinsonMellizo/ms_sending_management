@@ -6,8 +6,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface RemitterMapper {
-    Remitter toEntity(RemitterData RemitterData);
+    Remitter toEntity(RemitterData remitterData);
 
     @Mapping(target = "isNew", ignore = true)
-    RemitterData toData(Remitter Remitter);
+    RemitterData toData(Remitter remitter);
 }

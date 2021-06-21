@@ -13,43 +13,43 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class ServiceDocumentationApi {
 
-    private final static String tag = "Service";
-    private final static String error = "Error";
-    private final static String successful = "successful";
+    private final static String TAG = "Service";
+    private final static String ERROR = "Error";
+    private final static String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> saveServiceAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("Save service").summary("Save service")
-                .description("Create new service").tags(new String[]{tag})
+                .description("Create new service").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Service to create").required(true).implementation(Service.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Service.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Service.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> findServiceAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("findService").summary("Find Service")
-                .description("Find Service by id").tags(new String[]{tag})
+                .description("Find Service by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Service identifier"))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> updateServiceAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("updateService").summary("Update Service")
-                .description("Update Service by id").tags(new String[]{tag})
+                .description("Update Service by id").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Service to Update").required(true).implementation(Service.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Service.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Service.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> deleteServiceAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("deleteService").summary("Delete Service")
-                .description("Delete a Service by id").tags(new String[]{tag})
+                .description("Delete a Service by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Service identifier"))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(String.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {

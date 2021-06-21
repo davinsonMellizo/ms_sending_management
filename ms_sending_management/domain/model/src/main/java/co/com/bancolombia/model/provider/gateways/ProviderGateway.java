@@ -11,9 +11,9 @@ public interface ProviderGateway {
 
     Mono<Provider> findProviderById(String id);
 
-    Mono<Provider> saveProvider(Provider Provider);
+    Mono<Provider> saveProvider(Provider provider);
 
-    Mono<StatusResponse<Provider>> updateProvider(Provider Provider);
+    Mono<StatusResponse<Provider>> updateProvider(Provider provider);
 
     Mono<String> deleteProviderById(String id);
 }

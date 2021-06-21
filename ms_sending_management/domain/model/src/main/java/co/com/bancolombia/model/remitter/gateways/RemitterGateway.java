@@ -12,9 +12,9 @@ public interface RemitterGateway {
 
     Mono<Remitter> findRemitterById(Integer id);
 
-    Mono<Remitter> saveRemitter(Remitter Remitter);
+    Mono<Remitter> saveRemitter(Remitter remitter);
 
-    Mono<StatusResponse<Remitter>> updateRemitter(Remitter Remitter);
+    Mono<StatusResponse<Remitter>> updateRemitter(Remitter remitter);
 
     Mono<Integer> deleteRemitterById(Integer id);
 }

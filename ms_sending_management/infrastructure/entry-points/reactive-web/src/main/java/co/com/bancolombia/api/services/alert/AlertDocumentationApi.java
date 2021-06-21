@@ -14,43 +14,43 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class AlertDocumentationApi {
 
-    private final static String tag = "Alerts";
-    private final static String error = "Error";
-    private final static String successful = "successful";
+    private final static String TAG = "Alerts";
+    private final static String ERROR = "Error";
+    private final static String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> saveAlertAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("SaveAlert").summary("Save Alert")
-                .description("Create new Alert").tags(new String[]{tag})
+                .description("Create new Alert").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Alert to create").required(true).implementation(AlertDTO.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Alert.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> findAlertAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("findAlert").summary("Find Alert")
-                .description("Find Alerts by id").tags(new String[]{tag})
+                .description("Find Alerts by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Alert identifier"))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> updateAlertAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("updateAlert").summary("Update Alert")
-                .description("Update Alert by id").tags(new String[]{tag})
+                .description("Update Alert by id").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Alert to Update").required(true).implementation(AlertDTO.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Alert.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Alert.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> deleteAlertAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("deleteAlert").summary("Delete Alert")
-                .description("Delete a Alert by id").tags(new String[]{tag})
+                .description("Delete a Alert by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Alert identifier"))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(String.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {

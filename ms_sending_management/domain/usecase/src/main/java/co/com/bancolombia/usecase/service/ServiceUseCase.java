@@ -18,12 +18,12 @@ public class ServiceUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(SERVICE_NOT_FOUND)));
     }
 
-    public Mono<Service> saveService(Service Service) {
-        return serviceGateway.saveService(Service);
+    public Mono<Service> saveService(Service service) {
+        return serviceGateway.saveService(service);
     }
 
-    public Mono<StatusResponse<Service>> updateService(Service Service) {
-        return serviceGateway.updateService(Service)
+    public Mono<StatusResponse<Service>> updateService(Service service) {
+        return serviceGateway.updateService(service)
                 .switchIfEmpty(Mono.error(new BusinessException(SERVICE_NOT_FOUND)));
     }
 
