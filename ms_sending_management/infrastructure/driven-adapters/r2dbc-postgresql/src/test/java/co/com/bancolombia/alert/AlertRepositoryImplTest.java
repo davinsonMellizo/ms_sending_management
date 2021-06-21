@@ -47,7 +47,7 @@ public class AlertRepositoryImplTest {
     @Test
     public void findIdAlert() {
         StepVerifier.create(AlertRepositoryImplement.findAlertById(alert.getId()))
-                .consumeNextWith(alert -> assertEquals(alert.getId(), alert.getIdState()))
+                .consumeNextWith(alertFound -> assertEquals(alert.getId(), alertFound.getId()))
                 .verifyComplete();
     }
 
@@ -56,7 +56,7 @@ public class AlertRepositoryImplTest {
         alert.setIdState(1);
         alert.setId("UPD");
         StepVerifier.create(AlertRepositoryImplement.updateAlert(alert))
-                .consumeNextWith(status -> assertEquals(alert.getId(), status.getActual().getIdState()))
+                .consumeNextWith(status -> assertEquals(alert.getId(), status.getActual().getId()))
                 .verifyComplete();
     }
 
