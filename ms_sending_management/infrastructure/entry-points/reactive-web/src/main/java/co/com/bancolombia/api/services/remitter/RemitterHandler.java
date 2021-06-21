@@ -27,6 +27,11 @@ public class RemitterHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
+    public Mono<ServerResponse> findAllRemitter(ServerRequest serverRequest) {
+        return useCase.findAllRemitter()
+                .flatMap(ResponseUtil::responseOk);
+    }
+
     public Mono<ServerResponse> saveRemitter(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(RemitterDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))

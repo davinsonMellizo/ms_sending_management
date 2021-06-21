@@ -20,6 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,10 +51,20 @@ public class ProviderRouterTest extends BaseIntegration {
     @Test
     public void findProviderById() {
         when(useCase.findProviderById(any())).thenReturn(Mono.just(provider));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getProvider()+ID, "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getProvider() + ID, "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findProviderById(any());
+    }
+
+    @Test
+    public void findAllProviders() {
+        when(useCase.findAllProviders()).thenReturn(Mono.just(List.of(provider)));
+        webTestClient.get().uri(properties.getProvider())
+                .exchange()
+                .expectStatus()
+                .isOk();
+        verify(useCase).findAllProviders();
     }
 
     @Test
@@ -83,7 +95,7 @@ public class ProviderRouterTest extends BaseIntegration {
     @Test
     public void deleteProvider() {
         when(useCase.deleteProviderById(any())).thenReturn(Mono.just("ALT"));
-        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getProvider()+ID , "ALT")
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getProvider() + ID, "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteProviderById(any());

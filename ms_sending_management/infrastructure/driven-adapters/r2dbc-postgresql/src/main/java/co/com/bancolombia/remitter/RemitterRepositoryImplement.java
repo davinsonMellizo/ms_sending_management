@@ -4,7 +4,6 @@ package co.com.bancolombia.remitter;
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
-
 import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.model.response.StatusResponse;
@@ -13,6 +12,8 @@ import co.com.bancolombia.remitter.data.RemitterMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
@@ -29,6 +30,14 @@ public class RemitterRepositoryImplement
         super(repository, mapper::toData, mapper::toEntity);
     }
 
+
+    @Override
+    public Mono<List<Remitter>> findAll() {
+        return repository.findAll()
+                .map(this::convertToEntity)
+                .collectList()
+                .onErrorMap(e -> new TechnicalException(e, FIND_ALL_REMITTERS_ERROR));
+    }
 
     @Override
     public Mono<Remitter> findRemitterById(Integer id) {
@@ -52,7 +61,7 @@ public class RemitterRepositoryImplement
     @Override
     public Mono<StatusResponse<Remitter>> updateRemitter(Remitter remitter) {
         return findRemitterById(remitter.getId())
-                .map(remitterFound  -> StatusResponse.<Remitter>builder()
+                .map(remitterFound -> StatusResponse.<Remitter>builder()
                         .before(remitterFound)
                         .actual(remitter)
                         .build())

@@ -6,8 +6,8 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.service.ServiceHandler;
 import co.com.bancolombia.api.services.service.ServiceRouter;
-import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.usecase.service.ServiceUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ public class ServiceRouterTest extends BaseIntegration {
     @Test
     public void findServiceById() {
         when(useCase.findServiceById(any())).thenReturn(Mono.just(service));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getService()+ID, "0")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getService() + ID, "0")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findServiceById(any());
@@ -83,7 +83,7 @@ public class ServiceRouterTest extends BaseIntegration {
     @Test
     public void deleteService() {
         when(useCase.deleteServiceById(any())).thenReturn(Mono.just(0));
-        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getService()+ID , "0")
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getService() + ID, "0")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteServiceById(any());

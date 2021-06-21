@@ -19,8 +19,8 @@ INSERT INTO contact_medium
 INSERT INTO provider
 (id, name, type_service, creation_user, created_date)
 values
-('HJK', 'TODO 1', 'enail', 'Davinson', '2021-02-16 10:10:25-05'),
-('FGH', 'TODO 1', 'enail', 'Davinson', '2021-02-16 10:10:25-05'),
+('HJK', 'TODO 1', 'email', 'Davinson', '2021-02-16 10:10:25-05'),
+('FGH', 'TODO 1', 'email', 'Davinson', '2021-02-16 10:10:25-05'),
 ('JKL', 'TODO 1', 'sms', 'Davinson', '2021-02-16 10:10:25-05');
 
 

@@ -7,27 +7,35 @@ import co.com.bancolombia.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.PROVIDER_NOT_FOUND;
 
 @RequiredArgsConstructor
 public class ProviderUseCase {
     private final ProviderGateway providerGateway;
 
-    public Mono<Provider> findProviderById(String id){
+    public Mono<List<Provider>> findAllProviders() {
+        return providerGateway.findAll()
+                .filter(providers -> !providers.isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(PROVIDER_NOT_FOUND)));
+    }
+
+    public Mono<Provider> findProviderById(String id) {
         return providerGateway.findProviderById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(PROVIDER_NOT_FOUND)));
     }
 
-    public Mono<Provider> saveProvider(Provider provider){
+    public Mono<Provider> saveProvider(Provider provider) {
         return providerGateway.saveProvider(provider);
     }
 
-    public Mono<StatusResponse<Provider>> updateProvider(Provider provider){
+    public Mono<StatusResponse<Provider>> updateProvider(Provider provider) {
         return providerGateway.updateProvider(provider)
                 .switchIfEmpty(Mono.error(new BusinessException(PROVIDER_NOT_FOUND)));
     }
 
-    public Mono<String> deleteProviderById(String id){
+    public Mono<String> deleteProviderById(String id) {
         return providerGateway.findProviderById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(PROVIDER_NOT_FOUND)))
                 .map(Provider::getId)

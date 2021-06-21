@@ -1,7 +1,6 @@
 package co.com.bancolombia.provider;
 
 import co.com.bancolombia.model.provider.Provider;
-import co.com.bancolombia.provider.ProviderRepositoryImplement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +30,13 @@ public class ProviderRepositoryImplTest {
     public void findIdProvider() {
         StepVerifier.create(repositoryImpl.findProviderById(provider.getId()))
                 .consumeNextWith(providerFound -> assertEquals(provider.getId(), providerFound.getId()))
+                .verifyComplete();
+    }
+
+    @Test
+    public void findAllProvider() {
+        StepVerifier.create(repositoryImpl.findAll())
+                .consumeNextWith(allProviders -> assertEquals(4, allProviders.size()))
                 .verifyComplete();
     }
 

@@ -36,7 +36,7 @@ public class AlertUseCaseTest {
     }
 
     @Test
-    public void findAllAlertByClient() {
+    public void findAlertById() {
         when(alertGateway.findAlertById(anyString()))
                 .thenReturn(Mono.just(alert));
         StepVerifier

@@ -86,7 +86,7 @@ public class RemitterRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void deleteRemittersWithException() {
         when(useCase.deleteRemitterById(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getRemitter() + ID , "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getRemitter() + ID, "ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

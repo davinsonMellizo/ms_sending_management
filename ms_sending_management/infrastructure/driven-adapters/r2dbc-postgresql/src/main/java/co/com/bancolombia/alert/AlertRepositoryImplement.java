@@ -8,7 +8,6 @@ import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.response.StatusResponse;
-import co.com.bancolombia.model.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -50,7 +49,7 @@ public class AlertRepositoryImplement
     @Override
     public Mono<StatusResponse<Alert>> updateAlert(Alert alert) {
         return findAlertById(alert.getId())
-                .map(alertFound  -> StatusResponse.<Alert>builder()
+                .map(alertFound -> StatusResponse.<Alert>builder()
                         .before(alertFound)
                         .actual(alert)
                         .build())

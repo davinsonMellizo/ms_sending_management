@@ -1,12 +1,7 @@
 package co.com.bancolombia.remitter;
 
-import co.com.bancolombia.alert.AlertRepository;
-import co.com.bancolombia.alert.AlertRepositoryImplement;
-import co.com.bancolombia.alert.data.AlertData;
-import co.com.bancolombia.alert.data.AlertMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
-import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.remitter.data.RemitterData;
 import co.com.bancolombia.remitter.data.RemitterMapper;
@@ -19,12 +14,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,6 +58,16 @@ public class RemitterRepositoryImplExceptionTest {
         when(repository.findById(anyInt()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findRemitterById(remitter.getId())
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
+    }
+
+    @Test
+    public void findAllRemitterWithException() {
+        when(repository.findAll())
+                .thenReturn(Flux.error(RuntimeException::new));
+        repositoryImpl.findAll()
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

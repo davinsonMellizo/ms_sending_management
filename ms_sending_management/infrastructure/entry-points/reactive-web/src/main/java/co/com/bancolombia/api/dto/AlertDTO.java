@@ -23,14 +23,14 @@ public class AlertDTO {
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer idTemplate;
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    @Size(max = 3, message = "{constraint.maximum_length}")
+    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    private Integer idProviderMail;
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    private String idProviderMail;
+    @Size(max = 3, message = "{constraint.maximum_length}")
+    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    private Integer idProviderSms;
+    private String idProviderSms;
     @Max(value = 999, message = "{constraint.maximum_length}")
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")

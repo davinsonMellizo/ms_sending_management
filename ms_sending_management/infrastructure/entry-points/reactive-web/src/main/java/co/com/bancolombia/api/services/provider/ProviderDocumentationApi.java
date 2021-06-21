@@ -35,6 +35,13 @@ public class ProviderDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 
+    protected Consumer<Builder> findAllProviderAPI() {
+        return ops -> ops.tag(tag)
+                .operationId("findProviders").summary("Find all Providers")
+                .description("Find all Providers").tags(new String[]{tag})
+                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+    }
+
     protected Consumer<Builder> updateProviderAPI() {
         return ops -> ops.tag(tag)
                 .operationId("updateProvider").summary("Update Provider")

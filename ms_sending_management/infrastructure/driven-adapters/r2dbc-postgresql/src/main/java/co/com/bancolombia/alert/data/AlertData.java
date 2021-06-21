@@ -20,9 +20,9 @@ public class AlertData implements Persistable<String> {
 
     @Id
     private String id;
+    private String idProviderMail;
+    private String idProviderSms;
     private Integer idTemplate;
-    private Integer idProviderMail;
-    private Integer idProviderSms;
     private Integer idRemitter;
     private Integer idService;
     private Integer idState;

@@ -51,7 +51,7 @@ public class ServiceRepositoryImplement
     @Override
     public Mono<StatusResponse<Service>> updateService(Service service) {
         return findServiceById(service.getId())
-                .map(serviceFound  -> StatusResponse.<Service>builder()
+                .map(serviceFound -> StatusResponse.<Service>builder()
                         .before(serviceFound)
                         .actual(service)
                         .build())

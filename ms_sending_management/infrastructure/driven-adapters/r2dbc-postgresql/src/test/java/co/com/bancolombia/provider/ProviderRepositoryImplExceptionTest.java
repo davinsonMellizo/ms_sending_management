@@ -14,12 +14,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +57,16 @@ public class ProviderRepositoryImplExceptionTest {
         when(repository.findById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findProviderById(provider.getId())
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
+    }
+
+    @Test
+    public void findAllProviderWithException() {
+        when(repository.findAll())
+                .thenReturn(Flux.error(RuntimeException::new));
+        repositoryImpl.findAll()
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

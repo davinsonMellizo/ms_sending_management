@@ -2,9 +2,9 @@ package co.com.bancolombia.usecase.service;
 
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.model.service.gateways.ServiceGateway;
-import co.com.bancolombia.model.response.StatusResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +36,7 @@ public class ServiceUseCaseTest {
     }
 
     @Test
-    public void findAllServiceByClient() {
+    public void findServiceById() {
         when(serviceGateway.findServiceById(anyInt()))
                 .thenReturn(Mono.just(service));
         StepVerifier

@@ -86,7 +86,7 @@ public class ProviderRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void deleteProvidersWithException() {
         when(useCase.deleteProviderById(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getProvider() + ID , "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getProvider() + ID, "ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ServiceMapper {
     Service toEntity(ServiceData ServiceData);
+
     @Mapping(target = "isNew", ignore = true)
     ServiceData toData(Service Service);
 }

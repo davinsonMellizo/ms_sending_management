@@ -13,21 +13,21 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SERVICE_NOT_
 public class ServiceUseCase {
     private final ServiceGateway serviceGateway;
 
-    public Mono<Service> findServiceById(Integer id){
+    public Mono<Service> findServiceById(Integer id) {
         return serviceGateway.findServiceById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(SERVICE_NOT_FOUND)));
     }
 
-    public Mono<Service> saveService(Service Service){
+    public Mono<Service> saveService(Service Service) {
         return serviceGateway.saveService(Service);
     }
 
-    public Mono<StatusResponse<Service>> updateService(Service Service){
+    public Mono<StatusResponse<Service>> updateService(Service Service) {
         return serviceGateway.updateService(Service)
                 .switchIfEmpty(Mono.error(new BusinessException(SERVICE_NOT_FOUND)));
     }
 
-    public Mono<Integer> deleteServiceById(Integer id){
+    public Mono<Integer> deleteServiceById(Integer id) {
         return serviceGateway.findServiceById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(SERVICE_NOT_FOUND)))
                 .map(Service::getId)

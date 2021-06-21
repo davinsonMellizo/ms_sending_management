@@ -20,6 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,10 +51,21 @@ public class RemitterRouterTest extends BaseIntegration {
     @Test
     public void findRemitterById() {
         when(useCase.findRemitterById(any())).thenReturn(Mono.just(remitter));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getRemitter()+ID, "0")
-                .exchange();
-        spec.expectStatus().isOk();
+        webTestClient.get().uri(properties.getRemitter() + ID, "0")
+                .exchange()
+                .expectStatus()
+                .isOk();
         verify(useCase).findRemitterById(any());
+    }
+
+    @Test
+    public void findAllRemitters() {
+        when(useCase.findAllRemitter()).thenReturn(Mono.just(List.of(remitter)));
+        webTestClient.get().uri(properties.getRemitter())
+                .exchange()
+                .expectStatus()
+                .isOk();
+        verify(useCase).findAllRemitter();
     }
 
     @Test
@@ -83,7 +96,7 @@ public class RemitterRouterTest extends BaseIntegration {
     @Test
     public void deleteRemitter() {
         when(useCase.deleteRemitterById(any())).thenReturn(Mono.just(0));
-        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getRemitter()+ID , "0")
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getRemitter() + ID, "0")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteRemitterById(any());

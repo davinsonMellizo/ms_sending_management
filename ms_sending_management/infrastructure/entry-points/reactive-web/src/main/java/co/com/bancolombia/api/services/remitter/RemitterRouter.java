@@ -22,7 +22,8 @@ public class RemitterRouter extends RemitterDocumentationApi {
     public RouterFunction<ServerResponse> routerFunctionRemitter(RemitterHandler handler) {
         return route().POST(apiProperties.getRemitter(), accept(APPLICATION_JSON), handler::saveRemitter, saveRemitterAPI()).build()
                 .and(route().PUT(apiProperties.getRemitter(), accept(APPLICATION_JSON), handler::updateRemitter, updateRemitterAPI()).build())
-                .and(route().GET(apiProperties.getRemitter()+ID, accept(APPLICATION_JSON), handler::findRemitter, findRemitterAPI()).build())
-                .and(route().DELETE(apiProperties.getRemitter()+ID, accept(APPLICATION_JSON), handler::deleteRemitter, deleteRemitterAPI()).build());
+                .and(route().GET(apiProperties.getRemitter(), accept(APPLICATION_JSON), handler::findAllRemitter, findAllRemitterAPI()).build())
+                .and(route().GET(apiProperties.getRemitter() + ID, accept(APPLICATION_JSON), handler::findRemitter, findRemitterAPI()).build())
+                .and(route().DELETE(apiProperties.getRemitter() + ID, accept(APPLICATION_JSON), handler::deleteRemitter, deleteRemitterAPI()).build());
     }
 }

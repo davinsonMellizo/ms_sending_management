@@ -14,6 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -36,7 +39,7 @@ public class ProviderUseCaseTest {
     }
 
     @Test
-    public void findAllProviderByClient() {
+    public void findProviderById() {
         when(providerGateway.findProviderById(anyString()))
                 .thenReturn(Mono.just(provider));
         StepVerifier
@@ -44,6 +47,17 @@ public class ProviderUseCaseTest {
                 .expectNextCount(1)
                 .verifyComplete();
         verify(providerGateway).findProviderById(anyString());
+    }
+
+    @Test
+    public void findAllProvider() {
+        when(providerGateway.findAll())
+                .thenReturn(Mono.just(List.of(provider)));
+        StepVerifier
+                .create(useCase.findAllProviders())
+                .consumeNextWith(providers -> assertEquals(1, providers.size()))
+                .verifyComplete();
+        verify(providerGateway).findAll();
     }
 
     @Test

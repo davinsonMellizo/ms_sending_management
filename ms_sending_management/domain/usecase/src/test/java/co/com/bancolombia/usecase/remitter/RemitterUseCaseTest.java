@@ -14,7 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +39,7 @@ public class RemitterUseCaseTest {
     }
 
     @Test
-    public void findAllRemitterByClient() {
+    public void findRemitterById() {
         when(remitterGateway.findRemitterById(anyInt()))
                 .thenReturn(Mono.just(remitter));
         StepVerifier
@@ -43,6 +47,17 @@ public class RemitterUseCaseTest {
                 .expectNextCount(1)
                 .verifyComplete();
         verify(remitterGateway).findRemitterById(anyInt());
+    }
+
+    @Test
+    public void findAllRemitters() {
+        when(remitterGateway.findAll())
+                .thenReturn(Mono.just(List.of(remitter)));
+        StepVerifier
+                .create(useCase.findAllRemitter())
+                .assertNext(remitters -> assertEquals(1, remitters.size()))
+                .verifyComplete();
+        verify(remitterGateway).findAll();
     }
 
     @Test

@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProviderMapper {
     Provider toEntity(ProviderData ProviderData);
+
     @Mapping(target = "isNew", ignore = true)
     ProviderData toData(Provider Provider);
 }

@@ -22,7 +22,8 @@ public class ProviderRouter extends ProviderDocumentationApi {
     public RouterFunction<ServerResponse> routerFunctionProvider(ProviderHandler handler) {
         return route().POST(apiProperties.getProvider(), accept(APPLICATION_JSON), handler::saveProvider, saveProviderAPI()).build()
                 .and(route().PUT(apiProperties.getProvider(), accept(APPLICATION_JSON), handler::updateProvider, updateProviderAPI()).build())
-                .and(route().GET(apiProperties.getProvider()+ ID, accept(APPLICATION_JSON), handler::findProviderById, findProviderAPI()).build())
-                .and(route().DELETE(apiProperties.getProvider()+ ID, accept(APPLICATION_JSON), handler::deleteProviderById, deleteProviderAPI()).build());
+                .and(route().GET(apiProperties.getProvider(), accept(APPLICATION_JSON), handler::findAllProvider, findAllProviderAPI()).build())
+                .and(route().GET(apiProperties.getProvider() + ID, accept(APPLICATION_JSON), handler::findProviderById, findProviderAPI()).build())
+                .and(route().DELETE(apiProperties.getProvider() + ID, accept(APPLICATION_JSON), handler::deleteProviderById, deleteProviderAPI()).build());
     }
 }

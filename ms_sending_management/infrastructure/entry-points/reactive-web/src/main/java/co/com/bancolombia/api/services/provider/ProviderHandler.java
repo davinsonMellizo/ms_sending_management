@@ -26,6 +26,11 @@ public class ProviderHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
+    public Mono<ServerResponse> findAllProvider(ServerRequest serverRequest) {
+        return useCase.findAllProviders()
+                .flatMap(ResponseUtil::responseOk);
+    }
+
     public Mono<ServerResponse> saveProvider(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(ProviderDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))

@@ -7,27 +7,35 @@ import co.com.bancolombia.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.REMITTER_NOT_FOUND;
 
 @RequiredArgsConstructor
 public class RemitterUseCase {
     private final RemitterGateway remitterGateway;
 
-    public Mono<Remitter> findRemitterById(Integer id){
+    public Mono<List<Remitter>> findAllRemitter() {
+        return remitterGateway.findAll()
+                .filter(remitters -> !remitters.isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(REMITTER_NOT_FOUND)));
+    }
+
+    public Mono<Remitter> findRemitterById(Integer id) {
         return remitterGateway.findRemitterById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(REMITTER_NOT_FOUND)));
     }
 
-    public Mono<Remitter> saveRemitter(Remitter remitter){
+    public Mono<Remitter> saveRemitter(Remitter remitter) {
         return remitterGateway.saveRemitter(remitter);
     }
 
-    public Mono<StatusResponse<Remitter>> updateRemitter(Remitter remitter){
+    public Mono<StatusResponse<Remitter>> updateRemitter(Remitter remitter) {
         return remitterGateway.updateRemitter(remitter)
                 .switchIfEmpty(Mono.error(new BusinessException(REMITTER_NOT_FOUND)));
     }
 
-    public Mono<Integer> deleteRemitterById(Integer id){
+    public Mono<Integer> deleteRemitterById(Integer id) {
         return remitterGateway.findRemitterById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(REMITTER_NOT_FOUND)))
                 .map(Remitter::getId)

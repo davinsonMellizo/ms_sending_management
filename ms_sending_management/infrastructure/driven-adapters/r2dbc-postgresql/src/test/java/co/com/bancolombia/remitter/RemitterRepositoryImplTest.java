@@ -35,6 +35,13 @@ public class RemitterRepositoryImplTest {
     }
 
     @Test
+    public void findAllRemitter() {
+        StepVerifier.create(repositoryImpl.findAll())
+                .consumeNextWith(allRemitters -> assertEquals(3, allRemitters.size()))
+                .verifyComplete();
+    }
+
+    @Test
     public void updateRemitter() {
         StepVerifier.create(repositoryImpl.updateRemitter(remitter))
                 .consumeNextWith(status -> assertEquals(remitter.getId(), status.getActual().getId()))

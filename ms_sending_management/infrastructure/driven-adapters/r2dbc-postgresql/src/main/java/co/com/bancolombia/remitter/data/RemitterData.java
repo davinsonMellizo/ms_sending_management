@@ -1,4 +1,5 @@
 package co.com.bancolombia.remitter.data;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

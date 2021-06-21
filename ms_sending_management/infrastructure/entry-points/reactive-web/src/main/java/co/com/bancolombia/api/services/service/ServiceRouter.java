@@ -1,8 +1,6 @@
 package co.com.bancolombia.api.services.service;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.services.remitter.RemitterDocumentationApi;
-import co.com.bancolombia.api.services.remitter.RemitterHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +22,7 @@ public class ServiceRouter extends ServiceDocumentationApi {
     public RouterFunction<ServerResponse> routerFunctionService(ServiceHandler handler) {
         return route().POST(apiProperties.getService(), accept(APPLICATION_JSON), handler::saveService, saveServiceAPI()).build()
                 .and(route().PUT(apiProperties.getService(), accept(APPLICATION_JSON), handler::updateService, updateServiceAPI()).build())
-                .and(route().GET(apiProperties.getService()+ID, accept(APPLICATION_JSON), handler::findService, findServiceAPI()).build())
-                .and(route().DELETE(apiProperties.getService()+ID, accept(APPLICATION_JSON), handler::deleteService, deleteServiceAPI()).build());
+                .and(route().GET(apiProperties.getService() + ID, accept(APPLICATION_JSON), handler::findService, findServiceAPI()).build())
+                .and(route().DELETE(apiProperties.getService() + ID, accept(APPLICATION_JSON), handler::deleteService, deleteServiceAPI()).build());
     }
 }

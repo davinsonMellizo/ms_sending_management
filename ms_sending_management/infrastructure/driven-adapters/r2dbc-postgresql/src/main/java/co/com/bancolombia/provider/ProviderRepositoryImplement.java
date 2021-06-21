@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
@@ -27,6 +29,14 @@ public class ProviderRepositoryImplement
         super(repository, mapper::toData, mapper::toEntity);
     }
 
+
+    @Override
+    public Mono<List<Provider>> findAll() {
+        return repository.findAll()
+                .map(this::convertToEntity)
+                .collectList()
+                .onErrorMap(e -> new TechnicalException(e, FIND_ALL_PROVIDERS_ERROR));
+    }
 
     @Override
     public Mono<Provider> findProviderById(String id) {
@@ -50,7 +60,7 @@ public class ProviderRepositoryImplement
     @Override
     public Mono<StatusResponse<Provider>> updateProvider(Provider provider) {
         return this.findProviderById(provider.getId())
-                .map(providerFound  -> StatusResponse.<Provider>builder()
+                .map(providerFound -> StatusResponse.<Provider>builder()
                         .before(providerFound)
                         .actual(provider)
                         .build())

@@ -7,13 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProviderDTO{
+public class ProviderDTO {
 
     @Size(max = 3, message = "{constraint.maximum_length}")
     @NotBlank(message = "{constraint.not_blank}")

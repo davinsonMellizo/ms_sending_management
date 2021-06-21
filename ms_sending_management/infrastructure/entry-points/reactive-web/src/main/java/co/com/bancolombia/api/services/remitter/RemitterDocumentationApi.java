@@ -29,8 +29,15 @@ public class RemitterDocumentationApi {
     protected Consumer<Builder> findRemitterAPI() {
         return ops -> ops.tag(tag)
                 .operationId("findRemitter").summary("Find Remitter")
-                .description("Find Remitters by id").tags(new String[]{tag})
+                .description("Find Remitter by id").tags(new String[]{tag})
                 .parameter(createHeader(String.class, "id", "Remitter identifier"))
+                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+    }
+
+    protected Consumer<Builder> findAllRemitterAPI() {
+        return ops -> ops.tag(tag)
+                .operationId("findAllRemitter").summary("Find all Remitters")
+                .description("Find all Remitters by id").tags(new String[]{tag})
                 .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
     }
 

@@ -86,7 +86,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void deleteAlertsWithException() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID , "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID, "ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

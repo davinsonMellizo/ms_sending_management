@@ -48,7 +48,7 @@ public class AlertRouterTest extends BaseIntegration {
     @Test
     public void findAlertsById() {
         when(useCase.findAlertByIdRequest(any())).thenReturn(Mono.just(alert));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getAlert()+ID, "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getAlert() + ID, "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findAlertByIdRequest(any());
@@ -82,7 +82,7 @@ public class AlertRouterTest extends BaseIntegration {
     @Test
     public void deleteAlert() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.just("ALT"));
-        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert()+ID , "ALT")
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID, "ALT")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteAlertRequest(any());
