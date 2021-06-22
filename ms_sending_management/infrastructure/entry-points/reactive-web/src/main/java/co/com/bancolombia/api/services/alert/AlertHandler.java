@@ -17,12 +17,12 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
 @Component
 @RequiredArgsConstructor
 public class AlertHandler {
-    private final AlertUseCase alertUseCase;
+    private final AlertUseCase useCase;
     private final ValidatorHandler validatorHandler;
 
     public Mono<ServerResponse> findAlert(ServerRequest serverRequest) {
-        return ParamsUtil.getIdAlert(serverRequest)
-                .flatMap(alertUseCase::findAlertByIdRequest)
+        return ParamsUtil.getId(serverRequest)
+                .flatMap(useCase::findAlertByIdRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
 
@@ -31,7 +31,7 @@ public class AlertHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertDTO::toModel)
-                .flatMap(alertUseCase::saveAlertRequest)
+                .flatMap(useCase::saveAlertRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
 
@@ -40,13 +40,13 @@ public class AlertHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertDTO::toModel)
-                .flatMap(alertUseCase::updateAlertRequest)
+                .flatMap(useCase::updateAlertRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
 
     public Mono<ServerResponse> deleteAlert(ServerRequest serverRequest) {
-        return ParamsUtil.getIdAlert(serverRequest)
-                .flatMap(alertUseCase::deleteAlertRequest)
+        return ParamsUtil.getId(serverRequest)
+                .flatMap(useCase::deleteAlertRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
 

@@ -1,6 +1,7 @@
 package co.com.bancolombia.model.alert.gateways;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.response.StatusResponse;
 import reactor.core.publisher.Mono;
 
 public interface AlertGateway {
@@ -8,7 +9,7 @@ public interface AlertGateway {
 
     Mono<Alert> saveAlert(Alert alert);
 
-    Mono<Alert> updateAlert(Alert alert, Alert alertBefore);
+    Mono<StatusResponse<Alert>> updateAlert(Alert alert);
 
     Mono<String> deleteAlert(String id);
 

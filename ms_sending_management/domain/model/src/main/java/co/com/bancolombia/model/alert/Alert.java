@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class Alert {
     private String id;
+    private String idProviderMail;
+    private String idProviderSms;
     private Integer idTemplate;
-    private Integer idProviderMail;
-    private Integer idProviderSms;
     private Integer idRemitter;
     private Integer idService;
     private Integer idState;

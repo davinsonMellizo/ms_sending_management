@@ -42,6 +42,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @MockBean
     private AlertUseCase useCase;
     private String request;
+    private final static String ID = "/{id}";
 
     @BeforeEach
     public void init() {
@@ -51,7 +52,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void saveAlertWithException() {
         when(useCase.saveAlertRequest(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
-        statusAssertionsWebClientPost(properties.getSaveAlert(),
+        statusAssertionsWebClientPost(properties.getAlert(),
                 request)
                 .is5xxServerError();
         verify(useCase).saveAlertRequest(any());
@@ -60,7 +61,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void updateAlertsWithException() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        JsonNode response = statusAssertionsWebClientPut(properties.getUpdateAlert(),
+        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
                 request)
                 .is5xxServerError()
                 .expectBody(JsonNode.class)
@@ -73,7 +74,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void saveAlertWithExceptionTechnical() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        JsonNode response = statusAssertionsWebClientPut(properties.getUpdateAlert(),
+        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
                 "{}")
                 .is5xxServerError()
                 .expectBody(JsonNode.class)
@@ -85,7 +86,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     public void deleteAlertsWithException() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteAlert() , "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID, "ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

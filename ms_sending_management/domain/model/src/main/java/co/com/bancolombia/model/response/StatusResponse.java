@@ -1,6 +1,5 @@
 package co.com.bancolombia.model.response;
 
-import co.com.bancolombia.model.alert.Alert;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class StatusResponse {
+public class StatusResponse<T> {
     private String description;
-    private Alert before;
-    private Alert actual;
+    private T before;
+    private T actual;
 }

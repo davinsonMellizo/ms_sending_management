@@ -20,9 +20,9 @@ public class AlertData implements Persistable<String> {
 
     @Id
     private String id;
+    private String idProviderMail;
+    private String idProviderSms;
     private Integer idTemplate;
-    private Integer idProviderMail;
-    private Integer idProviderSms;
     private Integer idRemitter;
     private Integer idService;
     private Integer idState;
@@ -38,12 +38,12 @@ public class AlertData implements Persistable<String> {
     private String creationUser;
     private LocalDateTime createdDate;
     @Transient
-    private Boolean newAlert;
+    private Boolean isNew;
 
     @Override
     @Transient
     public boolean isNew() {
-        return this.newAlert;
+        return this.isNew;
     }
 
 }

@@ -16,49 +16,49 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class ContactDocumentationApi {
 
-    private final String tag = "Contacts";
-    private final String error = "Error";
-    private final String successful = "successful";
+    private final String TAG = "Contacts";
+    private final String ERROR = "Error";
+    private final String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> saveContactAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("SaveContact").summary("Save contact")
-                .description("save a Client contact").tags(new String[]{tag})
+                .description("save a Client contact").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Contact to create").required(true).implementation(ContactDTO.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(Contact.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Contact.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> findContactAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("findContacts").summary("Find contacts")
-                .description("Find contacts by client").tags(new String[]{tag})
+                .description("Find contacts by client").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(ContactsResponse.class))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ContactsResponse.class))
                 .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> updateContactAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("updateContact").summary("Update contact")
-                .description("Update client contact ").tags(new String[]{tag})
+                .description("Update client contact ").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Contact to Update").required(true).implementation(ContactDTO.class))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(StatusResponse.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(StatusResponse.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     protected Consumer<Builder> deleteContactAPI() {
-        return ops -> ops.tag(tag)
+        return ops -> ops.tag(TAG)
                 .operationId("deleteContact").summary("Delete contact")
-                .description("Delete a client contact").tags(new String[]{tag})
+                .description("Delete a client contact").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
                 .parameter(createHeader(String.class, "contact-medium", "Type of contact"))
                 .parameter(createHeader(String.class, "enrollment-contact", "Origin of enrollment"))
-                .response(responseBuilder().responseCode("200").description(successful).implementation(String.class))
-                .response(responseBuilder().responseCode("500").description(error).implementation(Error.class));
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {

@@ -24,8 +24,8 @@ public class AlertRepositoryImplTest {
     @BeforeEach
     public void init() {
         alert.setId("HGD");
-        alert.setIdProviderMail(0);
-        alert.setIdProviderSms(1);
+        alert.setIdProviderMail("HJK");
+        alert.setIdProviderSms("JKL");
         alert.setIdRemitter(0);
         alert.setIdService(0);
         alert.setIdTemplate(0);
@@ -47,7 +47,7 @@ public class AlertRepositoryImplTest {
     @Test
     public void findIdAlert() {
         StepVerifier.create(AlertRepositoryImplement.findAlertById(alert.getId()))
-                .consumeNextWith(id -> assertEquals(0, id.getIdState()))
+                .consumeNextWith(alertFound -> assertEquals(alert.getId(), alertFound.getId()))
                 .verifyComplete();
     }
 
@@ -55,8 +55,8 @@ public class AlertRepositoryImplTest {
     public void updateAlert() {
         alert.setIdState(1);
         alert.setId("UPD");
-        StepVerifier.create(AlertRepositoryImplement.updateAlert(alert, alert))
-                .consumeNextWith(alertU -> assertEquals(1, alertU.getIdState()))
+        StepVerifier.create(AlertRepositoryImplement.updateAlert(alert))
+                .consumeNextWith(status -> assertEquals(alert.getId(), status.getActual().getId()))
                 .verifyComplete();
     }
 
