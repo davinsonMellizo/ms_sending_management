@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -15,68 +18,58 @@ import javax.validation.constraints.*;
 @Builder
 public class AlertDTO {
 
-    @Size(max = 3, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String id;
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer idTemplate;
-    @Size(max = 3, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String idProviderMail;
-    @Size(max = 3, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String idProviderSms;
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer idRemitter;
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer idService;
-    @Max(value = 9, message = "{constraint.maximum_length}")
+    @Max(value = 9, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer idState;
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer priority;
-    @Size(max = 50, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 50, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String description;
-    @Size(max = 2, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 2, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String nature;
-    @Size(max = 500, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 500, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String message;
-    @Size(max = 50, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 50, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String subjectMail;
-    @Size(max = 15, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 15, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String attentionLine;
-    @Size(max = 100, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 100, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String pathAttachedMail;
     @NotNull(message = "{constraint.not_null}")
     private Boolean obligatory;
     @NotNull(message = "{constraint.not_null}")
     private Boolean visibleChannel;
-    @Size(max = 20, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
-    @NotNull(message = "{constraint.not_null}")
+    @Size(max = 20, message = "{constraint.size}")
     private String creationUser;
 
     public Mono<Alert> toModel() {

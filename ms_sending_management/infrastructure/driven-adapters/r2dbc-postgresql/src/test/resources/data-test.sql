@@ -51,3 +51,8 @@ INSERT INTO contact
 (id_enrollment_contact, id_contact_medium, document_number, document_type, value, id_state, created_date, modified_date)
 VALUES(0, 1, 1061772353, 0, 'dmellizo@bancolombia.com.co', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05'),
 (0, 0, 1061772353, 0, '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05');
+
+INSERT INTO alert_transaction
+(id_alert, id_consumer, id_transaction, creation_user, created_date)
+VALUES('HGD', 'BLP', '0520', 'user', '2021-02-16 10:10:25-05'),
+('HGD', 'BLM', '0256', 'user', '2021-02-16 10:10:25-05');

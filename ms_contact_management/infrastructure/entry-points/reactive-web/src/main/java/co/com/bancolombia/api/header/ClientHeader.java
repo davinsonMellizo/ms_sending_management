@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
@@ -19,15 +18,13 @@ import javax.validation.constraints.Size;
 @Builder
 public class ClientHeader {
 
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Size(max = 2, message = "{constraint.maximum_length}")
+    @PositiveOrZero(message = "{constraint.number}")
+    @Size(min = 1, max = 2, message = "{constraint.size}")
     private String documentType;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Size(max = 15, message = "{constraint.maximum_length}")
+    @PositiveOrZero(message = "{constraint.number}")
+    @Size(min = 1, max = 15, message = "{constraint.size}")
     private String documentNumber;
 
     public Mono<Client> toModel() {

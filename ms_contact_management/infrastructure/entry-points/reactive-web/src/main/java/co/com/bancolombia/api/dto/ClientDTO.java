@@ -15,28 +15,26 @@ import javax.validation.constraints.*;
 @Builder(toBuilder = true)
 public class ClientDTO {
 
+    @Max(value = 999999999999999L, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Long documentNumber;
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Max(value = 99, message = "{constraint.maximum_value}")
+    @Min(value = 0, message = "{constraint.min}")
+    @Max(value = 99, message = "{constraint.max}")
     private Integer documentType;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 20, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 20, message = "{constraint.size}")
     private String keyMdm;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 3, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     private String enrollmentOrigin;
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Max(value = 9, message = "{constraint.maximum_value}")
+    @Min(value = 0, message = "{constraint.min}")
+    @Max(value = 9, message = "{constraint.max}")
     private Integer idState;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 20, message = "{constraint.maximum_length}")
+    @Size(max = 20, message = "{constraint.size}")
     private String creationUser;
 
     public Mono<Client> toModel() {

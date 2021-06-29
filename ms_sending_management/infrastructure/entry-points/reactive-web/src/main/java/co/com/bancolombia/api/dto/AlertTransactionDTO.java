@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.model.provider.Provider;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,26 +14,25 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProviderDTO {
+public class AlertTransactionDTO {
 
     @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private String id;
-    @Size(min = 1, max = 20, message = "{constraint.size}")
+    private String idAlert;
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private String name;
-    @Size(min = 1, max = 1, message = "{constraint.size}")
+    private String idConsumer;
+    @Size(min = 1, max = 4, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private String typeService;
-    @Size(min = 1, max = 20, message = "{constraint.size}")
-    @NotNull(message = "{constraint.not_null}")
+    private String idTransaction;
+    @Size(max = 20, message = "{constraint.size}")
     private String creationUser;
 
-    public Mono<Provider> toModel() {
-        return Mono.just(Provider.builder()
-                .id(this.id)
-                .name(this.name)
-                .typeService(this.typeService)
+    public Mono<AlertTransaction> toModel() {
+        return Mono.just(AlertTransaction.builder()
+                .idAlert(this.idAlert)
+                .idTransaction(this.idTransaction)
+                .idConsumer(this.idConsumer)
                 .creationUser(this.creationUser)
                 .build());
     }

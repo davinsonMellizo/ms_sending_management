@@ -9,6 +9,7 @@ public enum BusinessErrorMessage {
 
     INVALID_DATA("372", "Base data is not valid"),
     ALERT_NOT_FOUND("373", "Alert Not Found"),
+    ALERT_TRANSACTION_NOT_FOUND("373", "Alert Transaction Not Found"),
     REMITTER_NOT_FOUND("373", "Remitter Not Found"),
     PROVIDER_NOT_FOUND("373", "Provider Not Found"),
     SERVICE_NOT_FOUND("374", "Service Not Found");

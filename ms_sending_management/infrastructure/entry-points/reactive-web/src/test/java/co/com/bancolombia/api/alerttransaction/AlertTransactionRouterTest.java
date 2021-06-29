@@ -1,14 +1,17 @@
-package co.com.bancolombia.api.alert;
+package co.com.bancolombia.api.alerttransaction;
 
 import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alert.AlertHandler;
-import co.com.bancolombia.api.services.alert.AlertRouter;
+import co.com.bancolombia.api.services.alerttransaction.AlertTransactionHandler;
+import co.com.bancolombia.api.services.alerttransaction.AlertTransactionRouter;
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
+import co.com.bancolombia.usecase.alerttransaction.AlertTransactionUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,66 +32,56 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        AlertRouter.class,
-        AlertHandler.class,
+        AlertTransactionRouter.class,
+        AlertTransactionHandler.class,
         ApiProperties.class,
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterTest extends BaseIntegration {
+public class AlertTransactionRouterTest extends BaseIntegration {
 
     @MockBean
-    private AlertUseCase useCase;
+    private AlertTransactionUseCase useCase;
     private String request;
-    private final Alert alert = new Alert();
+    private final AlertTransaction alert = new AlertTransaction();
     private final static String ID = "/{id}";
+    private String url;
 
     @BeforeEach
     public void init() {
-        request = loadFileConfig("AlertRequest.json", String.class);
+        url = properties.getAlert()+"-transaction";
+        request = loadFileConfig("AlertTransactionRequest.json", String.class);
     }
 
     @Test
-    public void findAlertsById() {
-        when(useCase.findAlertByIdRequest(any())).thenReturn(Mono.just(alert));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getAlert() + ID, "ALT")
+    public void findAllAlertsTransaction() {
+        when(useCase.findAllAlertTransaction(any())).thenReturn(Mono.just(List.of(alert)));
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + ID, "ALT")
                 .exchange();
         spec.expectStatus().isOk();
-        verify(useCase).findAlertByIdRequest(any());
+        verify(useCase).findAllAlertTransaction(any());
     }
 
     @Test
-    public void saveAlert() {
-        when(useCase.saveAlertRequest(any())).thenReturn(Mono.just(alert));
-        statusAssertionsWebClientPost(properties.getAlert(),
-                request)
+    public void saveAlertTransaction() {
+        when(useCase.saveAlertTransaction(any())).thenReturn(Mono.just(alert));
+        statusAssertionsWebClientPost(url, request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).saveAlertRequest(any());
+        verify(useCase).saveAlertTransaction(any());
     }
 
     @Test
-    public void updateAlert() {
-        when(useCase.updateAlertRequest(any())).thenReturn(Mono.just(StatusResponse.<Alert>builder()
-                .before(alert)
-                .actual(alert)
-                .build()));
-        statusAssertionsWebClientPut(properties.getAlert(),
-                request)
-                .isOk()
-                .expectBody(JsonNode.class)
-                .returnResult();
-        verify(useCase).updateAlertRequest(any());
-    }
-
-    @Test
-    public void deleteAlert() {
-        when(useCase.deleteAlertRequest(any())).thenReturn(Mono.just("ALT"));
-        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID, "ALT")
+    public void deleteAlertTransaction() {
+        when(useCase.deleteAlertTransaction(any())).thenReturn(Mono.just("ALT"));
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
+                .header("id-alert", "HGD")
+                .header("id-transaction", "HGD")
+                .header("id-consumer", "HGD")
                 .exchange();
         spec.expectStatus().isOk();
-        verify(useCase).deleteAlertRequest(any());
+        verify(useCase).deleteAlertTransaction(any());
     }
 
 }

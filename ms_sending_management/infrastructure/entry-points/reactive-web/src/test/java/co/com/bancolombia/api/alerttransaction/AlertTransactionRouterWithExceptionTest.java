@@ -1,4 +1,4 @@
-package co.com.bancolombia.api.alert;
+package co.com.bancolombia.api.alerttransaction;
 
 import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegration;
@@ -6,9 +6,13 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alert.AlertHandler;
 import co.com.bancolombia.api.services.alert.AlertRouter;
+import co.com.bancolombia.api.services.alerttransaction.AlertTransactionHandler;
+import co.com.bancolombia.api.services.alerttransaction.AlertTransactionRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
+import co.com.bancolombia.usecase.alerttransaction.AlertTransactionUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,51 +35,28 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        AlertRouter.class,
-        AlertHandler.class,
+        AlertTransactionRouter.class,
+        AlertTransactionHandler.class,
         ApiProperties.class,
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterWithExceptionTest extends BaseIntegration {
+public class AlertTransactionRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
-    private AlertUseCase useCase;
-    private String request;
+    private AlertTransactionUseCase useCase;
     private final static String ID = "/{id}";
+    private String url;
 
     @BeforeEach
     public void init() {
-        request = loadFileConfig("AlertRequest.json", String.class);
+        url = properties.getAlert()+"-transaction";
     }
 
-    @Test
-    public void saveAlertWithException() {
-        when(useCase.saveAlertRequest(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
-        statusAssertionsWebClientPost(properties.getAlert(),
-                request)
-                .is5xxServerError();
-        verify(useCase).saveAlertRequest(any());
-    }
 
     @Test
-    public void updateAlertsWithException() {
-        when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
-                request)
-                .is5xxServerError()
-                .expectBody(JsonNode.class)
-                .returnResult()
-                .getResponseBody();
-
-        Assertions.assertEquals(ALERT_NOT_FOUND.getCode(), response.get("code").textValue());
-    }
-
-    @Test
-    public void updateAlertWithExceptionTechnical() {
-        when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
-                "{}")
+    public void saveAlertTransactionWithExceptionTechnical() {
+        JsonNode response = statusAssertionsWebClientPost(url, "{}")
                 .is5xxServerError()
                 .expectBody(JsonNode.class)
                 .returnResult()
@@ -84,9 +65,8 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     }
 
     @Test
-    public void deleteAlertsWithException() {
-        when(useCase.deleteAlertRequest(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID, "ALT")
+    public void deleteAlertTransactionWithException() {
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

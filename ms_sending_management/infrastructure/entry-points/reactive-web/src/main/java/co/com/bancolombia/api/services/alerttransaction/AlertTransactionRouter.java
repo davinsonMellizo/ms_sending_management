@@ -1,4 +1,4 @@
-package co.com.bancolombia.api.services.service;
+package co.com.bancolombia.api.services.alerttransaction;
 
 import co.com.bancolombia.api.ApiProperties;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +14,16 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 @RequiredArgsConstructor
-public class ServiceRouter extends ServiceDocumentationApi {
+public class AlertTransactionRouter extends AlertTransactionDocumentationApi {
     private final ApiProperties apiProperties;
+    private final static String RELATION = "-transaction";
     private static String ID = "/{id}";
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunctionService(ServiceHandler handler) {
-        final String url = apiProperties.getService();
-        return route().POST(url, accept(APPLICATION_JSON), handler::saveService, save()).build()
-                .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateService, update()).build())
-                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findService, find()).build())
-                .and(route().DELETE(url + ID, accept(APPLICATION_JSON), handler::deleteService, delete()).build());
+    public RouterFunction<ServerResponse> routerFunctionAlertTransaction(AlertTransactionHandler handler) {
+        final String url = apiProperties.getAlert() + RELATION;
+        return route().POST(url, accept(APPLICATION_JSON), handler::saveAlertTransaction, save()).build()
+                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findAllAlertTransaction, find()).build())
+                .and(route().DELETE(url, accept(APPLICATION_JSON), handler::deleteAlertTransaction, delete()).build());
     }
 }
