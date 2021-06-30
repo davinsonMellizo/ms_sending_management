@@ -57,3 +57,14 @@ Feature: CRUD Remitter
     Then status 500
     And match $.code == '375'
 
+  Scenario: Error case Save remitter, missing parameter per body
+    Given request {}
+    When method POST
+    Then status 500
+    And match $.code == '301'
+
+  Scenario: Error case Update remitter, missing parameter per body
+    Given request {}
+    When method PUT
+    Then status 500
+    And match $.code == '301'

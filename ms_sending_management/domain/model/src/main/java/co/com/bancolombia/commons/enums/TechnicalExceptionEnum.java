@@ -31,7 +31,8 @@ public enum TechnicalExceptionEnum {
     DELETE_SERVICE_ERROR("DST0017", "An error occurred while delete a service"),
     SECRET_EXCEPTION("DST0018", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("DST0019", "Internal server error"),
-    BODY_MISSING_ERROR("301", "Missing parameters per body");
+    BODY_MISSING_ERROR("301", "Missing parameters per body"),
+    HEADER_MISSING_ERROR("301", "Missing parameters per header");
 
     private final String code;
     private final String message;

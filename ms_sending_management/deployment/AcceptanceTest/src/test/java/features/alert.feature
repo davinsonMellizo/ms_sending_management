@@ -52,3 +52,15 @@ Feature: CRUD and relations with alert
     Then status 500
     And match $.code == '373'
 
+  Scenario: Error case Save alert, missing parameter per body
+    Given request {}
+    When method POST
+    Then status 500
+    And match $.code == '301'
+
+  Scenario: Error case Update alert, missing parameter per body
+    Given request {}
+    When method PUT
+    Then status 500
+    And match $.code == '301'
+

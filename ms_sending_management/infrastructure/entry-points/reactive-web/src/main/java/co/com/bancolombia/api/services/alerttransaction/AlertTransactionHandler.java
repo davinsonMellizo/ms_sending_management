@@ -37,7 +37,7 @@ public class AlertTransactionHandler {
 
     public Mono<ServerResponse> deleteAlertTransaction(ServerRequest serverRequest) {
         return ParamsUtil.getRelationAlert(serverRequest)
-                .doOnNext(validatorHandler::validateObject)
+                .doOnNext(validatorHandler::validateObjectHeaders)
                 .flatMap(AlertTransactionDTO::toModel)
                 .flatMap(useCase::deleteAlertTransaction)
                 .flatMap(ResponseUtil::responseOk);

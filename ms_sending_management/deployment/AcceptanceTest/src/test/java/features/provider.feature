@@ -13,47 +13,59 @@ Feature: CRUD Provider
   Scenario: Successful case Find all providers
     When method GET
     Then status 200
-    And match $[0].id == '375'
+    And match $[0].id == 'TOD'
 
   Scenario: Successful case Delete provider by id
-    * def urlDelete = urlProvider + "/1"
+    * def urlDelete = urlProvider + "/PDI"
     Given url urlDelete
     When method DELETE
     Then status 200
-    And match response == '1'
+    And match response == 'PDI'
 
   Scenario: Successful case Save provider
-    * def id = 3
+    * def id = "PSA"
     Given request read("../data/provider.json")
     When method POST
     Then status 200
-    And match $.id == 3
+    And match $.id == 'PSA'
 
   Scenario: Successful case Update provider
-    * def id = 2
+    * def id = "TOD"
     Given request read("../data/provider.json")
     When method PUT
     Then status 200
-    And match $.actual.id == 2
+    And match $.actual.id == 'TOD'
 
   Scenario: Error case Find provider by id
-    * def urlFind = urlProvider + "/10"
+    * def urlFind = urlProvider + "/PNF"
     Given url urlFind
     When method GET
     Then status 500
-    And match $.code == '375'
+    And match $.code == '376'
 
   Scenario: Error case Update provider
-    * def id = 10
+    * def id = "PNF"
     Given request read("../data/provider.json")
     When method PUT
     Then status 500
-    And match $.code == '375'
+    And match $.code == '376'
 
   Scenario: Error case Delete provider by id
-    * def urlDelete = urlProvider + "/10"
+    * def urlDelete = urlProvider + "/PNF"
     Given url urlDelete
     When method DELETE
     Then status 500
-    And match $.code == '375'
+    And match $.code == '376'
+
+  Scenario: Error case Save provider, missing parameter per body
+    Given request {}
+    When method POST
+    Then status 500
+    And match $.code == '301'
+
+  Scenario: Successful case Update provider, missing parameter per body
+    Given request {}
+    When method PUT
+    Then status 500
+    And match $.code == '301'
 
