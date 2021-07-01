@@ -57,7 +57,7 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
     @Test
     public void saveContactsWithException() {
         when(useCase.saveContact(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
-        statusAssertionsWebClientPost(properties.getSaveContacts(),
+        statusAssertionsWebClientPost(properties.getContact(),
                 request)
                 .is5xxServerError();
         verify(useCase).saveContact(any());
@@ -66,7 +66,7 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
     @Test
     public void updateContactsWithException() {
         when(useCase.updateContact(any())).thenReturn(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
-        statusAssertionsWebClientPut(properties.getUpdateContacts(),
+        statusAssertionsWebClientPut(properties.getContact(),
                 request)
                 .is5xxServerError();
     }
@@ -74,7 +74,7 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
     @Test
     public void deleteContactsWithException() {
         when(useCase.deleteContact(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteContacts())
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getContact())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .header("contact-medium", "SMS")
@@ -85,7 +85,7 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
 
     @Test
     public void deleteContactsWithExceptionHeaders() {
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteContacts())
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getContact())
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

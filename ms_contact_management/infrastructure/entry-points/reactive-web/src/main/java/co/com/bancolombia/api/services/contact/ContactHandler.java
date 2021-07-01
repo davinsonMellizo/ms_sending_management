@@ -24,7 +24,7 @@ public class ContactHandler {
     private final ContactUseCase contactUseCase;
     private final ValidatorHandler validatorHandler;
 
-    public Mono<ServerResponse> findContacts(ServerRequest serverRequest) {
+    public Mono<ServerResponse> findContact(ServerRequest serverRequest) {
         return ParamsUtil.getClientHeaders(serverRequest)
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
@@ -33,7 +33,7 @@ public class ContactHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
-    public Mono<ServerResponse> saveContact(ServerRequest serverRequest) {
+    public Mono<ServerResponse> saveConatct(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(ContactDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)

@@ -19,7 +19,7 @@ public class ClientDocumentationApi {
     private final String ERROR = "Error";
     private final String SUCCESSFUL = "successful";
 
-    protected Consumer<Builder> saveClientAPI() {
+    protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("SaveClient").summary("Save Client")
                 .description("save a Client").tags(new String[]{TAG})
@@ -28,7 +28,7 @@ public class ClientDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findClientAPI() {
+    protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
                 .operationId("findClient").summary("Find Clients")
                 .description("Find Client by number and type document").tags(new String[]{TAG})
@@ -38,7 +38,7 @@ public class ClientDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateClientAPI() {
+    protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateClient").summary("Update Client")
                 .description("Update client Client ").tags(new String[]{TAG})
@@ -47,7 +47,7 @@ public class ClientDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteClientAPI() {
+    protected Consumer<Builder> delete() {
         return ops -> ops.tag(TAG)
                 .operationId("deleteClient").summary("Delete Client")
                 .description("Delete a client Client").tags(new String[]{TAG})

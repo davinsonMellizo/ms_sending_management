@@ -19,9 +19,10 @@ public class ClientRouter extends ClientDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionClient(ClientHandler clientHandler) {
-        return route().POST(apiProperties.getSaveClient(), accept(APPLICATION_JSON), clientHandler::saveClient, saveClientAPI()).build()
-                .and(route().GET(apiProperties.getFindClient(), accept(APPLICATION_JSON), clientHandler::findClient, findClientAPI()).build())
-                .and(route().PUT(apiProperties.getUpdateClient(), accept(APPLICATION_JSON), clientHandler::updateClient, updateClientAPI()).build())
-                .and(route().DELETE(apiProperties.getDeleteClient(), accept(APPLICATION_JSON), clientHandler::deleteClient, deleteClientAPI()).build());
+        final String url = apiProperties.getClient();
+        return route().POST(url, accept(APPLICATION_JSON), clientHandler::saveContact, save()).build()
+                .and(route().GET(url, accept(APPLICATION_JSON), clientHandler::findContact, find()).build())
+                .and(route().PUT(url, accept(APPLICATION_JSON), clientHandler::updateContact, update()).build())
+                .and(route().DELETE(url, accept(APPLICATION_JSON), clientHandler::deleteContact, delete()).build());
     }
 }

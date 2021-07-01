@@ -1,11 +1,5 @@
 entries:
   reactive-web:
     path-base: /api/v1/contact-management
-    save_contacts: /contact
-    find_contacts: /contact
-    update_contacts: /contact
-    delete_contacts: /contact
-    save_client: /client
-    find_client: /client
-    update_client: /client
-    delete_client: /client
+    contact: /contact
+    client: /client
