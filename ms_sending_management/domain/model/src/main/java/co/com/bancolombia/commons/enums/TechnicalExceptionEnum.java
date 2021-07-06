@@ -29,8 +29,16 @@ public enum TechnicalExceptionEnum {
     SAVE_SERVICE_ERROR("DST0015", "An error occurred while save a service"),
     UPDATE_SERVICE_ERROR("DST0016", "An error occurred while update a service"),
     DELETE_SERVICE_ERROR("DST0017", "An error occurred while delete a service"),
-    SECRET_EXCEPTION("DST0018", "An error occurred while trying to get AWS secrets"),
-    INTERNAL_SERVER_ERROR("DST0019", "Internal server error"),
+    FIND_ALL_ALERT_CLIENT_ERROR("DST0018", "An error occurred while found all alert client registers"),
+    FIND_ALERT_CLIENT_ERROR("DST0018", "An error occurred while found alert client register"),
+    SAVE_ALERT_CLIENT_ERROR("DST0019", "An error occurred while saved a relation alert with client"),
+    UPDATE_ALERT_CLIENT_ERROR("DST0020", "An error occurred while updated a relation alert with client"),
+    DELETE_ALERT_CLIENT_ERROR("DST0021", "An error occurred while deleted a relation alert with client"),
+    SAVE_ALERT_TEMPLATE_ERROR("DST0022", "An error occurred while saved a alert template"),
+    FIND_ALERT_TEMPLATE_BY_ID_ERROR("DST0023", "An error occurred while saved a alert template"),
+    DELETE_ALERT_TEMPLATE_ERROR("DST0024", "An error occurred while saved a alert template"),
+    SECRET_EXCEPTION("DST0025", "An error occurred while trying to get AWS secrets"),
+    INTERNAL_SERVER_ERROR("DST0026", "Internal server error"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
     HEADER_MISSING_ERROR("301", "Missing parameters per header");
 

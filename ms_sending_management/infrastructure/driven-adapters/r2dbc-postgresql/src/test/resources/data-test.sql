@@ -56,3 +56,7 @@ INSERT INTO alert_transaction
 (id_alert, id_consumer, id_transaction, creation_user, created_date)
 VALUES('HGD', 'BLP', '0520', 'user', '2021-02-16 10:10:25-05'),
 ('HGD', 'BLM', '0256', 'user', '2021-02-16 10:10:25-05');
+
+INSERT INTO alert_client
+(id_alert, document_number, id_document_type, number_operations, amountenable, accumulated_operations, accumulated_amount, association_origin, creation_user, created_date, modified_date, transaction_date)
+VALUES('1', 1, 5, 6, 2, 1, 4, 'tst', 'tst1', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00');
