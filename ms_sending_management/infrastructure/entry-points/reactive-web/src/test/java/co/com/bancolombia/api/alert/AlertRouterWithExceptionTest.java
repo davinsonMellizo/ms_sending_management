@@ -72,7 +72,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     }
 
     @Test
-    public void saveAlertWithExceptionTechnical() {
+    public void updateAlertWithExceptionTechnical() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
         JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
                 "{}")

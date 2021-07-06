@@ -19,23 +19,19 @@ import javax.validation.constraints.Size;
 @Builder
 public class ContactHeader {
 
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Size(max = 2, message = "{constraint.maximum_length}")
+    @PositiveOrZero(message = "{constraint.number}")
+    @Size(min = 1, max = 2, message = "{constraint.size}")
     private String documentType;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Size(max = 15, message = "{constraint.maximum_length}")
+    @PositiveOrZero(message = "{constraint.number}")
+    @Size(min = 1, max = 15, message = "{constraint.size}")
     private String documentNumber;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 10, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 10, message = "{constraint.size}")
     private String contactMedium;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 10, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 10, message = "{constraint.size}")
     private String enrollmentContact;
 
     public Mono<Contact> toModel() {

@@ -12,6 +12,9 @@ public enum TechnicalExceptionEnum {
     SAVE_ALERT_ERROR("DST0002", "An error occurred while save a alert"),
     UPDATE_ALERT_ERROR("DST0003", "An error occurred while update a alert"),
     DELETE_ALERT_ERROR("DST0004", "An error occurred while delete a alert"),
+    FIND_ALL_ALERT_TRANSACTION_ERROR("DST0001", "An error occurred while find the relations alert with transaction"),
+    SAVE_ALERT_TRANSACTION_ERROR("DST0002", "An error occurred while save a relation alert with transaction"),
+    DELETE_ALERT_TRANSACTION_ERROR("DST0004", "An error occurred while delete a relation alert with transaction"),
     FIND_REMITTER_BY_ID_ERROR("DST0004", "An error occurred while find a remitter"),
     FIND_ALL_REMITTERS_ERROR("DST0005", "An error occurred while find all remitters"),
     SAVE_REMITTER_ERROR("DST0006", "An error occurred while save a remitter"),
@@ -28,7 +31,8 @@ public enum TechnicalExceptionEnum {
     DELETE_SERVICE_ERROR("DST0017", "An error occurred while delete a service"),
     SECRET_EXCEPTION("DST0018", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("DST0019", "Internal server error"),
-    BODY_MISSING_ERROR("301", "Missing parameters per body");
+    BODY_MISSING_ERROR("301", "Missing parameters per body"),
+    HEADER_MISSING_ERROR("301", "Missing parameters per header");
 
     private final String code;
     private final String message;

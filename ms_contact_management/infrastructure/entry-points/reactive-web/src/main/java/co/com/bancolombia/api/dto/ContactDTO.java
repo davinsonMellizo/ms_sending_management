@@ -16,28 +16,25 @@ import javax.validation.constraints.*;
 @Builder(toBuilder = true)
 public class ContactDTO {
 
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 10, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 10, message = "{constraint.size}")
     private String enrollmentContact;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 10, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 10, message = "{constraint.size}")
     private String contactMedium;
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Max(value = 99, message = "{constraint.maximum_value}")
+    @Min(value = 0, message = "{constraint.min}")
+    @Max(value = 99, message = "{constraint.max}")
     private Integer documentType;
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
+    @Min(value = 0, message = "{constraint.min}")
+    @Max(value = 999999999999999L, message = "{constraint.max}")
     private Long documentNumber;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 60, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 60, message = "{constraint.size}")
     private String value;
-    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @Size(max = 10, message = "{constraint.maximum_length}")
+    @Size(min = 1, max = 10, message = "{constraint.size}")
     private String state;
 
     public Mono<Contact> toModel() {

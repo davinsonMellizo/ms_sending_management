@@ -17,7 +17,7 @@ public class ServiceDocumentationApi {
     private final static String ERROR = "Error";
     private final static String SUCCESSFUL = "successful";
 
-    protected Consumer<Builder> saveServiceAPI() {
+    protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("Save service").summary("Save service")
                 .description("Create new service").tags(new String[]{TAG})
@@ -26,15 +26,16 @@ public class ServiceDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findServiceAPI() {
+    protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
                 .operationId("findService").summary("Find Service")
                 .description("Find Service by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Service identifier"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Service.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateServiceAPI() {
+    protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateService").summary("Update Service")
                 .description("Update Service by id").tags(new String[]{TAG})
@@ -43,7 +44,7 @@ public class ServiceDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteServiceAPI() {
+    protected Consumer<Builder> delete() {
         return ops -> ops.tag(TAG)
                 .operationId("deleteService").summary("Delete Service")
                 .description("Delete a Service by id").tags(new String[]{TAG})

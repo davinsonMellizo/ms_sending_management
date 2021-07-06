@@ -7,7 +7,6 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.contact.ContactHandler;
 import co.com.bancolombia.api.services.contact.ContactRouter;
 import co.com.bancolombia.model.contact.Contact;
-import co.com.bancolombia.model.response.ContactsResponse;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -57,9 +56,8 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
 
     @Test
     public void findAllContactsByClient() {
-        when(useCase.findContactsByClient(any())).thenReturn(Mono.just(ContactsResponse.builder()
-                .contacts(List.of(contact)).build()));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getFindContacts())
+        when(useCase.findContactsByClient(any())).thenReturn(Mono.just(List.of(contact)));
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getContact())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .exchange();
@@ -70,7 +68,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     @Test
     public void saveContacts() {
         when(useCase.saveContact(any())).thenReturn(Mono.just(contact));
-        statusAssertionsWebClientPost(properties.getSaveContacts(),
+        statusAssertionsWebClientPost(properties.getContact(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
@@ -83,7 +81,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     public void updateContacts() {
         when(useCase.updateContact(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
                 .actual(contact).before(contact).build()));
-        statusAssertionsWebClientPut(properties.getUpdateContacts(),
+        statusAssertionsWebClientPut(properties.getContact(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
@@ -95,7 +93,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     @Test
     public void deleteContacts() {
         when(useCase.deleteContact(any())).thenReturn(Mono.just(1));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteContacts())
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getContact())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .header("contact-medium", "SMS")

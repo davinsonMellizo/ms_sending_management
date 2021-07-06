@@ -1,0 +1,8 @@
+{
+  "documentNumber": '#(documentNumber)',
+  "documentType": 0,
+  "keyMdm": "KEY",
+  "enrollmentOrigin": "svp",
+  "idState": 0,
+  "creationUser": "user"
+}

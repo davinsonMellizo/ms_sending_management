@@ -20,9 +20,10 @@ public class ServiceRouter extends ServiceDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionService(ServiceHandler handler) {
-        return route().POST(apiProperties.getService(), accept(APPLICATION_JSON), handler::saveService, saveServiceAPI()).build()
-                .and(route().PUT(apiProperties.getService(), accept(APPLICATION_JSON), handler::updateService, updateServiceAPI()).build())
-                .and(route().GET(apiProperties.getService() + ID, accept(APPLICATION_JSON), handler::findService, findServiceAPI()).build())
-                .and(route().DELETE(apiProperties.getService() + ID, accept(APPLICATION_JSON), handler::deleteService, deleteServiceAPI()).build());
+        final String url = apiProperties.getService();
+        return route().POST(url, accept(APPLICATION_JSON), handler::saveService, save()).build()
+                .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateService, update()).build())
+                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findService, find()).build())
+                .and(route().DELETE(url + ID, accept(APPLICATION_JSON), handler::deleteService, delete()).build());
     }
 }

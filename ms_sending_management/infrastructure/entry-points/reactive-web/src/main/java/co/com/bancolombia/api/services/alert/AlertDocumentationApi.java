@@ -14,11 +14,11 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class AlertDocumentationApi {
 
-    private final static String TAG = "Alerts";
+    private final static String TAG = "Alert";
     private final static String ERROR = "Error";
     private final static String SUCCESSFUL = "successful";
 
-    protected Consumer<Builder> saveAlertAPI() {
+    protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("SaveAlert").summary("Save Alert")
                 .description("Create new Alert").tags(new String[]{TAG})
@@ -27,7 +27,7 @@ public class AlertDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findAlertAPI() {
+    protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
                 .operationId("findAlert").summary("Find Alert")
                 .description("Find Alerts by id").tags(new String[]{TAG})
@@ -35,7 +35,7 @@ public class AlertDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateAlertAPI() {
+    protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateAlert").summary("Update Alert")
                 .description("Update Alert by id").tags(new String[]{TAG})
@@ -44,7 +44,7 @@ public class AlertDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteAlertAPI() {
+    protected Consumer<Builder> delete() {
         return ops -> ops.tag(TAG)
                 .operationId("deleteAlert").summary("Delete Alert")
                 .description("Delete a Alert by id").tags(new String[]{TAG})

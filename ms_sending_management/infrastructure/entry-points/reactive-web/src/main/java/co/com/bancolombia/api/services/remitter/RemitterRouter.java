@@ -20,10 +20,11 @@ public class RemitterRouter extends RemitterDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionRemitter(RemitterHandler handler) {
-        return route().POST(apiProperties.getRemitter(), accept(APPLICATION_JSON), handler::saveRemitter, saveRemitterAPI()).build()
-                .and(route().PUT(apiProperties.getRemitter(), accept(APPLICATION_JSON), handler::updateRemitter, updateRemitterAPI()).build())
-                .and(route().GET(apiProperties.getRemitter(), accept(APPLICATION_JSON), handler::findAllRemitter, findAllRemitterAPI()).build())
-                .and(route().GET(apiProperties.getRemitter() + ID, accept(APPLICATION_JSON), handler::findRemitter, findRemitterAPI()).build())
-                .and(route().DELETE(apiProperties.getRemitter() + ID, accept(APPLICATION_JSON), handler::deleteRemitter, deleteRemitterAPI()).build());
+        final String url = apiProperties.getRemitter();
+        return route().POST(url, accept(APPLICATION_JSON), handler::saveRemitter, save()).build()
+                .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateRemitter, update()).build())
+                .and(route().GET(url, accept(APPLICATION_JSON), handler::findAllRemitter, findAll()).build())
+                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findRemitter, find()).build())
+                .and(route().DELETE(url + ID, accept(APPLICATION_JSON), handler::deleteRemitter, delete()).build());
     }
 }

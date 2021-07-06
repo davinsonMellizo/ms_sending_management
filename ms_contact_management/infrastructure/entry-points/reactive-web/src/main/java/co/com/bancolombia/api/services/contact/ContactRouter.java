@@ -19,9 +19,10 @@ public class ContactRouter extends ContactDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionContact(ContactHandler contactHandler) {
-        return route().POST(apiProperties.getSaveContacts(), accept(APPLICATION_JSON), contactHandler::saveContact, saveContactAPI()).build()
-                .and(route().GET(apiProperties.getFindContacts(), accept(APPLICATION_JSON), contactHandler::findContacts, findContactAPI()).build())
-                .and(route().PUT(apiProperties.getUpdateContacts(), accept(APPLICATION_JSON), contactHandler::updateContact, updateContactAPI()).build())
-                .and(route().DELETE(apiProperties.getDeleteContacts(), accept(APPLICATION_JSON), contactHandler::deleteContact, deleteContactAPI()).build());
+        final String url = apiProperties.getContact();
+        return route().POST(url, accept(APPLICATION_JSON), contactHandler::saveConatct, save()).build()
+                .and(route().GET(url, accept(APPLICATION_JSON), contactHandler::findContact, find()).build())
+                .and(route().PUT(url, accept(APPLICATION_JSON), contactHandler::updateContact, update()).build())
+                .and(route().DELETE(url, accept(APPLICATION_JSON), contactHandler::deleteContact, delete()).build());
     }
 }

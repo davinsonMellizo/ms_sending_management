@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-
 import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
@@ -21,9 +20,10 @@ public class AlertRouter extends AlertDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionAlert(AlertHandler handler) {
-        return route().POST(apiProperties.getAlert(), accept(APPLICATION_JSON), handler::saveAlert, saveAlertAPI()).build()
-                .and(route().PUT(apiProperties.getAlert(), accept(APPLICATION_JSON), handler::updateAlert, updateAlertAPI()).build())
-                .and(route().GET(apiProperties.getAlert() + ID, accept(APPLICATION_JSON), handler::findAlert, findAlertAPI()).build())
-                .and(route().DELETE(apiProperties.getAlert() + ID, accept(APPLICATION_JSON), handler::deleteAlert, deleteAlertAPI()).build());
+        final String url = apiProperties.getAlert();
+        return route().POST(url, accept(APPLICATION_JSON), handler::saveAlert, save()).build()
+                .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateAlert, update()).build())
+                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findAlert, find()).build())
+                .and(route().DELETE(url + ID, accept(APPLICATION_JSON), handler::deleteAlert, delete()).build());
     }
 }

@@ -20,10 +20,11 @@ public class ProviderRouter extends ProviderDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionProvider(ProviderHandler handler) {
-        return route().POST(apiProperties.getProvider(), accept(APPLICATION_JSON), handler::saveProvider, saveProviderAPI()).build()
-                .and(route().PUT(apiProperties.getProvider(), accept(APPLICATION_JSON), handler::updateProvider, updateProviderAPI()).build())
-                .and(route().GET(apiProperties.getProvider(), accept(APPLICATION_JSON), handler::findAllProvider, findAllProviderAPI()).build())
-                .and(route().GET(apiProperties.getProvider() + ID, accept(APPLICATION_JSON), handler::findProviderById, findProviderAPI()).build())
-                .and(route().DELETE(apiProperties.getProvider() + ID, accept(APPLICATION_JSON), handler::deleteProviderById, deleteProviderAPI()).build());
+        final String url = apiProperties.getProvider();
+        return route().POST(url, accept(APPLICATION_JSON), handler::saveProvider, save()).build()
+                .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateProvider, update()).build())
+                .and(route().GET(url, accept(APPLICATION_JSON), handler::findAllProvider, findAll()).build())
+                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findProviderById, find()).build())
+                .and(route().DELETE(url + ID, accept(APPLICATION_JSON), handler::deleteProviderById, delete()).build());
     }
 }

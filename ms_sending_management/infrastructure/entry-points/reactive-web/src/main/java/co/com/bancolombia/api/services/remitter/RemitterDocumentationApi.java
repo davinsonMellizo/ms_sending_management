@@ -17,7 +17,7 @@ public class RemitterDocumentationApi {
     private final static String ERROR = "Error";
     private final static String SUCCESSFUL = "successful";
 
-    protected Consumer<Builder> saveRemitterAPI() {
+    protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("SaveRemitter").summary("Save Remitter")
                 .description("Create new Remitter").tags(new String[]{TAG})
@@ -26,22 +26,24 @@ public class RemitterDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findRemitterAPI() {
+    protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
                 .operationId("findRemitter").summary("Find Remitter")
                 .description("Find Remitter by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Remitter identifier"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Remitter.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findAllRemitterAPI() {
+    protected Consumer<Builder> findAll() {
         return ops -> ops.tag(TAG)
                 .operationId("findAllRemitter").summary("Find all Remitters")
                 .description("Find all Remitters by id").tags(new String[]{TAG})
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(Remitter.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateRemitterAPI() {
+    protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateRemitter").summary("Update Remitter")
                 .description("Update Remitter by id").tags(new String[]{TAG})
@@ -50,7 +52,7 @@ public class RemitterDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteRemitterAPI() {
+    protected Consumer<Builder> delete() {
         return ops -> ops.tag(TAG)
                 .operationId("deleteRemitter").summary("Delete Remitter")
                 .description("Delete a Remitter by id").tags(new String[]{TAG})

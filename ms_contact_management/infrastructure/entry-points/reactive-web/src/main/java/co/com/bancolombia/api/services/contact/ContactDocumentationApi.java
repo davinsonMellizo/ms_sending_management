@@ -3,7 +3,6 @@ package co.com.bancolombia.api.services.contact;
 import co.com.bancolombia.api.dto.ContactDTO;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.error.Error;
-import co.com.bancolombia.model.response.ContactsResponse;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
 
@@ -20,7 +19,7 @@ public class ContactDocumentationApi {
     private final String ERROR = "Error";
     private final String SUCCESSFUL = "successful";
 
-    protected Consumer<Builder> saveContactAPI() {
+    protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("SaveContact").summary("Save contact")
                 .description("save a Client contact").tags(new String[]{TAG})
@@ -29,18 +28,18 @@ public class ContactDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findContactAPI() {
+    protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
                 .operationId("findContacts").summary("Find contacts")
                 .description("Find contacts by client").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ContactsResponse.class))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(Contact.class))
                 .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateContactAPI() {
+    protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateContact").summary("Update contact")
                 .description("Update client contact ").tags(new String[]{TAG})
@@ -49,7 +48,7 @@ public class ContactDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteContactAPI() {
+    protected Consumer<Builder> delete() {
         return ops -> ops.tag(TAG)
                 .operationId("deleteContact").summary("Delete contact")
                 .description("Delete a client contact").tags(new String[]{TAG})

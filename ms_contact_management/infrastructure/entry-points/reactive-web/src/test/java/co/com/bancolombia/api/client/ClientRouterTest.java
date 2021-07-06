@@ -55,7 +55,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     @Test
     public void findAllContactsByClient() {
         when(useCase.findClientByIdentification(any())).thenReturn(Mono.just(client));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getFindClient())
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getClient())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .exchange();
@@ -66,7 +66,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     @Test
     public void saveContacts() {
         when(useCase.saveClient(any())).thenReturn(Mono.just(client));
-        statusAssertionsWebClientPost(properties.getSaveClient(),
+        statusAssertionsWebClientPost(properties.getClient(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
@@ -78,7 +78,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     public void updateContacts() {
         when(useCase.updateClient(any())).thenReturn(Mono.just(StatusResponse.<Client>builder()
                 .actual(client).before(client).build()));
-        statusAssertionsWebClientPut(properties.getUpdateClient(),
+        statusAssertionsWebClientPut(properties.getClient(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
@@ -89,7 +89,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     @Test
     public void deleteContacts() {
         when(useCase.deleteClient(any())).thenReturn(Mono.just(client));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getDeleteClient())
+        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getClient())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .exchange();

@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -15,16 +18,14 @@ import javax.validation.constraints.*;
 @Builder
 public class ServiceDTO {
 
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer id;
-    @Size(max = 20, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 20, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String name;
-    @Size(max = 20, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 20, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String creationUser;
 

@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,20 +16,16 @@ import javax.validation.constraints.Size;
 @Builder
 public class ProviderDTO {
 
-    @Size(max = 3, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String id;
-    @Size(max = 20, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 20, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String name;
-    @Size(max = 1, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 1, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String typeService;
-    @Size(max = 20, message = "{constraint.maximum_length}")
-    @NotBlank(message = "{constraint.not_blank}")
+    @Size(min = 1, max = 20, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String creationUser;
 

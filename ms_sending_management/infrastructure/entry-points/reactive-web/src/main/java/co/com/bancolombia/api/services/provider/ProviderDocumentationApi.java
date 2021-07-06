@@ -18,7 +18,7 @@ public class ProviderDocumentationApi {
     private final static String ERROR = "Error";
     private final static String SUCCESSFUL = "successful";
 
-    protected Consumer<Builder> saveProviderAPI() {
+    protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("SaveProvider").summary("Save Provider")
                 .description("Create new Provider").tags(new String[]{TAG})
@@ -27,22 +27,24 @@ public class ProviderDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findProviderAPI() {
+    protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
                 .operationId("findProvider").summary("Find Provider")
                 .description("Find Provider by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Provider identifier"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Provider.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> findAllProviderAPI() {
+    protected Consumer<Builder> findAll() {
         return ops -> ops.tag(TAG)
                 .operationId("findProviders").summary("Find all Providers")
                 .description("Find all Providers").tags(new String[]{TAG})
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(Provider.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> updateProviderAPI() {
+    protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateProvider").summary("Update Provider")
                 .description("Update Provider by code").tags(new String[]{TAG})
@@ -51,7 +53,7 @@ public class ProviderDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
-    protected Consumer<Builder> deleteProviderAPI() {
+    protected Consumer<Builder> delete() {
         return ops -> ops.tag(TAG)
                 .operationId("deleteProvider").summary("Delete Provider")
                 .description("Delete a Provider by id").tags(new String[]{TAG})

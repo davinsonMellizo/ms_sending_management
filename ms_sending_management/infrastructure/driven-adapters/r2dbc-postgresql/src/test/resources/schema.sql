@@ -99,12 +99,10 @@ CREATE TABLE IF NOT EXISTS alert_transaction (
 	id_alert varchar(3) NOT NULL,
 	id_consumer varchar(3) NOT NULL,
 	id_transaction varchar(4) NOT NULL,
-	id_state int2 NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
 	CONSTRAINT alert_transaction_pkey PRIMARY KEY (id_alert, id_consumer, id_transaction),
-	CONSTRAINT alert_transaction_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id),
- 	CONSTRAINT alert_transaction_state_fkey FOREIGN KEY (id_state) REFERENCES state(id)
+	CONSTRAINT alert_transaction_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id) on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS alert_client (
