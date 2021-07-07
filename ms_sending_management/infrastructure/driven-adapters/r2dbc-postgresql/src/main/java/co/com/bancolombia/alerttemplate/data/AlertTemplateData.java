@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table("template_alert")
+@Table("alert_template")
 public class AlertTemplateData implements Persistable<Integer> {
 
     @Id

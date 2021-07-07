@@ -22,7 +22,7 @@ public class AlertTemplateRepositoryImplement
     private TimeFactory timeFactory;
 
     public AlertTemplateRepositoryImplement(AlertTemplateRepository repository, AlertTemplateMapper mapper) {
-        super(repository, null, mapper::toEntity);
+        super(repository, mapper::toData, mapper::toEntity);
     }
 
     @Override

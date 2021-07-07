@@ -17,7 +17,7 @@ public interface AlertClientRepository extends ReactiveCrudRepository<AlertClien
 
     @Modifying
     @Query("update alert_client " +
-            "set number_operations = $1, amountenable = $2 " +
+            "set number_operations = $1, amount_enable = $2 " +
             "where id_alert = $3 and document_number= $4 and id_document_type = $5")
     Mono<Integer> updateAlertClient(Integer numberOperations, Long amount, String idAlert,
                                     Long documentNumber, Integer documentType);

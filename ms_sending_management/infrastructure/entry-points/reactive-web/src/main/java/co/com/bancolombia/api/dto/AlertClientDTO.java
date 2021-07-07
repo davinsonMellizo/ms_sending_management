@@ -47,7 +47,7 @@ public class AlertClientDTO {
                 .documentNumber(this.documentNumber)
                 .idDocumentType(this.idDocumentType)
                 .numberOperations(this.numberOperations)
-                .amountenable(this.amountenable)
+                .amountEnable(this.amountenable)
                 .accumulatedOperations(this.accumulatedOperations)
                 .accumulatedAmount(this.accumulatedAmount)
                 .associationOrigin(this.associationOrigin)

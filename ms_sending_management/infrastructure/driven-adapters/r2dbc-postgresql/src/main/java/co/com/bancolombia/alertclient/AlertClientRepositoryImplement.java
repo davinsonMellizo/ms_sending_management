@@ -45,7 +45,7 @@ public class AlertClientRepositoryImplement
     @Override
     public Mono<StatusResponse<AlertClient>> updateAlertClient(StatusResponse<AlertClient> statusResponse) {
         return repository.updateAlertClient(statusResponse.getActual().getNumberOperations(),
-                statusResponse.getActual().getAmountenable(),
+                statusResponse.getActual().getAmountEnable(),
                 statusResponse.getActual().getIdAlert(),
                 statusResponse.getActual().getDocumentNumber(),
                 statusResponse.getActual().getIdDocumentType())

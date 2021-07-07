@@ -1,3 +1,4 @@
+@ignore
 Feature: CRUD alert transaction
 
   Background:
