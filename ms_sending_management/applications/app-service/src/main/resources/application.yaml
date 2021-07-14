@@ -28,6 +28,7 @@ spring:
 
 adapters:
   secrets-manager:
+    secret-rabbit: ${SECRET-RABBIT}
     secret-rds: ${SECRET-RDS}
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}
@@ -40,6 +41,11 @@ entries:
     remitter: ${REMITTER}
     provider: ${PROVIDER}
     service: ${SERVICE}
+
+##RabbitMQ Configuration
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 1
 
 management:
   health:

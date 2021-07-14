@@ -10,4 +10,6 @@ public interface AlertTransactionGateway {
     Mono<String> deleteAlertTransaction(AlertTransaction alertTransaction);
 
     Flux<AlertTransaction> findAllAlertTransaction(String idAlert);
+
+    Flux<AlertTransaction> findAllAlertTransaction(String idTrx, String idConsumer);
 }

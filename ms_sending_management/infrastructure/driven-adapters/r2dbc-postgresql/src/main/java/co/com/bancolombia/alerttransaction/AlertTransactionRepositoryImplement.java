@@ -55,4 +55,9 @@ public class AlertTransactionRepositoryImplement
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_ALERT_TRANSACTION_ERROR));
     }
+
+    @Override
+    public Flux<AlertTransaction> findAllAlertTransaction(String idTrx, String idConsumer) {
+        return null;
+    }
 }
