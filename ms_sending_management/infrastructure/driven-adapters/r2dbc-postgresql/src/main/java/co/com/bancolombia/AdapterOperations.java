@@ -31,5 +31,9 @@ public class AdapterOperations<E, D, I, R extends ReactiveCrudRepository<D, I>> 
         return toEntity.apply(data);
     }
 
+    protected Mono<D> saveData(D data) {
+        return repository.save(data);
+    }
+
 
 }

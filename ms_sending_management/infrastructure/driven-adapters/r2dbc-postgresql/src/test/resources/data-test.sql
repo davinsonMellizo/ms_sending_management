@@ -33,8 +33,8 @@ INSERT INTO service
 (id, name, creation_user, created_date)
 VALUES(0, 'email', 'Davinson', '2021-02-16 10:10:25-05');
 
-INSERT INTO template_alert
-(id, fiel, initial_position, final_position, creation_user, created_date)
+INSERT INTO alert_template
+(id, field, initial_position, final_position, creation_user, created_date)
 VALUES(0, 'campo1', 0, 10, 'davinson', '2021-02-16 10:10:25-05');
 
 INSERT INTO alert
@@ -56,3 +56,13 @@ INSERT INTO alert_transaction
 (id_alert, id_consumer, id_transaction, creation_user, created_date)
 VALUES('HGD', 'BLP', '0520', 'user', '2021-02-16 10:10:25-05'),
 ('HGD', 'BLM', '0256', 'user', '2021-02-16 10:10:25-05');
+
+INSERT INTO alert_client
+(id_alert, document_number, id_document_type, number_operations, amount_enable, accumulated_operations, accumulated_amount, association_origin, creation_user, created_date, modified_date, transaction_date)
+VALUES('HGD', 1061, 0, 5, 2, 1, 4, 'tst', 'tst1', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00'),
+('HGD', 6565, 0, 1, 3, 4, 5, 'tsa', 'tst2', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00');
+
+INSERT INTO alert_template
+(id, field, initial_position, final_position, creation_user, created_date)
+VALUES(1, 'field', 1, 6, 'user', '2023-05-20 04:00:00-00');
+
