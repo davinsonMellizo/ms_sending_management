@@ -1,4 +1,3 @@
-@ignore
 Feature: CRUD Service
 
   Background:

@@ -1,0 +1,11 @@
+{
+  "idAlert": '#(idAlert)',
+  "documentNumber": 123,
+  "idDocumentType": 1,
+  "numberOperations": 2,
+  "amountenable": 5,
+  "accumulatedOperations": 1,
+  "accumulatedAmount": 1,
+  "associationOrigin": "tst",
+  "creationUser": "lmbm"
+}

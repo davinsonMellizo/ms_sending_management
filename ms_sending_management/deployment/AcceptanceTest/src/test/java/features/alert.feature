@@ -1,4 +1,3 @@
-@ignore
 Feature: CRUD and relations with alert
 
   Background:

@@ -17,6 +17,6 @@ public class ApiProperties {
     private String provider;
     private String service;
     private String remitter;
-    private String alertClient;
+    private String consumer;
 
 }

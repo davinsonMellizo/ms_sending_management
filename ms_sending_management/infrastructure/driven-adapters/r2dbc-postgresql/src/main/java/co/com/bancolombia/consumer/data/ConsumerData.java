@@ -1,4 +1,4 @@
-package co.com.bancolombia.service.data;
+package co.com.bancolombia.consumer.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,20 +9,16 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table("service")
-public class ServiceData implements Persistable<Integer> {
+@Table("consumer")
+public class ConsumerData implements Persistable<String> {
+
     @Id
-    private Integer id;
-    private String name;
-    private String creationUser;
-    private Integer idState;
-    private LocalDateTime createdDate;
+    private String id;
+    private String code;
 
     @Transient
     private Boolean isNew;

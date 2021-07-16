@@ -37,8 +37,13 @@ public enum TechnicalExceptionEnum {
     SAVE_ALERT_TEMPLATE_ERROR("DST0022", "An error occurred while saved a alert template"),
     FIND_ALERT_TEMPLATE_BY_ID_ERROR("DST0023", "An error occurred while saved a alert template"),
     DELETE_ALERT_TEMPLATE_ERROR("DST0024", "An error occurred while saved a alert template"),
-    SECRET_EXCEPTION("DST0025", "An error occurred while trying to get AWS secrets"),
-    INTERNAL_SERVER_ERROR("DST0026", "Internal server error"),
+    FIND_ALL_CONSUMER_ERROR("DST0025", "An error occurred while found all consumers"),
+    FIND_CONSUMER_BY_ID_ERROR("DST0026", "An error occurred while found a consumer"),
+    SAVE_CONSUMER_ERROR("DST0027", "An error occurred while save a consumer"),
+    UPDATE_CONSUMER_ERROR("DST0028", "An error occurred while update a consumer"),
+    DELETE_CONSUMER_ERROR("DST0029", "An error occurred while delete a consumer"),
+    SECRET_EXCEPTION("DST0030", "An error occurred while trying to get AWS secrets"),
+    INTERNAL_SERVER_ERROR("DST0031", "Internal server error"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
     HEADER_MISSING_ERROR("301", "Missing parameters per header");
 

@@ -63,8 +63,10 @@ CREATE TABLE IF NOT EXISTS service (
 	id int2 NOT NULL,
 	name varchar(50) NOT NULL,
 	creation_user varchar(20) NULL,
+	id_state int2 NOT NULL,
 	created_date timestamp NOT NULL,
-	CONSTRAINT service_pkey PRIMARY KEY (id)
+	CONSTRAINT service_pkey PRIMARY KEY (id),
+	CONSTRAINT service_state_fkey FOREIGN KEY (id_state) REFERENCES state(id)
 );
 
 CREATE TABLE IF NOT EXISTS alert (
@@ -126,6 +128,12 @@ CREATE TABLE IF NOT EXISTS log_send (
 	id_alert varchar(3) NOT NULL,
 	created_date timestamp NOT NULL,
 	CONSTRAINT log_send_pkey PRIMARY KEY (id_alert)
+);
+
+CREATE TABLE IF NOT EXISTS consumer (
+	id varchar(3) NOT NULL,
+	code varchar(10) NOT NULL,
+	CONSTRAINT consumer_pkey PRIMARY KEY (id)
 );
 
 --
