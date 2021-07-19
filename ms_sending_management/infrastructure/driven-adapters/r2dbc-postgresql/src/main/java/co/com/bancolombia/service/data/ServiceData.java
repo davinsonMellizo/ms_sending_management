@@ -21,6 +21,7 @@ public class ServiceData implements Persistable<Integer> {
     private Integer id;
     private String name;
     private String creationUser;
+    private Integer idState;
     private LocalDateTime createdDate;
 
     @Transient

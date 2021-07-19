@@ -23,6 +23,7 @@ public class AlertTransactionRepositoryImplTest {
     public void init() {
         service.setId(0);
         service.setName("EMAIL BASE");
+        service.setIdState(1);
         service.setCreationUser("User");
 
     }

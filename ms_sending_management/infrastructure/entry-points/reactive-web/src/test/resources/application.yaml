@@ -5,3 +5,4 @@ entries:
     provider: /provider
     remitter: /remitter
     service: /service
+    consumer: /consumer

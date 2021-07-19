@@ -40,14 +40,14 @@ CREATE TABLE IF NOT EXISTS provider (
 	CONSTRAINT provider_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS template_alert (
+CREATE TABLE IF NOT EXISTS alert_template (
 	id int2 NOT NULL,
-	fiel varchar(10) NOT NULL,
+	field varchar(10) NOT NULL,
 	initial_position int2 NOT NULL,
 	final_position int2 NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
-	CONSTRAINT template_alert_pkey PRIMARY KEY (id)
+	CONSTRAINT alert_template_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS remitter (
@@ -63,8 +63,10 @@ CREATE TABLE IF NOT EXISTS service (
 	id int2 NOT NULL,
 	name varchar(50) NOT NULL,
 	creation_user varchar(20) NULL,
+	id_state int2 NOT NULL,
 	created_date timestamp NOT NULL,
-	CONSTRAINT service_pkey PRIMARY KEY (id)
+	CONSTRAINT service_pkey PRIMARY KEY (id),
+	CONSTRAINT service_state_fkey FOREIGN KEY (id_state) REFERENCES state(id)
 );
 
 CREATE TABLE IF NOT EXISTS alert (
@@ -89,7 +91,7 @@ CREATE TABLE IF NOT EXISTS alert (
 	CONSTRAINT alert_pkey PRIMARY KEY (id),
 	CONSTRAINT alert_provider_mail_fkey FOREIGN KEY (id_provider_mail) REFERENCES provider(id),
 	CONSTRAINT alert_provider_sms_fkey FOREIGN KEY (id_provider_sms) REFERENCES provider(id),
-	CONSTRAINT alert_template_fkey FOREIGN KEY (id_template) REFERENCES template_alert(id),
+	CONSTRAINT alert_template_fkey FOREIGN KEY (id_template) REFERENCES alert_template(id),
 	CONSTRAINT alert_remitter_fkey FOREIGN KEY (id_remitter) REFERENCES remitter(id),
 	CONSTRAINT alert_service_fkey FOREIGN KEY (id_service) REFERENCES service(id),
 	CONSTRAINT alert_state_fkey FOREIGN KEY (id_state) REFERENCES state(id)
@@ -110,7 +112,7 @@ CREATE TABLE IF NOT EXISTS alert_client (
 	document_number int8 NOT NULL,
 	id_document_type int2 NOT NULL,
 	number_operations int2 NOT NULL,
-	amountEnable int8 NOT NULL,
+	amount_enable int8 NOT NULL,
 	accumulated_operations int2 NULL,
 	accumulated_amount int8 NULL,
 	association_origin varchar(3) NOT NULL,
@@ -119,13 +121,19 @@ CREATE TABLE IF NOT EXISTS alert_client (
 	modified_date timestamp NULL, 
 	transaction_date timestamp NULL,
 	CONSTRAINT alert_client_pkey PRIMARY KEY (id_alert, document_number, id_document_type),
-	CONSTRAINT alert_client_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id)
+	CONSTRAINT alert_client_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id) on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS log_send (
 	id_alert varchar(3) NOT NULL,
 	created_date timestamp NOT NULL,
 	CONSTRAINT log_send_pkey PRIMARY KEY (id_alert)
+);
+
+CREATE TABLE IF NOT EXISTS consumer (
+	id varchar(3) NOT NULL,
+	code varchar(10) NOT NULL,
+	CONSTRAINT consumer_pkey PRIMARY KEY (id)
 );
 
 --
