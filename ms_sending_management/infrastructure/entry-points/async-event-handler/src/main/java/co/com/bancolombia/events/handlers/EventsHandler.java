@@ -13,6 +13,6 @@ public class EventsHandler {
     private final SendAlertUseCase useCase;
 
     public Mono<Void> handleSendAlert(DomainEvent<Message> event) {
-        return useCase.sendAlertRetry(event.getData());
+        return useCase.alertSendingManager(event.getData());
     }
 }

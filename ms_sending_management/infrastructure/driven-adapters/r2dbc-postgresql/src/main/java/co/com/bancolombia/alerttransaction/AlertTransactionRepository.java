@@ -13,6 +13,9 @@ public interface AlertTransactionRepository extends ReactiveCrudRepository<Alert
     @Query("delete from alert_transaction where id_alert = $1 and id_consumer = $2 and id_transaction = $3")
     Mono<Integer> deleteAlertTransaction(String idAlert, String idConsumer, String idTransaction);
 
+    @Query("select * from alert_transaction where id_consumer = $1 and id_transaction = $2")
+    Flux<AlertTransactionData> findAllAlertTransaction(String idConsumer, String idTransaction);
+
     @Query("select * from alert_transaction where id_alert = $1")
     Flux<AlertTransactionData> findAllAlertTransaction(String idAlert);
 }
