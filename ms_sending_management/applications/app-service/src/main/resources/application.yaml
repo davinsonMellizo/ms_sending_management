@@ -41,6 +41,7 @@ entries:
     remitter: ${REMITTER}
     provider: ${PROVIDER}
     service: ${SERVICE}
+    consumer: ${CONSUMER}
 
 ##RabbitMQ Configuration
 app.async.withDLQRetry: true

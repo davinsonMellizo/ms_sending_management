@@ -14,5 +14,5 @@ public interface AlertTransactionGateway {
 
     Flux<AlertTransaction> findAllAlertTransaction(String idAlert);
 
-    Mono<List<AlertTransaction>> findAllAlertTransaction(Message message);
+    Flux<AlertTransaction> findAllAlertTransaction(Message message);
 }

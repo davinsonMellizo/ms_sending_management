@@ -7,23 +7,28 @@ import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
+import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
+import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
+
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidFormatMail;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailAndMobile;
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
     private final AlertTransactionGateway alertTransactionGateway;
     private final AlertClientGateway alertClientGateway;
+    private final ConsumerGateway consumerGateway;
+    private final ContactGateway contactGateway;
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
 
@@ -39,13 +44,6 @@ public class SendAlertUseCase {
         return functions.get(idOperation);
     }
 
-    private final Predicate<Message> isValidMailAndMobile = message ->
-            (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
-            || (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty());
-
-    private final Predicate<String> isValidFormatMail = email ->
-            Pattern.compile("^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$")
-            .matcher(email).matches();
 
     //TODO validate id 5
     private Mono<Void> validateWithCodeAlert(Message message) {
@@ -71,7 +69,7 @@ public class SendAlertUseCase {
     private Mono<Void> validateWithCodeTrx(Message message) {
         return Mono.just(message)
                 .filter(isValidMailAndMobile)
-                .flatMap(alertTransactionGateway::findAllAlertTransaction)
+                .map(alertTransactionGateway::findAllAlertTransaction)
                 .then(Mono.empty());
     }
 
@@ -79,7 +77,7 @@ public class SendAlertUseCase {
     //TODO validate id 1
     private Mono<Void> validateBasic(Message message) {
         return Mono.just(message)
-                .flatMap(this::validateConsumer)
+                .flatMap(this::findDataContact)
                 .filter(isValidMailAndMobile)
                 .then(Mono.empty());
     }
@@ -103,36 +101,44 @@ public class SendAlertUseCase {
                 .onErrorResume(throwable -> Mono.empty());
     }
 
-    private Mono<Void> validateAlerts(List<AlertTransaction> alertTransactions, Message message){
-        return Flux.fromIterable(alertTransactions)
+    private Mono<Void> validateAlerts(Message message){
+        return alertTransactionGateway.findAllAlertTransaction(message)
                 .map(AlertTransaction::getIdAlert)
                 .flatMap(alertGateway::findAlertById)
                 .flatMap(alert -> validateObligation(alert, message))
                 .then(Mono.empty());
     }
 
-    private Mono<Message> validateConsumer(Message message){
-        return Mono.empty();
+    private Mono<Message> findDataContact(Message message){
+        return contactGateway.findAllContactsByClient(message)
+                .collectMap(Contact::getContactMedium)
+                .map(contacts -> Message.builder()
+                        .mobile(contacts.get("SMS").getValue())
+                        .mail(contacts.get("MAIL").getValue()).build())
+                .switchIfEmpty(Mono.just(message));
     }
 
-    private Mono<Message> validateDataContact(Message message){
+    private Mono<Message> validateDataContact(Message message, Consumer consumer){
         return Mono.just(message)
                 .filter(isValidMailAndMobile)
-                .switchIfEmpty(Mono.just("Obtener mobile contacto")
-                        .map(contact -> Message.builder().mobile(contact).mail(contact).build()));
+                .switchIfEmpty(findDataContact(message))
+                .filter(isValidMailAndMobile)
+                .switchIfEmpty(findDataContact(Message.builder().consumer(consumer.getCode()).build()))
+                .filter(isValidMailAndMobile)
+                .switchIfEmpty(Mono.error(new Throwable("Invalid data contact")));
 
     }
 
     private Mono<Void> validateWithDataClient(Message message) {
         return Mono.just(message)
                 .flatMap(clientGateway::findClientByIdentification)
+                .switchIfEmpty(Mono.error(new Throwable("Client not found")))
                 .filter(client -> client.getIdState()==0)
-                .map(client -> message)
-                .flatMap(this::validateDataContact)
-                .filter(isValidMailAndMobile)
-                .flatMap(this::validateConsumer)
-                .flatMap(alertTransactionGateway::findAllAlertTransaction)
-                .flatMap(alertTransactions -> validateAlerts(alertTransactions, message))
+                .switchIfEmpty(Mono.error(new Throwable("Client not active")))
+                .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
+                .switchIfEmpty(Mono.error(new Throwable("Invalid Consumer")))
+                .flatMap(consumer -> validateDataContact(message, consumer))
+                .flatMap(this::validateAlerts)
                 .then(Mono.empty());
     }
 

@@ -10,13 +10,15 @@ function() {
       urlAlert: '',
       urlRemitter: '',
       urlService: '',
-      urlProvider: ''
+      urlProvider: '',
+      urlConsumer: ''
   }
 
   config.urlAlert = envData.urlAlert;
   config.urlRemitter = envData.urlRemitter;
   config.urlService = envData.urlService;
   config.urlProvider = envData.urlProvider;
+  config.urlConsumer = envData.urlConsumer;
   return config
 
 }

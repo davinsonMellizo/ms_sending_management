@@ -60,10 +60,9 @@ public class AlertTransactionRepositoryImplement
     }
 
     @Override
-    public Mono<List<AlertTransaction>> findAllAlertTransaction(Message message) {
+    public Flux<AlertTransaction> findAllAlertTransaction(Message message) {
         return repository.findAllAlertTransaction(message.getConsumer(), message.getTransactionCode())
                 .map(this::convertToEntity)
-                .collectList()
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_ALERT_TRANSACTION_ERROR));
     }
 }
