@@ -44,12 +44,12 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("1");
+        contact.setConsumer("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
 
         request = loadFileConfig("contactRequest.json", String.class);
     }

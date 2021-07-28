@@ -20,8 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidFormatMail;
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailAndMobile;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.*;
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
@@ -50,9 +49,10 @@ public class SendAlertUseCase {
         return Mono.just(message)
                 .map(Message::getIdAlert)
                 .flatMap(alertGateway::findAlertById)
+                .switchIfEmpty(Mono.error(new Throwable("Invalid Code alert")))
                 .filter(alert -> alert.getIdState()==(0))
-                .filter(alert -> isValidMailAndMobile.test(message))
-                .filter(alert -> isValidFormatMail.test(message.getMail()))
+                .switchIfEmpty(Mono.error(new Throwable("Alert not active")))
+                .filter(alert -> isValidMobile.test(message) || (isValidMailFormat.test(message)))
                 .then(Mono.empty());
     }
 
@@ -69,6 +69,7 @@ public class SendAlertUseCase {
     private Mono<Void> validateWithCodeTrx(Message message) {
         return Mono.just(message)
                 .filter(isValidMailAndMobile)
+                .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
                 .map(alertTransactionGateway::findAllAlertTransaction)
                 .then(Mono.empty());
     }
@@ -77,8 +78,8 @@ public class SendAlertUseCase {
     //TODO validate id 1
     private Mono<Void> validateBasic(Message message) {
         return Mono.just(message)
-                .flatMap(this::findDataContact)
                 .filter(isValidMailAndMobile)
+                .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
                 .then(Mono.empty());
     }
 

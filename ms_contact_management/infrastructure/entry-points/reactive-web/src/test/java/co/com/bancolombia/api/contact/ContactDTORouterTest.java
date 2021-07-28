@@ -7,6 +7,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.contact.ContactHandler;
 import co.com.bancolombia.api.services.contact.ContactRouter;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -44,19 +45,23 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("");
+        contact.setConsumer("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
 
         request = loadFileConfig("contactRequest.json", String.class);
     }
 
     @Test
     public void findAllContactsByClient() {
-        when(useCase.findContactsByClient(any())).thenReturn(Mono.just(List.of(contact)));
+        when(useCase.findContactsByClient(any())).thenReturn(Mono.just(ResponseContacts.<Contact>builder()
+                .contacts(List.of(contact))
+                .documentNumber(contact.getDocumentNumber())
+                .documentType(contact.getDocumentType())
+                .build()));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getContact())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")

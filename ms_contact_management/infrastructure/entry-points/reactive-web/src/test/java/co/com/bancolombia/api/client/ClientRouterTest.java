@@ -43,7 +43,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     @BeforeEach
     public void init() {
         client.setDocumentNumber(1061772353L);
-        client.setDocumentType(0);
+        client.setDocumentType("0");
         client.setIdState(0);
         client.setCreationUser("username");
         client.setEnrollmentOrigin("ALM");

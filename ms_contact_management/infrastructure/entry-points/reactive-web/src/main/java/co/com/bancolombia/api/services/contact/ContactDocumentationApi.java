@@ -1,11 +1,16 @@
 package co.com.bancolombia.api.services.contact;
 
 import co.com.bancolombia.api.dto.ContactDTO;
+import co.com.bancolombia.api.dto.ContactFindDTO;
+import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
@@ -33,8 +38,8 @@ public class ContactDocumentationApi {
                 .operationId("findContacts").summary("Find contacts")
                 .description("Find contacts by client").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
-                .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(Contact.class))
+                .parameter(createHeader(String.class, "document-type", "Client Document Type"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ResponseContactsDTO.class))
                 .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
@@ -53,7 +58,7 @@ public class ContactDocumentationApi {
                 .operationId("deleteContact").summary("Delete contact")
                 .description("Delete a client contact").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
-                .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
+                .parameter(createHeader(String.class, "document-type", "Client Document Type"))
                 .parameter(createHeader(String.class, "contact-medium", "Type of contact"))
                 .parameter(createHeader(String.class, "enrollment-contact", "Origin of enrollment"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))

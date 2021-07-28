@@ -25,7 +25,7 @@ public class ClientRepositoryImplTest {
     @BeforeEach
     public void init() {
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
         client.setIdState(0);
         client.setCreationUser("username");
         client.setEnrollmentOrigin("ALM");

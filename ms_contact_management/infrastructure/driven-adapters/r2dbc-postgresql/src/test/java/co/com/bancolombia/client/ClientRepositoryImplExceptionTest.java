@@ -42,7 +42,7 @@ public class ClientRepositoryImplExceptionTest {
     @BeforeEach
     public void init() {
         client.setDocumentNumber(1061772353L);
-        client.setDocumentType(0);
+        client.setDocumentType("0");
         client.setIdState(0);
         client.setCreationUser("username");
         client.setEnrollmentOrigin("ALM");
@@ -63,7 +63,7 @@ public class ClientRepositoryImplExceptionTest {
     @Test
     public void updateContact() {
         when(timeFactory.now()).thenReturn(NOW);
-        when(repository.updateClient(anyString(), anyString(), any(), anyInt(), anyLong(), anyInt()))
+        when(repository.updateClient(anyString(), anyString(), any(), anyInt(), anyLong(), anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.updateClient(StatusResponse.<Client>builder()
                 .before(client).actual(client).build())
@@ -74,7 +74,7 @@ public class ClientRepositoryImplExceptionTest {
 
     @Test
     public void deleteContact() {
-        when(repository.deleteClient(anyLong(), anyInt()))
+        when(repository.deleteClient(anyLong(), anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.deleteClient(client)
                 .as(StepVerifier::create)

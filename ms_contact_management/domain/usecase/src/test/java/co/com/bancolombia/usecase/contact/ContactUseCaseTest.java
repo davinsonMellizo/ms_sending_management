@@ -6,8 +6,8 @@ import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.contactmedium.ContactMedium;
 import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
-import co.com.bancolombia.model.enrollmentcontact.EnrollmentContact;
-import co.com.bancolombia.model.enrollmentcontact.gateways.EnrollmentContactGateway;
+import co.com.bancolombia.model.document.Document;
+import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
@@ -22,6 +22,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,27 +37,29 @@ public class ContactUseCaseTest {
     @Mock
     private StateGateway stateGateway;
     @Mock
-    private EnrollmentContactGateway enrollmentGateway;
-    @Mock
     private ContactMediumGateway mediumGateway;
+    @Mock
+    private DocumentGateway documentGateway;
 
     private final State state = new State(0, "Activo");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
-    private final EnrollmentContact enrollment = new EnrollmentContact(0, "ALM");
     private final Client client = new Client();
     private final Contact contact = new Contact();
+    private final Document document = new Document();
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("1");
+        contact.setConsumer("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
         contact.setState("Activo");
 
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
+
+        document.setId("0");
     }
 
     @Test
@@ -76,10 +79,10 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(stateGateway.findStateByName(any()))
                 .thenReturn(Mono.just(state));
-        when(enrollmentGateway.findEnrollmentContactByCode(any()))
-                .thenReturn(Mono.just(enrollment));
         when(mediumGateway.findContactMediumByCode(any()))
                 .thenReturn(Mono.just(medium));
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
         StepVerifier
                 .create(useCase.saveContact(contact))
                 .assertNext(response -> response
@@ -87,7 +90,6 @@ public class ContactUseCaseTest {
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).saveContact(any());
-        verify(enrollmentGateway).findEnrollmentContactByCode(any());
         verify(mediumGateway).findContactMediumByCode(any());
     }
 

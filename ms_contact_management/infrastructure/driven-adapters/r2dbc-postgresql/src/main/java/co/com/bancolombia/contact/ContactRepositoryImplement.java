@@ -34,14 +34,13 @@ public class ContactRepositoryImplement
         return repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
                 .map(Mono::just)
                 .flatMap(this::doQuery)
-                .map(contact -> contact.toBuilder().id(null).build())
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
     }
 
     @Override
     public Mono<Integer> findIdContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
-                contact.getContactMedium(), contact.getEnrollmentContact())
+                contact.getContactMedium(), contact.getConsumer())
                 .map(ContactData::getId)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
@@ -57,7 +56,7 @@ public class ContactRepositoryImplement
                 .map(contactData -> contactData.toBuilder()
                         .modifiedDate(timeFactory.now())
                         .value(actual.getValue())
-                        .idState(actual.getIdState())
+                        .state(actual.getState())
                         .build())
                 .flatMap(this::saveData)
                 .map(this::convertToEntity)
@@ -82,7 +81,7 @@ public class ContactRepositoryImplement
 
     private Mono<ContactData> findContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
-                contact.getContactMedium(), contact.getEnrollmentContact())
+                contact.getContactMedium(), contact.getConsumer())
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
 }

@@ -1,9 +1,6 @@
 package co.com.bancolombia.model.contact;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,16 +9,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Contact {
-    private Integer id;
-    private String enrollmentContact;
+    private String consumer;
     private String contactMedium;
-    private Integer idEnrollmentContact;
-    private Integer idContactMedium;
     private Long documentNumber;
-    private Integer documentType;
+    private String documentType;
     private String value;
     private String state;
-    private Integer idState;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 }

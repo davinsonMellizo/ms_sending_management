@@ -57,7 +57,8 @@ public class ClientRepositoryImplement
                 statusResponse.getActual().getDocumentNumber(),
                 statusResponse.getActual().getDocumentType())
                 .filter(rowsAffected -> rowsAffected == NUMBER_OF_ROWS)
-                .map(integer -> statusResponse)
+                .map(integer -> statusResponse.toBuilder()
+                        .description("Cliente Actualizado exitosamente").build())
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_CLIENT_ERROR));
     }
 

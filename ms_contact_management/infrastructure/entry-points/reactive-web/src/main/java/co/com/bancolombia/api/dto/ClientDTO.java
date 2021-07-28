@@ -20,9 +20,8 @@ public class ClientDTO {
     @NotNull(message = "{constraint.not_null}")
     private Long documentNumber;
     @NotNull(message = "{constraint.not_null}")
-    @Min(value = 0, message = "{constraint.min}")
-    @Max(value = 99, message = "{constraint.max}")
-    private Integer documentType;
+    @Size(min = 1, max = 2, message = "{constraint.size}")
+    private String documentType;
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 20, message = "{constraint.size}")
     private String keyMdm;

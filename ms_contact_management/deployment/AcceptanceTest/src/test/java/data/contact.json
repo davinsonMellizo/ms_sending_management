@@ -1,5 +1,5 @@
 {
-  "enrollmentContact": '#(enrollmentContact)',
+  "consumer": '#(consumer)',
   "contactMedium": "SMS",
   "documentNumber": "1000000000",
   "documentType":0,

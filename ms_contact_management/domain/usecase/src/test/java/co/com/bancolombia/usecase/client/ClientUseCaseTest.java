@@ -3,6 +3,8 @@ package co.com.bancolombia.usecase.client;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
+import co.com.bancolombia.model.document.Document;
+import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,12 +28,17 @@ public class ClientUseCaseTest {
 
     @Mock
     private ClientGateway clientGateway;
+    @Mock
+    private DocumentGateway documentGateway;
     private final Client client = new Client();
+    private final Document document = new Document();
 
     @BeforeEach
     public void init() {
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
+
+        document.setId("0");
     }
 
     @Test
@@ -45,9 +53,11 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void saveContact() {
+    public void saveClient() {
         when(clientGateway.saveClient(any()))
                 .thenReturn(Mono.just(client));
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
         StepVerifier
                 .create(useCase.saveClient(client))
                 .assertNext(response -> response
@@ -75,9 +85,11 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void deleteContact() {
+    public void deleteClient() {
         when(clientGateway.deleteClient(any()))
                 .thenReturn(Mono.just(client));
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
         StepVerifier.create(useCase.deleteClient(client))
                 .expectNextCount(1)
                 .verifyComplete();
@@ -108,6 +120,8 @@ public class ClientUseCaseTest {
     public void deleteContactWithException() {
         when(clientGateway.deleteClient(any()))
                 .thenReturn(Mono.empty());
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
         useCase.deleteClient(client)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)

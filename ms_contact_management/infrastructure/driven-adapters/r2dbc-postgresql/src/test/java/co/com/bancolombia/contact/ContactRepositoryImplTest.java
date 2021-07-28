@@ -27,16 +27,16 @@ public class ContactRepositoryImplTest {
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("SMS");
+        contact.setConsumer("ALM");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
         contact.setCreatedDate(LocalDateTime.now());
 
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
     }
 
     @Test
@@ -49,16 +49,16 @@ public class ContactRepositoryImplTest {
     @Test
     public void findIdContact() {
         contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setConsumer("ALM");
         StepVerifier.create(contactRepositoryImplement.findIdContact(contact))
-                .consumeNextWith(id -> assertEquals(1, id))
+                .consumeNextWith(id -> assertEquals(0, id))
                 .verifyComplete();
     }
 
     @Test
     public void updateContact() {
         contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setConsumer("ALM");
         contact.setValue("3216931596");
         StepVerifier.create(contactRepositoryImplement.updateContact(contact))
                 .consumeNextWith(response -> assertEquals("3216931596", response.getActual().getValue()))
@@ -77,7 +77,7 @@ public class ContactRepositoryImplTest {
     @Test
     public void deleteContact() {
         contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setConsumer("ALM");
         contactRepositoryImplement.findIdContact(contact)
                 .subscribe(id -> StepVerifier
                         .create(contactRepositoryImplement.deleteContact(id))

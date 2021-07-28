@@ -1,15 +1,15 @@
-package co.com.bancolombia.model.enrollmentcontact;
-
+package co.com.bancolombia.model.document;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder(toBuilder = true)
-public class EnrollmentContact {
-    private Integer id;
+public class Document {
+    private String id;
     private String code;
+    private String name;
 }

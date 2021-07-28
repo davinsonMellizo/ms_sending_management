@@ -19,7 +19,6 @@ import javax.validation.constraints.Size;
 public class ClientHeader {
 
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number}")
     @Size(min = 1, max = 2, message = "{constraint.size}")
     private String documentType;
     @NotNull(message = "{constraint.not_null}")
@@ -29,7 +28,7 @@ public class ClientHeader {
 
     public Mono<Client> toModel() {
         return Mono.just(Client.builder()
-                .documentType(Integer.parseInt(this.documentType))
+                .documentType((this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
                 .build());
     }
