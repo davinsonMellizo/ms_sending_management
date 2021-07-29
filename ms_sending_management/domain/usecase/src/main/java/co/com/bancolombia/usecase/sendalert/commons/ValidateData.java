@@ -17,8 +17,13 @@ public abstract class ValidateData {
             Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty();
 
     public static final Predicate<Message> isValidMailFormat = message ->
-            Objects.nonNull(message.getMail()) && !message.getMail().isEmpty()
+            (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
             && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
+
+    public static final Predicate<Message> isValidMailFormatAndMobile = message ->
+            (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty())
+                    || (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
+                    && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
 
 
 }

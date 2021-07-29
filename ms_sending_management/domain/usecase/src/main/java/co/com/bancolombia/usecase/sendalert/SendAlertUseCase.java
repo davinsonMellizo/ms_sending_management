@@ -11,7 +11,9 @@ import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
+import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.usecase.sendalert.validations.SendAlertBasicValidation;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,10 +33,12 @@ public class SendAlertUseCase {
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
 
-    private Function<Message, Mono<Void>> getFunction(Integer idOperation){
+    private final SendAlertBasicValidation basic;
+
+    private Function<Message, Mono<Void>> getValidations(Integer idOperation){
         final Map<Integer, Function<Message, Mono<Void>>> functions = new HashMap<>();
         functions.put(0, this::validateWithDataClient);
-        functions.put(1, this::validateBasic);
+        functions.put(1, basic::validate);
         functions.put(2, this::validateWithCodeTrx);
         functions.put(3, this::validateOthersChannels);
         functions.put(4, this::validateOthersChannels);
@@ -80,6 +84,7 @@ public class SendAlertUseCase {
         return Mono.just(message)
                 .filter(isValidMailAndMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
+                .map(message1 -> Mail.builder().value(message1.getValue()).build())
                 .then(Mono.empty());
     }
 
@@ -133,10 +138,10 @@ public class SendAlertUseCase {
     private Mono<Void> validateWithDataClient(Message message) {
         return Mono.just(message)
                 .flatMap(clientGateway::findClientByIdentification)
-                .switchIfEmpty(Mono.error(new Throwable("Client not found")))
-                .filter(client -> client.getIdState()==0)
-                .switchIfEmpty(Mono.error(new Throwable("Client not active")))
-                .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
+                        .switchIfEmpty(Mono.error(new Throwable("Client not found")))
+                        .filter(client -> client.getIdState()==0)
+                        .switchIfEmpty(Mono.error(new Throwable("Client not active")))
+                        .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Consumer")))
                 .flatMap(consumer -> validateDataContact(message, consumer))
                 .flatMap(this::validateAlerts)
@@ -145,7 +150,7 @@ public class SendAlertUseCase {
 
     public Mono<Void> alertSendingManager(Message message) {
         return Mono.just(message.getIdOperation())
-                .map(this::getFunction)
+                .map(this::getValidations)
                 .flatMap(function -> function.apply(message));
     }
 
