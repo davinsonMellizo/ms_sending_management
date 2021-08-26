@@ -3,7 +3,6 @@ package co.com.bancolombia.alertclient;
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.alertclient.data.AlertClientData;
 import co.com.bancolombia.alertclient.data.AlertClientMapper;
-import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.alertclient.AlertClient;

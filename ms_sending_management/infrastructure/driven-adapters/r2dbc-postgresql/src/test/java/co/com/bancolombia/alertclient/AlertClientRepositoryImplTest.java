@@ -2,7 +2,6 @@ package co.com.bancolombia.alertclient;
 
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.response.StatusResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

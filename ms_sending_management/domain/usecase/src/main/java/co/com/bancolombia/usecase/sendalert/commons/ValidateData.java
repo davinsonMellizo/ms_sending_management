@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
 import co.com.bancolombia.model.message.Message;
+
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -20,10 +21,13 @@ public abstract class ValidateData {
             (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
             && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
 
+    public static final Predicate<Message> isValidMail = message ->
+            Objects.nonNull(message.getMail()) && !message.getMail().isEmpty();
+
     public static final Predicate<Message> isValidMailFormatAndMobile = message ->
             (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty())
-                    || (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
-                    && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
+                    || ((Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
+                    && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
 
 
 }

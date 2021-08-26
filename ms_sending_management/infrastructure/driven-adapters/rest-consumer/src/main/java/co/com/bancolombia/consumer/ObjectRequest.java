@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer;
 
-    import lombok.Builder;
-    import lombok.Data;
+import lombok.Builder;
+import lombok.Data;
 
     @Data
     @Builder(toBuilder = true)

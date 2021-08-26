@@ -4,11 +4,10 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormatAndMobile;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailAndMobile;
 
 @RequiredArgsConstructor
 public class SendAlertBasicValidation {
@@ -17,14 +16,12 @@ public class SendAlertBasicValidation {
     public Mono<Void> validate(Message message) {
         return Flux.just(message)
                 .doOnNext(message1 -> System.out.println("Validate consumer"))
-                .filter(isValidMailFormatAndMobile)
-                .flatMap(this::getAlerts)
-                .map(alert -> "build message to send")
-                .onErrorResume(e -> e.getMessage().equals("Alert with message"), e -> Mono.just(""))
+                .filter(isValidMailAndMobile)
+                .flatMap(this::validateData)
                 .then(Mono.empty());
     }
 
-    private Flux<Alert> getAlerts(Message message) {
+    private Flux<Alert> validateData(Message message) {
         return Flux.just(message)
                 .filter(message1 -> message1.getValue().isEmpty())
                 .switchIfEmpty(Mono.error(new Throwable("Alert with message case 1")))

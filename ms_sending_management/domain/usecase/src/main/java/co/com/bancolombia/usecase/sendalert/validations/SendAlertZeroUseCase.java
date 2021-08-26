@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert;
+package co.com.bancolombia.usecase.sendalert.validations;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
@@ -13,98 +13,46 @@ import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.usecase.sendalert.validations.SendAlertBasicValidation;
+import co.com.bancolombia.model.message.gateways.MessageGateway;
+import co.com.bancolombia.model.provider.Provider;
+import co.com.bancolombia.model.provider.gateways.ProviderGateway;
+import co.com.bancolombia.model.remitter.Remitter;
+import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
+import co.com.bancolombia.model.service.Service;
+import co.com.bancolombia.model.service.gateways.ServiceGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.*;
 
 @RequiredArgsConstructor
-public class SendAlertUseCase {
+public class SendAlertZeroUseCase {
     private final AlertTransactionGateway alertTransactionGateway;
     private final AlertClientGateway alertClientGateway;
+    private final ProviderGateway providerGateway;
+    private final RemitterGateway remitterGateway;
     private final ConsumerGateway consumerGateway;
+    private final ServiceGateway serviceGateway;
+    private final MessageGateway messageGateway;
     private final ContactGateway contactGateway;
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
 
-    private final SendAlertBasicValidation basic;
-
-    private Function<Message, Mono<Void>> getValidations(Integer idOperation){
-        final Map<Integer, Function<Message, Mono<Void>>> functions = new HashMap<>();
-        functions.put(0, this::validateWithDataClient);
-        functions.put(1, basic::validate);
-        functions.put(2, this::validateWithCodeTrx);
-        functions.put(3, this::validateOthersChannels);
-        functions.put(4, this::validateOthersChannels);
-        functions.put(5, this::validateWithCodeAlert);
-
-        return functions.get(idOperation);
-    }
-
-
-    //TODO validate id 5
-    private Mono<Void> validateWithCodeAlert(Message message) {
-        return Mono.just(message)
-                .map(Message::getIdAlert)
-                .flatMap(alertGateway::findAlertById)
-                .switchIfEmpty(Mono.error(new Throwable("Invalid Code alert")))
-                .filter(alert -> alert.getIdState()==(0))
-                .switchIfEmpty(Mono.error(new Throwable("Alert not active")))
-                .filter(alert -> isValidMobile.test(message) || (isValidMailFormat.test(message)))
-                .then(Mono.empty());
-    }
-
-    //TODO validate id 3 y 4
-    private Mono<Void> validateOthersChannels(Message message) {
-        return Mono.empty();
-    }
-    private  Mono<Void> buildMessageFrame(){
-        return Mono.empty();
-    }
-
-
-    //TODO validate id 2
-    private Mono<Void> validateWithCodeTrx(Message message) {
-        return Mono.just(message)
-                .filter(isValidMailAndMobile)
-                .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
-                .map(alertTransactionGateway::findAllAlertTransaction)
-                .then(Mono.empty());
-    }
-
-
-    //TODO validate id 1
-    private Mono<Void> validateBasic(Message message) {
-        return Mono.just(message)
-                .filter(isValidMailAndMobile)
-                .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
-                .map(message1 -> Mail.builder().value(message1.getValue()).build())
-                .then(Mono.empty());
-    }
-
-
-    //TODO validate id 0
-
     private Mono<Alert> validateAmount(Alert alert, Message message){
         return Mono.just(AlertClient.builder().build())
                 .flatMap(alertClientGateway::findAlertClient)
+                .switchIfEmpty(Mono.error(new Throwable("Business client alert not found")))
                 .filter(alertClient -> alertClient.getAccumulatedAmount()+message.getAmount()<=alertClient.getAmountEnable())
                 .map(alertClient -> alert)
-                .switchIfEmpty(Mono.error(new Throwable()));
+                .switchIfEmpty(Mono.error(new Throwable("Business amount exceeded")));
     }
     private Flux<Alert> validateObligation(Alert pAlert, Message message){
         return Flux.just(pAlert)
                 .filter(alert -> !alert.getObligatory())
                 .filter(alert -> alert.getNature().equals("MO"))
                 .flatMap(alert -> validateAmount(alert, message))
-                .switchIfEmpty(Mono.just(pAlert))
-                .onErrorResume(throwable -> Mono.empty());
+                .switchIfEmpty(Mono.just(pAlert));
     }
 
     private Mono<Void> validateAlerts(Message message){
@@ -112,7 +60,37 @@ public class SendAlertUseCase {
                 .map(AlertTransaction::getIdAlert)
                 .flatMap(alertGateway::findAlertById)
                 .flatMap(alert -> validateObligation(alert, message))
+                .flatMap(alert -> sendAlert(alert, message))
                 .then(Mono.empty());
+    }
+
+    private Flux<Void> sendAlert(Alert alert, Message message) {
+        return Flux.just(message)
+                .filter(isValidMobile)
+                .flatMap(message1 -> sendAlertMobile(alert, message))
+                .switchIfEmpty(Flux.just(message))
+                .filter(isValidMail)
+                .flatMap(message1 -> sendAlertMail(alert, message))
+                .thenMany(Flux.empty());
+    }
+
+    private Flux<Message> sendAlertMobile(Alert alert, Message message) {
+        return null;
+    }
+
+    private Flux<Message> sendAlertMail(Alert alert, Message message) {
+        Mono<Remitter> remitter = remitterGateway.findRemitterById(alert.getIdRemitter());
+        Mono<Provider> providerSms = providerGateway.findProviderById(alert.getIdProviderSms());
+        Mono<Provider> providerMail = providerGateway.findProviderById(alert.getIdProviderMail());
+        Mono<Service> service = serviceGateway.findServiceById(alert.getIdService());
+        //TODO: build template
+        return Mono.zip(remitter,providerSms, providerMail, service)
+                .map(data -> Mail.builder()
+                        .remitter(data.getT1().getMail())
+                        .affair(message.getMail())//TODO: build MAIL with data
+                        .build())
+                .flatMap(messageGateway::sendEmail)
+                .thenMany(Flux.just(message));
     }
 
     private Mono<Message> findDataContact(Message message){
@@ -135,23 +113,16 @@ public class SendAlertUseCase {
 
     }
 
-    private Mono<Void> validateWithDataClient(Message message) {
+    public Mono<Void> validateWithDataClient(Message message) {
         return Mono.just(message)
                 .flatMap(clientGateway::findClientByIdentification)
-                        .switchIfEmpty(Mono.error(new Throwable("Client not found")))
-                        .filter(client -> client.getIdState()==0)
-                        .switchIfEmpty(Mono.error(new Throwable("Client not active")))
-                        .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
+                .switchIfEmpty(Mono.error(new Throwable("Client not found")))
+                .filter(client -> client.getIdState()==0)
+                .switchIfEmpty(Mono.error(new Throwable("Client not active")))
+                .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Consumer")))
                 .flatMap(consumer -> validateDataContact(message, consumer))
                 .flatMap(this::validateAlerts)
                 .then(Mono.empty());
     }
-
-    public Mono<Void> alertSendingManager(Message message) {
-        return Mono.just(message.getIdOperation())
-                .map(this::getValidations)
-                .flatMap(function -> function.apply(message));
-    }
-
 }

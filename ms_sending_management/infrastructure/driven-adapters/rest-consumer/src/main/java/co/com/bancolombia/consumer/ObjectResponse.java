@@ -1,9 +1,9 @@
 package co.com.bancolombia.consumer;
 
-    import lombok.AllArgsConstructor;
-    import lombok.Builder;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
     @Data
     @Builder(toBuilder = true)
@@ -11,6 +11,6 @@ package co.com.bancolombia.consumer;
     @AllArgsConstructor
 public class ObjectResponse {
 
-private String state;
+    private String id;
 
 }

@@ -52,7 +52,7 @@ public class ProviderRepositoryImplement
                         .isNew(true)
                         .createdDate(timeFactory.now())
                         .build())
-                .flatMap(repository::save)
+                .flatMap(providerData -> repository.save(providerData))
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, SAVE_PROVIDER_ERROR));
     }

@@ -12,8 +12,7 @@ import org.springframework.context.annotation.FilterType;
 @Configuration
 @ComponentScan(basePackages = "co.com.bancolombia.usecase",
         includeFilters = {
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+UseCase$"),
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+Validation")
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+UseCase$")
         },
         useDefaultFilters = false)
 public class UseCasesConfig {

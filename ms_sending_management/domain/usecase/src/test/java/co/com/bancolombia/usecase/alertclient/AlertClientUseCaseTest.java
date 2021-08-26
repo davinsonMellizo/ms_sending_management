@@ -1,7 +1,6 @@
 package co.com.bancolombia.usecase.alertclient;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.response.StatusResponse;

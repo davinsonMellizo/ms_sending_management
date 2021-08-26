@@ -23,6 +23,15 @@ spring:
       reactor:
         netty: false
 adapters:
+  postgresql:
+    pool:
+      initial: ${POSTGRESQL_CONN_INITIAL:2}
+      max: ${POSTGRESQL_CONN_MAX:10}
+  rest-client:
+    timeout: 1000
+    scope: scope-blm
+    resources:
+      sendAlertMail: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
   secrets-manager:
     secret-rabbit: "${SECRET-RABBIT}"
     secret-rds: "${SECRET-RDS}"
@@ -62,3 +71,6 @@ management:
 adapter:
   restconsumer:
     url: "http://localhost:8080"
+environment:
+  replicas:
+    max: ${MAX_REPLICAS:1}
