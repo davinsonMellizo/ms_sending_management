@@ -16,19 +16,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("client")
-public class ClientData implements Persistable<Long> {
+public class ClientData implements Persistable<Integer> {
     @Id
+    private Integer id;
     private Long documentNumber;
-    private Integer documentType;
+    private Integer idDocumentType;
     private String keyMdm;
     private String enrollmentOrigin;
     private Integer idState;
     private String creationUser;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-
-    @Transient
-    private Long id;
 
     @Override
     @Transient

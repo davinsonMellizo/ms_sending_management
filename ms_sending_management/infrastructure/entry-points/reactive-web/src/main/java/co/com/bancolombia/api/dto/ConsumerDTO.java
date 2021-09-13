@@ -18,18 +18,17 @@ import javax.validation.constraints.Size;
 @Builder
 public class ConsumerDTO {
 
-    @Max(value = 999, message = "{constraint.max}")
-    @Min(value = 0, message = "{constraint.min}")
+    @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String id;
     @Size(min = 1, max = 10, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private String code;
+    private String segment;
 
     public Mono<Consumer> toModel() {
         return Mono.just(Consumer.builder()
                 .id(this.id)
-                .code(this.code)
+                .segment(this.segment)
                 .build());
     }
 }

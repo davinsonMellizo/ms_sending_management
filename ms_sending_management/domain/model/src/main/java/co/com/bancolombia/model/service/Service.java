@@ -15,6 +15,6 @@ public class Service {
     private Integer id;
     private String name;
     private String creationUser;
-    private Integer idState;
+    private String state;
     private LocalDateTime createdDate;
 }

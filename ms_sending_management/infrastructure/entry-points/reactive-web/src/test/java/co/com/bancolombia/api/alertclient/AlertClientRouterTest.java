@@ -46,6 +46,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     private String request;
     private final AlertClient alertClient = new AlertClient();
     private String url;
+    private final static String ID = "/{id}";
 
     @BeforeEach
     public void init() {
@@ -68,9 +69,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     public void findAll() {
         when(useCase.findAllAlertClient(any()))
                 .thenReturn(Mono.just(List.of(alertClient)));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url)
-                .header("document-number", "123")
-                .header("document-type", "1")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + ID, "1")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findAllAlertClient(any());
@@ -94,8 +93,7 @@ public class AlertClientRouterTest extends BaseIntegration {
                 .thenReturn(Mono.just("1"));
         WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
                 .header("id-alert", "1")
-                .header("document-number", "123")
-                .header("document-type", "1")
+                .header("id-client", "123")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteAlertClient(any());

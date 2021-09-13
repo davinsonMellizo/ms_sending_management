@@ -20,12 +20,12 @@ public class AlertData implements Persistable<String> {
 
     @Id
     private String id;
-    private String idProviderMail;
-    private String idProviderSms;
     private Integer idTemplate;
+    private Integer idProviderMail;
+    private Integer idProviderSms;
     private Integer idRemitter;
-    private Integer idService;
     private Integer idState;
+    private Integer idCategory;
     private Integer priority;
     private String description;
     private String nature;
@@ -33,6 +33,7 @@ public class AlertData implements Persistable<String> {
     private String subjectMail;
     private String attentionLine;
     private String pathAttachedMail;
+    private String push;
     private Boolean obligatory;
     private Boolean visibleChannel;
     private String creationUser;

@@ -16,13 +16,14 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class AlertClientRouter extends AlertClientDocumentationApi {
     private final ApiProperties apiProperties;
     private final static String RELATION = "-client";
+    private static String ID = "/{id}";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionAlertClient(AlertClientHandler handler) {
         final String url = apiProperties.getAlert().concat(RELATION);
         return route().POST(url, accept(APPLICATION_JSON), handler::saveAlertClient, save()).build()
+                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findAllAlertClient, find()).build())
                 .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateAlertClient, update()).build())
-                .and(route().GET(url, accept(APPLICATION_JSON), handler::findAllAlertClient, find()).build())
                 .and(route().DELETE(url, accept(APPLICATION_JSON), handler::deleteAlertClient, delete()).build());
     }
 }

@@ -13,7 +13,8 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 @RequiredArgsConstructor
-public class AlertTemplateRouter extends AlertTemplateDocumentationApi {
+public class
+AlertTemplateRouter extends AlertTemplateDocumentationApi {
 
     private final ApiProperties apiProperties;
     private final static String RELATION = "-template";

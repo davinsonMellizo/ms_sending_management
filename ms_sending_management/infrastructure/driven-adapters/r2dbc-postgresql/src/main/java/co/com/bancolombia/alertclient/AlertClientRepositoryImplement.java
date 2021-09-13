@@ -46,16 +46,15 @@ public class AlertClientRepositoryImplement
         return repository.updateAlertClient(statusResponse.getActual().getNumberOperations(),
                 statusResponse.getActual().getAmountEnable(),
                 statusResponse.getActual().getIdAlert(),
-                statusResponse.getActual().getDocumentNumber(),
-                statusResponse.getActual().getIdDocumentType())
+                statusResponse.getActual().getIdClient())
                 .filter(rowsAffected -> rowsAffected == NUMBER_ONE)
                 .map(integer -> statusResponse)
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_ALERT_CLIENT_ERROR));
     }
 
     @Override
-    public Flux<AlertClient> findAllAlertsByClient(AlertClient alertClient) {
-        return repository.findAllAlertsByClient(alertClient.getDocumentNumber(), alertClient.getIdDocumentType())
+    public Flux<AlertClient> findAllAlertsByClient(Integer idAlertClient) {
+        return repository.findAllAlertsByClient(idAlertClient)
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_ALERT_CLIENT_ERROR));
     }
@@ -63,7 +62,7 @@ public class AlertClientRepositoryImplement
     @Override
     public Mono<String> delete(AlertClient alertClient) {
         return repository.deleteAlertClient(alertClient.getIdAlert(),
-                alertClient.getDocumentNumber(), alertClient.getIdDocumentType())
+                alertClient.getIdClient())
                 .filter(rowsAffected -> rowsAffected == NUMBER_ONE)
                 .map(integer -> alertClient.getIdAlert())
                 .onErrorMap(e -> new TechnicalException(e, DELETE_ALERT_CLIENT_ERROR));
@@ -71,8 +70,7 @@ public class AlertClientRepositoryImplement
 
     @Override
     public Mono<AlertClient> findAlertClient(AlertClient alertClient) {
-        return repository.findAlertClient(alertClient.getIdAlert(), alertClient.getDocumentNumber(),
-                alertClient.getIdDocumentType())
+        return repository.findAlertClient(alertClient.getIdAlert(), alertClient.getIdClient())
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALERT_CLIENT_ERROR));
     }

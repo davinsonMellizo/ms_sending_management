@@ -44,11 +44,11 @@ public class AlertTransactionRepositoryImplExceptionTest {
     public void init() {
         service.setId(0);
         service.setName("EMAIL BASE");
-        service.setIdState(1);
+        service.setState("activo");
         service.setCreationUser("User");
         serviceData.setId(0);
         serviceData.setName("EMAIL BASE");
-        serviceData.setIdState(1);
+        serviceData.setState("activo");
         serviceData.setCreationUser("User");
     }
 

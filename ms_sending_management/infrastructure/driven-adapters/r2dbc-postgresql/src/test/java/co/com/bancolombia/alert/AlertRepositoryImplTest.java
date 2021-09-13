@@ -24,10 +24,9 @@ public class AlertRepositoryImplTest {
     @BeforeEach
     public void init() {
         alert.setId("HGD");
-        alert.setIdProviderMail("HJK");
-        alert.setIdProviderSms("JKL");
+        alert.setIdProviderMail(1);
+        alert.setIdProviderSms(1);
         alert.setIdRemitter(0);
-        alert.setIdService(0);
         alert.setIdTemplate(0);
         alert.setIdState(0);
         alert.setAttentionLine("3215684");

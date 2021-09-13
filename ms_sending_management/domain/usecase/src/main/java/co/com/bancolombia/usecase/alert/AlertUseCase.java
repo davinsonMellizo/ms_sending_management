@@ -15,10 +15,6 @@ public class AlertUseCase {
 
     public Mono<Alert> findAlertByIdRequest(String id) {
         return alertGateway.findAlertById(id)
-                .map(alert -> id)
-                .flatMap(alertGateway::findAlertById)
-                .map(alert -> id)
-                .flatMap(alertGateway::findAlertById)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
     }
 

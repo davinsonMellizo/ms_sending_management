@@ -11,7 +11,7 @@ public interface AlertClientGateway {
 
     Mono<StatusResponse<AlertClient>> updateAlertClient(StatusResponse<AlertClient> statusResponse);
 
-    Flux<AlertClient> findAllAlertsByClient(AlertClient alertClient);
+    Flux<AlertClient> findAllAlertsByClient(Integer idAlertClient);
 
     Mono<String> delete(AlertClient alertClient);
 

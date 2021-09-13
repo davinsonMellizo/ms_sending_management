@@ -1,12 +1,11 @@
 package co.com.bancolombia.api.commons.util;
 
+import co.com.bancolombia.api.dto.AlertClientDTO;
 import co.com.bancolombia.api.dto.AlertTransactionDTO;
-import co.com.bancolombia.api.headers.AlertClientHeader;
+import co.com.bancolombia.api.dto.ProviderServiceDTO;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 @UtilityClass
 public class ParamsUtil {
@@ -15,8 +14,9 @@ public class ParamsUtil {
     public static final String ID_ALERT = "id-alert";
     public static final String ID_TRANSACTION = "id-transaction";
     public static final String ID_CONSUMER = "id-consumer";
-    public static final String DOCUMENT_NUMBER = "document-number";
-    public static final String DOCUMENT_TYPE = "document-type";
+    public static final String ID_CLIENT = "id-client";
+    public static final String ID_PROVIDER = "id-provider";
+    public static final String ID_SERVICE = "id-service";
 
     private static Mono<String> ofEmpty(String value) {
         return (value == null || value.isEmpty()) ? Mono.empty() : Mono.just(value);
@@ -34,27 +34,18 @@ public class ParamsUtil {
                 .build());
     }
 
-    public static Mono<AlertClientHeader> getClientHeaders(ServerRequest request) {
-        return Mono.just(AlertClientHeader.builder()
-                .idAlert(getHeader(request, ID_ALERT))
-                .documentNumber(getHeader(request, DOCUMENT_NUMBER))
-                .documentType(getHeader(request, DOCUMENT_TYPE))
+    public static Mono<AlertClientDTO> getRelationClient(ServerRequest request) {
+        return Mono.just(AlertClientDTO.builder()
+                .idAlert(request.headers().firstHeader(ID_ALERT))
+                .idClient(Integer.parseInt(request.headers().firstHeader(ID_CLIENT)))
                 .build());
     }
 
-    public static Mono<AlertClientHeader> getClientHeadersFind(ServerRequest request) {
-        return Mono.just(AlertClientHeader.builder()
-                .documentNumber(getHeader(request, DOCUMENT_NUMBER))
-                .documentType(getHeader(request, DOCUMENT_TYPE))
+    public static Mono<ProviderServiceDTO> getRelationProvider(ServerRequest request) {
+        return Mono.just(ProviderServiceDTO.builder()
+                .idProvider(request.headers().firstHeader(ID_PROVIDER))
+                .idService(Integer.parseInt(request.headers().firstHeader(ID_SERVICE)))
                 .build());
-    }
-
-    public static String getHeader(ServerRequest request, String header) {
-        return ofEmptyHeader(request.headers().firstHeader(header)).orElse("Undefined");
-    }
-
-    private static Optional<String> ofEmptyHeader(String value) {
-        return (value == null || value.isEmpty()) ? Optional.empty() : Optional.of(value);
     }
 
 }

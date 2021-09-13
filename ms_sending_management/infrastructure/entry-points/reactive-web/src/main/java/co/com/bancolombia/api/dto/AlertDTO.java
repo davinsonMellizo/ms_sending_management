@@ -25,12 +25,14 @@ public class AlertDTO {
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
     private Integer idTemplate;
-    @Size(min = 1, max = 3, message = "{constraint.size}")
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    private String idProviderMail;
-    @Size(min = 1, max = 3, message = "{constraint.size}")
+    private Integer idProviderMail;
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    private String idProviderSms;
+    private Integer idProviderSms;
     @Max(value = 999, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
@@ -47,6 +49,10 @@ public class AlertDTO {
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
     private Integer priority;
+    @Max(value = 999, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
+    @NotNull(message = "{constraint.not_null}")
+    private Integer idCategory;
     @Size(min = 1, max = 50, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String description;
@@ -69,6 +75,9 @@ public class AlertDTO {
     private Boolean obligatory;
     @NotNull(message = "{constraint.not_null}")
     private Boolean visibleChannel;
+    @Size(min = 2, max = 2, message = "{constraint.size}")
+    @NotNull(message = "{constraint.not_null}")
+    private String push;
     @Size(max = 20, message = "{constraint.size}")
     private String creationUser;
 
@@ -78,10 +87,10 @@ public class AlertDTO {
                 .idProviderMail(this.idProviderMail)
                 .idProviderSms(this.idProviderSms)
                 .idRemitter(this.idRemitter)
-                .idService(this.idService)
                 .idTemplate(this.idTemplate)
                 .idState(this.idState)
                 .priority(this.priority)
+                .idCategory(this.idCategory)
                 .description(this.description)
                 .nature(this.nature)
                 .message(this.message)
@@ -90,6 +99,7 @@ public class AlertDTO {
                 .pathAttachedMail(this.pathAttachedMail)
                 .obligatory(this.obligatory)
                 .visibleChannel(this.visibleChannel)
+                .push(this.push)
                 .creationUser(this.creationUser)
                 .build());
     }

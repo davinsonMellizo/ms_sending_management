@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Data
 @Builder(toBuilder = true)
 public class Client {
+    private Integer id;
     private Long documentNumber;
-    private Integer documentType;
+    private Integer idDocumentType;
     private String keyMdm;
     private String enrollmentOrigin;
     private Integer idState;
