@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 public interface ProviderServiceRepository extends ReactiveCrudRepository<ProviderServiceData, Integer> {
 
     @Query("SELECT ps.*, p.id as code, p.name as description, s.name as service " +
-            "FROM schalertd.provider_service ps join provider p on ps.id_provider = p.id " +
+            "FROM provider_service ps join provider p on ps.id_provider = p.id " +
             "join service s on ps.id_service = s.id")
     Flux<ProviderServiceData> findAllProviderService();
 

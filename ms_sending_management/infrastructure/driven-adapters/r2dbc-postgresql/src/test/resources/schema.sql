@@ -65,7 +65,35 @@ CREATE TABLE IF NOT EXISTS service (
 	creation_user varchar(20) NULL,
 	state varchar(10) NOT NULL,
 	created_date timestamp NOT NULL,
-	CONSTRAINT service_pkey PRIMARY KEY (id),
+	CONSTRAINT service_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS category (
+	id int2 NOT NULL,
+	name varchar(30) NOT NULL,
+	creation_user varchar(20),
+	created_date timestamp NOT NULL,
+ 	CONSTRAINT category_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS priority (
+	id serial NOT NULL,
+	code int2 NOT NULL,
+	description varchar(50) NOT NULL,
+	id_provider varchar(3) NOT NULL,
+	creation_user varchar(20),
+	created_date timestamp NOT NULL,
+ 	CONSTRAINT priority_pkey PRIMARY KEY (id),
+ 	CONSTRAINT priority_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id)
+);
+
+CREATE TABLE IF NOT EXISTS provider_service (
+	id serial NOT NULL,
+	id_provider varchar(3) NOT NULL,
+	id_service int2 NOT NULL,
+ 	CONSTRAINT provider_service_pkey PRIMARY KEY (id),
+ 	CONSTRAINT provider_service_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id),
+ 	CONSTRAINT provider_service_service_fkey FOREIGN KEY (id_service) REFERENCES service(id)
 );
 
 CREATE TABLE IF NOT EXISTS alert (
@@ -106,23 +134,6 @@ CREATE TABLE IF NOT EXISTS alert_transaction (
 	created_date timestamp NOT NULL,
 	CONSTRAINT alert_transaction_pkey PRIMARY KEY (id_alert, id_consumer, id_transaction),
 	CONSTRAINT alert_transaction_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id) on delete cascade
-);
-
-CREATE TABLE IF NOT EXISTS alert_client (
-	id_alert varchar(3) NOT NULL,
-	id_client int2 NOT NULL,
-	number_operations int2 NOT NULL,
-	amount_enable int8 NOT NULL,
-	accumulated_operations int2 NULL,
-	accumulated_amount int8 NULL,
-	association_origin varchar(3) NOT NULL,
-	creation_user varchar(20) NULL,
-	created_date timestamp NOT NULL,
-	modified_date timestamp NULL, 
-	transaction_date timestamp NULL,
-	CONSTRAINT alert_client_pkey PRIMARY KEY (id_alert, id_client),
-	CONSTRAINT alert_client_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id) on delete cascade
-	CONSTRAINT alert_client_client_fkey FOREIGN KEY (id_client) REFERENCES client(id) on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS log_send (
@@ -172,30 +183,19 @@ CREATE TABLE IF NOT EXISTS contact (
  	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, document_type) REFERENCES client(document_number, document_type) on delete cascade
 );
 
-CREATE TABLE IF NOT EXISTS category (
-	id int2 NOT NULL,
-	name varchar(30) NOT NULL,
-	creation_user varchar(20),
-	created_date timestamp NOT NULL
- 	CONSTRAINT category_pkey PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS priority (
-	id serial NOT NULL,
-	code int2 NOT NULL,
-	description varchar(50) NOT NULL,
-	id_provider varchar(3) NOT NULL,
-	creation_user varchar(20),
-	created_date timestamp NOT NULL
- 	CONSTRAINT priority_pkey PRIMARY KEY (id),
- 	CONSTRAINT priority_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id)
-);
-
-CREATE TABLE IF NOT EXISTS provider_service (
-	id serial NOT NULL,
-	id_provider varchar(3) NOT NULL,
-	id_service int2 NOT NULL,
- 	CONSTRAINT provider_service_pkey PRIMARY KEY (id),
- 	CONSTRAINT provider_service_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id),
- 	CONSTRAINT provider_service_service_fkey FOREIGN KEY (id_service) REFERENCES service(id)
+CREATE TABLE IF NOT EXISTS alert_client (
+	id_alert varchar(3) NOT NULL,
+	id_client int2 NOT NULL,
+	number_operations int2 NOT NULL,
+	amount_enable int8 NOT NULL,
+	accumulated_operations int2 NULL,
+	accumulated_amount int8 NULL,
+	association_origin varchar(3) NOT NULL,
+	creation_user varchar(20) NULL,
+	created_date timestamp NOT NULL,
+	modified_date timestamp NULL,
+	transaction_date timestamp NULL,
+	CONSTRAINT alert_client_pkey PRIMARY KEY (id_alert, id_client),
+	CONSTRAINT alert_client_alert_fkey FOREIGN KEY (id_alert) REFERENCES alert(id) on delete cascade,
+	CONSTRAINT alert_client_client_fkey FOREIGN KEY (id_client) REFERENCES client(id) on delete cascade
 );

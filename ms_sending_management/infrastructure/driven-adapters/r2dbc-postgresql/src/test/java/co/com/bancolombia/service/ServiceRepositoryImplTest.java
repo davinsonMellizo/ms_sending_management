@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AlertTransactionRepositoryImplTest {
+public class ServiceRepositoryImplTest {
 
     @Autowired
     private ServiceRepositoryImplement repositoryImpl;
@@ -21,11 +21,10 @@ public class AlertTransactionRepositoryImplTest {
 
     @BeforeEach
     public void init() {
-        service.setId(0);
+        service.setId(1);
         service.setName("EMAIL BASE");
         service.setState("inactivo");
         service.setCreationUser("User");
-
     }
 
     @Test
@@ -54,7 +53,7 @@ public class AlertTransactionRepositoryImplTest {
 
     @Test
     public void deleteService() {
-        service.setId(1);
+        service.setId(2);
         StepVerifier.create(repositoryImpl.deleteServiceById(service.getId()))
                 .consumeNextWith(s -> assertEquals(service.getId(), s))
                 .verifyComplete();

@@ -41,7 +41,7 @@ public class AlertClientRepositoryImplTest {
 
     @Test
     public void findAllAlertClient() {
-        StepVerifier.create(repositoryImplement.findAllAlertsByClient(0))
+        StepVerifier.create(repositoryImplement.findAllAlertsByClient(1))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -58,7 +58,7 @@ public class AlertClientRepositoryImplTest {
     @Test
     public void deleteAlertClient() {
         alertClient.setIdAlert("HGD");
-        alertClient.setIdClient(0);
+        alertClient.setIdClient(1);
         StepVerifier.create(repositoryImplement.delete(alertClient))
                 .consumeNextWith(s -> assertEquals(alertClient.getIdAlert(), s))
                 .verifyComplete();
@@ -67,7 +67,7 @@ public class AlertClientRepositoryImplTest {
     @Test
     public void findAlertClient(){
         alertClient.setIdAlert("HGD");
-        alertClient.setIdClient(0);
+        alertClient.setIdClient(1);
         StepVerifier.create(repositoryImplement.findAlertClient(alertClient))
                 .consumeNextWith(acFound -> assertEquals(alertClient.getIdClient(), acFound.getIdClient()))
                 .verifyComplete();

@@ -49,7 +49,7 @@ public class BaseIntegration {
         return webTestClient.post()
                 .uri(path)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromObject(requestBody))
+                .body(BodyInserters.fromValue(requestBody))
                 .exchange()
                 .expectStatus();
     }
@@ -58,7 +58,7 @@ public class BaseIntegration {
         return webTestClient.put()
                 .uri(path)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromObject(requestBody))
+                .body(BodyInserters.fromValue(requestBody))
                 .exchange()
                 .expectStatus();
     }

@@ -50,7 +50,7 @@ public class PostgreSQLConnectionConfigHelperTest {
 
     @Test
     public void getConnectionConfig() {
-        assertNotNull(helper.getConnectionConfig());
+        assertNotNull(helper.buildConnectionConfiguration());
     }
 
 }

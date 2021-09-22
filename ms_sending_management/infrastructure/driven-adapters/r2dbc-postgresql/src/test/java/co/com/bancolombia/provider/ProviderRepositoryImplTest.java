@@ -59,7 +59,7 @@ public class ProviderRepositoryImplTest {
 
     @Test
     public void deleteProvider() {
-        provider.setId("FGH");
+        provider.setId("GHJ");
         StepVerifier.create(repositoryImpl.deleteProviderById(provider.getId()))
                 .consumeNextWith(s -> assertEquals(provider.getId(), s))
                 .verifyComplete();

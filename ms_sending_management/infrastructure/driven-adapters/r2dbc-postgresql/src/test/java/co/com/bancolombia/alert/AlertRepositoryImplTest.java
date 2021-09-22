@@ -29,15 +29,17 @@ public class AlertRepositoryImplTest {
         alert.setIdRemitter(0);
         alert.setIdTemplate(0);
         alert.setIdState(0);
+        alert.setIdCategory(1);
         alert.setAttentionLine("3215684");
         alert.setCreatedDate(LocalDateTime.now());
         alert.setCreationUser("UserName");
         alert.setVisibleChannel(true);
         alert.setObligatory(true);
         alert.setSubjectMail("sub");
-        alert.setPriority(0);
+        alert.setPriority(1);
         alert.setPathAttachedMail("path");
         alert.setNature("NM");
+        alert.setPush("SI");
         alert.setMessage("message");
         alert.setDescription("alert");
 

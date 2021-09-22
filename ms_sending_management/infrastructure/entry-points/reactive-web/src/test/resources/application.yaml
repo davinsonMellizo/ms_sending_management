@@ -6,3 +6,5 @@ entries:
     remitter: /remitter
     service: /service
     consumer: /consumer
+    category: /category
+    priority: /priority
