@@ -40,7 +40,7 @@ public class ContactRepositoryImplement
     @Override
     public Mono<Integer> findIdContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
-                contact.getContactMedium(), contact.getConsumer())
+                contact.getContactMedium(), contact.getSegment())
                 .map(ContactData::getId)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
@@ -81,7 +81,7 @@ public class ContactRepositoryImplement
 
     private Mono<ContactData> findContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
-                contact.getContactMedium(), contact.getConsumer())
+                contact.getContactMedium(), contact.getSegment())
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
 }

@@ -15,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +36,7 @@ public class ClientUseCaseTest {
     public void init() {
         client.setDocumentNumber(new Long(1061772353));
         client.setDocumentType("0");
+        client.setId(0);
 
         document.setId("0");
     }
@@ -68,12 +68,14 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void updateContact() {
+    public void updateClient() {
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
         when(clientGateway.updateClient(any()))
                 .thenReturn(Mono.just(StatusResponse.<Client>builder()
                         .before(client).actual(client)
                         .build()));
-        when(clientGateway.findClientByIdentification(any()))
+        when(clientGateway.findClientById(anyInt()))
                 .thenReturn(Mono.just(client));
         StepVerifier
                 .create(useCase.updateClient(client))
@@ -108,7 +110,7 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateContactWithException() {
-        when(clientGateway.findClientByIdentification(any()))
+        when(clientGateway.findClientById(anyInt()))
                 .thenReturn(Mono.empty());
         useCase.updateClient(client)
                 .as(StepVerifier::create)

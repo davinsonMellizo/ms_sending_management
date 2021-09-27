@@ -3,10 +3,10 @@ package co.com.bancolombia.remitter;
 
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.config.model.remitter.Remitter;
+import co.com.bancolombia.config.model.remitter.gateways.RemitterGateway;
+import co.com.bancolombia.config.model.response.StatusResponse;
 import co.com.bancolombia.drivenadapters.TimeFactory;
-import co.com.bancolombia.model.remitter.Remitter;
-import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.remitter.data.RemitterData;
 import co.com.bancolombia.remitter.data.RemitterMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -31,9 +31,9 @@ public class ClientUseCase {
     }
 
     public Mono<StatusResponse<Client>> updateClient(Client client) {
-        return clientGateway.findClientByIdentification(client)
+        return clientGateway.findClientById(client.getId())
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .map(clientBefore -> buildResponse(clientBefore, client))
+                .flatMap(clientBefore -> buildResponse(clientBefore, client))
                 .flatMap(clientGateway::updateClient);
     }
 
@@ -46,10 +46,12 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
-    private StatusResponse<Client> buildResponse(Client before, Client actual) {
-        return StatusResponse.<Client>builder()
-                .before(before)
-                .actual(actual.toBuilder().documentType(before.getDocumentType()).build())
-                .build();
+    private Mono<StatusResponse<Client>> buildResponse(Client before, Client actual) {
+        return documentGateway.getDocument(actual.getDocumentType())
+                .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
+                .map(document -> StatusResponse.<Client>builder()
+                        .before(before)
+                        .actual(actual.toBuilder().documentType(document.getId()).build())
+                        .build());
     }
 }

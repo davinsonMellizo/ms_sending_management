@@ -2,11 +2,11 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.config.model.consumer.Consumer;
+import co.com.bancolombia.config.model.consumer.gateways.ConsumerGateway;
+import co.com.bancolombia.config.model.response.StatusResponse;
 import co.com.bancolombia.consumer.data.ConsumerData;
 import co.com.bancolombia.consumer.data.ConsumerMapper;
-import co.com.bancolombia.model.consumer.Consumer;
-import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
-import co.com.bancolombia.model.response.StatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -40,6 +40,7 @@ public class ConsumerRepositoryImplement extends AdapterOperations<Consumer, Con
 
     @Override
     public Mono<Consumer> saveConsumer(Consumer consumer) {
+
         return Mono.just(consumer)
                 .map(this::convertToData)
                 .map(consumerData -> consumerData.toBuilder()

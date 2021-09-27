@@ -1,6 +1,6 @@
 package co.com.bancolombia.remitter.data;
 
-import co.com.bancolombia.model.remitter.Remitter;
+import co.com.bancolombia.config.model.remitter.Remitter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

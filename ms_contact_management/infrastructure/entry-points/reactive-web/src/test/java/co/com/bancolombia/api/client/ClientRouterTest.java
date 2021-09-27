@@ -48,6 +48,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
         client.setCreationUser("username");
         client.setEnrollmentOrigin("ALM");
         client.setKeyMdm("key");
+        client.setId(0);
 
         request = loadFileConfig("clientRequest.json", String.class);
     }
@@ -64,7 +65,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void saveContacts() {
+    public void saveClient() {
         when(useCase.saveClient(any())).thenReturn(Mono.just(client));
         statusAssertionsWebClientPost(properties.getClient(),
                 request)
@@ -75,7 +76,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateContacts() {
+    public void updateClient() {
         when(useCase.updateClient(any())).thenReturn(Mono.just(StatusResponse.<Client>builder()
                 .actual(client).before(client).build()));
         statusAssertionsWebClientPut(properties.getClient(),

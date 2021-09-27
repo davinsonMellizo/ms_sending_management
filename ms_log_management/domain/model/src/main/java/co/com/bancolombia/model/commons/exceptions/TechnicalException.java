@@ -1,0 +1,26 @@
+package co.com.bancolombia.model.commons.exceptions;
+
+
+import co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum;
+import lombok.Getter;
+
+@Getter
+public class TechnicalException extends RuntimeException {
+
+    private final TechnicalExceptionEnum exception;
+
+    public TechnicalException(Throwable error, TechnicalExceptionEnum technicalExceptionEnum) {
+        super(error);
+        this.exception = technicalExceptionEnum;
+    }
+
+    public TechnicalException(String message, TechnicalExceptionEnum technicalExceptionEnum) {
+        super(message);
+        this.exception = technicalExceptionEnum;
+    }
+
+    public TechnicalException(TechnicalExceptionEnum technicalExceptionEnum) {
+        super(technicalExceptionEnum.getMessage());
+        this.exception = technicalExceptionEnum;
+    }
+}

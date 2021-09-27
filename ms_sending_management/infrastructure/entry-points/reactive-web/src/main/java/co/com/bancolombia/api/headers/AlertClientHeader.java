@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.headers;
 
-import co.com.bancolombia.model.alertclient.AlertClient;
+import co.com.bancolombia.config.model.alertclient.AlertClient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

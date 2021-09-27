@@ -63,7 +63,7 @@ public class ClientRepositoryImplExceptionTest {
     @Test
     public void updateContact() {
         when(timeFactory.now()).thenReturn(NOW);
-        when(repository.updateClient(anyString(), anyString(), any(), anyInt(), anyLong(), anyString()))
+        when(repository.save(any()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.updateClient(StatusResponse.<Client>builder()
                 .before(client).actual(client).build())

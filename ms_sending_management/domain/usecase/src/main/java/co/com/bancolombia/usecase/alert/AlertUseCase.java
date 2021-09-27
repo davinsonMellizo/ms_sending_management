@@ -1,9 +1,9 @@
 package co.com.bancolombia.usecase.alert;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.config.model.alert.Alert;
+import co.com.bancolombia.config.model.alert.gateways.AlertGateway;
+import co.com.bancolombia.config.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

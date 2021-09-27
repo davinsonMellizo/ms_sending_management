@@ -21,8 +21,9 @@ public enum TechnicalExceptionEnum {
     FIND_CONTACT_MEDIUM_ERROR("DST0007", "An error occurred while find contact medium"),
     FIND_ENROLLMENT_CONTACT_ERROR("DST0008", "An error occurred while find enrollment contact"),
     FIND_DOCUMENT_ERROR("DST0009", "An error occurred while find a document"),
-    SECRET_EXCEPTION("DST0010", "An error occurred while trying to get AWS secrets"),
-    INTERNAL_SERVER_ERROR("DST0011", "Internal server error"),
+    FIND_CONSUMER_BY_ID_ERROR("DST0010", "An error occurred while find a consumer"),
+    SECRET_EXCEPTION("DST0011", "An error occurred while trying to get AWS secrets"),
+    INTERNAL_SERVER_ERROR("DST0012", "Internal server error"),
     HEADERS_MISSING_ERROR("301", "Missing parameters per Headers"),
     BODY_MISSING_ERROR("301", "Missing parameters per body");
 

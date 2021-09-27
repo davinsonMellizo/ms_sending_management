@@ -1,6 +1,6 @@
 package co.com.bancolombia.consumer;
 
-import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.config.model.consumer.Consumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

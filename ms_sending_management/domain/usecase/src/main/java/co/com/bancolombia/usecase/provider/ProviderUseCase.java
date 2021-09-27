@@ -1,9 +1,9 @@
 package co.com.bancolombia.usecase.provider;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.provider.Provider;
-import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.config.model.provider.Provider;
+import co.com.bancolombia.config.model.provider.gateways.ProviderGateway;
+import co.com.bancolombia.config.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

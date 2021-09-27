@@ -37,7 +37,7 @@ public class ContactHeader {
                 .documentType((this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
                 .contactMedium(this.contactMedium)
-                .consumer(this.consumer)
+                .segment(this.consumer)
                 .build());
     }
 }

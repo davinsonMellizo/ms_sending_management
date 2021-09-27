@@ -2,6 +2,7 @@ package co.com.bancolombia.api.services.contact;
 
 import co.com.bancolombia.api.dto.ContactDTO;
 import co.com.bancolombia.api.dto.ContactFindDTO;
+import co.com.bancolombia.api.dto.ContactUpdateDTO;
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.ResponseContacts;
@@ -48,7 +49,7 @@ public class ContactDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("updateContact").summary("Update contact")
                 .description("Update client contact ").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Contact to Update").required(true).implementation(ContactDTO.class))
+                .requestBody(requestBodyBuilder().description("Contact to Update").required(true).implementation(ContactUpdateDTO.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(StatusResponse.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
@@ -60,7 +61,7 @@ public class ContactDocumentationApi {
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(String.class, "document-type", "Client Document Type"))
                 .parameter(createHeader(String.class, "contact-medium", "Type of contact"))
-                .parameter(createHeader(String.class, "enrollment-contact", "Origin of enrollment"))
+                .parameter(createHeader(String.class, "segment", "Segment"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }

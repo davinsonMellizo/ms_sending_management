@@ -1,8 +1,8 @@
 package co.com.bancolombia.usecase.alerttemplate;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.alerttemplate.AlertTemplate;
-import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
+import co.com.bancolombia.config.model.alerttemplate.AlertTemplate;
+import co.com.bancolombia.config.model.alerttemplate.gateways.AlertTemplateGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

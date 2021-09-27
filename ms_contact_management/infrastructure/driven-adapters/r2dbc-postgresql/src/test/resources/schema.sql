@@ -134,32 +134,34 @@ CREATE TABLE IF NOT EXISTS log_send (
 --  Gestion Contacto tables creation
 --
 CREATE TABLE IF NOT EXISTS client (
+	id serial NOT NULL,
 	document_number int8 NOT NULL,
-	document_type int2 NOT NULL,
+	id_document_type int2 NOT NULL,
 	key_mdm varchar(20) NOT NULL,
 	enrollment_origin varchar(3) NULL,
 	id_state int2 NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
 	modified_date timestamp NULL,
- 	CONSTRAINT client_pkey PRIMARY KEY (document_number, document_type),
+	CONSTRAINT client_pkey PRIMARY KEY (id),
+ 	CONSTRAINT client_document_unique UNIQUE (document_number, id_document_type),
  	CONSTRAINT client_state_fkey FOREIGN KEY (id_state) REFERENCES state(id),
- 	CONSTRAINT client_document_type_fkey FOREIGN KEY (document_type) REFERENCES document_type(id)
+ 	CONSTRAINT client_document_type_fkey FOREIGN KEY (id_document_type) REFERENCES document_type(id)
 );
 
 CREATE TABLE IF NOT EXISTS contact (
-	id int8 unique,
+	id serial NOT NULL,
 	document_number int8 NOT NULL,
-	document_type int2 NOT NULL,
-	id_consumer varchar(3) NOT NULL,
+	id_document_type int2 NOT NULL,
+	segment varchar(10) NOT NULL,
 	id_contact_medium int2 NOT NULL,
 	value varchar(60) NOT NULL,
 	id_state int2 NOT NULL,
 	created_date timestamp NOT NULL,
 	modified_date timestamp NULL,
- 	CONSTRAINT contact_pkey PRIMARY KEY (document_number, document_type,id_consumer,id_contact_medium),
- 	CONSTRAINT contact_consumer_fkey FOREIGN KEY (id_consumer) REFERENCES consumer(id),
+	CONSTRAINT contact_pkey PRIMARY KEY (id),
+ 	CONSTRAINT contact_unique UNIQUE (document_number, id_document_type,segment,id_contact_medium),
  	CONSTRAINT contact_contact_medium_fkey FOREIGN KEY (id_contact_medium) REFERENCES contact_medium(id),
  	CONSTRAINT contact_state_fkey FOREIGN KEY (id_state) REFERENCES state(id),
- 	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, document_type) REFERENCES client(document_number, document_type) on delete cascade
+ 	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, id_document_type) REFERENCES client(document_number, id_document_type) on delete cascade on update cascade
 );

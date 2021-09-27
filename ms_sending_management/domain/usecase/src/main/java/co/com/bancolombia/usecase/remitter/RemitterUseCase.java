@@ -1,9 +1,9 @@
 package co.com.bancolombia.usecase.remitter;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.remitter.Remitter;
-import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.config.model.remitter.Remitter;
+import co.com.bancolombia.config.model.remitter.gateways.RemitterGateway;
+import co.com.bancolombia.config.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

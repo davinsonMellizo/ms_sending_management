@@ -16,7 +16,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
 public class ClientRepositoryImplement
-        extends AdapterOperations<Client, ClientData, Long, ClientRepository>
+        extends AdapterOperations<Client, ClientData, Integer, ClientRepository>
         implements ClientGateway {
 
     @Autowired
@@ -37,6 +37,13 @@ public class ClientRepositoryImplement
     }
 
     @Override
+    public Mono<Client> findClientById(Integer id) {
+        return repository.findById(id)
+                .map(this::convertToEntity)
+                .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
+    }
+
+    @Override
     public Mono<Client> saveClient(Client client) {
         return Mono.just(client)
                 .map(this::convertToData)
@@ -51,13 +58,16 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<StatusResponse<Client>> updateClient(StatusResponse<Client> statusResponse) {
-        return repository.updateClient(statusResponse.getActual().getKeyMdm(),
-                statusResponse.getActual().getEnrollmentOrigin(), timeFactory.now(),
-                statusResponse.getActual().getIdState(),
-                statusResponse.getActual().getDocumentNumber(),
-                statusResponse.getActual().getDocumentType())
-                .filter(rowsAffected -> rowsAffected == NUMBER_OF_ROWS)
-                .map(integer -> statusResponse.toBuilder()
+        return Mono.just(statusResponse.getActual().toBuilder()
+                .creationUser(statusResponse.getBefore().getCreationUser())
+                .createdDate(statusResponse.getBefore().getCreatedDate())
+                .modifiedDate(timeFactory.now()).build())
+                .map(this::convertToData)
+                .doOnNext(System.out::println)
+                .flatMap(this::saveData)
+                .map(this::convertToEntity)
+                .map(clientUpdated -> statusResponse.toBuilder()
+                        .actual(clientUpdated)
                         .description("Cliente Actualizado exitosamente").build())
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_CLIENT_ERROR));
     }

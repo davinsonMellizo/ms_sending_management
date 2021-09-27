@@ -1,8 +1,8 @@
 package co.com.bancolombia.api.services.alerttransaction;
 
 import co.com.bancolombia.api.dto.AlertTransactionDTO;
-import co.com.bancolombia.model.alerttransaction.AlertTransaction;
-import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.config.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.config.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;

@@ -40,18 +40,20 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
     @MockBean
     private ContactUseCase useCase;
     private String request;
+    private String requestSave;
     private final Contact contact = new Contact();
 
     @BeforeEach
     public void init() {
         contact.setContactMedium("1");
-        contact.setConsumer("0");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
         contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
         contact.setState("0");
 
-        request = loadFileConfig("contactRequest.json", String.class);
+        request = loadFileConfig("contactSaveRequest.json", String.class);
+        requestSave = loadFileConfig("contactRequest.json", String.class);
     }
 
     @Test

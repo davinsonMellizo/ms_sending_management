@@ -1,8 +1,7 @@
 package co.com.bancolombia.provider;
 
-import co.com.bancolombia.model.provider.Provider;
+import co.com.bancolombia.config.model.provider.Provider;
 import co.com.bancolombia.provider.data.ProviderData;
-import co.com.bancolombia.remitter.data.RemitterData;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;

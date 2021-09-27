@@ -1,6 +1,6 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
-import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.config.model.message.Message;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -24,7 +24,7 @@ public abstract class ValidateData {
     public static final Predicate<Message> isValidMail = message ->
             Objects.nonNull(message.getMail()) && !message.getMail().isEmpty();
 
-    public static final Predicate<Message> isValidMailFormatAndMobile = message ->
+    public static final Predicate<Message> isValidMailFormatOrMobile = message ->
             (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty())
                     || ((Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
                     && Pattern.compile(PATTERN).matcher(message.getMail()).matches());

@@ -2,10 +2,12 @@ package co.com.bancolombia.config;
 
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
-import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
+import io.r2dbc.spi.ConnectionFactoryOptions;
+import io.r2dbc.spi.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -20,15 +22,18 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public PostgresqlConnectionConfiguration getConnectionConfig() {
-        PostgresqlConnectionProperties properties = postgresProperties();
-        return PostgresqlConnectionConfiguration.builder()
-                .host(properties.getHost())
-                .port(properties.getPort())
-                .database(properties.getDbname())
-                .schema(properties.getSchema())
-                .username(properties.getUsername())
-                .password(properties.getPassword())
+    public ConnectionFactoryOptions buildConnectionConfiguration(){
+        PostgresqlConnectionProperties properties =  postgresProperties();
+        return ConnectionFactoryOptions.builder()
+                .option(DRIVER,"postgresql")
+                .option(HOST, properties.getHost())
+                .option(PORT, properties.getPort())
+                .option(USER,properties.getUsername())
+                .option(PASSWORD,properties.getPassword())
+                .option(DATABASE, properties.getDbname())
+                .option(Option.valueOf("sslmode"), "disable")
+                .option(Option.valueOf("schema"), "schalertd")
                 .build();
+
     }
 }

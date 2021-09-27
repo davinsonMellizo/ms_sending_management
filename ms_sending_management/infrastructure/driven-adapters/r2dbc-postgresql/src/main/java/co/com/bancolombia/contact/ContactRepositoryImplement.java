@@ -2,12 +2,12 @@ package co.com.bancolombia.contact;
 
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.config.model.contact.Contact;
+import co.com.bancolombia.config.model.contact.gateways.ContactGateway;
+import co.com.bancolombia.config.model.message.Message;
 import co.com.bancolombia.contact.data.ContactData;
 import co.com.bancolombia.contact.data.ContactMapper;
 import co.com.bancolombia.drivenadapters.TimeFactory;
-import co.com.bancolombia.model.contact.Contact;
-import co.com.bancolombia.model.contact.gateways.ContactGateway;
-import co.com.bancolombia.model.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;

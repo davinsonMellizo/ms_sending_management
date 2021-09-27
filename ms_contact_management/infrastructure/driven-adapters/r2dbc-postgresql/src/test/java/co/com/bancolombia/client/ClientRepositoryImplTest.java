@@ -1,6 +1,7 @@
 package co.com.bancolombia.client;
 
 
+import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,6 +33,7 @@ public class ClientRepositoryImplTest {
         client.setCreationUser("username");
         client.setEnrollmentOrigin("ALM");
         client.setKeyMdm("key");
+        client.setCreatedDate(LocalDateTime.now());
     }
 
 
@@ -51,7 +55,8 @@ public class ClientRepositoryImplTest {
     }
 
     @Test
-    public void updateContact() {
+    public void updateClient() {
+        client.setId(0);
         StepVerifier.create(clientRepositoryImplement.updateClient(StatusResponse.<Client>builder()
                 .before(client).actual(client)
                 .build()))
@@ -60,7 +65,7 @@ public class ClientRepositoryImplTest {
     }
 
     @Test
-    public void deleteContact() {
+    public void deleteClient() {
         client.setDocumentNumber(new Long(1061772354));
         StepVerifier.create(clientRepositoryImplement.deleteClient(client))
                 .consumeNextWith(client -> assertEquals(1061772354, client.getDocumentNumber()))

@@ -2,6 +2,8 @@ package co.com.bancolombia.usecase.contact;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.contactmedium.ContactMedium;
@@ -40,17 +42,20 @@ public class ContactUseCaseTest {
     private ContactMediumGateway mediumGateway;
     @Mock
     private DocumentGateway documentGateway;
+    @Mock
+    private ConsumerGateway consumerGateway;
 
     private final State state = new State(0, "Activo");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
     private final Client client = new Client();
     private final Contact contact = new Contact();
     private final Document document = new Document();
+    private final Consumer consumer = new Consumer();
 
     @BeforeEach
     public void init() {
         contact.setContactMedium("1");
-        contact.setConsumer("0");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
         contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
@@ -59,6 +64,7 @@ public class ContactUseCaseTest {
         client.setDocumentNumber(new Long(1061772353));
         client.setDocumentType("0");
 
+        consumer.setSegment("GNR");
         document.setId("0");
     }
 
@@ -83,6 +89,8 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(medium));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
         StepVerifier
                 .create(useCase.saveContact(contact))
                 .assertNext(response -> response

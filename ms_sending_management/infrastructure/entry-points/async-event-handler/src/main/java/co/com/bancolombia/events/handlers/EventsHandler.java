@@ -1,6 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
-import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.config.model.message.Message;
 import co.com.bancolombia.usecase.sendalert.ManagementAlertUseCase;
 import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.DomainEvent;

@@ -1,6 +1,6 @@
 package co.com.bancolombia.service;
 
-import co.com.bancolombia.model.service.Service;
+import co.com.bancolombia.config.model.service.Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

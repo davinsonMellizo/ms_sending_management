@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Contact {
-    private String consumer;
+    private String segment;
     private String contactMedium;
     private Long documentNumber;
     private String documentType;

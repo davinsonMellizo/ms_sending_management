@@ -41,7 +41,7 @@ public class ContactDTO {
                 .documentType(this.documentType)
                 .documentNumber(this.documentNumber)
                 .contactMedium(this.contactMedium)
-                .consumer(this.consumer)
+                .segment(this.consumer)
                 .value(this.value)
                 .state(this.state)
                 .build());

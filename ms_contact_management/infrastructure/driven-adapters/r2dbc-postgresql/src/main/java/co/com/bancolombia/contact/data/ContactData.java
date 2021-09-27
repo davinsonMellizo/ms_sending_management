@@ -20,12 +20,12 @@ public class ContactData {
 
     @Id
     private Integer id;
-    @Column("id_consumer")
-    private String consumer;
+    private String segment;
     @ReadOnlyProperty
     private String contactMedium;
     private Integer idContactMedium;
     private Long documentNumber;
+    @Column("id_document_type")
     private Integer documentType;
     private String value;
     @ReadOnlyProperty

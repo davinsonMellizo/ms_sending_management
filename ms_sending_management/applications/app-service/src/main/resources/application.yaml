@@ -22,33 +22,11 @@ spring:
       root: "${LOG4J_LEVEL}"
       reactor:
         netty: false
-adapters:
-  postgresql:
-    pool:
-      initial: ${POSTGRESQL_CONN_INITIAL:2}
-      max: ${POSTGRESQL_CONN_MAX:10}
-  rest-client:
-    timeout: 1000
-    scope: scope-blm
-    resources:
-      sendAlertMail: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
-  secrets-manager:
-    secret-rabbit: "${SECRET-RABBIT}"
-    secret-rds: "${SECRET-RDS}"
-    cache-size: "${CACHE_SECRETS_SIZE}"
-    cache-time: "${CACHE_SECRETS_SECONDS}"
-    endpoint: "http://localhost:4566"
-entries:
-  reactive-web:
-    path-base: "${PATH_BASE}"
-    alert: "${ALERT}"
-    remitter: "${REMITTER}"
-    provider: "${PROVIDER}"
-    service: "${SERVICE}"
-    consumer: "${CONSUMER}"
+
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
+
 management:
   health:
     probes:
@@ -68,9 +46,28 @@ management:
         health: "health"
         liveness: "liveness"
         readiness: "readiness"
-adapter:
-  restconsumer:
-    url: "http://localhost:8080"
-environment:
-  replicas:
-    max: ${MAX_REPLICAS:1}
+
+adapters:
+  postgresql:
+    pool:
+      initial: "${POSTGRESQL_CONN_INITIAL:2}"
+      max: "${POSTGRESQL_CONN_MAX:10}"
+  rest-client:
+    timeout: 1000
+    scope: "scope-blm"
+    resources:
+      sendAlertMail: "https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail"
+  secrets-manager:
+    secret-rabbit: "${SECRET-RABBIT}"
+    secret-rds: "${SECRET-RDS}"
+    cache-size: "${CACHE_SECRETS_SIZE}"
+    cache-time: "${CACHE_SECRETS_SECONDS}"
+    endpoint: "http://localhost:4566"
+  entries:
+    reactive-web:
+      path-base: "${PATH_BASE}"
+      alert: "${ALERT}"
+      remitter: "${REMITTER}"
+      provider: "${PROVIDER}"
+      service: "${SERVICE}"
+      consumer: "${CONSUMER}"

@@ -1,9 +1,9 @@
 package co.com.bancolombia.usecase.consumer;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.consumer.Consumer;
-import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.config.model.consumer.Consumer;
+import co.com.bancolombia.config.model.consumer.gateways.ConsumerGateway;
+import co.com.bancolombia.config.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

@@ -4,6 +4,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.api.dto.ClientDTO;
+import co.com.bancolombia.api.dto.ClientUpdateDTO;
 import co.com.bancolombia.api.header.ClientHeader;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.client.ClientUseCase;
@@ -41,10 +42,10 @@ public class ClientHandler {
     }
 
     public Mono<ServerResponse> updateContact(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(ClientDTO.class)
+        return serverRequest.bodyToMono(ClientUpdateDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
-                .flatMap(ClientDTO::toModel)
+                .flatMap(ClientUpdateDTO::toModel)
                 .flatMap(clientUseCase::updateClient)
                 .flatMap(ResponseUtil::responseOk);
     }

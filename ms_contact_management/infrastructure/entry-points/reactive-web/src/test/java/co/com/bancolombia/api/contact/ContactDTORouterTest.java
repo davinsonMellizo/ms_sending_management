@@ -41,18 +41,20 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     @MockBean
     private ContactUseCase useCase;
     private String request;
+    private String requestSave;
     private final Contact contact = new Contact();
 
     @BeforeEach
     public void init() {
         contact.setContactMedium("");
-        contact.setConsumer("0");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
         contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
         contact.setState("0");
 
         request = loadFileConfig("contactRequest.json", String.class);
+        requestSave = loadFileConfig("contactSaveRequest.json", String.class);
     }
 
     @Test
@@ -71,10 +73,10 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void saveContacts() {
+    public void saveContact() {
         when(useCase.saveContact(any())).thenReturn(Mono.just(contact));
         statusAssertionsWebClientPost(properties.getContact(),
-                request)
+                requestSave)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult()
@@ -83,7 +85,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateContacts() {
+    public void updateContact() {
         when(useCase.updateContact(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
                 .actual(contact).before(contact).build()));
         statusAssertionsWebClientPut(properties.getContact(),

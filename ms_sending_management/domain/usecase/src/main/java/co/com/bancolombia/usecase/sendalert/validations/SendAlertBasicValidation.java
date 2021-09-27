@@ -1,8 +1,8 @@
 package co.com.bancolombia.usecase.sendalert.validations;
 
-import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.config.model.alert.Alert;
+import co.com.bancolombia.config.model.alert.gateways.AlertGateway;
+import co.com.bancolombia.config.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

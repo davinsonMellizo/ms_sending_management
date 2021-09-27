@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-@ConfigurationProperties(prefix = "entries.reactive-web")
+@ConfigurationProperties(prefix = "adapters.entries.reactive-web")
 public class ApiProperties {
     private String pathBase;
     private String alert;

@@ -1,0 +1,62 @@
+##Spring Configuration
+server:
+  port: ${SERVER_PORT}
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: false
+
+springdoc:
+  version: 1
+
+cloud:
+  aws:
+    region: us-east-1
+    stack:
+      auto: false
+    sqs:
+      pollingThreads: 50
+      queue-endpoint: ${SQS-ENDPOINT}
+    rds:
+      postgresql:
+        pool:
+          initial: ${POSTGRESQL-POOL-INITIAL}
+          max: ${POSTGRESQL-POOL-MAX}
+        schema: ${POSTGRESQL-SCHEMA}
+    secrets-manager:
+      secret-rds: ${SECRET-RDS}
+      endpoint: http://localhost:4566
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+

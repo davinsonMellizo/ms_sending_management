@@ -2,6 +2,8 @@ package co.com.bancolombia.usecase.contact;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
@@ -15,6 +17,7 @@ import co.com.bancolombia.model.state.gateways.StateGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple3;
+import reactor.util.function.Tuple4;
 
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACT_NOT_FOUND;
@@ -24,8 +27,9 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA
 public class ContactUseCase {
     private final StateGateway stateGateway;
     private final ContactGateway contactGateway;
-    private final ContactMediumGateway contactMediumGateway;
     private final DocumentGateway documentGateway;
+    private final ConsumerGateway consumerGateway;
+    private final ContactMediumGateway contactMediumGateway;
 
     public Mono<ResponseContacts> findContactsByClient(Client client) {
         return contactGateway.findAllContactsByClient(client)
@@ -45,15 +49,17 @@ public class ContactUseCase {
                         .state(Integer.toString(data.getT1().getId()))
                         .contactMedium(Integer.toString(data.getT2().getId()))
                         .documentType(data.getT3().getId())
+                        .segment(data.getT4().getSegment())
                         .build())
                 .flatMap(contactGateway::saveContact);
     }
 
-    private Mono<Tuple3<State, ContactMedium, Document>> getDataBase(Contact contact) {
+    private Mono<Tuple4<State, ContactMedium, Document, Consumer>> getDataBase(Contact contact) {
         Mono<State> state = stateGateway.findStateByName(contact.getState());
         Mono<ContactMedium> medium = contactMediumGateway.findContactMediumByCode(contact.getContactMedium());
         Mono<Document> document = documentGateway.getDocument(contact.getDocumentType());
-        return Mono.zip(state, medium, document);
+        Mono<Consumer> consumer = consumerGateway.findConsumerById(contact.getSegment());
+        return Mono.zip(state, medium, document, consumer);
     }
 
     public Mono<StatusResponse<Contact>> updateContact(Contact contact) {

@@ -1,6 +1,6 @@
 package co.com.bancolombia.contact.data;
 
-import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.config.model.contact.Contact;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.services.client;
 
 import co.com.bancolombia.api.dto.ClientDTO;
+import co.com.bancolombia.api.dto.ClientUpdateDTO;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.response.StatusResponse;
@@ -42,7 +43,7 @@ public class ClientDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("updateClient").summary("Update Client")
                 .description("Update client Client ").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Client to Update").required(true).implementation(ClientDTO.class))
+                .requestBody(requestBodyBuilder().description("Client to Update").required(true).implementation(ClientUpdateDTO.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(StatusResponse.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }

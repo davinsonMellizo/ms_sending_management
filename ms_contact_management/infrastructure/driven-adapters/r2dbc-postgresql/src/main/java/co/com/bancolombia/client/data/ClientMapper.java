@@ -8,6 +8,5 @@ import org.mapstruct.Mapping;
 public interface ClientMapper {
     Client toEntity(ClientData clientData);
 
-    @Mapping(target = "id", ignore = true)
     ClientData toData(Client client);
 }

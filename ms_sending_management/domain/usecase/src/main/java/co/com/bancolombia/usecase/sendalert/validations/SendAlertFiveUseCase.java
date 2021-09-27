@@ -1,20 +1,19 @@
 package co.com.bancolombia.usecase.sendalert.validations;
 
-import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.gateways.MessageGateway;
-import co.com.bancolombia.model.provider.Provider;
-import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.remitter.Remitter;
-import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.model.service.Service;
-import co.com.bancolombia.model.service.gateways.ServiceGateway;
+import co.com.bancolombia.config.model.alert.Alert;
+import co.com.bancolombia.config.model.alert.gateways.AlertGateway;
+import co.com.bancolombia.config.model.message.Mail;
+import co.com.bancolombia.config.model.message.Message;
+import co.com.bancolombia.config.model.message.gateways.MessageGateway;
+import co.com.bancolombia.config.model.provider.Provider;
+import co.com.bancolombia.config.model.provider.gateways.ProviderGateway;
+import co.com.bancolombia.config.model.remitter.Remitter;
+import co.com.bancolombia.config.model.remitter.gateways.RemitterGateway;
+import co.com.bancolombia.config.model.service.Service;
+import co.com.bancolombia.config.model.service.gateways.ServiceGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.*;
 
@@ -29,7 +28,7 @@ public class SendAlertFiveUseCase {
     //TODO validate id 5
     public Mono<Void> validateWithCodeAlert(Message message) {
         return Flux.just(message)
-                .filter(isValidMailFormatAndMobile)
+                .filter(isValidMailFormatOrMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid contact data")))
                 .map(Message::getIdAlert)
                 .flatMap(alertGateway::findAlertById)

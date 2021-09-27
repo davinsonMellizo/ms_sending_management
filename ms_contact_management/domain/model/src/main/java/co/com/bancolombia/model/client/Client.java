@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder(toBuilder = true)
 public class Client {
+    private Integer id;
     private Long documentNumber;
     private String documentType;
     private String keyMdm;

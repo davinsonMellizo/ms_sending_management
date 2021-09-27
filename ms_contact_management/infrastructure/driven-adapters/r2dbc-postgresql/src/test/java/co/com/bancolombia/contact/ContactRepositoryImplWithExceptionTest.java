@@ -37,7 +37,7 @@ public class ContactRepositoryImplWithExceptionTest {
     @BeforeEach
     public void init() {
         contact.setContactMedium("1");
-        contact.setConsumer("0");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
         contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
@@ -62,7 +62,7 @@ public class ContactRepositoryImplWithExceptionTest {
         when(repository.findContact(any(), any(), any(), any()))
                 .thenReturn(Mono.error(RuntimeException::new));
         contact.setContactMedium("SMS");
-        contact.setConsumer("ALM");
+        contact.setSegment("ALM");
         repositoryImpl.findIdContact(contact)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
