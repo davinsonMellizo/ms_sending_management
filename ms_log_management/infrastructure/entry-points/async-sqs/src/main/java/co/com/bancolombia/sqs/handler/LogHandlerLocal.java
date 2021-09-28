@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @EnableSqs
 @Component
@@ -23,8 +25,8 @@ public class LogHandlerLocal {
 
     @SqsListener(value = "${cloud.aws.sqs.queue-endpoint}", deletionPolicy = SqsMessageDeletionPolicy.ALWAYS)
     public void listenLogBySqsListener(@Payload final String jsonMessage) throws JsonProcessingException {
-        System.out.println("Mensaje leido, procediendo a enviar"+jsonMessage);
         Log log =  objectMapper.readValue(jsonMessage, Log.class);
+        log.setDateCreation(LocalDateTime.now());
         useCase.saveLog(log).subscribe();
     }
 

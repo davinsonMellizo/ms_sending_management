@@ -2,8 +2,8 @@ package co.com.bancolombia.alertclient;
 
 import co.com.bancolombia.alertclient.data.AlertClientMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.alertclient.AlertClient;
-import co.com.bancolombia.config.model.response.StatusResponse;
+import co.com.bancolombia.model.alertclient.AlertClient;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

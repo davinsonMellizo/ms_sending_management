@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.services.consumer;
 
-import co.com.bancolombia.config.model.error.Error;
+import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
@@ -21,9 +21,9 @@ public class ConsumerDocumentationApi {
                 .operationId("SaveConsumer").summary("Save Consumer")
                 .description("Create new Consumer").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Consumer to create").required(true)
-                        .implementation(co.com.bancolombia.config.model.consumer.Consumer.class))
+                        .implementation(co.com.bancolombia.model.consumer.Consumer.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL)
-                        .implementation(co.com.bancolombia.config.model.consumer.Consumer.class))
+                        .implementation(co.com.bancolombia.model.consumer.Consumer.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
@@ -33,7 +33,7 @@ public class ConsumerDocumentationApi {
                 .description("Find Consumer by id").tags(new String[]{TAG})
                 .parameter(createHeader(String.class, "id", "Consumer identifier"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL)
-                        .implementation(co.com.bancolombia.config.model.consumer.Consumer.class))
+                        .implementation(co.com.bancolombia.model.consumer.Consumer.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
@@ -42,7 +42,7 @@ public class ConsumerDocumentationApi {
                 .operationId("findAllConsumer").summary("Find all Consumers")
                 .description("Find all Consumers by id").tags(new String[]{TAG})
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL)
-                        .implementationArray(co.com.bancolombia.config.model.consumer.Consumer.class))
+                        .implementationArray(co.com.bancolombia.model.consumer.Consumer.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
@@ -51,9 +51,9 @@ public class ConsumerDocumentationApi {
                 .operationId("updateConsumer").summary("Update Consumer")
                 .description("Update Consumer by id").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Consumer to Update").required(true)
-                        .implementation(co.com.bancolombia.config.model.consumer.Consumer.class))
+                        .implementation(co.com.bancolombia.model.consumer.Consumer.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL)
-                        .implementation(co.com.bancolombia.config.model.consumer.Consumer.class))
+                        .implementation(co.com.bancolombia.model.consumer.Consumer.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 

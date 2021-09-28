@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer.adapter;
 
-import co.com.bancolombia.config.model.message.Mail;
-import co.com.bancolombia.config.model.message.gateways.MessageGateway;
+import co.com.bancolombia.model.message.Mail;
+import co.com.bancolombia.model.message.gateways.MessageGateway;
 import co.com.bancolombia.consumer.ObjectRequest;
 import co.com.bancolombia.consumer.ObjectResponse;
 import co.com.bancolombia.consumer.RestConsumer;

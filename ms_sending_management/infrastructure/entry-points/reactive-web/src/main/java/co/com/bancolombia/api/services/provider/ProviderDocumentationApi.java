@@ -1,8 +1,8 @@
 package co.com.bancolombia.api.services.provider;
 
 import co.com.bancolombia.api.dto.ProviderDTO;
-import co.com.bancolombia.config.model.error.Error;
-import co.com.bancolombia.config.model.provider.Provider;
+import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.model.provider.Provider;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;

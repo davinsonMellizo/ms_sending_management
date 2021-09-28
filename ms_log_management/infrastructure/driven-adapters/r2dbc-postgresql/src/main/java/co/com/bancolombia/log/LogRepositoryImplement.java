@@ -21,6 +21,10 @@ public class LogRepositoryImplement
 
     @Override
     public Mono<Log> saveLog(Log log) {
-        return null;
+        return Mono.just(log)
+                .map(this::convertToData)
+                .flatMap(repository::save)
+                .thenReturn(log)
+                .doOnNext(log1 -> System.out.println("se guardò el log"));
     }
 }

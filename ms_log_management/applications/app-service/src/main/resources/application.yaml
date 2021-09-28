@@ -58,5 +58,3 @@ management:
         health: "health"
         liveness: "liveness"
         readiness: "readiness"
-
-

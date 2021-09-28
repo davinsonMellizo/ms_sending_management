@@ -1,25 +1,25 @@
 server:
-  port: "${SERVER_PORT}"
+  port: ${SERVER_PORT}
   servlet:
     encoding:
-      charset: "UTF-8"
+      charset: UTF-8
       force: true
 springdoc:
   version: 1
 spring:
   application:
-    name: "${APPLICATION_NAME}"
+    name: ${APPLICATION_NAME}
   devtools:
     add-properties: false
   jackson:
-    default-property-inclusion: "NON_NULL"
+    default-property-inclusion: NON_NULL
   profiles:
-    active: "${SPRING_PROFILE_ACTIVE}"
+    active: ${SPRING_PROFILE_ACTIVE}
   webflux:
-    base-path: "${PATH_BASE}"
+    base-path: ${PATH_BASE}
   logging:
     level:
-      root: "${LOG4J_LEVEL}"
+      root: ${LOG4J_LEVEL}
       reactor:
         netty: false
 
@@ -50,24 +50,29 @@ management:
 adapters:
   postgresql:
     pool:
-      initial: "${POSTGRESQL_CONN_INITIAL:2}"
-      max: "${POSTGRESQL_CONN_MAX:10}"
+      initial: ${POSTGRESQL_CONN_INITIAL:2}
+      max: ${POSTGRESQL_CONN_MAX:10}
+  async-sqs:
+    url: ${SQS_URL}
+    timeout: ${SQS_TIMEOUT}
+    pool-size: ${SQS_POOL_SIZE}
+    region-aws: ${REGION_AWS}
   rest-client:
     timeout: 1000
-    scope: "scope-blm"
+    scope: scope-blm
     resources:
-      sendAlertMail: "https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail"
+      sendAlertMail: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
   secrets-manager:
-    secret-rabbit: "${SECRET-RABBIT}"
-    secret-rds: "${SECRET-RDS}"
-    cache-size: "${CACHE_SECRETS_SIZE}"
-    cache-time: "${CACHE_SECRETS_SECONDS}"
-    endpoint: "http://localhost:4566"
+    secret-rabbit: ${SECRET-RABBIT}
+    secret-rds: ${SECRET-RDS}
+    cache-size: ${CACHE_SECRETS_SIZE}
+    cache-time: ${CACHE_SECRETS_SECONDS}
+    endpoint: http://localhost:4566
   entries:
     reactive-web:
-      path-base: "${PATH_BASE}"
-      alert: "${ALERT}"
-      remitter: "${REMITTER}"
-      provider: "${PROVIDER}"
-      service: "${SERVICE}"
-      consumer: "${CONSUMER}"
+      path-base: ${PATH_BASE}
+      alert: ${ALERT}
+      remitter: ${REMITTER}
+      provider: ${PROVIDER}
+      service: ${SERVICE}
+      consumer: ${CONSUMER}

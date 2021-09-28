@@ -3,7 +3,7 @@ package co.com.bancolombia.alert;
 import co.com.bancolombia.alert.data.AlertData;
 import co.com.bancolombia.alert.data.AlertMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.alert.Alert;
+import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

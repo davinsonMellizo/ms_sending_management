@@ -1,6 +1,6 @@
 package co.com.bancolombia.provider.data;
 
-import co.com.bancolombia.config.model.provider.Provider;
+import co.com.bancolombia.model.provider.Provider;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

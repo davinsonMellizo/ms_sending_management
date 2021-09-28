@@ -1,6 +1,6 @@
 package co.com.bancolombia.alert;
 
-import co.com.bancolombia.config.model.alert.Alert;
+import co.com.bancolombia.model.alert.Alert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

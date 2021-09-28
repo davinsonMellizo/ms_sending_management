@@ -2,7 +2,7 @@ package co.com.bancolombia.alerttemplate;
 
 import co.com.bancolombia.alerttemplate.data.AlertTemplateMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.alerttemplate.AlertTemplate;
+import co.com.bancolombia.model.alerttemplate.AlertTemplate;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.services.alerttemplate;
 
-import co.com.bancolombia.config.model.alerttemplate.AlertTemplate;
-import co.com.bancolombia.config.model.error.Error;
+import co.com.bancolombia.model.alerttemplate.AlertTemplate;
+import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;

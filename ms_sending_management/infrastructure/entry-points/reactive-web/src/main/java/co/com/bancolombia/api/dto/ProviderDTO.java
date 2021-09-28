@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.config.model.provider.Provider;
+import co.com.bancolombia.model.provider.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

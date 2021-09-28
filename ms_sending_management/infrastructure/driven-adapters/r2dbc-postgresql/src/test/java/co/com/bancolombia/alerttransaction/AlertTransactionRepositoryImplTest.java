@@ -1,6 +1,6 @@
 package co.com.bancolombia.alerttransaction;
 
-import co.com.bancolombia.config.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

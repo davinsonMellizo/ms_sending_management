@@ -2,9 +2,9 @@ package co.com.bancolombia.provider;
 
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.provider.Provider;
-import co.com.bancolombia.config.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.config.model.response.StatusResponse;
+import co.com.bancolombia.model.provider.Provider;
+import co.com.bancolombia.model.provider.gateways.ProviderGateway;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.provider.data.ProviderData;
 import co.com.bancolombia.provider.data.ProviderMapper;

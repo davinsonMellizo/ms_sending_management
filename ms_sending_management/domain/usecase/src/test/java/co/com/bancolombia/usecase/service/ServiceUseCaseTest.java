@@ -2,9 +2,9 @@ package co.com.bancolombia.usecase.service;
 
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.config.model.response.StatusResponse;
-import co.com.bancolombia.config.model.service.Service;
-import co.com.bancolombia.config.model.service.gateways.ServiceGateway;
+import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.service.Service;
+import co.com.bancolombia.model.service.gateways.ServiceGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

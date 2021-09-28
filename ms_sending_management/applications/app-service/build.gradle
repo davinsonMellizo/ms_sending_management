@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	implementation project(':async-sqs')
 	implementation project(':s3-repository')
 	implementation project(':rest-consumer')
 	compile 'org.springframework.boot:spring-boot-starter-webflux'

@@ -1,6 +1,6 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
-import co.com.bancolombia.config.model.message.Message;
+import co.com.bancolombia.model.message.Message;
 
 import java.util.Objects;
 import java.util.function.Predicate;

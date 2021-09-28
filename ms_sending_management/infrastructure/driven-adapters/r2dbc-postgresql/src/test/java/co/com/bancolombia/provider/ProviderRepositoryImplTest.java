@@ -1,6 +1,6 @@
 package co.com.bancolombia.provider;
 
-import co.com.bancolombia.config.model.provider.Provider;
+import co.com.bancolombia.model.provider.Provider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

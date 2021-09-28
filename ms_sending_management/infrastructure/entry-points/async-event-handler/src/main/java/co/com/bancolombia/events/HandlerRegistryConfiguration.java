@@ -1,6 +1,6 @@
 package co.com.bancolombia.events;
 
-import co.com.bancolombia.config.model.message.Message;
+import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.events.handlers.CommandsHandler;
 import co.com.bancolombia.events.handlers.EventsHandler;
 import org.reactivecommons.async.api.HandlerRegistry;

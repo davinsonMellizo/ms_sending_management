@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.consumer.data.ConsumerData;
 import co.com.bancolombia.consumer.data.ConsumerMapper;
 import org.junit.jupiter.api.BeforeEach;

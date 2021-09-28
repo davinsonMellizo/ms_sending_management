@@ -1,8 +1,8 @@
 package co.com.bancolombia.usecase.alerttransaction;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.config.model.alerttransaction.AlertTransaction;
-import co.com.bancolombia.config.model.alerttransaction.gateways.AlertTransactionGateway;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

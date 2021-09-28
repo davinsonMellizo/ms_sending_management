@@ -2,7 +2,7 @@ package co.com.bancolombia.alerttransaction;
 
 import co.com.bancolombia.alerttransaction.data.AlertTransactionMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

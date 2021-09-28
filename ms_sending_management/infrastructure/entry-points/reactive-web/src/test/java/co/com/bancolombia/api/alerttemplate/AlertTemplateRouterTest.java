@@ -6,7 +6,7 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alerttemplate.AlertTemplateHandler;
 import co.com.bancolombia.api.services.alerttemplate.AlertTemplateRouter;
-import co.com.bancolombia.config.model.alerttemplate.AlertTemplate;
+import co.com.bancolombia.model.alerttemplate.AlertTemplate;
 import co.com.bancolombia.usecase.alerttemplate.AlertTemplateUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;

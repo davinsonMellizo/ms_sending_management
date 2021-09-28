@@ -3,9 +3,9 @@ package co.com.bancolombia.service;
 
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.response.StatusResponse;
-import co.com.bancolombia.config.model.service.Service;
-import co.com.bancolombia.config.model.service.gateways.ServiceGateway;
+import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.service.Service;
+import co.com.bancolombia.model.service.gateways.ServiceGateway;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.service.data.ServiceData;
 import co.com.bancolombia.service.data.ServiceMapper;

@@ -1,6 +1,6 @@
 package co.com.bancolombia.alerttransaction.data;
 
-import co.com.bancolombia.config.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

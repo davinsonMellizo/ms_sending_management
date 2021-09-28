@@ -1,6 +1,6 @@
 package co.com.bancolombia.remitter;
 
-import co.com.bancolombia.config.model.remitter.Remitter;
+import co.com.bancolombia.model.remitter.Remitter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

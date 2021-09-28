@@ -4,7 +4,7 @@ import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.config.model.error.Error;
+import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.logging.technical.LoggerFactory;
 import co.com.bancolombia.logging.technical.logger.TechLogger;
 import co.com.bancolombia.logging.technical.message.ObjectTechMsg;

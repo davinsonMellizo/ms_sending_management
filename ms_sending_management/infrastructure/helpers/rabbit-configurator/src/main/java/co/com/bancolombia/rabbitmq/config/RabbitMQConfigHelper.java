@@ -1,6 +1,6 @@
 package co.com.bancolombia.rabbitmq.config;
 
-import co.com.bancolombia.log.LoggerBuilder;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;

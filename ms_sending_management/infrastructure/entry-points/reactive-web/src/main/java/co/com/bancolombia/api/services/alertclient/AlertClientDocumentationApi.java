@@ -1,8 +1,8 @@
 package co.com.bancolombia.api.services.alertclient;
 
 import co.com.bancolombia.api.dto.AlertClientDTO;
-import co.com.bancolombia.config.model.alertclient.AlertClient;
-import co.com.bancolombia.config.model.error.Error;
+import co.com.bancolombia.model.alertclient.AlertClient;
+import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
