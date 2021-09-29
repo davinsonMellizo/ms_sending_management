@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @Repository
 public class LogRepositoryImplement
         extends AdapterOperations<Log, LogData, String, LogRepository>
@@ -21,10 +23,9 @@ public class LogRepositoryImplement
 
     @Override
     public Mono<Log> saveLog(Log log) {
-        return Mono.just(log)
+        return Mono.just(log.toBuilder().dateCreation(LocalDateTime.now()).build())
                 .map(this::convertToData)
                 .flatMap(repository::save)
-                .thenReturn(log)
-                .doOnNext(log1 -> System.out.println("se guardò el log"));
+                .thenReturn(log);
     }
 }

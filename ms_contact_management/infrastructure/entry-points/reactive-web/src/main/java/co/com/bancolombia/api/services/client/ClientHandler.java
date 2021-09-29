@@ -23,7 +23,7 @@ public class ClientHandler {
     private final ClientUseCase clientUseCase;
     private final ValidatorHandler validatorHandler;
 
-    public Mono<ServerResponse> findContact(ServerRequest serverRequest) {
+    public Mono<ServerResponse> findClient(ServerRequest serverRequest) {
         return ParamsUtil.getClientHeaders(serverRequest)
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
@@ -32,7 +32,7 @@ public class ClientHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
-    public Mono<ServerResponse> saveContact(ServerRequest serverRequest) {
+    public Mono<ServerResponse> saveClient(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(ClientDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
@@ -41,7 +41,7 @@ public class ClientHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
-    public Mono<ServerResponse> updateContact(ServerRequest serverRequest) {
+    public Mono<ServerResponse> updateClient(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(ClientUpdateDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
@@ -50,7 +50,7 @@ public class ClientHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
-    public Mono<ServerResponse> deleteContact(ServerRequest serverRequest) {
+    public Mono<ServerResponse> deleteClient(ServerRequest serverRequest) {
         return ParamsUtil.getClientHeaders(serverRequest)
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
