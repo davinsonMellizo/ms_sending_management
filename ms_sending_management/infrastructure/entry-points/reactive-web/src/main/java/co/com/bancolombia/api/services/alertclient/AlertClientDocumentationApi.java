@@ -27,6 +27,16 @@ public class AlertClientDocumentationApi {
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(AlertClient.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
+    protected Consumer<Builder> basicKit() {
+        return ops -> ops.tag(TAG)
+                .operationId("matchClientWithBasicKit").summary("Associate alerts to client")
+                .description("Associate alerts to client  by Basic Kit").tags(new String[]{TAG})
+                .parameter(createPath(Long.class, "document-number", "Client document"))
+                .parameter(createPath(Integer.class, "document-type", "Client document type"))
+                .parameter(createPath(String.class, "association-origin", "Association Origin"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
+    }
 
     protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)

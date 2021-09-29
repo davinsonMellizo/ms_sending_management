@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.alertclient;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.response.StatusResponse;
@@ -15,6 +16,18 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT
 public class AlertClientUseCase {
 
     private final AlertClientGateway alertClientGateway;
+    private final AlertGateway alertGateway;
+
+    public Mono<Boolean> matchClientWithBasicKit(AlertClient alertClient){
+        return alertGateway.findAlertKitBasic()
+                .map(alert -> alertClient.toBuilder()
+                        .idAlert(alert.getId()).numberOperations(1)
+                        .amountEnable(alert.getNature().equals("MO")?new Long(50000):new Long(0))
+                        .build())
+                .flatMap(this::saveAlertClient)
+                .last()
+                .map(alertClientSaved -> true);
+    }
 
     public Mono<AlertClient> saveAlertClient(AlertClient alertClient) {
         return alertClientGateway.save(alertClient);

@@ -35,6 +35,8 @@ public class AlertClientRepositoryImplement
         return Mono.just(alertClient)
                 .map(this::convertToData)
                 .map(data -> data.toBuilder().createdDate(timeFactory.now())
+                        .accumulatedAmount(new Long(0))
+                        .accumulatedOperations(new Long(0))
                         .modifiedDate(timeFactory.now()).transactionDate(timeFactory.now()).build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)
@@ -61,8 +63,7 @@ public class AlertClientRepositoryImplement
 
     @Override
     public Mono<String> delete(AlertClient alertClient) {
-        return repository.deleteAlertClient(alertClient.getIdAlert(),
-                alertClient.getIdClient())
+        return repository.deleteAlertClient(alertClient.getIdAlert(),alertClient.getIdClient())
                 .filter(rowsAffected -> rowsAffected == NUMBER_ONE)
                 .map(integer -> alertClient.getIdAlert())
                 .onErrorMap(e -> new TechnicalException(e, DELETE_ALERT_CLIENT_ERROR));

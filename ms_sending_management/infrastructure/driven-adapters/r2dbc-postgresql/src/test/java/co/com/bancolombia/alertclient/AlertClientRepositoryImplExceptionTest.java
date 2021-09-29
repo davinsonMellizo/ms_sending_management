@@ -42,7 +42,8 @@ public class AlertClientRepositoryImplExceptionTest {
     @BeforeEach
     public void init() {
         alertClient.setIdAlert("HGD");
-        alertClient.setIdClient(1);
+        alertClient.setDocumentNumber(new Long(1));
+        alertClient.setDocumentType(0);
         alertClient.setNumberOperations(5);
         alertClient.setAmountEnable(9L);
         alertClient.setAccumulatedOperations(8L);
@@ -75,7 +76,7 @@ public class AlertClientRepositoryImplExceptionTest {
     @Test
     public void updateAlertClient() {
         when(timeFactory.now()).thenReturn(NOW);
-        when(repository.updateAlertClient(anyInt(), anyLong(), anyString(), anyInt()))
+        when(repository.updateAlertClient(anyInt(), anyLong(), anyString(), anyInt(), anyLong()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.updateAlertClient(StatusResponse.<AlertClient>builder()
                 .before(alertClient).actual(alertClient).build())

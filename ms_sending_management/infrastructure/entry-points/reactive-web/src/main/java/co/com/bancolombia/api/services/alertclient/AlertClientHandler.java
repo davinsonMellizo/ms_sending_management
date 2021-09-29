@@ -45,6 +45,12 @@ public class AlertClientHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
+    public Mono<ServerResponse> basicKit(ServerRequest serverRequest) {
+        return ParamsUtil.getDataAlertClient(serverRequest)
+                .map(useCase::matchClientWithBasicKit)
+                .flatMap(ResponseUtil::responseOk);
+    }
+
     public Mono<ServerResponse> deleteAlertClient(ServerRequest serverRequest) {
         return ParamsUtil.getRelationClient(serverRequest)
                 .flatMap(AlertClientDTO::toModel)
