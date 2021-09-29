@@ -51,7 +51,6 @@ public class ProviderRepositoryImplExceptionTest {
         providerData.setTypeService("A");
     }
 
-
     @Test
     public void findProviderByIdWithException() {
         when(repository.findById(anyString()))

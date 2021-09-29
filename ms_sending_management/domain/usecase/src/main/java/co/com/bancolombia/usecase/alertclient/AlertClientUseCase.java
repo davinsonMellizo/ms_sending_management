@@ -27,8 +27,8 @@ public class AlertClientUseCase {
                 .flatMap(alertClientGateway::updateAlertClient);
     }
 
-    public Mono<List<AlertClient>> findAllAlertClient(AlertClient alertClient) {
-        return alertClientGateway.findAllAlertsByClient(alertClient)
+    public Mono<List<AlertClient>> findAllAlertClient(Integer idAlertClient) {
+        return alertClientGateway.findAllAlertsByClient(idAlertClient)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)))
                 .collectList();
     }

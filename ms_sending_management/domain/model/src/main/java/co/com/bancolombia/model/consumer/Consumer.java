@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class Consumer {
 
     private String id;
-    private String code;
+    private String segment;
 }

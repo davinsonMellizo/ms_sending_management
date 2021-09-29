@@ -25,10 +25,9 @@ public class ServiceDTO {
     @Size(min = 1, max = 20, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String name;
-    @Max(value = 9, message = "{constraint.max}")
-    @Min(value = 0, message = "{constraint.min}")
+    @Size(max = 9, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private Integer idState;
+    private String state;
     @Size(min = 1, max = 20, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String creationUser;
@@ -37,7 +36,7 @@ public class ServiceDTO {
         return Mono.just(Service.builder()
                 .id(this.id)
                 .name(this.name)
-                .idState(this.idState)
+                .state(this.state)
                 .creationUser(this.creationUser)
                 .build());
     }

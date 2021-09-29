@@ -66,7 +66,7 @@ public class AlertClientUseCaseTest {
     public void findAll() {
         when(alertClientGateway.findAllAlertsByClient(any()))
                 .thenReturn(Flux.just(alertClient));
-        useCase.findAllAlertClient(alertClient)
+        useCase.findAllAlertClient(1)
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();

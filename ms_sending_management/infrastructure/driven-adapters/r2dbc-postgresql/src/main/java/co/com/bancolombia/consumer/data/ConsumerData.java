@@ -18,7 +18,7 @@ public class ConsumerData implements Persistable<String> {
 
     @Id
     private String id;
-    private String code;
+    private String segment;
 
     @Transient
     private Boolean isNew;

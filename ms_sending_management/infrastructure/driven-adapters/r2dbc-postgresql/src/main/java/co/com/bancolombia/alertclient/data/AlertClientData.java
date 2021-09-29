@@ -20,8 +20,7 @@ public class AlertClientData implements Persistable<String> {
 
     @Id
     private String idAlert;
-    private Long documentNumber;
-    private Integer idDocumentType;
+    private Integer idClient;
     private Integer numberOperations;
     private Long amountEnable;
     private Long accumulatedOperations;

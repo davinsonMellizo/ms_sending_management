@@ -38,10 +38,10 @@ public class ConsumerRepositoryImplExceptionTest {
     @BeforeEach
     public void init() {
         consumer.setId("1");
-        consumer.setCode("123asv");
+        consumer.setSegment("123asv");
 
         consumerData.setId("1");
-        consumerData.setCode("123asv");
+        consumerData.setSegment("123asv");
     }
 
 

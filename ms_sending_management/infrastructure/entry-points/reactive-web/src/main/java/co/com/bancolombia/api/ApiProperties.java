@@ -18,5 +18,7 @@ public class ApiProperties {
     private String service;
     private String remitter;
     private String consumer;
+    private String category;
+    private String priority;
 
 }

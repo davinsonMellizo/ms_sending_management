@@ -79,18 +79,19 @@ public class SendAlertZeroUseCase {
     }
 
     private Flux<Message> sendAlertMail(Alert alert, Message message) {
-        Mono<Remitter> remitter = remitterGateway.findRemitterById(alert.getIdRemitter());
+       /* Mono<Remitter> remitter = remitterGateway.findRemitterById(alert.getIdRemitter());
         Mono<Provider> providerSms = providerGateway.findProviderById(alert.getIdProviderSms());
         Mono<Provider> providerMail = providerGateway.findProviderById(alert.getIdProviderMail());
-        Mono<Service> service = serviceGateway.findServiceById(alert.getIdService());
+
         //TODO: build template
-        return Mono.zip(remitter,providerSms, providerMail, service)
+        return Mono.zip(remitter,providerSms, providerMail)
                 .map(data -> Mail.builder()
                         .remitter(data.getT1().getMail())
                         .affair(message.getMail())//TODO: build MAIL with data
                         .build())
                 .flatMap(messageGateway::sendEmail)
-                .thenMany(Flux.just(message));
+                .thenMany(Flux.just(message));*/
+        return Flux.empty();
     }
 
     private Mono<Message> findDataContact(Message message){
@@ -107,7 +108,7 @@ public class SendAlertZeroUseCase {
                 .filter(isValidMailAndMobile)
                 .switchIfEmpty(findDataContact(message))
                 .filter(isValidMailAndMobile)
-                .switchIfEmpty(findDataContact(Message.builder().consumer(consumer.getCode()).build()))
+                .switchIfEmpty(findDataContact(Message.builder().consumer(consumer.getSegment()).build()))
                 .filter(isValidMailAndMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid data contact")));
 

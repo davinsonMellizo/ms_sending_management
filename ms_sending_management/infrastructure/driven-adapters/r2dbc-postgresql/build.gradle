@@ -10,4 +10,6 @@ dependencies {
     implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
     implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
     implementation group: 'io.r2dbc', name: 'r2dbc-pool', version: '0.9.0.M2'
+    testCompile group: 'io.r2dbc', name: 'r2dbc-h2', version: '0.8.4.RELEASE'
 }
+
