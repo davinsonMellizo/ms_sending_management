@@ -2,10 +2,14 @@ package co.com.bancolombia.usecase.client;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.client.Enrol;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
+import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.usecase.contact.ContactUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
@@ -24,7 +30,11 @@ public class ClientUseCaseTest {
 
     @InjectMocks
     private ClientUseCase useCase;
+    @Mock
+    private ContactUseCase contactUseCase;
 
+    @Mock
+    private ClientRepository clientRepository;
     @Mock
     private ClientGateway clientGateway;
     @Mock
@@ -37,70 +47,79 @@ public class ClientUseCaseTest {
         client.setDocumentNumber(new Long(1061772353));
         client.setDocumentType("0");
         client.setId(0);
-
+        client.setIdState(0);
         document.setId("0");
     }
 
     @Test
     public void findClientByDocument() {
-        when(clientGateway.findClientByIdentification(any()))
+        when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         StepVerifier
                 .create(useCase.findClientByIdentification(client))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(clientGateway).findClientByIdentification(client);
+        verify(clientRepository).findClientByIdentification(client);
     }
 
     @Test
     public void saveClient() {
-        when(clientGateway.saveClient(any()))
+        when(clientRepository.saveClient(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.empty());
+        when(clientGateway.matchClientWithBasicKit(any()))
+                .thenReturn(Mono.just(true));
         StepVerifier
-                .create(useCase.saveClient(client))
+                .create(useCase.saveClient(Enrol.builder().client(client).contacts(new ArrayList<>()).build()))
                 .assertNext(response -> response
                         .getDocumentNumber()
                         .equals(client.getDocumentNumber()))
                 .verifyComplete();
-        verify(clientGateway).saveClient(any());
+        verify(clientRepository).saveClient(any());
     }
 
     @Test
     public void updateClient() {
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
-        when(clientGateway.updateClient(any()))
+        when(clientRepository.updateClient(any()))
                 .thenReturn(Mono.just(StatusResponse.<Client>builder()
                         .before(client).actual(client)
                         .build()));
-        when(clientGateway.findClientById(anyInt()))
-                .thenReturn(Mono.just(client));
+        Contact contact = new Contact();
+        ArrayList<Contact> contacts = new ArrayList();
+        contacts.add(contact);
+        when(contactUseCase.updateContactRequest(any()))
+                .thenReturn(Mono.just(StatusResponse.<Contact>builder().before(contact).before(contact).build()));
         StepVerifier
-                .create(useCase.updateClient(client))
+                .create(useCase.updateClient(Enrol.builder().contacts(contacts).client(client).build()))
                 .assertNext(response -> response
-                        .getActual().getDocumentNumber()
+                        .getActual().getClient().getDocumentNumber()
                         .equals(client.getDocumentNumber()))
                 .verifyComplete();
-        verify(clientGateway).updateClient(any());
+        verify(clientRepository).updateClient(any());
     }
 
     @Test
     public void deleteClient() {
-        when(clientGateway.deleteClient(any()))
+        when(clientRepository.deleteClient(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
         StepVerifier.create(useCase.deleteClient(client))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(clientGateway).deleteClient(client);
+        verify(clientRepository).deleteClient(client);
     }
 
     @Test
     public void findClientByDocumentWithException() {
-        when(clientGateway.findClientByIdentification(any()))
+        when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
         useCase.findClientByIdentification(client)
                 .as(StepVerifier::create)
@@ -110,9 +129,9 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateContactWithException() {
-        when(clientGateway.findClientById(anyInt()))
+        when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
-        useCase.updateClient(client)
+        useCase.updateClient(Enrol.builder().client(client).build())
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
@@ -120,7 +139,7 @@ public class ClientUseCaseTest {
 
     @Test
     public void deleteContactWithException() {
-        when(clientGateway.deleteClient(any()))
+        when(clientRepository.deleteClient(any()))
                 .thenReturn(Mono.empty());
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));

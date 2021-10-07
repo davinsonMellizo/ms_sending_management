@@ -6,25 +6,26 @@ import co.com.bancolombia.client.data.ClientMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
-import co.com.bancolombia.model.client.gateways.ClientGateway;
+import co.com.bancolombia.model.client.gateways.ClientRepository;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.State.INACTIVE;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
 public class ClientRepositoryImplement
-        extends AdapterOperations<Client, ClientData, Integer, ClientRepository>
-        implements ClientGateway {
+        extends AdapterOperations<Client, ClientData, Integer, co.com.bancolombia.client.ClientRepository>
+        implements ClientRepository {
 
     @Autowired
     private TimeFactory timeFactory;
     private static final int NUMBER_OF_ROWS = 1;
 
     @Autowired
-    public ClientRepositoryImplement(ClientRepository repository, ClientMapper mapper) {
+    public ClientRepositoryImplement(co.com.bancolombia.client.ClientRepository repository, ClientMapper mapper) {
         super(repository, mapper::toData, mapper::toEntity);
     }
 
@@ -59,16 +60,15 @@ public class ClientRepositoryImplement
     @Override
     public Mono<StatusResponse<Client>> updateClient(StatusResponse<Client> statusResponse) {
         return Mono.just(statusResponse.getActual().toBuilder()
+                .id(statusResponse.getBefore().getId())
                 .creationUser(statusResponse.getBefore().getCreationUser())
                 .createdDate(statusResponse.getBefore().getCreatedDate())
                 .modifiedDate(timeFactory.now()).build())
                 .map(this::convertToData)
-                .doOnNext(System.out::println)
                 .flatMap(this::saveData)
                 .map(this::convertToEntity)
                 .map(clientUpdated -> statusResponse.toBuilder()
-                        .actual(clientUpdated)
-                        .description("Cliente Actualizado exitosamente").build())
+                        .actual(clientUpdated).build())
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_CLIENT_ERROR));
     }
 
@@ -78,5 +78,11 @@ public class ClientRepositoryImplement
                 .filter(rowsAffected -> rowsAffected == NUMBER_OF_ROWS)
                 .map(integer -> client)
                 .onErrorMap(e -> new TechnicalException(e, DELETE_CLIENT_ERROR));
+    }
+
+    @Override
+    public Mono<Client> inactivateClient(Client client) {
+        return Mono.just(client.toBuilder().idState(INACTIVE).modifiedDate(timeFactory.now()).build())
+                .flatMap(this::save);
     }
 }

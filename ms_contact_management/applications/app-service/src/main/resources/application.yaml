@@ -28,11 +28,16 @@ adapters:
     cache-size: "${CACHE_SECRETS_SIZE}"
     cache-time: "${CACHE_SECRETS_SECONDS}"
     endpoint: "http://localhost:4566"
-entries:
-  reactive-web:
-    path-base: "${PATH_BASE}"
-    contact: "${CONTACT}"
-    client: "${CLIENT}"
+  entries:
+    reactive-web:
+      path-base: "${PATH_BASE}"
+      contact: "${CONTACT}"
+      client: "${CLIENT}"
+  rest-consumer:
+    timeout: 1000
+    resources:
+      basicKit: localhost:8081/api/v1/sending-management/alert-client/basic-kit
+      sendAlert: localhost:8081/api/v1/sending-management/send
 management:
   health:
     probes:
@@ -52,6 +57,4 @@ management:
         health: "health"
         liveness: "liveness"
         readiness: "readiness"
-adapter:
-  restconsumer:
-    url: "http://localhost:8080"
+

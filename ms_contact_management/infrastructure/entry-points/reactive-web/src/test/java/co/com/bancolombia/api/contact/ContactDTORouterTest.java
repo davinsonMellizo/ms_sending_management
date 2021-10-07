@@ -86,7 +86,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
 
     @Test
     public void updateContact() {
-        when(useCase.updateContact(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
+        when(useCase.updateContactRequest(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
                 .actual(contact).before(contact).build()));
         statusAssertionsWebClientPut(properties.getContact(),
                 request)
@@ -94,7 +94,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
                 .expectBody(JsonNode.class)
                 .returnResult()
                 .getResponseBody();
-        verify(useCase).updateContact(any());
+        verify(useCase).updateContactRequest(any());
     }
 
     @Test

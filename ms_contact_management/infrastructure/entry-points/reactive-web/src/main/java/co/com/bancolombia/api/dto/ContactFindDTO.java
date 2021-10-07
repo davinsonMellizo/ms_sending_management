@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ContactFindDTO {
-    public String consumer;
+    public String segment;
     public String contactMedium;
     public String value;
     public String state;

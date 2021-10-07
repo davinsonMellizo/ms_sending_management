@@ -22,8 +22,8 @@ VALUES(0,1061772353, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '202
       (1,1061772354, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05');
 
 INSERT INTO contact
-(id, segment, id_contact_medium, document_number, id_document_type, value, id_state, created_date, modified_date)
-VALUES(0, 'ALM', 0, 1061772353, 0, '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05');
+(id, segment, id_contact_medium, document_number, id_document_type, value, id_state, created_date, modified_date, previous)
+VALUES(0, 'ALM', 0, 1061772353, 0, '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05', false);
 
 
 

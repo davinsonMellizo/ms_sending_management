@@ -4,5 +4,5 @@ import co.com.bancolombia.model.state.State;
 import reactor.core.publisher.Mono;
 
 public interface StateGateway {
-    Mono<State> findStateByName(String name);
+    Mono<State> findState(String name);
 }

@@ -31,6 +31,7 @@ public class ContactData {
     @ReadOnlyProperty
     private String state;
     private Integer idState;
+    private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 }

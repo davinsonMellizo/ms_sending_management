@@ -17,7 +17,7 @@ public class StateRepositoryImplTest {
 
     @Test
     public void findStateByName() {
-        StepVerifier.create(stateRepositoryImplement.findStateByName("Active"))
+        StepVerifier.create(stateRepositoryImplement.findState("Active"))
                 .expectNextCount(1)
                 .verifyComplete();
     }

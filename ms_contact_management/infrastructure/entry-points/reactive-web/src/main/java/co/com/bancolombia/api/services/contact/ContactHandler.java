@@ -48,7 +48,7 @@ public class ContactHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(ContactUpdateDTO::toModel)
-                .flatMap(contactUseCase::updateContact)
+                .flatMap(contactUseCase::updateContactRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
 

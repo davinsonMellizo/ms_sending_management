@@ -159,6 +159,7 @@ CREATE TABLE IF NOT EXISTS contact (
 	id_state int2 NOT NULL,
 	created_date timestamp NOT NULL,
 	modified_date timestamp NULL,
+	previous boolean NOT NULL,
 	CONSTRAINT contact_pkey PRIMARY KEY (id),
  	CONSTRAINT contact_unique UNIQUE (document_number, id_document_type,segment,id_contact_medium),
  	CONSTRAINT contact_contact_medium_fkey FOREIGN KEY (id_contact_medium) REFERENCES contact_medium(id),

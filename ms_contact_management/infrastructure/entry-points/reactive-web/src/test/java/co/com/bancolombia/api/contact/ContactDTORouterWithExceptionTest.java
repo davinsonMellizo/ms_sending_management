@@ -67,7 +67,7 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
 
     @Test
     public void updateContactsWithException() {
-        when(useCase.updateContact(any())).thenReturn(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
+        when(useCase.updateContactRequest(any())).thenReturn(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
         statusAssertionsWebClientPut(properties.getContact(),
                 request)
                 .is5xxServerError();

@@ -38,10 +38,10 @@ public class ContactRepositoryImplement
     }
 
     @Override
-    public Mono<Integer> findIdContact(Contact contact) {
+    public Flux<Contact> findIdContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactMedium(), contact.getSegment())
-                .map(ContactData::getId)
+                .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }
 
@@ -51,25 +51,14 @@ public class ContactRepositoryImplement
                 .onErrorMap(e -> new TechnicalException(e, SAVE_CONTACT_ERROR));
     }
 
-    private Mono<StatusResponse<Contact>> update(ContactData before, Contact actual) {
-        return Mono.just(before)
-                .map(contactData -> contactData.toBuilder()
-                        .modifiedDate(timeFactory.now())
-                        .value(actual.getValue())
-                        .state(actual.getState())
-                        .build())
-                .flatMap(this::saveData)
-                .map(this::convertToEntity)
-                .flatMap(contact -> doQuery(Mono.just(before))
-                        .map(beforeEntity -> StatusResponse.<Contact>builder().before(beforeEntity)
-                                .actual(contact).description("Contacto Actualizado Exitosamente").build())
-                ).onErrorMap(e -> new TechnicalException(e, UPDATE_CONTACT_ERROR));
-    }
-
     @Override
-    public Mono<StatusResponse<Contact>> updateContact(Contact contact) {
-        return findContact(contact)
-                .flatMap(contactData -> update(contactData, contact));
+    public Mono<Contact> updateContact(Contact pContact) {
+        return Mono.just(pContact)
+                .map(this::convertToData)
+                .map(contact -> contact.toBuilder().modifiedDate(timeFactory.now()).build())
+                .flatMap(repository::save)
+                .map(this::convertToEntity)
+                .onErrorMap(e -> new TechnicalException(e, UPDATE_CONTACT_ERROR));
     }
 
     @Override
@@ -79,9 +68,4 @@ public class ContactRepositoryImplement
                 .thenReturn(id);
     }
 
-    private Mono<ContactData> findContact(Contact contact) {
-        return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
-                contact.getContactMedium(), contact.getSegment())
-                .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
-    }
 }

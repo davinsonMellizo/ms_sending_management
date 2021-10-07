@@ -60,7 +60,7 @@ public class ContactRepositoryImplWithExceptionTest {
     @Test
     public void findIdContact() {
         when(repository.findContact(any(), any(), any(), any()))
-                .thenReturn(Mono.error(RuntimeException::new));
+                .thenReturn(Flux.error(RuntimeException::new));
         contact.setContactMedium("SMS");
         contact.setSegment("ALM");
         repositoryImpl.findIdContact(contact)

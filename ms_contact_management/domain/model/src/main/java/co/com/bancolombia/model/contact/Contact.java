@@ -9,12 +9,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Contact {
+    private Integer id;
     private String segment;
     private String contactMedium;
     private Long documentNumber;
     private String documentType;
     private String value;
     private String state;
+    private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+
 }

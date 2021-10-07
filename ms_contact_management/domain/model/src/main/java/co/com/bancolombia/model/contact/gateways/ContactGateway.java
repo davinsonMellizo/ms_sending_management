@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 public interface ContactGateway {
     Flux<Contact> findAllContactsByClient(Client client);
 
-    Mono<Integer> findIdContact(Contact contact);
+    Flux<Contact> findIdContact(Contact contact);
 
     Mono<Contact> saveContact(Contact contact);
 
-    Mono<StatusResponse<Contact>> updateContact(Contact contact);
+    Mono<Contact> updateContact(Contact contact);
 
     Mono<Integer> deleteContact(Integer id);
 
