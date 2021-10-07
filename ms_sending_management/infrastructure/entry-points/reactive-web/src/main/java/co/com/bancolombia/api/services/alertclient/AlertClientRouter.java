@@ -25,6 +25,7 @@ public class AlertClientRouter extends AlertClientDocumentationApi {
         return route().POST(url, accept(APPLICATION_JSON), handler::saveAlertClient, save()).build()
                 .and(route().POST(url+KIT, accept(APPLICATION_JSON), handler::basicKit, basicKit()).build())
                 .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findAllAlertClient, find()).build())
+                .and(route().GET(url, accept(APPLICATION_JSON), handler::findAllAlertClient, find()).build())
                 .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateAlertClient, update()).build())
                 .and(route().DELETE(url, accept(APPLICATION_JSON), handler::deleteAlertClient, delete()).build());
     }

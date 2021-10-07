@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.log;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

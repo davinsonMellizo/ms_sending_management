@@ -1,4 +1,4 @@
-package co.com.bancolombia.client;
+package co.com.bancolombia.log;
 
 import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
@@ -34,7 +34,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
         initializer.setConnectionFactory(connectionFactory);
         CompositeDatabasePopulator populator = new CompositeDatabasePopulator();
         populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("schema.sql")));
-        populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("data-test.sql")));
+        //populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("data-test.sql")));
         initializer.setDatabasePopulator(populator);
 
         return initializer;

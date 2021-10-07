@@ -25,7 +25,7 @@ public class PostgreSQLConnectionConfigHelperTest {
     public static final Integer port = 5432;
 
     @InjectMocks
-    private PostgreSQLConnectionConfigHelper helper;
+    private PostgreSQLConnectionPool helper;
 
 
     public final PostgresqlConnectionProperties properties = new PostgresqlConnectionProperties();

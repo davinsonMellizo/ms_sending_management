@@ -10,9 +10,10 @@ import java.util.regex.Pattern;
 public abstract class ValidateData {
     private static final String PATTERN =  "^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
 
-    public static final Predicate<Message> isValidMailAndMobile = message ->
+    public static final Predicate<Message> isValidMailOrMobile = message ->
             (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
-                    || (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty());
+                    || (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty()
+                    && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
 
     public static final Predicate<Message> isValidMobile = message ->
             Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty();

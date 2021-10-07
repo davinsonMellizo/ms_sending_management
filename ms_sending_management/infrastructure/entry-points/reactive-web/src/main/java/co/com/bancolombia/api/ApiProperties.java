@@ -20,5 +20,6 @@ public class ApiProperties {
     private String consumer;
     private String category;
     private String priority;
+    private String send;
 
 }

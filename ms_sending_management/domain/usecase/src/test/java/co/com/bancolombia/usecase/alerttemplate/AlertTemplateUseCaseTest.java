@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -36,7 +37,7 @@ public class AlertTemplateUseCaseTest {
     @Test
     public void findAlertTemplateById() {
         when(alertTemplateGateway.findTemplateById(anyInt()))
-                .thenReturn(Mono.just(alertTemplate));
+                .thenReturn(Flux.just(alertTemplate));
         StepVerifier
                 .create(useCase.findAlertTemplateById(alertTemplate.getId()))
                 .expectNextCount(1)
@@ -59,7 +60,7 @@ public class AlertTemplateUseCaseTest {
     @Test
     public void deleteAlertTemplate() {
         when(alertTemplateGateway.findTemplateById(anyInt()))
-                .thenReturn(Mono.just(alertTemplate));
+                .thenReturn(Flux.just(alertTemplate));
         when(alertTemplateGateway.delete(any()))
                 .thenReturn(Mono.just(alertTemplate.getId()));
         StepVerifier.create(useCase.deleteAlertTemplateById(alertTemplate.getId()))
@@ -71,7 +72,7 @@ public class AlertTemplateUseCaseTest {
     @Test
     public void deleteAlertTemplateWithException() {
         when(alertTemplateGateway.findTemplateById(anyInt()))
-                .thenReturn(Mono.empty());
+                .thenReturn(Flux.empty());
         useCase.deleteAlertTemplateById(alertTemplate.getId())
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class AlertClientData implements Persistable<String> {
     private String idAlert;
     private Integer idClient;
     private Long documentNumber;
+    @Column("id_document_type")
     private Integer documentType;
     private Integer numberOperations;
     private Long amountEnable;

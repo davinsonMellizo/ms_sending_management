@@ -4,6 +4,8 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
+import co.com.bancolombia.model.alerttemplate.AlertTemplate;
+import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
@@ -13,22 +15,27 @@ import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Parameter;
+import co.com.bancolombia.model.message.SMS;
 import co.com.bancolombia.model.message.gateways.MessageGateway;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.model.service.gateways.ServiceGateway;
+import co.com.bancolombia.usecase.sendalert.commons.BuilderMasivian;
+import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.*;
 
 @RequiredArgsConstructor
 public class SendAlertZeroUseCase {
     private final AlertTransactionGateway alertTransactionGateway;
+    private final AlertTemplateGateway alertTemplateGateway;
     private final AlertClientGateway alertClientGateway;
     private final ProviderGateway providerGateway;
     private final RemitterGateway remitterGateway;
@@ -59,6 +66,7 @@ public class SendAlertZeroUseCase {
         return alertTransactionGateway.findAllAlertTransaction(message)
                 .map(AlertTransaction::getIdAlert)
                 .flatMap(alertGateway::findAlertById)
+                .flatMap(alert -> Util.replaceParameter(alert, message))
                 .flatMap(alert -> validateObligation(alert, message))
                 .flatMap(alert -> sendAlert(alert, message))
                 .then(Mono.empty());
@@ -66,7 +74,7 @@ public class SendAlertZeroUseCase {
 
     private Flux<Void> sendAlert(Alert alert, Message message) {
         return Flux.just(message)
-                .filter(isValidMobile)
+                .filter(isValidMobile)//TODO Incluir el envio de push
                 .flatMap(message1 -> sendAlertMobile(alert, message))
                 .switchIfEmpty(Flux.just(message))
                 .filter(isValidMail)
@@ -75,41 +83,50 @@ public class SendAlertZeroUseCase {
     }
 
     private Flux<Message> sendAlertMobile(Alert alert, Message message) {
+        SMS sms = SMS.builder().To(message.getMobile()).text(alert.getMessage()).build();
+        //TODO::Implement routing proveedor
+        //TODO::Implement send sms
         return null;
     }
 
-    private Flux<Message> sendAlertMail(Alert alert, Message message) {
-       /* Mono<Remitter> remitter = remitterGateway.findRemitterById(alert.getIdRemitter());
-        Mono<Provider> providerSms = providerGateway.findProviderById(alert.getIdProviderSms());
-        Mono<Provider> providerMail = providerGateway.findProviderById(alert.getIdProviderMail());
 
-        //TODO: build template
-        return Mono.zip(remitter,providerSms, providerMail)
-                .map(data -> Mail.builder()
-                        .remitter(data.getT1().getMail())
-                        .affair(message.getMail())//TODO: build MAIL with data
-                        .build())
-                .flatMap(messageGateway::sendEmail)
-                .thenMany(Flux.just(message));*/
+    private Mono<Mail> buildMail(Alert alert, Message message, Mail mail){
+        return alertTemplateGateway.findTemplateById(alert.getIdTemplate())
+                .flatMap(alertTemplate -> BuilderMasivian.buildParameter(alertTemplate, alert.getMessage()))
+                .map(parameter -> mail.getParameters().add(parameter))
+                .last()
+                .thenReturn(mail);
+    }
+    private Flux<Message> sendAlertMail(Alert alert, Message message) {
+        buildMail(alert, message, Mail.builder().Subject(alert.getSubjectMail()).build())
+                .thenReturn(message);
+
+        //TODO::Implement routing proveedor
+        //TODO::Implement send sms
+        Mono<Remitter> remitter = remitterGateway.findRemitterById(alert.getIdRemitter());
+        /*Mono<Provider> providerSms = providerGateway.findProviderById(alert.getIdProviderSms());
+        Mono<Provider> providerMail = providerGateway.findProviderById(alert.getIdProviderMail());*/
+
+
         return Flux.empty();
     }
 
+    //TODO:VALIDATE DATA CONTACT
     private Mono<Message> findDataContact(Message message){
         return contactGateway.findAllContactsByClient(message)
                 .collectMap(Contact::getContactMedium)
                 .map(contacts -> Message.builder()
                         .mobile(contacts.get("SMS").getValue())
+                        .mobile(contacts.get("PUSH").getValue())
                         .mail(contacts.get("MAIL").getValue()).build())
                 .switchIfEmpty(Mono.just(message));
     }
 
     private Mono<Message> validateDataContact(Message message, Consumer consumer){
         return Mono.just(message)
-                .filter(isValidMailAndMobile)
-                .switchIfEmpty(findDataContact(message))
-                .filter(isValidMailAndMobile)
+                .filter(isValidMailOrMobile)
                 .switchIfEmpty(findDataContact(Message.builder().consumer(consumer.getSegment()).build()))
-                .filter(isValidMailAndMobile)
+                .filter(isValidMailOrMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid data contact")));
 
     }
@@ -123,7 +140,6 @@ public class SendAlertZeroUseCase {
                 .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Consumer")))
                 .flatMap(consumer -> validateDataContact(message, consumer))
-                .flatMap(this::validateAlerts)
-                .then(Mono.empty());
+                .flatMap(this::validateAlerts);
     }
 }

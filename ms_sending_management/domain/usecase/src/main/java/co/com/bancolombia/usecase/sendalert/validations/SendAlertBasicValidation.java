@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailAndMobile;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailOrMobile;
 
 @RequiredArgsConstructor
 public class SendAlertBasicValidation {
@@ -16,14 +16,14 @@ public class SendAlertBasicValidation {
     public Mono<Void> validate(Message message) {
         return Flux.just(message)
                 .doOnNext(message1 -> System.out.println("Validate consumer"))
-                .filter(isValidMailAndMobile)
+                .filter(isValidMailOrMobile)
                 .flatMap(this::validateData)
                 .then(Mono.empty());
     }
 
     private Flux<Alert> validateData(Message message) {
         return Flux.just(message)
-                .filter(message1 -> message1.getValue().isEmpty())
+                .filter(message1 -> message1.getMobile().isEmpty())
                 .switchIfEmpty(Mono.error(new Throwable("Alert with message case 1")))
                 .map(Message::getIdAlert)
                 .filter(String::isEmpty)

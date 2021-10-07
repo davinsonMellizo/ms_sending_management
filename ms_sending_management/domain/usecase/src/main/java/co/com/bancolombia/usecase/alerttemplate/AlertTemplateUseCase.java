@@ -4,7 +4,10 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alerttemplate.AlertTemplate;
 import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_TEMPLATE_NOT_FOUND;
 
@@ -17,8 +20,9 @@ public class AlertTemplateUseCase {
         return alertTemplateGateway.save(alertTemplate);
     }
 
-    public Mono<AlertTemplate> findAlertTemplateById(Integer id) {
+    public Mono<List<AlertTemplate>> findAlertTemplateById(Integer id) {
         return alertTemplateGateway.findTemplateById(id)
+                .collectList()
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_TEMPLATE_NOT_FOUND)));
     }
 
@@ -26,6 +30,7 @@ public class AlertTemplateUseCase {
         return alertTemplateGateway.findTemplateById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_TEMPLATE_NOT_FOUND)))
                 .map(AlertTemplate::getId)
-                .flatMap(alertTemplateGateway::delete);
+                .flatMap(alertTemplateGateway::delete)
+                .then(Mono.just(id));
     }
 }

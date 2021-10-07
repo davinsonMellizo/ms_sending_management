@@ -2,6 +2,7 @@ package co.com.bancolombia.api.services.alertclient;
 
 import co.com.bancolombia.api.dto.AlertClientDTO;
 import co.com.bancolombia.model.alertclient.AlertClient;
+import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
@@ -34,7 +35,7 @@ public class AlertClientDocumentationApi {
                 .parameter(createPath(Long.class, "document-number", "Client document"))
                 .parameter(createPath(Integer.class, "document-type", "Client document type"))
                 .parameter(createPath(String.class, "association-origin", "Association Origin"))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ResponseClient.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 

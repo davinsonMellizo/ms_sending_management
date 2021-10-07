@@ -12,8 +12,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Mono;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LogHandler {
@@ -28,17 +30,17 @@ public class LogHandler {
 
     @Mock
     private ObjectMapper objectMapper;
+    private final Log log = new Log();
 
     @BeforeEach
     public void init(){
         MockitoAnnotations.openMocks(this);
         Mockito.when(useCase.saveLog(any())).thenReturn(Mono.empty());
-        //Mockito.when(createMessageUseCase.createFailMessage(DataTest.FAIL_MESSAGE)).thenReturn(Mono.just(DataTest.FAIL_MESSAGE));
     }
 
     @Test
     public void createTest() throws JsonProcessingException {
-        assertThatCode(() -> sqsService.listenLogBySqsListener(objectMapper.writeValueAsString(new Log())))
+        assertThatCode(() -> sqsService.listenLogBySqsListener(objectMapper.writeValueAsString(log)))
                 .isNotNull();
     }
 

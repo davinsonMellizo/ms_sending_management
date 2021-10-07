@@ -20,7 +20,7 @@ public class CategoryRouter extends CategoryDocumentationApi {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionCategory(CategoryHandler handler) {
-        final String url = "/category";
+        final String url = apiProperties.getCategory();
         return route().POST(url, accept(APPLICATION_JSON), handler::saveCategory, save()).build()
                 .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateCategory, update()).build())
                 .and(route().GET(url, accept(APPLICATION_JSON), handler::findAllCategory, findAll()).build())

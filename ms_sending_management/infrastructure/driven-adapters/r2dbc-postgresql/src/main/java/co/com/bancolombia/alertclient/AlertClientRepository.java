@@ -1,8 +1,10 @@
 package co.com.bancolombia.alertclient;
 
 import co.com.bancolombia.alertclient.data.AlertClientData;
+import co.com.bancolombia.model.alertclient.AlertClient;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
@@ -26,4 +28,10 @@ public interface AlertClientRepository extends ReactiveCrudRepository<AlertClien
 
     @Query("SELECT * FROM alert_client WHERE id_alert = $1 and id_client = $2")
     Mono<AlertClientData> findAlertClient(String idAlert, Integer idClient);
+
+    @Query("select ac.number_operations, ac.amount_enable, a.id as id_alert from alert a left join " +
+            "(select * from alert_client where document_number = $1 and id_document_type = $2) ac " +
+            "on a.id = ac.id_alert " +
+            "where a.visible_channel = true")
+    Flux<AlertClientData> findAlertVisibleChannelByClient(Long documentNumber, Integer documentType);
 }

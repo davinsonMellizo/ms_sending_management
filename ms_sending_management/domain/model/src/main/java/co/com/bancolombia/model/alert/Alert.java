@@ -32,4 +32,9 @@ public class Alert implements Serializable {
     private Boolean visibleChannel;
     private String creationUser;
     private LocalDateTime createdDate;
+
+    public Alert message(String message){
+        setMessage(message);
+        return this;
+    }
 }

@@ -9,6 +9,7 @@ import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
@@ -39,8 +40,9 @@ public class AlertTemplateRepositoryImplement
     }
 
     @Override
-    public Mono<AlertTemplate> findTemplateById(Integer id) {
-        return doQuery(repository.findById(id))
+    public Flux<AlertTemplate> findTemplateById(Integer id) {
+        return repository.findTemplateById(id)
+                .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALERT_TEMPLATE_BY_ID_ERROR));
     }
 

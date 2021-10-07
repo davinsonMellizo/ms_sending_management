@@ -17,11 +17,11 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class PriorityRouter extends PriorityDocumentationApi {
     private final ApiProperties apiProperties;
     private static String ID = "/{id}";
-    private final static String PROVIDER = "/provider" + ID;
+    private final static String PROVIDER = "-by-provider" + ID;
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionPriority(PriorityHandler handler) {
-        final String url = "/priority";
+        final String url = apiProperties.getPriority();
         return route().POST(url, accept(APPLICATION_JSON), handler::savePriority, save()).build()
                 .and(route().PUT(url, accept(APPLICATION_JSON), handler::updatePriority, update()).build())
                 .and(route().GET(url + PROVIDER, accept(APPLICATION_JSON), handler::findAllPriorityByProvider,

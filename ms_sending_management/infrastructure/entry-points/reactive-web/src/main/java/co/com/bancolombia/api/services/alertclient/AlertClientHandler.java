@@ -12,7 +12,11 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADER_MISSING_ERROR;
 
 @Component
 @RequiredArgsConstructor
@@ -46,9 +50,10 @@ public class AlertClientHandler {
     }
 
     public Mono<ServerResponse> basicKit(ServerRequest serverRequest) {
-        return ParamsUtil.getDataAlertClient(serverRequest)
-                .map(useCase::matchClientWithBasicKit)
-                .flatMap(ResponseUtil::responseOk);
+          return ParamsUtil.validateHeader(serverRequest)
+                  .switchIfEmpty(Mono.error(new TechnicalException(HEADER_MISSING_ERROR)))
+                  .flatMap(useCase::matchClientWithBasicKit)
+                  .flatMap(ResponseUtil::responseOk);
     }
 
     public Mono<ServerResponse> deleteAlertClient(ServerRequest serverRequest) {

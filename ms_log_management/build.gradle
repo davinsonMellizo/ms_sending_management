@@ -2,6 +2,7 @@ buildscript {
 	ext {
 		cleanArchitectureVersion = '1.9.8'
 		springBootVersion = '2.4.2'
+        springCloudVersion = 'Hoxton.SR6'
 		sonarVersion = '3.0'
 		jacocoVersion = '0.8.5'
         lombokVersion = '1.18.16'

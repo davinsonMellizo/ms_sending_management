@@ -5,7 +5,7 @@ import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailAndMobile;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailOrMobile;
 
 @RequiredArgsConstructor
 public class SendAlertOneUseCase {
@@ -14,9 +14,9 @@ public class SendAlertOneUseCase {
     //TODO validate id 1
     public Mono<Void> validateBasic(Message message) {
         return Mono.just(message)
-                .filter(isValidMailAndMobile)
+                .filter(isValidMailOrMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
-                .map(message1 -> Mail.builder().value(message1.getValue()).build())
+                .map(message1 -> Mail.builder().Subject(message1.getMail()).build())
                 .then(Mono.empty());
     }
 }

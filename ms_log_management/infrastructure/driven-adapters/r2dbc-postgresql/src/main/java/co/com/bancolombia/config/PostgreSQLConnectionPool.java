@@ -19,9 +19,9 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class PostgreSQLConnectionPool {
 	@Value("${cloud.aws.rds.postgresql.pool.initial}")
-    private int INITIAL_SIZE ;
+    private int INITIAL_SIZE = 1;
 	@Value("${cloud.aws.rds.postgresql.pool.max}")
-    private int MAX_SIZE ;
+    private int MAX_SIZE =1;
     private static final int MAX_IDLE_TIME = 30;
 	@Value("${cloud.aws.rds.postgresql.schema}")
     private String SCHEMA;

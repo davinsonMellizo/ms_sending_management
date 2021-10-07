@@ -18,7 +18,6 @@ public class AlertUseCase {
     public Mono<Alert> findAlertByIdRequest(String id) {
         return alertGateway.findAlertById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-
     }
 
     public Mono<Alert> saveAlertRequest(Alert alert) {

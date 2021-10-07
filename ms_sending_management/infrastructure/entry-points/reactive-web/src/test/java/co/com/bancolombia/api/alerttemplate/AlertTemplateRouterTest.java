@@ -19,6 +19,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,7 +52,7 @@ public class AlertTemplateRouterTest extends BaseIntegration {
 
     @Test
     public void findAlertTemplateById() {
-        when(useCase.findAlertTemplateById(any())).thenReturn(Mono.just(alertTemplate));
+        when(useCase.findAlertTemplateById(any())).thenReturn(Mono.just(List.of(alertTemplate)));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + ID, "0")
                 .exchange();
         spec.expectStatus().isOk();

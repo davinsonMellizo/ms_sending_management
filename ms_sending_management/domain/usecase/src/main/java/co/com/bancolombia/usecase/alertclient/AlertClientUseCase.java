@@ -4,12 +4,16 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
+import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
+import static co.com.bancolombia.commons.constants.Header.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -18,15 +22,18 @@ public class AlertClientUseCase {
     private final AlertClientGateway alertClientGateway;
     private final AlertGateway alertGateway;
 
-    public Mono<Boolean> matchClientWithBasicKit(AlertClient alertClient){
+    public Mono<ResponseClient> matchClientWithBasicKit(Map<String, String> headers){
         return alertGateway.findAlertKitBasic()
-                .map(alert -> alertClient.toBuilder()
+                .map(alert -> AlertClient.builder()
+                        .documentType(Integer.parseInt( headers.get(DOCUMENT_TYPE)))
+                        .documentNumber(Long.parseLong(headers.get(DOCUMENT_NUMBER)))
+                        .associationOrigin(headers.get(ASSOCIATION_ORIGIN))
                         .idAlert(alert.getId()).numberOperations(1)
-                        .amountEnable(alert.getNature().equals("MO")?new Long(50000):new Long(0))
+                        .amountEnable(alert.getNature().equals("MO") ? new Long(50000) : new Long(0))
                         .build())
                 .flatMap(this::saveAlertClient)
                 .last()
-                .map(alertClientSaved -> true);
+                .map(alertClient1 -> ResponseClient.builder().response(true).build());
     }
 
     public Mono<AlertClient> saveAlertClient(AlertClient alertClient) {

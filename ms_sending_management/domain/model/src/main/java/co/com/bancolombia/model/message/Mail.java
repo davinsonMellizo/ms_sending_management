@@ -5,19 +5,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Mail {
-    private String remitter;
-    private String recipient;
-    private String affair;
-    private String template;
-    private String typeMessage;
-    private String nameParameter;
-    private String typeParameter;
-    private String valueParameter;
-    private String value;
+    private String Subject;
+    private String From;
+    private Template Template;
+    private String PreviewText;
+    private String ReplyTo;
+    private ArrayList<Parameter> parameters;
+    private ArrayList<Recipient> Recipients;
+    private ArrayList<Attachment> Attachments;
+
 
 }

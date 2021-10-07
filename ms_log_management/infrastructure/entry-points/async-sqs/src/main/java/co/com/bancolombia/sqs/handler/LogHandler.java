@@ -5,7 +5,6 @@ import com.jashmore.sqs.argument.payload.Payload;
 import com.jashmore.sqs.spring.container.basic.QueueListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor

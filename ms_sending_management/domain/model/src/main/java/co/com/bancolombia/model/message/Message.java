@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,9 +17,11 @@ public class Message {
     private String consumer;
     private String idAlert;
     private String transactionCode;
-    private String value;
     private Double amount;
 
     private String mobile;
     private String mail;
+
+    private ArrayList<Parameter> parameters;
+
 }

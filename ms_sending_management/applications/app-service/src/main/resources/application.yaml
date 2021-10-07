@@ -76,3 +76,6 @@ adapters:
       provider: ${PROVIDER}
       service: ${SERVICE}
       consumer: ${CONSUMER}
+      category: ${CATEGORY}
+      priority: ${PRIORITY}
+      send: ${SEND}

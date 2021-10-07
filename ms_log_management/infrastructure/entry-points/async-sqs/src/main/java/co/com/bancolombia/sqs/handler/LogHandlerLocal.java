@@ -10,10 +10,6 @@ import org.springframework.cloud.aws.messaging.listener.SqsMessageDeletionPolicy
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
-
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @EnableSqs

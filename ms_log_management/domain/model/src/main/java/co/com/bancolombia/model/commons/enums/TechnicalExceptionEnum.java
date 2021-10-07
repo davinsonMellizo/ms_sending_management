@@ -8,8 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TechnicalExceptionEnum {
 
-    SECRET_EXCEPTION("DST0032", "An error occurred while trying to get AWS secrets"),
-    INTERNAL_SERVER_ERROR("DST0033", "Internal server error"),
+    SAVE_LOG_ERROR("DST0002", "An error has occurred saving the log"),
+    SECRET_EXCEPTION("DST0002", "An error occurred while trying to get AWS secrets"),
+    INTERNAL_SERVER_ERROR("DST0003", "Internal server error"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
     HEADER_MISSING_ERROR("301", "Missing parameters per header");
 

@@ -1,4 +1,4 @@
-package co.com.bancolombia.api.services.remitter;
+package co.com.bancolombia.api.services.sendalert;
 
 import co.com.bancolombia.api.ApiProperties;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +14,12 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 @RequiredArgsConstructor
-public class RemitterRouter extends RemitterDocumentationApi {
+public class SendAlertRouter extends SendAlertDocumentationApi {
     private final ApiProperties apiProperties;
-    private static String ID = "/{id}";
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunctionRemitter(RemitterHandler handler) {
-        final String url = apiProperties.getRemitter();
-        return route().POST(url, accept(APPLICATION_JSON), handler::saveRemitter, save()).build()
-                .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateRemitter, update()).build())
-                .and(route().GET(url, accept(APPLICATION_JSON), handler::findAllRemitter, findAll()).build())
-                .and(route().GET(url + ID, accept(APPLICATION_JSON), handler::findRemitter, find()).build())
-                .and(route().DELETE(url + ID, accept(APPLICATION_JSON), handler::deleteRemitter, delete()).build());
+    public RouterFunction<ServerResponse> routerFunctionSendAlert(SendAlertHandler handler) {
+        final String url = apiProperties.getSend();
+        return route().POST(url, accept(APPLICATION_JSON), handler::saveRemitter, send()).build();
     }
 }
