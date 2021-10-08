@@ -16,7 +16,6 @@ import co.com.bancolombia.model.message.gateways.MessageGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
-import co.com.bancolombia.usecase.commons.ValidateData;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -39,16 +38,20 @@ public class ContactUseCase {
     private final ContactMediumGateway contactMediumGateway;
     private final ClientRepository clientRepository;
 
-    public Mono<ResponseContacts> findContactsByClient(Client pClient) {
+    public Mono<ResponseContacts> findContactsByClient(Client pClient, String consumerCode) {
         return clientRepository.findClientByIdentification(pClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
                 .filter(client -> client.getIdState()==ACTIVE)
-                .flatMap(this::findAllContacts)
+                .flatMap(client -> findAllContacts(client, consumerCode))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
     }
 
-    private Mono<ResponseContacts> findAllContacts(Client client) {
-        return contactGateway.findAllContactsByClient(client)
+    private Mono<ResponseContacts> findAllContacts(Client client, String consumerCode) {
+        return Mono.just(consumerCode)
+                .filter(consumerFilter -> !consumerFilter.isEmpty())
+                .flatMap(consumerGateway::findConsumerById)
+                .flatMapMany(consumer -> contactGateway.contactsByClientAndSegment(client, consumer.getSegment()))
+                .switchIfEmpty(contactGateway.contactsByClient(client))
                 .collectList()
                 .map(contacts -> ResponseContacts.<Contact>builder()
                         .contacts(contacts)
@@ -78,18 +81,19 @@ public class ContactUseCase {
         return Mono.zip(state, medium, document, consumer);
     }
 
-    public Mono<StatusResponse<Contact>> updateContactRequest(Contact contact){
-        return clientRepository.findClientByIdentification(Client.builder().documentType(contact.getDocumentType())
-                .documentNumber(contact.getDocumentNumber())
+    public Mono<StatusResponse<Contact>> updateContactRequest(Contact newContact){
+        return clientRepository.findClientByIdentification(Client.builder().documentType(newContact.getDocumentType())
+                .documentNumber(newContact.getDocumentNumber())
                 .build())
-                .doOnNext(client -> contact.setDocumentType(client.getDocumentType()))
+                .doOnNext(client -> newContact.setDocumentType(client.getDocumentType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .flatMapMany(client -> contactGateway.findIdContact(contact))
+                .flatMap(client -> consumerGateway.findConsumerById(newContact.getSegment()))
+                .map(consumer -> newContact.toBuilder().segment(consumer.getSegment()).build())
+                .flatMapMany(contactGateway::findIdContact)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
                 .collectList()
-                .doOnNext(System.out::println)
-                .flatMap(contacts -> validateNewValueContact(contacts, contact)
-                        .switchIfEmpty(updateValueContact(contacts, contact)));
+                .flatMap(contacts -> validateNewValueContact(contacts, newContact)
+                        .switchIfEmpty(updateValueContact(contacts, newContact)));
     }
 
     private Mono<StatusResponse<Contact>> validateNewValueContact(List<Contact> contacts, Contact newContact) {
@@ -122,7 +126,7 @@ public class ContactUseCase {
                 .switchIfEmpty(Flux.fromIterable(contacts)).next()
                 .map(contact -> contact.toBuilder().previous(true).build())
                 .flatMap(contactGateway::updateContact)
-                .zipWith(saveCopyPrevious(newContact))
+                .zipWhen(contact -> saveCopyPrevious(contact, newContact))
                 .map(response -> StatusResponse.<Contact>builder()
                         .description("Contact Updated Successfully")
                         .before(response.getT1()).actual(response.getT2()).build());
@@ -135,12 +139,14 @@ public class ContactUseCase {
                 .filter(contact1 -> !contact1.getPrevious());
     }
 
-    private Mono<Contact> saveCopyPrevious(Contact newContact){
+    private Mono<Contact> saveCopyPrevious(Contact contact, Contact newContact){
         return stateGateway.findState(newContact.getState())
-                .zipWith(contactMediumGateway.findContactMediumByCode(newContact.getContactMedium()))
                 .onErrorMap(e -> new BusinessException(INVALID_DATA))
-                .map(data -> newContact.toBuilder().state(Integer.toString(data.getT1().getId()))
-                        .contactMedium(Integer.toString(data.getT2().getId())).previous(false)
+                .map(state -> newContact.toBuilder().state(Integer.toString(state.getId()))
+                        .contactMedium(contact.getContactMedium())
+                        .documentType(contact.getDocumentType())
+                        .segment(contact.getSegment())
+                        .previous(false)
                         .build())
                 .flatMap(contactGateway::saveContact);
 

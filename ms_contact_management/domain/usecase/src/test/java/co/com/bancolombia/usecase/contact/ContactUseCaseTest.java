@@ -11,7 +11,6 @@ import co.com.bancolombia.model.contactmedium.ContactMedium;
 import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
-import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,15 +76,15 @@ public class ContactUseCaseTest {
 
     @Test
     public void findAllContactByClient() {
-        when(contactGateway.findAllContactsByClient(any()))
+        when(contactGateway.contactsByClient(any()))
                 .thenReturn(Flux.just(contact));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         StepVerifier
-                .create(useCase.findContactsByClient(client))
+                .create(useCase.findContactsByClient(client, ""))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(contactGateway).findAllContactsByClient(client);
+        verify(contactGateway).contactsByClient(client);
     }
 
     @Test

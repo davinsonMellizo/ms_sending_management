@@ -22,8 +22,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.List;
 
+import static co.com.bancolombia.commons.constants.Header.DOCUMENT_NUMBER;
+import static co.com.bancolombia.commons.constants.Header.DOCUMENT_TYPE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +49,6 @@ public class AlertClientRouterTest extends BaseIntegration {
     private String request;
     private final AlertClient alertClient = new AlertClient();
     private String url;
-    private final static String ID = "/{id}";
 
     @BeforeEach
     public void init() {
@@ -67,12 +69,14 @@ public class AlertClientRouterTest extends BaseIntegration {
 
     @Test
     public void findAll() {
-        when(useCase.findAllAlertClient(any()))
+        when(useCase.findAllAlertClientByClient(any()))
                 .thenReturn(Mono.just(List.of(alertClient)));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + ID, "1")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url)
+                .header(DOCUMENT_NUMBER, "106177285")
+                .header(DOCUMENT_TYPE, "0")
                 .exchange();
         spec.expectStatus().isOk();
-        verify(useCase).findAllAlertClient(any());
+        verify(useCase).findAllAlertClientByClient(any());
     }
 
     @Test

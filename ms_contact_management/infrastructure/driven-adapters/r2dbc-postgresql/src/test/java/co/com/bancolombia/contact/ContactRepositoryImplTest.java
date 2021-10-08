@@ -43,7 +43,7 @@ public class ContactRepositoryImplTest {
 
     @Test
     public void findAllContactsByClient() {
-        StepVerifier.create(contactRepositoryImplement.findAllContactsByClient(client))
+        StepVerifier.create(contactRepositoryImplement.contactsByClient(client))
                 .expectNextCount(1)
                 .verifyComplete();
     }

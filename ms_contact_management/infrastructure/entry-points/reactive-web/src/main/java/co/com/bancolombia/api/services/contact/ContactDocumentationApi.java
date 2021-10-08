@@ -40,6 +40,7 @@ public class ContactDocumentationApi {
                 .description("Find contacts by client").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(String.class, "document-type", "Client Document Type"))
+                .parameter(createHeader(String.class, "consumer", "Code consumer"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ResponseContactsDTO.class))
                 .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
@@ -49,7 +50,7 @@ public class ContactDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("updateContact").summary("Update contact")
                 .description("Update client contact ").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Contact to Update").required(true).implementation(ContactUpdateDTO.class))
+                .requestBody(requestBodyBuilder().description("Contact to Update").required(true).implementation(ContactDTO.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(StatusResponse.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
@@ -68,5 +69,9 @@ public class ContactDocumentationApi {
 
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
         return parameterBuilder().in(HEADER).implementation(clazz).required(true).name(name).description(description);
+    }
+
+    private <T> org.springdoc.core.fn.builders.parameter.Builder headerNoRequired(Class<T> clazz, String name, String description) {
+        return parameterBuilder().in(HEADER).implementation(clazz).name(name).description(description);
     }
 }

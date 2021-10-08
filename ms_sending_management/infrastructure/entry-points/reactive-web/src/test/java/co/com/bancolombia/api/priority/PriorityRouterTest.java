@@ -70,7 +70,7 @@ public class PriorityRouterTest extends BaseIntegration {
     public void findAll() {
         when(useCase.findAllByProvider(anyString()))
                 .thenReturn(Mono.just(List.of(priority)));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + "/provider" + ID, "1")
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + "-provider" + ID, "1")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).findAllByProvider(anyString());

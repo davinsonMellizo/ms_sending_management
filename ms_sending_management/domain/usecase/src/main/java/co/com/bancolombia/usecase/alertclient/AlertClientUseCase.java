@@ -47,8 +47,8 @@ public class AlertClientUseCase {
                 .flatMap(alertClientGateway::updateAlertClient);
     }
 
-    public Mono<List<AlertClient>> findAllAlertClient(Integer idAlertClient) {
-        return alertClientGateway.findAllAlertsByClient(idAlertClient)
+    public Mono<List<AlertClient>> findAllAlertClientByClient(Map<String, String> headers) {
+        return alertClientGateway.findAllAlertsByClient(headers.get(DOCUMENT_NUMBER), headers.get(DOCUMENT_TYPE))
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)))
                 .collectList();
     }

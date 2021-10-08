@@ -46,13 +46,9 @@ public class ClientHandler {
     }
 
     public Mono<ServerResponse> saveClient(ServerRequest serverRequest) {
-        System.out.println("llega"+enrolMapper);
         return serverRequest.bodyToMono(EnrolDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObject)
-                .doOnNext(enrolDTO -> System.out.println("data "+enrolDTO.getClient()))
                 .map(enrolMapper::toEntity)
-                .doOnError(throwable -> System.out.println("error 2"))
                 .flatMap(clientUseCase::saveClient)
                 .flatMap(ResponseUtil::responseOk);
     }

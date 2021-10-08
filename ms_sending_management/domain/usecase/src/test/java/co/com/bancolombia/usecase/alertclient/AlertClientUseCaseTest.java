@@ -15,7 +15,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static co.com.bancolombia.commons.constants.Header.DOCUMENT_NUMBER;
+import static co.com.bancolombia.commons.constants.Header.DOCUMENT_TYPE;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,13 +70,16 @@ public class AlertClientUseCaseTest {
 
     @Test
     public void findAll() {
-        when(alertClientGateway.findAllAlertsByClient(any()))
+        when(alertClientGateway.findAllAlertsByClient(anyString(), anyString()))
                 .thenReturn(Flux.just(alertClient));
-        useCase.findAllAlertClient(1)
+        Map<String, String> headers = new HashMap<>();
+        headers.put(DOCUMENT_NUMBER, "1061772353");
+        headers.put(DOCUMENT_TYPE, "0");
+        useCase.findAllAlertClientByClient(headers)
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(alertClientGateway).findAllAlertsByClient(any());
+        verify(alertClientGateway).findAllAlertsByClient(anyString(), anyString());
     }
 
     @Test

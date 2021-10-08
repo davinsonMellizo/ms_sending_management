@@ -40,8 +40,8 @@ public class AlertClientRepositoryImplTest {
     }
 
     @Test
-    public void findAllAlertClient() {
-        StepVerifier.create(repositoryImplement.findAllAlertsByClient(1))
+    public void findAlertClientByClient() {
+        StepVerifier.create(repositoryImplement.findAllAlertsByClient("1061772353", "0"))
                 .expectNextCount(1)
                 .verifyComplete();
     }

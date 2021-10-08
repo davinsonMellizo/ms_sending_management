@@ -55,8 +55,8 @@ public class AlertClientRepositoryImplement
     }
 
     @Override
-    public Flux<AlertClient> findAllAlertsByClient(Integer idAlertClient) {
-        return repository.findAllAlertsByClient(idAlertClient)
+    public Flux<AlertClient> findAllAlertsByClient(String documentNumber, String documentType) {
+        return repository.findAlertClientByClient(documentNumber, documentType)
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_ALERT_CLIENT_ERROR));
     }

@@ -7,7 +7,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ContactGateway {
-    Flux<Contact> findAllContactsByClient(Client client);
+    Flux<Contact> contactsByClient(Client client);
+
+    Flux<Contact> contactsByClientAndSegment(Client client, String segment);
 
     Flux<Contact> findIdContact(Contact contact);
 

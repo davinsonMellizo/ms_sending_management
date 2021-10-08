@@ -20,6 +20,18 @@ public interface ContactRepository extends ReactiveCrudRepository<ContactData, I
     Flux<ContactData> findAllContactsByClient(@Param("documentNumber") Long documentNumber,
                                               @Param("documentType") String documentType);
 
+    @Query("select c.value, c.created_date, c.modified_date, c.segment, " +
+            "m.code as contact_medium, s.name as state, c.previous " +
+            "from contact c " +
+            "inner join document_type d on d.id = c.id_document_type "+
+            "inner join contact_medium m on c.id_contact_medium = m.id " +
+            "inner join state s on c.id_state = s.id " +
+            "where c.document_number::int8 = :documentNumber and c.segment = :segment " +
+            "and (d.id::text = :documentType or d.code = :documentType)")
+    Flux<ContactData> contactsByClientAndSegment(@Param("documentNumber") Long documentNumber,
+                                                 @Param("documentType") String documentType,
+                                                 @Param("segment") String segment);
+
     @Query("select c.* , c.segment as consumer, m.id as contact_medium, s.id as state " +
             "FROM contact c " +
             "inner join document_type d on d.id = c.id_document_type "+

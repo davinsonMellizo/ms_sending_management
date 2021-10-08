@@ -17,7 +17,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class PriorityRouter extends PriorityDocumentationApi {
     private final ApiProperties apiProperties;
     private static String ID = "/{id}";
-    private final static String PROVIDER = "-by-provider" + ID;
+    private final static String PROVIDER = "-provider" + ID;
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionPriority(PriorityHandler handler) {

@@ -25,9 +25,9 @@ public class ClientAdapter implements ClientGateway {
     @Override
     public Mono<Boolean> matchClientWithBasicKit(Client client) {
         HashMap headers = new HashMap();
-        headers.put(DOCUMENT_TYPE.getName(), client.getDocumentType());
-        headers.put(DOCUMENT_NUMBER.getName(), Long.toString(client.getDocumentNumber()));
-        headers.put(ASSOCIATION_ORIGIN.getName(), client.getEnrollmentOrigin());
+        headers.put(DOCUMENT_TYPE, client.getDocumentType());
+        headers.put(DOCUMENT_NUMBER, Long.toString(client.getDocumentNumber()));
+        headers.put(ASSOCIATION_ORIGIN, client.getEnrollmentOrigin());
 
         return Mono.just(Request.builder().headers(headers).build())
                 .flatMap(clientRequest -> restClient.post(properties.getResources().getBasicKit(),

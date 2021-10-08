@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +60,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
 
     @Test
     public void findAllContactsByClient() {
-        when(useCase.findContactsByClient(any())).thenReturn(Mono.just(ResponseContacts.<Contact>builder()
+        when(useCase.findContactsByClient(any(), anyString())).thenReturn(Mono.just(ResponseContacts.<Contact>builder()
                 .contacts(List.of(contact))
                 .documentNumber(contact.getDocumentNumber())
                 .documentType(contact.getDocumentType())
@@ -69,7 +70,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
                 .header("document-type", "0")
                 .exchange();
         spec.expectStatus().isOk();
-        verify(useCase).findContactsByClient(any());
+        verify(useCase).findContactsByClient(any(), anyString());
     }
 
     @Test

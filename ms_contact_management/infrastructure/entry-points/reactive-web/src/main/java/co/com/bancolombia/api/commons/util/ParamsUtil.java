@@ -8,13 +8,10 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
+import static co.com.bancolombia.commons.enums.Header.*;
+
 @UtilityClass
 public class ParamsUtil {
-
-    public static final String DOCUMENT_NUMBER = "document-number";
-    public static final String DOCUMENT_TYPE = "document-type";
-    public static final String CONTACT_MEDIUM = "contact-medium";
-    public static final String SEGMENT = "segment";
 
     private static Optional<String> ofEmpty(String value) {
         return (value == null || value.isEmpty()) ? Optional.empty() : Optional.of(value);
@@ -37,7 +34,11 @@ public class ParamsUtil {
     }
 
     public static String getHeader(ServerRequest request, String header) {
-        return ofEmpty(request.headers().firstHeader(header)).orElse("Undefined");
+        return ofEmpty(request.headers().firstHeader(header)).orElse("");
+    }
+
+    public String getConsumer(ServerRequest request){
+        return getHeader(request, CONSUMER);
     }
 
 }

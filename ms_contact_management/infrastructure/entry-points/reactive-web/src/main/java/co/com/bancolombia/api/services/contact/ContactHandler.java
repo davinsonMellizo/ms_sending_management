@@ -30,7 +30,8 @@ public class ContactHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
                 .flatMap(ClientHeader::toModel)
-                .flatMap(contactUseCase::findContactsByClient)
+                .flatMap(client ->  contactUseCase.findContactsByClient(client,
+                        ParamsUtil.getConsumer(serverRequest)))
                 .flatMap(ResponseUtil::responseOk);
     }
 
@@ -44,10 +45,10 @@ public class ContactHandler {
     }
 
     public Mono<ServerResponse> updateContact(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(ContactUpdateDTO.class)
+        return serverRequest.bodyToMono(ContactDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
-                .flatMap(ContactUpdateDTO::toModel)
+                .flatMap(ContactDTO::toModel)
                 .flatMap(contactUseCase::updateContactRequest)
                 .flatMap(ResponseUtil::responseOk);
     }

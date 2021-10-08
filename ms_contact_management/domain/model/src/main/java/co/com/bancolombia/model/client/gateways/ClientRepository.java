@@ -7,8 +7,6 @@ import reactor.core.publisher.Mono;
 public interface ClientRepository {
     Mono<Client> findClientByIdentification(Client client);
 
-    Mono<Client> findClientById(Integer id);
-
     Mono<Client> saveClient(Client client);
 
     Mono<StatusResponse<Client>> updateClient(StatusResponse<Client> statusResponse);

@@ -8,7 +8,6 @@ import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
-import co.com.bancolombia.model.response.StatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -30,8 +29,15 @@ public class ContactRepositoryImplement
     }
 
     @Override
-    public Flux<Contact> findAllContactsByClient(Client client) {
+    public Flux<Contact> contactsByClient(Client client) {
         return repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
+                .map(Mono::just)
+                .flatMap(this::doQuery)
+                .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
+    }
+    @Override
+    public Flux<Contact> contactsByClientAndSegment(Client client, String segment) {
+        return repository.contactsByClientAndSegment(client.getDocumentNumber(), client.getDocumentType(), segment)
                 .map(Mono::just)
                 .flatMap(this::doQuery)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));

@@ -12,9 +12,6 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADER_MISSING_ERROR;
 
@@ -24,10 +21,10 @@ public class AlertClientHandler {
     private final AlertClientUseCase useCase;
     private final ValidatorHandler validatorHandler;
 
-    public Mono<ServerResponse> findAllAlertClient(ServerRequest serverRequest) {
-        return ParamsUtil.getId(serverRequest)
-                .map(Integer::parseInt)
-                .flatMap(useCase::findAllAlertClient)
+    public Mono<ServerResponse> findAlertClientByClient(ServerRequest serverRequest) {
+        return ParamsUtil.validateHeaderFindAlertClient(serverRequest)
+                .switchIfEmpty(Mono.error(new TechnicalException(HEADER_MISSING_ERROR)))
+                .flatMap(useCase::findAllAlertClientByClient)
                 .flatMap(ResponseUtil::responseOk);
     }
 
@@ -50,7 +47,7 @@ public class AlertClientHandler {
     }
 
     public Mono<ServerResponse> basicKit(ServerRequest serverRequest) {
-          return ParamsUtil.validateHeader(serverRequest)
+          return ParamsUtil.validateHeaderBasicKit(serverRequest)
                   .switchIfEmpty(Mono.error(new TechnicalException(HEADER_MISSING_ERROR)))
                   .flatMap(useCase::matchClientWithBasicKit)
                   .flatMap(ResponseUtil::responseOk);

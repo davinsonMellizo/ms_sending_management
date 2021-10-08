@@ -38,13 +38,6 @@ public class ClientRepositoryImplement
     }
 
     @Override
-    public Mono<Client> findClientById(Integer id) {
-        return repository.findById(id)
-                .map(this::convertToEntity)
-                .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
-    }
-
-    @Override
     public Mono<Client> saveClient(Client client) {
         return Mono.just(client)
                 .map(this::convertToData)

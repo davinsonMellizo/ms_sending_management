@@ -14,7 +14,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -51,7 +50,7 @@ public class ContactRepositoryImplWithExceptionTest {
     public void findAllContactsByClient() {
         when(repository.findAllContactsByClient(any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAllContactsByClient(client)
+        repositoryImpl.contactsByClient(client)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

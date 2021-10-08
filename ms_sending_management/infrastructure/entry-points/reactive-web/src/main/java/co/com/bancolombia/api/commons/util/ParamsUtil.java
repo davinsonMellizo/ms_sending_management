@@ -63,15 +63,17 @@ public class ParamsUtil {
                 .collect(Collectors.toMap(Map.Entry::getKey, v -> String.join(",", v.getValue())));
     }
 
-    public Mono<Map<String, String>> validateHeader(ServerRequest request){
+    public Mono<Map<String, String>> validateHeaderBasicKit(ServerRequest request){
         return Mono.just(setHeaders(request))
-                .map(stringStringMap -> {
-                    System.out.println("headeres "+stringStringMap);
-                    return stringStringMap;
-                })
                 .filter(headers -> headers.containsKey(DOCUMENT_TYPE))
                 .filter(headers -> headers.containsKey(DOCUMENT_NUMBER))
                 .filter(headers -> headers.containsKey(ASSOCIATION_ORIGIN));
+
+    }
+    public Mono<Map<String, String>> validateHeaderFindAlertClient(ServerRequest request){
+        return Mono.just(setHeaders(request))
+                .filter(headers -> headers.containsKey(DOCUMENT_TYPE))
+                .filter(headers -> headers.containsKey(DOCUMENT_NUMBER));
 
     }
 

@@ -30,8 +30,8 @@ public interface AlertClientRepository extends ReactiveCrudRepository<AlertClien
     Mono<AlertClientData> findAlertClient(String idAlert, Integer idClient);
 
     @Query("select ac.number_operations, ac.amount_enable, a.id as id_alert from alert a left join " +
-            "(select * from alert_client where document_number = $1 and id_document_type = $2) ac " +
+            "(select * from alert_client where document_number::text = $1 and id_document_type::text = $2) ac " +
             "on a.id = ac.id_alert " +
             "where a.visible_channel = true")
-    Flux<AlertClientData> findAlertVisibleChannelByClient(Long documentNumber, Integer documentType);
+    Flux<AlertClientData> findAlertClientByClient(String documentNumber, String documentType);
 }

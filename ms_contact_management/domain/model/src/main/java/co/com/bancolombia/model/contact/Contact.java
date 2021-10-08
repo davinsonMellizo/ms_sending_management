@@ -20,4 +20,9 @@ public class Contact {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
+    public Contact segment(String segment){
+        this.setSegment(segment);
+        return this;
+    }
+
 }
