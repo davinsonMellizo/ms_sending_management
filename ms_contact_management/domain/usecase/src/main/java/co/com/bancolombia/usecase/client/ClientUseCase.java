@@ -5,6 +5,7 @@ import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.response.StatusResponse;
@@ -83,6 +84,7 @@ public class ClientUseCase {
                 .doOnNext(response -> responseUpdate.getActual().getContacts().add(response.getActual()))
                 .doOnNext(response -> responseUpdate.getBefore().getContacts().add(response.getBefore()))
                 .singleOrEmpty()
+                .switchIfEmpty(Mono.just(new StatusResponse<Contact>()))
                 .doOnNext(response -> responseUpdate.getActual().setClient(responseClient.getActual()))
                 .doOnNext(response -> responseUpdate.getBefore().setClient(responseClient.getBefore()))
                 .doOnNext(response -> responseUpdate.setDescription("Cliente actualizado exitosamente"))

@@ -29,7 +29,7 @@ public class ParamsUtil {
                 .documentNumber(getHeader(request, DOCUMENT_NUMBER))
                 .documentType(getHeader(request, DOCUMENT_TYPE))
                 .contactMedium(getHeader(request, CONTACT_MEDIUM))
-                .consumer(getHeader(request, SEGMENT))
+                .consumer(getHeader(request, CONSUMER))
                 .build());
     }
 

@@ -153,7 +153,9 @@ public class ContactUseCase {
     }
 
     public Mono<Integer> deleteContact(Contact contact) {
-        return contactGateway.findIdContact(contact)
+        return consumerGateway.findConsumerById(contact.getSegment())
+                .map(consumer -> contact.toBuilder().segment(consumer.getSegment()).build())
+                .flatMapMany(contactGateway::findIdContact)
                 .map(Contact::getId)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
                 .flatMap(contactGateway::deleteContact)

@@ -40,7 +40,7 @@ public class ContactDocumentationApi {
                 .description("Find contacts by client").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(String.class, "document-type", "Client Document Type"))
-                .parameter(createHeader(String.class, "consumer", "Code consumer"))
+                .parameter(headerNoRequired(String.class, "consumer", "Code consumer"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ResponseContactsDTO.class))
                 .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
@@ -62,7 +62,7 @@ public class ContactDocumentationApi {
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
                 .parameter(createHeader(String.class, "document-type", "Client Document Type"))
                 .parameter(createHeader(String.class, "contact-medium", "Type of contact"))
-                .parameter(createHeader(String.class, "segment", "Segment"))
+                .parameter(createHeader(String.class, "consumer", "Code Consumer"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }

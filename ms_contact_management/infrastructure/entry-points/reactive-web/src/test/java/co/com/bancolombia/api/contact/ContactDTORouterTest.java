@@ -105,7 +105,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .header("contact-medium", "SMS")
-                .header("enrollment-contact", "ALM")
+                .header("consumer", "ALM")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteContact(any());
