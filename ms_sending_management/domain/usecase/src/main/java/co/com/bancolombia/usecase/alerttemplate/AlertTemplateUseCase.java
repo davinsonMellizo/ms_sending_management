@@ -4,7 +4,6 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alerttemplate.AlertTemplate;
 import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package co.com.bancolombia.remitter;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.drivenadapters.TimeFactory;
+import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.remitter.data.RemitterData;
 import co.com.bancolombia.remitter.data.RemitterMapper;
 import org.junit.jupiter.api.BeforeEach;

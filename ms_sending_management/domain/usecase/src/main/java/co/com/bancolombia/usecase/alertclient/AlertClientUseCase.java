@@ -7,7 +7,6 @@ import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;

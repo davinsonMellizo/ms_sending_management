@@ -1,7 +1,6 @@
 package co.com.bancolombia.alerttemplate;
 
 import co.com.bancolombia.alerttemplate.data.AlertTemplateData;
-import co.com.bancolombia.model.alerttemplate.AlertTemplate;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;

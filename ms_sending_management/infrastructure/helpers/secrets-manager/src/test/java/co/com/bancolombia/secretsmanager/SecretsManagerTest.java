@@ -1,8 +1,8 @@
 package co.com.bancolombia.secretsmanager;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.logging.technical.logger.TechLogger;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import connector.AWSSecretManagerConnector;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

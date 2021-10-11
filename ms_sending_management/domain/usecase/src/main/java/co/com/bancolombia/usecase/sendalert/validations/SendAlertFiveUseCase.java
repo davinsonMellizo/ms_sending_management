@@ -2,14 +2,10 @@ package co.com.bancolombia.usecase.sendalert.validations;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.gateways.MessageGateway;
-import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.model.service.gateways.ServiceGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;

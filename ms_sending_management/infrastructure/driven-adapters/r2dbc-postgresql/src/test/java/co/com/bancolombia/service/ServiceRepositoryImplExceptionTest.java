@@ -1,8 +1,8 @@
 package co.com.bancolombia.service;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.drivenadapters.TimeFactory;
+import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.service.data.ServiceData;
 import co.com.bancolombia.service.data.ServiceMapper;
 import org.junit.jupiter.api.BeforeEach;

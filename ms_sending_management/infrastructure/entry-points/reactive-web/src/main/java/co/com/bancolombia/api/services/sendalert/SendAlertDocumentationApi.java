@@ -2,14 +2,11 @@ package co.com.bancolombia.api.services.sendalert;
 
 import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.remitter.Remitter;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
 
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
-import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 
 public class SendAlertDocumentationApi {

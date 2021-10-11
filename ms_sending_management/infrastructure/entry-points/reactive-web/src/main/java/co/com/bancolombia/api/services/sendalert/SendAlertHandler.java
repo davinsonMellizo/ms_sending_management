@@ -1,12 +1,9 @@
 package co.com.bancolombia.api.services.sendalert;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
-import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
-import co.com.bancolombia.api.dto.RemitterDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.usecase.remitter.RemitterUseCase;
 import co.com.bancolombia.usecase.sendalert.ManagementAlertUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
