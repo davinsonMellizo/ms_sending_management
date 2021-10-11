@@ -156,6 +156,8 @@ public class ContactUseCaseTest {
 
     @Test
     public void deleteContactWithException() {
+        when(consumerGateway.findConsumerById(any()))
+                .thenReturn(Mono.just(Consumer.builder().segment("SEG").build()));
         when(contactGateway.findIdContact(any()))
                 .thenReturn(Flux.empty());
         useCase.deleteContact(contact)
