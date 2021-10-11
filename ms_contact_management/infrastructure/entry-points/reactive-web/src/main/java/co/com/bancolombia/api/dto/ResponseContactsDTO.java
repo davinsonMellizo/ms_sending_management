@@ -1,6 +1,5 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.model.contact.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

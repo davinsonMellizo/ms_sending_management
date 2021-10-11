@@ -21,7 +21,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple4;
 
-
 import java.util.List;
 
 import static co.com.bancolombia.commons.constants.State.ACTIVE;

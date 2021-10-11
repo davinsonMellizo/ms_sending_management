@@ -2,7 +2,6 @@ package co.com.bancolombia.model.contact.gateways;
 
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
-import co.com.bancolombia.model.response.StatusResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

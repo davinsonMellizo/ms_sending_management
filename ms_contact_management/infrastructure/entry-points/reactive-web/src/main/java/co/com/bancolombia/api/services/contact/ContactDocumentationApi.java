@@ -1,17 +1,12 @@
 package co.com.bancolombia.api.services.contact;
 
 import co.com.bancolombia.api.dto.ContactDTO;
-import co.com.bancolombia.api.dto.ContactFindDTO;
-import co.com.bancolombia.api.dto.ContactUpdateDTO;
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.contact.Contact;
-import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;

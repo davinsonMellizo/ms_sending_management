@@ -1,7 +1,6 @@
 package co.com.bancolombia.usecase.commons;
 
 import co.com.bancolombia.model.contact.Contact;
-import co.com.bancolombia.model.message.Message;
 
 import java.util.Objects;
 import java.util.function.Predicate;

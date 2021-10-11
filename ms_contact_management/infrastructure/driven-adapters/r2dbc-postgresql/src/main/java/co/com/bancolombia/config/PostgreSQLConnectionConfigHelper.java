@@ -7,6 +7,7 @@ import io.r2dbc.spi.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
