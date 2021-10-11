@@ -131,6 +131,8 @@ public class ContactUseCaseTest {
 
     @Test
     public void deleteContact() {
+        when(consumerGateway.findConsumerById(any()))
+                .thenReturn(Mono.just(Consumer.builder().segment("SEG").build()));
         when(contactGateway.findIdContact(any()))
                 .thenReturn(Flux.just(contact));
         when(contactGateway.deleteContact(any()))
@@ -138,7 +140,7 @@ public class ContactUseCaseTest {
         StepVerifier.create(useCase.deleteContact(contact))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(contactGateway).findIdContact(contact);
+        verify(contactGateway).findIdContact(any());
         verify(contactGateway).deleteContact(any());
     }
 
