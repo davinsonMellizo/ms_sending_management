@@ -17,10 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class RestClientProperties {
     private ClientHttpConnector clientHttpConnector(int timeout) {
         return new ReactorClientHttpConnector(HttpClient.create()
-                .tcpConfiguration(tcpClient -> {
-                    tcpClient = tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout);
-                    return tcpClient;
-                }));
+                .option(CONNECT_TIMEOUT_MILLIS, timeout));
     }
 
     @Bean

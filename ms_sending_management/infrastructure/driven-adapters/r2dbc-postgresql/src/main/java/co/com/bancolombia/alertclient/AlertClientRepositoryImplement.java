@@ -20,6 +20,7 @@ public class AlertClientRepositoryImplement
         extends AdapterOperations<AlertClient, AlertClientData, String, AlertClientRepository>
         implements AlertClientGateway {
 
+    private static final int NUMBER_ZERO = 0;
     private static final int NUMBER_ONE = 1;
 
     @Autowired
@@ -35,8 +36,8 @@ public class AlertClientRepositoryImplement
         return Mono.just(alertClient)
                 .map(this::convertToData)
                 .map(data -> data.toBuilder().createdDate(timeFactory.now())
-                        .accumulatedAmount(new Long(0))
-                        .accumulatedOperations(new Long(0))
+                        .accumulatedAmount(Long.valueOf(NUMBER_ZERO))
+                        .accumulatedOperations(Long.valueOf(NUMBER_ZERO))
                         .modifiedDate(timeFactory.now()).transactionDate(timeFactory.now()).build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)
@@ -46,9 +47,10 @@ public class AlertClientRepositoryImplement
     @Override
     public Mono<StatusResponse<AlertClient>> updateAlertClient(StatusResponse<AlertClient> statusResponse) {
         return repository.updateAlertClient(statusResponse.getActual().getNumberOperations(),
-                statusResponse.getActual().getAmountEnable(),
-                statusResponse.getActual().getIdAlert(),
-                statusResponse.getActual().getIdClient())
+                        statusResponse.getActual().getAmountEnable(),
+                        statusResponse.getActual().getIdAlert(),
+                        statusResponse.getActual().getDocumentNumber(),
+                        statusResponse.getActual().getDocumentType())
                 .filter(rowsAffected -> rowsAffected == NUMBER_ONE)
                 .map(integer -> statusResponse)
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_ALERT_CLIENT_ERROR));
@@ -63,7 +65,8 @@ public class AlertClientRepositoryImplement
 
     @Override
     public Mono<String> delete(AlertClient alertClient) {
-        return repository.deleteAlertClient(alertClient.getIdAlert(),alertClient.getIdClient())
+        return repository.deleteAlertClient(alertClient.getIdAlert(), alertClient.getDocumentNumber(),
+                        alertClient.getDocumentType())
                 .filter(rowsAffected -> rowsAffected == NUMBER_ONE)
                 .map(integer -> alertClient.getIdAlert())
                 .onErrorMap(e -> new TechnicalException(e, DELETE_ALERT_CLIENT_ERROR));
@@ -71,7 +74,8 @@ public class AlertClientRepositoryImplement
 
     @Override
     public Mono<AlertClient> findAlertClient(AlertClient alertClient) {
-        return repository.findAlertClient(alertClient.getIdAlert(), alertClient.getIdClient())
+        return repository.findAlertClient(alertClient.getIdAlert(), alertClient.getDocumentNumber(),
+                        alertClient.getDocumentType())
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALERT_CLIENT_ERROR));
     }

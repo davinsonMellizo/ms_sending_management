@@ -18,10 +18,14 @@ public class AlertClientDTO {
     @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String idAlert;
-    @Max(value = 999, message = "{constraint.max}")
+    @Max(value = 999999999999999L, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    private Integer idClient;
+    private Long documentNumber;
+    @NotNull(message = "{constraint.not_null}")
+    @Min(value = 0, message = "{constraint.min}")
+    @Max(value = 999, message = "{constraint.maximum_value}")
+    private Integer documentType;
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer numberOperations;
@@ -38,7 +42,8 @@ public class AlertClientDTO {
     public Mono<AlertClient> toModel() {
         return Mono.just(AlertClient.builder()
                 .idAlert(this.idAlert)
-                .idClient(this.idClient)
+                .documentNumber(this.documentNumber)
+                .documentType(this.documentType)
                 .numberOperations(this.numberOperations)
                 .amountEnable(this.amountEnable)
                 .accumulatedOperations(this.accumulatedOperations)

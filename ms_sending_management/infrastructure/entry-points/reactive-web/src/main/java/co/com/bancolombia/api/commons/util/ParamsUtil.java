@@ -21,7 +21,6 @@ public class ParamsUtil {
     public static final String ID_ALERT = "id-alert";
     public static final String ID_TRANSACTION = "id-transaction";
     public static final String ID_CONSUMER = "id-consumer";
-    public static final String ID_CLIENT = "id-client";
     public static final String ID_PROVIDER = "id-provider";
     public static final String ID_SERVICE = "id-service";
 
@@ -45,7 +44,8 @@ public class ParamsUtil {
     public static Mono<AlertClientDTO> getRelationClient(ServerRequest request) {
         return Mono.just(AlertClientDTO.builder()
                 .idAlert(request.headers().firstHeader(ID_ALERT))
-                .idClient(Integer.parseInt(request.headers().firstHeader(ID_CLIENT)))
+                .documentNumber(Long.valueOf(request.headers().firstHeader(DOCUMENT_NUMBER)))
+                .documentType(Integer.parseInt(request.headers().firstHeader(DOCUMENT_TYPE)))
                 .build());
     }
 

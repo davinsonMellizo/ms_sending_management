@@ -21,7 +21,6 @@ public class AlertClientData implements Persistable<String> {
 
     @Id
     private String idAlert;
-    private Integer idClient;
     private Long documentNumber;
     @Column("id_document_type")
     private Integer documentType;
