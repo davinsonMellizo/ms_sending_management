@@ -1,13 +1,13 @@
 package co.com.bancolombia.secretsmanager;
 
 import co.com.bancolombia.log.LoggerBuilder;
-import co.com.bancolombia.model.commons.exceptions.TechnicalException;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import connector.AWSSecretManagerConnector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum.SECRET_EXCEPTION;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SECRET_EXCEPTION;
 
 @Component
 @RequiredArgsConstructor

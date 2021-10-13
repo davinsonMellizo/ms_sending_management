@@ -36,6 +36,7 @@ public class ClientUseCase {
         return findClientByIdentification(pClient)
                 .filter(client -> client.getIdState()==ACTIVE)
                 .flatMap(clientRepository::inactivateClient)
+                //TODO SAVE LOG
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
     }
 

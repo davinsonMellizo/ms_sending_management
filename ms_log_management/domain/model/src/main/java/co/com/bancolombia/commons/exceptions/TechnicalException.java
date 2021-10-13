@@ -1,7 +1,7 @@
-package co.com.bancolombia.model.commons.exceptions;
+package co.com.bancolombia.commons.exceptions;
 
 
-import co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum;
+import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import lombok.Getter;
 
 @Getter

@@ -1,6 +1,6 @@
 package co.com.bancolombia.log;
 
-import co.com.bancolombia.model.commons.enums.TypeLog;
+import co.com.bancolombia.commons.enums.TypeLog;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;

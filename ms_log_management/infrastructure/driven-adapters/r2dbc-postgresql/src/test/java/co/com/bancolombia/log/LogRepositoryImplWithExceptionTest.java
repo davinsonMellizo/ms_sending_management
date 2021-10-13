@@ -2,7 +2,7 @@ package co.com.bancolombia.log;
 
 
 import co.com.bancolombia.log.data.LogMapper;
-import co.com.bancolombia.model.commons.exceptions.TechnicalException;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.log.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

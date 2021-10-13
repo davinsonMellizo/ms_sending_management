@@ -1,6 +1,6 @@
-package co.com.bancolombia.model.commons.exceptions;
+package co.com.bancolombia.commons.exceptions;
 
-import co.com.bancolombia.model.commons.enums.BusinessErrorMessage;
+import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

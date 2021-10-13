@@ -1,4 +1,4 @@
-package co.com.bancolombia.model.commons.enums;
+package co.com.bancolombia.commons.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

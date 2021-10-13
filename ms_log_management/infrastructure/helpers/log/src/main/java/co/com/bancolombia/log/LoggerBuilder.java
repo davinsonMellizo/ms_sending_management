@@ -3,7 +3,7 @@ package co.com.bancolombia.log;
 
 import co.com.bancolombia.logging.technical.logger.TechLogger;
 import co.com.bancolombia.logging.technical.message.ObjectTechMsg;
-import co.com.bancolombia.model.commons.enums.TypeLog;
+import co.com.bancolombia.commons.enums.TypeLog;
 import co.com.bancolombia.logging.technical.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

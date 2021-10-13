@@ -10,10 +10,13 @@ import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 
 
+import io.r2dbc.spi.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.r2dbc.core.DatabaseClient;
 
 @Configuration
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class PostgreSQLConnectionPool {
 	}
 
 	@Bean
-	public ConnectionPool getConnectionConfig() {
+	public ConnectionFactory getConnectionConfig() {
 		PostgresqlConnectionProperties pgProperties = postgresProperties();
 		pgProperties.setSchema(SCHEMA);
 
@@ -64,5 +67,10 @@ public class PostgreSQLConnectionPool {
                 .build();
 
 		return new ConnectionPool(poolConfiguration);
+	}
+
+	@Bean("r2dbcEntityTemplate")
+	public R2dbcEntityTemplate entityTemplate(){
+		return new R2dbcEntityTemplate(getConnectionConfig());
 	}
 }

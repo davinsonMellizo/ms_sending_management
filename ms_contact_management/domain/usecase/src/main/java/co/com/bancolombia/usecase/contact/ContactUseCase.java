@@ -69,7 +69,7 @@ public class ContactUseCase {
                         .documentType(data.getT3().getId()).previous(false)
                         .segment(data.getT4().getSegment())
                         .build())
-                .flatMap(contactGateway::saveContact);
+                .flatMap(contactGateway::saveContact);//TODO SAVE LOG
     }
 
     private Mono<Tuple4<State, ContactMedium, Document, Consumer>> getDataBase(Contact contact) {
@@ -103,7 +103,9 @@ public class ContactUseCase {
                 .flatMap(contact -> updateStateContact(contact, newContact.getState()))
                 .flatMap(contactGateway::updateContact)
                 .zipWith(Flux.fromIterable(contacts).filter(contact -> !contact.getPrevious()).next())
-                .map(response -> StatusResponse.<Contact>builder()
+                .map(response ->
+                        //TODO SAVE LOG
+                        StatusResponse.<Contact>builder()
                         .description("Contact Updated Successfully")
                         .before(response.getT2()).actual(response.getT1()).build());
     }
@@ -133,6 +135,7 @@ public class ContactUseCase {
 
     private Flux<Contact> deletePrevious(Contact contact, List<Contact> contacts){
         return contactGateway.deleteContact(contact.getId())
+                //TODO SAVE LOG
                 .map(idContact -> contacts)
                 .flatMapMany(Flux::fromIterable)
                 .filter(contact1 -> !contact1.getPrevious());
@@ -148,6 +151,7 @@ public class ContactUseCase {
                         .previous(false)
                         .build())
                 .flatMap(contactGateway::saveContact);
+                //TODO SAVE LOG;
 
     }
 
@@ -158,6 +162,7 @@ public class ContactUseCase {
                 .map(Contact::getId)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
                 .flatMap(contactGateway::deleteContact)
+                //TODO SAVE LOG
                 .last();
     }
 }
