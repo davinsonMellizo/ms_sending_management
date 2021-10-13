@@ -28,7 +28,7 @@ public class AlertClientUseCase {
                         .documentNumber(Long.parseLong(headers.get(DOCUMENT_NUMBER)))
                         .associationOrigin(headers.get(ASSOCIATION_ORIGIN))
                         .idAlert(alert.getId()).numberOperations(1)
-                        .amountEnable(alert.getNature().equals("MO") ? new Long(50000) : new Long(0))
+                        .amountEnable(alert.getNature().equals("MO") ? Long.valueOf(50000) : Long.valueOf(0))
                         .build())
                 .flatMap(this::saveAlertClient)
                 .last()

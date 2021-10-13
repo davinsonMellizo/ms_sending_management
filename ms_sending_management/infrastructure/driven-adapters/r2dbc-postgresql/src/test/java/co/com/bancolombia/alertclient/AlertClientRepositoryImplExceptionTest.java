@@ -42,7 +42,7 @@ public class AlertClientRepositoryImplExceptionTest {
     @BeforeEach
     public void init() {
         alertClient.setIdAlert("HGD");
-        alertClient.setDocumentNumber(new Long(1));
+        alertClient.setDocumentNumber(1L);
         alertClient.setDocumentType(0);
         alertClient.setNumberOperations(5);
         alertClient.setAmountEnable(9L);
@@ -63,9 +63,8 @@ public class AlertClientRepositoryImplExceptionTest {
                 .verify();
     }
 
-    //TODO TEST FAILED
     public void findAllAlertClient() {
-        when(repository.findAllAlertsByClient(any()))
+        when(repository.findAlertClientByClient(anyString(), anyString()))
                 .thenReturn(Flux.error(RuntimeException::new));
         repositoryImpl.findAllAlertsByClient("1", "0")
                 .as(StepVerifier::create)
@@ -73,10 +72,9 @@ public class AlertClientRepositoryImplExceptionTest {
                 .verify();
     }
 
-    //TODO TEST FAILED
     public void updateAlertClient() {
         when(timeFactory.now()).thenReturn(NOW);
-        when(repository.updateAlertClient(anyInt(), anyLong(), anyString(), anyInt()))
+        when(repository.updateAlertClient(anyInt(), anyLong(), anyString(), anyLong(), anyInt()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.updateAlertClient(StatusResponse.<AlertClient>builder()
                 .before(alertClient).actual(alertClient).build())

@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class AlertClient {
 
     private String idAlert;
-    private Integer idClient;
     private Long documentNumber;
     private Integer documentType;
     private Integer numberOperations;

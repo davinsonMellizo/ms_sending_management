@@ -23,7 +23,8 @@ public class AlertClientRepositoryImplTest {
     @BeforeEach
     public void init() {
         alertClient.setIdAlert("HGD");
-        alertClient.setIdClient(1);
+        alertClient.setDocumentNumber(1061772353L);
+        alertClient.setDocumentType(0);
         alertClient.setNumberOperations(5);
         alertClient.setAmountEnable(9L);
         alertClient.setAccumulatedOperations(8L);
@@ -32,7 +33,7 @@ public class AlertClientRepositoryImplTest {
         alertClient.setCreationUser("user");
     }
 
-    //TODO: test
+    @Test
     public void saveAlertClient() {
         StepVerifier.create(repositoryImplement.save(alertClient))
                 .consumeNextWith(AlertSaved -> assertEquals(alertClient.getIdAlert(), AlertSaved.getIdAlert()))
@@ -40,36 +41,38 @@ public class AlertClientRepositoryImplTest {
     }
 
     @Test
-    public void findAlertClientByClient() {
+    public void findAllAlertClient() {
         StepVerifier.create(repositoryImplement.findAllAlertsByClient("1061772353", "0"))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
-    //TODO: test
+    @Test
     public void updateAlertClient() {
         StepVerifier.create(repositoryImplement.updateAlertClient(StatusResponse.<AlertClient>builder()
-                .before(alertClient).actual(alertClient)
-                .build()))
-                .consumeNextWith(response -> assertEquals(1, response.getActual().getIdClient()))
+                        .before(alertClient).actual(alertClient)
+                        .build()))
+                .consumeNextWith(response -> assertEquals(1061772353L, response.getActual().getDocumentNumber()))
                 .verifyComplete();
     }
 
-    //TODO: test
+    @Test
     public void deleteAlertClient() {
         alertClient.setIdAlert("HGD");
-        alertClient.setIdClient(1);
+        alertClient.setDocumentNumber(1061772353L);
+        alertClient.setDocumentType(0);
         StepVerifier.create(repositoryImplement.delete(alertClient))
                 .consumeNextWith(s -> assertEquals(alertClient.getIdAlert(), s))
                 .verifyComplete();
     }
 
-    //TODO test
+    @Test
     public void findAlertClient(){
         alertClient.setIdAlert("HGD");
-        alertClient.setIdClient(1);
+        alertClient.setDocumentNumber(1061772353L);
+        alertClient.setDocumentType(0);
         StepVerifier.create(repositoryImplement.findAlertClient(alertClient))
-                .consumeNextWith(acFound -> assertEquals(alertClient.getIdClient(), acFound.getIdClient()))
+                .consumeNextWith(acFound -> assertEquals(alertClient.getIdAlert(), acFound.getIdAlert()))
                 .verifyComplete();
     }
 }

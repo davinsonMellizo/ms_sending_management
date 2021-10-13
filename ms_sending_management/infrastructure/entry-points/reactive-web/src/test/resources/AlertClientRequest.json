@@ -1,10 +1,11 @@
 {
-  "idAlert": "AFI",
-  "idClient": 1,
-  "numberOperations": 2,
-  "amountEnable": 5,
-  "accumulatedOperations": 1,
-  "accumulatedAmount": 1,
-  "associationOrigin": "tst",
-  "creationUser": "lmbm"
+  "idAlert": "UPD",
+  "documentNumber": 1000000000,
+  "documentType": 0,
+  "numberOperations": 9,
+  "amountEnable": 6,
+  "accumulatedOperations": 18,
+  "accumulatedAmount": 15,
+  "associationOrigin": "tsa",
+  "creationUser": "lmbm1"
 }

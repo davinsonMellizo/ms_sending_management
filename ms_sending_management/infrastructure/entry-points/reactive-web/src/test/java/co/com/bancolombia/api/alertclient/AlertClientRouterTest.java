@@ -96,7 +96,8 @@ public class AlertClientRouterTest extends BaseIntegration {
                 .thenReturn(Mono.just("1"));
         WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
                 .header("id-alert", "1")
-                .header("id-client", "123")
+                .header("document-number", "1061")
+                .header("document-type", "0")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteAlertClient(any());
