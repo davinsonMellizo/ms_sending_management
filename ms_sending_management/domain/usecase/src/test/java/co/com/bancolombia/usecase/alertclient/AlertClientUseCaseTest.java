@@ -3,6 +3,8 @@ package co.com.bancolombia.usecase.alertclient;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
+import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,8 @@ public class AlertClientUseCaseTest {
 
     @Mock
     private AlertClientGateway alertClientGateway;
+    @Mock
+    private ClientGateway clientGateway;
 
     @InjectMocks
     private AlertClientUseCase useCase;
@@ -38,7 +42,11 @@ public class AlertClientUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alertClient.setIdAlert("1L");
+        alertClient.setIdAlert("1");
+        alertClient.setDocumentNumber(1061481L);
+        alertClient.setDocumentType(0);
+        alertClient.setAmountEnable(558L);
+        alertClient.setNumberOperations(0);
     }
 
     @Test
@@ -57,18 +65,26 @@ public class AlertClientUseCaseTest {
     public void update() {
         when(alertClientGateway.updateAlertClient(any()))
                 .thenReturn(Mono.just(alertClient));
-        when(alertClientGateway.findAlertClient(any()))
+        when(alertClientGateway.save(any()))
                 .thenReturn(Mono.just(alertClient));
+        when(alertClientGateway.findAlertsByClient(anyLong(), anyInt()))
+                .thenReturn(Flux.just(alertClient));
         useCase.updateAlertClient(List.of(alertClient))
                 .as(StepVerifier::create)
                 .assertNext(response -> response
                         .getIdAlert().equals(alertClient.getIdAlert()))
                 .verifyComplete();
         verify(alertClientGateway).updateAlertClient(any());
+        verify(alertClientGateway).findAlertsByClient(anyLong(), anyInt());
     }
 
     @Test
     public void findAll() {
+        when(clientGateway.findClientByIdentification(anyLong(), anyInt()))
+                .thenReturn(Mono.just(Client.builder()
+                        .documentNumber(1061772353L)
+                        .idDocumentType(0)
+                        .build()));
         when(alertClientGateway.alertsVisibleChannelByClient(anyLong(), anyInt()))
                 .thenReturn(Flux.just(alertClient));
         Map<String, String> headers = new HashMap<>();
@@ -87,21 +103,10 @@ public class AlertClientUseCaseTest {
                 .thenReturn(Mono.just(alertClient));
         useCase.deleteAlertClient(alertClient)
                 .as(StepVerifier::create)
-                .assertNext(str ->
-                        Assertions.assertThat(str)
-                                .isExactlyInstanceOf(String.class))
+                .assertNext(alertClientD -> alertClientD.getIdAlert().equals(alertClient.getIdAlert()))
                 .verifyComplete();
         verify(alertClientGateway).delete(any());
     }
 
-    @Test
-    public void updateThrowingException() {
-        when(alertClientGateway.findAlertClient(any()))
-                .thenReturn(Mono.empty());
-        useCase.updateAlertClient(List.of(alertClient))
-                .as(StepVerifier::create)
-                .expectError(BusinessException.class)
-                .verify();
-    }
 
 }

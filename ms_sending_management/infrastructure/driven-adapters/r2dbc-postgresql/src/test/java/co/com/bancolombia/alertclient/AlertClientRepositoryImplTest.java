@@ -60,7 +60,7 @@ public class AlertClientRepositoryImplTest {
         alertClient.setDocumentNumber(1061772353L);
         alertClient.setDocumentType(0);
         StepVerifier.create(repositoryImplement.delete(alertClient))
-                .consumeNextWith(s -> assertEquals(alertClient.getIdAlert(), s))
+                .consumeNextWith(alertClient1 -> assertEquals(alertClient.getIdAlert(), alertClient1.getIdAlert()))
                 .verifyComplete();
     }
 

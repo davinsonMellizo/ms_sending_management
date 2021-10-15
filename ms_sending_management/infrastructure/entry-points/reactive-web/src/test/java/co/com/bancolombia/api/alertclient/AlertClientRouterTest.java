@@ -46,6 +46,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     @MockBean
     private AlertClientUseCase useCase;
     private String request;
+    private String requestUpdate;
     private final AlertClient alertClient = new AlertClient();
     private String url;
 
@@ -53,6 +54,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     public void init() {
         url = properties.getAlert() + "-client";
         request = loadFileConfig("AlertClientRequest.json", String.class);
+        requestUpdate = loadFileConfig("AlertClientRequestUpdate.json", String.class);
     }
 
     @Test
@@ -82,7 +84,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     public void update() {
         when(useCase.updateAlertClient(any())).thenReturn(Mono.just(alertClient));
         statusAssertionsWebClientPut(url,
-                request)
+                requestUpdate)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();

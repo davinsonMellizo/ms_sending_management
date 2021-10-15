@@ -63,6 +63,7 @@ public class AlertClientUseCase {
     }
     private Mono<AlertClient> validateCreation(Tuple2<List<String>, AlertClient> data) {
         return Mono.just(data.getT2())
+                .doOnNext(System.out::println)
                 .filter(alertClient ->  data.getT1().contains(data.getT2().getIdAlert()))
                 .flatMap(alertClientGateway::updateAlertClient) //TODO save log novedad
                 .switchIfEmpty(saveAlertClient(data.getT2()));
@@ -94,8 +95,8 @@ public class AlertClientUseCase {
                 .build();
     }
 
-    public Mono<AlertClient> deleteAlertClient(AlertClient client) {
-        return alertClientGateway.delete(client) //TODO save log novedad
+    public Mono<AlertClient> deleteAlertClient(AlertClient alertClient) {
+        return alertClientGateway.delete(alertClient) //TODO save log novedad
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)));
     }
 

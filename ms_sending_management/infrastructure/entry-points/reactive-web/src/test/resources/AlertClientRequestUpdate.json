@@ -1,0 +1,12 @@
+[
+  {
+    "idAlert": "AFI",
+    "alertDescription": "Alerta",
+    "documentNumber": 1061772354,
+    "documentType": 0,
+    "numberOperations": 5,
+    "amountEnable": 0,
+    "associationOrigin": "ALM",
+    "creationUser": ""
+  }
+]
