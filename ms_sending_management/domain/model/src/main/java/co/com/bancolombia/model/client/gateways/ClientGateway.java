@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface ClientGateway {
 
-    Mono<Client> findClientByIdentification(Message message);
+    Mono<Client> findClientByIdentification(Long documentNumber, Integer documentType);
 
 }

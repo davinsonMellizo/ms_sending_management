@@ -27,7 +27,7 @@ public class AlertClientRepositoryImplTest {
         alertClient.setDocumentType(0);
         alertClient.setNumberOperations(5);
         alertClient.setAmountEnable(9L);
-        alertClient.setAccumulatedOperations(8L);
+        alertClient.setAccumulatedOperations(8);
         alertClient.setAccumulatedAmount(1L);
         alertClient.setAssociationOrigin("ac");
         alertClient.setCreationUser("user");
@@ -42,17 +42,15 @@ public class AlertClientRepositoryImplTest {
 
     @Test
     public void findAllAlertClient() {
-        StepVerifier.create(repositoryImplement.findAllAlertsByClient("1061772353", "0"))
+        StepVerifier.create(repositoryImplement.alertsVisibleChannelByClient(1061772353L, 0))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
     public void updateAlertClient() {
-        StepVerifier.create(repositoryImplement.updateAlertClient(StatusResponse.<AlertClient>builder()
-                        .before(alertClient).actual(alertClient)
-                        .build()))
-                .consumeNextWith(response -> assertEquals(1061772353L, response.getActual().getDocumentNumber()))
+        StepVerifier.create(repositoryImplement.updateAlertClient(alertClient))
+                .consumeNextWith(response -> assertEquals(1061772353L, response.getDocumentNumber()))
                 .verifyComplete();
     }
 

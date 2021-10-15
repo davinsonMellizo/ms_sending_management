@@ -46,7 +46,7 @@ public class AlertClientRepositoryImplExceptionTest {
         alertClient.setDocumentType(0);
         alertClient.setNumberOperations(5);
         alertClient.setAmountEnable(9L);
-        alertClient.setAccumulatedOperations(8L);
+        alertClient.setAccumulatedOperations(8);
         alertClient.setAccumulatedAmount(1L);
         alertClient.setAssociationOrigin("ac");
         alertClient.setCreationUser("user");
@@ -64,9 +64,9 @@ public class AlertClientRepositoryImplExceptionTest {
     }
 
     public void findAllAlertClient() {
-        when(repository.findAlertClientByClient(anyString(), anyString()))
+        when(repository.alertsClientVisibleChannelByClient(anyLong(), anyInt()))
                 .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAllAlertsByClient("1", "0")
+        repositoryImpl.alertsVisibleChannelByClient(1L, 0)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();
@@ -76,8 +76,7 @@ public class AlertClientRepositoryImplExceptionTest {
         when(timeFactory.now()).thenReturn(NOW);
         when(repository.updateAlertClient(anyInt(), anyLong(), anyString(), anyLong(), anyInt()))
                 .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.updateAlertClient(StatusResponse.<AlertClient>builder()
-                .before(alertClient).actual(alertClient).build())
+        repositoryImpl.updateAlertClient(alertClient)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

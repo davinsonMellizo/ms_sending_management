@@ -32,8 +32,6 @@ public class AlertClientDTO {
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Long amountEnable;
-    private Long accumulatedOperations;
-    private Long accumulatedAmount;
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 3, message = "{constraint.size}")
     private String associationOrigin;
@@ -46,8 +44,6 @@ public class AlertClientDTO {
                 .documentType(this.documentType)
                 .numberOperations(this.numberOperations)
                 .amountEnable(this.amountEnable)
-                .accumulatedOperations(this.accumulatedOperations)
-                .accumulatedAmount(this.accumulatedAmount)
                 .associationOrigin(this.associationOrigin)
                 .creationUser(this.creationUser)
                 .build());

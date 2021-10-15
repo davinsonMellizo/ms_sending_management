@@ -68,9 +68,10 @@ public class ClientRouterTest extends BaseIntegrationTest {
         verify(useCase).findClientByIdentification(any());
     }
 
-
+    @Test
     public void saveClient() {
         when(useCase.saveClient(any())).thenReturn(Mono.just(client));
+        when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         statusAssertionsWebClientPost(properties.getClient(),
                 request)
                 .isOk()
@@ -79,8 +80,9 @@ public class ClientRouterTest extends BaseIntegrationTest {
         verify(useCase).saveClient(any());
     }
 
-
+    @Test
     public void updateClient() {
+        when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         when(useCase.updateClient(any())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
                 .actual(Enrol.builder().client(client).build()).before(Enrol.builder().client(client).build()).build()));
         statusAssertionsWebClientPut(properties.getClient(),

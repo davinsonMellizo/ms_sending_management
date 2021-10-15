@@ -1,6 +1,5 @@
 package co.com.bancolombia.consumer.config;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ClientHttpConnector;
@@ -14,23 +13,23 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
-public class RestClientProperties {
+public class RestConsumerProperties {
+
     private ClientHttpConnector clientHttpConnector(int timeout) {
         return new ReactorClientHttpConnector(HttpClient.create()
-                .option(CONNECT_TIMEOUT_MILLIS, timeout));
+                .tcpConfiguration(tcpClient -> {
+                    tcpClient = tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout);
+                    return tcpClient;
+                }));
     }
 
     @Bean
-    public WebClient webClientConfig(final ClientProperties clientProperties) {
+    public WebClient webClientConfig(final co.com.bancolombia.consumer.config.ConsumerProperties consumerProperties) {
         return WebClient.builder()
-                .clientConnector(clientHttpConnector(clientProperties.getTimeout()))
+                .clientConnector(clientHttpConnector(consumerProperties.getTimeout()))
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
                 .build();
     }
 
-    @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
-    }
 }

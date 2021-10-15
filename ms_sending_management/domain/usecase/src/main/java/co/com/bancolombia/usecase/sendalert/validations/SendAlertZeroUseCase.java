@@ -37,7 +37,6 @@ public class SendAlertZeroUseCase {
     private final RemitterGateway remitterGateway;
     private final ConsumerGateway consumerGateway;
     private final ServiceGateway serviceGateway;
-    private final MessageGateway messageGateway;
     private final ContactGateway contactGateway;
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
@@ -129,7 +128,7 @@ public class SendAlertZeroUseCase {
 
     public Mono<Void> validateWithDataClient(Message message) {
         return Mono.just(message)
-                .flatMap(clientGateway::findClientByIdentification)
+                .flatMap(message1 -> clientGateway.findClientByIdentification(message1.getDocumentNumber(), message.getDocumentType()))
                 .switchIfEmpty(Mono.error(new Throwable("Client not found")))
                 .filter(client -> client.getIdState()==0)
                 .switchIfEmpty(Mono.error(new Throwable("Client not active")))

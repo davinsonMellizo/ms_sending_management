@@ -80,8 +80,7 @@ public class AlertClientRouterTest extends BaseIntegration {
 
     @Test
     public void update() {
-        when(useCase.updateAlertClient(any())).thenReturn(Mono.just(StatusResponse.<AlertClient>builder()
-                .actual(alertClient).before(alertClient).build()));
+        when(useCase.updateAlertClient(any())).thenReturn(Mono.just(alertClient));
         statusAssertionsWebClientPut(url,
                 request)
                 .isOk()
@@ -93,7 +92,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     @Test
     public void delete() {
         when(useCase.deleteAlertClient(any()))
-                .thenReturn(Mono.just("1"));
+                .thenReturn(Mono.just(alertClient));
         WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
                 .header("id-alert", "1")
                 .header("document-number", "1061")

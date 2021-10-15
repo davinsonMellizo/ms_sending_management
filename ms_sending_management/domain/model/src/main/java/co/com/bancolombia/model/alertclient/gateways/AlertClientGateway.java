@@ -9,12 +9,14 @@ public interface AlertClientGateway {
 
     Mono<AlertClient> save(AlertClient alertClient);
 
-    Mono<StatusResponse<AlertClient>> updateAlertClient(StatusResponse<AlertClient> statusResponse);
+    Mono<AlertClient> updateAlertClient(AlertClient alertClient);
 
-    Flux<AlertClient> findAllAlertsByClient(String documentNumber, String documentType);
+    Flux<AlertClient> alertsVisibleChannelByClient(Long documentNumber, Integer documentType);
 
-    Mono<String> delete(AlertClient alertClient);
+    Mono<AlertClient> delete(AlertClient alertClient);
 
     Mono<AlertClient> findAlertClient(AlertClient alertClient);
+
+    Flux<AlertClient> findAlertsByClient(Long documentNumber, Integer documentType);
 
 }

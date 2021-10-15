@@ -23,8 +23,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -60,7 +59,7 @@ public class ContactUseCaseTest {
         contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
         contact.setDocumentType("0");
-        contact.setValue("correo@gamail.com");
+        contact.setValue("3217958455");
         contact.setState("Active");
         contact.setId(1);
         contact.setPrevious(false);
@@ -109,16 +108,47 @@ public class ContactUseCaseTest {
         verify(mediumGateway).findContactMediumByCode(any());
     }
 
-
+    @Test
     public void updateContact() {
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(contactGateway.updateContact(any()))
                 .thenReturn(Mono.just(contact));
+        /*when(contactGateway.saveContact(any()))
+                .thenReturn(Mono.just(contact));*/
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
         when(contactGateway.findIdContact(any()))
                 .thenReturn(Flux.just(contact));
+        StepVerifier
+                .create(useCase.updateContactRequest(contact))
+                .assertNext(response -> response
+                        .getActual().getDocumentNumber()
+                        .equals(contact.getDocumentNumber()))
+                .verifyComplete();
+        verify(contactGateway).updateContact(any());
+        verify(stateGateway).findState(any());
+    }
+
+    @Test
+    public void updateContactWithExistent() {
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+        when(contactGateway.updateContact(any()))
+                .thenReturn(Mono.just(contact));
+        when(contactGateway.saveContact(any()))
+                .thenReturn(Mono.just(contact));
+        when(contactGateway.deleteContact(anyInt()))
+                .thenReturn(Mono.just(contact.getId()));
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
+        when(contactGateway.findIdContact(any()))
+                .thenReturn(Flux.just(contact.toBuilder().value("69784585254").build(),
+                        contact.toBuilder().previous(true).value("69784585254").build()));
         StepVerifier
                 .create(useCase.updateContactRequest(contact))
                 .assertNext(response -> response

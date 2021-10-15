@@ -20,5 +20,5 @@ public interface EnrolMapper {
     @Mapping(target = "modifiedDate", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "previous", ignore = true)
-    Contact toEntity(ContactDTO contactDTO);
+    Contact toEntityContact(ContactDTO contactDTO);
 }

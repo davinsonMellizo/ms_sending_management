@@ -16,12 +16,12 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static co.com.bancolombia.commons.constants.Header.DOCUMENT_NUMBER;
 import static co.com.bancolombia.commons.constants.Header.DOCUMENT_TYPE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -56,13 +56,12 @@ public class AlertClientUseCaseTest {
     @Test
     public void update() {
         when(alertClientGateway.updateAlertClient(any()))
-                .thenReturn(Mono.just(StatusResponse.<AlertClient>builder()
-                        .actual(alertClient).before(alertClient).build()));
+                .thenReturn(Mono.just(alertClient));
         when(alertClientGateway.findAlertClient(any()))
                 .thenReturn(Mono.just(alertClient));
-        useCase.updateAlertClient(alertClient)
+        useCase.updateAlertClient(List.of(alertClient))
                 .as(StepVerifier::create)
-                .assertNext(response -> response.getActual()
+                .assertNext(response -> response
                         .getIdAlert().equals(alertClient.getIdAlert()))
                 .verifyComplete();
         verify(alertClientGateway).updateAlertClient(any());
@@ -70,7 +69,7 @@ public class AlertClientUseCaseTest {
 
     @Test
     public void findAll() {
-        when(alertClientGateway.findAllAlertsByClient(anyString(), anyString()))
+        when(alertClientGateway.alertsVisibleChannelByClient(anyLong(), anyInt()))
                 .thenReturn(Flux.just(alertClient));
         Map<String, String> headers = new HashMap<>();
         headers.put(DOCUMENT_NUMBER, "1061772353");
@@ -79,13 +78,13 @@ public class AlertClientUseCaseTest {
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(alertClientGateway).findAllAlertsByClient(anyString(), anyString());
+        verify(alertClientGateway).alertsVisibleChannelByClient(anyLong(), anyInt());
     }
 
     @Test
     public void delete() {
         when(alertClientGateway.delete(any()))
-                .thenReturn(Mono.just("1"));
+                .thenReturn(Mono.just(alertClient));
         useCase.deleteAlertClient(alertClient)
                 .as(StepVerifier::create)
                 .assertNext(str ->
@@ -99,7 +98,7 @@ public class AlertClientUseCaseTest {
     public void updateThrowingException() {
         when(alertClientGateway.findAlertClient(any()))
                 .thenReturn(Mono.empty());
-        useCase.updateAlertClient(alertClient)
+        useCase.updateAlertClient(List.of(alertClient))
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
@@ -29,10 +30,12 @@ public class AlertClientHandler {
     }
 
     public Mono<ServerResponse> updateAlertClient(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(AlertClientDTO.class)
+        return serverRequest.bodyToMono(AlertClientDTO[].class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .flatMapMany(Flux::fromArray)
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertClientDTO::toModel)
+                .collectList()
                 .flatMap(useCase::updateAlertClient)
                 .flatMap(ResponseUtil::responseOk);
     }

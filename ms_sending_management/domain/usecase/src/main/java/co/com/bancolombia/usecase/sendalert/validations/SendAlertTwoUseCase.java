@@ -22,7 +22,6 @@ public class SendAlertTwoUseCase {
     private final ProviderGateway providerGateway;
     private final RemitterGateway remitterGateway;
     private final ServiceGateway serviceGateway;
-    private final MessageGateway messageGateway;
 
     //TODO validate id 2
     public Mono<Void> validateWithCodeTrx(Message message) {

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BusinessErrorMessage {
 
+    CLIENT_NOT_FOUND("373", "Client Not Found"),
     INVALID_DATA("372", "Base data is not valid"),
     ALERT_NOT_FOUND("373", "Alert Not Found"),
     ALERT_TRANSACTION_NOT_FOUND("374", "Alert Transaction Not Found"),

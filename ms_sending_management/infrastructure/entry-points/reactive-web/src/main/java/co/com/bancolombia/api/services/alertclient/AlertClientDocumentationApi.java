@@ -4,8 +4,14 @@ import co.com.bancolombia.api.dto.AlertClientDTO;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.error.Error;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import org.springdoc.core.fn.builders.operation.Builder;
+import org.springframework.asm.TypeReference;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
@@ -43,7 +49,7 @@ public class AlertClientDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("updateAlertClient").summary("Update alert client")
                 .description("Update number-operations and amountenable by client").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Alert client to Update").required(true).implementation(AlertClientDTO.class))
+                .requestBody(requestBodyBuilder().description("Alert client to Update").required(true).implementation(AlertClientDTO[].class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(AlertClient.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
@@ -54,7 +60,7 @@ public class AlertClientDocumentationApi {
                 .description("Find all alert relations with client by document-number and document-type").tags(new String[]{TAG})
                 .parameter(createPath(String.class, "document-number", "Client document"))
                 .parameter(createPath(String.class, "document-type", "Client document type"))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(AlertClient.class))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(AlertClientDTO.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 

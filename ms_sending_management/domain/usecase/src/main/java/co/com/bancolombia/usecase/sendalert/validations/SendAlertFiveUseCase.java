@@ -19,7 +19,6 @@ public class SendAlertFiveUseCase {
     private final ProviderGateway providerGateway;
     private final RemitterGateway remitterGateway;
     private final ServiceGateway serviceGateway;
-    private final MessageGateway messageGateway;
 
     //TODO validate id 5
     public Mono<Void> validateWithCodeAlert(Message message) {
