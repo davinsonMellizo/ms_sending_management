@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer.adapter;
 
 
-import co.com.bancolombia.consumer.RestClient;
+import co.com.bancolombia.consumer.RestConsumer;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.Request;
 import co.com.bancolombia.model.client.Client;
@@ -20,7 +20,7 @@ import static co.com.bancolombia.commons.enums.Header.*;
 public class ClientAdapter implements ClientGateway {
 
     private final ConsumerProperties properties;
-    private final RestClient<Request, ResponseClient> restClient;
+    private final RestConsumer<Request, ResponseClient> restConsumer;
 
     @Override
     public Mono<Boolean> matchClientWithBasicKit(Client client) {
@@ -30,7 +30,7 @@ public class ClientAdapter implements ClientGateway {
         headers.put(ASSOCIATION_ORIGIN, client.getEnrollmentOrigin());
 
         return Mono.just(Request.builder().headers(headers).build())
-                .flatMap(clientRequest -> restClient.post(properties.getResources().getBasicKit(),
+                .flatMap(clientRequest -> restConsumer.post(properties.getResources().getBasicKit(),
                         clientRequest, ResponseClient.class))
                 .map(ResponseClient::getResponse);
     }

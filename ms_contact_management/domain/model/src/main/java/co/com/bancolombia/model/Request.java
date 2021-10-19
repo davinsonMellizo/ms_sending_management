@@ -9,11 +9,11 @@ import java.util.Map;
 @Data
 @Builder(toBuilder = true)
 public class Request implements Serializable {
-    private Map<String,String> headers;
+    private Map<String, String> headers;
 
-    public Request headers(Map<String,String> headers) {
+    public Request headers(Map<String, String> headers) {
         if (this.getHeaders() != null) {
-           this.getHeaders().putAll(headers);
+            this.getHeaders().putAll(headers);
         } else {
             setHeaders(headers);
         }

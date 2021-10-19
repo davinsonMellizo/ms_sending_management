@@ -40,7 +40,7 @@ public class ContactUseCase {
     public Mono<ResponseContacts> findContactsByClient(Client pClient, String consumerCode) {
         return clientRepository.findClientByIdentification(pClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .filter(client -> client.getIdState()==ACTIVE)
+                .filter(client -> client.getIdState() == ACTIVE)
                 .flatMap(client -> findAllContacts(client, consumerCode))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
     }
@@ -80,7 +80,7 @@ public class ContactUseCase {
         return Mono.zip(state, medium, document, consumer);
     }
 
-    public Mono<StatusResponse<Contact>> updateContactRequest(Contact newContact){
+    public Mono<StatusResponse<Contact>> updateContactRequest(Contact newContact) {
         return clientRepository.findClientByIdentification(Client.builder().documentType(newContact.getDocumentType())
                 .documentNumber(newContact.getDocumentNumber())
                 .build())
@@ -106,11 +106,11 @@ public class ContactUseCase {
                 .map(response ->
                         //TODO SAVE LOG
                         StatusResponse.<Contact>builder()
-                        .description("Contact Updated Successfully")
-                        .before(response.getT2()).actual(response.getT1()).build());
+                                .description("Contact Updated Successfully")
+                                .before(response.getT2()).actual(response.getT1()).build());
     }
 
-    private Mono<Contact> updateStateContact(Contact contact, String nameState){
+    private Mono<Contact> updateStateContact(Contact contact, String nameState) {
         return stateGateway.findState(nameState)
                 .switchIfEmpty(Mono.error(new BusinessException(STATE_INVALID)))
                 .map(state -> contact.toBuilder().state(Integer.toString(state.getId())).build());
@@ -122,7 +122,7 @@ public class ContactUseCase {
                 .map(contact -> contacts)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_INVALID)))
                 .flatMapMany(Flux::fromIterable)
-                .filter(contact -> contact.getPrevious())
+                .filter(Contact::getPrevious)
                 .flatMap(contact -> deletePrevious(contact, contacts))
                 .switchIfEmpty(Flux.fromIterable(contacts)).next()
                 .map(contact -> contact.toBuilder().previous(true).build())
@@ -133,7 +133,7 @@ public class ContactUseCase {
                         .before(response.getT1()).actual(response.getT2()).build());
     }
 
-    private Flux<Contact> deletePrevious(Contact contact, List<Contact> contacts){
+    private Flux<Contact> deletePrevious(Contact contact, List<Contact> contacts) {
         return contactGateway.deleteContact(contact.getId())
                 //TODO SAVE LOG
                 .map(idContact -> contacts)
@@ -141,7 +141,7 @@ public class ContactUseCase {
                 .filter(contact1 -> !contact1.getPrevious());
     }
 
-    private Mono<Contact> saveCopyPrevious(Contact contact, Contact newContact){
+    private Mono<Contact> saveCopyPrevious(Contact contact, Contact newContact) {
         return stateGateway.findState(newContact.getState())
                 .onErrorMap(e -> new BusinessException(INVALID_DATA))
                 .map(state -> newContact.toBuilder().state(Integer.toString(state.getId()))
@@ -151,8 +151,7 @@ public class ContactUseCase {
                         .previous(false)
                         .build())
                 .flatMap(contactGateway::saveContact);
-                //TODO SAVE LOG;
-
+        //TODO SAVE LOG;
     }
 
     public Mono<Integer> deleteContact(Contact contact) {

@@ -1,4 +1,5 @@
 package co.com.bancolombia.model.document;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -32,9 +32,9 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
-    public Mono<Client> inactivateClient(Client pClient){
+    public Mono<Client> inactivateClient(Client pClient) {
         return findClientByIdentification(pClient)
-                .filter(client -> client.getIdState()==ACTIVE)
+                .filter(client -> client.getIdState() == ACTIVE)
                 .flatMap(clientRepository::inactivateClient)
                 //TODO SAVE LOG
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
@@ -48,7 +48,8 @@ public class ClientUseCase {
                 .switchIfEmpty(createClientAndContacts(enrol));
 
     }
-    private Mono<Client> createClientAndContacts(Enrol enrol){
+
+    private Mono<Client> createClientAndContacts(Enrol enrol) {
         return documentGateway.getDocument(enrol.getClient().getDocumentType())
                 .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
                 .map(Document::getId)
@@ -63,7 +64,7 @@ public class ClientUseCase {
 
     private Mono<Client> validateClientStatus(Client pClient) {
         return Mono.just(pClient)
-                .filter(client -> client.getIdState()==INACTIVE)
+                .filter(client -> client.getIdState() == INACTIVE)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_ACTIVE)));
     }
 
@@ -75,10 +76,10 @@ public class ClientUseCase {
                 .flatMap(response -> updateContacts(enrol, response));
     }
 
-    private Mono<StatusResponse<Enrol>> updateContacts(Enrol enrol, StatusResponse<Client> responseClient){
+    private Mono<StatusResponse<Enrol>> updateContacts(Enrol enrol, StatusResponse<Client> responseClient) {
         Enrol enrolActual = Enrol.builder().contacts(new ArrayList<>()).build();
         Enrol enrolBefore = Enrol.builder().contacts(new ArrayList<>()).build();
-        StatusResponse<Enrol> responseUpdate = new StatusResponse<>("",enrolActual, enrolBefore);
+        StatusResponse<Enrol> responseUpdate = new StatusResponse<>("", enrolActual, enrolBefore);
         return Flux.fromIterable(enrol.getContacts())
                 .flatMap(contactUseCase::updateContactRequest)
                 .doOnNext(response -> responseUpdate.getActual().getContacts().add(response.getActual()))

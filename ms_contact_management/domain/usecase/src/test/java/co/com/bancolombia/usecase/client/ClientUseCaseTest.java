@@ -21,6 +21,8 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 
+import static co.com.bancolombia.commons.constants.State.ACTIVE;
+import static co.com.bancolombia.commons.constants.State.INACTIVE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -48,8 +50,33 @@ public class ClientUseCaseTest {
         client.setDocumentNumber(new Long(1061772353));
         client.setDocumentType("0");
         client.setId(0);
-        client.setIdState(0);
+        client.setIdState(ACTIVE);
         document.setId("0");
+    }
+
+    @Test
+    public void inactivateClient(){
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+        when(clientRepository.inactivateClient(any()))
+                .thenReturn(Mono.just(client));
+
+        StepVerifier
+                .create(useCase.inactivateClient(client))
+                .expectNextCount(1)
+                .verifyComplete();
+
+        verify(clientRepository).inactivateClient(client);
+    }
+    @Test
+    public void inactivateClientWithClientInactive(){
+        client.setIdState(INACTIVE);
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+
+        useCase.inactivateClient(client).as(StepVerifier::create)
+                .expectError(BusinessException.class)
+                .verify();
     }
 
     @Test
@@ -80,6 +107,7 @@ public class ClientUseCaseTest {
                         .equals(client.getDocumentNumber()))
                 .verifyComplete();
         verify(clientRepository).saveClient(any());
+        verify(clientGateway).matchClientWithBasicKit(any());
     }
 
     @Test

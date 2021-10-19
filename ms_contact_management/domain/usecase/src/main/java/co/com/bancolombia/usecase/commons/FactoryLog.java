@@ -7,11 +7,11 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class FactoryLog {
-    private Newness createLog(Client client){
+    private Newness createLog(Client client) {
         return null;
     }
 
-    private Newness createLog(Contact contact){
+    private Newness createLog(Contact contact) {
         return null;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class RestClient<T extends Request,R> {
+public class RestConsumer<T extends Request,R> {
 
     private final WebClient webClient;
 

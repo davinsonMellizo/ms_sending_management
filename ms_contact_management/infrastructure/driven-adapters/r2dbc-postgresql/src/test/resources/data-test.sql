@@ -4,7 +4,8 @@ VALUES(0, 'CC', 'Cedula de Ciudadania');
 
 INSERT INTO state
 (id, name)
-VALUES(0, 'Active');
+VALUES(0, 'Active'),
+(1, 'Inactive');
 
 INSERT INTO consumer
 (id, segment)

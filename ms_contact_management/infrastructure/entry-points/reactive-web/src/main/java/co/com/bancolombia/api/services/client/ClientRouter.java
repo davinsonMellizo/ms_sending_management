@@ -16,7 +16,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class ClientRouter extends ClientDocumentationApi {
     private final ApiProperties apiProperties;
-    private static String INACTIVE = "/inactive";
+    private final static String INACTIVE = "/inactive";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionClient(ClientHandler clientHandler) {

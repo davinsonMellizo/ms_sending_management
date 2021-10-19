@@ -14,7 +14,8 @@ public interface ContactRepository extends ReactiveCrudRepository<ContactData, I
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +
             "inner join state s on c.id_state = s.id " +
-            "where c.document_number::int8 = :documentNumber and (d.id::text = :documentType or d.code = :documentType)")
+            "where c.document_number::int8 = :documentNumber " +
+            "and (d.id::text = :documentType or d.code = :documentType)")
     Flux<ContactData> findAllContactsByClient(@Param("documentNumber") Long documentNumber,
                                               @Param("documentType") String documentType);
 

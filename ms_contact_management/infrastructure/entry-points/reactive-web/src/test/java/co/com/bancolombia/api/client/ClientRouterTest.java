@@ -69,6 +69,17 @@ public class ClientRouterTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void inactivateClient() {
+        when(useCase.inactivateClient(any())).thenReturn(Mono.just(client));
+        final WebTestClient.ResponseSpec spec = webTestClient.put().uri(properties.getClient()+"/inactive")
+                .header("document-number", "1061772353")
+                .header("document-type", "0")
+                .exchange();
+        spec.expectStatus().isOk();
+        verify(useCase).inactivateClient(any());
+    }
+
+    @Test
     public void saveClient() {
         when(useCase.saveClient(any())).thenReturn(Mono.just(client));
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());

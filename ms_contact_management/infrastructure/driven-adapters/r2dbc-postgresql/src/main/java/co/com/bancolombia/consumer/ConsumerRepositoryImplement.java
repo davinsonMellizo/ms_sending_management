@@ -19,12 +19,13 @@ public class ConsumerRepositoryImplement extends AdapterOperations<Consumer, Con
 
     @Autowired
     public ConsumerRepositoryImplement(ConsumerRepository repository, ConsumerMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override
     public Mono<Consumer> findConsumerById(String id) {
-        return doQuery(repository.findById(id))
+        return repository.findById(id)
+                .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONSUMER_BY_ID_ERROR));
     }
 

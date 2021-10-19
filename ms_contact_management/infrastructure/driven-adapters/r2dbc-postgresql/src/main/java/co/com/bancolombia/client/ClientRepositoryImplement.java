@@ -76,6 +76,7 @@ public class ClientRepositoryImplement
     @Override
     public Mono<Client> inactivateClient(Client client) {
         return Mono.just(client.toBuilder().idState(INACTIVE).modifiedDate(timeFactory.now()).build())
-                .flatMap(this::save);
+                .flatMap(this::save)
+                .onErrorMap(e -> new TechnicalException(e, INACTIVE_CLIENT_ERROR));
     }
 }

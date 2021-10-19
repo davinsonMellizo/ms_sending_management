@@ -44,6 +44,14 @@ public class ClientRepositoryImplTest {
     }
 
     @Test
+    public void inactivateClient() {
+        client.setId(0);
+        StepVerifier.create(clientRepositoryImplement.inactivateClient(client))
+                .consumeNextWith(client -> assertEquals(1061772353, client.getDocumentNumber()))
+                .verifyComplete();
+    }
+
+    @Test
     public void saveClient() {
         client.setDocumentNumber(new Long(123456789));
         clientRepositoryImplement.saveClient(client)

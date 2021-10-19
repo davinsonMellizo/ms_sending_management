@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ContactFindDTO {
-    public String segment;
-    public String contactMedium;
-    public String value;
-    public String state;
-    public LocalDateTime createdDate;
-    public LocalDateTime modifiedDate;
+    private String segment;
+    private String contactMedium;
+    private String value;
+    private String state;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 }

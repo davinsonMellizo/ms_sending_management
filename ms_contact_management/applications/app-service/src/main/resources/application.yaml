@@ -38,6 +38,13 @@ adapters:
     resources:
       basicKit: localhost:8081/api/v1/sending-management/alert-client/basic-kit
       sendAlert: localhost:8081/api/v1/sending-management/send
+  rds:
+    postgresql:
+      pool:
+        initial: ${POSTGRESQL-POOL-INITIAL}
+        max: ${POSTGRESQL-POOL-MAX}
+      schema: ${POSTGRESQL-SCHEMA}
+
 management:
   health:
     probes:
