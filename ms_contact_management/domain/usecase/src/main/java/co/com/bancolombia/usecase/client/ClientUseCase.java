@@ -76,6 +76,7 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .flatMap(clientBefore -> buildResponse(clientBefore, enrol.getClient()))
                 .flatMap(clientRepository::updateClient)
+                .doOnNext(System.out::println)
                 .flatMap(response -> newnessUseCase.saveNewness(response.getBefore())
                         .thenReturn(response))
                 .flatMap(response -> updateContacts(enrol, response));

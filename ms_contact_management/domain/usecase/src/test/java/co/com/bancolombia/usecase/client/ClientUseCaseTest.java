@@ -8,8 +8,11 @@ import co.com.bancolombia.model.client.gateways.ClientRepository;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
+import co.com.bancolombia.model.newness.Newness;
+import co.com.bancolombia.model.newness.gateways.NewnessRepository;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +44,8 @@ public class ClientUseCaseTest {
     @Mock
     private ClientGateway clientGateway;
     @Mock
+    private NewnessUseCase newnessUseCase;
+    @Mock
     private DocumentGateway documentGateway;
     private final Client client = new Client();
     private final Document document = new Document();
@@ -56,6 +61,8 @@ public class ClientUseCaseTest {
 
     @Test
     public void inactivateClient(){
+        when(newnessUseCase.saveNewness((Client) any()))
+                .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.inactivateClient(any()))
@@ -92,6 +99,8 @@ public class ClientUseCaseTest {
 
     @Test
     public void saveClient() {
+        when(newnessUseCase.saveNewness((Client) any()))
+                .thenReturn(Mono.just(client));
         when(clientRepository.saveClient(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
@@ -112,6 +121,8 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateClient() {
+        when(newnessUseCase.saveNewness((Client) any()))
+                .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
@@ -136,6 +147,8 @@ public class ClientUseCaseTest {
 
     @Test
     public void deleteClient() {
+        when(newnessUseCase.saveNewness((Client) any()))
+                .thenReturn(Mono.just(client));
         when(clientRepository.deleteClient(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))

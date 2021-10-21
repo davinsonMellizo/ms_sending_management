@@ -13,6 +13,7 @@ import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +46,8 @@ public class ContactUseCaseTest {
     private DocumentGateway documentGateway;
     @Mock
     private ConsumerGateway consumerGateway;
+    @Mock
+    private NewnessUseCase newnessUseCase;
 
     private final State state = new State(0, "Active");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
@@ -88,6 +91,8 @@ public class ContactUseCaseTest {
 
     @Test
     public void saveContact() {
+        when(newnessUseCase.saveNewness((Contact) any()))
+                .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
         when(stateGateway.findState(any()))
@@ -110,14 +115,14 @@ public class ContactUseCaseTest {
 
     @Test
     public void updateContact() {
+        when(newnessUseCase.saveNewness((Contact) any()))
+                .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(contactGateway.updateContact(any()))
                 .thenReturn(Mono.just(contact));
-        /*when(contactGateway.saveContact(any()))
-                .thenReturn(Mono.just(contact));*/
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
         when(contactGateway.findIdContact(any()))
@@ -134,6 +139,8 @@ public class ContactUseCaseTest {
 
     @Test
     public void updateContactWithExistent() {
+        when(newnessUseCase.saveNewness((Contact) any()))
+                .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
         when(clientRepository.findClientByIdentification(any()))
@@ -161,6 +168,8 @@ public class ContactUseCaseTest {
 
     @Test
     public void deleteContact() {
+        when(newnessUseCase.saveNewness((Contact) any()))
+                .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(any()))
                 .thenReturn(Mono.just(Consumer.builder().segment("SEG").build()));
         when(contactGateway.findIdContact(any()))
