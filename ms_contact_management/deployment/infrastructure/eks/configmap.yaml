@@ -17,4 +17,10 @@ data:
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
   SECRET-RDS: #{secret-rds}#
   PATH_BASE: "#{prefix}#/#{service}#"
+  CONTACT: "#{contact}#"
+  CLIENT: "#{client}#"
+  BASIC_KIT: "#{basic-kit}#"
+  POSTGRESQL_SCHEMA: #{postgresql-schema}#
+  POSTGRESQL_POOL_INITIAL: "#{postgresql-pool-initial}#"
+  POSTGRESQL_POOL_MAX: "#{postgresql-pool-max}#"
 

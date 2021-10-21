@@ -10,6 +10,7 @@ import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,6 +26,7 @@ public class ClientUseCase {
     private final ClientRepository clientRepository;
     private final DocumentGateway documentGateway;
     private final ContactUseCase contactUseCase;
+    private final NewnessUseCase newnessUseCase;
     private final ClientGateway clientGateway;
 
     public Mono<Client> findClientByIdentification(Client client) {
@@ -36,7 +38,7 @@ public class ClientUseCase {
         return findClientByIdentification(pClient)
                 .filter(client -> client.getIdState() == ACTIVE)
                 .flatMap(clientRepository::inactivateClient)
-                //TODO SAVE LOG
+                .flatMap(newnessUseCase::saveNewness)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
     }
 
@@ -55,6 +57,7 @@ public class ClientUseCase {
                 .map(Document::getId)
                 .map(documentType -> enrol.getClient().toBuilder().documentType(documentType).build())
                 .flatMap(clientRepository::saveClient)
+                .flatMap(newnessUseCase::saveNewness)
                 .flatMap(clientGateway::matchClientWithBasicKit)
                 .map(aBoolean -> enrol.getContacts())
                 .flatMapMany(Flux::fromIterable)
@@ -73,6 +76,8 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .flatMap(clientBefore -> buildResponse(clientBefore, enrol.getClient()))
                 .flatMap(clientRepository::updateClient)
+                .flatMap(response -> newnessUseCase.saveNewness(response.getBefore())
+                        .thenReturn(response))
                 .flatMap(response -> updateContacts(enrol, response));
     }
 
@@ -98,6 +103,7 @@ public class ClientUseCase {
                 .map(Document::getId)
                 .map(documentType -> client.toBuilder().documentType(documentType).build())
                 .flatMap(clientRepository::deleteClient)
+                .flatMap(newnessUseCase::saveNewness)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 

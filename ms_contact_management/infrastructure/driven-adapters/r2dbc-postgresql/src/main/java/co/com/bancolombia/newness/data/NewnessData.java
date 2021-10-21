@@ -1,17 +1,20 @@
-package co.com.bancolombia.model.newness;
-
+package co.com.bancolombia.newness.data;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder(toBuilder = true)
-public class Newness {
+@Table("newness")
+public class NewnessData {
+    @Id
     private Integer id;
     private Integer documentType;
     private Long documentNumber;

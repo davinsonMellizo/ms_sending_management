@@ -142,8 +142,8 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
-        when(contactGateway.deleteContact(anyInt()))
-                .thenReturn(Mono.just(contact.getId()));
+        when(contactGateway.deleteContact(any()))
+                .thenReturn(Mono.just(contact));
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
         when(contactGateway.findIdContact(any()))
@@ -166,7 +166,7 @@ public class ContactUseCaseTest {
         when(contactGateway.findIdContact(any()))
                 .thenReturn(Flux.just(contact));
         when(contactGateway.deleteContact(any()))
-                .thenReturn(Mono.just(1));
+                .thenReturn(Mono.just(contact));
         StepVerifier.create(useCase.deleteContact(contact))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -82,7 +82,7 @@ public class ContactRepositoryImplTest {
         contact.setSegment("ALM");
         contactRepositoryImplement.findIdContact(contact)
                 .subscribe(contact -> StepVerifier
-                        .create(contactRepositoryImplement.deleteContact(contact.getId()))
+                        .create(contactRepositoryImplement.deleteContact(contact))
                         .verifyComplete());
     }
 }

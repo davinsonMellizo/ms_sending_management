@@ -22,6 +22,5 @@ public class ConsumerProperties {
     @NoArgsConstructor
     public static class Resources {
         private String basicKit;
-        private String sendAlert;
     }
 }

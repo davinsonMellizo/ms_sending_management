@@ -24,8 +24,7 @@ public class PostgreSQLConnectionPool {
     private int MAX_SIZE =1;
     private static final int MAX_IDLE_TIME = 30;
 	@Value("${cloud.aws.rds.postgresql.schema}")
-    private static final String SCHEMA = "public";
-
+    private String SCHEMA = "public";
 
 	private final SecretsManager secretsManager;
 	private final SecretsNameStandard secretsNameStandard;

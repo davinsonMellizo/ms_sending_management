@@ -16,6 +16,6 @@ public interface ContactGateway {
 
     Mono<Contact> updateContact(Contact contact);
 
-    Mono<Integer> deleteContact(Integer id);
+    Mono<Contact> deleteContact(Contact contact);
 
 }

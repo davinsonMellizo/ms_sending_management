@@ -6,7 +6,7 @@ import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,6 +24,7 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_F
 public class AlertClientUseCase {
 
     private final AlertClientGateway alertClientGateway;
+    private final NewnessUseCase newnessUseCase;
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
 
@@ -42,7 +43,8 @@ public class AlertClientUseCase {
     }
 
     public Mono<AlertClient> saveAlertClient(AlertClient alertClient) {
-        return alertClientGateway.save(alertClient); //TODO save log novedad
+        return alertClientGateway.save(alertClient)
+                .flatMap(newnessUseCase::saveNewness);
     }
 
     public Mono<AlertClient> updateAlertClient(List<AlertClient> alertClients) {
@@ -65,7 +67,8 @@ public class AlertClientUseCase {
         return Mono.just(data.getT2())
                 .doOnNext(System.out::println)
                 .filter(alertClient ->  data.getT1().contains(data.getT2().getIdAlert()))
-                .flatMap(alertClientGateway::updateAlertClient) //TODO save log novedad
+                .flatMap(alertClientGateway::updateAlertClient)
+                .flatMap(newnessUseCase::saveNewness)
                 .switchIfEmpty(saveAlertClient(data.getT2()));
     }
     private Mono<AlertClient> validateDeletion(Tuple2<List<String>, AlertClient> data) {
@@ -87,16 +90,9 @@ public class AlertClientUseCase {
                 .collectList();
     }
 
-    private StatusResponse<AlertClient> buildResponse(AlertClient before, AlertClient actual) {
-        return StatusResponse.<AlertClient>builder()
-                .before(before)
-                .actual(actual)
-                .description("Actualizado exitosamente")
-                .build();
-    }
-
     public Mono<AlertClient> deleteAlertClient(AlertClient alertClient) {
-        return alertClientGateway.delete(alertClient) //TODO save log novedad
+        return alertClientGateway.delete(alertClient)
+                .flatMap(newnessUseCase::saveNewness)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)));
     }
 

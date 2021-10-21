@@ -13,9 +13,12 @@ import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.message.gateways.MessageGateway;
+import co.com.bancolombia.model.newness.Newness;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.commons.FactoryLog;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,7 +34,7 @@ import static co.com.bancolombia.usecase.commons.ValidateData.isValidMailOrMobil
 public class ContactUseCase {
     private final StateGateway stateGateway;
     private final ContactGateway contactGateway;
-    private final MessageGateway messageGateway;
+    private final NewnessUseCase newnessUseCase;
     private final DocumentGateway documentGateway;
     private final ConsumerGateway consumerGateway;
     private final ContactMediumGateway contactMediumGateway;
@@ -69,7 +72,8 @@ public class ContactUseCase {
                         .documentType(data.getT3().getId()).previous(false)
                         .segment(data.getT4().getSegment())
                         .build())
-                .flatMap(contactGateway::saveContact);//TODO SAVE LOG
+                .flatMap(contactGateway::saveContact)
+                .flatMap(newnessUseCase::saveNewness);
     }
 
     private Mono<Tuple4<State, ContactMedium, Document, Consumer>> getDataBase(Contact contact) {
@@ -103,11 +107,11 @@ public class ContactUseCase {
                 .flatMap(contact -> updateStateContact(contact, newContact.getState()))
                 .flatMap(contactGateway::updateContact)
                 .zipWith(Flux.fromIterable(contacts).filter(contact -> !contact.getPrevious()).next())
-                .map(response ->
-                        //TODO SAVE LOG
-                        StatusResponse.<Contact>builder()
-                                .description("Contact Updated Successfully")
-                                .before(response.getT2()).actual(response.getT1()).build());
+                .map(response -> StatusResponse.<Contact>builder().description("Contact Updated Successfully")
+                        .before(response.getT2()).actual(response.getT1()).build())
+                .flatMap(response -> newnessUseCase.saveNewness(response.getBefore())
+                        .thenReturn(response));
+
     }
 
     private Mono<Contact> updateStateContact(Contact contact, String nameState) {
@@ -134,8 +138,8 @@ public class ContactUseCase {
     }
 
     private Flux<Contact> deletePrevious(Contact contact, List<Contact> contacts) {
-        return contactGateway.deleteContact(contact.getId())
-                //TODO SAVE LOG
+        return contactGateway.deleteContact(contact)
+                .flatMap(newnessUseCase::saveNewness)
                 .map(idContact -> contacts)
                 .flatMapMany(Flux::fromIterable)
                 .filter(contact1 -> !contact1.getPrevious());
@@ -150,18 +154,18 @@ public class ContactUseCase {
                         .segment(contact.getSegment())
                         .previous(false)
                         .build())
-                .flatMap(contactGateway::saveContact);
-        //TODO SAVE LOG;
+                .flatMap(contactGateway::saveContact)
+                .flatMap(newnessUseCase::saveNewness);
     }
 
     public Mono<Integer> deleteContact(Contact contact) {
         return consumerGateway.findConsumerById(contact.getSegment())
                 .map(consumer -> contact.toBuilder().segment(consumer.getSegment()).build())
                 .flatMapMany(contactGateway::findIdContact)
-                .map(Contact::getId)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
                 .flatMap(contactGateway::deleteContact)
-                //TODO SAVE LOG
+                .flatMap(newnessUseCase::saveNewness)
+                .map(Contact::getId)
                 .last();
     }
 }

@@ -68,10 +68,10 @@ public class ContactRepositoryImplement
     }
 
     @Override
-    public Mono<Integer> deleteContact(Integer id) {
-        return deleteById(id)
+    public Mono<Contact> deleteContact(Contact contact) {
+        return deleteById(contact.getId())
                 .onErrorMap(e -> new TechnicalException(e, DELETE_CONTACT_ERROR))
-                .thenReturn(id);
+                .thenReturn(contact);
     }
 
 }
