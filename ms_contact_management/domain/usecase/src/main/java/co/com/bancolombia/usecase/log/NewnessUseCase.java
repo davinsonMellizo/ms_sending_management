@@ -15,7 +15,7 @@ public class NewnessUseCase {
     public Mono<Client> saveNewness(Client client, String transaction){
         return FactoryLog.createLog(client, transaction)
                 .flatMap(newnessRepository::saveNewness)
-                //.onErrorReturn(new Newness())
+                .onErrorReturn(new Newness())
                 .thenReturn(client);
     }
 
