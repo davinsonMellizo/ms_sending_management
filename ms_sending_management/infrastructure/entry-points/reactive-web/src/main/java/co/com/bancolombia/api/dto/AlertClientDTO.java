@@ -18,6 +18,9 @@ public class AlertClientDTO {
     @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String idAlert;
+    @Size(min = 1, max = 50, message = "{constraint.size}")
+    @NotNull(message = "{constraint.not_null}")
+    private String alertDescription;
     @Max(value = 999999999999999L, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
@@ -35,7 +38,7 @@ public class AlertClientDTO {
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 3, message = "{constraint.size}")
     private String associationOrigin;
-    private String creationUser;
+    private String creationUser = "";
 
     public Mono<AlertClient> toModel() {
         return Mono.just(AlertClient.builder()
@@ -46,6 +49,7 @@ public class AlertClientDTO {
                 .amountEnable(this.amountEnable)
                 .associationOrigin(this.associationOrigin)
                 .creationUser(this.creationUser)
+                .alertDescription(this.alertDescription)
                 .build());
     }
 

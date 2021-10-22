@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.State.INACTIVE;
+import static co.com.bancolombia.commons.constants.Transaction.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class ClientUseCase {
         return findClientByIdentification(pClient)
                 .filter(client -> client.getIdState() == ACTIVE)
                 .flatMap(clientRepository::inactivateClient)
-                .flatMap(newnessUseCase::saveNewness)
+                .flatMap(client -> newnessUseCase.saveNewness(client, INACTIVE_CLIENT))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
     }
 
@@ -57,7 +58,7 @@ public class ClientUseCase {
                 .map(Document::getId)
                 .map(documentType -> enrol.getClient().toBuilder().documentType(documentType).build())
                 .flatMap(clientRepository::saveClient)
-                .flatMap(newnessUseCase::saveNewness)
+                .flatMap(client -> newnessUseCase.saveNewness(client, CREATE_CLIENT))
                 .flatMap(clientGateway::matchClientWithBasicKit)
                 .map(aBoolean -> enrol.getContacts())
                 .flatMapMany(Flux::fromIterable)
@@ -77,7 +78,7 @@ public class ClientUseCase {
                 .flatMap(clientBefore -> buildResponse(clientBefore, enrol.getClient()))
                 .flatMap(clientRepository::updateClient)
                 .doOnNext(System.out::println)
-                .flatMap(response -> newnessUseCase.saveNewness(response.getBefore())
+                .flatMap(response -> newnessUseCase.saveNewness(response.getBefore(), UPDATE_CLIENT)
                         .thenReturn(response))
                 .flatMap(response -> updateContacts(enrol, response));
     }
@@ -98,13 +99,14 @@ public class ClientUseCase {
                 .map(response -> responseUpdate);
     }
 
-    public Mono<Client> deleteClient(Client client) {
-        return documentGateway.getDocument(client.getDocumentType())
+    public Mono<Client> deleteClient(Client pClient) {
+        return documentGateway.getDocument(pClient.getDocumentType())
                 .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
                 .map(Document::getId)
-                .map(documentType -> client.toBuilder().documentType(documentType).build())
+                .map(documentType -> pClient.toBuilder().documentType(documentType).build())
+                .flatMap(clientRepository::findClientByIdentification)
                 .flatMap(clientRepository::deleteClient)
-                .flatMap(newnessUseCase::saveNewness)
+                .flatMap(client -> newnessUseCase.saveNewness(client, DELETE_CLIENT))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 

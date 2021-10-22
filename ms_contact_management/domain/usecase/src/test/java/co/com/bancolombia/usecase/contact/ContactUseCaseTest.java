@@ -91,7 +91,7 @@ public class ContactUseCaseTest {
 
     @Test
     public void saveContact() {
-        when(newnessUseCase.saveNewness((Contact) any()))
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
@@ -115,7 +115,7 @@ public class ContactUseCaseTest {
 
     @Test
     public void updateContact() {
-        when(newnessUseCase.saveNewness((Contact) any()))
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
@@ -139,7 +139,7 @@ public class ContactUseCaseTest {
 
     @Test
     public void updateContactWithExistent() {
-        when(newnessUseCase.saveNewness((Contact) any()))
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
@@ -168,7 +168,7 @@ public class ContactUseCaseTest {
 
     @Test
     public void deleteContact() {
-        when(newnessUseCase.saveNewness((Contact) any()))
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(any()))
                 .thenReturn(Mono.just(Consumer.builder().segment("SEG").build()));

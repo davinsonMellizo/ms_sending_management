@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static co.com.bancolombia.commons.constants.Header.*;
+import static co.com.bancolombia.commons.constants.Transaction.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
 
@@ -35,6 +36,7 @@ public class AlertClientUseCase {
                         .documentNumber(Long.parseLong(headers.get(DOCUMENT_NUMBER)))
                         .associationOrigin(headers.get(ASSOCIATION_ORIGIN))
                         .idAlert(alert.getId()).numberOperations(1)
+                        .alertDescription(alert.getDescription())
                         .amountEnable(alert.getNature().equals("MO") ? Long.valueOf(50000) : Long.valueOf(0))
                         .build())
                 .flatMap(this::saveAlertClient)
@@ -44,7 +46,7 @@ public class AlertClientUseCase {
 
     public Mono<AlertClient> saveAlertClient(AlertClient alertClient) {
         return alertClientGateway.save(alertClient)
-                .flatMap(newnessUseCase::saveNewness);
+                .flatMap(alertClientSaved -> newnessUseCase.saveNewness(alertClientSaved, CREATE_CLIENT_ALERT));
     }
 
     public Mono<AlertClient> updateAlertClient(List<AlertClient> alertClients) {
@@ -68,7 +70,7 @@ public class AlertClientUseCase {
                 .doOnNext(System.out::println)
                 .filter(alertClient ->  data.getT1().contains(data.getT2().getIdAlert()))
                 .flatMap(alertClientGateway::updateAlertClient)
-                .flatMap(newnessUseCase::saveNewness)
+                .flatMap(alertClient -> newnessUseCase.saveNewness(alertClient, UPDATE_CLIENT_ALERT))
                 .switchIfEmpty(saveAlertClient(data.getT2()));
     }
     private Mono<AlertClient> validateDeletion(Tuple2<List<String>, AlertClient> data) {
@@ -91,8 +93,9 @@ public class AlertClientUseCase {
     }
 
     public Mono<AlertClient> deleteAlertClient(AlertClient alertClient) {
-        return alertClientGateway.delete(alertClient)
-                .flatMap(newnessUseCase::saveNewness)
+        return alertClientGateway.findAlertClient(alertClient)
+                .flatMap(alertClientGateway::delete)
+                .flatMap(alertClientDeleted -> newnessUseCase.saveNewness(alertClientDeleted, DELETE_CLIENT_ALERT))
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)));
     }
 

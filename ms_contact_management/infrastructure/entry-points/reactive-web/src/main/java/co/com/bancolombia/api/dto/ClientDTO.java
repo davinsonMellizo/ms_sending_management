@@ -35,5 +35,5 @@ public class ClientDTO {
     private Integer idState;
     @NotNull(message = "{constraint.not_null}")
     @Size(max = 20, message = "{constraint.size}")
-    private String creationUser;
+    private String creationUser="";
 }

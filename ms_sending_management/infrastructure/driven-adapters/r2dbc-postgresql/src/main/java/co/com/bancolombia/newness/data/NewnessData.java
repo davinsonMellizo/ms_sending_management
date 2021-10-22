@@ -20,10 +20,9 @@ public class NewnessData {
     private Long documentNumber;
     private String contact;
     private String channelTransaction;
-    private String operationCode;
-    private String operationDescription;
+    private String idAlert;
+    private String descriptionAlert;
     private Boolean active;
-    private String transactionCode;
     private String transactionDescription;
     private Integer numberOperations;
     private Long amountEnable;
@@ -31,9 +30,6 @@ public class NewnessData {
     private String responseCode;
     private String responseDescription;
     private Integer voucher;
+    private LocalDateTime dateFistInscription;
     private LocalDateTime dateCreation;
-    private String userField1;
-    private String userField2;
-    private Integer userField3;
-    private Integer userField4;
 }

@@ -61,7 +61,7 @@ public class ClientUseCaseTest {
 
     @Test
     public void inactivateClient(){
-        when(newnessUseCase.saveNewness((Client) any()))
+        when(newnessUseCase.saveNewness((Client) any(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
@@ -99,7 +99,7 @@ public class ClientUseCaseTest {
 
     @Test
     public void saveClient() {
-        when(newnessUseCase.saveNewness((Client) any()))
+        when(newnessUseCase.saveNewness((Client) any(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.saveClient(any()))
                 .thenReturn(Mono.just(client));
@@ -121,7 +121,7 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateClient() {
-        when(newnessUseCase.saveNewness((Client) any()))
+        when(newnessUseCase.saveNewness((Client) any(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
@@ -147,9 +147,11 @@ public class ClientUseCaseTest {
 
     @Test
     public void deleteClient() {
-        when(newnessUseCase.saveNewness((Client) any()))
+        when(newnessUseCase.saveNewness((Client) any(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.deleteClient(any()))
+                .thenReturn(Mono.just(client));
+        when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
@@ -181,6 +183,8 @@ public class ClientUseCaseTest {
 
     @Test
     public void deleteContactWithException() {
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
         when(clientRepository.deleteClient(any()))
                 .thenReturn(Mono.empty());
         when(documentGateway.getDocument(anyString()))

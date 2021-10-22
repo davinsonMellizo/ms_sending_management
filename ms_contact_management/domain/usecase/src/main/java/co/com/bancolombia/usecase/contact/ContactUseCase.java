@@ -27,6 +27,7 @@ import reactor.util.function.Tuple4;
 import java.util.List;
 
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
+import static co.com.bancolombia.commons.constants.Transaction.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.usecase.commons.ValidateData.isValidMailOrMobile;
 
@@ -62,18 +63,18 @@ public class ContactUseCase {
                         .build());
     }
 
-    public Mono<Contact> saveContact(Contact contact) {
-        return Mono.just(contact)
+    public Mono<Contact> saveContact(Contact pContact) {
+        return Mono.just(pContact)
                 .flatMap(this::getDataBase)
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_DATA)))
-                .map(data -> contact.toBuilder()
+                .map(data -> pContact.toBuilder()
                         .state(Integer.toString(data.getT1().getId()))
                         .contactMedium(Integer.toString(data.getT2().getId()))
                         .documentType(data.getT3().getId()).previous(false)
                         .segment(data.getT4().getSegment())
                         .build())
                 .flatMap(contactGateway::saveContact)
-                .flatMap(newnessUseCase::saveNewness);
+                .flatMap(contact -> newnessUseCase.saveNewness(contact, CREATE_CONTACT));
     }
 
     private Mono<Tuple4<State, ContactMedium, Document, Consumer>> getDataBase(Contact contact) {
@@ -109,7 +110,7 @@ public class ContactUseCase {
                 .zipWith(Flux.fromIterable(contacts).filter(contact -> !contact.getPrevious()).next())
                 .map(response -> StatusResponse.<Contact>builder().description("Contact Updated Successfully")
                         .before(response.getT2()).actual(response.getT1()).build())
-                .flatMap(response -> newnessUseCase.saveNewness(response.getBefore())
+                .flatMap(response -> newnessUseCase.saveNewness(response.getBefore(), UPDATE_CONTACT)
                         .thenReturn(response));
 
     }
@@ -137,34 +138,34 @@ public class ContactUseCase {
                         .before(response.getT1()).actual(response.getT2()).build());
     }
 
-    private Flux<Contact> deletePrevious(Contact contact, List<Contact> contacts) {
-        return contactGateway.deleteContact(contact)
-                .flatMap(newnessUseCase::saveNewness)
+    private Flux<Contact> deletePrevious(Contact pContact, List<Contact> contacts) {
+        return contactGateway.deleteContact(pContact)
+                .flatMap(contact -> newnessUseCase.saveNewness(contact, DELETE_CONTACT_PREVIOUS))
                 .map(idContact -> contacts)
                 .flatMapMany(Flux::fromIterable)
                 .filter(contact1 -> !contact1.getPrevious());
     }
 
-    private Mono<Contact> saveCopyPrevious(Contact contact, Contact newContact) {
+    private Mono<Contact> saveCopyPrevious(Contact pContact, Contact newContact) {
         return stateGateway.findState(newContact.getState())
                 .onErrorMap(e -> new BusinessException(INVALID_DATA))
                 .map(state -> newContact.toBuilder().state(Integer.toString(state.getId()))
-                        .contactMedium(contact.getContactMedium())
-                        .documentType(contact.getDocumentType())
-                        .segment(contact.getSegment())
+                        .contactMedium(pContact.getContactMedium())
+                        .documentType(pContact.getDocumentType())
+                        .segment(pContact.getSegment())
                         .previous(false)
                         .build())
                 .flatMap(contactGateway::saveContact)
-                .flatMap(newnessUseCase::saveNewness);
+                .flatMap(contact -> newnessUseCase.saveNewness(contact, UPDATE_CONTACT));
     }
 
-    public Mono<Integer> deleteContact(Contact contact) {
-        return consumerGateway.findConsumerById(contact.getSegment())
-                .map(consumer -> contact.toBuilder().segment(consumer.getSegment()).build())
+    public Mono<Integer> deleteContact(Contact pContact) {
+        return consumerGateway.findConsumerById(pContact.getSegment())
+                .map(consumer -> pContact.toBuilder().segment(consumer.getSegment()).build())
                 .flatMapMany(contactGateway::findIdContact)
                 .switchIfEmpty(Mono.error(new BusinessException(CONTACT_NOT_FOUND)))
                 .flatMap(contactGateway::deleteContact)
-                .flatMap(newnessUseCase::saveNewness)
+                .flatMap(contact -> newnessUseCase.saveNewness(contact, DELETE_CONTACT))
                 .map(Contact::getId)
                 .last();
     }
