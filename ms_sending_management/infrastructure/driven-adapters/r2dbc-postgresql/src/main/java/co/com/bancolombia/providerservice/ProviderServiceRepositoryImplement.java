@@ -35,7 +35,14 @@ public class ProviderServiceRepositoryImplement extends AdapterOperations<Provid
     public Flux<ProviderService> findAllProviderService() {
         return repository.findAllProviderService()
                 .map(this::convertToEntity)
-                .onErrorMap(e -> new TechnicalException(e, FIND_ALL_PROVIDER_SERVICE_ERROR));
+                .onErrorMap(e -> new TechnicalException(e, FIND_PROVIDER_SERVICE_ERROR));
+    }
+
+    @Override
+    public Mono<ProviderService> findProviderService(Integer integer) {
+        return repository.findById(integer)
+                .map(this::convertToEntity)
+                .onErrorMap(e -> new TechnicalException(e, FIND_PROVIDER_SERVICE_ERROR));
     }
 
     @Override

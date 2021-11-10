@@ -12,11 +12,10 @@ public abstract class ValidateData {
 
     public static final Predicate<Message> isValidMailOrMobile = message ->
             (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
-                    || (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty()
-                    && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
+                    || (Objects.nonNull(message.getPhone()) && !message.getPhone().isEmpty());
 
     public static final Predicate<Message> isValidMobile = message ->
-            Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty();
+            Objects.nonNull(message.getPhone()) && !message.getPhone().isEmpty();
 
     public static final Predicate<Message> isValidMailFormat = message ->
             (Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
@@ -26,7 +25,7 @@ public abstract class ValidateData {
             Objects.nonNull(message.getMail()) && !message.getMail().isEmpty();
 
     public static final Predicate<Message> isValidMailFormatOrMobile = message ->
-            (Objects.nonNull(message.getMobile()) && !message.getMobile().isEmpty())
+            (Objects.nonNull(message.getPhone()) && !message.getPhone().isEmpty())
                     || ((Objects.nonNull(message.getMail()) && !message.getMail().isEmpty())
                     && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
 

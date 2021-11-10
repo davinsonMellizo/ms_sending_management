@@ -10,5 +10,7 @@ public interface ProviderServiceGateway {
 
     Flux<ProviderService> findAllProviderService();
 
+    Mono<ProviderService> findProviderService(Integer integer);
+
     Mono<Integer> deleteProviderService(ProviderService providerService);
 }

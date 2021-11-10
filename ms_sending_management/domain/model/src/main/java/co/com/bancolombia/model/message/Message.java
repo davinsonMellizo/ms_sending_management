@@ -1,8 +1,5 @@
 package co.com.bancolombia.model.message;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 
@@ -11,17 +8,24 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Message {
-    private Integer idOperation;
+    private Integer operation;
     private Integer documentType;
     private Long documentNumber;
     private String consumer;
-    private String idAlert;
+    private String alert;
     private String transactionCode;
-    private Double amount;
+    private Long amount;
+    private String url;
+    private String template;
 
-    private String mobile;
+    private String phone;
+    private String phoneIndicator;
+
     private String mail;
 
+    private Boolean push;
+
     private ArrayList<Parameter> parameters;
+    private ArrayList<Attachment> attachments;
 
 }

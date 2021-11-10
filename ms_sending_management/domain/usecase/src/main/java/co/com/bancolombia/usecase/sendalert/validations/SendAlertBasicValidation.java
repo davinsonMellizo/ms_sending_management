@@ -23,9 +23,9 @@ public class SendAlertBasicValidation {
 
     private Flux<Alert> validateData(Message message) {
         return Flux.just(message)
-                .filter(message1 -> message1.getMobile().isEmpty())
+                .filter(message1 -> message1.getPhone().isEmpty())
                 .switchIfEmpty(Mono.error(new Throwable("Alert with message case 1")))
-                .map(Message::getIdAlert)
+                .map(Message::getAlert)
                 .filter(String::isEmpty)
                 .map(s -> message)
                 .flatMap(this::getAlertsWithTrx)
@@ -48,7 +48,7 @@ public class SendAlertBasicValidation {
 
     private Flux<Alert> getAlert(Message message) {
         //TODO case 5
-        return alertGateway.findAlertById(message.getIdAlert())
+        return alertGateway.findAlertById(message.getAlert())
                 .switchIfEmpty(Mono.error(new Throwable("Business alert no fount")))
                 .doOnNext(alert -> System.out.println("build and send alert"))
                 .flux();

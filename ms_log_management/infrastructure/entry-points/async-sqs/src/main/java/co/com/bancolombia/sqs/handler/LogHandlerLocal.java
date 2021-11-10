@@ -22,6 +22,7 @@ public class LogHandlerLocal {
     @SqsListener(value = "${cloud.aws.sqs.queue-endpoint}", deletionPolicy = SqsMessageDeletionPolicy.ALWAYS)
     public void listenLogBySqsListener(@Payload final String jsonMessage) throws JsonProcessingException {
         Log log =  objectMapper.readValue(jsonMessage, Log.class);
+        System.out.println("llega el mensaje");
         useCase.saveLog(log).subscribe();
     }
 

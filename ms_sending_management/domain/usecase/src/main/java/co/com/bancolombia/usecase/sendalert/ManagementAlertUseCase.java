@@ -2,6 +2,8 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
+import co.com.bancolombia.model.log.Log;
+import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.usecase.sendalert.validations.*;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,7 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 public class ManagementAlertUseCase {
-    private final AlertTransactionGateway alertTransactionGateway;
-    private final AlertGateway alertGateway;
+    private final LogGateway logGateway;
 
     private final SendAlertZeroUseCase sendAlertZeroUseCase;
     private final SendAlertOneUseCase sendAlertOneUseCase;
@@ -35,7 +36,7 @@ public class ManagementAlertUseCase {
     }
 
     public Mono<Void> alertSendingManager(Message message) {
-        return Mono.just(message.getIdOperation())
+        return Mono.just(message.getOperation())
                 .map(this::getValidations)
                 .flatMap(function -> function.apply(message));
     }

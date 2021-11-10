@@ -1,8 +1,21 @@
 {
-  "documentNumber": '#(documentNumber)',
-  "documentType": 0,
-  "keyMdm": "KEY",
-  "enrollmentOrigin": "svp",
-  "idState": 0,
-  "creationUser": "user"
+  "client":
+  {
+    "documentNumber": '#(documentNumber)',
+    "documentType": "CC",
+    "keyMdm": "KEY C",
+    "enrollmentOrigin": "ALM",
+    "idState": 0,
+    "creationUser": "user"
+  },
+  "contacts":[
+    {
+      "consumer": '#(consumer)',
+      "contactMedium": "MAIL",
+      "documentNumber": '#(documentNumber)',
+      "documentType": "CC",
+      "value":"3218975854",
+      "state":"Active"
+    }
+  ]
 }

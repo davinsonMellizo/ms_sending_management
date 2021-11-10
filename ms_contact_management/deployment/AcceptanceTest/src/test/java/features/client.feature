@@ -18,18 +18,20 @@ Feature: CRUD client
     And match $.documentNumber == 1000000001
 
   Scenario: Successful case Save Client
-    * def documentNumber = "1000000002"
+    * def documentNumber = "1000000004"
+    * def consumer = "ALM"
     Given request read("../data/client.json")
     When method POST
     Then status 200
-    And match $.documentNumber == 1000000002
+    And match $.documentNumber == 1000000004
 
   Scenario: Successful case Update Client
-    * def documentNumber = "1000000000"
+    * def consumer = "SVP"
+    * def documentNumber = "1000000003"
     Given request read("../data/client.json")
     When method PUT
     Then status 200
-    And match $.actual.documentNumber == 1000000000
+    And match $.actual.client.documentNumber == 1000000003
 
   Scenario: Error case Find Client
     Given header document-number = "1000000010"
@@ -43,7 +45,7 @@ Feature: CRUD client
     Given request read("../data/client.json")
     When method PUT
     Then status 500
-    And match $.code == '373'
+    And match $.code == '301'
 
   Scenario: Error case Delete Client
     Given header document-number = "1000000010"
@@ -56,11 +58,11 @@ Feature: CRUD client
     Given request {}
     When method POST
     Then status 500
-    And match $.code == '301'
+    And match $.code == 'DST0012'
 
   Scenario: Error case Update client, missing parameter per body
     Given request {}
     When method PUT
     Then status 500
-    And match $.code == '301'
+    And match $.code == 'DST0012'
 

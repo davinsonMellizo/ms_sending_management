@@ -49,7 +49,7 @@ public enum TechnicalExceptionEnum {
     SAVE_CATEGORY_ERROR("DST0034", "An error occurred while save a category"),
     UPDATE_CATEGORY_ERROR("DST0035", "An error occurred while update a category"),
     DELETE_CATEGORY_ERROR("DST0036", "An error occurred while delete a category"),
-    FIND_ALL_PROVIDER_SERVICE_ERROR("DST0037", "An error occurred while find the provider service"),
+    FIND_PROVIDER_SERVICE_ERROR("DST0037", "An error occurred while find the provider service"),
     SAVE_PROVIDER_SERVICE_ERROR("DST0038", "An error occurred while save a relation provider with service"),
     DELETE_PROVIDER_SERVICE_ERROR("DST0039", "An error occurred while delete a relation provider with service"),
     SEND_LOG_SQS_ERROR("DST0040","An error occurred while sending a log "),

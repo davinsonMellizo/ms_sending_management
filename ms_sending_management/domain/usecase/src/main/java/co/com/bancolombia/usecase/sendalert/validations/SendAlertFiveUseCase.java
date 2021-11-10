@@ -3,7 +3,6 @@ package co.com.bancolombia.usecase.sendalert.validations;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.gateways.MessageGateway;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.model.service.gateways.ServiceGateway;
@@ -25,7 +24,7 @@ public class SendAlertFiveUseCase {
         return Flux.just(message)
                 .filter(isValidMailFormatOrMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid contact data")))
-                .map(Message::getIdAlert)
+                .map(Message::getAlert)
                 .flatMap(alertGateway::findAlertById)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Code alert")))
                 .filter(alert -> alert.getIdState()==(0))

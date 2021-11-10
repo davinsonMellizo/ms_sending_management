@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AlertTemplateUseCaseTest {
+public class AlertTemplateTypeUseCaseTest {
 
     @InjectMocks
     private AlertTemplateUseCase useCase;

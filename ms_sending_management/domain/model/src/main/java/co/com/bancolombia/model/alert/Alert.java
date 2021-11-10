@@ -37,4 +37,5 @@ public class Alert implements Serializable {
         setMessage(message);
         return this;
     }
+
 }

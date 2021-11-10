@@ -13,6 +13,5 @@ public class Parameter {
     private String Name;
     private String Value;
     private String Type;
-    private Integer length;
 
 }
