@@ -1,18 +1,18 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Recipient;
-import co.com.bancolombia.model.message.Template;
+import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
+import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.usecase.Response;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.commons.BuilderMasivian;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
@@ -20,10 +20,21 @@ import static co.com.bancolombia.commons.enums.TemplateType.COMPLEX;
 
 @RequiredArgsConstructor
 public class RouterProviderMailUseCase {
+    private final AlertTemplateGateway alertTemplateGateway;
     private final RemitterGateway remitterGateway;
     private final LogUseCase logUseCase;
 
-    public Mono<Response> sendEmail(Message message, Alert alert){
+    public Mono<Response> sendAlertMail(Alert alert, Message message){
+        ArrayList<Recipient> recipients = new ArrayList<>();
+        recipients.add(new Recipient(message.getMail()));
+        return alertTemplateGateway.findTemplateById(alert.getIdTemplate())
+                .doOnNext(alertTemplate -> message.setTemplate(alertTemplate.getId()))
+                .flatMap(alertTemplate -> BuilderMasivian.buildParameter(alertTemplate, alert.getMessage()))
+                .collectList()
+                .flatMap(parameters -> sendEmail(message, alert, parameters));
+    }
+
+    public Mono<Response> sendEmail(Message message, Alert alert, List<Parameter> parameters){
         ArrayList<Recipient> recipients = new ArrayList<>();
         recipients.add(new Recipient(message.getMail()));
         return remitterGateway.findRemitterById(alert.getIdRemitter())
@@ -33,6 +44,7 @@ public class RouterProviderMailUseCase {
                         .Subject(alert.getSubjectMail())
                         .Recipients(recipients)
                         .Template(new Template(COMPLEX.getType(), message.getTemplate()))
+                        .parameters(parameters)
                         .Attachments(Util.validateAttachments(message.getAttachments()))
                         .From(remitter.getMail())
                         .build())

@@ -4,7 +4,7 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.usecase.Response;
+import co.com.bancolombia.model.message.Response;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

@@ -10,18 +10,19 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-@ConfigurationProperties(prefix = "adapters.rest-consumer")
+@ConfigurationProperties(prefix = "adapters.rest-client.resources")
 public class ConsumerProperties {
 
     private int timeout;
     private Resources resources;
 
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Resources {
-        private String basicKit;
-        private String sendAlert;
+        private String endpointMasivianSms;
+        private String endpointMasivianMail;
+        private String endpointInalambriaSms;
+        private String endpointPush;
     }
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class AlertTemplate {
 
-    private Integer id;
+    private String id;
     private String field;
     private Integer initialPosition;
     private Integer finalPosition;

@@ -1,8 +1,11 @@
 package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.Request;
+import co.com.bancolombia.consumer.adapter.response.Error;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -15,13 +18,14 @@ public class RestClient<T extends Request,R> {
 
     private final WebClient webClient;
 
-    public Mono<R> post(String route, T request, Class<R> clazz) {
+    public <S extends Error> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
         Map<String,String> header = request.getHeaders();
         return webClient.post()
                 .uri(route)
                 .headers(head -> head.setAll(header))
                 .bodyValue(cleanHeader(request))
                 .retrieve()
+                .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
                 .bodyToMono(clazz);
     }
 
@@ -37,5 +41,10 @@ public class RestClient<T extends Request,R> {
     private <T extends Request> T cleanHeader(T request){
         request.setHeaders(null);
         return request;
+    }
+
+    private <S extends Error> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
+        return clientResponse.bodyToMono(clazzError)
+                .map(error -> error.toBuilder().httpsStatus(clientResponse.statusCode().value()).build());
     }
 }

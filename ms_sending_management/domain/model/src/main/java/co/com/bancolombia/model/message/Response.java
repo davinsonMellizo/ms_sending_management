@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase;
+package co.com.bancolombia.model.message;
 
 import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import lombok.AllArgsConstructor;

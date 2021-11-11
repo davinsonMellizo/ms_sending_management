@@ -3,7 +3,7 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.PUSH;
-import co.com.bancolombia.usecase.Response;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

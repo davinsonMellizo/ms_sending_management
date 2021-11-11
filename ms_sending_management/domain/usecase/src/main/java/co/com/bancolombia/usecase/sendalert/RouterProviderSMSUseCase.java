@@ -10,7 +10,7 @@ import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.providerservice.ProviderService;
 import co.com.bancolombia.model.providerservice.gateways.ProviderServiceGateway;
-import co.com.bancolombia.usecase.Response;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

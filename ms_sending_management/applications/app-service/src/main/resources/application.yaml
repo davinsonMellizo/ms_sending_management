@@ -61,7 +61,10 @@ adapters:
     timeout: 1000
     scope: scope-blm
     resources:
-      sendAlertMail: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
+      endpoint-masivian-sms: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
+      endpoint-masivian-mail: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
+      endpoint-inalambria-sms: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
+      endpoint-push: https://cba15735-6e3a-478b-83b5-dc2470bca02b.mock.pstmn.io/send/alert/mail
   secrets-manager:
     secret-rabbit: ${SECRET-RABBIT}
     secret-rds: ${SECRET-RDS}

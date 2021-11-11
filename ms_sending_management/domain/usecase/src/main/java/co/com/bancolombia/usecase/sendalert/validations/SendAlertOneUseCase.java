@@ -16,20 +16,19 @@ public class SendAlertOneUseCase {
     private final RouterProviderSMSUseCase routerProviderSMSUseCase;
     private final AlertGateway alertGateway;
 
-    //TODO validate id 1
-    public Mono<Void> validateBasic(Message message) {
-        return alertGateway.findAlertById("GNR")
-                .flatMap(alert -> routingAlerts(message, alert));
-    }
-
     private Mono<Void> routingAlerts(Message message, Alert pAlert){
         return Mono.just(pAlert)
                 .filter(alert -> alert.getPush().equals("Si"))
                 .flatMap(alert -> routerProviderPushUseCase.sendPush(message, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.routingAlertsSMS(message, pAlert))
-                //TODO cambiar el text de alert por el de message
-                .concatWith(routerProviderMailUseCase.sendEmail(message, pAlert))
+                //TODO mirar si el parametro se envia asì
+                .concatWith(routerProviderMailUseCase.sendEmail(message, pAlert, message.getParameters()))
                 .thenEmpty(Mono.empty());
+    }
+
+    public Mono<Void> validateBasic(Message message) {
+        return alertGateway.findAlertById("GNR")
+                .flatMap(alert -> routingAlerts(message, alert));
     }
 
 }
