@@ -13,8 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,18 +30,18 @@ public class AlertTemplateTypeUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alertTemplate.setId(1);
+        alertTemplate.setId("1");
     }
 
     @Test
     public void findAlertTemplateById() {
-        when(alertTemplateGateway.findTemplateById(anyInt()))
+        when(alertTemplateGateway.findTemplateById(anyString()))
                 .thenReturn(Flux.just(alertTemplate));
         StepVerifier
                 .create(useCase.findAlertTemplateById(alertTemplate.getId()))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(alertTemplateGateway).findTemplateById(anyInt());
+        verify(alertTemplateGateway).findTemplateById(anyString());
     }
 
     @Test
@@ -59,7 +58,7 @@ public class AlertTemplateTypeUseCaseTest {
 
     @Test
     public void deleteAlertTemplate() {
-        when(alertTemplateGateway.findTemplateById(anyInt()))
+        when(alertTemplateGateway.findTemplateById(anyString()))
                 .thenReturn(Flux.just(alertTemplate));
         when(alertTemplateGateway.delete(any()))
                 .thenReturn(Mono.just(alertTemplate.getId()));
@@ -71,7 +70,7 @@ public class AlertTemplateTypeUseCaseTest {
 
     @Test
     public void deleteAlertTemplateWithException() {
-        when(alertTemplateGateway.findTemplateById(anyInt()))
+        when(alertTemplateGateway.findTemplateById(anyString()))
                 .thenReturn(Flux.empty());
         useCase.deleteAlertTemplateById(alertTemplate.getId())
                 .as(StepVerifier::create)

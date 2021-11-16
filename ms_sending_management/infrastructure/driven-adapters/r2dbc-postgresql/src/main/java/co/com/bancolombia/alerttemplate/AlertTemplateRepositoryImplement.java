@@ -16,7 +16,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
 public class AlertTemplateRepositoryImplement
-        extends AdapterOperations<AlertTemplate, AlertTemplateData, Integer, AlertTemplateRepository>
+        extends AdapterOperations<AlertTemplate, AlertTemplateData, String, AlertTemplateRepository>
         implements AlertTemplateGateway {
 
     @Autowired
@@ -40,14 +40,14 @@ public class AlertTemplateRepositoryImplement
     }
 
     @Override
-    public Flux<AlertTemplate> findTemplateById(Integer id) {
+    public Flux<AlertTemplate> findTemplateById(String id) {
         return repository.findTemplateById(id)
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALERT_TEMPLATE_BY_ID_ERROR));
     }
 
     @Override
-    public Mono<Integer> delete(Integer id) {
+    public Mono<String> delete(String id) {
         return repository.deleteById(id)
                 .onErrorMap(e -> new TechnicalException(e, DELETE_ALERT_TEMPLATE_ERROR))
                 .thenReturn(id);

@@ -18,7 +18,7 @@ public class SendAlertOneUseCase {
 
     private Mono<Void> routingAlerts(Message message, Alert pAlert){
         return Mono.just(pAlert)
-                .filter(alert -> alert.getPush().equals("Si"))
+                .filter(alert -> alert.getPush().equalsIgnoreCase("Si"))
                 .flatMap(alert -> routerProviderPushUseCase.sendPush(message, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.routingAlertsSMS(message, pAlert))
                 //TODO mirar si el parametro se envia asì

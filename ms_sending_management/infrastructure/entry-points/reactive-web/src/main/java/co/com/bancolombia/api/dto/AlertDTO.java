@@ -21,10 +21,9 @@ public class AlertDTO {
     @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String id;
-    @Max(value = 999, message = "{constraint.max}")
-    @Min(value = 0, message = "{constraint.min}")
+    @Size(min = 1, max = 100, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private Integer idTemplate;
+    private String idTemplate;
     @Max(value = 999, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")

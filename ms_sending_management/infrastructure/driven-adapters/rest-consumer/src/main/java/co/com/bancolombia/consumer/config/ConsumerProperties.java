@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-@ConfigurationProperties(prefix = "adapters.rest-client.resources")
+@ConfigurationProperties(prefix = "adapters.rest-client")
 public class ConsumerProperties {
 
     private int timeout;

@@ -11,6 +11,8 @@ public interface AlertClientGateway {
 
     Mono<AlertClient> updateAlertClient(AlertClient alertClient);
 
+    Mono<AlertClient> accumulate(AlertClient alertClient);
+
     Flux<AlertClient> alertsVisibleChannelByClient(Long documentNumber, Integer documentType);
 
     Mono<AlertClient> delete(AlertClient alertClient);

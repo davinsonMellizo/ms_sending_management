@@ -72,7 +72,7 @@ public class AlertTemplateTypeRouterTest extends BaseIntegration {
 
     @Test
     public void delete() {
-        when(useCase.deleteAlertTemplateById(any())).thenReturn(Mono.just(1));
+        when(useCase.deleteAlertTemplateById(any())).thenReturn(Mono.just("1"));
         WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url + ID, "0")
                 .exchange();
         spec.expectStatus().isOk();

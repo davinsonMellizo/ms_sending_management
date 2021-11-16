@@ -45,9 +45,13 @@ public class SendAlertZeroUseCase {
         return Mono.just(AlertClient.builder().idAlert(alert.getId()).documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber()).build())
                 .flatMap(alertClientGateway::findAlertClient)
+                .map(alertClient -> alertClient.toBuilder()
+                        .numberOperations(alertClient.getNumberOperations()+1)
+                        .accumulatedAmount(alertClient.getAccumulatedAmount()+ message.getAmount()).build())
+                .flatMap(alertClientGateway::updateAlertClient)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)))
-                .filter(alertClient -> alertClient.getAccumulatedAmount()+message.getAmount()>=alertClient.getAmountEnable() ||
-                        alertClient.getAccumulatedOperations()+1>=alertClient.getNumberOperations())
+                .filter(alertClient -> alertClient.getAccumulatedAmount()>=alertClient.getAmountEnable() ||
+                        alertClient.getAccumulatedOperations()>=alertClient.getNumberOperations())
                 .map(alertClient -> alert)
                 .switchIfEmpty(Mono.error(new BusinessException(AMOUNT_NOT_EXCEEDED)));
     }
@@ -75,10 +79,10 @@ public class SendAlertZeroUseCase {
 
     private Flux<Void> sendAlerts(Alert alert, Message message) {
         return Mono.just(message)
-                .filter(message1 -> !message1.getPush() || alert.getPush().equalsIgnoreCase("No"))
-                .flatMap(message1 -> routerProviderSMSUseCase.routingAlertsSMS(message1, alert))
-                .switchIfEmpty(routerProviderPushUseCase.sendPush(message,alert))
-                .concatWith(message1 -> routerProviderMailUseCase.sendAlertMail(alert, message))
+                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase("Si"))
+                .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1,alert))
+                .switchIfEmpty(routerProviderSMSUseCase.routingAlertsSMS(message, alert))
+                .concatWith(routerProviderMailUseCase.sendAlertMail(alert, message))
                 .thenMany(Flux.empty());
     }
 

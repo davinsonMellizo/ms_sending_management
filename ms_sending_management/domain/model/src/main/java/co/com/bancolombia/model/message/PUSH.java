@@ -1,5 +1,6 @@
 package co.com.bancolombia.model.message;
 
+import co.com.bancolombia.Request;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class PUSH {
+public class PUSH extends Request {
     private Data data;
 
     @lombok.Data

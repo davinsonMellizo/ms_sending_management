@@ -18,6 +18,13 @@ public interface AlertClientRepository extends ReactiveCrudRepository<AlertClien
                                     Long documentNumber, Integer documentType);
 
     @Modifying
+    @Query("update alert_client " +
+            "set accumulated_operations = $1, accumulated_amount = $2 " +
+            "where id_alert = $3 and document_number= $4 and id_document_type = $5")
+    Mono<Integer> accumulate(Integer numberOperations, Long amount, String idAlert,
+                                    Long documentNumber, Integer documentType);
+
+    @Modifying
     @Query("DELETE FROM alert_client where id_alert = $1 and document_number = $2 and id_document_type = $3")
     Mono<Integer> deleteAlertClient(String idAlert, Long documentNumber, Integer documentType);
 

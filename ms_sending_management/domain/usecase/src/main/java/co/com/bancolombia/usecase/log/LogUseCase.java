@@ -33,6 +33,27 @@ public class LogUseCase {
                 .then(Mono.empty());
     }
 
+    public  Mono<Response> sendLogPush(Message message, Alert alert, String logType, String text, Response response){
+        return logGateway.putLogToSQS(Log.builder()
+                .documentType(message.getDocumentType())
+                .documentNumber(message.getDocumentNumber())
+                .consumer(message.getConsumer())
+                .logType(logType)
+                .medium("PUSH")
+                .template(message.getTemplate())
+                .contact(message.getPhone())
+                .messageSent(text)
+                .alertId(alert.getId())
+                .alertDescription(alert.getDescription())
+                .transactionId(message.getTransactionCode())
+                .amount(message.getAmount())
+                .responseCode(response.getCode())
+                .responseDescription(response.getDescription())
+                .operationId(message.getOperation())
+                .build())
+                .then(Mono.just(response));
+    }
+
     public  <T> Mono<T> sendLogMAIL(Message message, Alert alert, String logType, String text, Response response){
         return logGateway.putLogToSQS(Log.builder()
                 .documentType(message.getDocumentType())

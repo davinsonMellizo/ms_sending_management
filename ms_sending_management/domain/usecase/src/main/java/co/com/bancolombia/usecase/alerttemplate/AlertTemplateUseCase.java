@@ -19,13 +19,13 @@ public class AlertTemplateUseCase {
         return alertTemplateGateway.save(alertTemplate);
     }
 
-    public Mono<List<AlertTemplate>> findAlertTemplateById(Integer id) {
+    public Mono<List<AlertTemplate>> findAlertTemplateById(String id) {
         return alertTemplateGateway.findTemplateById(id)
                 .collectList()
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_TEMPLATE_NOT_FOUND)));
     }
 
-    public Mono<Integer> deleteAlertTemplateById(Integer id) {
+    public Mono<String> deleteAlertTemplateById(String id) {
         return alertTemplateGateway.findTemplateById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_TEMPLATE_NOT_FOUND)))
                 .map(AlertTemplate::getId)

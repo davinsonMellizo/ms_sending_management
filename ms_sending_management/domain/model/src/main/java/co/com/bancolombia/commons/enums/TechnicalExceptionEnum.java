@@ -32,6 +32,7 @@ public enum TechnicalExceptionEnum {
     FIND_ALL_ALERT_CLIENT_ERROR("DST0018", "An error occurred while found all alert client registers"),
     FIND_ALERT_CLIENT_ERROR("DST0018", "An error occurred while found alert client register"),
     SAVE_ALERT_CLIENT_ERROR("DST0019", "An error occurred while saved a relation alert with client"),
+    ACCUMULATE_ALERT_CLIENT_ERROR("DST0020", "An error occurred while accumulate a alert with client"),
     UPDATE_ALERT_CLIENT_ERROR("DST0020", "An error occurred while updated a relation alert with client"),
     DELETE_ALERT_CLIENT_ERROR("DST0021", "An error occurred while deleted a relation alert with client"),
     SAVE_ALERT_TEMPLATE_ERROR("DST0022", "An error occurred while saved a alert template"),

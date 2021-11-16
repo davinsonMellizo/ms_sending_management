@@ -15,10 +15,9 @@ import javax.validation.constraints.*;
 @Builder
 public class AlertTemplateDTO {
 
-    @Max(value = 999, message = "{constraint.maximum_length}")
+    @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    private Integer id;
+    private String id;
     @Size(max = 10, message = "{constraint.maximum_length}")
     @NotBlank(message = "{constraint.not_blank}")
     @NotNull(message = "{constraint.not_null}")

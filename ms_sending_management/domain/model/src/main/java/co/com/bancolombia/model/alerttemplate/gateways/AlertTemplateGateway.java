@@ -8,8 +8,8 @@ public interface AlertTemplateGateway {
 
     Mono<AlertTemplate> save(AlertTemplate alertTemplate);
 
-    Flux<AlertTemplate> findTemplateById(Integer id);
+    Flux<AlertTemplate> findTemplateById(String id);
 
-    Mono<Integer> delete(Integer id);
+    Mono<String> delete(String id);
 
 }

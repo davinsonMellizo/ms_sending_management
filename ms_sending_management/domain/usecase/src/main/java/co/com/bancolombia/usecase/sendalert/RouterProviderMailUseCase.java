@@ -1,14 +1,17 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.alerttemplate.AlertTemplate;
 import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.commons.BuilderMasivian;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -21,12 +24,11 @@ import static co.com.bancolombia.commons.enums.TemplateType.COMPLEX;
 @RequiredArgsConstructor
 public class RouterProviderMailUseCase {
     private final AlertTemplateGateway alertTemplateGateway;
+    private final MasivianGateway masivianGateway;
     private final RemitterGateway remitterGateway;
     private final LogUseCase logUseCase;
 
     public Mono<Response> sendAlertMail(Alert alert, Message message){
-        ArrayList<Recipient> recipients = new ArrayList<>();
-        recipients.add(new Recipient(message.getMail()));
         return alertTemplateGateway.findTemplateById(alert.getIdTemplate())
                 .doOnNext(alertTemplate -> message.setTemplate(alertTemplate.getId()))
                 .flatMap(alertTemplate -> BuilderMasivian.buildParameter(alertTemplate, alert.getMessage()))
@@ -48,7 +50,7 @@ public class RouterProviderMailUseCase {
                         .Attachments(Util.validateAttachments(message.getAttachments()))
                         .From(remitter.getMail())
                         .build())
-                .map(mail -> Response.builder().code(200).build())//TODO call api Masivian EMAIL
+                .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_230,
                         message.getParameters().get(0).getValue(), response));

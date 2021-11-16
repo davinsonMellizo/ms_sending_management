@@ -28,10 +28,10 @@ public class SendAlertFiveUseCase {
 
     private Mono<Void> sendAlert(Alert alert, Message message) {
         return Mono.just(message)
-                .filter(message1 -> !message1.getPush() || alert.getPush().equalsIgnoreCase("No"))
-                .flatMap(message1 -> routerProviderSMSUseCase.routingAlertsSMS(message1, alert))
-                .switchIfEmpty(routerProviderPushUseCase.sendPush(message,alert))
-                .concatWith(message1 -> routerProviderMailUseCase.sendAlertMail(alert, message))
+                .filter(message1 -> alert.getPush().equalsIgnoreCase("Si"))
+                .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1,alert))
+                .switchIfEmpty(routerProviderSMSUseCase.routingAlertsSMS(message, alert))
+                .concatWith(routerProviderMailUseCase.sendAlertMail(alert, message))
                 .then(Mono.empty());
     }
 

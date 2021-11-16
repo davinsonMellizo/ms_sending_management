@@ -38,6 +38,7 @@ public class AlertClientDTO {
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 3, message = "{constraint.size}")
     private String associationOrigin;
+    @Builder.Default
     private String creationUser = "";
 
     public Mono<AlertClient> toModel() {

@@ -32,14 +32,12 @@ public class AlertTemplateHandler {
 
     public Mono<ServerResponse> findAlertTemplate(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
-                .map(Integer::parseInt)
                 .flatMap(useCase::findAlertTemplateById)
                 .flatMap(ResponseUtil::responseOk);
     }
 
     public Mono<ServerResponse> deleteAlertTemplate(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
-                .map(Integer::parseInt)
                 .flatMap(useCase::deleteAlertTemplateById)
                 .flatMap(ResponseUtil::responseOk);
     }

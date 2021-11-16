@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
@@ -22,7 +23,8 @@ public class RestClient<T extends Request,R> {
         Map<String,String> header = request.getHeaders();
         return webClient.post()
                 .uri(route)
-                .headers(head -> head.setAll(header))
+                .contentType(APPLICATION_JSON)
+                //.headers(head -> head.setAll(header))
                 .bodyValue(cleanHeader(request))
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
@@ -45,6 +47,6 @@ public class RestClient<T extends Request,R> {
 
     private <S extends Error> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
         return clientResponse.bodyToMono(clazzError)
-                .map(error -> error.toBuilder().httpsStatus(clientResponse.statusCode().value()).build());
+                .map(error -> new Error(clientResponse.statusCode().value()));
     }
 }

@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("alert_template")
-public class AlertTemplateData implements Persistable<Integer> {
+public class AlertTemplateData implements Persistable<String> {
 
     @Id
-    private Integer id;
+    private String id;
     private String field;
     private Integer initialPosition;
     private Integer finalPosition;

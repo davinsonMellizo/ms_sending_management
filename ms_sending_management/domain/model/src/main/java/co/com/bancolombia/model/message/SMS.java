@@ -7,10 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
 public class SMS extends Request {
-    private String To; // Contacto
-    private String text; // build
+    private String To;
+    private String text;
     private String CustomData;
     private Boolean IsPremium;
     private Boolean IsFlash;
