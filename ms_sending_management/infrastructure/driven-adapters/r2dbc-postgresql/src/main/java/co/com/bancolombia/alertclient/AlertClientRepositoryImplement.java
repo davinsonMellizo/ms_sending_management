@@ -58,11 +58,12 @@ public class AlertClientRepositoryImplement
 
     @Override
     public Mono<AlertClient> accumulate(AlertClient alertClient) {
-        return repository.updateAlertClient(alertClient.getAccumulatedOperations(),
+        return repository.accumulate(alertClient.getAccumulatedOperations(),
                 alertClient.getAccumulatedAmount(),
                 alertClient.getIdAlert(),
                 alertClient.getDocumentNumber(),
-                alertClient.getDocumentType())
+                alertClient.getDocumentType(),
+                timeFactory.now())
                 .filter(rowsAffected -> rowsAffected == NUMBER_ONE)
                 .map(integer -> alertClient)
                 .onErrorMap(e -> new TechnicalException(e, ACCUMULATE_ALERT_CLIENT_ERROR));

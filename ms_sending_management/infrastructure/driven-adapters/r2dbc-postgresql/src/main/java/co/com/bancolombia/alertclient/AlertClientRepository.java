@@ -8,6 +8,8 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 public interface AlertClientRepository extends ReactiveCrudRepository<AlertClientData, String> {
 
     @Modifying
@@ -19,10 +21,10 @@ public interface AlertClientRepository extends ReactiveCrudRepository<AlertClien
 
     @Modifying
     @Query("update alert_client " +
-            "set accumulated_operations = $1, accumulated_amount = $2 " +
+            "set accumulated_operations = $1, accumulated_amount = $2, transaction_date = $6 " +
             "where id_alert = $3 and document_number= $4 and id_document_type = $5")
     Mono<Integer> accumulate(Integer numberOperations, Long amount, String idAlert,
-                                    Long documentNumber, Integer documentType);
+                             Long documentNumber, Integer documentType, LocalDateTime dateTransaction);
 
     @Modifying
     @Query("DELETE FROM alert_client where id_alert = $1 and document_number = $2 and id_document_type = $3")

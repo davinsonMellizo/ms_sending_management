@@ -24,7 +24,8 @@ public class MasivianAdapter implements MasivianGateway {
 
     @Override
     public Mono<Response> sendSMS(SMS sms) {
-        return clientSms.post(properties.getResources().getEndpointInalambriaSms(), sms,
+        System.out.println(sms);
+        return clientSms.post(properties.getResources().getEndpointMasivianSms(), sms,
                 SuccessMasivianSMS.class, ErrorMasivianSMS.class)
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getDeliveryToken()).build())
@@ -38,6 +39,7 @@ public class MasivianAdapter implements MasivianGateway {
 
     @Override
     public Mono<Response> sendMAIL(Mail mail) {
+        System.out.println(mail);
         return clientMail.post(properties.getResources().getEndpointMasivianMail(), mail,
                 SuccessMasivianMAIL.class, ErrorMasivianMAIL.class)
                 .map(response -> Response.builder().code(STATUS_OK)

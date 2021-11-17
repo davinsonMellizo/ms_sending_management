@@ -17,17 +17,18 @@ public class SendAlertOneUseCase {
     private final AlertGateway alertGateway;
 
     private Mono<Void> routingAlerts(Message message, Alert pAlert){
-        return Mono.just(pAlert)
+        return Mono.just(pAlert)//TODO poner el mensaje en alert
                 .filter(alert -> alert.getPush().equalsIgnoreCase("Si"))
                 .flatMap(alert -> routerProviderPushUseCase.sendPush(message, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.routingAlertsSMS(message, pAlert))
                 //TODO mirar si el parametro se envia asì
-                .concatWith(routerProviderMailUseCase.sendEmail(message, pAlert, message.getParameters()))
+                .concatWith(routerProviderMailUseCase.sendMail(message, pAlert, message.getParameters()))
                 .thenEmpty(Mono.empty());
     }
 
     public Mono<Void> validateBasic(Message message) {
         return alertGateway.findAlertById("GNR")
+                .map(alert -> alert.toBuilder().message(message.getParameters().get(0).getValue()).build())
                 .flatMap(alert -> routingAlerts(message, alert));
     }
 

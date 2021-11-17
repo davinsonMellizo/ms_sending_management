@@ -15,6 +15,7 @@ public enum BusinessErrorMessage {
     INVALID_CONTACT("372", "Invalid Contact"),
     INVALID_CONTACTS("016", "Invalid Contacts"),
     ALERT_NOT_FOUND("120", "Alert Not Found"),
+    INVALID_PARAMETERS("120", "Invalid parameters"),
     INACTIVE_ALERT("120", "Inactive Alert"),
     ALERT_TRANSACTION_NOT_FOUND("374", "Alert Transaction Not Found"),
     REMITTER_NOT_FOUND("375", "Remitter Not Found"),

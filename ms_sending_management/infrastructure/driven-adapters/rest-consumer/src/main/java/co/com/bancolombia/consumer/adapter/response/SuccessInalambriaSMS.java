@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class SuccessInalambriaSMS {
-    private String MessageText;
-    private Integer Status;
-    private Long TransactionNumber;
+    private String messageText;
+    private Integer status;
+    private String transactionNumber;
 }

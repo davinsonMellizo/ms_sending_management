@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class PushAdapter implements PushGateway {
 
-    private static Integer STATUS_OK = 200;
+    private static Integer STATUS_OK = 202;
     private static Integer STATUS_ERROR = 1;
     private final ConsumerProperties properties;
     private final RestClient<PUSH, SuccessPush> client;

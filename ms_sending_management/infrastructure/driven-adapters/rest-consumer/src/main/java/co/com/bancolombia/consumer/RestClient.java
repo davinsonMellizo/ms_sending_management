@@ -49,4 +49,5 @@ public class RestClient<T extends Request,R> {
         return clientResponse.bodyToMono(clazzError)
                 .map(error -> new Error(clientResponse.statusCode().value()));
     }
+
 }

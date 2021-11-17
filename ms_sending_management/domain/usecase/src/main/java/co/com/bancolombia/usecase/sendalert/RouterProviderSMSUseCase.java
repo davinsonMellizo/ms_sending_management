@@ -50,8 +50,9 @@ public class RouterProviderSMSUseCase {
     }
 
     private Mono<Response> sendAlertMobile(Alert alert, Message message, Provider provider) {
-        return
-                sendSMSInalambria(message, alert, provider)
+        return logUseCase.sendLogSMS(message, alert, SEND_220, alert.getMessage(), new Response(0, "Success"))
+                .cast(Response.class)
+                .concatWith(sendSMSInalambria(message, alert, provider))
                 .concatWith(sendSMSMasivian(message, alert, provider)).next();
     }
 
@@ -66,7 +67,7 @@ public class RouterProviderSMSUseCase {
                 .flatMap(inalambriaGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response ->  logUseCase.sendLogSMS(message, alert, SEND_230,
-                        message.getParameters().get(0).getValue(), response));
+                        alert.getMessage(), response));
     }
 
     private Mono<Response> sendSMSMasivian(Message message, Alert alert, Provider pProvider){
@@ -81,7 +82,7 @@ public class RouterProviderSMSUseCase {
                 .flatMap(masivianGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response ->  logUseCase.sendLogSMS(message, alert, SEND_230,
-                        message.getParameters().get(0).getValue(), response));
+                        alert.getMessage(), response));
     }
 
 }

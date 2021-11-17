@@ -24,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
@@ -41,15 +44,26 @@ public class SendAlertZeroUseCase {
     private final AlertGateway alertGateway;
     private final LogUseCase logUseCase;
 
+    private Mono<AlertClient> restartAccumulated(AlertClient pAlertClient){
+        LocalDate now = LocalDate.now();
+        return Mono.just(pAlertClient)
+                .map(alertClient -> alertClient.getTransactionDate().toLocalDate())
+                .filter(dateTransaction -> !dateTransaction.equals(now))
+                .map(dateTransaction -> pAlertClient.toBuilder().accumulatedOperations(0)
+                        .accumulatedAmount(0L).build())
+                .switchIfEmpty(Mono.just(pAlertClient));
+    }
+
     private Mono<Alert> validateAmount(Alert alert, Message message){
         return Mono.just(AlertClient.builder().idAlert(alert.getId()).documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber()).build())
                 .flatMap(alertClientGateway::findAlertClient)
+                .flatMap(this::restartAccumulated)
                 .map(alertClient -> alertClient.toBuilder()
-                        .numberOperations(alertClient.getNumberOperations()+1)
+                        .accumulatedOperations(alertClient.getAccumulatedOperations()+1)
                         .accumulatedAmount(alertClient.getAccumulatedAmount()+ message.getAmount()).build())
-                .flatMap(alertClientGateway::updateAlertClient)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)))
+                .flatMap(alertClientGateway::accumulate)
                 .filter(alertClient -> alertClient.getAccumulatedAmount()>=alertClient.getAmountEnable() ||
                         alertClient.getAccumulatedOperations()>=alertClient.getNumberOperations())
                 .map(alertClient -> alert)
@@ -92,6 +106,8 @@ public class SendAlertZeroUseCase {
                 .flatMap(alertGateway::findAlertById)
                 .switchIfEmpty(logUseCase.sendLogError(message,SEND_220, new Response(1, ALERT_NOT_FOUND)))
                 .flatMap(alert -> Util.replaceParameter(alert, message))
+                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message,SEND_220,
+                        new Response(1, e.getBusinessErrorMessage().getMessage())))
                 .flatMap(alert -> validateObligation(alert, message))
                 .flatMap(alert -> sendAlerts(alert, message))
                 .then(Mono.empty());

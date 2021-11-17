@@ -9,6 +9,7 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 
 @RequiredArgsConstructor
@@ -18,7 +19,8 @@ public class RouterProviderPushUseCase {
 
 
     public Mono<Response> sendPush(Message message, Alert alert) {
-        return Mono.just(PUSH.builder()
+        return logUseCase.sendLogPush(message, alert, SEND_220, alert.getMessage(), new Response(0, "Success"))
+                .map(response -> PUSH.builder()
                 .data(PUSH.Data.builder()
                         .sendMessage(PUSH.SendMessage.builder()
                                 .customerIdentification(PUSH.CustomerIdentification.builder()
@@ -26,13 +28,13 @@ public class RouterProviderPushUseCase {
                                         .customerDocumentType(Integer.toString(message.getDocumentType()))
                                         .build())
                                 .consumerId("AYN")
-                                .message(message.getParameters().get(0).getValue())
+                                .message(alert.getMessage())
                                 .build())
                         .build())
                 .build())
                 .flatMap(pushGateway::sendPush)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLogPush(message, alert, SEND_230,
-                        message.getParameters().get(0).getValue(), response));
+                        alert.getMessage(), response));
     }
 }
