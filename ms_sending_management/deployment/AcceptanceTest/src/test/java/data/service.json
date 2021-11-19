@@ -1,6 +1,6 @@
 {
-  "id":  '#(id)',
-  "name":"WITH ATTACHMENT",
+  "id": '#(id)',
+  "name": "WITH ATTACHMENT",
   "idState": 1,
-  "creationUser":"user"
+  "creationUser": "user"
 }

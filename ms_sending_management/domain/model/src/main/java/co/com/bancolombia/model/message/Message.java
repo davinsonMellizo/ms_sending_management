@@ -1,7 +1,12 @@
 package co.com.bancolombia.model.message;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,7 +30,7 @@ public class Message {
 
     private Boolean push;
 
-    private ArrayList<Parameter> parameters;
+    private List<Parameter> parameters;
     private ArrayList<Attachment> attachments;
 
 }

@@ -11,7 +11,8 @@ public class SendAlertThreeUseCase {
     public Mono<Void> validateOthersChannels(Message message) {
         return Mono.empty();
     }
-    private  Mono<Void> buildMessageFrame(){
+
+    private Mono<Void> buildMessageFrame() {
         return Mono.empty();
     }
 

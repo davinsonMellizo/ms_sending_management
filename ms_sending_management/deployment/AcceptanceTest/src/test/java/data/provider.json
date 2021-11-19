@@ -1,6 +1,6 @@
 {
   "id": '#(id)',
-  "name":"PROVIDER TEST",
+  "name": "PROVIDER TEST",
   "typeService": "A",
-  "creationUser":"user"
+  "creationUser": "user"
 }

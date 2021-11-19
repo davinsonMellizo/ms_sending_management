@@ -1,12 +1,9 @@
 package co.com.bancolombia.usecase.alertclient;
 
-import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
-import co.com.bancolombia.model.response.StatusResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

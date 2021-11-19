@@ -33,7 +33,7 @@ public class Alert implements Serializable {
     private String creationUser;
     private LocalDateTime createdDate;
 
-    public Alert message(String message){
+    public Alert message(String message) {
         setMessage(message);
         return this;
     }

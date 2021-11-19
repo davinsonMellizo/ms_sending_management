@@ -17,7 +17,7 @@ public class PUSH extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class Data{
+    public static class Data {
         private SendMessage sendMessage;
 
     }
@@ -26,7 +26,7 @@ public class PUSH extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class SendMessage{
+    public static class SendMessage {
         private CustomerIdentification customerIdentification;
         private String customerNickname;
         private String customerMdmKey;
@@ -40,7 +40,7 @@ public class PUSH extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class CustomerIdentification{
+    public static class CustomerIdentification {
         private String customerDocumentType;
         private String customerDocumentNumber;
     }

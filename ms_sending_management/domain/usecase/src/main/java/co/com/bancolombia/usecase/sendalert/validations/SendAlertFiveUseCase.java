@@ -16,7 +16,8 @@ import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.*;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormat;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormatOrMobile;
 
 @RequiredArgsConstructor
 public class SendAlertFiveUseCase {
@@ -26,29 +27,38 @@ public class SendAlertFiveUseCase {
     private final AlertGateway alertGateway;
     private final LogUseCase logUseCase;
 
-    private Mono<Void> sendAlert(Alert alert, Message message) {
+    private Mono<Response> validateMail(Message message, Alert alert) {
+        return Mono.just(message)
+                .filter(isValidMailFormat)
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
+                .flatMap(messageValid -> routerProviderMailUseCase.sendAlertMail(alert, messageValid))
+                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
+                        alert.getMessage(), new Response(1, e.getBusinessErrorMessage().getMessage())));
+    }
+
+    private Mono<Void> routeAlert(Alert alert, Message message) {
         return Mono.just(message)
                 .filter(message1 -> alert.getPush().equalsIgnoreCase("Si"))
-                .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1,alert))
-                .switchIfEmpty(routerProviderSMSUseCase.routingAlertsSMS(message, alert))
-                .concatWith(routerProviderMailUseCase.sendAlertMail(alert, message))
+                .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1, alert))
+                .switchIfEmpty(routerProviderSMSUseCase.validateMobile(message, alert))
+                .concatWith(validateMail(message, alert))
                 .then(Mono.empty());
     }
 
-    public Mono<Void> validateWithCodeAlert(Message message) {
+    public Mono<Void> sendAlertIndicatorFive(Message message) {
         return Mono.just(message)
                 .filter(isValidMailFormatOrMobile)
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)))
                 .map(Message::getAlert)
                 .flatMap(alertGateway::findAlertById)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
-                .filter(alert -> alert.getIdState()==(0))
+                .filter(alert -> alert.getIdState() == (0))
                 .switchIfEmpty(Mono.error(new BusinessException(INACTIVE_ALERT)))
                 .flatMapMany(alert -> Util.replaceParameter(alert, message)).next()
-                .flatMap(alert -> sendAlert(alert, message))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message,SEND_220,
+                .flatMap(alert -> routeAlert(alert, message))
+                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
                         new Response(1, e.getBusinessErrorMessage().getMessage())))
-                .onErrorResume(TechnicalException.class, e -> logUseCase.sendLogError(message,SEND_220,
+                .onErrorResume(TechnicalException.class, e -> logUseCase.sendLogError(message, SEND_220,
                         new Response(1, e.getMessage())));
     }
 

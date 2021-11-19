@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class LogUseCase {
     private final LogGateway logGateway;
 
-    public  <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, String text, Response response){
+    public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
@@ -33,7 +33,7 @@ public class LogUseCase {
                 .then(Mono.empty());
     }
 
-    public  Mono<Response> sendLogPush(Message message, Alert alert, String logType, String text, Response response){
+    public Mono<Response> sendLogPush(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
@@ -54,7 +54,7 @@ public class LogUseCase {
                 .then(Mono.just(response));
     }
 
-    public  <T> Mono<T> sendLogMAIL(Message message, Alert alert, String logType, String text, Response response){
+    public <T> Mono<T> sendLogMAIL(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
@@ -75,7 +75,7 @@ public class LogUseCase {
                 .then(Mono.empty());
     }
 
-    public  <T> Mono<T> sendLogError(Message message, String logType, Response response){
+    public <T> Mono<T> sendLogError(Message message, String logType, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())

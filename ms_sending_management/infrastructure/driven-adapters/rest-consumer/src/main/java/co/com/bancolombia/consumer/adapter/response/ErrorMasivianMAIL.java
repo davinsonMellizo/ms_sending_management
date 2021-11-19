@@ -1,15 +1,13 @@
 package co.com.bancolombia.consumer.adapter.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
-public class ErrorMasivianMAIL extends Error{
+public class ErrorMasivianMAIL{
     private String status;
     private String description;
 }

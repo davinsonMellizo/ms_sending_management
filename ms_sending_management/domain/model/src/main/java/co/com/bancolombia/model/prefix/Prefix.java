@@ -1,4 +1,5 @@
 package co.com.bancolombia.model.prefix;
+
 import lombok.Builder;
 import lombok.Data;
 

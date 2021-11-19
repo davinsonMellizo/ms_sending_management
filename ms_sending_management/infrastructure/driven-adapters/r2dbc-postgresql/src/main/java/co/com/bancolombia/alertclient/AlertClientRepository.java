@@ -3,7 +3,6 @@ package co.com.bancolombia.alertclient;
 import co.com.bancolombia.alertclient.data.AlertClientData;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

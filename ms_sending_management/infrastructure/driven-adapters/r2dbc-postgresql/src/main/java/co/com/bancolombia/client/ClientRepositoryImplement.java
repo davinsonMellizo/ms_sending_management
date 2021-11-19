@@ -6,7 +6,6 @@ import co.com.bancolombia.client.data.ClientMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
-import co.com.bancolombia.model.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;

@@ -1,8 +1,5 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
-import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.usecase.sendalert.validations.*;
@@ -23,14 +20,14 @@ public class ManagementAlertUseCase {
     private final SendAlertThreeUseCase sendAlertThreeUseCase;
     private final SendAlertFiveUseCase sendAlertFiveUseCase;
 
-    private Function<Message, Mono<Void>> getValidations(Integer idOperation){
+    private Function<Message, Mono<Void>> getValidations(Integer idOperation) {
         final Map<Integer, Function<Message, Mono<Void>>> functions = new HashMap<>();
-        functions.put(0, sendAlertZeroUseCase::validateWithDataClient);
-        functions.put(1, sendAlertOneUseCase::validateBasic);
+        functions.put(0, sendAlertZeroUseCase::sendAlertsIndicatorZero);
+        functions.put(1, sendAlertOneUseCase::sendAlertIndicatorOne);
         functions.put(2, sendAlertTwoUseCase::validateWithCodeTrx);
         functions.put(3, sendAlertThreeUseCase::validateOthersChannels);
         functions.put(4, sendAlertThreeUseCase::validateOthersChannels);
-        functions.put(5, sendAlertFiveUseCase::validateWithCodeAlert);
+        functions.put(5, sendAlertFiveUseCase::sendAlertIndicatorFive);
 
         return functions.get(idOperation);
     }

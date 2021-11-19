@@ -14,7 +14,7 @@ public class Response {
     private Integer code;
     private String description;
 
-    public Response(Integer code, BusinessErrorMessage message){
+    public Response(Integer code, BusinessErrorMessage message) {
         this.code = code;
         this.description = message.getMessage();
     }

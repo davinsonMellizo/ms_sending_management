@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -19,12 +20,14 @@ public class RestClient<T extends Request,R> {
 
     private final WebClient webClient;
 
-    public <S extends Error> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
-        Map<String,String> header = request.getHeaders();
+    public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
+        Map<String,String> header = new HashMap<>();
+        header.put("x-mock-match-request-headers", "true");
+        header.put("token", "token-valid");
         return webClient.post()
                 .uri(route)
                 .contentType(APPLICATION_JSON)
-                //.headers(head -> head.setAll(header))
+                .headers(head -> head.setAll(header))
                 .bodyValue(cleanHeader(request))
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
@@ -45,9 +48,9 @@ public class RestClient<T extends Request,R> {
         return request;
     }
 
-    private <S extends Error> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
+    private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
         return clientResponse.bodyToMono(clazzError)
-                .map(error -> new Error(clientResponse.statusCode().value()));
+                .map(data -> new Error(clientResponse.statusCode().value(), data));
     }
 
 }

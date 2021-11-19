@@ -8,5 +8,6 @@ import reactor.core.publisher.Mono;
 public interface MasivianGateway {
 
     Mono<Response> sendSMS(SMS sms);
+
     Mono<Response> sendMAIL(Mail mail);
 }

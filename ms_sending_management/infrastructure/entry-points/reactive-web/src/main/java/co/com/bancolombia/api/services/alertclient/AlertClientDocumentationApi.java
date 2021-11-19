@@ -4,14 +4,8 @@ import co.com.bancolombia.api.dto.AlertClientDTO;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.error.Error;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import org.springdoc.core.fn.builders.operation.Builder;
-import org.springframework.asm.TypeReference;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;

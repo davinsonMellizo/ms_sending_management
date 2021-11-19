@@ -29,10 +29,10 @@ public class AlertClientUseCase {
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
 
-    public Mono<ResponseClient> matchClientWithBasicKit(Map<String, String> headers){
+    public Mono<ResponseClient> matchClientWithBasicKit(Map<String, String> headers) {
         return alertGateway.findAlertKitBasic()
                 .map(alert -> AlertClient.builder()
-                        .documentType(Integer.parseInt( headers.get(DOCUMENT_TYPE)))
+                        .documentType(Integer.parseInt(headers.get(DOCUMENT_TYPE)))
                         .documentNumber(Long.parseLong(headers.get(DOCUMENT_NUMBER)))
                         .associationOrigin(headers.get(ASSOCIATION_ORIGIN))
                         .idAlert(alert.getId()).numberOperations(1)
@@ -54,28 +54,29 @@ public class AlertClientUseCase {
                 alertClients.get(0).getDocumentType())
                 .map(AlertClient::getIdAlert)
                 .collectList()
-                .flatMapMany(alerts->Flux.fromIterable(alertClients)
+                .flatMapMany(alerts -> Flux.fromIterable(alertClients)
                         .map(alertClient -> Tuples.of(alerts, alertClient)))
                 .flatMap(this::validateValues).last();
     }
 
     private Mono<AlertClient> validateValues(Tuple2<List<String>, AlertClient> data) {
         return Mono.just(data)
-                .filter(data1 -> data.getT2().getAmountEnable()!=0 || data.getT2().getNumberOperations()!=0)
+                .filter(data1 -> data.getT2().getAmountEnable() != 0 || data.getT2().getNumberOperations() != 0)
                 .flatMap(this::validateCreation)
                 .switchIfEmpty(validateDeletion(data));
     }
+
     private Mono<AlertClient> validateCreation(Tuple2<List<String>, AlertClient> data) {
         return Mono.just(data.getT2())
-                .doOnNext(System.out::println)
-                .filter(alertClient ->  data.getT1().contains(data.getT2().getIdAlert()))
+                .filter(alertClient -> data.getT1().contains(data.getT2().getIdAlert()))
                 .flatMap(alertClientGateway::updateAlertClient)
                 .flatMap(alertClient -> newnessUseCase.saveNewness(alertClient, UPDATE_CLIENT_ALERT))
                 .switchIfEmpty(saveAlertClient(data.getT2()));
     }
+
     private Mono<AlertClient> validateDeletion(Tuple2<List<String>, AlertClient> data) {
         return Mono.just(data.getT2())
-                .filter(alertClient ->  data.getT1().contains(data.getT2().getIdAlert()))
+                .filter(alertClient -> data.getT1().contains(data.getT2().getIdAlert()))
                 .flatMap(this::deleteAlertClient);
     }
 
@@ -86,8 +87,8 @@ public class AlertClientUseCase {
                 .flatMapMany(client -> alertClientGateway.alertsVisibleChannelByClient(client.getDocumentNumber(),
                         client.getIdDocumentType()))
                 .map(alertClient -> alertClient.toBuilder()
-                .documentNumber(Long.parseLong(headers.get(DOCUMENT_NUMBER)))
-                .documentType(Integer.parseInt(headers.get(DOCUMENT_TYPE))).build())
+                        .documentNumber(Long.parseLong(headers.get(DOCUMENT_NUMBER)))
+                        .documentType(Integer.parseInt(headers.get(DOCUMENT_TYPE))).build())
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)))
                 .collectList();
     }

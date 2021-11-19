@@ -9,7 +9,6 @@ import co.com.bancolombia.api.services.alertclient.AlertClientRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alertclient.AlertClient;
-import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.alertclient.AlertClientUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;

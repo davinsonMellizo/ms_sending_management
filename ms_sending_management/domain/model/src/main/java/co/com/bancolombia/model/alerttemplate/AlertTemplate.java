@@ -1,4 +1,5 @@
 package co.com.bancolombia.model.alerttemplate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

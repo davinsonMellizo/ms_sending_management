@@ -1,9 +1,8 @@
-
 {
   "id": '#(id)',
-  "idProviderMail":"TOD",
+  "idProviderMail": "TOD",
   "idProviderSms": "TOD",
-  "idTemplate":0,
+  "idTemplate": 0,
   "idRemitter": 0,
   "idService": 0,
   "idState": 0,
@@ -16,5 +15,5 @@
   "pathAttachedMail": "pathAttachedMail",
   "obligatory": true,
   "visibleChannel": true,
-  "creationUser":"creationUser"
+  "creationUser": "creationUser"
 }

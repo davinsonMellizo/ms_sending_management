@@ -5,7 +5,6 @@ import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.gateways.MessageGateway;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.model.service.gateways.ServiceGateway;

@@ -1,4 +1,5 @@
 package co.com.bancolombia.model.priority;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

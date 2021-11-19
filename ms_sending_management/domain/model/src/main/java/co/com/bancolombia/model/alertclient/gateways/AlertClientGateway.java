@@ -1,7 +1,6 @@
 package co.com.bancolombia.model.alertclient.gateways;
 
 import co.com.bancolombia.model.alertclient.AlertClient;
-import co.com.bancolombia.model.response.StatusResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

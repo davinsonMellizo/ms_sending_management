@@ -9,7 +9,7 @@ import static co.com.bancolombia.commons.enums.Response.SUCCESS_120;
 
 @UtilityClass
 public class FactoryLog {
-    public  Mono<Newness> createLog(AlertClient alertClient, String transaction) {
+    public Mono<Newness> createLog(AlertClient alertClient, String transaction) {
         return Mono.just(Newness.builder()
                 .documentType(alertClient.getDocumentType())
                 .documentNumber(alertClient.getDocumentNumber())

@@ -4,7 +4,6 @@ import co.com.bancolombia.alertclient.data.AlertClientMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.alertclient.AlertClient;
-import co.com.bancolombia.model.response.StatusResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
