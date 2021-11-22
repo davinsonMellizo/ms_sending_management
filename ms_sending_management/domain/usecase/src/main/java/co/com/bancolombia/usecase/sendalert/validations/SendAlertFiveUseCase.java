@@ -38,7 +38,7 @@ public class SendAlertFiveUseCase {
 
     private Mono<Void> routeAlert(Alert alert, Message message) {
         return Mono.just(message)
-                .filter(message1 -> alert.getPush().equalsIgnoreCase("Si"))
+                .filter(message1 -> alert.getPush().equalsIgnoreCase("SI"))
                 .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.validateMobile(message, alert))
                 .concatWith(validateMail(message, alert))
