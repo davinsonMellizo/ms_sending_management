@@ -14,14 +14,32 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Mail extends Request {
-    private String Subject;
-    private String From;
-    private Template Template;
-    private String PreviewText;
-    private String ReplyTo;
-    private List<Parameter> parameters;
-    private ArrayList<Recipient> Recipients;
-    private ArrayList<Attachment> Attachments;
+    private Integer priority;
+    private String provider;
+    private String from;
+    private Destination destination;
+    private List<Attachment> attachments;
+    private Template template;
+    private Message message;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder(toBuilder = true)
+    public static class Destination{
+        private String toAddress;
+        private String ccAddress;
+        private String bccAddress;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder(toBuilder = true)
+    public static class Message{
+        private String subject;
+        private String body;
+    }
 
 
 }

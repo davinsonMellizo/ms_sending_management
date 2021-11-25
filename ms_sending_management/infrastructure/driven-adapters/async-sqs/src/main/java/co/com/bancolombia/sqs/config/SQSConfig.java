@@ -41,7 +41,6 @@ public class SQSConfig {
         return AmazonSQSAsyncClientBuilder.standard()
                 .withClientConfiguration(clientConfiguration())
                 .withExecutorFactory(executorFactory())
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(properties.getRegionAws())
                 .build();
     }

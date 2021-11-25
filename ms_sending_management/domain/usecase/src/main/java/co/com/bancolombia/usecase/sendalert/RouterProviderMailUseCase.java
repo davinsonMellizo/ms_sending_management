@@ -3,6 +3,7 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
+import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.remitter.Remitter;
@@ -24,7 +25,7 @@ import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidM
 @RequiredArgsConstructor
 public class RouterProviderMailUseCase {
     private final AlertTemplateGateway alertTemplateGateway;
-    private final MasivianGateway masivianGateway;
+    private final CommandGateway commandGateway;
     private final RemitterGateway remitterGateway;
     private final LogUseCase logUseCase;
 
@@ -45,7 +46,7 @@ public class RouterProviderMailUseCase {
 
     public Mono<Response> routeAlertMail(Message message, Alert alert, List<Parameter> parameters) {
         return remitterGateway.findRemitterById(alert.getIdRemitter())
-                .doOnError(e -> logUseCase.sendLogSMS(message, alert, SEND_220,
+                .doOnError(e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
                         parameters.toString(), new Response(1, e.getMessage())))
                 .flatMap(remitter -> buildMail(message, alert, parameters, remitter));
     }
@@ -57,16 +58,15 @@ public class RouterProviderMailUseCase {
                 new Response(0, "Success"))
                 .cast(Mail.class)
                 .concatWith(Mono.just(Mail.builder()
-                        .Subject(alert.getSubjectMail())
-                        .Recipients(recipients)
-                        .Template(new Template(COMPLEX.getType(), message.getTemplate()))
-                        .parameters(parameters)
-                        .Attachments(Util.validateAttachments(message.getAttachments()))
-                        .From(remitter.getMail())
-                        .build())).next()
-                .flatMap(masivianGateway::sendMAIL)
+                        .priority(1)
+                        .provider("MASIVIAN")
+                        .from(remitter.getMail())
+                        .destination(new Mail.Destination(message.getMail(), "", ""))
+                        .attachments(message.getAttachments())
+                        /*.template(new Template())*/.build())).next()
+                .flatMap(commandGateway::sendCommandAlertEmail)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_230,
+                .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_220,
                         alert.getMessage(), response));
     }
 }

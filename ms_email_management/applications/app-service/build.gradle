@@ -1,0 +1,19 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation project(':async-sqs')
+	implementation project(':pinpoint')
+	implementation project(':rest-consumer')
+    implementation project(':async-event-handler')
+	compile 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation project(':model')
+    implementation project(':usecase')
+    compile 'org.springframework.boot:spring-boot-starter'
+    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}
