@@ -31,7 +31,7 @@ public class SendAlertFiveUseCase {
         return Mono.just(message)
                 .filter(isValidMailFormat)
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
-                .flatMap(messageValid -> routerProviderMailUseCase.sendAlertMail(alert, messageValid))
+                .flatMap(messageValid -> routerProviderMailUseCase.routeAlertMail(messageValid, alert))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
                         alert.getMessage(), new Response(1, e.getBusinessErrorMessage().getMessage())));
     }

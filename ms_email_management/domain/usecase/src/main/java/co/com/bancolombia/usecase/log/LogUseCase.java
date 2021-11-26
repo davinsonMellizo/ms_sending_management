@@ -19,7 +19,7 @@ public class LogUseCase {
                 .logType(logType)
                 .medium(medium)
                 .contact(alert.getDestination().getToAddress())
-                .messageSent(alert.getMessage().getBody())
+                //.messageSent(alert.getMessage().getBody())
                 //.alertId(alert.getId())
                 //.alertDescription(alert.getDescription())
                 //.transactionId(message.getTransactionCode())

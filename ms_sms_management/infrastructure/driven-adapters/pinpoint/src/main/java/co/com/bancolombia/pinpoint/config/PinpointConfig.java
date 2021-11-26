@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.pinpoint.PinpointAsyncClient;
 
@@ -15,18 +17,39 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class PinpointConfig {
 
-    private final PinpointProperties properties;
-
+    @Profile("local")
     @Bean
-    @Primary
-    public PinpointAsyncClient clientPinpoint(){
+    public PinpointAsyncClient pinpointConfigLocal(){
         try {
             return PinpointAsyncClient.builder()
                     .region(Region.US_EAST_1)
-                    .endpointOverride(URI.create(properties.getUrl()))
+                    .credentialsProvider(getProviderChain())
                     .build();
         }catch (TechnicalException e){
             throw new TechnicalException(TechnicalExceptionEnum.CREATE_CLIENT_PINPOINT_ERROR);
         }
+    }
+
+    @Profile({"dev", "qa", "pdn"})
+    @Bean
+    public PinpointAsyncClient pinpointConfig(){
+        try {
+            return PinpointAsyncClient.builder()
+                    .region(Region.US_EAST_1)
+                    .build();
+        }catch (TechnicalException e){
+            throw new TechnicalException(TechnicalExceptionEnum.CREATE_CLIENT_PINPOINT_ERROR);
+        }
+    }
+
+    public AwsCredentialsProviderChain getProviderChain() {
+        return AwsCredentialsProviderChain.builder()
+                .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
+                .addCredentialsProvider(SystemPropertyCredentialsProvider.create())
+                .addCredentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
+                .addCredentialsProvider(ProfileCredentialsProvider.create())
+                .addCredentialsProvider(ContainerCredentialsProvider.builder().build())
+                .addCredentialsProvider(InstanceProfileCredentialsProvider.create())
+                .build();
     }
 }

@@ -3,8 +3,10 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.PinpointGateway;
+import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
+import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -17,14 +19,29 @@ import static co.com.bancolombia.usecase.sendalert.commons.Medium.*;
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
-    private final MasivianGateway masivianGateway;
     private final PinpointGateway pinpointGateway;
+    private final MasivianGateway masivianGateway;
+    private final SesGateway sesGateway;
     private final LogUseCase logUseCase;
 
     public Mono<Void> sendAlertToProviders(Alert alert) {
         return validateAttachments(alert)
                 .flatMap(this::sendEmailByMasivian)
+                .concatWith(sendEmailBySes(alert))
                 .thenEmpty(Mono.empty());
+    }
+
+    private Mono<Response> sendEmailBySes(Alert alert) {
+        return Mono.just(alert.getProvider())
+                .filter(provider -> provider.equalsIgnoreCase(SES))
+                .flatMap(provider -> pinpointGateway.findTemplateEmail(alert.getTemplate().getName()))
+                .map(template -> alert.toBuilder()
+                        .message(Alert.Message.builder().body(template.getBody())
+                                .subject(template.getSubject())
+                                .build()).build())
+                .flatMap(sesGateway::sendEmail)
+                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
+                .flatMap(response -> logUseCase.sendLog(alert, SEND_230, EMAIL, response));
     }
 
     private Mono<Alert> validateAttachments(Alert alert) {
@@ -32,13 +49,14 @@ public class SendAlertUseCase {
     }
 
     public Mono<Response> sendEmailByMasivian(Alert alert) {
+        System.out.println(alert);
         ArrayList<Recipient> recipients = new ArrayList<>();
-        //recipients.add(new Recipient(alert.getDestination().getToAddress()));
+        recipients.add(new Recipient(alert.getDestination().getToAddress()));
         return Mono.just(alert.getProvider())
-                //.filter(provider -> provider.equalsIgnoreCase(MASIVIAN))
+                .filter(provider -> provider.equalsIgnoreCase(MASIVIAN))
                 .flatMap(provider -> pinpointGateway.findTemplateEmail(alert.getTemplate().getName()))
-                .then(Mono.empty())
-                /*.doOnNext(template -> alert.setMessage(Alert.Message.builder().body(template.getBody()).build()))
+                .doOnNext(template -> alert.setMessage(Alert.Message.builder().subject(template.getSubject())
+                        .body(template.getBody()).build()))
                 .map(template -> Mail.builder()
                         .From(alert.getFrom())
                         .Subject(template.getSubject())
@@ -48,6 +66,6 @@ public class SendAlertUseCase {
                         .build())
                 .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SEND_230, EMAIL, response))*/;
+                .flatMap(response -> logUseCase.sendLog(alert, SEND_230, EMAIL, response));
     }
 }

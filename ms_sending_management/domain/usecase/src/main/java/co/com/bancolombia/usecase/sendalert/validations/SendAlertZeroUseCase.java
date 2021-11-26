@@ -96,7 +96,7 @@ public class SendAlertZeroUseCase {
                 .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase("Si"))
                 .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
-                .concatWith(routerProviderMailUseCase.sendAlertMail(alert, message))
+                .concatWith(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .thenMany(Flux.empty());
     }
 

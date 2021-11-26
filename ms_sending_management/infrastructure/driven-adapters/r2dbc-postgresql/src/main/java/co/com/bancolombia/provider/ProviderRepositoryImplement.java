@@ -45,6 +45,12 @@ public class ProviderRepositoryImplement
     }
 
     @Override
+    public Mono<Provider> findProviderByProviderService(Integer id) {
+        return repository.finProvider(id)
+                .map(this::convertToEntity);
+    }
+
+    @Override
     public Mono<Provider> saveProvider(Provider provider) {
         return Mono.just(provider)
                 .map(this::convertToData)

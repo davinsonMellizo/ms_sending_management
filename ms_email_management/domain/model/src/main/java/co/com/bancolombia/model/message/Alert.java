@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Alert {
-    private Integer priority;
     private String provider;
     private String from;
     private Destination destination;

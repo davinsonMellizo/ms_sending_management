@@ -2,7 +2,7 @@ package co.com.bancolombia.usecase.log;
 
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.gateways.LogGateway;
-import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -11,20 +11,20 @@ import reactor.core.publisher.Mono;
 public class LogUseCase {
     private final LogGateway logGateway;
 
-    public <T> Mono<T> sendLog(Message message, String logType, String medium, Response response) {
+    public <T> Mono<T> sendLog(Alert alert, String logType, String medium, Response response) {
         return logGateway.putLogToSQS(Log.builder()
-                .documentType(message.getDocumentType())
-                .documentNumber(Long.parseLong(message.getDocumentNumber()))
+                .documentType(alert.getDocumentType())
+                .documentNumber(Long.parseLong(alert.getDocumentNumber()))
                 //.consumer(message.getConsumer())
                 .logType(logType)
                 .medium(medium)
-                .contact(message.getTo())
-                .messageSent(message.getText())
+                .contact(alert.getTo())
+                .messageSent(alert.getText())
                 //.alertId(alert.getId())
                 //.alertDescription(alert.getDescription())
                 //.transactionId(message.getTransactionCode())
                 //.amount(message.getAmount())
-                .provider(message.getProvider())
+                .provider(alert.getProvider())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 //.operationId(message.getOperation())

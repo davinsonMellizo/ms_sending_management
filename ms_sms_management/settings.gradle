@@ -22,3 +22,5 @@ include ':async-event-handler'
 project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
 include ':pinpoint'
 project(':pinpoint').projectDir = file('./infrastructure/driven-adapters/pinpoint')
+include ':async-sqs'
+project(':async-sqs').projectDir = file('./infrastructure/driven-adapters/async-sqs')

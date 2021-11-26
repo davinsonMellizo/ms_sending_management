@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Mail extends Request {
-    private Integer priority;
     private String provider;
     private String from;
     private Destination destination;

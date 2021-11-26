@@ -16,7 +16,6 @@ public class HandlerRegistryConfiguration {
 
     @Bean
     public HandlerRegistry handlerRegistry(CommandsHandler commands, EventsHandler events) {
-        System.out.println("llega");
         return register()
                 .handleCommand(SEND_ALERT, commands::handleSendAlert, Alert.class)
                 .listenEvent(SEND_ALERT_RETRY, events::handleSendAlert, Alert.class);

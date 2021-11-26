@@ -21,25 +21,14 @@ public class SendAlertOneUseCase {
     private final RouterProviderMailUseCase routerProviderMailUseCase;
     private final RouterProviderPushUseCase routerProviderPushUseCase;
     private final RouterProviderSMSUseCase routerProviderSMSUseCase;
-    private final LogUseCase logUseCase;
     private final AlertGateway alertGateway;
-
-    private Mono<Response> validateMail(Message message, Alert alert) {
-        return Mono.just(message)
-                .filter(isValidMail)
-                .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
-                .map(Message::getParameters)
-                .flatMap(parameters -> routerProviderMailUseCase.routeAlertMail(message, alert, parameters))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        alert.getMessage(), new Response(1, e.getBusinessErrorMessage().getMessage())));
-    }
 
     private Mono<Void> routeAlerts(Message message, Alert pAlert) {
         return Mono.just(pAlert)
                 .filter(alert -> alert.getPush().equalsIgnoreCase("Si"))
                 .flatMap(alert -> routerProviderPushUseCase.sendPush(message, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.validateMobile(message, pAlert))
-                .concatWith(validateMail(message, pAlert))
+                .concatWith(routerProviderMailUseCase.routeAlertMail(message, pAlert))
                 .thenEmpty(Mono.empty());
     }
 

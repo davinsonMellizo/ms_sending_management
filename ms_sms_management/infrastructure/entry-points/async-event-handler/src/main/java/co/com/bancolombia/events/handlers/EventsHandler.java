@@ -1,6 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
-import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.DomainEvent;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class EventsHandler {
     private final SendAlertUseCase useCase;
 
-    public Mono<Void> handleSendAlert(DomainEvent<Message> event) {
+    public Mono<Void> handleSendAlert(DomainEvent<Alert> event) {
         return useCase.sendAlertToProviders(event.getData());
     }
 }
