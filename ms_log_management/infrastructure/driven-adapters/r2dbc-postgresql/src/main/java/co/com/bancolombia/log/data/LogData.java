@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class LogData {
     @Id
     private Integer id;
+    private String logKey;
     private Integer documentType;
     private Long documentNumber;
     private String logType;
@@ -33,6 +34,7 @@ public class LogData {
     private Integer responseCode;
     private String responseDescription;
     private Integer priority;
+    private String provider;
     private String template;
     private Integer operationId;
     private String operationDescription;

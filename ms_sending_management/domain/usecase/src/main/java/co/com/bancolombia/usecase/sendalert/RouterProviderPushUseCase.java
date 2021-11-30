@@ -10,12 +10,19 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
+import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
+
 @RequiredArgsConstructor
 public class RouterProviderPushUseCase {
     private final CommandGateway commandGateway;
+    private final LogUseCase logUseCase;
 
     public Mono<Response> sendPush(Message message, Alert alert) {
-        return Mono.just(Sms.builder()
+        return logUseCase.sendLogPush(message, alert, SEND_220, alert.getMessage(), new Response(0, "Success"))
+                .map(response -> Sms.builder()
+                        .logKey(message.getLogKey())
                         .priority(1)
                         .to(message.getPhoneIndicator() + message.getPhone())
                         .template(new Template(message.getParameters(), "Compra"))

@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class TemplateEmail {
     private String subject;
-    private String body;
+    private String bodyHtml;
+    private String textPlain;
 }

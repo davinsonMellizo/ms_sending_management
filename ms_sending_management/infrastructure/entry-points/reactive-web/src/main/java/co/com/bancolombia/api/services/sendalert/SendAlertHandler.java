@@ -2,6 +2,7 @@ package co.com.bancolombia.api.services.sendalert;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
+import co.com.bancolombia.api.services.sendalert.dto.MessageDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.usecase.sendalert.ManagementAlertUseCase;
@@ -21,8 +22,9 @@ public class SendAlertHandler {
 
 
     public Mono<ServerResponse> saveRemitter(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(Message.class)
+        return serverRequest.bodyToMono(MessageDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .flatMap(MessageDTO::toModel)
                 .flatMap(useCase::alertSendingManager)
                 .flatMap(ResponseUtil::responseOk);
     }

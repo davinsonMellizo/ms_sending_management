@@ -17,6 +17,9 @@ public class PinpointAdapter implements PinpointGateway {
     public Mono<TemplateSms> findTemplateSms(String templateName){
         return Mono.fromFuture(client.getSmsTemplate(GetSmsTemplateRequest.builder()
                 .templateName(templateName)
-                .build())).map(response -> TemplateSms.builder().build());
+                .build()))
+                .map(response -> TemplateSms.builder()
+                        .bodyText(response.smsTemplateResponse().body())
+                        .build());
     }
 }

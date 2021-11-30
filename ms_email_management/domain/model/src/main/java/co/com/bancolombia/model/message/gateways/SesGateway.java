@@ -6,5 +6,5 @@ import co.com.bancolombia.model.message.TemplateEmail;
 import reactor.core.publisher.Mono;
 
 public interface SesGateway {
-    Mono<Response> sendEmail(Alert alert);
+    Mono<Response> sendEmail( TemplateEmail templateEmail,Alert alert);
 }

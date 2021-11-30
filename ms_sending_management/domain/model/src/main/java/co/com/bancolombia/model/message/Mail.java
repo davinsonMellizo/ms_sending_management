@@ -20,6 +20,7 @@ public class Mail extends Request {
     private List<Attachment> attachments;
     private Template template;
     private Message message;
+    private String logKey;
 
     @Data
     @AllArgsConstructor

@@ -20,4 +20,5 @@ public class Sms extends Request {
     private String documentType;
     private String documentNumber;
     private String enrolClient;
+    private String logKey;
 }

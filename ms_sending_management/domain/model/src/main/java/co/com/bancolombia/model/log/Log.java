@@ -27,6 +27,7 @@ public class Log {
     private Integer responseCode;
     private String responseDescription;
     private Integer priority;
+    private String provider;
     private String template;
     private Integer operationId;
     private String operationDescription;

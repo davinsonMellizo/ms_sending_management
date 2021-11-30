@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
@@ -26,21 +27,6 @@ public class RouterProviderMailUseCase {
     private final ProviderGateway providerGateway;
     private final CommandGateway commandGateway;
     private final LogUseCase logUseCase;
-
-
-    /*public Mono<Response> sendAlertMail(Alert alert, Message pMessage) {
-        return Mono.just(pMessage)
-                .filter(isValidMail)
-                .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
-                //.flatMapMany(message -> alertTemplateGateway.findTemplateById(alert.getIdTemplate()))
-                //.doOnNext(alertTemplate -> pMessage.setTemplate(alertTemplate.getId()))
-                //.flatMap(alertTemplate -> Util.buildParameter(alertTemplate, alert.getMessage()))
-                //.collectList()
-                //.filter(parameters -> !parameters.isEmpty())
-                .flatMap(parameters -> routeAlertMail(pMessage, alert))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(pMessage, alert, SEND_220,
-                        alert.getMessage(), new Response(1, e.getBusinessErrorMessage().getMessage())));
-    }*/
 
     public Mono<Response> routeAlertMail(Message message, Alert alert) {
         return Mono.just(message)
@@ -62,11 +48,12 @@ public class RouterProviderMailUseCase {
                 new Response(0, "Success"))
                 .cast(Mail.class)
                 .concatWith(Mono.just(Mail.builder()
+                        .logKey(message.getLogKey())
                         .provider(provider.getId())
                         .from(remitter.getMail())
                         .destination(new Mail.Destination(message.getMail(), "", ""))
                         .attachments(message.getAttachments())
-                        .template(new Template(message.getParameters(),"Compra")).build())).next()
+                        .template(new Template(message.getParameters(), alert.getTemplateName())).build())).next()
                 .flatMap(commandGateway::sendCommandAlertEmail)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_220,

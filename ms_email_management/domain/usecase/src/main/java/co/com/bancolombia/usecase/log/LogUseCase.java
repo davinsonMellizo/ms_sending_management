@@ -4,30 +4,26 @@ import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.TemplateEmail;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+
+import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 
 @RequiredArgsConstructor
 public class LogUseCase {
     private final LogGateway logGateway;
 
-    public <T> Mono<T> sendLog(Alert alert, String logType, String medium, Response response) {
+    public <T> Mono<T> sendLog(Alert alert, TemplateEmail template, String medium, Response response) {
         return logGateway.putLogToSQS(Log.builder()
-                //.documentType(alert.getDocumentType())
-                //.documentNumber(Long.parseLong(alert.getDocumentNumber()))
-                //.consumer(message.getConsumer())
-                .logType(logType)
+                .keyLog(alert.getLogKey())
+                .logType(SEND_230)
                 .medium(medium)
                 .contact(alert.getDestination().getToAddress())
-                //.messageSent(alert.getMessage().getBody())
-                //.alertId(alert.getId())
-                //.alertDescription(alert.getDescription())
-                //.transactionId(message.getTransactionCode())
-                //.amount(message.getAmount())
+                .messageSent(template.getTextPlain())
                 .provider(alert.getProvider())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                //.operationId(message.getOperation())
                 .build())
                 .then(Mono.empty());
     }

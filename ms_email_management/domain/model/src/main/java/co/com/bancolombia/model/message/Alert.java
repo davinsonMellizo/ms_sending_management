@@ -17,7 +17,7 @@ public class Alert {
     private Destination destination;
     private List<Attachment> attachments;
     private Template template;
-    private Message message;
+    private String logKey;
 
     @Data
     @AllArgsConstructor
@@ -29,12 +29,4 @@ public class Alert {
         private String bccAddress;
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder(toBuilder = true)
-    public static class Message{
-        private String subject;
-        private String body;
-    }
 }

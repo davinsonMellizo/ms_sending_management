@@ -16,7 +16,7 @@ public class Alert implements Serializable {
     private String id;
     private Integer idProviderMail;
     private Integer idProviderSms;
-    private String idTemplate;
+    private String templateName;
     private Integer idRemitter;
     private Integer idState;
     private Integer priority;
@@ -26,7 +26,6 @@ public class Alert implements Serializable {
     private String message;
     private String subjectMail;
     private String attentionLine;
-    private String pathAttachedMail;
     private String push;
     private Boolean obligatory;
     private Boolean visibleChannel;

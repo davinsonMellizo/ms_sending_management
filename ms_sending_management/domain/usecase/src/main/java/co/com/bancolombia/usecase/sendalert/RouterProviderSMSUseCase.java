@@ -16,6 +16,8 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMobile;
@@ -55,15 +57,16 @@ public class RouterProviderSMSUseCase {
 
     private Mono<Response> sendSMS(Message message, Alert alert, Provider provider) {
         return Mono.just(Sms.builder()
-                        .priority(1)
-                        .to(message.getPhoneIndicator() + message.getPhone())
-                        .template(new Template(message.getParameters(), "Compra"))
-                        .text(alert.getMessage())
-                        .provider(provider.getId())
-                        .documentNumber(Long.toString(message.getDocumentNumber()))
-                        .documentType(Integer.toString(message.getDocumentType()))
-                        .url(message.getUrl())
-                        .build())
+                .logKey(message.getLogKey())
+                .priority(1)
+                .to(message.getPhoneIndicator() + message.getPhone())
+                .template(new Template(message.getParameters(), "Compra"))
+                .text(alert.getMessage())
+                .provider(provider.getId())
+                .documentNumber(Long.toString(message.getDocumentNumber()))
+                .documentType(Integer.toString(message.getDocumentType()))
+                .url(message.getUrl())
+                .build())
                 .flatMap(commandGateway::sendCommandAlertSms)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build());
     }

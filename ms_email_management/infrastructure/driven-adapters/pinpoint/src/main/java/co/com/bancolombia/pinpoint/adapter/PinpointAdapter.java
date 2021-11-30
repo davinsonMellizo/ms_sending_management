@@ -18,11 +18,11 @@ public class PinpointAdapter implements PinpointGateway {
     public Mono<TemplateEmail> findTemplateEmail(String templateName){
         return Mono.fromFuture(client.getEmailTemplate(GetEmailTemplateRequest.builder()
                 .templateName(templateName)
-                .version("1")
                 .build()))
                 .map(response -> TemplateEmail.builder()
                         .subject(response.emailTemplateResponse().subject())
-                        .body(response.emailTemplateResponse().htmlPart())
+                        .bodyHtml(response.emailTemplateResponse().htmlPart())
+                        .textPlain(response.emailTemplateResponse().textPart())
                 .build());
     }
 }

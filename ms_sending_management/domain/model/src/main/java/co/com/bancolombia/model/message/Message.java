@@ -22,6 +22,7 @@ public class Message {
     private Long amount;
     private String url;
     private String template;
+    private String logKey;
 
     private String phone;
     private String phoneIndicator;

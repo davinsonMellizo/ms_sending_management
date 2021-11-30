@@ -54,7 +54,7 @@ public class LogUseCase {
                 .then(Mono.just(response));
     }
 
-    public <T> Mono<T> sendLogMAIL(Message message, Alert alert, String logType, String text, Response response) {
+    public <T> Mono<T>  sendLogMAIL(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())

@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class Provider {
-    public static String SES = "SES";
-    public static String MASIVIAN = "MASIVIAN";
+    public static String SES = "TOD";
+    public static String MASIVIAN = "MAS";
 }

@@ -4,4 +4,5 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk-sqs', version: '1.11.857'
     implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.16.88'
     implementation group: 'software.amazon.awssdk', name: 'sqs', version: '2.16.91'
+
 }

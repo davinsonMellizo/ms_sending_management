@@ -14,6 +14,6 @@ public class EventsHandler {
 
     public Mono<Void> handleSendAlert(DomainEvent<Alert> event) {
         System.out.println("datos "+ event.getData());
-        return useCase.sendAlertToProviders(event.getData());
+        return useCase.sendAlert(event.getData());
     }
 }

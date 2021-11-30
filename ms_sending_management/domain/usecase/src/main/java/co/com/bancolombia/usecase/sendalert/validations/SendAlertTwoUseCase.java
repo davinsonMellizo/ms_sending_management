@@ -1,67 +1,63 @@
 package co.com.bancolombia.usecase.sendalert.validations;
 
+import co.com.bancolombia.commons.enums.BusinessErrorMessage;
+import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.model.service.gateways.ServiceGateway;
+import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
+import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
+import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_TRANSACTION_NOT_FOUND;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.*;
 
 @RequiredArgsConstructor
 public class SendAlertTwoUseCase {
     private final AlertGateway alertGateway;
     private final AlertTransactionGateway alertTransactionGateway;
-    private final ProviderGateway providerGateway;
-    private final RemitterGateway remitterGateway;
-    private final ServiceGateway serviceGateway;
+    private final RouterProviderMailUseCase routerProviderMailUseCase;
+    private final RouterProviderPushUseCase routerProviderPushUseCase;
+    private final RouterProviderSMSUseCase routerProviderSMSUseCase;
+    private final LogUseCase logUseCase;
 
-    //TODO validate id 2
     public Mono<Void> validateWithCodeTrx(Message message) {
         return Flux.just(message)
                 .filter(isValidMailOrMobile)
                 .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
                 .flatMap(alertTransactionGateway::findAllAlertTransaction)
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_TRANSACTION_NOT_FOUND)))
                 .map(AlertTransaction::getIdAlert)
                 .flatMap(alertGateway::findAlertById)
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
+                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
+                        new Response(1, e.getBusinessErrorMessage().getMessage())))
                 .flatMap(alert -> sendAlert(alert, message))
+                .onErrorResume(TechnicalException.class, e -> logUseCase.sendLogError(message, SEND_220,
+                        new Response(1, e.getMessage())))
                 .then(Mono.empty());
     }
 
-    private Flux<Void> sendAlert(Alert alert, Message message) {
-        return Flux.just(message)
-                .filter(isValidMobile)
-                .flatMap(message1 -> sendAlertMobile(alert, message))
-                .switchIfEmpty(Flux.just(message))
-                .filter(isValidMail)
-                .flatMap(message1 -> sendAlertMail(alert, message))
-                .thenMany(Flux.empty());
-    }
-
-    private Flux<Message> sendAlertMobile(Alert alert, Message message) {
-        return null;
-    }
-
-    private Flux<Message> sendAlertMail(Alert alert, Message message) {
-        /*Mono<Remitter> remitter = remitterGateway.findRemitterById(alert.getIdRemitter());
-        Mono<Provider> providerSms = providerGateway.findProviderById(alert.getIdProviderSms());
-        Mono<Provider> providerMail = providerGateway.findProviderById(alert.getIdProviderMail());
-
-        //TODO: build template
-        return Mono.zip(remitter,providerSms, providerMail)
-                .map(data -> Mail.builder()
-                        .remitter(data.getT1().getMail())
-                        .affair(message.getMail())//TODO: build MAIL with data
-                        .build())
-                .flatMap(messageGateway::sendEmail)
-                .thenMany(Flux.just(message));*/
-        return Flux.empty();
+    private Mono<Void> sendAlert(Alert pAlert, Message message) {
+        return Mono.just(pAlert)
+                .filter(alert -> alert.getPush().equalsIgnoreCase("Si"))
+                .flatMap(alert -> routerProviderPushUseCase.sendPush(message, alert))
+                .switchIfEmpty(routerProviderSMSUseCase.validateMobile(message, pAlert))
+                .concatWith(routerProviderMailUseCase.routeAlertMail(message, pAlert))
+                .thenEmpty(Mono.empty());
     }
 
 }

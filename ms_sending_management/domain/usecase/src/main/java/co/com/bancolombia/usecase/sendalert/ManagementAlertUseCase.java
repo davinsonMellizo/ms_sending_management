@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
@@ -35,6 +36,6 @@ public class ManagementAlertUseCase {
     public Mono<Void> alertSendingManager(Message message) {
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
-                .flatMap(function -> function.apply(message));
+                .flatMap(function -> function.apply(message.toBuilder().logKey(UUID.randomUUID().toString()).build()));
     }
 }
