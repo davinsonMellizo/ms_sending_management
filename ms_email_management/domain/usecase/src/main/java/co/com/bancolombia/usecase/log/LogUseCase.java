@@ -16,7 +16,7 @@ public class LogUseCase {
 
     public <T> Mono<T> sendLog(Alert alert, TemplateEmail template, String medium, Response response) {
         return logGateway.putLogToSQS(Log.builder()
-                .keyLog(alert.getLogKey())
+                .logKey(alert.getLogKey())
                 .logType(SEND_230)
                 .medium(medium)
                 .contact(alert.getDestination().getToAddress())
@@ -25,6 +25,7 @@ public class LogUseCase {
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 .build())
-                .then(Mono.empty());
+                .filter(log -> response.getCode()!=200)
+                .flatMap(log -> Mono.error(new Throwable()));
     }
 }

@@ -14,6 +14,7 @@ public class LogUseCase {
 
     public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
+                .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())
@@ -35,6 +36,7 @@ public class LogUseCase {
 
     public Mono<Response> sendLogPush(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
+                .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())
@@ -56,6 +58,7 @@ public class LogUseCase {
 
     public <T> Mono<T>  sendLogMAIL(Message message, Alert alert, String logType, String text, Response response) {
         return logGateway.putLogToSQS(Log.builder()
+                .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())

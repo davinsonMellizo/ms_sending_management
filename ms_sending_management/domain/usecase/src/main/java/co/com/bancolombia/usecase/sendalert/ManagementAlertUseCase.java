@@ -1,7 +1,8 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.validations.*;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -11,9 +12,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_OPERATION;
+
 @RequiredArgsConstructor
 public class ManagementAlertUseCase {
-    private final LogGateway logGateway;
+    private final LogUseCase logUseCase;
 
     private final SendAlertZeroUseCase sendAlertZeroUseCase;
     private final SendAlertOneUseCase sendAlertOneUseCase;
@@ -36,6 +40,8 @@ public class ManagementAlertUseCase {
     public Mono<Void> alertSendingManager(Message message) {
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
+                .filter(function -> function != null)
+                .switchIfEmpty(logUseCase.sendLogError(message, SEND_220, new Response(1, INVALID_OPERATION)))
                 .flatMap(function -> function.apply(message.toBuilder().logKey(UUID.randomUUID().toString()).build()));
     }
 }

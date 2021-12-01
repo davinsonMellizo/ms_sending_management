@@ -10,7 +10,6 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
-import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -54,7 +53,6 @@ public class SendAlertFiveUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
                 .filter(alert -> alert.getIdState() == (0))
                 .switchIfEmpty(Mono.error(new BusinessException(INACTIVE_ALERT)))
-                .flatMapMany(alert -> Util.replaceParameter(alert, message)).next()
                 .flatMap(alert -> routeAlert(alert, message))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
                         new Response(1, e.getBusinessErrorMessage().getMessage())))

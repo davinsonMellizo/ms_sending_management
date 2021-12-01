@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +27,18 @@ public class MessageDTO {
     private String alert;
     private String transactionCode;
     private Long amount;
-    private String url;
-
-    private String phone;
+    @Builder.Default
+    private String url = "";
+    @Builder.Default
+    private String phone = "";
     @Builder.Default
     private String phoneIndicator = "";
-
-    private String mail;
-
-    private List<Parameter> parameters;
-    private ArrayList<Attachment> attachments;
+    @Builder.Default
+    private String mail = "";
+    @Builder.Default
+    private List<Parameter> parameters = new ArrayList<>();
+    @Builder.Default
+    private ArrayList<Attachment> attachments = new ArrayList<>();;
 
     public Mono<Message> toModel(){
         return Mono.just(Message.builder()

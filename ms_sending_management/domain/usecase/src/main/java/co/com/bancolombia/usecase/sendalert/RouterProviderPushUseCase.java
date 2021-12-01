@@ -20,12 +20,13 @@ public class RouterProviderPushUseCase {
     private final LogUseCase logUseCase;
 
     public Mono<Response> sendPush(Message message, Alert alert) {
-        return logUseCase.sendLogPush(message, alert, SEND_220, alert.getMessage(), new Response(0, "Success"))
-                .map(response -> Sms.builder()
+        Response response =  new Response(0, "Success");
+        return logUseCase.sendLogPush(message, alert, SEND_220, alert.getMessage(),response)
+                .map(responseLog -> Sms.builder()
                         .logKey(message.getLogKey())
                         .priority(1)
                         .to(message.getPhoneIndicator() + message.getPhone())
-                        .template(new Template(message.getParameters(), "Compra"))
+                        .template(new Template(message.getParameters(), alert.getTemplateName()))
                         .text(alert.getMessage())
                         .provider("PUSH")
                         .documentNumber(Long.toString(message.getDocumentNumber()))
@@ -33,6 +34,7 @@ public class RouterProviderPushUseCase {
                         .url(message.getUrl())
                         .build())
                 .flatMap(commandGateway::sendCommandAlertSms)
-                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build());
+                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
+                .thenReturn(response);
     }
 }

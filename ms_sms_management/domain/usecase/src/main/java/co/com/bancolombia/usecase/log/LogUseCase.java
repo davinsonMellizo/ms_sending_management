@@ -25,6 +25,7 @@ public class LogUseCase {
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 .build())
-                .then(Mono.empty());
+                .filter(log -> response.getCode()!=200)
+                .flatMap(log -> Mono.error(new Throwable()));
     }
 }

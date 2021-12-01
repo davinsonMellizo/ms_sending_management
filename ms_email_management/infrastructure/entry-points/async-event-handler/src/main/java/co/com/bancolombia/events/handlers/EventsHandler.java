@@ -13,7 +13,7 @@ public class EventsHandler {
     private final SendAlertUseCase useCase;
 
     public Mono<Void> handleSendAlert(DomainEvent<Alert> event) {
-        System.out.println("datos "+ event.getData());
+        System.out.println("intento de envio");
         return useCase.sendAlert(event.getData());
     }
 }

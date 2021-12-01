@@ -13,6 +13,7 @@ public enum BusinessErrorMessage {
     INVALID_DATA("372", "Base data is not valid"),
     INVALID_PREFIX("372", "Invalid Prefix"),
     INVALID_CONTACT("372", "Invalid Contact"),
+    INVALID_OPERATION("372", "Invalid Operation"),
     INVALID_CONTACTS("016", "Invalid Contacts"),
     ALERT_NOT_FOUND("120", "Alert Not Found"),
     INVALID_PARAMETERS("120", "Invalid parameters"),

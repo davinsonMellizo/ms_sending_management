@@ -23,8 +23,6 @@ public class SendAlertUseCase {
     private final SesGateway sesGateway;
     private final LogUseCase logUseCase;
 
-
-
     public Mono<Void> sendAlert(Alert alert) {
         return pinpointGateway.findTemplateEmail(alert.getTemplate().getName())
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
@@ -37,7 +35,6 @@ public class SendAlertUseCase {
                 .concatWith(sendEmailBySes(alert, templateEmail))
                 .thenEmpty(Mono.empty());
     }
-
 
     private Mono<Response> sendEmailBySes(Alert alert, TemplateEmail templateEmail) {
         return Mono.just(alert.getProvider())

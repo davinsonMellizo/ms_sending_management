@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class Log {
     private Integer id;
+    private String logKey;
     private Integer documentType;
     private Long documentNumber;
     private String logType;
