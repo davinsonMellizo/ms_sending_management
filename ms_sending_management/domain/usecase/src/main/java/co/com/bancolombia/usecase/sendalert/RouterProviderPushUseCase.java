@@ -21,7 +21,7 @@ public class RouterProviderPushUseCase {
 
     public Mono<Response> sendPush(Message message, Alert alert) {
         Response response =  new Response(0, "Success");
-        return logUseCase.sendLogPush(message, alert, SEND_220, alert.getMessage(),response)
+        return logUseCase.sendLogPush(message, alert, SEND_220, response)
                 .map(responseLog -> Sms.builder()
                         .logKey(message.getLogKey())
                         .priority(1)

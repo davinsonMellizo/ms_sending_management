@@ -8,6 +8,8 @@ import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Sms;
 import co.com.bancolombia.model.message.Template;
 import co.com.bancolombia.model.prefix.gateways.PrefixRepository;
+import co.com.bancolombia.model.priority.Priority;
+import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.providerservice.ProviderService;
@@ -27,6 +29,7 @@ public class RouterProviderSMSUseCase {
     private final ProviderServiceGateway providerServiceGateway;
     private final PrefixRepository prefixRepository;
     private final ProviderGateway providerGateway;
+    private final PriorityGateway priorityGateway;
     private final CommandGateway commandGateway;
     private final LogUseCase logUseCase;
 
@@ -35,8 +38,7 @@ public class RouterProviderSMSUseCase {
                 .filter(isValidMobile)
                 .map(message1 -> message.getPhone().substring(0, 3))
                 .flatMap(prefixRepository::findPrefix)
-                .switchIfEmpty(logUseCase.sendLogSMS(message, alert, SEND_220,
-                        message.getParameters().get(0).getValue(), new Response(1, INVALID_CONTACT)))
+                .switchIfEmpty(logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, INVALID_CONTACT)))
                 .flatMap(prefix -> routeAlertsSMS(message, alert));
     }
 
@@ -44,23 +46,23 @@ public class RouterProviderSMSUseCase {
         return providerServiceGateway.findProviderService(alert.getIdProviderSms())
                 .map(ProviderService::getIdProvider)
                 .flatMap(providerGateway::findProviderById)
-                .flatMap(provider -> sendAlertToProviders(alert, message, provider))
-                .doOnError(e -> logUseCase.sendLogSMS(message, alert, SEND_220,
-                        message.getParameters().get(0).getValue(), new Response(1, e.getMessage())));
+                .zipWith(priorityGateway.findPriorityById(alert.getPriority()))
+                .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
+                .doOnError(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
     }
 
-    private Mono<Response> sendAlertToProviders(Alert alert, Message message, Provider provider) {
-        return logUseCase.sendLogSMS(message, alert, SEND_220, alert.getMessage(), new Response(0, "Success"))
+    private Mono<Response> sendAlertToProviders(Alert alert, Message message, Provider provider, Priority priority) {
+        return logUseCase.sendLogSMS(message, alert, SEND_220, new Response(0, "Success"))
                 .cast(Response.class)
-                .concatWith(sendSMS(message, alert, provider)).next();
+                .concatWith(sendSMS(message, alert.toBuilder().priority(priority.getCode()).build(), provider)).next();
     }
 
     private Mono<Response> sendSMS(Message message, Alert alert, Provider provider) {
         return Mono.just(Sms.builder()
                 .logKey(message.getLogKey())
-                .priority(1)
+                .priority(alert.getPriority())
                 .to(message.getPhoneIndicator() + message.getPhone())
-                .template(new Template(message.getParameters(), "Compra"))
+                .template(new Template(message.getParameters(), alert.getTemplateName()))
                 .text(alert.getMessage())
                 .provider(provider.getId())
                 .documentNumber(Long.toString(message.getDocumentNumber()))

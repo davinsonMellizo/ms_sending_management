@@ -34,18 +34,16 @@ public class RouterProviderMailUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
                 .zipWith(providerGateway.findProviderByProviderService(alert.getIdProviderMail()))
-                .doOnError(e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        message.getParameters().toString(), new Response(1, e.getMessage())))
+                .doOnError(e -> logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(1, e.getMessage())))
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        alert.getMessage(), new Response(1, e.getBusinessErrorMessage().getMessage())));
+                        new Response(1, e.getBusinessErrorMessage().getMessage())));
     }
 
     public Mono<Response> buildMail(Message message, Alert alert, Remitter remitter, Provider provider) {
         ArrayList<Recipient> recipients = new ArrayList<>();
         recipients.add(new Recipient(message.getMail()));
-        return logUseCase.sendLogMAIL(message, alert, SEND_220, alert.getMessage(),
-                new Response(0, "Success"))
+        return logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(0, "Success"))
                 .cast(Mail.class)
                 .concatWith(Mono.just(Mail.builder()
                         .logKey(message.getLogKey())
@@ -56,7 +54,6 @@ public class RouterProviderMailUseCase {
                         .template(new Template(message.getParameters(), alert.getTemplateName())).build())).next()
                 .flatMap(commandGateway::sendCommandAlertEmail)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        alert.getMessage(), response));
+                .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_220, response));
     }
 }

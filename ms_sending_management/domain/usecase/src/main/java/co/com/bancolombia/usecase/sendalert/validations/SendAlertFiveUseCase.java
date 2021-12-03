@@ -13,6 +13,7 @@ import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormat;
@@ -32,7 +33,7 @@ public class SendAlertFiveUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(messageValid -> routerProviderMailUseCase.routeAlertMail(messageValid, alert))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        alert.getMessage(), new Response(1, e.getBusinessErrorMessage().getMessage())));
+                       new Response(1, e.getBusinessErrorMessage().getMessage())));
     }
 
     private Mono<Void> routeAlert(Alert alert, Message message) {
@@ -51,7 +52,7 @@ public class SendAlertFiveUseCase {
                 .map(Message::getAlert)
                 .flatMap(alertGateway::findAlertById)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
-                .filter(alert -> alert.getIdState() == (0))
+                .filter(alert -> alert.getIdState() == ACTIVE)
                 .switchIfEmpty(Mono.error(new BusinessException(INACTIVE_ALERT)))
                 .flatMap(alert -> routeAlert(alert, message))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,

@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class LogUseCase {
     private final LogGateway logGateway;
 
-    public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, String text, Response response) {
+    public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
@@ -20,21 +20,22 @@ public class LogUseCase {
                 .consumer(message.getConsumer())
                 .logType(logType)
                 .medium("SMS")
-                .template(message.getTemplate())
                 .contact(message.getPhone())
-                .messageSent(text)
+                .messageSent(message.getParameters().toString())
                 .alertId(alert.getId())
+                .template(alert.getTemplateName())
                 .alertDescription(alert.getDescription())
                 .transactionId(message.getTransactionCode())
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 .operationId(message.getOperation())
+                .priority(alert.getPriority())
                 .build())
                 .then(Mono.empty());
     }
 
-    public Mono<Response> sendLogPush(Message message, Alert alert, String logType, String text, Response response) {
+    public Mono<Response> sendLogPush(Message message, Alert alert, String logType, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
@@ -44,7 +45,7 @@ public class LogUseCase {
                 .medium("PUSH")
                 .template(message.getTemplate())
                 .contact(message.getPhone())
-                .messageSent(text)
+                .messageSent(message.getParameters().toString())
                 .alertId(alert.getId())
                 .alertDescription(alert.getDescription())
                 .transactionId(message.getTransactionCode())
@@ -56,7 +57,7 @@ public class LogUseCase {
                 .then(Mono.just(response));
     }
 
-    public <T> Mono<T>  sendLogMAIL(Message message, Alert alert, String logType, String text, Response response) {
+    public <T> Mono<T>  sendLogMAIL(Message message, Alert alert, String logType, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
@@ -64,9 +65,9 @@ public class LogUseCase {
                 .consumer(message.getConsumer())
                 .logType(logType)
                 .medium("MAIL")
-                .template(message.getTemplate())
+                .template(alert.getTemplateName())
                 .contact(message.getMail())
-                .messageSent(text)
+                .messageSent(message.getParameters().toString())
                 .alertId(alert.getId())
                 .alertDescription(alert.getDescription())
                 .transactionId(message.getTransactionCode())
@@ -80,6 +81,7 @@ public class LogUseCase {
 
     public <T> Mono<T> sendLogError(Message message, String logType, Response response) {
         return logGateway.putLogToSQS(Log.builder()
+                .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())

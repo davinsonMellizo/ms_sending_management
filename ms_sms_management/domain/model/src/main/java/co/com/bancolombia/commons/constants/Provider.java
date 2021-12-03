@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class Provider {
-    public static String INALAMBRIA = "INALAMBRIA";
-    public static String MASIVIAN = "MASIVIAN";
+    public static String INALAMBRIA = "INA";
+    public static String MASIVIAN = "MAS";
     public static String CONTACTABILIDAD = "PUSH";
 }

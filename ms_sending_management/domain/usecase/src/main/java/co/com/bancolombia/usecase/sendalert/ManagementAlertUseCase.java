@@ -41,7 +41,8 @@ public class ManagementAlertUseCase {
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
                 .filter(function -> function != null)
-                .switchIfEmpty(logUseCase.sendLogError(message, SEND_220, new Response(1, INVALID_OPERATION)))
+                .switchIfEmpty(logUseCase.sendLogError(message.toBuilder().logKey(UUID.randomUUID().toString()).build(),
+                        SEND_220, new Response(1, INVALID_OPERATION)))
                 .flatMap(function -> function.apply(message.toBuilder().logKey(UUID.randomUUID().toString()).build()));
     }
 }
