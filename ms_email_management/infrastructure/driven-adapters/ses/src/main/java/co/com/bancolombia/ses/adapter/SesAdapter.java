@@ -1,4 +1,4 @@
-package co.com.bancolombia.pinpoint.adapter;
+package co.com.bancolombia.ses.adapter;
 
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
@@ -20,8 +20,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.util.Properties;
 

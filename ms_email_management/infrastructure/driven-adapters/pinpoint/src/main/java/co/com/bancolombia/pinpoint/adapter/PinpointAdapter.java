@@ -1,4 +1,4 @@
-package co.com.bancolombia.pinpoint.adapter;
+package co.com.bancolombia.ses.adapter;
 
 import co.com.bancolombia.model.message.TemplateEmail;
 import co.com.bancolombia.model.message.gateways.PinpointGateway;

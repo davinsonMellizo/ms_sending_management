@@ -1,4 +1,4 @@
-package co.com.bancolombia.pinpoint.config;
+package co.com.bancolombia.ses.config;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;

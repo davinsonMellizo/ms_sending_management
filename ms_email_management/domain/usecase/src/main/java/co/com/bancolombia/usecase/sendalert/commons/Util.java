@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_PARAMETERS;
 
 @UtilityClass
 public class Util {

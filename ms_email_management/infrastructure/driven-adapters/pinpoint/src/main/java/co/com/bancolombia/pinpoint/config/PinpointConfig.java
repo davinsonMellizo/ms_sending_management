@@ -1,10 +1,7 @@
-package co.com.bancolombia.pinpoint.config;
+package co.com.bancolombia.ses.config;
 
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.pinpoint.AmazonPinpointAsync;
-import com.amazonaws.services.pinpoint.AmazonPinpointAsyncClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
