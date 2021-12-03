@@ -1,5 +1,6 @@
 {
   "idAlert": "UPD",
+  "alertDescription": "Alerta",
   "documentNumber": 1000000000,
   "documentType": 0,
   "numberOperations": 9,

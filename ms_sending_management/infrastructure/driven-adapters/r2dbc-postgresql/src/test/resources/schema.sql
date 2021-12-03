@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS provider_service (
 
 CREATE TABLE IF NOT EXISTS alert (
 	id varchar(3) NOT NULL,
-	id_template int2 NOT NULL,
+	template_name varchar(100) NOT NULL,
 	id_provider_mail int4 NOT NULL,
 	id_provider_sms int4 NOT NULL,
 	id_remitter int2 NOT NULL,
@@ -119,7 +119,6 @@ CREATE TABLE IF NOT EXISTS alert (
 	CONSTRAINT alert_pkey PRIMARY KEY (id),
 	CONSTRAINT alert_provider_mail_fkey FOREIGN KEY (id_provider_mail) REFERENCES provider_service(id),
 	CONSTRAINT alert_provider_sms_fkey FOREIGN KEY (id_provider_sms) REFERENCES provider_service(id),
-	CONSTRAINT alert_template_fkey FOREIGN KEY (id_template) REFERENCES alert_template(id),
 	CONSTRAINT alert_remitter_fkey FOREIGN KEY (id_remitter) REFERENCES remitter(id),
 	CONSTRAINT alert_category_fkey FOREIGN KEY (id_category) REFERENCES category(id),
 	CONSTRAINT alert_priority_fkey FOREIGN KEY (priority) REFERENCES priority(id),

@@ -4,6 +4,7 @@ import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,9 @@ public class AlertClientUseCaseTest {
     @Mock
     private ClientGateway clientGateway;
 
+    @Mock
+    private NewnessUseCase newnessUseCase;
+
     @InjectMocks
     private AlertClientUseCase useCase;
 
@@ -50,6 +54,8 @@ public class AlertClientUseCaseTest {
     public void save() {
         when(alertClientGateway.save(any()))
                 .thenReturn(Mono.just(alertClient));
+        when(newnessUseCase.saveNewness(any(), any()))
+                .thenReturn(Mono.just(alertClient));
         useCase.saveAlertClient(alertClient)
                 .as(StepVerifier::create)
                 .assertNext(response -> response
@@ -60,6 +66,8 @@ public class AlertClientUseCaseTest {
 
     @Test
     public void update() {
+        when(newnessUseCase.saveNewness(any(), any()))
+                .thenReturn(Mono.just(alertClient));
         when(alertClientGateway.updateAlertClient(any()))
                 .thenReturn(Mono.just(alertClient));
         when(alertClientGateway.save(any()))
@@ -97,6 +105,10 @@ public class AlertClientUseCaseTest {
     @Test
     public void delete() {
         when(alertClientGateway.delete(any()))
+                .thenReturn(Mono.just(alertClient));
+        when(alertClientGateway.findAlertClient(any()))
+                .thenReturn(Mono.just(alertClient));
+        when(newnessUseCase.saveNewness(any(), any()))
                 .thenReturn(Mono.just(alertClient));
         useCase.deleteAlertClient(alertClient)
                 .as(StepVerifier::create)
