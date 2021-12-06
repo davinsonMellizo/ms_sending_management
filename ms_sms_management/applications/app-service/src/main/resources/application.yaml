@@ -62,7 +62,6 @@ adapters:
     scope: scope-blm
     resources:
       endpointMasivianSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-sms
-      endpointMasivianMail: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-mail
       endpointInalambriaSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/inalambria-sms
       endpointPush: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/push
   secrets-manager:

@@ -3,6 +3,5 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.16.88'
     implementation group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
-    implementation group: 'com.amazonaws', name: 'aws-java-sdk-ses', version: '1.12.118'
-    //implementation group: 'software.amazon.awssdk', name: 'ses', version: '2.16.91'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-ses'
 }

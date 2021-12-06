@@ -1,4 +1,4 @@
-package co.com.bancolombia.ses.config;
+package co.com.bancolombia.pinpoint.config;
 
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -37,10 +38,23 @@ public class SQSConfig {
 
     @Bean
     @Primary
+    @Profile({"dev", "qa", "pdn"})
     public AmazonSQSAsync clientSQS(){
         return AmazonSQSAsyncClientBuilder.standard()
                 .withClientConfiguration(clientConfiguration())
                 .withExecutorFactory(executorFactory())
+                .withRegion(properties.getRegionAws())
+                .build();
+    }
+
+    @Bean
+    @Primary
+    @Profile("local")
+    public AmazonSQSAsync clientSQSLocal(){
+        return AmazonSQSAsyncClientBuilder.standard()
+                .withClientConfiguration(clientConfiguration())
+                .withExecutorFactory(executorFactory())
+                .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(properties.getRegionAws())
                 .build();
     }

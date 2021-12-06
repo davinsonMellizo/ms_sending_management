@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @EnableCommandListeners
 public class CommandsHandler {
+
     private final SendAlertUseCase useCase;
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {

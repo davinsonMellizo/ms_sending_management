@@ -21,7 +21,6 @@ public class ConsumerProperties {
     @NoArgsConstructor
     public static class Resources {
         private String endpointMasivianSms;
-        private String endpointMasivianMail;
         private String endpointInalambriaSms;
         private String endpointPush;
     }

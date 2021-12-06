@@ -23,7 +23,8 @@ public class MasivianAdapter implements MasivianGateway {
     @Override
     public Mono<Response> sendMAIL(Mail mail) {
         System.out.println(mail);
-        return clientMail.post(properties.getResources().getEndpointMasivianMail(), mail,
+        String endpoint = properties.getResources().getEndpointMasivianMail();
+        return clientMail.post(endpoint, mail,
                 SuccessMasivianMAIL.class, ErrorMasivianMAIL.class)
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getDescription()).build())

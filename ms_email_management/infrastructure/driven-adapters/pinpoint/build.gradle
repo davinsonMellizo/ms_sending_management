@@ -2,6 +2,5 @@ dependencies {
     compile project(':model')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.16.88'
-    implementation group: 'com.amazonaws', name: 'aws-java-sdk-pinpoint', version: '1.12.117'
     implementation group: 'software.amazon.awssdk', name: 'pinpoint', version: '2.16.91'
 }

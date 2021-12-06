@@ -1,6 +1,5 @@
 package co.com.bancolombia.pinpoint.adapter;
 
-import co.com.bancolombia.ses.adapter.PinpointAdapter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

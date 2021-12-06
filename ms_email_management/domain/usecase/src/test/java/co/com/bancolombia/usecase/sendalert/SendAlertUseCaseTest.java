@@ -37,7 +37,7 @@ public class SendAlertUseCaseTest {
     private Alert alert = new Alert();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         alert.setProvider("MAS");
         alert.setFrom("bancolombia@test.com.co");
         alert.setDestination(new Alert.Destination("bancolombia@test.com.co","",""));

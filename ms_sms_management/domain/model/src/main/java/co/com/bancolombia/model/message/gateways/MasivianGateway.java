@@ -9,5 +9,4 @@ public interface MasivianGateway {
 
     Mono<Response> sendSMS(Sms sms);
 
-    Mono<Response> sendMAIL(Mail mail);
 }

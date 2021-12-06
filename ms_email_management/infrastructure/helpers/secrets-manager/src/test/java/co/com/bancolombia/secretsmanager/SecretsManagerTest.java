@@ -58,7 +58,8 @@ public class SecretsManagerTest {
         when(secretsConnector.getSecret(SECRET, ClassTest.class))
                 .thenReturn(Mono.error(new RuntimeException("error")));
         StepVerifier.create(secretsManager.getSecret(SECRET, ClassTest.class))
-                .expectErrorMatches(e -> e instanceof TechnicalException);
+                .expectError(TechnicalException.class)
+                .verify();
     }
 
     @Data

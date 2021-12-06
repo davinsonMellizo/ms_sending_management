@@ -1,4 +1,4 @@
-package co.com.bancolombia.consumer.adapter;
+package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.ErrorMasivianMAIL;
@@ -54,7 +54,8 @@ public class RestClientTest {
     public void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
         StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Mail(), SuccessMasivianMAIL.class, ErrorMasivianMAIL.class))
-                .expectError(Error.class);
+                .expectError()
+                .verify();
     }
 
     public static MockResponse mockResponseSuccess() {

@@ -13,7 +13,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
-public class RestConsumerProperties {
+public class RestConsumerConfig {
 
     private ClientHttpConnector clientHttpConnector(int timeout) {
         return new ReactorClientHttpConnector(HttpClient.create()

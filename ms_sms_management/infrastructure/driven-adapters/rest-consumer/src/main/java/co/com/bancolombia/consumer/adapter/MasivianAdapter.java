@@ -20,7 +20,6 @@ public class MasivianAdapter implements MasivianGateway {
     private final static Integer STATUS_ERROR = 1;
     private final ConsumerProperties properties;
     private final RestClient<Sms, SuccessMasivianSMS> clientSms;
-    private final RestClient<Mail, SuccessMasivianMAIL> clientMail;
 
     @Override
     public Mono<Response> sendSMS(Sms sms) {
@@ -32,21 +31,6 @@ public class MasivianAdapter implements MasivianGateway {
                         .description(response.getDeliveryToken()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
                         .code(e.getHttpsStatus()).description(((ErrorMasivianSMS)e.getData()).getDescription())
-                        .build()))
-                .onErrorResume(e -> Mono.just(Response.builder()
-                        .code(STATUS_ERROR).description(e.getMessage())
-                        .build()));
-    }
-
-    @Override
-    public Mono<Response> sendMAIL(Mail mail) {
-        System.out.println(mail);
-        return clientMail.post(properties.getResources().getEndpointMasivianMail(), mail,
-                SuccessMasivianMAIL.class, ErrorMasivianMAIL.class)
-                .map(response -> Response.builder().code(STATUS_OK)
-                        .description(response.getDescription()).build())
-                .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorMasivianMAIL)e.getData()).getDescription())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
                         .code(STATUS_ERROR).description(e.getMessage())
