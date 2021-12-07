@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 
@@ -68,7 +69,7 @@ public class SendAlertZeroUseCase {
         return Mono.just(message)
                 .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(), message.getDocumentType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .filter(client -> client.getIdState() == 0)
+                .filter(client -> client.getIdState() == ACTIVE)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
                 .switchIfEmpty(Mono.error(new BusinessException(CONSUMER_NOT_FOUND)))

@@ -11,6 +11,7 @@ import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidM
 
 @RequiredArgsConstructor
 public class RouterProviderMailUseCase {
-    private final AlertTemplateGateway alertTemplateGateway;
     private final RemitterGateway remitterGateway;
     private final ProviderGateway providerGateway;
     private final CommandGateway commandGateway;
