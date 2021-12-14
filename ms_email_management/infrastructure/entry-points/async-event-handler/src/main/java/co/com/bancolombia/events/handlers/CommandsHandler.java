@@ -14,6 +14,7 @@ public class CommandsHandler {
     private final SendAlertUseCase useCase;
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {
+        System.out.println("Entrega de alerta "+command.getData());
         return useCase.sendAlert(command.getData());
     }
 }

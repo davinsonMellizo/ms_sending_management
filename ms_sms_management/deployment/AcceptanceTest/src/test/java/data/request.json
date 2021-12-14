@@ -1,0 +1,25 @@
+{
+  "priority":1,
+  "to":"3217896854",
+  "template":{
+    "parameters": [
+      {
+        "name": "nombre",
+        "value": "Davinson Mellizo",
+        "type": "text"
+      },
+      {
+        "name": "fecha",
+        "value": "20/20/1999",
+        "type": "text"
+      }
+    ],
+    "name": "Compra"
+  },
+  "url":"",
+  "provider":"INA",
+  "documentType":"low",
+  "documentNumber":"low",
+  "enrolClient":"low",
+  "logKey":"low"
+}

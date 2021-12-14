@@ -3,22 +3,21 @@ function() {
   karate.configure('connectTimeout', 500000);
   karate.configure('readTimeout', 500000);
 
-
-  var envData = read('../configurations/paths.json');
+  var envData = read('../configurations/config_rabbit.json');
 
   var config = {
-      urlAlert: '',
-      urlRemitter: '',
-      urlService: '',
-      urlProvider: '',
-      urlConsumer: ''
+      host: '127.0.0.1',
+      port: 5672,
+      queueName: 'ms_sms_management',
+      username: 'guest',
+      password: 'guest',
   }
 
-  config.urlAlert = envData.urlAlert;
-  config.urlRemitter = envData.urlRemitter;
-  config.urlService = envData.urlService;
-  config.urlProvider = envData.urlProvider;
-  config.urlConsumer = envData.urlConsumer;
+  config.host = envData.host;
+  config.port = envData.port;
+  config.queueName = envData.queueName;
+  config.username = envData.username;
+  config.password = envData.password;
   return config
 
 }

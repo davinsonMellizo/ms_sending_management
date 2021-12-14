@@ -3,7 +3,6 @@ package co.com.bancolombia.usecase.alert;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -13,7 +12,6 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FO
 @RequiredArgsConstructor
 public class AlertUseCase {
     private final AlertGateway alertGateway;
-    private final AlertTemplateGateway alertTemplateGateway;
 
     public Mono<Alert> findAlertByIdRequest(String id) {
         return alertGateway.findAlertById(id)

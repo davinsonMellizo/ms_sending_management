@@ -1,16 +1,13 @@
-package co.com.bancolombia.model.message;
+package models;
 
-import co.com.bancolombia.Request;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
-@Builder(toBuilder = true)
-public class Sms extends Request {
+@NoArgsConstructor
+public class Alert extends Request{
     private Integer priority;
     private String to;
     private Template template;
@@ -20,4 +17,6 @@ public class Sms extends Request {
     private String documentNumber;
     private String enrolClient;
     private String logKey;
+
+
 }

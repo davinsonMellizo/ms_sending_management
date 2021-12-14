@@ -2,7 +2,7 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.adapter.response.ErrorMasivianSMS;
 import co.com.bancolombia.consumer.adapter.response.SuccessMasivianSMS;
-import co.com.bancolombia.model.message.Mail;
+import co.com.bancolombia.model.message.Sms;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -43,7 +43,7 @@ public class RestClientTest {
     @Test
     public void givenPostThenSuccess() {
         mockServer.enqueue(mockResponseSuccess());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Mail(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -51,7 +51,7 @@ public class RestClientTest {
     @Test
     public void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Mail(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectError()
                 .verify();
     }

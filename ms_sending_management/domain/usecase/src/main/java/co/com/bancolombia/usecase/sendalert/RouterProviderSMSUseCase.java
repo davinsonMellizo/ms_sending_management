@@ -63,7 +63,6 @@ public class RouterProviderSMSUseCase {
                 .priority(alert.getPriority())
                 .to(message.getPhoneIndicator() + message.getPhone())
                 .template(new Template(message.getParameters(), alert.getTemplateName()))
-                .text(alert.getMessage())
                 .provider(provider.getId())
                 .documentNumber(Long.toString(message.getDocumentNumber()))
                 .documentType(Integer.toString(message.getDocumentType()))

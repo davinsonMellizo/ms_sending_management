@@ -4,8 +4,6 @@ import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.*;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
-import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.Push;
 import co.com.bancolombia.model.message.Sms;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

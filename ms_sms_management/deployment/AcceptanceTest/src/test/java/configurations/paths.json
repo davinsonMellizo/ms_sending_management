@@ -1,8 +1,0 @@
-{
-  "urlAlert": "http://localhost:8080/api/v1/sending-management/alert",
-  "urlRemitter": "http://localhost:8080/api/v1/sending-management/remitter",
-  "urlService": "http://localhost:8080/api/v1/sending-management/service",
-  "urlProvider": "http://localhost:8080/api/v1/sending-management/provider",
-  "urlConsumer": "http://localhost:8080/api/v1/sending-management/consumer"
-}
-
