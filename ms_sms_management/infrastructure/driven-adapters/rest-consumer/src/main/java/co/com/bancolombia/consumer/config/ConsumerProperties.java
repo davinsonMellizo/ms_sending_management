@@ -22,6 +22,5 @@ public class ConsumerProperties {
     public static class Resources {
         private String endpointMasivianSms;
         private String endpointInalambriaSms;
-        private String endpointPush;
     }
 }
