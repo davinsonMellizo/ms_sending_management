@@ -3,7 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     implementation project(':async-sqs')
     implementation project(':ses')
-	implementation project(':pinpoint')
+	implementation project(':dynamodb')
 	implementation project(':rest-consumer')
     implementation project(':async-event-handler')
 	compile 'org.springframework.boot:spring-boot-starter-webflux'

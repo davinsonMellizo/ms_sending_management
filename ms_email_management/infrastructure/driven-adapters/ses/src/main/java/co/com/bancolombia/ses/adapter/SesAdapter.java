@@ -33,7 +33,6 @@ public class SesAdapter implements SesGateway {
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert){
         Session session = Session.getDefaultInstance(new Properties());
         MimeMessage message = new MimeMessage(session);
-
         try {
         message.setSubject(templateEmail.getSubject(), "UTF-8");
         message.setFrom(new InternetAddress(alert.getFrom()));

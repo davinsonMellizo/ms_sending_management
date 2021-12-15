@@ -14,6 +14,8 @@ include ':rabbit-configurator'
 project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
 include ":commons"
 project(':commons').projectDir = file('./infrastructure/helpers/commons')
+include ':rest-consumer'
+project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
 include ':r2dbc-postgresql'
 project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
 include ':reactive-web'

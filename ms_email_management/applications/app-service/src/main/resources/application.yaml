@@ -48,6 +48,9 @@ management:
         readiness: "readiness"
 
 adapters:
+  dynamo-repository:
+    region-aws: ${REGION_AWS}
+    endpoint: http://localhost:4566
   postgresql:
     pool:
       initial: ${POSTGRESQL_CONN_INITIAL:2}

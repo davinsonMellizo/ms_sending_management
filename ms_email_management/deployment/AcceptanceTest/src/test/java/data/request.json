@@ -1,8 +1,8 @@
 {
   "provider":"TOD",
-  "from": "dmellizo@bancolombia.com",
+  "from": "davinson.mellizo@gmail.com",
   "destination": {
-    "toAddress": "dmellizo@bancolombia.com"
+    "toAddress": "davinson.mellizo@gmail.com"
   },
   "attachments": [],
   "template":{
@@ -18,7 +18,7 @@
         "type": "text"
       }
     ],
-    "name": "Compra"
+    "name": "Credito"
   },
   "logKey":"low"
 }

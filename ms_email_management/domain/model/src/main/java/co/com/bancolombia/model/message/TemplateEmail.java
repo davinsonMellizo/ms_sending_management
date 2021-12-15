@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class TemplateEmail {
+    private String name;
     private String subject;
     private String bodyHtml;
-    private String textPlain;
 }

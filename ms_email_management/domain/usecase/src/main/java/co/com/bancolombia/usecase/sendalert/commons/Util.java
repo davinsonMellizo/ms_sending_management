@@ -18,14 +18,14 @@ public class Util {
         return Mono.just(templateEmail)
                 .map(templateEmail1 -> replaceParameterTemplate(alert, templateEmail))
                 .map(templateEmail1 -> templateEmail1.toBuilder()
-                        .bodyHtml(templateEmail1.getBodyHtml().replace(target, templateEmail.getTextPlain()))
+                        .bodyHtml(templateEmail1.getBodyHtml().replace(target, templateEmail1.getBodyHtml()))
                         .build());
     }
 
     private TemplateEmail replaceParameterTemplate(Alert alert, TemplateEmail templateEmail) {
         alert.getTemplate().getParameters().forEach(parameter -> {
-            String message = templateEmail.getTextPlain().replace("${" + parameter.getName() + "}", parameter.getValue());
-            templateEmail.setTextPlain(message);
+            String message = templateEmail.getBodyHtml().replace("${" + parameter.getName() + "}", parameter.getValue());
+            templateEmail.setBodyHtml(message);
         });
 
         return templateEmail;

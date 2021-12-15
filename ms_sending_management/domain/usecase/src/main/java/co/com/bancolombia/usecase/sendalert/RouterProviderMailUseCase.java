@@ -2,7 +2,6 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.alerttemplate.gateways.AlertTemplateGateway;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.provider.Provider;
@@ -11,11 +10,9 @@ import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;

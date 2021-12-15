@@ -20,7 +20,6 @@ public class LogUseCase {
                 .logType(SEND_230)
                 .medium(medium)
                 .contact(alert.getDestination().getToAddress())
-                .messageSent(template.getTextPlain())
                 .provider(alert.getProvider())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())

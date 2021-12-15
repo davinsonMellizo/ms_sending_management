@@ -14,14 +14,16 @@ include ':rabbit-configurator'
 project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
 include ":commons"
 project(':commons').projectDir = file('./infrastructure/helpers/commons')
+include ':dynamo-commons'
+project(':dynamo-commons').projectDir = file('./infrastructure/helpers/dynamo-commons')
 include ':async-event-handler'
 project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
 include ':rest-consumer'
 project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
 include ':async-event-handler'
 project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
-include ':pinpoint'
-project(':pinpoint').projectDir = file('./infrastructure/driven-adapters/pinpoint')
+include ':dynamodb'
+project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
 include ':ses'
 project(':ses').projectDir = file('./infrastructure/driven-adapters/ses')
 include ':async-sqs'
