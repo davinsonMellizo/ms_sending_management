@@ -1,6 +1,5 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
-import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alert.Alert;
@@ -9,13 +8,11 @@ import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
-import co.com.bancolombia.model.service.gateways.ServiceGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
+import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -45,6 +42,7 @@ public class SendAlertTwoUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
                         new Response(1, e.getBusinessErrorMessage().getMessage())))
+                .flatMap(alert -> Util.replaceParameter(alert, message))
                 .flatMap(alert -> sendAlert(alert, message))
                 .onErrorResume(TechnicalException.class, e -> logUseCase.sendLogError(message, SEND_220,
                         new Response(1, e.getMessage())))

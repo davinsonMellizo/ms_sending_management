@@ -5,6 +5,7 @@ import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.gateways.PushGateway;
 import co.com.bancolombia.model.prefix.Prefix;
 import co.com.bancolombia.model.prefix.gateways.PrefixRepository;
 import co.com.bancolombia.model.priority.Priority;
@@ -33,7 +34,7 @@ public class RouterProviderPushUseCaseTest {
     @InjectMocks
     private RouterProviderPushUseCase routerProviderPushUseCase;
     @Mock
-    private CommandGateway commandGateway;
+    private PushGateway pushGateway;
     @Mock
     private LogUseCase logUseCase;
 
@@ -67,7 +68,9 @@ public class RouterProviderPushUseCaseTest {
                 .idProviderSms(0)
                 .priority(0)
                 .build();
-        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
+        when(pushGateway.sendPush(any())).thenReturn(Mono.just(Response.builder()
+                .description("success").code(200)
+                .build()));
         when(logUseCase.sendLogPush(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         StepVerifier.create(routerProviderPushUseCase.sendPush(message, alert))
                 .expectNextCount(1)

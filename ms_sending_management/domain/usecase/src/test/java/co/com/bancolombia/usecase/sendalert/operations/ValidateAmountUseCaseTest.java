@@ -1,15 +1,10 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
-import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
-import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
-import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,21 +18,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertOneUseCaseTest {
+public class ValidateAmountUseCaseTest {
     @InjectMocks
-    private SendAlertOneUseCase sendAlertOneUseCase;
+    private ValidateAmountUseCase validateAmountUseCase;
     @Mock
-    private RouterProviderMailUseCase routerProviderMailUseCase;
-    @Mock
-    private RouterProviderPushUseCase routerProviderPushUseCase;
-    @Mock
-    private RouterProviderSMSUseCase routerProviderSMSUseCase;
-    @Mock
-    private AlertGateway alertGateway;
+    private AlertClientGateway alertClientGateway;
 
     private Message message = new Message();
 
@@ -61,34 +49,42 @@ public class SendAlertOneUseCaseTest {
         message.setParameters(parameters);
     }
 
+
     @Test
-    public void sendAlertIndicatorOnePushTest(){
+    public void validateAmountErrorTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
-        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
-        when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
-        when(routerProviderPushUseCase.sendPush(any(), any())).thenReturn(Mono.just(new Response()));
-        when(routerProviderSMSUseCase.validateMobile(any(), any())).thenReturn(Mono.empty());
-        StepVerifier.create(sendAlertOneUseCase.sendAlertIndicatorOne(message))
-                .verifyComplete();
+        AlertClient alertClient = AlertClient.builder()
+                .transactionDate(LocalDateTime.now()).accumulatedAmount(0L).accumulatedOperations(0)
+                .amountEnable(100L).numberOperations(5)
+                .build();
+        when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
+        when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
+        StepVerifier.create(validateAmountUseCase.validateAmount(alert, message))
+                .expectError()
+                .verify();
     }
 
     @Test
-    public void sendAlertIndicatorOneSMSTest(){
+    public void validateAmountTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
-                .push("NO")
+                .push("SI")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
-        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
-        when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
-        when(routerProviderSMSUseCase.validateMobile(any(), any())).thenReturn(Mono.empty());
-        StepVerifier.create(sendAlertOneUseCase.sendAlertIndicatorOne(message))
+        AlertClient alertClient = AlertClient.builder()
+                .transactionDate(LocalDateTime.now()).accumulatedAmount(60000L).accumulatedOperations(0)
+                .amountEnable(1000L).numberOperations(5)
+                .build();
+        when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
+        when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
+        StepVerifier.create(validateAmountUseCase.validateAmount(alert, message))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

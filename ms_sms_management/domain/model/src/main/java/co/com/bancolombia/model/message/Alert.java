@@ -15,12 +15,9 @@ import java.util.List;
 public class Alert {
     private Integer priority;
     private String to;
-    private Template template;
+    private String message;
     private String url;
     private String provider;
-    private String documentType;
-    private String documentNumber;
-    private String enrolClient;
     private String logKey;
 
 }

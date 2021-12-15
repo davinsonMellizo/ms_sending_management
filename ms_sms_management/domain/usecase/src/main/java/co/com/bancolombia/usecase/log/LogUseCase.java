@@ -14,13 +14,13 @@ import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 public class LogUseCase {
     private final LogGateway logGateway;
 
-    public <T> Mono<T> sendLog(Alert alert, TemplateSms template, String medium, Response response) {
+    public <T> Mono<T> sendLog(Alert alert, String medium, Response response) {
         return logGateway.putLogToSQS(Log.builder()
                 .logKey(alert.getLogKey())
                 .logType(SEND_230)
                 .medium(medium)
                 .contact(alert.getTo())
-                .messageSent(template.getBodyText())
+                .messageSent(alert.getMessage())
                 .provider(alert.getProvider())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())

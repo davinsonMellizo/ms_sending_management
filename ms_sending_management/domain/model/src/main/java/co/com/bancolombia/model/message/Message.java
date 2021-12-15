@@ -34,4 +34,9 @@ public class Message {
     private List<Parameter> parameters;
     private ArrayList<Attachment> attachments;
 
+    public Message setParameters(List<Parameter> parameters){
+        this.parameters = parameters;
+        return this;
+    }
+
 }

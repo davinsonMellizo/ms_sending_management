@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;

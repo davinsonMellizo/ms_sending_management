@@ -1,8 +1,6 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;

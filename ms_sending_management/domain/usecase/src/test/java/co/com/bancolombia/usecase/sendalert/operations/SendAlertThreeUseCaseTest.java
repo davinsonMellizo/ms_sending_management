@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
@@ -10,7 +10,6 @@ import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,6 +77,7 @@ public class SendAlertThreeUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
@@ -99,6 +99,7 @@ public class SendAlertThreeUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("NO")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();

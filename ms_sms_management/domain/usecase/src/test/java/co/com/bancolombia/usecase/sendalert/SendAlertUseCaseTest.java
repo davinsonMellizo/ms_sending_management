@@ -3,7 +3,6 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
-import co.com.bancolombia.model.message.gateways.PinpointGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,13 +26,10 @@ public class SendAlertUseCaseTest {
     @InjectMocks
     private SendAlertUseCase useCase;
     @Mock
-    private PinpointGateway pinpointGateway;
-    @Mock
     private LogUseCase logUseCase;
     @Mock
     private MasivianGateway masivianGateway;
-    @Mock
-    private PushGateway pushGateway;
+
     @Mock
     private InalambriaGateway inalambriaGateway;
     private Alert alert = new Alert();
@@ -45,9 +41,9 @@ public class SendAlertUseCaseTest {
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name","bancolombia",""));
-        alert.setTemplate(new Template(parameters, "Compra"));
+        alert.setMessage("text to send");
         alert.setLogKey(UUID.randomUUID().toString());
-        when(pinpointGateway.findTemplateSms(any())).thenReturn(Mono.just(new TemplateSms("Hola ${name}")));
+
     }
 
     @Test
@@ -57,7 +53,7 @@ public class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), any(),anyString(), any()))
+        when(logUseCase.sendLog(any(),anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
                 .create(useCase.sendAlert(alert))
@@ -72,22 +68,7 @@ public class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), any(),anyString(), any()))
-                .thenReturn(Mono.empty());
-        StepVerifier
-                .create(useCase.sendAlert(alert))
-                .verifyComplete();
-    }
-
-    @Test
-    public void sendAlertPushTest(){
-        alert.setProvider("PUSH");
-       when(pushGateway.sendPush(any()))
-                .thenReturn(Mono.just(Response.builder()
-                        .code(200)
-                        .description("success")
-                        .build()));
-        when(logUseCase.sendLog(any(), any(),anyString(), any()))
+        when(logUseCase.sendLog(any(),anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
                 .create(useCase.sendAlert(alert))
@@ -115,15 +96,5 @@ public class SendAlertUseCaseTest {
                 .verify();
     }
 
-    @Test
-    public void sendAlertPushErrorTest(){
-        alert.setProvider("PUSH");
-        when(pushGateway.sendPush(any()))
-                .thenReturn(Mono.error(new Throwable("error")));
-        StepVerifier
-                .create(useCase.sendAlert(alert))
-                .expectError()
-                .verify();
-    }
 
 }

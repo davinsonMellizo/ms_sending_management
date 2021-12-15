@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
@@ -28,6 +29,7 @@ public class RouterProviderMailUseCase {
     public Mono<Response> routeAlertMail(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMail)
+                .flatMap(message1 -> replaceMessage(message, alert))
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
                 .zipWith(providerGateway.findProviderByProviderService(alert.getIdProviderMail()))
@@ -35,6 +37,16 @@ public class RouterProviderMailUseCase {
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
                         new Response(1, e.getBusinessErrorMessage().getMessage())));
+    }
+
+    private Mono<Message> replaceMessage(Message message, Alert alert) {
+        return Mono.just(message.getOperation())
+                .filter(operation -> operation != 1)
+                .map(operation -> message.setParameters(List.of(Parameter.builder()
+                                .Value(alert.getMessage())
+                                .Name("message")
+                                .build())))
+                .thenReturn(message);
     }
 
     public Mono<Response> buildMail(Message message, Alert alert, Remitter remitter, Provider provider) {

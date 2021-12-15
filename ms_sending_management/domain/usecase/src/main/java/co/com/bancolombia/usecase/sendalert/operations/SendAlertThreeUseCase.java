@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
@@ -15,6 +15,7 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
+import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -61,6 +62,7 @@ public class SendAlertThreeUseCase {
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
                         new Response(1, e.getBusinessErrorMessage().getMessage())))
                 .flatMap(alert -> validateTransaction(alert, message))
+                .flatMap(alert -> Util.replaceParameter(alert, message))
                 .flatMap(alert -> routeAlert(alert, message));
     }
 

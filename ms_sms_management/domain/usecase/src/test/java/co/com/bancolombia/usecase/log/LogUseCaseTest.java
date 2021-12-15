@@ -43,7 +43,7 @@ public class LogUseCaseTest {
 
     @Test
     public void putLogTest(){
-        StepVerifier.create(logUseCase.sendLog(alert, templateEmail, "", response))
+        StepVerifier.create(logUseCase.sendLog(alert, "", response))
                 .expectError();
     }
 

@@ -23,7 +23,6 @@ public class PushAdapter implements PushGateway {
 
     @Override
     public Mono<Response> sendPush(Push push) {
-        System.out.println(push);
         return client.post(properties.getResources().getEndpointPush(), push,
                 SuccessPush.class, ErrorPush.class)
                 .map(response -> Response.builder().code(STATUS_OK)

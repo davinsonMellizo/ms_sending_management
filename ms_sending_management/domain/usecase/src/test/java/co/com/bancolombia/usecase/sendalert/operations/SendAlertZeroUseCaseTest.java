@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
@@ -85,6 +85,7 @@ public class SendAlertZeroUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("SI").nature("MO")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
@@ -110,6 +111,7 @@ public class SendAlertZeroUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("NO").nature("MO")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
@@ -134,6 +136,7 @@ public class SendAlertZeroUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("NO").nature("MO")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
@@ -157,6 +160,7 @@ public class SendAlertZeroUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("NO").nature("MO")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();

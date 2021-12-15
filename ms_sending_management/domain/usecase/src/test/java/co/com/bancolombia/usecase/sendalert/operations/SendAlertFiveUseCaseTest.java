@@ -1,8 +1,7 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -28,9 +26,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertTwoUseCaseTest {
+public class SendAlertFiveUseCaseTest {
     @InjectMocks
-    private SendAlertTwoUseCase sendAlertTwoUseCase;
+    private SendAlertFiveUseCase sendAlertFiveUseCase;
     @Mock
     private AlertGateway alertGateway;
     @Mock
@@ -58,7 +56,7 @@ public class SendAlertTwoUseCaseTest {
         message.setUrl("");
         message.setPhone("32158967");
         message.setPhoneIndicator("57");
-        message.setMail("bancolombia@com.co");
+        message.setMail("bancolombia@banco.com.co");
         message.setAttachments(new ArrayList<>());
         ArrayList<Parameter> parameters = new ArrayList<>();
         Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
@@ -67,10 +65,11 @@ public class SendAlertTwoUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorTwoPushTest(){
+    public void sendAlertIndicatorFivePushTest(){
         Alert alert = Alert.builder()
-                .id("AFI")
+                .id("AFI").idState(1)
                 .push("SI")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
@@ -78,16 +77,15 @@ public class SendAlertTwoUseCaseTest {
         when(routerProviderPushUseCase.sendPush(any(), any())).thenReturn(Mono.just(new Response()));
         when(routerProviderSMSUseCase.validateMobile(any(), any())).thenReturn(Mono.empty());
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
-        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
-                .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
-        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
+        StepVerifier.create(sendAlertFiveUseCase.sendAlertIndicatorFive(message))
                 .verifyComplete();
     }
 
     @Test
-    public void sendAlertIndicatorTwoSmsTest(){
+    public void sendAlertIndicatorFiveSmsTest(){
         Alert alert = Alert.builder()
-                .id("AFI")
+                .id("AFI").idState(1)
+                .message("${name}")
                 .push("NO")
                 .idProviderMail(0)
                 .idRemitter(0)
@@ -95,27 +93,8 @@ public class SendAlertTwoUseCaseTest {
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
         when(routerProviderSMSUseCase.validateMobile(any(), any())).thenReturn(Mono.empty());
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
-        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
-                .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
-        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
+        StepVerifier.create(sendAlertFiveUseCase.sendAlertIndicatorFive(message))
                 .verifyComplete();
-    }
-
-    @Test
-    public void errorAlertTransactionNotFoundTest(){
-        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.empty());
-        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
-                .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
-        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
-                .expectError().verify();
-    }
-
-    @Test
-    public void errorAlertNotFoundTest(){
-        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
-                .thenReturn(Flux.empty());
-        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
-                .expectError().verify();
     }
 
 

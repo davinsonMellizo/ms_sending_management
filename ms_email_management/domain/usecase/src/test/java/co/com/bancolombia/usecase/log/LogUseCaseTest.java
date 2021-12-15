@@ -35,7 +35,6 @@ public class LogUseCaseTest {
         alert.setLogKey(UUID.randomUUID().toString());
         alert.setProvider("TOD");
         alert.setDestination(Alert.Destination.builder().toAddress("email").build());
-        templateEmail.setTextPlain("text");
         response.setCode(1);
         response.setDescription("description");
         when(logGateway.putLogToSQS(any())).thenReturn(Mono.just(new Log()));

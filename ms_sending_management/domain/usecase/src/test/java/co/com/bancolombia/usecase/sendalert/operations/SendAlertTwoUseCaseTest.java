@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert.validations;
+package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
@@ -28,9 +28,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertFiveUseCaseTest {
+public class SendAlertTwoUseCaseTest {
     @InjectMocks
-    private SendAlertFiveUseCase sendAlertFiveUseCase;
+    private SendAlertTwoUseCase sendAlertTwoUseCase;
     @Mock
     private AlertGateway alertGateway;
     @Mock
@@ -58,7 +58,7 @@ public class SendAlertFiveUseCaseTest {
         message.setUrl("");
         message.setPhone("32158967");
         message.setPhoneIndicator("57");
-        message.setMail("bancolombia@banco.com.co");
+        message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
         ArrayList<Parameter> parameters = new ArrayList<>();
         Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
@@ -67,10 +67,11 @@ public class SendAlertFiveUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorFivePushTest(){
+    public void sendAlertIndicatorTwoPushTest(){
         Alert alert = Alert.builder()
-                .id("AFI").idState(1)
+                .id("AFI")
                 .push("SI")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
@@ -78,23 +79,45 @@ public class SendAlertFiveUseCaseTest {
         when(routerProviderPushUseCase.sendPush(any(), any())).thenReturn(Mono.just(new Response()));
         when(routerProviderSMSUseCase.validateMobile(any(), any())).thenReturn(Mono.empty());
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
-        StepVerifier.create(sendAlertFiveUseCase.sendAlertIndicatorFive(message))
+        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
+                .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
+        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
                 .verifyComplete();
     }
 
     @Test
-    public void sendAlertIndicatorFiveSmsTest(){
+    public void sendAlertIndicatorTwoSmsTest(){
         Alert alert = Alert.builder()
-                .id("AFI").idState(1)
+                .id("AFI")
                 .push("NO")
+                .message("${name}")
                 .idProviderMail(0)
                 .idRemitter(0)
                 .build();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
         when(routerProviderSMSUseCase.validateMobile(any(), any())).thenReturn(Mono.empty());
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
-        StepVerifier.create(sendAlertFiveUseCase.sendAlertIndicatorFive(message))
+        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
+                .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
+        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
                 .verifyComplete();
+    }
+
+    @Test
+    public void errorAlertTransactionNotFoundTest(){
+        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.empty());
+        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
+                .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
+        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
+                .expectError().verify();
+    }
+
+    @Test
+    public void errorAlertNotFoundTest(){
+        when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
+                .thenReturn(Flux.empty());
+        StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))
+                .expectError().verify();
     }
 
 

@@ -1,5 +1,7 @@
 package co.com.bancolombia.consumer;
 
+import co.com.bancolombia.consumer.adapter.response.ErrorPush;
+import co.com.bancolombia.consumer.adapter.response.SuccessPush;
 import co.com.bancolombia.model.message.Sms;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -41,7 +43,7 @@ public class RestClientTest {
     @Test
     public void givenPostThenSuccess() {
         mockServer.enqueue(mockResponseSuccess());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessPush.class, ErrorPush.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -49,7 +51,7 @@ public class RestClientTest {
     @Test
     public void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessPush.class, ErrorPush.class))
                 .expectError()
                 .verify();
     }
