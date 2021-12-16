@@ -33,12 +33,6 @@ public class AdapterOperations<E, D> {
         this.table = client.table(tableName, TableSchema.fromBean(dataClass));
     }
 
-    protected Flux<E> findByIndex(String index, String partitionKey) {
-        return result(table.index(index)
-            .query(basicQuery(partitionKey)));
-
-    }
-
     protected Mono<Void> save(E entity) {
         return fromFuture(table.putItem(toData(entity)));
     }
@@ -46,10 +40,6 @@ public class AdapterOperations<E, D> {
     protected Mono<E> findById(String partitionKey){
         return fromFuture(table.getItem(buildKey(partitionKey)))
             .map(this::toEntity);
-    }
-
-    protected Flux<E> findAll(){
-        return result(table.scan());
     }
 
     protected Mono<Void> update(E entity) {
@@ -60,21 +50,10 @@ public class AdapterOperations<E, D> {
         return fromFuture(table.deleteItem(buildKey(partitionKey))).then();
     }
 
-    private QueryConditional basicQuery(String partitionKey){
-        return QueryConditional.keyEqualTo(buildKey(partitionKey));
-    }
-
     private Key buildKey(String partitionKey) {
         return Key.builder()
             .partitionValue(partitionKey)
             .build();
-    }
-
-    private Flux<E> result(SdkPublisher<Page<D>> resultPublisher) {
-        return from(resultPublisher)
-            .map(Page::items)
-            .flatMapMany(Flux::fromIterable)
-            .map(this::toEntity);
     }
 
     private E toEntity(D data){

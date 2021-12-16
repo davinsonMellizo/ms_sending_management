@@ -62,7 +62,6 @@ adapters:
     region-aws: ${REGION_AWS}
   rest-client:
     timeout: 1000
-    scope: scope-blm
     resources:
       endpointMasivianMail: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-mail
   secrets-manager:
