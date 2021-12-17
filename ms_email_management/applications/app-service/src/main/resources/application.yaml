@@ -51,10 +51,6 @@ adapters:
   dynamo-repository:
     region-aws: ${REGION_AWS}
     endpoint: http://localhost:4566
-  postgresql:
-    pool:
-      initial: ${POSTGRESQL_CONN_INITIAL:2}
-      max: ${POSTGRESQL_CONN_MAX:10}
   async-sqs:
     url: ${SQS_URL}
     timeout: ${SQS_TIMEOUT}
@@ -66,18 +62,6 @@ adapters:
       endpointMasivianMail: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-mail
   secrets-manager:
     secret-rabbit: ${SECRET-RABBIT}
-    secret-rds: ${SECRET-RDS}
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}
     endpoint: http://localhost:4566
-  entries:
-    reactive-web:
-      path-base: ${PATH_BASE}
-      alert: ${ALERT}
-      remitter: ${REMITTER}
-      provider: ${PROVIDER}
-      service: ${SERVICE}
-      consumer: ${CONSUMER}
-      category: ${CATEGORY}
-      priority: ${PRIORITY}
-      send: ${SEND}

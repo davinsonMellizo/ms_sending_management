@@ -7,15 +7,12 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Alert extends Request{
+public class Alert extends Request {
     private Integer priority;
     private String to;
-    private Template template;
+    private String message;
     private String url;
     private String provider;
-    private String documentType;
-    private String documentNumber;
-    private String enrolClient;
     private String logKey;
 
 
