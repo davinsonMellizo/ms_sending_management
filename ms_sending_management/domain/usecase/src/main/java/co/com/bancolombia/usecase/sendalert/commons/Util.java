@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 @UtilityClass
 public class Util {
+
     public Mono<Alert> replaceParameter(Alert alert, Message message) {
         message.getParameters().forEach(parameter -> {
             String text = alert.getMessage().replace("${" + parameter.getName() + "}", parameter.getValue());
