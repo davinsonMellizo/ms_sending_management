@@ -8,6 +8,7 @@ import co.com.bancolombia.api.services.remitter.RemitterHandler;
 import co.com.bancolombia.api.services.remitter.RemitterRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.remitter.RemitterUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Assertions;
@@ -41,6 +42,10 @@ public class RemitterRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private RemitterUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final static String ID = "/{id}";
 

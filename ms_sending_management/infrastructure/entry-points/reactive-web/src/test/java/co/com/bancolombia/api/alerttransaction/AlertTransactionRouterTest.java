@@ -7,6 +7,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alerttransaction.AlertTransactionHandler;
 import co.com.bancolombia.api.services.alerttransaction.AlertTransactionRouter;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.alerttransaction.AlertTransactionUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,10 @@ public class AlertTransactionRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertTransactionUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final AlertTransaction alert = new AlertTransaction();
     private final static String ID = "/{id}";

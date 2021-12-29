@@ -1,8 +1,5 @@
 allprojects {
     repositories {
-        mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
         maven { url "https://artifactory.apps.bancolombia.com/maven-bancolombia" }
     }
 }
@@ -26,6 +23,13 @@ subprojects {
         testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    }
+
+    ext['log4j2.version'] = '2.17.0'
+
+    configurations {
+        compile.exclude group: "org.apache.logging.log4j", module:"log4j-to-slf4j"
+        compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
 
     test {

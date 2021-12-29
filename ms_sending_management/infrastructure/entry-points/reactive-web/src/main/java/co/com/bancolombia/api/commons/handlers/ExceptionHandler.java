@@ -3,10 +3,8 @@ package co.com.bancolombia.api.commons.handlers;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.logging.technical.LoggerFactory;
-import co.com.bancolombia.logging.technical.logger.TechLogger;
-import co.com.bancolombia.logging.technical.message.ObjectTechMsg;
 import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
@@ -18,11 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 
 
@@ -31,15 +24,16 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_S
 public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
 
     private final Environment environment;
-    private static final TechLogger LOGGER = LoggerFactory.getLog(ExceptionHandler.class.getName());
+    private LoggerBuilder logger;
 
     public ExceptionHandler(ErrorAttributes errorAttributes, WebProperties.Resources resourceProperties,
                             ApplicationContext applicationContext,
                             ServerCodecConfigurer configurator,
-                            Environment environment) {
+                            Environment environment, final LoggerBuilder loggerBuilder) {
         super(errorAttributes, resourceProperties, applicationContext);
         this.setMessageWriters(configurator.getWriters());
         this.environment = environment;
+        this.logger = loggerBuilder;
     }
 
     @Override
@@ -60,7 +54,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                 .map(errorResponse -> errorResponse.toBuilder()
                         .domain(request.path())
                         .build())
-                .doAfterTerminate(() -> LOGGER.error(buildObjectTechMsg(throwable, request)))
+                .doAfterTerminate(() -> logger.error(throwable))
                 .flatMap(ResponseUtil::responseFail);
     }
 
@@ -90,24 +84,4 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                 .build()
         );
     }
-
-
-    private ObjectTechMsg<Map<String, Object>> buildObjectTechMsg(Throwable throwable, ServerRequest request) {
-        return new ObjectTechMsg(null,
-                environment.getProperty("spring.application.name"),
-                request.path(),
-                Arrays.stream(throwable.getStackTrace())
-                        .findFirst()
-                        .map(StackTraceElement::getClassName)
-                        .orElse(""),
-                List.of(), buildStackTrace(throwable));
-    }
-
-    private Map<String, Object> buildStackTrace(Throwable throwable) {
-
-        return Map.of("stackTrace", Optional.ofNullable(throwable.getStackTrace()).orElse(new StackTraceElement[]{}),
-                "message", Optional.ofNullable(throwable.getMessage()).orElse(""),
-                "exception", throwable.toString());
-    }
-
 }

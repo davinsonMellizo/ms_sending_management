@@ -9,6 +9,7 @@ import co.com.bancolombia.api.services.alertclient.AlertClientRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alertclient.AlertClient;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.alertclient.AlertClientUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +45,10 @@ public class AlertClientRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertClientUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private String requestUpdate;
     private final AlertClient alertClient = new AlertClient();

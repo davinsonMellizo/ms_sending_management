@@ -8,6 +8,7 @@ import co.com.bancolombia.api.services.alert.AlertHandler;
 import co.com.bancolombia.api.services.alert.AlertRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Assertions;
@@ -41,6 +42,10 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final static String ID = "/{id}";
 

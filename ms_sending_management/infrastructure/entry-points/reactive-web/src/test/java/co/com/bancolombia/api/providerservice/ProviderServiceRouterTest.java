@@ -7,6 +7,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.providerservice.ProviderServiceHandler;
 import co.com.bancolombia.api.services.providerservice.ProviderServiceRouter;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.providerservice.ProviderService;
 import co.com.bancolombia.usecase.providerservice.ProviderServiceUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,6 +41,10 @@ public class ProviderServiceRouterTest extends BaseIntegration {
 
     @MockBean
     private ProviderServiceUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final ProviderService providerService = new ProviderService();
     private String url;

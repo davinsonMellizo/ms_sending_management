@@ -9,6 +9,7 @@ import co.com.bancolombia.api.services.category.CategoryRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.category.Category;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.category.CategoryUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,6 +44,10 @@ public class CategoryRouterTest extends BaseIntegration {
 
     @MockBean
     private CategoryUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Category category = new Category();
     private String url;

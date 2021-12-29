@@ -8,6 +8,7 @@ import co.com.bancolombia.api.services.priority.PriorityHandler;
 import co.com.bancolombia.api.services.priority.PriorityRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.priority.PriorityUseCase;
@@ -44,6 +45,10 @@ public class PriorityRouterTest extends BaseIntegration {
 
     @MockBean
     private PriorityUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Priority priority = new Priority();
     private String url;
