@@ -19,7 +19,7 @@ public class SecretsManagerConfigTest {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         when(properties.getCacheTime()).thenReturn(3600);
         when(properties.getCacheSize()).thenReturn(300);
     }

@@ -1,26 +1,24 @@
 package co.com.bancolombia.secretsmanager;
 
-import co.com.bancolombia.log.LoggerBuilder;
-import co.com.bancolombia.logging.technical.logger.TechLogger;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import connector.AWSSecretManagerConnector;
+import co.com.bancolombia.log.LoggerBuilder;
+import co.com.bancolombia.secretsmanager.connector.AWSSecretManagerConnectorAsync;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
-import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.Mockito.when;
 import static reactor.core.publisher.Mono.just;
 
-@ExtendWith(MockitoExtension.class)
 public class SecretsManagerTest {
 
     public static final String SECRET = "any-secret-dev";
@@ -29,17 +27,14 @@ public class SecretsManagerTest {
     private SecretsManager secretsManager;
 
     @Mock
-    private AWSSecretManagerConnector secretsConnector;
+    private AWSSecretManagerConnectorAsync secretsConnector;
 
     @Mock
     private LoggerBuilder loggerBuilder;
 
-    @Mock
-    protected TechLogger techLogger;
-
-    @BeforeTestMethod
+    @BeforeEach
     public void init() {
-        ReflectionTestUtils.setField(loggerBuilder, "logger", techLogger);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

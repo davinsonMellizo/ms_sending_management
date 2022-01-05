@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS log (
 	id serial primary KEY,
 	document_type int2 NOT NULL,
 	document_number int8 NOT NULL,
-	id_alert varchar(3) NOT NULL,
+	alert_id varchar(3) NOT NULL,
 	alert_type varchar(15) NOT NULL,
 	alert_destination varchar(60) NOT NULL,
 	message_type varchar(4) NOT NULL,
