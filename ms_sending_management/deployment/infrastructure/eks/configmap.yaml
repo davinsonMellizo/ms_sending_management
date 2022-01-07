@@ -30,7 +30,7 @@ data:
   POSTGRESQL_POOL_MAX: "#{postgresql-pool-max}#"
   SQS_URL: #{log-url}#
   SQS_TIMEOUT: #{log-tmo}#
-  SQS_POOL_SIZE: #{sqs-pool-size}#
+  SQS_POOL_SIZE: "#{sqs-pool-size}#"
   REGION_AWS: #{aws-region}#
 
 
