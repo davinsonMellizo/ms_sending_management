@@ -1,8 +1,6 @@
 allprojects {
     repositories {
-        mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://artifactory.apps.bancolombia.com/maven-bancolombia" }
     }
 }
 
@@ -12,7 +10,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
 
     dependencies {
         implementation 'io.projectreactor:reactor-core'
@@ -25,6 +23,16 @@ subprojects {
         testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        }
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)
@@ -65,5 +73,5 @@ tasks.withType(JavaCompile) {
     ]
 }
 tasks.named('wrapper') {
-  gradleVersion = '6.9.1'
+  gradleVersion = '7.3.2'
  }
