@@ -11,14 +11,13 @@ class EnumsTest {
     @Test
     void technicalExceptionEnumGetType() {
         assertThat(TechnicalExceptionEnum.TECHNICAL_SAVE.getMessage())
-                .isNotNull();
+                .isInstanceOf(String.class);
         assertThat(TechnicalExceptionEnum.TECHNICAL_SAVE.getCode())
                 .isEqualTo(TechnicalExceptionEnum.TECHNICAL_SAVE.getCode());
     }
 
     @Test
     void businessExceptionEnumTest() {
-        assertThat(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)
-                .isNotNull();
+        assertThat(BusinessExceptionEnum.TEMPLATE_NOT_FOUND).isInstanceOf(Enum.class);
     }
 }

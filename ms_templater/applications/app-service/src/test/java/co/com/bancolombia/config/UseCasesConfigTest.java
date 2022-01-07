@@ -21,6 +21,6 @@ class UseCasesConfigTest {
 
     @Test
     void useCasesConfigTest() {
-        assertThat(useCasesConfig).isNotNull();
+        assertThat(useCasesConfig).isInstanceOf(UseCasesConfig.class);
     }
 }
