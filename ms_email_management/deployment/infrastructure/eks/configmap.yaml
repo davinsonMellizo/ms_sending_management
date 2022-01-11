@@ -15,7 +15,6 @@ data:
   LOG4J_LEVEL:  #{log-level}#
   CACHE_SECRETS_SIZE: "#{cache-secrets-size}#"
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
-  SECRET-RDS: #{secret-rds}#
   PATH_BASE: "#{prefix}#/#{service}#"
   REGION_AWS: "#{region-aws}"
   SQS_URL: "#{sqs-url}"
