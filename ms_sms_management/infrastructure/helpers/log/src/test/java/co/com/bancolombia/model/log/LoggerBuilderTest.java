@@ -1,6 +1,5 @@
 package co.com.bancolombia.model.log;
 
-import co.com.bancolombia.commons.enums.TypeLog;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -27,7 +26,7 @@ public class LoggerBuilderTest {
 
     @Test
     public void givenInfoWhenValuesThenSuccessTest() {
-        assertThatCode(() -> loggerBuilder.info(DATA, TRANSACTION_ID, CHANNEL, SERVICE, TypeLog.REQ))
+        assertThatCode(() -> loggerBuilder.info(DATA, TRANSACTION_ID, CHANNEL, SERVICE))
                 .doesNotThrowAnyException();
 
     }

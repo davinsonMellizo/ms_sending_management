@@ -1,7 +1,6 @@
 package co.com.bancolombia.model.log;
 
 
-import co.com.bancolombia.commons.enums.TypeLog;
 import co.com.bancolombia.logging.technical.LoggerFactory;
 import co.com.bancolombia.logging.technical.logger.TechLogger;
 import co.com.bancolombia.logging.technical.message.ObjectTechMsg;
@@ -38,8 +37,8 @@ public class LoggerBuilder {
                 .build());
     }
 
-    public <T> void info(T data, String transactionId, String service, String channel, TypeLog type) {
-        logger.info(buildObject(data, transactionId, service, channel, type.getValue()));
+    public <T> void info(T data, String transactionId, String service, String channel) {
+        logger.info(buildObject(data, transactionId, service, channel));
     }
 
     private ObjectTechMsg<?> buildError(Throwable error, String transactionId, String channel, String service) {

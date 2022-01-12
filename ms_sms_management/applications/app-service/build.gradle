@@ -7,6 +7,7 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
     implementation project(':model')
     implementation project(':usecase')
+    implementation project(':log')
     compile 'org.springframework.boot:spring-boot-starter'
     runtime('org.springframework.boot:spring-boot-devtools')
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
