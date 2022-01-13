@@ -6,6 +6,9 @@ buildscript {
 		jacocoVersion = '0.8.5'
         lombokVersion = '1.18.16'
 	}
+    repositories {
+        maven { url "https://artifactory.apps.bancolombia.com/maven-bancolombia" }
+    }
 
 }
 
