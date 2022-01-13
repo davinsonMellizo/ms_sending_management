@@ -6,6 +6,7 @@ buildscript {
 		jacocoVersion = '0.8.5'
         lombokVersion = '1.18.16'
 	}
+
 }
 
 plugins {
@@ -14,6 +15,7 @@ plugins {
 	id 'org.sonarqube' version "${sonarVersion}"
 	id 'jacoco'
 }
+
 
 sonarqube {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
