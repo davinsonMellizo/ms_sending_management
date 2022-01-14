@@ -21,7 +21,7 @@ public class LogAdapterTest {
 
     @BeforeEach
     public void init(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         when(sqsRepository.putQueue(any())).thenReturn(Mono.empty());
     }
 

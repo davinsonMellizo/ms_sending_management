@@ -1,61 +1,32 @@
 package co.com.bancolombia.sqs.config;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.client.builder.ExecutorFactory;
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
+import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.net.URI;
 
 @Configuration
 @RequiredArgsConstructor
+@Generated
 public class SQSConfig {
+
     private final SQSProperties properties;
 
-    private ClientConfiguration clientConfiguration() {
-        return new ClientConfiguration()
-                .withConnectionTimeout(properties.getTimeout())
-                .withRequestTimeout(properties.getTimeout())
-                .withClientExecutionTimeout(properties.getTimeout());
-    }
-
-    private ExecutorFactory executorFactory() {
-        return () -> new ThreadPoolExecutor(
-                properties.getPoolSize(),
-                properties.getPoolSize(),
-                0L,
-                TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>());
-    }
-
     @Bean
-    @Primary
-    @Profile({"dev", "qa", "pdn"})
-    public AmazonSQSAsync clientSQS(){
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withClientConfiguration(clientConfiguration())
-                .withExecutorFactory(executorFactory())
-                .withRegion(properties.getRegionAws())
-                .build();
-    }
-
-    @Bean
-    @Primary
-    @Profile("local")
-    public AmazonSQSAsync clientSQSLocal(){
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withClientConfiguration(clientConfiguration())
-                .withExecutorFactory(executorFactory())
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion(properties.getRegionAws())
-                .build();
+    public SqsAsyncClient sqsConfig() {
+        try {
+            return SqsAsyncClient.builder()
+                    .region(Region.US_EAST_1)
+                    .endpointOverride(URI.create(properties.getUrl()))
+                    .build();
+        } catch (TechnicalException e) {
+            throw new TechnicalException(TechnicalExceptionEnum.SEND_LOG_SQS_ERROR);
+        }
     }
 }
