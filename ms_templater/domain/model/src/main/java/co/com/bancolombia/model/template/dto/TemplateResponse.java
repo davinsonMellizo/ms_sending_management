@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TemplateResponse {
+public class  TemplateResponse {
     private String id;
     private String messageType;
     private String messageSubject;

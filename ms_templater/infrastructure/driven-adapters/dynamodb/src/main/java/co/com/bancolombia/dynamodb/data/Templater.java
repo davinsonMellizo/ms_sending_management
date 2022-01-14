@@ -1,20 +1,20 @@
 package co.com.bancolombia.dynamodb.data;
 
+import ch.qos.logback.classic.db.names.TableName;
 import co.com.bancolombia.dynamo.annotation.DynamoDbTableAdapter;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
 @Data
 @DynamoDbBean
-@DynamoDbTableAdapter(tableName = "template-email")
-public class TemplateEmailData {
-    private String name;
-    private String subject;
-    private String bodyHtml;
-
+@DynamoDbTableAdapter(tableName = "${project.table-name}")
+public class Templater {
+    private String id;
+    private String message_type;
     @DynamoDbPartitionKey
-    public String getName() {
-        return name;
+        public String getId() {
+        return id;
     }
 }

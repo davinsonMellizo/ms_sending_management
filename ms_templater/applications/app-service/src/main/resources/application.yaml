@@ -12,3 +12,8 @@ spring:
       path: /h2
   profiles:
     include:
+project:
+  code: ${APPLICATION_CODE}
+  name: ${PROJECT_NAME}
+  env: ${ENVIRONMENT}
+  table-name: ${TABLE_NAME}
