@@ -16,8 +16,8 @@ data:
   CACHE_SECRETS_SIZE: "#{cache-secrets-size}#"
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
   PATH_BASE: "#{prefix}#/#{service}#"
-  REGION_AWS: #{region-aws}
-  SQS_URL: #{sqs-url}
+  REGION_AWS: #{region-aws}#
+  SQS_URL: #{sqs-url}#
   SQS_TIMEOUT: "#{sqs-timeout}"
   SQS_POOL_SIZE: "#{sqs-pool-size}"
   SECRET-RABBIT: "#{secret-rabbit}"
