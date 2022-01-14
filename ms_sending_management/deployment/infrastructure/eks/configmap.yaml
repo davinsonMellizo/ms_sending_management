@@ -32,5 +32,6 @@ data:
   SQS_TIMEOUT: "#{log-tmo}#"
   SQS_POOL_SIZE: "#{sqs-pool-size}#"
   REGION_AWS: #{aws-region}#
+  SECRET-RABBIT: #{secret-rabbit}#
 
 
