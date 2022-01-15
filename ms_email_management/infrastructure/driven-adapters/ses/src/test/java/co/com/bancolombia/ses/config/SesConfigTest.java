@@ -14,17 +14,11 @@ public class SesConfigTest {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
-
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void sesConfigLocalTest(){
-        assertThat(sesConfig.sesConfigLocal()).isNotNull();
-    }
-
-    @Test
-    public void sesConfigTest(){
-        assertThat(sesConfig.sesConfig()).isNotNull();
+    public void sesConfigTest() {
+        assertThat(sesConfig.sesClientConfig()).isNotNull();
     }
 }

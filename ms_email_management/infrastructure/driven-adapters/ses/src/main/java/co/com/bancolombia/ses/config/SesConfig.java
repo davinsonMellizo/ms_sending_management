@@ -1,32 +1,34 @@
 package co.com.bancolombia.ses.config;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
+import co.com.bancolombia.model.log.LoggerBuilder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.*;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.ses.SesAsyncClient;
 
 
+@RequiredArgsConstructor
 @Configuration
 public class SesConfig {
 
-    @Profile("local")
-    @Bean
-    public AmazonSimpleEmailService sesConfigLocal(){
-        return AmazonSimpleEmailServiceClientBuilder.standard()
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion("us-east-1")
-                .build();
-    }
+    private static final Region region = Region.US_EAST_1;
+    private final LoggerBuilder logger;
 
-    @Profile({"dev", "qa", "pdn"})
     @Bean
-    public AmazonSimpleEmailService sesConfig(){
-        return AmazonSimpleEmailServiceClientBuilder.standard()
-                .withRegion("us-east-1")
-                .build();
+    public SesAsyncClient sesClientConfig() {
+        try {
+            return SesAsyncClient.builder()
+                    .region(region)
+                    .credentialsProvider(getProviderChain())
+                    .build();
+
+        } catch (IllegalStateException | ExceptionInInitializerError ex) {
+            logger.info("exception " + ex);
+            logger.info("Error al inicializar cliente ses".concat(ex.getMessage()));
+        }
+        return null;
     }
 
     public AwsCredentialsProviderChain getProviderChain() {
