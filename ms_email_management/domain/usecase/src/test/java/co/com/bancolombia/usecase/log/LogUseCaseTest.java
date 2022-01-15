@@ -46,4 +46,11 @@ public class LogUseCaseTest {
                 .expectError();
     }
 
+    @Test
+    public void putLogTestError(){
+        response.setCode(200);
+        StepVerifier.create(logUseCase.sendLog(alert, templateEmail, "", response))
+                .verifyComplete();
+    }
+
 }

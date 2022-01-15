@@ -12,8 +12,6 @@ include ":secrets-manager"
 project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
 include ':rabbit-configurator'
 project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
-include ":commons"
-project(':commons').projectDir = file('./infrastructure/helpers/commons')
 include ':dynamo-commons'
 project(':dynamo-commons').projectDir = file('./infrastructure/helpers/dynamo-commons')
 include ':async-event-handler'
