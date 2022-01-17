@@ -1,5 +1,6 @@
 package co.com.bancolombia.rabbitmq.config;
 
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
@@ -25,12 +26,15 @@ public class RabbitMQConfigHelperTest {
     @Mock
     private SecretsNameStandard secretsNameStandard;
 
+    @Mock
+    private LoggerBuilder loggerBuilder;
+
     @InjectMocks
     private RabbitMQConfigHelper rabbitMQConfigHelper;
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
