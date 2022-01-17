@@ -36,6 +36,10 @@ class RequestValidatorTest {
         templaterDTO.setId("001");
         templaterDTO.setMessageType("Email");
         templaterDTO.setMessageSubject("Alertas y Notificaciones");
+        templaterDTO.setMessageBody("Body");
+        templaterDTO.setMessageText("Text");
+        templaterDTO.setCreationUser("User");
+        templaterDTO.setConsumerId("ConsumerId");
         Assertions.assertDoesNotThrow(() -> requestValidator.validateBody(templaterDTO));
     }
 
@@ -43,9 +47,13 @@ class RequestValidatorTest {
     void validateBodyThrowException() {
         Validator myValidator = Validation.buildDefaultValidatorFactory().getValidator();
         TemplaterDTO templaterDTO = new TemplaterDTO();
-        templaterDTO.setId("001");
+        templaterDTO.setId("");
         templaterDTO.setMessageType("Email");
         templaterDTO.setMessageSubject("Alertas y Notificaciones");
+        templaterDTO.setMessageBody("Body");
+        templaterDTO.setMessageText("Text");
+        templaterDTO.setCreationUser("User");
+        templaterDTO.setConsumerId("ConsumerId");
         Set<ConstraintViolation<TemplaterDTO>> constrain = myValidator.validate(templaterDTO);
         Mockito.when(validator.validate(templaterDTO)).thenReturn(constrain);
         Assertions.assertThrows(TechnicalException.class, () ->
