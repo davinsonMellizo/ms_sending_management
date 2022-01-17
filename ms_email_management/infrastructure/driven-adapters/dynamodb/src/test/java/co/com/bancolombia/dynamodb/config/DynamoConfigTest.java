@@ -30,12 +30,12 @@ public class DynamoConfigTest {
     public void dynamoConfigLocalTest(){
         when(properties.getEndpoint()).thenReturn("http://localhost:4566");
         when(properties.getRegionAws()).thenReturn("us-east-1");
-        assertThat(dynamoConfig.dynamoConfig()).isNotNull();
+        assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
     @Test
     public void dynamoConfigTest(){
-        assertThat(dynamoConfig.dynamoConfig()).isNotNull();
+        assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
    /* @Test

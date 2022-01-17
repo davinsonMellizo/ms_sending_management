@@ -21,7 +21,7 @@ public class DynamoConfig {
     private final Properties properties;
 
     @Bean
-    public DynamoDbEnhancedAsyncClient dynamoConfig() {
+    public DynamoDbEnhancedAsyncClient dynamodbConfig() {
         try {
             DynamoDbAsyncClient ddb = DynamoDbAsyncClient.builder()
                     .region(Region.US_EAST_1)
