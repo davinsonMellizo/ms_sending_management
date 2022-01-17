@@ -27,6 +27,7 @@ public class RabbitMQConfigHelper{
     private RabbitMQConnectionProperties rabbitProperties() {
         return secretsNameStandard.secretForRabbitMQ()
                 .flatMap(secretName -> secretsManager.getSecret(secretName, RabbitMQConnectionProperties.class))
+                .doOnNext(rabbit -> System.out.println("variables rabbit mq " + rabbit))
                 .block();
     }
 
@@ -35,6 +36,7 @@ public class RabbitMQConfigHelper{
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
         final ConnectionFactory factory = new ConnectionFactory();
+        System.out.println("getConnectionFactoryProvider ++++ " + properties);
         PropertyMapper map = PropertyMapper.get();
 
         map.from(properties::getHostname).whenNonNull().to(factory::setHost);
