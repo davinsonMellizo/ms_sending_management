@@ -1,5 +1,7 @@
 package co.com.bancolombia.dynamodb.config;
 
+import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,20 @@ public class DynamoConfig {
     private final Properties properties;
 
     @Bean
+    public DynamoDbEnhancedAsyncClient dynamoConfig() {
+        try {
+            DynamoDbAsyncClient ddb = DynamoDbAsyncClient.builder()
+                    .region(Region.US_EAST_1)
+                    .build();
+            return DynamoDbEnhancedAsyncClient.builder()
+                    .dynamoDbClient(ddb)
+                    .build();
+        } catch (TechnicalException e) {
+            throw new TechnicalException(TechnicalExceptionEnum.SEND_LOG_SQS_ERROR);
+        }
+    }
+
+    /*@Bean
     @Profile({"dev", "cer", "pdn"})
     public DynamoDbAsyncClient clientEnvironments(){
         return DynamoDbAsyncClient.create();
@@ -39,6 +55,6 @@ public class DynamoConfig {
         return DynamoDbEnhancedAsyncClient.builder()
                 .dynamoDbClient(client)
                 .build();
-    }
+    }*/
 
 }
