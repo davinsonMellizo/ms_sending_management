@@ -1,56 +1,64 @@
 package co.com.bancolombia.rabbitmq.config;
 
-import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
+import co.com.bancolombia.secretsmanager.api.GenericManager;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
+import com.rabbitmq.client.ConnectionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import reactor.core.publisher.Mono;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 
 public class RabbitMQConfigHelperTest {
-    public static final String SECRET = "any-secret-dev";
 
+    private static final String secretName = "secret-example";
+    private static final String virtualHost = "/";
+    private static final String hostname = "example.com";
+    private static final String username = "user2";
+    private static final String password = "pass2";
+    private static final boolean SSL = true;
+    private static final Integer port = 5432;
+    private static final String METHOD_CONFIG_SSL = "configureSsl";
+
+    private final RabbitMQConfigHelper helper = new RabbitMQConfigHelper(secretName);
+    private final RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
 
     @Mock
-    private SecretsManager secretsManager;
+    private GenericManager genericManager;
     @Mock
-    private SecretsNameStandard secretsNameStandard;
-
-    @Mock
-    private LoggerBuilder loggerBuilder;
-
-    @InjectMocks
-    private RabbitMQConfigHelper rabbitMQConfigHelper;
+    private ConnectionFactory factory;
 
     @BeforeEach
-    public void init() {
+    public void init() throws SecretException {
         MockitoAnnotations.openMocks(this);
+        properties.setVirtualhost(virtualHost);
+        properties.setHostname(hostname);
+        properties.setUsername(username);
+        properties.setPassword(password);
+        properties.setSsl(SSL);
+        properties.setPort(port);
+
+        when(genericManager.getSecret(secretName, RabbitMQConnectionProperties.class)).thenReturn(properties);
     }
 
     @Test
-    public void connectionRabbitWhenSecretExistTest(){
-        when(secretsManager.getSecret(anyString(), any())).thenReturn(Mono.just(properties()));
-        when(secretsNameStandard.secretForRabbitMQ()).thenReturn(Mono.just("name"));
-        assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
+    public void getConnectionConfig() throws SecretException {
+        assertThat(helper.getConnectionFactoryProvider(genericManager)).isNotNull();
     }
 
-    private RabbitMQConnectionProperties properties(){
-        RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
-        properties.setHostname("any-host");
-        properties.setUsername("this-is-for-test");
-        properties.setPassword("this-is-for-test");
-        properties.setVirtualhost("/");
-        properties.setPort(8080);
-        return properties;
+    @Test
+    public void configureSslWithException() throws KeyManagementException, NoSuchAlgorithmException {
+        doThrow(new NoSuchAlgorithmException()).when(factory).useSslProtocol();
+        ReflectionTestUtils.invokeMethod(helper, METHOD_CONFIG_SSL, factory);
+        assertThat(factory).isNotNull();
     }
 }
