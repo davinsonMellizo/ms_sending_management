@@ -7,6 +7,7 @@ dependencies {
 	implementation project(':rest-consumer')
     implementation project(':async-event-handler')
     implementation project(':log')
+    implementation project(':dynamo-commons')
     implementation project(':rabbit-configurator')
     implementation project(':secrets-manager')
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
