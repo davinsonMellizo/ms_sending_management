@@ -1,14 +1,12 @@
 package co.com.bancolombia.rabbitmq.config;
 
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
-import co.com.bancolombia.secretsmanager.SecretsHelper;
-import co.com.bancolombia.secretsmanager.api.GenericManager;
-import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
+import co.com.bancolombia.secretsmanager.SecretsManager;
+import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import com.rabbitmq.client.ConnectionFactory;
+import lombok.RequiredArgsConstructor;
 import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,24 +16,25 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
-public class RabbitMQConfigHelper extends SecretsHelper<RabbitMQConnectionProperties, ConnectionFactoryProvider> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConfigHelper.class.getName());
+@RequiredArgsConstructor
+public class RabbitMQConfigHelper{
+    private final LoggerBuilder logger;
+    private final SecretsManager secretsManager;
+    private final SecretsNameStandard secretsNameStandard;
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in email management";
 
-    protected RabbitMQConfigHelper(@Value("${adapters.secrets-manager.secret-rabbit}") final String secretName) {
-        super(RabbitMQConnectionProperties.class, secretName);
-        LOGGER.info("secretName " + secretName);
+
+    private RabbitMQConnectionProperties rabbitProperties() {
+        return secretsNameStandard.secretForRabbitMQ()
+                .flatMap(secretName -> secretsManager.getSecret(secretName, RabbitMQConnectionProperties.class))
+                .block();
     }
 
     @Primary
     @Bean
-    public ConnectionFactoryProvider getConnectionFactoryProvider(GenericManager manager) throws SecretException {
-        LOGGER.info("AASDFDSFDASFDFDF");
-        return createConfigFromSecret(manager, this::buildConnectionFactoryProvider);
-    }
-
-    private ConnectionFactoryProvider buildConnectionFactoryProvider(RabbitMQConnectionProperties properties) {
+    public ConnectionFactoryProvider getConnectionFactoryProvider(){
+        RabbitMQConnectionProperties properties = rabbitProperties();
+        System.out.println("Properties"+properties);
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();
 
@@ -44,6 +43,7 @@ public class RabbitMQConfigHelper extends SecretsHelper<RabbitMQConnectionProper
         map.from(properties::getUsername).whenNonNull().to(factory::setUsername);
         map.from(properties::getPassword).whenNonNull().to(factory::setPassword);
         map.from(properties::isSsl).whenTrue().as(isSsl -> factory).to(this::configureSsl);
+
         return () -> factory;
     }
 
@@ -51,7 +51,7 @@ public class RabbitMQConfigHelper extends SecretsHelper<RabbitMQConnectionProper
         try {
             factory.useSslProtocol();
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            LOGGER.error(FAIL_MSG, e);
+            logger.info(String.format(FAIL_MSG, e));
         }
     }
 }
