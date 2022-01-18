@@ -3,5 +3,4 @@ dependencies {
     compile project(':secrets-manager')
     compile 'org.springframework:spring-context'
     compile 'org.reactivecommons:async-commons-starter:1.0.0-beta5'
-    implementation "com.github.bancolombia:aws-secrets-manager-sync:3.0.0"
 }
