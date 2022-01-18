@@ -5,6 +5,7 @@ import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import io.r2dbc.spi.ConnectionFactoryOptions;
 import io.r2dbc.spi.Option;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,7 +25,7 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionConfiguration(){
+    public ConnectionFactoryOptions buildConnectionConfiguration(@Value("${adapters.postgresql.schema}") String schema){
         PostgresqlConnectionProperties properties =  postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(DRIVER,"postgresql")
@@ -34,7 +35,8 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(PASSWORD,properties.getPassword())
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "disable")
-                .option(Option.valueOf("schema"), "schalertd")
+                .option(Option.valueOf("schema"), schema)
+
                 .build();
 
     }

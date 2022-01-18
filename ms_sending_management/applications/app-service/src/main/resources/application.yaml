@@ -49,6 +49,7 @@ management:
 
 adapters:
   postgresql:
+    schema: ${POSTGRESQL_SCHEMA}
     pool:
       initial: ${POSTGRESQL_CONN_INITIAL:2}
       max: ${POSTGRESQL_CONN_MAX:10}
