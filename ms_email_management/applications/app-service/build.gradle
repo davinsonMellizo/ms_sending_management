@@ -8,6 +8,7 @@ dependencies {
     implementation project(':async-event-handler')
     implementation project(':log')
     implementation project(':rabbit-configurator')
+    implementation project(':secrets-manager')
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
     implementation project(':model')
     implementation project(':usecase')
