@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class HandlerTest {
+class HandlerTest {
 
     @Mock
     private ServerRequest request;

@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RouterTest {
+class RouterTest {
 
     @InjectMocks
     private Handler handler;

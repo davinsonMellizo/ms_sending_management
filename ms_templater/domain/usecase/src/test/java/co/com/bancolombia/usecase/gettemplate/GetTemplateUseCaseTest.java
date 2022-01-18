@@ -16,11 +16,9 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GetTemplateUseCaseTest {
+class GetTemplateUseCaseTest {
 
     @InjectMocks
     private GetTemplateUseCase getTemplateUseCase;

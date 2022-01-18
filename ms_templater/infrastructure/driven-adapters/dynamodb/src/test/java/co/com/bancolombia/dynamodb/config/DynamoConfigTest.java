@@ -7,23 +7,23 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class DynamoConfigTest {
+class DynamoConfigTest {
 
     @InjectMocks
     private DynamoConfig dynamoConfig;
+
     @Mock
     private DynamoDbAsyncClient dynamoDbAsyncClient;
+
     @Mock
     private Properties properties;
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
-
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -42,5 +42,4 @@ public class DynamoConfigTest {
     public void dynamoConfigEnhancedTest(){
         assertThat(dynamoConfig.clientEnhanced(dynamoDbAsyncClient)).isNotNull();
     }
-
 }
