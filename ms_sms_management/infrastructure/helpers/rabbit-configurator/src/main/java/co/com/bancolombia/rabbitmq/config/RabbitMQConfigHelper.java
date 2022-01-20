@@ -41,8 +41,7 @@ public class RabbitMQConfigHelper{
         map.from(properties::getPort).to(factory::setPort);
         map.from(properties::getUsername).whenNonNull().to(factory::setUsername);
         map.from(properties::getPassword).whenNonNull().to(factory::setPassword);
-        //map.from(properties::isSsl).whenTrue().as(isSsl -> factory).to(this::configureSsl);
-        map.from(false).whenTrue().as(isSsl -> factory).to(this::configureSsl);
+        map.from(properties::isSsl).whenTrue().as(isSsl -> factory).to(this::configureSsl);
 
         return () -> factory;
     }
