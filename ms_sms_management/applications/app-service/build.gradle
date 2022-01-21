@@ -13,7 +13,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter'
     runtime('org.springframework.boot:spring-boot-devtools')
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
-    //implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 task explodedJar(type: Copy) {
