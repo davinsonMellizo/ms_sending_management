@@ -58,34 +58,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: #{name}#-configmap
-          startupProbe:
-            httpGet:
-              path: #{prefix}#/#{service}#/health/readiness
-              scheme: HTTP
-              port: #{container-port}#
-            periodSeconds: #{health-startup-period}#
-            timeoutSeconds: 1
-            successThreshold: 1
-            failureThreshold: #{health-failures-startup}#
-          livenessProbe:
-            httpGet:
-              path: #{prefix}#/#{service}#/health/liveness
-              scheme: HTTP
-              port: #{container-port}#
-            periodSeconds: #{health-liveness-period}#
-            timeoutSeconds: 1
-            successThreshold: 1
-            failureThreshold: #{health-failure}#
-          readinessProbe:
-            httpGet:
-              path: #{prefix}#/#{service}#/health/readiness
-              scheme: HTTP
-              port: #{container-port}#
-            initialDelaySeconds: 0
-            periodSeconds: #{health-readiness-period}#
-            timeoutSeconds: 1
-            successThreshold: 1
-            failureThreshold: #{health-failure}#
+
       securityContext:
         fsGroup: 65534
 
