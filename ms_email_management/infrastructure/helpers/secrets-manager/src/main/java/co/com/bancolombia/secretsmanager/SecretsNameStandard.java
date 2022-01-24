@@ -17,7 +17,6 @@ public class SecretsNameStandard {
     private String secretRabbit;
 
     public Mono<String> secretForRabbitMQ() {
-        System.out.println("rabbit secret ++ " + secretRabbit);
         return Mono.just(secretRabbit);
     }
 }
