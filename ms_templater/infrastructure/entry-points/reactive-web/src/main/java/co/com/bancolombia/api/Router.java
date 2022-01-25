@@ -27,6 +27,8 @@ public class Router {
                 .andRoute(GET(apiProperties.getGetTemplate()).and(accept(MediaType.APPLICATION_JSON)),
                         handler::getTemplate)
                 .andRoute(PUT(apiProperties.getPutTemplate()).and(accept(MediaType.APPLICATION_JSON)),
-                        handler::updateTemplate));
+                        handler::updateTemplate)
+                .andRoute(PUT(apiProperties.getDeleteTemplate()).and(accept(MediaType.APPLICATION_JSON)),
+                        handler::deleteTemplate));
     }
 }

@@ -14,16 +14,16 @@ import lombok.Setter;
 @Getter
 @Builder(toBuilder = true)
 public class TemplateRequest extends Request {
-    private String MessageType;
-    private String IdTemplate;
-    private String Version;
-    private String IdConsumer;
-    private String Description;
-    private String MessageSubject;
-    private String MessageBody;
-    private String PlainText;
-    private String CreationUser;
-    private String ModificationUser;
+    private String messageType;
+    private String idTemplate;
+    private String version;
+    private String idConsumer;
+    private String description;
+    private String messageSubject;
+    private String messageBody;
+    private String plainText;
+    private String creationUser;
+    private String modificationUser;
 
     @Override
     public boolean equals(Object obj) {
@@ -31,13 +31,13 @@ public class TemplateRequest extends Request {
             return false;
         }
         TemplateRequest fobj = (TemplateRequest) obj;
-        return PlainText.equals(fobj.getPlainText());
+        return plainText.equals(fobj.getPlainText());
     }
 
     @Override
     public int hashCode() {
         final int prime = Constants.PRIME;
         int result = Constants.ONE;
-        return prime * result + ((PlainText == null) ? Constants.ZERO : PlainText.hashCode());
+        return prime * result + ((plainText == null) ? Constants.ZERO : plainText.hashCode());
     }
 }

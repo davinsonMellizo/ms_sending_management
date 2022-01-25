@@ -36,13 +36,13 @@ class GetTemplateUseCaseTest {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Flux.just(SampleData.templateResponse()));
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
-                .assertNext(categoryResponses ->
-                        Assertions.assertThat(categoryResponses).isInstanceOf(ArrayList.class))
+                .assertNext(templateResponses ->
+                        Assertions.assertThat(templateResponses).isInstanceOf(ArrayList.class))
                 .verifyComplete();
     }
 
     @Test
-    void getCategoryErrorTest() {
+    void getTemplateErrorTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Flux.just());
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))

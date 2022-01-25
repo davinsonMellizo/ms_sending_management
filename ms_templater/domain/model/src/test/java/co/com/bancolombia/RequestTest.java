@@ -27,7 +27,7 @@ class RequestTest {
     @Test
     void requestTest() {
         Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.ID, "Test-ID-123");
+        headers.put(Constants.ID_TEMPLATE, "Test-ID_TEMPLATE-123");
         headers.put(Constants.MESSAGE_TYPE, "EMAIL");
         headers.put(Constants.MESSAGE_SUBJECT, "Email Subject");
         assertThat(request.headers(headers)).isNotNull();
@@ -39,7 +39,7 @@ class RequestTest {
         currentHeaders.put("Content-Type", "application/json");
         ReflectionTestUtils.setField(request, "headers", currentHeaders);
         Map<String, String> newHeaders = new HashMap<>();
-        newHeaders.put(Constants.ID, "Test-ID-123");
+        newHeaders.put(Constants.ID_TEMPLATE, "Test-ID_TEMPLATE-123");
         newHeaders.put(Constants.MESSAGE_TYPE, "EMAIL");
         newHeaders.put(Constants.MESSAGE_SUBJECT, "Email Subject");
         assertThat(request.headers(newHeaders)).isNotNull();
@@ -48,7 +48,7 @@ class RequestTest {
     @Test
     void blankHeadersTest() {
         Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.ID, "Test-ID-123");
+        headers.put(Constants.ID_TEMPLATE, "Test-ID_TEMPLATE-123");
         headers.put(Constants.MESSAGE_TYPE, "EMAIL");
         headers.put(Constants.MESSAGE_SUBJECT, "");
         assertThat(request.headers(headers)).isNotNull();

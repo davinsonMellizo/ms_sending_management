@@ -1,5 +1,6 @@
 package co.com.bancolombia.usecase;
 
+import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.model.template.dto.TemplateRequest;
 import co.com.bancolombia.model.template.dto.TemplateResponse;
 
@@ -10,46 +11,51 @@ public class SampleData {
 
     public static TemplateRequest templateRequest() {
         return TemplateRequest.builder()
-                .MessageType("EMAIL")
-                .Description("First Template")
-                .MessageSubject("Subject")
-                .MessageBody("Body")
-                .PlainText("Message")
-                .CreationUser("User ID")
-                .IdConsumer("Consumer ID")
+                .messageType("EMAIL")
+                .description("First Template")
+                .messageSubject("Subject")
+                .messageBody("Body")
+                .plainText("Message")
+                .creationUser("User ID_TEMPLATE")
+                .idConsumer("Consumer ID_TEMPLATE")
                 .build();
     }
 
     public static TemplateResponse templateResponse() {
         return TemplateResponse.builder()
-                .IdTemplate("001")
-                .MessageType("EMAIL")
-                .Description("First Template")
-                .MessageSubject("Subject")
-                .MessageBody("Body")
-                .PlainText("Message")
-                .IdConsumer("Consumer ID")
+                .idTemplate("001")
+                .messageType("EMAIL")
+                .description("First Template")
+                .messageSubject("Subject")
+                .messageBody("Body")
+                .plainText("Message")
+                .idConsumer("Consumer ID_TEMPLATE")
                 .build();
     }
 
     public static TemplateRequest templateRequestUpdate() {
         return TemplateRequest.builder()
-                .IdTemplate("001")
-                .MessageType("EMAIL")
-                .Description("First Template")
-                .MessageBody("Subject")
-                .MessageBody("New Body")
-                .PlainText("Message")
-                .CreationUser("User ID")
-                .IdConsumer("Consumer ID")
+                .idTemplate("001")
+                .messageType("EMAIL")
+                .description("First Template")
+                .messageBody("Subject")
+                .messageBody("New Body")
+                .plainText("Message")
+                .creationUser("User ID_TEMPLATE")
+                .idConsumer("Consumer ID_TEMPLATE")
+                .build();
+    }
+    public static TemplateRequest templateRequestDelete() {
+        return TemplateRequest.builder()
+                .idTemplate("001")
                 .build();
     }
 
     public static Map<String, String> testHeader() {
         Map<String, String> testHeader = new HashMap<>();
-        testHeader.put("id", "001");
-        testHeader.put("messageType", "Test");
-        testHeader.put("messageSubject", "Test");
+        testHeader.put(Constants.ID_TEMPLATE, "001");
+        testHeader.put(Constants.MESSAGE_TYPE, "Test");
+        testHeader.put(Constants.MESSAGE_SUBJECT, "Test");
         return testHeader;
     }
 }

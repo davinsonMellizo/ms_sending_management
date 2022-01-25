@@ -19,7 +19,7 @@ public class GetTemplateUseCase {
 
     public Mono<List<TemplateResponse>> getTemplate(Map<String, String> header) {
         List<TemplateResponse> templateResponses = new ArrayList<>();
-        return templateRepository.getTemplate(header.get(Constants.ID), header.get(Constants.MESSAGE_TYPE),
+        return templateRepository.getTemplate(header.get(Constants.ID_TEMPLATE), header.get(Constants.MESSAGE_TYPE),
                 header.get(Constants.MESSAGE_SUBJECT))
                 .collectList()
                 .map(templates -> {

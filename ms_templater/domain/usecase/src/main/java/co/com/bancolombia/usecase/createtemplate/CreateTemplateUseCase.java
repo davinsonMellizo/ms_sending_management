@@ -26,7 +26,7 @@ public class CreateTemplateUseCase {
                 });
     }
 
-    public Flux<TemplateResponse> validateTemplate(String id) {
-        return templateRepository.getTemplate(id, null, null);
+    public Flux<TemplateResponse> validateTemplate(String idTemplate) {
+        return templateRepository.getTemplate(idTemplate, null, null);
     }
 }

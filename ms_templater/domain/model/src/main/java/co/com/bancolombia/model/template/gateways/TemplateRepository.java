@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface TemplateRepository {
-    Flux<TemplateResponse> getTemplate(String id, String messageType, String messageSubject);
+    Flux<TemplateResponse> getTemplate(String idTemplate, String messageType, String messageSubject);
     Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest);
     Mono<TemplateResponse> updateTemplate(TemplateRequest templateRequest);
     Mono<TemplateResponse> deleteTemplate(TemplateRequest templateRequest);

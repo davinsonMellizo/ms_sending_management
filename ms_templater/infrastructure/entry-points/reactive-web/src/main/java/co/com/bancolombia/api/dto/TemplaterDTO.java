@@ -18,57 +18,55 @@ import javax.validation.constraints.Size;
 public class TemplaterDTO {
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 50, message = "Longitud maxima de 50 caracteres")
-    private String IdTemplate;
+    private String idTemplate;
 
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
-    private String MessageType;
+    private String messageType;
 
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 10, message = "Longitud maxima de 10 caracteres")
-    private String Version;
+    private String version;
 
     @NotNull(message = "campo obligatorio")
     @Size(min = 1, max = 50, message = "longitud maxima de 50 caracteres")
-    private String IdConsumer;
+    private String idConsumer;
 
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 200, message = "Longitud maxima de 200 caracteres")
-    private String Description;
+    private String description;
 
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 500, message = "Longitud maxima de 500 caracteres")
-    private String MessageSubject;
+    private String messageSubject;
 
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 50000, message = "Longitud maxima de 50000 caracteres")
-    private String MessageBody;
+    private String messageBody;
 
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 10000, message = "Longitud maxima de 10000 caracteres")
-    private String PlainText;
+    private String plainText;
 
-    @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
-    private String CreationUser;
+    private String creationUser;
 
-    @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
-    private String ModificationUser;
+    private String modificationUser;
 
 
     public Mono<TemplateRequest> toModel() {
         return Mono.just(TemplateRequest.builder()
-                .IdTemplate(this.IdTemplate)
-                .MessageType(this.MessageType)
-                .Version(this.Version)
-                .IdConsumer(this.IdConsumer)
-                .Description(this.Description)
-                .MessageSubject(this.MessageSubject)
-                .MessageBody(this.MessageBody)
-                .PlainText(this.PlainText)
-                .CreationUser(this.CreationUser)
-                .ModificationUser(this.ModificationUser)
+                .idTemplate(this.idTemplate)
+                .messageType(this.messageType)
+                .version(this.version)
+                .idConsumer(this.idConsumer)
+                .description(this.description)
+                .messageSubject(this.messageSubject)
+                .messageBody(this.messageBody)
+                .plainText(this.plainText)
+                .creationUser(this.creationUser)
+                .modificationUser(this.modificationUser)
                 .build());
     }
 }

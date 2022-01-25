@@ -19,3 +19,4 @@ data:
   PATH_CREATE-TEMPLATE: #{create}#
   PATH_GET-TEMPLATE: #{get}#
   PATH_PUT-TEMPLATE: #{put}#
+  PATH_DELETE-TEMPLATE: #{delete}#
