@@ -15,18 +15,17 @@ public class CreateTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest) {
-        return validateTemplate(templateRequest.getIdTemplate())
-                .collectList()
-                .flatMap(templateResponses -> {
-                    if (Constants.ZERO < templateResponses.size()) {
-                        throw new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS);
-                    }
-                    return templateRepository.createTemplate(templateRequest);
-                });
-    }
-
-    public Flux<TemplateResponse> validateTemplate(String idTemplate) {
-        return templateRepository.getTemplate(idTemplate, null, null);
-    }
+//    public Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest) {
+//        return validateTemplate(templateRequest.getIdTemplate())
+//                .flatMap(templateResponse -> {
+//                    if (!templateResponse.getIdTemplate().isEmpty()) {
+//                        throw new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS);
+//                    }
+//                    return templateRepository.createTemplate(templateRequest);
+//                });
+//    }
+//
+//    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
+//        return templateRepository.getTemplate(idTemplate);
+//    }
 }

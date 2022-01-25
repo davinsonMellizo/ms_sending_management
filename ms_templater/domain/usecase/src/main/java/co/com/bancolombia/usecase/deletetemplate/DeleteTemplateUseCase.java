@@ -15,17 +15,16 @@ public class DeleteTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<TemplateResponse> deleteTemplate(TemplateRequest templateRequest) {
-        return validateTemplate(templateRequest.getIdTemplate())
-                .collectList()
-                .map(templateResponses -> {
-                    templateRepository.deleteTemplate(templateRequest);
-                    return templateResponses.get(Constants.ZERO);
-                });
-    }
-
-    public Flux<TemplateResponse> validateTemplate(String idTemplate) {
-        return templateRepository.getTemplate(idTemplate, null, null)
-                .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
-    }
+//    public Mono<TemplateResponse> deleteTemplate(TemplateRequest templateRequest) {
+//        return validateTemplate(templateRequest.getIdTemplate())
+//                .map(templateResponse -> {
+//                    templateRepository.deleteTemplate(templateRequest);
+//                    return templateResponse;
+//                });
+//    }
+//
+//    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
+//        return templateRepository.getTemplate(idTemplate)
+//                .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
+//    }
 }

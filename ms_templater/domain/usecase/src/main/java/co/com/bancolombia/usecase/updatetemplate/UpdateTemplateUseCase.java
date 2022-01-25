@@ -20,22 +20,21 @@ public class UpdateTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<Map<String, TemplateResponse>> updateTemplate(TemplateRequest templateRequest) {
-        Map<String, TemplateResponse> templateResponseMap = new HashMap<>();
-        return validateTemplate(templateRequest.getIdTemplate())
-                .collectList()
-                .flatMap(templateResponses -> {
-                    templateResponseMap.put(Constants.BEFORE, templateResponses.get(Constants.ZERO));
-                    return templateRepository.updateTemplate(templateRequest);
-                })
-                .map(templateResponse -> {
-                    templateResponseMap.put(Constants.ACTUAL, templateResponse);
-                    return templateResponseMap;
-                });
-    }
-
-    public Flux<TemplateResponse> validateTemplate(String idTemplate) {
-        return templateRepository.getTemplate(idTemplate, null, null)
-                .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
-    }
+//    public Mono<Map<String, TemplateResponse>> updateTemplate(TemplateRequest templateRequest) {
+//        Map<String, TemplateResponse> templateResponseMap = new HashMap<>();
+//        return validateTemplate(templateRequest.getIdTemplate())
+//                .flatMap(templateResponse -> {
+//                    templateResponseMap.put(Constants.BEFORE, templateResponse);
+//                    return templateRepository.updateTemplate(templateRequest);
+//                })
+//                .map(templateResponse -> {
+//                    templateResponseMap.put(Constants.ACTUAL, templateResponse);
+//                    return templateResponseMap;
+//                });
+//    }
+//
+//    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
+//        return templateRepository.getTemplate(idTemplate)
+//                .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
+//    }
 }

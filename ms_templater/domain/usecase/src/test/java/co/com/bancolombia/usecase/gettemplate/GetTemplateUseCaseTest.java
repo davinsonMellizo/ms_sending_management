@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.gettemplate;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.template.dto.TemplateResponse;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import co.com.bancolombia.usecase.SampleData;
 import org.assertj.core.api.Assertions;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
@@ -33,18 +35,18 @@ class GetTemplateUseCaseTest {
 
     @Test
     void getTemplateSuccessfulTest() {
-        Mockito.when(templateRepository.getTemplate(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
-                .thenReturn(Flux.just(SampleData.templateResponse()));
+        Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
+                .thenReturn(Mono.just(SampleData.templateResponse()));
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
                 .assertNext(templateResponses ->
-                        Assertions.assertThat(templateResponses).isInstanceOf(ArrayList.class))
+                        Assertions.assertThat(templateResponses).isInstanceOf(TemplateResponse.class))
                 .verifyComplete();
     }
 
     @Test
     void getTemplateErrorTest() {
-        Mockito.when(templateRepository.getTemplate(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
-                .thenReturn(Flux.just());
+        Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
+                .thenReturn(Mono.empty());
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
                 .expectErrorMatches(throwable -> throwable instanceof BusinessException &&
                         ((BusinessException) throwable).getException()

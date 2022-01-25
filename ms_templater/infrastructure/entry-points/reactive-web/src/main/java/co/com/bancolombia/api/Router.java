@@ -22,13 +22,14 @@ public class Router {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
-        return (route(POST(apiProperties.getCreateTemplate()).and(accept(MediaType.APPLICATION_JSON)),
+        return (route/*(POST(apiProperties.getCreateTemplate()).and(accept(MediaType.APPLICATION_JSON)),
                 handler::createTemplate)
-                .andRoute(GET(apiProperties.getGetTemplate()).and(accept(MediaType.APPLICATION_JSON)),
-                        handler::getTemplate)
-                .andRoute(PUT(apiProperties.getPutTemplate()).and(accept(MediaType.APPLICATION_JSON)),
-                        handler::updateTemplate)
-                .andRoute(PUT(apiProperties.getDeleteTemplate()).and(accept(MediaType.APPLICATION_JSON)),
-                        handler::deleteTemplate));
+                .andRoute*/(GET(apiProperties.getGetTemplate()).and(accept(MediaType.APPLICATION_JSON)),
+                handler::getTemplate)
+//                .andRoute(PUT(apiProperties.getPutTemplate()).and(accept(MediaType.APPLICATION_JSON)),
+//                        handler::updateTemplate)
+//                .andRoute(PUT(apiProperties.getDeleteTemplate()).and(accept(MediaType.APPLICATION_JSON)),
+//                        handler::deleteTemplate)
+        );
     }
 }

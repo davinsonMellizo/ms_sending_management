@@ -21,7 +21,7 @@ class TemplaterTest {
 
     @Test
     void getIdTest() {
-        assertThat(templater.getId()).isNullOrEmpty();
+        assertThat(templater.getIdTemplate()).isNullOrEmpty();
     }
 
 }

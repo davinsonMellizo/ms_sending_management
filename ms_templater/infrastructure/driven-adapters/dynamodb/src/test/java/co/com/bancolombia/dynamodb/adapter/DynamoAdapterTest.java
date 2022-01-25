@@ -13,19 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DynamoAdapterTest {
 
-    @Mock
-    private DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient;
-
-    @InjectMocks
-    private DynamoAdapter dynamoAdapter;
-
-    @BeforeAll
-    public void init() {
-        MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    void dynamoAdapterTest() {
-        assertThat(dynamoAdapter).isNotNull();
-    }
+//    @Mock
+//    private DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient;
+//
+//    @InjectMocks
+//    private DynamoAdapter dynamoAdapter;
+//
+//    @BeforeAll
+//    public void init() {
+//        MockitoAnnotations.openMocks(this);
+//    }
+//
+//    @Test
+//    void dynamoAdapterTest() {
+//        assertThat(dynamoAdapter).isNotNull();
+//    }
 }
