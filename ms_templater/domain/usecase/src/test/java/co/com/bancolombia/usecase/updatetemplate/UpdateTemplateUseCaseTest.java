@@ -30,7 +30,7 @@ class UpdateTemplateUseCaseTest {
         MockitoAnnotations.openMocks(this);
         Mockito.when(templateRepository.updateTemplate(Mockito.any()))
                 .thenReturn(Mono.just(SampleData.templateResponse()));
-        Mockito.when(templateRepository.getTemplate(SampleData.templateRequestUpdate().getId(), null, null))
+        Mockito.when(templateRepository.getTemplate(SampleData.templateRequestUpdate().getIdTemplate(), null, null))
                 .thenReturn(Flux.just(SampleData.templateResponse()));
     }
 

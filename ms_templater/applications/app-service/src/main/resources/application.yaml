@@ -29,6 +29,9 @@ spring:
         netty: OFF
 
 adapters:
+  dynamo-repository:
+    region-aws: ${AWS_REGION}
+    endpoint: http://localhost:4566
   secrets-manager:
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}

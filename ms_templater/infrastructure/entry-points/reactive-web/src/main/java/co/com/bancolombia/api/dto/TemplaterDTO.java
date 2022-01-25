@@ -68,7 +68,7 @@ public class TemplaterDTO {
                 .MessageBody(this.MessageBody)
                 .PlainText(this.PlainText)
                 .CreationUser(this.CreationUser)
-                .ModificationUser(this.CreationUser)
+                .ModificationUser(this.ModificationUser)
                 .build());
     }
 }

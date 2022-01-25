@@ -123,7 +123,7 @@ class HandlerTest {
         headers.put("IdTemplate", "01");
         headers.put("MessageType", "Type");
         MockServerRequest request = MockServerRequest.builder()
-                .header("Id", "01")
+                .header("IdTemplate", "01")
                 .header("MessageType", "Type")
                 .build();
         Mockito.when(getTemplateUseCase.getTemplate(headers))
