@@ -11,10 +11,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 @DynamoDbBean
 @DynamoDbTableAdapter(tableName = "${project.table-name}")
 public class Templater {
-    private String IdTemplate;
-    private String MessageType;
+    private String idTemplate;
+    private String messageType;
     @DynamoDbPartitionKey
         public String getId() {
-        return IdTemplate;
+        return idTemplate;
     }
 }
