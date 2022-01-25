@@ -16,7 +16,7 @@ public class CreateTemplateUseCase {
     private final TemplateRepository templateRepository;
 
     public Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest) {
-        return validateTemplate(templateRequest.getId())
+        return validateTemplate(templateRequest.getIdTemplate())
                 .collectList()
                 .flatMap(templateResponses -> {
                     if (Constants.ZERO < templateResponses.size()) {

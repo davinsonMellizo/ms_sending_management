@@ -22,7 +22,7 @@ public class UpdateTemplateUseCase {
 
     public Mono<Map<String, TemplateResponse>> updateTemplate(TemplateRequest templateRequest) {
         Map<String, TemplateResponse> templateResponseMap = new HashMap<>();
-        return validateTemplate(templateRequest.getId())
+        return validateTemplate(templateRequest.getIdTemplate())
                 .collectList()
                 .flatMap(templateResponses -> {
                     templateResponseMap.put(Constants.BEFORE, templateResponses.get(Constants.ZERO));

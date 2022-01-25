@@ -12,11 +12,12 @@ class TemplateRequestTest {
     @Test
     void templateRequestTest() {
         TemplateRequest templateRequest = TemplateRequest.builder()
-                .messageType("Message Type")
-                .messageSubject("Message Subject")
-                .messageBody("Message Body")
-                .messageText("Message")
-                .creationUser("Creation User")
+                .MessageType("Message Type")
+                .Description("Description")
+                .MessageSubject("Message Subject")
+                .MessageBody("Message Body")
+                .PlainText("Message")
+                .CreationUser("Creation User")
                 .build();
         assertThat(templateRequest)
                 .isNotEqualTo(TemplateRequest.builder().build())

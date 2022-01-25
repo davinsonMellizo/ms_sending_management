@@ -66,9 +66,9 @@ public class Handler extends GenericBaseHandler {
     protected Mono<TemplaterDTO> templaterDTOMono(ServerRequest serverRequest) {
         return Mono.just(setHeaders(serverRequest)).map(stringStringMap ->
                 TemplaterDTO.builder()
-                        .id(stringStringMap.get("id"))
-                        .messageType(stringStringMap.get("messageType"))
-                        .messageSubject(stringStringMap.get("messageSubject"))
+                        .IdTemplate(stringStringMap.get("IdTemplate"))
+                        .MessageType(stringStringMap.get("MessageType"))
+                        .MessageSubject(stringStringMap.get("MessageSubject"))
                         .build())
                 .switchIfEmpty(Mono.empty());
     }

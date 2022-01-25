@@ -16,43 +16,59 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 
 public class TemplaterDTO {
-    @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 10, message = "longitud maxima de 10 caracteres")
-    private String id;
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 50, message = "Longitud maxima de 50 caracteres")
+    private String IdTemplate;
+
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
+    private String MessageType;
+
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 10, message = "Longitud maxima de 10 caracteres")
+    private String Version;
 
     @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 100, message = "longitud maxima de 100 caracteres")
-    private String messageType;
+    @Size(min = 1, max = 50, message = "longitud maxima de 50 caracteres")
+    private String IdConsumer;
 
-    @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 100, message = "longitud maxima de 100 caracteres")
-    private String messageSubject;
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 200, message = "Longitud maxima de 200 caracteres")
+    private String Description;
 
-    @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 100, message = "longitud maxima de 100 caracteres")
-    private String messageBody;
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 500, message = "Longitud maxima de 500 caracteres")
+    private String MessageSubject;
 
-    @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 100, message = "longitud maxima de 100 caracteres")
-    private String messageText;
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 50000, message = "Longitud maxima de 50000 caracteres")
+    private String MessageBody;
 
-    @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 100, message = "longitud maxima de 100 caracteres")
-    private String creationUser;
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 10000, message = "Longitud maxima de 10000 caracteres")
+    private String PlainText;
 
-    @NotNull(message = "campo obligatorio")
-    @Size(min = 1, max = 100, message = "longitud maxima de 100 caracteres")
-    private String consumerId;
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
+    private String CreationUser;
+
+    @NotNull(message = "Campo obligatorio")
+    @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
+    private String ModificationUser;
+
 
     public Mono<TemplateRequest> toModel() {
         return Mono.just(TemplateRequest.builder()
-                .id(this.id)
-                .messageType(this.messageType)
-                .messageSubject(this.messageSubject)
-                .messageBody(this.messageBody)
-                .messageText(this.messageText)
-                .creationUser(this.creationUser)
-                .consumerId(this.consumerId)
+                .IdTemplate(this.IdTemplate)
+                .MessageType(this.MessageType)
+                .Version(this.Version)
+                .IdConsumer(this.IdConsumer)
+                .Description(this.Description)
+                .MessageSubject(this.MessageSubject)
+                .MessageBody(this.MessageBody)
+                .PlainText(this.PlainText)
+                .CreationUser(this.CreationUser)
+                .ModificationUser(this.CreationUser)
                 .build());
     }
 }

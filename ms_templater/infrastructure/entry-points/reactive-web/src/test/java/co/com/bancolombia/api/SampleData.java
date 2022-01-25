@@ -8,36 +8,38 @@ public class SampleData {
 
     public static TemplateRequest templaterRequest() {
         return TemplateRequest.builder()
-                .id("01")
-                .messageType("Type")
-                .messageSubject("Subject")
-                .messageBody("Body")
-                .messageText("Text")
-                .creationUser("User")
-                .consumerId("ConsumerID")
+                .IdTemplate("01")
+                .MessageType("Type")
+                .Description("Firts template")
+                .MessageSubject("Subject")
+                .MessageBody("Body")
+                .PlainText("Text")
+                .CreationUser("User")
+                .IdConsumer("ConsumerID")
                 .build();
     }
 
     public static TemplaterDTO templaterDTO() {
         return TemplaterDTO.builder()
-                .id("01")
-                .messageType("Type")
-                .messageSubject("Subject")
-                .messageBody("Body")
-                .messageText("Text")
-                .creationUser("User")
-                .consumerId("ConsumerID")
+                .IdTemplate("01")
+                .MessageType("Type")
+                .Description("Firts template")
+                .MessageSubject("Subject")
+                .MessageBody("Body")
+                .PlainText("Text")
+                .CreationUser("User")
+                .IdConsumer("ConsumerID")
                 .build();
     }
 
     public static TemplateResponse templateResponse() {
         return TemplateResponse.builder()
-                .id("01")
-                .messageType("Type")
-                .messageSubject("Subject")
-                .messageBody("Body")
-                .messageText("Text")
-                .consumerId("ConsumerID")
+                .IdTemplate("01")
+                .MessageType("Type")
+                .MessageSubject("Subject")
+                .MessageBody("Body")
+                .PlainText("Text")
+                .IdConsumer("ConsumerID")
                 .build();
     }
 

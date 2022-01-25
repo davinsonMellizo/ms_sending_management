@@ -10,35 +10,38 @@ public class SampleData {
 
     public static TemplateRequest templateRequest() {
         return TemplateRequest.builder()
-                .messageType("EMAIL")
-                .messageSubject("Subject")
-                .messageBody("Body")
-                .messageText("Message")
-                .creationUser("User ID")
-                .consumerId("Consumer ID")
+                .MessageType("EMAIL")
+                .Description("First Template")
+                .MessageSubject("Subject")
+                .MessageBody("Body")
+                .PlainText("Message")
+                .CreationUser("User ID")
+                .IdConsumer("Consumer ID")
                 .build();
     }
 
     public static TemplateResponse templateResponse() {
         return TemplateResponse.builder()
-                .id("001")
-                .messageType("EMAIL")
-                .messageSubject("Subject")
-                .messageBody("Body")
-                .messageText("Message")
-                .consumerId("Consumer ID")
+                .IdTemplate("001")
+                .MessageType("EMAIL")
+                .Description("First Template")
+                .MessageSubject("Subject")
+                .MessageBody("Body")
+                .PlainText("Message")
+                .IdConsumer("Consumer ID")
                 .build();
     }
 
     public static TemplateRequest templateRequestUpdate() {
         return TemplateRequest.builder()
-                .id("001")
-                .messageType("EMAIL")
-                .messageSubject("Subject")
-                .messageBody("New Body")
-                .messageText("Message")
-                .creationUser("User ID")
-                .consumerId("Consumer ID")
+                .IdTemplate("001")
+                .MessageType("EMAIL")
+                .Description("First Template")
+                .MessageBody("Subject")
+                .MessageBody("New Body")
+                .PlainText("Message")
+                .CreationUser("User ID")
+                .IdConsumer("Consumer ID")
                 .build();
     }
 

@@ -35,7 +35,7 @@ class CreateTemplateUseCaseTest {
 
     @Test
     void createTemplateSuccessfulTest() {
-        Mockito.when(templateRepository.getTemplate(SampleData.templateRequest().getId(), null, null))
+        Mockito.when(templateRepository.getTemplate(SampleData.templateRequest().getIdTemplate(), null, null))
                 .thenReturn(Flux.just());
         StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
                 .assertNext(templateResponse ->
@@ -45,7 +45,7 @@ class CreateTemplateUseCaseTest {
 
     @Test
     void createTemplateErrorTest() {
-        Mockito.when(templateRepository.getTemplate(SampleData.templateRequest().getId(), null, null))
+        Mockito.when(templateRepository.getTemplate(SampleData.templateRequest().getIdTemplate(), null, null))
                 .thenReturn(Flux.just(SampleData.templateResponse()));
         StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
                 .expectErrorMatches(throwable ->

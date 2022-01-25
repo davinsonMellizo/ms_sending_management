@@ -67,11 +67,11 @@ class HandlerTest {
     @Test
     void headersTemplate() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("id", "01");
-        headers.put("messageType", "Type");
+        headers.put("IdTemplate", "01");
+        headers.put("MessageType", "Type");
         MockServerRequest request = MockServerRequest.builder()
-                .header("id", "01")
-                .header("messageType", "Type")
+                .header("IdTemplate", "01")
+                .header("MessageType", "Type")
                 .build();
         Mockito.when(genericBaseHandler.setHeaders(request))
                 .thenReturn(headers);
@@ -83,11 +83,11 @@ class HandlerTest {
     @Test
     void getTemplateSuccessful() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("id", "01");
-        headers.put("messageType", "Type");
+        headers.put("IdTemplate", "01");
+        headers.put("MessageType", "Type");
         MockServerRequest request = MockServerRequest.builder()
-                .header("id", "01")
-                .header("messageType", "Type")
+                .header("IdTemplate", "01")
+                .header("MessageType", "Type")
                 .build();
         List<TemplateResponse> templateResponses = new ArrayList<>();
         templateResponses.add(SampleData.templateResponse());
@@ -102,11 +102,11 @@ class HandlerTest {
     @Test
     void getTemplateUnsuccessfulBusiness() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("id", "01");
-        headers.put("messageType", "Type");
+        headers.put("IdTemplate", "01");
+        headers.put("MessageType", "Type");
         MockServerRequest request = MockServerRequest.builder()
-                .header("id", "01")
-                .header("messageType", "Type")
+                .header("IdTemplate", "01")
+                .header("MessageType", "Type")
                 .build();
         Mockito.when(getTemplateUseCase.getTemplate(headers))
                 .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
@@ -120,11 +120,11 @@ class HandlerTest {
     @Test
     void getTemplateUnsuccessfulTechnical() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("id", "01");
-        headers.put("messageType", "Type");
+        headers.put("IdTemplate", "01");
+        headers.put("MessageType", "Type");
         MockServerRequest request = MockServerRequest.builder()
-                .header("id", "01")
-                .header("messageType", "Type")
+                .header("Id", "01")
+                .header("MessageType", "Type")
                 .build();
         Mockito.when(getTemplateUseCase.getTemplate(headers))
                 .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
