@@ -1,20 +1,29 @@
 package co.com.bancolombia.dynamodb.data;
 
-import ch.qos.logback.classic.db.names.TableName;
 import co.com.bancolombia.dynamo.annotation.DynamoDbTableAdapter;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
 @Data
 @DynamoDbBean
-@DynamoDbTableAdapter(tableName = "${project.table-name}")
+@DynamoDbTableAdapter(tableName = "alertas-local-nu0154001-templater-table")
 public class Templater {
     private String idTemplate;
     private String messageType;
+    private String version;
+    private String idConsumer;
+    private String description;
+    private String messageSubject;
+    private String messageBody;
+    private String plainText;
+    private String creationUser;
+    private String creationDate;
+    private String modificationUser;
+    private String modificationDate;
+
     @DynamoDbPartitionKey
-        public String getIdTemplate() {
+    public String getIdTemplate() {
         return idTemplate;
     }
 }
