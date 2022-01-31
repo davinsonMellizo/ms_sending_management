@@ -1,0 +1,67 @@
+{
+
+  "connections": [
+    {
+      "name": "connFactory1",
+      "qmGroup": "QM1",
+	  "temporaryQueueModel": "ALM_RESPVINCULACIONAPP.QM.RES",
+      "secret": "nu0051001-galatea-local-ibmmq-functional-adapters-galatea",
+	  "applicationName": "ms_functional_adapter",
+      "outputConcurrency": 10,
+      "replyTimeOut": 10,
+	  "ccdtBucketName": "ccdtM1.json",
+	  "jksBucketName": "aw0955001_alm_mq_dev.jks", 
+	  "ccdtPath": "/app/ccdtM1.json",
+	  "jksPath": "/app/aw0955001_alm_mq_dev.jks"
+    }
+  ],
+  "queues" : [
+    {
+      "name" : "DEV.QUEUE.1",
+      "connection": "connFactory1"
+    },
+    {
+      "name" : "ALM_RESPVINCULACIONAPP.QL.RES",
+      "connection": "connFactory1",
+	  "temporary": true
+    },
+	{
+      "name" : "DEV.QUEUE.3",
+      "connection": "connFactory1"
+    },
+    {
+      "name" : "DEV.QUEUE.2",
+      "connection": "connFactory1"
+    }
+  ],
+  "listener": [
+    {
+      "name": "id1",
+      "queueRequest": "DEV.QUEUE.1",
+      "queueResponse": "ALM_RESPVINCULACIONAPP.QL.RES"
+    },
+    {
+      "name": "id2",
+      "queueRequest": "DEV.QUEUE.3",
+      "queueResponse": "DEV.QUEUE.2"
+    }
+  ],
+  "transactions": {
+    "ALM9610": {
+      "listener" : "id1",
+      "template" : "{\"codeResponse\":\"${payload?substring(117, 121)}\",\"descResponse\":\"${payload?substring(121, 171)}\",\"idMassive\":\"${payload?substring(286, 287)}\",\"idPassword\":\"${payload?substring(287, 288)}\"}"
+    },
+    "ALM9369": {
+      "listener" : "id1",
+      "template" : "{\"codeResponse\":\"${payload?substring(117, 121)}\",\"descResponse\":\"${payload?substring(121, 171)}\",\"lastIngresDate\":\"${payload?substring(286, 296)}\",\"lastIngresHour\":\"${payload?substring(296, 304)}\",\"thirdControl\":\"${payload?substring(304, 305)}\"}"
+    },
+    "APP9369": {
+      "listener" : "id2",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+	"ALM9999": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    }
+  }
+}

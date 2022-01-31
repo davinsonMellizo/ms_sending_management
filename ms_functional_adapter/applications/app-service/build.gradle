@@ -1,0 +1,19 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation project(':async-event-handler')
+    implementation project(':log')
+    //implementation project(':ibmmq')
+    implementation project(':s3-bucket')
+    implementation project(':secrets-manager')
+    implementation project(':rabbit-configurator')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}
