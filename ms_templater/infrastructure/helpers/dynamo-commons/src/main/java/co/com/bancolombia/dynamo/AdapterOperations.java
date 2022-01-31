@@ -2,19 +2,14 @@ package co.com.bancolombia.dynamo;
 
 import co.com.bancolombia.dynamo.annotation.DynamoDbTableAdapter;
 import org.modelmapper.ModelMapper;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import software.amazon.awssdk.core.async.SdkPublisher;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
-import software.amazon.awssdk.enhanced.dynamodb.model.Page;
-import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
 import java.lang.reflect.ParameterizedType;
 
-import static reactor.core.publisher.Mono.from;
 import static reactor.core.publisher.Mono.fromFuture;
 
 public class AdapterOperations<E, D> {
@@ -37,13 +32,14 @@ public class AdapterOperations<E, D> {
         return fromFuture(table.putItem(toData(entity)));
     }
 
-    protected Mono<E> findById(String partitionKey){
+    protected Mono<E> findById(String partitionKey) {
         return fromFuture(table.getItem(buildKey(partitionKey)))
-            .map(this::toEntity);
+                .map(this::toEntity);
     }
 
-    protected Mono<Void> update(E entity) {
-        return fromFuture(table.putItem(toData(entity)));
+    protected Mono<E> update(E entity) {
+        return fromFuture(table.putItem(toData(entity)))
+                .then(findById("0002"));
     }
 
     protected Mono<Void> delete(String partitionKey) {
@@ -52,8 +48,8 @@ public class AdapterOperations<E, D> {
 
     private Key buildKey(String partitionKey) {
         return Key.builder()
-            .partitionValue(partitionKey)
-            .build();
+                .partitionValue(partitionKey)
+                .build();
     }
 
     private E toEntity(D data){

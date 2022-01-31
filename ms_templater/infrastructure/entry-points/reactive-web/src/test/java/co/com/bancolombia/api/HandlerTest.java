@@ -9,7 +9,6 @@ import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
 import co.com.bancolombia.usecase.createtemplate.CreateTemplateUseCase;
 import co.com.bancolombia.usecase.deletetemplate.DeleteTemplateUseCase;
 import co.com.bancolombia.usecase.gettemplate.GetTemplateUseCase;
@@ -29,9 +28,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -98,7 +95,7 @@ class HandlerTest {
                 .header(Constants.MESSAGE_TYPE, "Type")
                 .build();
         Mockito.when(getTemplateUseCase.getTemplate(headers))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+                .thenReturn(Mono.just(SampleData.templaterRequest()));
         StepVerifier.create(handler.getTemplate(request))
                 .assertNext(serverResponse ->
                         Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class))

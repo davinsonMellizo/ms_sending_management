@@ -2,11 +2,7 @@ package co.com.bancolombia.model.template.dto;
 
 import co.com.bancolombia.Request;
 import co.com.bancolombia.commons.constants.Constants;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,8 +10,8 @@ import lombok.Setter;
 @Getter
 @Builder(toBuilder = true)
 public class TemplateRequest extends Request {
-    private String messageType;
     private String idTemplate;
+    private String messageType;
     private String version;
     private String idConsumer;
     private String description;

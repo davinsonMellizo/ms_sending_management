@@ -18,9 +18,10 @@ public class Templater {
     private String messageBody;
     private String plainText;
     private String creationUser;
-    private String creationDate;
+    //private String creationDate;
     private String modificationUser;
-    private String modificationDate;
+    //private String modificationDate;
+    private String headers;
 
     @DynamoDbPartitionKey
     public String getIdTemplate() {
