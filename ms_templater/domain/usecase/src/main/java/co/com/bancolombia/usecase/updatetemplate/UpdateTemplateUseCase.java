@@ -19,11 +19,10 @@ public class UpdateTemplateUseCase {
     public Mono<Map<String, TemplateRequest>> updateTemplate(TemplateRequest templateRequest) {
         Map<String, TemplateRequest> templateResponseMap = new HashMap<>();
         return validateTemplate(templateRequest.getIdTemplate())
-                .flatMap(templateResponse -> {
-                    templateResponseMap.put(Constants.BEFORE, templateResponse);
+                .flatMap(response -> {
+                    templateResponseMap.put(Constants.BEFORE, response);
                     return templateRepository.updateTemplate(templateRequest);
                 })
-                .flatMap(unused -> validateTemplate(templateRequest.getIdTemplate()))
                 .map(templateRequest1 -> {
                     templateResponseMap.put(Constants.ACTUAL, templateRequest1);
                     return templateResponseMap;
