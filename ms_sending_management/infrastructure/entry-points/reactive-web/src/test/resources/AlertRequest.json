@@ -7,6 +7,7 @@
   "idService": 0,
   "idState": 0,
   "idCategory": 0,
+  "basicKit": true,
   "priority": 1,
   "description": "primera",
   "nature": "no",

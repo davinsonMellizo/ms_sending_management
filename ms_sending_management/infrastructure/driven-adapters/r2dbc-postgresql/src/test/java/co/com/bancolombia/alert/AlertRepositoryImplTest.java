@@ -36,6 +36,7 @@ public class AlertRepositoryImplTest {
         alert.setVisibleChannel(true);
         alert.setObligatory(true);
         alert.setSubjectMail("sub");
+        alert.setBasicKit(true);
         alert.setPriority(1);
         alert.setNature("NM");
         alert.setPush("SI");

@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS alert (
 	path_attached_mail varchar(100) NOT NULL,
 	attention_line varchar(15) NOT NULL,
 	id_state int2 NOT NULL,
+	basic_kit boolean NOT NULL,
 	push varchar(2) NOT NULL,
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,

@@ -53,9 +53,9 @@ VALUES(1, 'FGH', 1),
 (3, 'JKL', 1);
 
 INSERT INTO alert
-(id, template_name, id_provider_mail, id_provider_sms, id_remitter, id_category, description, nature, obligatory, message, priority, subject_mail, visible_channel, path_attached_mail, attention_line, id_state, push, creation_user, created_date)
-VALUES('HGD', 'Compra', 1, 1, 0, 1, 'Alerta', 'NM', false, 'Alerta', 1, 'Alerta', true, 'Alerta', '3216549', 0, 'SI', 'UserName', '2021-02-16 10:10:25-05'),
-('UPD', 'Compra', 1, 1, 0, 1, 'Alerta', 'NM', false, 'Alerta', 2, 'Alerta', false, 'Alerta', '3216549', 0, 'NO', 'UserName', '2021-02-16 10:10:25-05');
+(id, template_name, id_provider_mail, id_provider_sms, id_remitter, id_category, description, nature, obligatory, message, priority, subject_mail, visible_channel, path_attached_mail, attention_line, id_state,basic_kit, push, creation_user, created_date)
+VALUES('HGD', 'Compra', 1, 1, 0, 1, 'Alerta', 'NM', false, 'Alerta', 1, 'Alerta', true, 'Alerta', '3216549', 0, true,'SI', 'UserName', '2021-02-16 10:10:25-05'),
+('UPD', 'Compra', 1, 1, 0, 1, 'Alerta', 'NM', false, 'Alerta', 2, 'Alerta', false, 'Alerta', '3216549', 0, true,'NO', 'UserName', '2021-02-16 10:10:25-05');
 
 
 INSERT INTO client
