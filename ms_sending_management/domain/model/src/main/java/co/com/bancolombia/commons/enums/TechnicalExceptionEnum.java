@@ -58,6 +58,7 @@ public enum TechnicalExceptionEnum {
     SECRET_EXCEPTION("302", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("302", "Internal server error"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
+    INVALID_HEADER_ERROR("301", "Invalid headers"),
     HEADER_MISSING_ERROR("301", "Missing parameters per header");
 
     private final String code;

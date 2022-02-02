@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +33,7 @@ public class RabbitMQConfigHelper{
 
     @Primary
     @Bean
+    @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
         System.out.println("Properties"+properties);

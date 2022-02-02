@@ -6,13 +6,17 @@ import co.com.bancolombia.api.dto.ProviderServiceDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.reactive.function.server.ServerRequest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.constants.Header.*;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADER_MISSING_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INVALID_HEADER_ERROR;
 
 @UtilityClass
 public class ParamsUtil {
@@ -42,12 +46,21 @@ public class ParamsUtil {
     }
 
     public static Mono<AlertClientDTO> getRelationClient(ServerRequest request) {
-        return Mono.just(AlertClientDTO.builder()
-                .idAlert(request.headers().firstHeader(ID_ALERT))
-                .documentNumber(Long.valueOf(request.headers().firstHeader(DOCUMENT_NUMBER)))
-                .documentType(Integer.parseInt(request.headers().firstHeader(DOCUMENT_TYPE)))
-                .build())
-                .onErrorMap(e -> new TechnicalException(HEADER_MISSING_ERROR));
+        return ofEmpty(request.headers().firstHeader(DOCUMENT_NUMBER))
+                .zipWith(ofEmpty(request.headers().firstHeader(DOCUMENT_TYPE)))
+                .filter(ParamsUtil::validateHeaders)
+                .map(headers -> AlertClientDTO.builder()
+                        .idAlert(request.headers().firstHeader(ID_ALERT))
+                        .documentNumber(Long.valueOf(headers.getT1()))
+                        .documentType(Integer.parseInt(headers.getT2()))
+                        .build())
+                .switchIfEmpty(Mono.error(new TechnicalException(INVALID_HEADER_ERROR)));
+
+    }
+
+    private static boolean validateHeaders(Tuple2<String, String> headers) {
+        return Pattern.compile("^[0-9]+$").matcher(headers.getT1()).matches() &&
+                Pattern.compile("^[0-9]+$").matcher(headers.getT2()).matches();
     }
 
     public static Mono<ProviderServiceDTO> getRelationProvider(ServerRequest request) {
