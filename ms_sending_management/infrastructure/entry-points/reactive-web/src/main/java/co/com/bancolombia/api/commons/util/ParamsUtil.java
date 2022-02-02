@@ -46,7 +46,8 @@ public class ParamsUtil {
                 .idAlert(request.headers().firstHeader(ID_ALERT))
                 .documentNumber(Long.valueOf(request.headers().firstHeader(DOCUMENT_NUMBER)))
                 .documentType(Integer.parseInt(request.headers().firstHeader(DOCUMENT_TYPE)))
-                .build());
+                .build())
+                .onErrorMap(e -> new TechnicalException(HEADER_MISSING_ERROR));
     }
 
     public static Mono<ProviderServiceDTO> getRelationProvider(ServerRequest request) {
