@@ -4,23 +4,23 @@ Feature: CRUD Consumer
     * url urlConsumer
 
   Scenario: Successful case Find consumer by id
-    * def urlFind = urlConsumer + "/2"
+    * def urlFind = urlConsumer + "/ALM"
     Given url urlFind
     When method GET
     Then status 200
-    And match $.id == '2'
+    And match $.id == 'ALM'
 
   Scenario: Successful case Find all consumers
     When method GET
     Then status 200
-    And match $[0].id == '3'
+    And match $[0].id == 'ALM'
 
   Scenario: Successful case Delete consumer by id
-    * def urlDelete = urlConsumer + "/1"
+    * def urlDelete = urlConsumer + "/ELI"
     Given url urlDelete
     When method DELETE
     Then status 200
-    And match response == '1'
+    And match response == 'ELI'
 
   Scenario: Successful case Save consumer
     * def id = 1
@@ -30,11 +30,11 @@ Feature: CRUD Consumer
     And match $.id == '1'
 
   Scenario: Successful case Update consumer
-    * def id = 2
+    * def id = "VLP"
     Given request read("../data/consumer.json")
     When method PUT
     Then status 200
-    And match $.actual.id == '2'
+    And match $.actual.id == 'VLP'
 
   Scenario: Error case Find consumer by id
     * def urlFind = urlConsumer + "/10"

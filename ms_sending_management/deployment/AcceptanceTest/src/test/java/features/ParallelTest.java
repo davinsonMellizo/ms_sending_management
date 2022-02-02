@@ -15,17 +15,4 @@ import java.util.List;
 @RunWith(Karate.class)
 public class ParallelTest {
 
-    @Test
-    public void testParallel() {
-
-    }
-
-    public static void generateReport(String karateOutputPath) {
-        Collection<File> jsonFiles = FileUtils.listFiles(new File(karateOutputPath), new String[]{"json"}, true);
-        List<String> jsonPaths = new ArrayList<String>(jsonFiles.size());
-        jsonFiles.forEach(file -> jsonPaths.add(file.getAbsolutePath()));
-        Configuration config = new Configuration(new File("target"), "AcceptanceTest");
-        ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, config);
-        reportBuilder.generateReports();
-    }
 }

@@ -4,26 +4,26 @@ Feature: CRUD alert client
     * url urlAlert+"-client"
 
   Scenario: Successful case Find all relations alert with client
-    Given header document-number = "123"
-    And header document-type = "1"
+    Given header document-number = "1111111111"
+    And header document-type = "0"
     When method GET
     Then status 200
-    And match $[0].idAlert == '1'
+    And match $[0].idAlert == 'I02'
 
   Scenario: Successful case Delete relation alert with client
-    Given header id-alert = "1"
-    And header document-number = "123"
-    And header document-type = "1"
+    Given header id-alert = "I01"
+    And header document-number = "1111111111"
+    And header document-type = "0"
     When method DELETE
     Then status 200
-    And match response == '1'
+    And match $.documentNumber == 1111111111
 
   Scenario: Successful case Save relation alert with client
-    * def idAlert = "1"
+    * def idAlert = "I01"
     Given request read("../data/alertClient.json")
     When method POST
     Then status 200
-    And match $.idAlert == '1'
+    And match $.idAlert == 'I01'
 
   Scenario: Error case Save relation alert with client, alert not found
     * def idAlert = "5a"

@@ -1,8 +1,7 @@
 {
-  "urlAlert": "#{dns-service}#/alertas/api/v1/sending-management/alert",
-  "urlRemitter": "#{dns-service}#/alertas/api/v1/sending-management/remitter",
-  "urlService": "#{dns-service}#/alertas/api/v1/sending-management/service",
-  "urlProvider": "#{dns-service}#/alertas/api/v1/sending-management/provider",
-  "urlConsumer": "#{dns-service}#/alertas/api/v1/sending-management/consumer"
+  "urlAlert": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/alert",
+  "urlRemitter": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/remitter",
+  "urlService": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/service",
+  "urlProvider": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/provider",
+  "urlConsumer": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/consumer"
 }
-

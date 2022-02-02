@@ -34,6 +34,7 @@ public class AlertData implements Persistable<String> {
     private String attentionLine;
     private String push;
     private Boolean obligatory;
+    private Boolean basicKit;
     private Boolean visibleChannel;
     private String creationUser;
     private LocalDateTime createdDate;

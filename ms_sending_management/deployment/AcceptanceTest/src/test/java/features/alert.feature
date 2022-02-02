@@ -36,21 +36,21 @@ Feature: CRUD and relations with alert
     Given url urlFind
     When method GET
     Then status 500
-    And match $.code == '373'
+    And match $.code == '120'
 
   Scenario: Error case Update alert
     * def id = "ANF"
     Given request read("../data/alert.json")
     When method PUT
     Then status 500
-    And match $.code == '373'
+    And match $.code == '120'
 
   Scenario: Error case Delete alert by id
     * def urlDelete = urlAlert + "/ANF"
     Given url urlDelete
     When method DELETE
     Then status 500
-    And match $.code == '373'
+    And match $.code == '120'
 
   Scenario: Error case Save alert, missing parameter per body
     Given request {}

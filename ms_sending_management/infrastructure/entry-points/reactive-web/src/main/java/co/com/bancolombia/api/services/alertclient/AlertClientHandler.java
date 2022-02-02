@@ -58,6 +58,7 @@ public class AlertClientHandler {
 
     public Mono<ServerResponse> deleteAlertClient(ServerRequest serverRequest) {
         return ParamsUtil.getRelationClient(serverRequest)
+                .onErrorMap(e -> new TechnicalException(HEADER_MISSING_ERROR))
                 .flatMap(AlertClientDTO::toModel)
                 .flatMap(useCase::deleteAlertClient)
                 .flatMap(ResponseUtil::responseOk);

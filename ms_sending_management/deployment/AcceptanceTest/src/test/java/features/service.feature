@@ -11,18 +11,18 @@ Feature: CRUD Service
     And match $.id == 0
 
   Scenario: Successful case Delete service by id
-    * def urlDelete = urlService + "/1"
+    * def urlDelete = urlService + "/3"
     Given url urlDelete
     When method DELETE
     Then status 200
-    And match response == '1'
+    And match response == '3'
 
   Scenario: Successful case Save service
-    * def id = 3
+    * def id = 4
     Given request read("../data/service.json")
     When method POST
     Then status 200
-    And match $.id == 3
+    And match $.id == 4
 
   Scenario: Successful case Update service
     * def id = 2

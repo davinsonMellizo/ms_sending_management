@@ -28,6 +28,7 @@ public class Alert implements Serializable {
     private String attentionLine;
     private String push;
     private Boolean obligatory;
+    private Boolean basicKit;
     private Boolean visibleChannel;
     private String creationUser;
     private LocalDateTime createdDate;

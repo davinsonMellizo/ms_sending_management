@@ -74,6 +74,8 @@ public class AlertDTO {
     private Boolean obligatory;
     @NotNull(message = "{constraint.not_null}")
     private Boolean visibleChannel;
+    @NotNull(message = "{constraint.not_null}")
+    private Boolean basicKit;
     @Size(min = 2, max = 2, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String push;
@@ -96,6 +98,7 @@ public class AlertDTO {
                 .subjectMail(this.subjectMail)
                 .attentionLine(this.attentionLine)
                 .obligatory(this.obligatory)
+                .basicKit(this.basicKit)
                 .visibleChannel(this.visibleChannel)
                 .push(this.push)
                 .creationUser(this.creationUser)
