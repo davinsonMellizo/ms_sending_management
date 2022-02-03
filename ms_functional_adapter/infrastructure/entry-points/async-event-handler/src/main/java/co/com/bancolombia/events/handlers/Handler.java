@@ -2,6 +2,7 @@ package co.com.bancolombia.events.handlers;
 
 import co.com.bancolombia.commons.utils.JsonUtils;
 import co.com.bancolombia.events.model.ResourceQuery;
+import co.com.bancolombia.model.transaction.Transaction;
 import co.com.bancolombia.s3bucket.S3AsynOperations;
 import co.com.bancolombia.usecase.functionaladapter.FunctionalAdapterUseCase;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class Handler {
 
     private final FunctionalAdapterUseCase useCase;
 
-    public Mono<Void> handleSendAlert(String command) {
-        return useCase.sendTransactionToMQ(command);
+    public Mono<Void> handleSendAlert(Transaction transaction) {
+        return useCase.sendTransactionToMQ(transaction);
     }
 }

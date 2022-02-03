@@ -68,9 +68,11 @@ public class JmsExtConnectionFactory {
             try {
                 MQProperties properties = secretManager.getSecret(conn.getSecret(), MQProperties.class).block();
                 System.setProperty("com.ibm.mq.cfg.useIBMCipherMappings", "false");
+                System.out.println("cuarto");
                 JmsFactoryFactory ff = JmsFactoryFactory.getInstance(WMQConstants.WMQ_PROVIDER);
+                System.out.println("quinto");
                 JmsConnectionFactory cf = ff.createConnectionFactory();
-
+                System.out.println("sexto");
                 cf.setIntProperty(WMQConstants.WMQ_CONNECTION_MODE, WMQ_CM_CLIENT);
                 cf.setStringProperty(WMQConstants.WMQ_QUEUE_MANAGER, conn.getQmGroup());
                 cf.setStringProperty(WMQConstants.USERID, properties.getUser());
@@ -81,7 +83,6 @@ public class JmsExtConnectionFactory {
                 if (properties.getPassword() != null && !properties.getPassword().isEmpty()) {
                     cf.setStringProperty(PASSWORD, properties.getPassword());
                 }
-
                 MQConnectionFactory mqConnection = (MQConnectionFactory) cf;
                 URL ccdtUrl = new File(conn.getCcdtPath()).toURI().toURL();
                 URL jksUrl = new File(conn.getJksPath()).toURI().toURL();
