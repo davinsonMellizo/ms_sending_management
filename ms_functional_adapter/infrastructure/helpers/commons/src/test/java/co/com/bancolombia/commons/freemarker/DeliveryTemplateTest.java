@@ -24,6 +24,7 @@ public class DeliveryTemplateTest {
     public void converFuncion(){
         Map<String,Object> data = new HashMap<>();
         data.put("data", Map.of("headers", Map.of("message-id", "123456789")));
+        CommonTemplate.create(templateTest).flatMap(tem -> tem.process(data)).block();
         StepVerifier.create(CommonTemplate.create(templateTest).flatMap(tem -> tem.process(data)))
                 .expectNext("123456789")
                 .verifyComplete();

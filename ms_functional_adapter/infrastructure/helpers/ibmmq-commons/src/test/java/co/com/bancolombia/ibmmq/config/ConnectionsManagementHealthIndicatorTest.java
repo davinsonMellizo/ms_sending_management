@@ -52,12 +52,13 @@ public class ConnectionsManagementHealthIndicatorTest {
         when(cm.getConnectionFactory()).thenReturn(extFactory);
         when(extFactory.connectionFactory(any())).thenReturn(factory);
         when(factory.createConnection()).thenReturn(connection);
-        when(connection.getMetaData()).thenReturn(connectionMetaData);
-        when(connectionMetaData.getJMSProviderName()).thenReturn("jMSProviderName");
+
     }
 
     @Test
     public void shouldBeUp() throws JMSException {
+        when(connection.getMetaData()).thenReturn(connectionMetaData);
+        when(connectionMetaData.getJMSProviderName()).thenReturn("jMSProviderName");
         // Arrange
         doNothing().when(connection).start();
         doNothing().when(connection).close();

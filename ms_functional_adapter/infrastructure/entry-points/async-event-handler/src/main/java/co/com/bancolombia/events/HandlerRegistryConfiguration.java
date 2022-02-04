@@ -27,26 +27,13 @@ public class HandlerRegistryConfiguration {
     private String configMQKey;
     @Value("${aws.s3.bucket}")
     private String bucketName;
-    private final S3AsynOperations s3AsynOperations;
+
 
     @Bean
     public HandlerRegistry handlerRegistry(Handler handler) {
         return register()
-                .handleCommand(SEND_ALERT, command ->  handlerCommand(command, handler), String.class);
+                .handleCommand(SEND_ALERT, command ->  handler.handleSendAlert(command, configMQKey, bucketName), String.class);
 
-    }
-    private Mono<Void> handlerCommand(Command<String> command, Handler handler){
-        return s3AsynOperations.getFileAsString(bucketName, configMQKey)
-                .map(s -> JsonUtils.stringToType(s,ResourceQuery.class))
-                .map(ResourceQuery::getData)
-                .flatMapMany(resources -> Flux.fromIterable(resources))
-                .map(resource -> Transaction.builder()
-                        .channel(resource.getChannel())
-                        .nroTransaction(resource.getTransaction())
-                        .template("message template ")
-                        .payload(new HashMap<>()).build())
-                .map(transaction -> handler.handleSendAlert(transaction))
-                .thenEmpty(Mono.empty());
     }
 
 }

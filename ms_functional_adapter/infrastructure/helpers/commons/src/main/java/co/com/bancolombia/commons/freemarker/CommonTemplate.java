@@ -2,6 +2,7 @@ package co.com.bancolombia.commons.freemarker;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.commons.freemarker.config.FreemarkerConfig;
+import co.com.bancolombia.commons.utils.BusinessUtil;
 import co.com.bancolombia.commons.utils.JsonUtils;
 import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
@@ -23,6 +24,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_
 
 public class CommonTemplate {
     private static final String UTIL = "JsonUtil";
+    private static final String BUSINESS_UTIL = "BusinessUtil";
     private Template template;
     private Map<String, Object> map;
 
@@ -33,6 +35,7 @@ public class CommonTemplate {
             this.map = new HashMap<>();
             TemplateHashModel model = new BeansWrapperBuilder(Configuration.VERSION_2_3_30).build().getStaticModels();
             map.put(UTIL, model.get(JsonUtils.class.getName()));
+            map.put(BUSINESS_UTIL, model.get(BusinessUtil.class.getName()));
         }catch (IOException | TemplateModelException exception) {
             throw new TechnicalException(exception, TECHNICAL_FREEMARKER_ERROR);
         }
