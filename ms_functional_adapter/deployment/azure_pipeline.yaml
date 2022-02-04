@@ -46,6 +46,7 @@ jobs:
             sonar.junit.reportPaths=$(Build.SourcesDirectory)/$(artifactName)/applications/app-service/build/test-results/test
             sonar.branch.name=master
             sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/$(artifactName)/build/jacoco/report.xml
+            sonar.coverage.exclusions=**/MainApplication.java, **/*JmsExtConnectionFactory*.java
 
       - task: Gradle@2
         displayName: 'Gradle build and test'
