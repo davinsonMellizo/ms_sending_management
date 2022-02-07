@@ -42,17 +42,7 @@ public class S3ConnectionConfig {
 
     public S3AsyncClient s3AsyncClient(boolean withEndpoint) {
 
-        AwsCredentialsProviderChain chain = AwsCredentialsProviderChain.builder()
-                .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
-                .addCredentialsProvider(SystemPropertyCredentialsProvider.create())
-                .addCredentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
-                .addCredentialsProvider(ProfileCredentialsProvider.create())
-                .addCredentialsProvider(ContainerCredentialsProvider.builder().build())
-                .addCredentialsProvider(InstanceProfileCredentialsProvider.create())
-                .build();
-
         S3AsyncClientBuilder s3AsyncClient = S3AsyncClient.builder()
-                .credentialsProvider(chain)
                 .asyncConfiguration(config -> config.advancedOption(FUTURE_COMPLETION_EXECUTOR, threadPoolExecutor()))
                 .region(s3ConnectionProperties.getRegion());
         if (withEndpoint) s3AsyncClient.endpointOverride(URI.create(s3ConnectionProperties.getEndpoint()));
