@@ -31,7 +31,8 @@ public class S3ConnectionConfig {
     public S3AsyncClient s3AsyncClient(boolean withEndpoint) {
 
         S3AsyncClientBuilder s3AsyncClient = S3AsyncClient.builder()
-                .region(s3ConnectionProperties.getRegion());
+                .region(s3ConnectionProperties.getRegion())
+                .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create());
         if (withEndpoint) s3AsyncClient.endpointOverride(URI.create(s3ConnectionProperties.getEndpoint()));
         return s3AsyncClient.build();
     }
