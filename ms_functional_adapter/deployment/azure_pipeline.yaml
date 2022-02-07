@@ -147,13 +147,6 @@ jobs:
         condition: succeeded()
 
       - task: PublishBuildArtifacts@1
-          displayName: 'Publish Artifact: bucket'
-          inputs:
-            PathtoPublish: '$(Build.repository.LocalPath)/build/libs/infrastructure/bucket'
-            ArtifactName: bucket-artifact
-          condition: succeeded()
-
-      - task: PublishBuildArtifacts@1
         displayName: 'Publish artifact: Karate'
         inputs:
           PathtoPublish: '$(Build.repository.LocalPath)/build/libs/AcceptanceTest'
