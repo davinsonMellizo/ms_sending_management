@@ -1,0 +1,7 @@
+{
+  "urlAlert": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/alert",
+  "urlRemitter": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/remitter",
+  "urlService": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/service",
+  "urlProvider": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/provider",
+  "urlConsumer": "https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/sending-management/consumer"
+}
