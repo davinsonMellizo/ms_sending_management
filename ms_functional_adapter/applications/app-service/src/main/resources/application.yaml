@@ -31,12 +31,12 @@ app:
 aws:
   region: ${AWS-REGION}
   s3:
-    endpoint: ${AWS-ENDPOINT}
+    endpoint: http://localhost:4566
     bucket: ${S3-BUCKET}
     request-config-mq-key: ${REQUEST-CONFIG-MQ-KEY}
     config-listener-mq-key: ${CONFIG-LISTENER-MQ-KEY}
   secrets-manager:
-    secret-rabbit: ${SECRET-RABBIT}
+    secret-rabbit: ${SECRET_RABBIT}
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}
     endpoint: http://localhost:4566

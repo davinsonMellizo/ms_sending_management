@@ -13,14 +13,14 @@ data:
   APPLICATION_NAME: #{application-name}#
   SPRING_PROFILE_ACTIVE:  #{spring-profile-active}#
   LOG4J_LEVEL:  #{log-level}#
+  APP_PATH:  #{app-path}#
   CACHE_SECRETS_SIZE: "#{cache-secrets-size}#"
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
-  PATH_BASE: "#{prefix}#/#{service}#"
   REGION_AWS: #{region-aws}#
-  SQS_URL: #{sqs-url}#
-  SQS_TIMEOUT: "#{sqs-timeout}#"
-  SQS_POOL_SIZE: "#{sqs-pool-size}#"
-  SECRET-RABBIT: "#{secret-rabbit}#"
+  S3_BUCKET: #{s3-bucket}#
+  REQUEST-CONFIG-MQ-KEY: #{request-config-mq-key}#
+  CONFIG-LISTENER-MQ-KEY: #{config-listener-mq-key}#
+  SECRET_RABBIT: "#{secret-rabbit}#"
 
 
 
