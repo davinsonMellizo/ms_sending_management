@@ -28,22 +28,9 @@ public class S3ConnectionConfig {
 
     private final S3ConnectionProperties s3ConnectionProperties;
 
-    private ThreadPoolExecutor threadPoolExecutor() {
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(
-                s3ConnectionProperties.getCorePoolSize(),
-                s3ConnectionProperties.getMaximumPoolSize(),
-                s3ConnectionProperties.getKeepAliveTime(),
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(s3ConnectionProperties.getQueueCapacity()),
-                new ThreadFactoryBuilder().threadNamePrefix("sdk-async-response").build());
-        executor.allowCoreThreadTimeOut(true);
-        return executor;
-    }
-
     public S3AsyncClient s3AsyncClient(boolean withEndpoint) {
 
         S3AsyncClientBuilder s3AsyncClient = S3AsyncClient.builder()
-                //.asyncConfiguration(config -> config.advancedOption(FUTURE_COMPLETION_EXECUTOR, threadPoolExecutor()))
                 .region(s3ConnectionProperties.getRegion());
         if (withEndpoint) s3AsyncClient.endpointOverride(URI.create(s3ConnectionProperties.getEndpoint()));
         return s3AsyncClient.build();
