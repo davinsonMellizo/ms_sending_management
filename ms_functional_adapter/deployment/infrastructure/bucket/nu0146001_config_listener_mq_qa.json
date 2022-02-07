@@ -1,0 +1,145 @@
+{
+    "connections": [
+      {
+        "name": "connFactory1",
+        "qmGroup": "*APPSGRP",
+        "temporaryQueueModel": "",
+        "secret": "nu0146001-app-personas-qa-mq-functional-adapters-app",
+        "applicationName": "ms_functional_adapter",
+        "outputConcurrency": 10,
+        "replyTimeOut": 10,
+        "ccdtBucketName": "nu0146001_app_personas_ccdt_qa.json",
+        "jksBucketName": "nu0146001_app_qa.jks", 
+        "ccdtPath": "/appuser/nu0146001_app_personas_ccdt_qa.json",
+        "jksPath": "/appuser/nu0146001_app_qa.jks"
+      }
+    ],
+  "queues" : [
+    {
+      "name" : "WWW_LOGAPP_CD.QL.REQ",
+      "connection": "connFactory1"
+    },
+    {
+      "name" : "CD_SVEEMPRE_WWW.QL.RES",
+      "connection": "connFactory1"
+    }
+  ],
+  "listener": [
+    {
+      "name": "id1",
+      "queueRequest": "WWW_LOGAPP_CD.QL.REQ",
+      "queueResponse": "CD_SVEEMPRE_WWW.QL.RES"
+      
+    }
+  ],
+  "transactions": {
+    "APP0001": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP1301": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP1302": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8001": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8002": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8003": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8004": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8005": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8536": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8537": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8538": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8539": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0293": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0294": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0296": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0297": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0298": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0299": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0291": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0292": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0888": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8540": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP1130": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0304": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8051": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP8052": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "APP0295": {
+      "listener" : "id1",
+      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    }
+  }
+}
