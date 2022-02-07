@@ -4,6 +4,6 @@
     compile project(':commons')
     compile 'org.springframework:spring-context'
     implementation group: 'software.amazon.awssdk', name: 's3', version: '2.16.91'
-    implementation 'software.amazon.awssdk:auth'
+    //implementation 'software.amazon.awssdk:auth'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.1.RELEASE'
 }
