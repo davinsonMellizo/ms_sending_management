@@ -6,7 +6,6 @@ import co.com.bancolombia.ibmmq.MqConnector;
 import co.com.bancolombia.ibmmq.jms.JmsManagement;
 import co.com.bancolombia.ibmmq.model.ConnectionData;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +48,7 @@ public class ListenerConfigurationTest {
     private Environment env;
 
     private ConnectionData connData;
-    private static final ObjectMapper mapper = new ObjectMapper();
+    //private static final ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     public void init() throws IOException {
