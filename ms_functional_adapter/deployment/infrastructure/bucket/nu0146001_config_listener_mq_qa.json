@@ -4,7 +4,7 @@
         "name": "connFactory1",
         "qmGroup": "*APPSGRP",
         "temporaryQueueModel": "",
-        "secret": "nu0146001-app-personas-qa-mq-functional-adapters-app",
+        "secret": "nu0154001-alertas-dev-mq-functional-adapters",
         "applicationName": "ms_functional_adapter",
         "outputConcurrency": 10,
         "replyTimeOut": 10,
