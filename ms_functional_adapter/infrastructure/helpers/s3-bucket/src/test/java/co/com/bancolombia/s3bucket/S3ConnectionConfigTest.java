@@ -24,10 +24,10 @@ public class S3ConnectionConfigTest {
 
     @BeforeEach
     public void init(){
-        //when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
-        //when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
-        //when(s3ConnectionProperties.getMaximumPoolSize()).thenReturn(50);
-        //when(s3ConnectionProperties.getKeepAliveTime()).thenReturn(10);
+        when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
+        when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
+        when(s3ConnectionProperties.getMaximumPoolSize()).thenReturn(50);
+        when(s3ConnectionProperties.getKeepAliveTime()).thenReturn(10);
         when(s3ConnectionProperties.getRegion()).thenReturn(Region.US_EAST_1);
     }
 
