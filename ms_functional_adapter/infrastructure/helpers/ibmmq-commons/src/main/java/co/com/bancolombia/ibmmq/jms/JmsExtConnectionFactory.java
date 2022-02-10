@@ -68,11 +68,8 @@ public class JmsExtConnectionFactory {
             try {
                 MQProperties properties = secretManager.getSecret(conn.getSecret(), MQProperties.class).block();
                 System.setProperty("com.ibm.mq.cfg.useIBMCipherMappings", "false");
-                System.out.println("cuarto");
                 JmsFactoryFactory ff = JmsFactoryFactory.getInstance(WMQConstants.WMQ_PROVIDER);
-                System.out.println("quinto");
                 JmsConnectionFactory cf = ff.createConnectionFactory();
-                System.out.println("sexto");
                 cf.setIntProperty(WMQConstants.WMQ_CONNECTION_MODE, WMQ_CM_CLIENT);
                 cf.setStringProperty(WMQConstants.WMQ_QUEUE_MANAGER, conn.getQmGroup());
                 cf.setStringProperty(WMQConstants.USERID, properties.getUser());
