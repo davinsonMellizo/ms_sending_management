@@ -15,15 +15,12 @@ import org.springframework.context.annotation.Configuration;
 public class HandlerRegistryConfiguration {
 
     private final S3AsynOperations s3AsynOperations;
-    @Value("${aws.s3.request-config-mq-key}")
-    private String configMQKey;
-    @Value("${aws.s3.bucket}")
-    private String bucketName;
+    private final Handler handler;
 
     @Bean
-    public HandlerRegistry queryHandler(Handler handler) {
+    public HandlerRegistry queryHandler(@Value("${aws.s3.request-config-mq-key}") String configMQKey,
+                                                    @Value("${aws.s3.bucket}") String bucketName) {
         HandlerRegistry register = HandlerRegistry.register();
-
         ResourceQuery resourceQuery = JsonUtils.stringToType(
                 s3AsynOperations.getFileAsString(bucketName, configMQKey).block(), ResourceQuery.class);
 
