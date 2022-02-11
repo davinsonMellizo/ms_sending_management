@@ -39,7 +39,9 @@ public class IbmmqAdapter implements TransactionGateway {
 
     private Mono<String> buildDataFromTemplate(Transaction transaction){
         return CommonTemplate.create(transaction.getTemplate())
-                .flatMap(tpl -> tpl.process(transaction.getPayload()));
+                .flatMap(tpl -> tpl.process(transaction.getPayload()))
+                .doOnError(throwable ->loggerBuilder.info(throwable.getMessage()))
+                .onErrorResume(throwable ->  Mono.empty());
     }
 
     private Message buildMessage(String textMessage) {

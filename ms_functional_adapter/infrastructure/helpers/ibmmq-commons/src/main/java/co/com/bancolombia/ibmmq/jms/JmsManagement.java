@@ -69,11 +69,8 @@ public class JmsManagement {
         AwsProperties.S3 s3 = awsProperties.getS3();
         connectionData = connectionsMQ(s3AsynOperations, s3.getBucket(), s3.getConfigListenerMqKey());
         downloadConfigFiles(connectionData.getConnections());
-        System.out.println("primero");
         connections = connectionsMap();
-        System.out.println("segundo");
         producerManagement = new ProducerManagement(connections);
-        System.out.println("tercero");
         queueManagement = new QueueManagement(connections, connectionData);
         exceptionListener = new ReconnectSupervisor(this, listener, loggerBuilder);
     }

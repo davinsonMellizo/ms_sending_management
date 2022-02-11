@@ -32,11 +32,11 @@
       }
     ],
     "transactions": {
-      "ALERTAS0001": {
+      "ALERTAS0043": {
         "listener" : "id1",
         "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
       },
-      "ALERTAS0002": {
+      "ALERTAS0050": {
         "listener" : "id1",
         "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
       }

@@ -24,7 +24,7 @@ spring:
 app:
   localPath: ${APP_PATH}
   async:
-    withDLQRetry: false
+    withDLQRetry: true
     retryDelay: 1000
     maxRetries: 0
 
