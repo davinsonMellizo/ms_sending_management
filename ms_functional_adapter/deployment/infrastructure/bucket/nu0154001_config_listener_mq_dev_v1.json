@@ -8,10 +8,10 @@
         "applicationName": "ms_functional_adapter",
         "outputConcurrency": 10,
         "replyTimeOut": 10,
-        "ccdtBucketName": "nu0154001_alert_ccdt_dev.json",
-        "jksBucketName": "nu0154001_alert_dev.jks",
-        "ccdtPath": "/appuser/nu0154001_alert_ccdt_dev.json",
-        "jksPath": "/appuser/nu0154001_alert_dev.jks"
+        "ccdtBucketName": "nu0154001_alert_ccdt_dev_v1.json",
+        "jksBucketName": "nu0154001_alert_dev_v1.jks",
+        "ccdtPath": "/appuser/nu0154001_alert_ccdt_dev_v1.json",
+        "jksPath": "/appuser/nu0154001_alert_dev_v1.jks"
       }
     ],
     "queues" : [
