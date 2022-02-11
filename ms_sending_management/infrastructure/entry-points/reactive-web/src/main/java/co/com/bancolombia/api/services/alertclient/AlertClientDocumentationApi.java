@@ -1,10 +1,9 @@
 package co.com.bancolombia.api.services.alertclient;
 
 import co.com.bancolombia.api.dto.AlertClientDTO;
-import co.com.bancolombia.api.dto.ProviderDTO;
 import co.com.bancolombia.model.alertclient.AlertClient;
+import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.error.Error;
-import co.com.bancolombia.model.provider.Provider;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
@@ -29,12 +28,22 @@ public class AlertClientDocumentationApi {
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(AlertClient.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
+    protected Consumer<Builder> basicKit() {
+        return ops -> ops.tag(TAG)
+                .operationId("matchClientWithBasicKit").summary("Associate alerts to client")
+                .description("Associate alerts to client  by Basic Kit").tags(new String[]{TAG})
+                .parameter(createPath(Long.class, "document-number", "Client document"))
+                .parameter(createPath(Integer.class, "document-type", "Client document type"))
+                .parameter(createPath(String.class, "association-origin", "Association Origin"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ResponseClient.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
+    }
 
     protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateAlertClient").summary("Update alert client")
                 .description("Update number-operations and amountenable by client").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Alert client to Update").required(true).implementation(AlertClientDTO.class))
+                .requestBody(requestBodyBuilder().description("Alert client to Update").required(true).implementation(AlertClientDTO[].class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(AlertClient.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
@@ -45,7 +54,7 @@ public class AlertClientDocumentationApi {
                 .description("Find all alert relations with client by document-number and document-type").tags(new String[]{TAG})
                 .parameter(createPath(String.class, "document-number", "Client document"))
                 .parameter(createPath(String.class, "document-type", "Client document type"))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(AlertClient.class))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(AlertClientDTO.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 

@@ -23,7 +23,6 @@ public class ConsumerHandler {
 
     public Mono<ServerResponse> findConsumer(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
-                .doOnNext(System.out::println)
                 .flatMap(useCase::findConsumerById)
                 .flatMap(ResponseUtil::responseOk);
     }

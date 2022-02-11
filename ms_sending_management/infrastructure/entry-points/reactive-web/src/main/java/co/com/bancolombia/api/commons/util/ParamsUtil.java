@@ -1,12 +1,22 @@
 package co.com.bancolombia.api.commons.util;
 
+import co.com.bancolombia.api.dto.AlertClientDTO;
 import co.com.bancolombia.api.dto.AlertTransactionDTO;
-import co.com.bancolombia.api.headers.AlertClientHeader;
+import co.com.bancolombia.api.dto.ProviderServiceDTO;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.reactive.function.server.ServerRequest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
-import java.util.Optional;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static co.com.bancolombia.commons.constants.Header.*;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADER_MISSING_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INVALID_HEADER_ERROR;
 
 @UtilityClass
 public class ParamsUtil {
@@ -15,11 +25,12 @@ public class ParamsUtil {
     public static final String ID_ALERT = "id-alert";
     public static final String ID_TRANSACTION = "id-transaction";
     public static final String ID_CONSUMER = "id-consumer";
-    public static final String DOCUMENT_NUMBER = "document-number";
-    public static final String DOCUMENT_TYPE = "document-type";
+    public static final String ID_PROVIDER = "id-provider";
+    public static final String ID_SERVICE = "id-service";
 
     private static Mono<String> ofEmpty(String value) {
-        return (value == null || value.isEmpty()) ? Mono.empty() : Mono.just(value);
+        return (value == null || value.isEmpty()) ?
+                Mono.error(new TechnicalException(HEADER_MISSING_ERROR)) : Mono.just(value);
     }
 
     public static Mono<String> getId(ServerRequest request) {
@@ -34,27 +45,50 @@ public class ParamsUtil {
                 .build());
     }
 
-    public static Mono<AlertClientHeader> getClientHeaders(ServerRequest request) {
-        return Mono.just(AlertClientHeader.builder()
-                .idAlert(getHeader(request, ID_ALERT))
-                .documentNumber(getHeader(request, DOCUMENT_NUMBER))
-                .documentType(getHeader(request, DOCUMENT_TYPE))
+    public static Mono<AlertClientDTO> getRelationClient(ServerRequest request) {
+        return ofEmpty(request.headers().firstHeader(DOCUMENT_NUMBER))
+                .zipWith(ofEmpty(request.headers().firstHeader(DOCUMENT_TYPE)))
+                .filter(ParamsUtil::validateHeaders)
+                .map(headers -> AlertClientDTO.builder()
+                        .idAlert(request.headers().firstHeader(ID_ALERT))
+                        .documentNumber(Long.valueOf(headers.getT1()))
+                        .documentType(Integer.parseInt(headers.getT2()))
+                        .build())
+                .switchIfEmpty(Mono.error(new TechnicalException(INVALID_HEADER_ERROR)));
+
+    }
+
+    private static boolean validateHeaders(Tuple2<String, String> headers) {
+        return Pattern.compile("^[0-9]+$").matcher(headers.getT1()).matches() &&
+                Pattern.compile("^[0-9]+$").matcher(headers.getT2()).matches();
+    }
+
+    public static Mono<ProviderServiceDTO> getRelationProvider(ServerRequest request) {
+        return Mono.just(ProviderServiceDTO.builder()
+                .idProvider(request.headers().firstHeader(ID_PROVIDER))
+                .idService(Integer.parseInt(request.headers().firstHeader(ID_SERVICE)))
                 .build());
     }
 
-    public static Mono<AlertClientHeader> getClientHeadersFind(ServerRequest request) {
-        return Mono.just(AlertClientHeader.builder()
-                .documentNumber(getHeader(request, DOCUMENT_NUMBER))
-                .documentType(getHeader(request, DOCUMENT_TYPE))
-                .build());
+    public Map<String, String> setHeaders(ServerRequest serverRequest){
+        return serverRequest.headers()
+                .asHttpHeaders()
+                .entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, v -> String.join(",", v.getValue())));
     }
 
-    public static String getHeader(ServerRequest request, String header) {
-        return ofEmptyHeader(request.headers().firstHeader(header)).orElse("Undefined");
-    }
+    public Mono<Map<String, String>> validateHeaderBasicKit(ServerRequest request){
+        return Mono.just(setHeaders(request))
+                .filter(headers -> headers.containsKey(DOCUMENT_TYPE))
+                .filter(headers -> headers.containsKey(DOCUMENT_NUMBER))
+                .filter(headers -> headers.containsKey(ASSOCIATION_ORIGIN));
 
-    private static Optional<String> ofEmptyHeader(String value) {
-        return (value == null || value.isEmpty()) ? Optional.empty() : Optional.of(value);
+    }
+    public Mono<Map<String, String>> validateHeaderFindAlertClient(ServerRequest request){
+        return Mono.just(setHeaders(request))
+                .filter(headers -> headers.containsKey(DOCUMENT_TYPE))
+                .filter(headers -> headers.containsKey(DOCUMENT_NUMBER));
+
     }
 
 }

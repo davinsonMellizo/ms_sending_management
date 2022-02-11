@@ -6,6 +6,7 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.remitter.RemitterHandler;
 import co.com.bancolombia.api.services.remitter.RemitterRouter;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.remitter.RemitterUseCase;
@@ -39,6 +40,10 @@ public class RemitterRouterTest extends BaseIntegration {
 
     @MockBean
     private RemitterUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Remitter remitter = new Remitter();
     private final static String ID = "/{id}";

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -19,18 +20,18 @@ public class ContactData {
 
     @Id
     private Integer id;
-    @ReadOnlyProperty
-    private String enrollmentContact;
+    private String segment;
     @ReadOnlyProperty
     private String contactMedium;
-    private Integer idEnrollmentContact;
     private Integer idContactMedium;
     private Long documentNumber;
+    @Column("id_document_type")
     private Integer documentType;
     private String value;
     @ReadOnlyProperty
     private String state;
     private Integer idState;
+    private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 }

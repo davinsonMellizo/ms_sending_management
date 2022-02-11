@@ -1,8 +1,8 @@
 {
-  "enrollmentContact": "ALM",
+  "consumer": "GNR",
   "contactMedium": "SMS",
   "documentNumber": 1061772353,
-  "documentType": 0,
+  "documentType": "0",
   "value": "3217937584",
   "state": "Activo"
 }

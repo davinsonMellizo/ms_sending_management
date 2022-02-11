@@ -8,6 +8,7 @@ import co.com.bancolombia.api.services.provider.ProviderHandler;
 import co.com.bancolombia.api.services.provider.ProviderRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.provider.ProviderUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Assertions;
@@ -41,6 +42,10 @@ public class ProviderRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private ProviderUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final static String ID = "/{id}";
 

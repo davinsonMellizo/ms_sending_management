@@ -1,6 +1,5 @@
 package co.com.bancolombia.usecase.alerttransaction;
 
-import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;

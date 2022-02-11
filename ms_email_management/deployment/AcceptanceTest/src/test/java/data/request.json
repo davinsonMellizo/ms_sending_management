@@ -1,0 +1,24 @@
+{
+  "provider":"TOD",
+  "from": "davinson.mellizo@gmail.com",
+  "destination": {
+    "toAddress": "davinson.mellizo@gmail.com"
+  },
+  "attachments": [],
+  "template":{
+    "parameters": [
+      {
+        "name": "nombre",
+        "value": "Davinson Mellizo",
+        "type": "text"
+      },
+      {
+        "name": "fecha",
+        "value": "20/20/1999",
+        "type": "text"
+      }
+    ],
+    "name": "Credito"
+  },
+  "logKey":"low"
+}

@@ -17,7 +17,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,10 +38,10 @@ public class ConsumerRepositoryImplExceptionTest {
     @BeforeEach
     public void init() {
         consumer.setId("1");
-        consumer.setCode("123asv");
+        consumer.setSegment("123asv");
 
         consumerData.setId("1");
-        consumerData.setCode("123asv");
+        consumerData.setSegment("123asv");
     }
 
 

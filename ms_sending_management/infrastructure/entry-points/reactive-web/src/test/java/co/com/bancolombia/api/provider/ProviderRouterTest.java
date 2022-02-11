@@ -6,6 +6,7 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.provider.ProviderHandler;
 import co.com.bancolombia.api.services.provider.ProviderRouter;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.provider.ProviderUseCase;
@@ -39,6 +40,10 @@ public class ProviderRouterTest extends BaseIntegration {
 
     @MockBean
     private ProviderUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Provider provider = new Provider();
     private final static String ID = "/{id}";

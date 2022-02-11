@@ -1,0 +1,24 @@
+rootProject.name = 'ms_sms_management'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ":log"
+project(':log').projectDir = file('./infrastructure/helpers/log')
+include ":secrets-manager"
+project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
+include ':rabbit-configurator'
+project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
+include ":commons"
+project(':commons').projectDir = file('./infrastructure/helpers/commons')
+include ':async-event-handler'
+project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
+include ':rest-consumer'
+project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
+include ':async-event-handler'
+project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
+include ':async-sqs'
+project(':async-sqs').projectDir = file('./infrastructure/driven-adapters/async-sqs')

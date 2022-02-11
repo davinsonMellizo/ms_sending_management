@@ -13,15 +13,19 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class Contact {
     private Integer id;
-    private String enrollmentContact;
+    private String segment;
     private String contactMedium;
-    private Integer idEnrollmentContact;
-    private Integer idContactMedium;
     private Long documentNumber;
-    private Integer documentType;
+    private String documentType;
     private String value;
     private String state;
-    private Integer idState;
+    private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+
+    public Contact segment(String segment) {
+        this.setSegment(segment);
+        return this;
+    }
+
 }

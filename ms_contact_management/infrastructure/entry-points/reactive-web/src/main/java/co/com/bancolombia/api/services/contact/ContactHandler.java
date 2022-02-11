@@ -7,7 +7,6 @@ import co.com.bancolombia.api.dto.ContactDTO;
 import co.com.bancolombia.api.header.ClientHeader;
 import co.com.bancolombia.api.header.ContactHeader;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,11 +28,12 @@ public class ContactHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
                 .flatMap(ClientHeader::toModel)
-                .flatMap(contactUseCase::findContactsByClient)
+                .flatMap(client ->  contactUseCase.findContactsByClient(client,
+                        ParamsUtil.getConsumer(serverRequest)))
                 .flatMap(ResponseUtil::responseOk);
     }
 
-    public Mono<ServerResponse> saveConatct(ServerRequest serverRequest) {
+    public Mono<ServerResponse> saveContact(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(ContactDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
@@ -47,7 +47,7 @@ public class ContactHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(ContactDTO::toModel)
-                .flatMap(contactUseCase::updateContact)
+                .flatMap(contactUseCase::updateContactRequest)
                 .flatMap(ResponseUtil::responseOk);
     }
 

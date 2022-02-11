@@ -4,11 +4,12 @@ VALUES(0, 'CC', 'Cedula de Ciudadania');
 
 INSERT INTO state
 (id, name)
-VALUES(0, 'Active');
+VALUES(0, 'Active'),
+(1, 'Inactive');
 
-INSERT INTO enrollment_contact
-(id, code)
-VALUES(0, 'ALM');
+INSERT INTO consumer
+(id, segment)
+VALUES('ALM', 'GNR');
 
 INSERT INTO contact_medium
 (id, code) values
@@ -17,13 +18,13 @@ INSERT INTO contact_medium
 
 
 INSERT INTO client
-(document_number, document_type, key_mdm, enrollment_origin, id_state, creation_user, created_date, modified_date)
-VALUES(1061772353, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05'),
-(1061772354, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05');
+(id,document_number, id_document_type, key_mdm, enrollment_origin, id_state, creation_user, created_date, modified_date)
+VALUES(0,1061772353, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05'),
+      (1,1061772354, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05');
 
 INSERT INTO contact
-(id_enrollment_contact, id_contact_medium, document_number, document_type, value, id_state, created_date, modified_date)
-VALUES(0, 0, 1061772353, 0, '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05');
+(id, segment, id_contact_medium, document_number, id_document_type, value, id_state, created_date, modified_date, previous)
+VALUES(0, 'ALM', 0, 1061772353, 0, '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05', false);
 
 
 

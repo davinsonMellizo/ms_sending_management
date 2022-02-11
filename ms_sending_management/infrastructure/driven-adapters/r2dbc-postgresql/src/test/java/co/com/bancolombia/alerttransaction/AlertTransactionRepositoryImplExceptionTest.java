@@ -1,13 +1,8 @@
 package co.com.bancolombia.alerttransaction;
 
-import co.com.bancolombia.alert.AlertRepository;
-import co.com.bancolombia.alert.AlertRepositoryImplement;
-import co.com.bancolombia.alert.data.AlertData;
-import co.com.bancolombia.alert.data.AlertMapper;
 import co.com.bancolombia.alerttransaction.data.AlertTransactionMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
-import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

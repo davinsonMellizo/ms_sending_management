@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.services.contact;
 
 import co.com.bancolombia.api.dto.ContactDTO;
+import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.response.StatusResponse;
@@ -33,8 +34,9 @@ public class ContactDocumentationApi {
                 .operationId("findContacts").summary("Find contacts")
                 .description("Find contacts by client").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
-                .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementationArray(Contact.class))
+                .parameter(createHeader(String.class, "document-type", "Client Document Type"))
+                .parameter(headerNoRequired(String.class, "consumer", "Code consumer"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(ResponseContactsDTO.class))
                 .response(responseBuilder().responseCode("400").description("Bad Request").implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
@@ -53,14 +55,18 @@ public class ContactDocumentationApi {
                 .operationId("deleteContact").summary("Delete contact")
                 .description("Delete a client contact").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
-                .parameter(createHeader(Integer.class, "document-type", "Client Document Type"))
+                .parameter(createHeader(String.class, "document-type", "Client Document Type"))
                 .parameter(createHeader(String.class, "contact-medium", "Type of contact"))
-                .parameter(createHeader(String.class, "enrollment-contact", "Origin of enrollment"))
+                .parameter(createHeader(String.class, "consumer", "Code Consumer"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
         return parameterBuilder().in(HEADER).implementation(clazz).required(true).name(name).description(description);
+    }
+
+    private <T> org.springdoc.core.fn.builders.parameter.Builder headerNoRequired(Class<T> clazz, String name, String description) {
+        return parameterBuilder().in(HEADER).implementation(clazz).name(name).description(description);
     }
 }

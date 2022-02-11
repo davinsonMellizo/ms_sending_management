@@ -48,7 +48,6 @@ public class AlertRepositoryImplExceptionTest {
         alertData.setCreatedDate(NOW);
     }
 
-
     @Test
     public void findAlertByIdWithException() {
         when(repository.findById(anyString()))

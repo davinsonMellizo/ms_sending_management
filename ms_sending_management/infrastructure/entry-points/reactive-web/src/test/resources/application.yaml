@@ -1,8 +1,11 @@
-entries:
-  reactive-web:
-    path-base: /api/v1/alert-management
-    alert: /alert
-    provider: /provider
-    remitter: /remitter
-    service: /service
-    consumer: /consumer
+adapters:
+  entries:
+    reactive-web:
+      path-base: /api/v1/alert-management
+      alert: /alert
+      provider: /provider
+      remitter: /remitter
+      service: /service
+      consumer: /consumer
+      category: /category
+      priority: /priority

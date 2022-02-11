@@ -1,11 +1,12 @@
 {
-  "idAlert": 1,
-  "documentNumber": 123,
-  "idDocumentType": 1,
-  "numberOperations": 2,
-  "amountenable": 5,
-  "accumulatedOperations": 1,
-  "accumulatedAmount": 1,
-  "associationOrigin": "tst",
-  "creationUser": "lmbm"
+  "idAlert": "UPD",
+  "alertDescription": "Alerta",
+  "documentNumber": 1000000000,
+  "documentType": 0,
+  "numberOperations": 9,
+  "amountEnable": 6,
+  "accumulatedOperations": 18,
+  "accumulatedAmount": 15,
+  "associationOrigin": "tsa",
+  "creationUser": "lmbm1"
 }

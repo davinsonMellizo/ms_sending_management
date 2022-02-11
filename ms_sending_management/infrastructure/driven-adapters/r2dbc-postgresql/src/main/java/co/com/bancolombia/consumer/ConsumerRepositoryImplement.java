@@ -40,6 +40,7 @@ public class ConsumerRepositoryImplement extends AdapterOperations<Consumer, Con
 
     @Override
     public Mono<Consumer> saveConsumer(Consumer consumer) {
+
         return Mono.just(consumer)
                 .map(this::convertToData)
                 .map(consumerData -> consumerData.toBuilder()

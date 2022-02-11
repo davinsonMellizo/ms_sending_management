@@ -14,7 +14,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,14 +35,14 @@ public class ContactRepositoryImplWithExceptionTest {
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("1");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
 
-        client.setDocumentType(0);
+        client.setDocumentType("0");
         client.setDocumentNumber(new Long(1061772353));
     }
 
@@ -51,7 +50,7 @@ public class ContactRepositoryImplWithExceptionTest {
     public void findAllContactsByClient() {
         when(repository.findAllContactsByClient(any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAllContactsByClient(client)
+        repositoryImpl.contactsByClient(client)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();
@@ -60,9 +59,9 @@ public class ContactRepositoryImplWithExceptionTest {
     @Test
     public void findIdContact() {
         when(repository.findContact(any(), any(), any(), any()))
-                .thenReturn(Mono.error(RuntimeException::new));
+                .thenReturn(Flux.error(RuntimeException::new));
         contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setSegment("ALM");
         repositoryImpl.findIdContact(contact)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)

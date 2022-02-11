@@ -6,6 +6,7 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.service.ServiceHandler;
 import co.com.bancolombia.api.services.service.ServiceRouter;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.service.Service;
 import co.com.bancolombia.usecase.service.ServiceUseCase;
@@ -37,6 +38,10 @@ public class ServiceRouterTest extends BaseIntegration {
 
     @MockBean
     private ServiceUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Service service = new Service();
     private final static String ID = "/{id}";

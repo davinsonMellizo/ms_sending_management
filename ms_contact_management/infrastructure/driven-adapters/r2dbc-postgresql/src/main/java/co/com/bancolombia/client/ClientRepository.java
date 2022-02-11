@@ -8,19 +8,20 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
-public interface ClientRepository extends ReactiveCrudRepository<ClientData, Long> {
-    @Query("select * from client " +
-            "where document_number = $1 and document_type = $2")
-    Mono<ClientData> findClientByIdentification(Long documentNumber, Integer documentType);
+public interface ClientRepository extends ReactiveCrudRepository<ClientData, Integer> {
+    @Query("select * from client c " +
+            "inner join document_type d on d.id = c.id_document_type  " +
+            "where document_number = $1 and (d.id::text = $2 or d.code = $2)")
+    Mono<ClientData> findClientByIdentification(Long documentNumber, String documentType);
 
     @Modifying
-    @Query("delete from client where document_number = $1 and document_type = $2")
-    Mono<Integer> deleteClient(Long documentNumber, Integer documentType);
+    @Query("delete from client where document_number = $1 and id_document_type::text = $2")
+    Mono<Integer> deleteClient(Long documentNumber, String documentType);
 
     @Modifying
     @Query("update client set key_mdm = $1, enrollment_origin = $2,modified_date = $3, id_state = $4 " +
-            "where document_number = $5 and document_type = $6")
+            "where document_number = $5 and document_type::text = $6")
     Mono<Integer> updateClient(String keyMdm, String enrollmentOrigin, LocalDateTime modifiedDate,
-                               Integer idState, Long documentNumber, Integer documentType);
+                               Integer idState, Long documentNumber, String documentType);
 
 }

@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':model')
+    compile group: 'software.amazon.awssdk', name: 'dynamodb-enhanced', version: '2.14.13'
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
+}

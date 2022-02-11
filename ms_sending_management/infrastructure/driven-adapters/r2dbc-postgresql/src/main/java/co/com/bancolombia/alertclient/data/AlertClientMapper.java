@@ -7,6 +7,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AlertClientMapper {
 
+    @Mapping(target = "numberOperations", defaultValue = "0")
+    @Mapping(target = "amountEnable", defaultValue = "0L")
+    @Mapping(target = "associationOrigin", defaultValue = "")
+    @Mapping(target = "creationUser", defaultValue = "")
     AlertClient toEntity(AlertClientData alertClientData);
 
     @Mapping(target = "id", ignore = true)

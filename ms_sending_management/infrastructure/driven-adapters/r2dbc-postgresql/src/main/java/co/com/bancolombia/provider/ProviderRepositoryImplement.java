@@ -45,6 +45,12 @@ public class ProviderRepositoryImplement
     }
 
     @Override
+    public Mono<Provider> findProviderByProviderService(Integer id) {
+        return repository.finProvider(id)
+                .map(this::convertToEntity);
+    }
+
+    @Override
     public Mono<Provider> saveProvider(Provider provider) {
         return Mono.just(provider)
                 .map(this::convertToData)
@@ -52,7 +58,7 @@ public class ProviderRepositoryImplement
                         .isNew(true)
                         .createdDate(timeFactory.now())
                         .build())
-                .flatMap(repository::save)
+                .flatMap(providerData -> repository.save(providerData))
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, SAVE_PROVIDER_ERROR));
     }

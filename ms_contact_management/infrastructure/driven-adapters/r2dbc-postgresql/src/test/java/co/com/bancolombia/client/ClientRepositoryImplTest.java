@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -25,17 +27,26 @@ public class ClientRepositoryImplTest {
     @BeforeEach
     public void init() {
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
         client.setIdState(0);
         client.setCreationUser("username");
         client.setEnrollmentOrigin("ALM");
         client.setKeyMdm("key");
+        client.setCreatedDate(LocalDateTime.now());
     }
 
 
     @Test
     public void findClientByDocument() {
         StepVerifier.create(clientRepositoryImplement.findClientByIdentification(client))
+                .consumeNextWith(client -> assertEquals(1061772353, client.getDocumentNumber()))
+                .verifyComplete();
+    }
+
+    @Test
+    public void inactivateClient() {
+        client.setId(0);
+        StepVerifier.create(clientRepositoryImplement.inactivateClient(client))
                 .consumeNextWith(client -> assertEquals(1061772353, client.getDocumentNumber()))
                 .verifyComplete();
     }
@@ -51,7 +62,8 @@ public class ClientRepositoryImplTest {
     }
 
     @Test
-    public void updateContact() {
+    public void updateClient() {
+        client.setId(0);
         StepVerifier.create(clientRepositoryImplement.updateClient(StatusResponse.<Client>builder()
                 .before(client).actual(client)
                 .build()))
@@ -60,7 +72,7 @@ public class ClientRepositoryImplTest {
     }
 
     @Test
-    public void deleteContact() {
+    public void deleteClient() {
         client.setDocumentNumber(new Long(1061772354));
         StepVerifier.create(clientRepositoryImplement.deleteClient(client))
                 .consumeNextWith(client -> assertEquals(1061772354, client.getDocumentNumber()))

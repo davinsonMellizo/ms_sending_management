@@ -1,5 +1,6 @@
 dependencies {
-    compile project(':model')
-    compile 'org.springframework:spring-context'
-    compile group: 'co.com.bancolombia', name: 'technical-log', version: '1.1'
+    implementation 'org.springframework:spring-context:5.3.14'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+    implementation group: 'co.com.bancolombia', name: 'technical-log', version: '1.2.2'
+
 }

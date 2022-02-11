@@ -9,7 +9,7 @@ import co.com.bancolombia.api.services.alertclient.AlertClientRouter;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alertclient.AlertClient;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.alertclient.AlertClientUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +24,8 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static co.com.bancolombia.commons.constants.Header.DOCUMENT_NUMBER;
+import static co.com.bancolombia.commons.constants.Header.DOCUMENT_TYPE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,7 +45,12 @@ public class AlertClientRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertClientUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
+    private String requestUpdate;
     private final AlertClient alertClient = new AlertClient();
     private String url;
 
@@ -51,6 +58,7 @@ public class AlertClientRouterTest extends BaseIntegration {
     public void init() {
         url = properties.getAlert() + "-client";
         request = loadFileConfig("AlertClientRequest.json", String.class);
+        requestUpdate = loadFileConfig("AlertClientRequestUpdate.json", String.class);
     }
 
     @Test
@@ -66,22 +74,21 @@ public class AlertClientRouterTest extends BaseIntegration {
 
     @Test
     public void findAll() {
-        when(useCase.findAllAlertClient(any()))
+        when(useCase.findAllAlertClientByClient(any()))
                 .thenReturn(Mono.just(List.of(alertClient)));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url)
-                .header("document-number", "123")
-                .header("document-type", "1")
+                .header(DOCUMENT_NUMBER, "106177285")
+                .header(DOCUMENT_TYPE, "0")
                 .exchange();
         spec.expectStatus().isOk();
-        verify(useCase).findAllAlertClient(any());
+        verify(useCase).findAllAlertClientByClient(any());
     }
 
     @Test
     public void update() {
-        when(useCase.updateAlertClient(any())).thenReturn(Mono.just(StatusResponse.<AlertClient>builder()
-                .actual(alertClient).before(alertClient).build()));
+        when(useCase.updateAlertClient(any())).thenReturn(Mono.just(alertClient));
         statusAssertionsWebClientPut(url,
-                request)
+                requestUpdate)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
@@ -91,11 +98,11 @@ public class AlertClientRouterTest extends BaseIntegration {
     @Test
     public void delete() {
         when(useCase.deleteAlertClient(any()))
-                .thenReturn(Mono.just("1"));
+                .thenReturn(Mono.just(alertClient));
         WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
                 .header("id-alert", "1")
-                .header("document-number", "123")
-                .header("document-type", "1")
+                .header("document-number", "1061")
+                .header("document-type", "0")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteAlertClient(any());

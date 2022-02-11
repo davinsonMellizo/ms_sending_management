@@ -1,8 +1,21 @@
 {
-  "documentNumber": 654566,
-  "documentType": 0,
-  "keyMdm": "KEY C",
-  "enrollmentOrigin": "svp",
-  "idState": 0,
-  "creationUser": "UserName"
+  "client":
+  {
+    "documentNumber": 1061772355,
+    "documentType": "CC",
+    "keyMdm": "KEY C",
+    "enrollmentOrigin": "ALM",
+    "idState": 0,
+    "creationUser": "Kevin MELLIZO"
+  },
+  "contacts":[
+    {
+      "consumer": "ALM",
+      "contactMedium": "MAIL",
+      "documentNumber": 1061772355,
+      "documentType": "CC",
+      "value":"dsfds",
+      "state":"Active"
+    }
+  ]
 }

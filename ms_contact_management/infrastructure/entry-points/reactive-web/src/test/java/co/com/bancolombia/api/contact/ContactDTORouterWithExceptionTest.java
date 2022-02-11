@@ -40,18 +40,20 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
     @MockBean
     private ContactUseCase useCase;
     private String request;
+    private String requestSave;
     private final Contact contact = new Contact();
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("1");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
 
-        request = loadFileConfig("contactRequest.json", String.class);
+        request = loadFileConfig("contactSaveRequest.json", String.class);
+        requestSave = loadFileConfig("contactRequest.json", String.class);
     }
 
     @Test
@@ -65,7 +67,7 @@ public class ContactDTORouterWithExceptionTest extends BaseIntegrationTest {
 
     @Test
     public void updateContactsWithException() {
-        when(useCase.updateContact(any())).thenReturn(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
+        when(useCase.updateContactRequest(any())).thenReturn(Mono.error(new BusinessException(CONTACT_NOT_FOUND)));
         statusAssertionsWebClientPut(properties.getContact(),
                 request)
                 .is5xxServerError();

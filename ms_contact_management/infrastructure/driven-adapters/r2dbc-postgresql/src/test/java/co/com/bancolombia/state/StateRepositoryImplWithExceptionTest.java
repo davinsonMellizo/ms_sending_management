@@ -31,9 +31,9 @@ public class StateRepositoryImplWithExceptionTest {
 
     @Test
     public void findStateByNameWithException() {
-        when(repository.findById(anyString()))
+        when(repository.findState(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
-        stateRepositoryImplement.findStateByName("Active")
+        stateRepositoryImplement.findState("Active")
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

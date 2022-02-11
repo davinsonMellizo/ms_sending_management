@@ -2,15 +2,18 @@ package co.com.bancolombia.usecase.contact;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.contactmedium.ContactMedium;
 import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
-import co.com.bancolombia.model.enrollmentcontact.EnrollmentContact;
-import co.com.bancolombia.model.enrollmentcontact.gateways.EnrollmentContactGateway;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.document.Document;
+import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +24,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,52 +37,72 @@ public class ContactUseCaseTest {
     @Mock
     private ContactGateway contactGateway;
     @Mock
+    private ClientRepository clientRepository;
+    @Mock
     private StateGateway stateGateway;
     @Mock
-    private EnrollmentContactGateway enrollmentGateway;
-    @Mock
     private ContactMediumGateway mediumGateway;
+    @Mock
+    private DocumentGateway documentGateway;
+    @Mock
+    private ConsumerGateway consumerGateway;
+    @Mock
+    private NewnessUseCase newnessUseCase;
 
-    private final State state = new State(0, "Activo");
+    private final State state = new State(0, "Active");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
-    private final EnrollmentContact enrollment = new EnrollmentContact(0, "ALM");
     private final Client client = new Client();
     private final Contact contact = new Contact();
+    private final Document document = new Document();
+    private final Consumer consumer = new Consumer();
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("1");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
-        contact.setValue("correo@gamail.com");
-        contact.setState("Activo");
+        contact.setDocumentType("0");
+        contact.setValue("3217958455");
+        contact.setState("Active");
+        contact.setId(1);
+        contact.setPrevious(false);
 
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
+        client.setIdState(0);
+
+        consumer.setSegment("GNR");
+        document.setId("0");
+
     }
 
     @Test
     public void findAllContactByClient() {
-        when(contactGateway.findAllContactsByClient(any()))
+        when(contactGateway.contactsByClient(any()))
                 .thenReturn(Flux.just(contact));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
         StepVerifier
-                .create(useCase.findContactsByClient(client))
+                .create(useCase.findContactsByClient(client, ""))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(contactGateway).findAllContactsByClient(client);
+        verify(contactGateway).contactsByClient(client);
     }
 
     @Test
     public void saveContact() {
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
+                .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
-        when(stateGateway.findStateByName(any()))
+        when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(enrollmentGateway.findEnrollmentContactByCode(any()))
-                .thenReturn(Mono.just(enrollment));
         when(mediumGateway.findContactMediumByCode(any()))
                 .thenReturn(Mono.just(medium));
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
         StepVerifier
                 .create(useCase.saveContact(contact))
                 .assertNext(response -> response
@@ -87,48 +110,84 @@ public class ContactUseCaseTest {
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).saveContact(any());
-        verify(enrollmentGateway).findEnrollmentContactByCode(any());
         verify(mediumGateway).findContactMediumByCode(any());
     }
 
     @Test
     public void updateContact() {
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
+                .thenReturn(Mono.just(contact));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
         when(contactGateway.updateContact(any()))
-                .thenReturn(Mono.just(StatusResponse.<Contact>builder()
-                        .before(contact).actual(contact)
-                        .build()));
-        when(stateGateway.findStateByName(any()))
+                .thenReturn(Mono.just(contact));
+        when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
+        when(contactGateway.findIdContact(any()))
+                .thenReturn(Flux.just(contact));
         StepVerifier
-                .create(useCase.updateContact(contact))
+                .create(useCase.updateContactRequest(contact))
                 .assertNext(response -> response
                         .getActual().getDocumentNumber()
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).updateContact(any());
-        verify(stateGateway).findStateByName(any());
+        verify(stateGateway).findState(any());
+    }
+
+    @Test
+    public void updateContactWithExistent() {
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
+                .thenReturn(Mono.just(contact));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+        when(contactGateway.updateContact(any()))
+                .thenReturn(Mono.just(contact));
+        when(contactGateway.saveContact(any()))
+                .thenReturn(Mono.just(contact));
+        when(contactGateway.deleteContact(any()))
+                .thenReturn(Mono.just(contact));
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
+        when(contactGateway.findIdContact(any()))
+                .thenReturn(Flux.just(contact.toBuilder().value("69784585254").build(),
+                        contact.toBuilder().previous(true).value("69784585254").build()));
+        StepVerifier
+                .create(useCase.updateContactRequest(contact))
+                .assertNext(response -> response
+                        .getActual().getDocumentNumber()
+                        .equals(contact.getDocumentNumber()))
+                .verifyComplete();
+        verify(contactGateway).updateContact(any());
+        verify(stateGateway).findState(any());
     }
 
     @Test
     public void deleteContact() {
+        when(newnessUseCase.saveNewness((Contact) any(), anyString()))
+                .thenReturn(Mono.just(contact));
+        when(consumerGateway.findConsumerById(any()))
+                .thenReturn(Mono.just(Consumer.builder().segment("SEG").build()));
         when(contactGateway.findIdContact(any()))
-                .thenReturn(Mono.just(1));
+                .thenReturn(Flux.just(contact));
         when(contactGateway.deleteContact(any()))
-                .thenReturn(Mono.just(1));
+                .thenReturn(Mono.just(contact));
         StepVerifier.create(useCase.deleteContact(contact))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(contactGateway).findIdContact(contact);
+        verify(contactGateway).findIdContact(any());
         verify(contactGateway).deleteContact(any());
     }
 
     @Test
     public void updateContactWithException() {
-        when(contactGateway.updateContact(any()))
+        when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
-        when(stateGateway.findStateByName(any()))
-                .thenReturn(Mono.just(state));
-        useCase.updateContact(contact)
+        useCase.updateContactRequest(contact)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
@@ -136,8 +195,10 @@ public class ContactUseCaseTest {
 
     @Test
     public void deleteContactWithException() {
+        when(consumerGateway.findConsumerById(any()))
+                .thenReturn(Mono.just(Consumer.builder().segment("SEG").build()));
         when(contactGateway.findIdContact(any()))
-                .thenReturn(Mono.empty());
+                .thenReturn(Flux.empty());
         useCase.deleteContact(contact)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)

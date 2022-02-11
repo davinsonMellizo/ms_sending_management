@@ -7,10 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -21,37 +18,39 @@ public class AlertClientDTO {
     @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String idAlert;
+    @Size(min = 1, max = 50, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
+    private String alertDescription;
+    @Max(value = 999999999999999L, message = "{constraint.max}")
+    @Min(value = 0, message = "{constraint.min}")
+    @NotNull(message = "{constraint.not_null}")
     private Long documentNumber;
     @NotNull(message = "{constraint.not_null}")
-    @PositiveOrZero(message = "{constraint.number_not_negative}")
-    @Max(value = 99, message = "{constraint.maximum_value}")
-    private Integer idDocumentType;
+    @Min(value = 0, message = "{constraint.min}")
+    @Max(value = 999, message = "{constraint.maximum_value}")
+    private Integer documentType;
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
     private Integer numberOperations;
     @NotNull(message = "{constraint.not_null}")
     @PositiveOrZero(message = "{constraint.number_not_negative}")
-    private Long amountenable;
-    private Long accumulatedOperations;
-    private Long accumulatedAmount;
+    private Long amountEnable;
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 3, message = "{constraint.size}")
     private String associationOrigin;
-    private String creationUser;
+    @Builder.Default
+    private String creationUser = "";
 
     public Mono<AlertClient> toModel() {
         return Mono.just(AlertClient.builder()
                 .idAlert(this.idAlert)
                 .documentNumber(this.documentNumber)
-                .idDocumentType(this.idDocumentType)
+                .documentType(this.documentType)
                 .numberOperations(this.numberOperations)
-                .amountEnable(this.amountenable)
-                .accumulatedOperations(this.accumulatedOperations)
-                .accumulatedAmount(this.accumulatedAmount)
+                .amountEnable(this.amountEnable)
                 .associationOrigin(this.associationOrigin)
                 .creationUser(this.creationUser)
+                .alertDescription(this.alertDescription)
                 .build());
     }
 

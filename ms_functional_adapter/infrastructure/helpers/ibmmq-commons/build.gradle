@@ -1,0 +1,11 @@
+dependencies {
+    compile project(':model')
+    compile project(':log')
+    compile project(':secrets-manager')
+    compile project(':s3-bucket')
+    compile project(':commons')
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'com.ibm.mq:com.ibm.mq.allclient:9.1.5.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    testCompile project(':model').sourceSets.test.output
+}

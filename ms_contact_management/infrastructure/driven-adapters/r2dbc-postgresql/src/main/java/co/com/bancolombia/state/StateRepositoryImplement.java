@@ -23,8 +23,9 @@ public class StateRepositoryImplement
     }
 
     @Override
-    public Mono<State> findStateByName(String name) {
-        return doQuery(repository.findById(name))
+    public Mono<State> findState(String name) {
+        return repository.findState(name)
+                .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, TechnicalExceptionEnum.FIND_STATE_ERROR));
     }
 }

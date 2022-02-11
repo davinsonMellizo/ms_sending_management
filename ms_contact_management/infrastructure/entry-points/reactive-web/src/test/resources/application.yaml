@@ -1,5 +1,6 @@
-entries:
-  reactive-web:
-    path-base: /api/v1/contact-management
-    contact: /contact
-    client: /client
+adapters:
+  entries:
+    reactive-web:
+      path-base: /api/v1/contact-management
+      contact: /contact
+      client: /client

@@ -1,0 +1,44 @@
+{
+    "connections": [
+      {
+        "name": "connFactory1",
+        "qmGroup": "*ALESGRP",
+        "temporaryQueueModel": "",
+        "secret": "nu0154001-alertas-dev-mq-functional-adapters",
+        "applicationName": "ms_functional_adapter",
+        "outputConcurrency": 10,
+        "replyTimeOut": 10,
+        "ccdtBucketName": "nu0154001_alert_ccdt_dev_v1.json",
+        "jksBucketName": "nu0154001_alert_dev_v1.jks",
+        "ccdtPath": "/appuser/nu0154001_alert_ccdt_dev_v1.json",
+        "jksPath": "/appuser/nu0154001_alert_dev_v1.jks"
+      }
+    ],
+    "queues" : [
+      {
+        "name" : "WWW_LOGALERTAS_CD.QL.REQ",
+        "connection": "connFactory1"
+      },
+      {
+        "name" : "CD_LOGALERTAS_WWW.QL.RES",
+        "connection": "connFactory1"
+      }
+    ],
+    "listener": [
+      {
+        "name": "id1",
+        "queueRequest": "WWW_LOGALERTAS_CD.QL.REQ",
+        "queueResponse": "CD_LOGALERTAS_WWW.QL.RES"
+      }
+    ],
+    "transactions": {
+      "ALERTAS0043": {
+        "listener" : "id1",
+        "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+      },
+      "ALERTAS0050": {
+        "listener" : "id1",
+        "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+      }
+    }
+  }

@@ -22,7 +22,7 @@ public class ConsumerRepositoryImplTest {
     @BeforeEach
     public void init() {
         consumer.setId("1");
-        consumer.setCode("4567aaa");
+        consumer.setSegment("4567aaa");
     }
 
     @Test

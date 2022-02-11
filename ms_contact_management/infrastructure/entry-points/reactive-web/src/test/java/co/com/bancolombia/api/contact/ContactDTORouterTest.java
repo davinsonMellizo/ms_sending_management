@@ -7,6 +7,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.contact.ContactHandler;
 import co.com.bancolombia.api.services.contact.ContactRouter;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,6 +24,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,36 +42,42 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     @MockBean
     private ContactUseCase useCase;
     private String request;
+    private String requestSave;
     private final Contact contact = new Contact();
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("");
+        contact.setSegment("0");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
 
         request = loadFileConfig("contactRequest.json", String.class);
+        requestSave = loadFileConfig("contactSaveRequest.json", String.class);
     }
 
     @Test
     public void findAllContactsByClient() {
-        when(useCase.findContactsByClient(any())).thenReturn(Mono.just(List.of(contact)));
+        when(useCase.findContactsByClient(any(), anyString())).thenReturn(Mono.just(ResponseContacts.<Contact>builder()
+                .contacts(List.of(contact))
+                .documentNumber(contact.getDocumentNumber())
+                .documentType(contact.getDocumentType())
+                .build()));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getContact())
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .exchange();
         spec.expectStatus().isOk();
-        verify(useCase).findContactsByClient(any());
+        verify(useCase).findContactsByClient(any(), anyString());
     }
 
     @Test
-    public void saveContacts() {
+    public void saveContact() {
         when(useCase.saveContact(any())).thenReturn(Mono.just(contact));
         statusAssertionsWebClientPost(properties.getContact(),
-                request)
+                requestSave)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult()
@@ -78,8 +86,8 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateContacts() {
-        when(useCase.updateContact(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
+    public void updateContact() {
+        when(useCase.updateContactRequest(any())).thenReturn(Mono.just(StatusResponse.<Contact>builder()
                 .actual(contact).before(contact).build()));
         statusAssertionsWebClientPut(properties.getContact(),
                 request)
@@ -87,7 +95,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
                 .expectBody(JsonNode.class)
                 .returnResult()
                 .getResponseBody();
-        verify(useCase).updateContact(any());
+        verify(useCase).updateContactRequest(any());
     }
 
     @Test
@@ -97,7 +105,7 @@ public class ContactDTORouterTest extends BaseIntegrationTest {
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .header("contact-medium", "SMS")
-                .header("enrollment-contact", "ALM")
+                .header("consumer", "ALM")
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteContact(any());

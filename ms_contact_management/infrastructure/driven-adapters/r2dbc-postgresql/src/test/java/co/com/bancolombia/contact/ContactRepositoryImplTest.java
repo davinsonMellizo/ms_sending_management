@@ -27,21 +27,23 @@ public class ContactRepositoryImplTest {
 
     @BeforeEach
     public void init() {
-        contact.setIdContactMedium(1);
-        contact.setIdEnrollmentContact(0);
+        contact.setContactMedium("SMS");
+        contact.setSegment("ALM");
         contact.setDocumentNumber(new Long(1061772353));
-        contact.setDocumentType(0);
+        contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setIdState(0);
+        contact.setState("0");
         contact.setCreatedDate(LocalDateTime.now());
+        contact.setPrevious(false);
+        contact.setId(0);
 
         client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType(0);
+        client.setDocumentType("0");
     }
 
     @Test
     public void findAllContactsByClient() {
-        StepVerifier.create(contactRepositoryImplement.findAllContactsByClient(client))
+        StepVerifier.create(contactRepositoryImplement.contactsByClient(client))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -49,19 +51,19 @@ public class ContactRepositoryImplTest {
     @Test
     public void findIdContact() {
         contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setSegment("ALM");
         StepVerifier.create(contactRepositoryImplement.findIdContact(contact))
-                .consumeNextWith(id -> assertEquals(1, id))
+                .consumeNextWith(contact -> assertEquals(0, contact.getId()))
                 .verifyComplete();
     }
 
     @Test
     public void updateContact() {
-        contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setContactMedium("0");
+        contact.setSegment("ALM");
         contact.setValue("3216931596");
         StepVerifier.create(contactRepositoryImplement.updateContact(contact))
-                .consumeNextWith(response -> assertEquals("3216931596", response.getActual().getValue()))
+                .consumeNextWith(response -> assertEquals("3216931596", response.getValue()))
                 .verifyComplete();
     }
 
@@ -77,10 +79,10 @@ public class ContactRepositoryImplTest {
     @Test
     public void deleteContact() {
         contact.setContactMedium("SMS");
-        contact.setEnrollmentContact("ALM");
+        contact.setSegment("ALM");
         contactRepositoryImplement.findIdContact(contact)
-                .subscribe(id -> StepVerifier
-                        .create(contactRepositoryImplement.deleteContact(id))
+                .subscribe(contact -> StepVerifier
+                        .create(contactRepositoryImplement.deleteContact(contact))
                         .verifyComplete());
     }
 }

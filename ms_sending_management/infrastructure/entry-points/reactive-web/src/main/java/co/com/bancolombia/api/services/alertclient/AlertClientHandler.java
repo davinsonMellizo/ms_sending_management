@@ -4,13 +4,13 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.api.dto.AlertClientDTO;
-import co.com.bancolombia.api.headers.AlertClientHeader;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.alertclient.AlertClientUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
@@ -22,20 +22,20 @@ public class AlertClientHandler {
     private final AlertClientUseCase useCase;
     private final ValidatorHandler validatorHandler;
 
-    public Mono<ServerResponse> findAllAlertClient(ServerRequest serverRequest) {
-        return ParamsUtil.getClientHeadersFind(serverRequest)
+    public Mono<ServerResponse> findAlertClientByClient(ServerRequest serverRequest) {
+        return ParamsUtil.validateHeaderFindAlertClient(serverRequest)
                 .switchIfEmpty(Mono.error(new TechnicalException(HEADER_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObjectHeaders)
-                .flatMap(AlertClientHeader::toModel)
-                .flatMap(useCase::findAllAlertClient)
+                .flatMap(useCase::findAllAlertClientByClient)
                 .flatMap(ResponseUtil::responseOk);
     }
 
     public Mono<ServerResponse> updateAlertClient(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(AlertClientDTO.class)
+        return serverRequest.bodyToMono(AlertClientDTO[].class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .flatMapMany(Flux::fromArray)
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertClientDTO::toModel)
+                .collectList()
                 .flatMap(useCase::updateAlertClient)
                 .flatMap(ResponseUtil::responseOk);
     }
@@ -49,11 +49,16 @@ public class AlertClientHandler {
                 .flatMap(ResponseUtil::responseOk);
     }
 
+    public Mono<ServerResponse> basicKit(ServerRequest serverRequest) {
+          return ParamsUtil.validateHeaderBasicKit(serverRequest)
+                  .switchIfEmpty(Mono.error(new TechnicalException(HEADER_MISSING_ERROR)))
+                  .flatMap(useCase::matchClientWithBasicKit)
+                  .flatMap(ResponseUtil::responseOk);
+    }
+
     public Mono<ServerResponse> deleteAlertClient(ServerRequest serverRequest) {
-        return ParamsUtil.getClientHeaders(serverRequest)
-                .switchIfEmpty(Mono.error(new TechnicalException(HEADER_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObjectHeaders)
-                .flatMap(AlertClientHeader::toModel)
+        return ParamsUtil.getRelationClient(serverRequest)
+                .flatMap(AlertClientDTO::toModel)
                 .flatMap(useCase::deleteAlertClient)
                 .flatMap(ResponseUtil::responseOk);
     }

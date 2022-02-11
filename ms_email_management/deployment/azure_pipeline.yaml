@@ -1,0 +1,146 @@
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+variables:
+  - name: 'artifactory.Repository'
+    value: 'build-NU0154_AlertasyNotificaciones/NU0154001_ms_email_management'
+  - name: 'projectName'
+    value: 'ms_email_management'
+  - name: 'artifactName'
+    value: 'ms_email_management'
+  - name: 'NU'
+    value: 'NU0154001_Alertas_MR'
+
+resources:
+  - repo: self
+
+trigger:
+  branches:
+    include:
+      - trunk
+      - feature/*
+  paths:
+    include:
+      - 'ms_email_management/*'
+
+jobs:
+  - job: BuildJob
+    displayName: 'Build'
+    pool:
+      name: Build
+      demands:
+        - java
+        - JAVA_HOME_11_X64
+    steps:
+      - task: SonarQubePrepare@4
+        displayName: 'Prepare analysis on SonarQube'
+        inputs:
+          SonarQube: SonarQube
+          scannerMode: CLI
+          configMode: manual
+          cliProjectKey: $(NU)_$(artifactName)
+          cliProjectName: $(NU)_$(artifactName)
+          cliProjectVersion: $(Build.BuildNumber)
+          cliSources: $(artifactName)
+          extraProperties: |
+            sonar.sources=$(Build.SourcesDirectory)/$(artifactName)/src/main/java
+            sonar.junit.reportPaths=$(Build.SourcesDirectory)/$(artifactName)/applications/app-service/build/test-results/test
+            sonar.branch.name=$(Build.SourceBranchName)
+            sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/$(artifactName)/build/jacoco/report.xml
+
+      - task: Gradle@2
+        displayName: 'Gradle build and test'
+        inputs:
+          workingDirectory: '$(artifactName)'
+          gradleWrapperFile: '$(artifactName)/gradlew'
+          tasks: 'clean build jacocoMergedReport --stacktrace'
+          publishJUnitResults: true
+          testResultsFiles: '$(artifactName)/**/build/test-results/test/TEST-*.xml'
+          sonarQubeRunAnalysis: true
+          sqGradlePluginVersionChoice: 'build'
+          testRunTitle: '$(Build.DefinitionName)'
+          sonarQubeServiceEndpoint: SonarqubeGradle
+          sonarQubeProjectName: '$(Build.Repository.Name)_$(artifactName)_Java'
+          sonarQubeProjectKey: '$(Build.Repository.Name)_$(artifactName)_Java'
+          sonarQubeProjectVersion: '$(Build.BuildNumber)'
+          sonarQubeGradlePluginVersion: 2.7
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+        condition: succeededOrFailed()
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFiles: '**/TEST-*.xml'
+
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage'
+        inputs:
+          summaryFileLocation: '$(System.DefaultWorkingDirectory)/$(artifactName)/build/jacoco/report.xml'
+          reportDirectory: '$(System.DefaultWorkingDirectory)/$(artifactName)/build/jacoco/report.xml'
+
+      - task: SimondeLang.sonar-buildbreaker.sonar-buildbreaker.sonar-buildbreaker@8
+        displayName: 'Break build on quality gate failure'
+        inputs:
+          SonarQube: SonarQube
+
+      - task: CopyFiles@2
+        displayName: 'Copy Deployment Files'
+        inputs:
+          SourceFolder: $(projectName)/deployment
+          Contents: |
+            infrastructure/**
+            AcceptanceTest/**
+          TargetFolder: $(Build.repository.LocalPath)/build/libs
+
+      - task: CopyFiles@2
+        displayName: 'Copy Jar'
+        inputs:
+          SourceFolder: $(projectName)/applications/app-service/build/libs/
+          Contents: |
+            *.jar
+          TargetFolder: $(Build.repository.LocalPath)/build/libs/infrastructure/app
+
+      - task: ArchiveFiles@2
+        displayName: 'Compress artifacts'
+        inputs:
+          rootFolderOrFile: $(Build.repository.LocalPath)/build/libs
+          includeRootFolder: false
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
+
+      - task: ArtifactoryGenericUpload@1
+        displayName: 'Artifactory Generic Upload'
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/trunk'))
+        inputs:
+          artifactoryService: Artifactory
+          fileSpec: |
+            {
+              "files": [
+                {
+                  "pattern": "$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip",
+                   "target": "$(artifactory.Repository)/"
+                }
+              ]
+            }
+          collectBuildInfo: true
+          includeEnvVars: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: App'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/infrastructure/app'
+          ArtifactName: app-artifact
+        condition: succeeded()
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: EKS'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/infrastructure/eks'
+          ArtifactName: eks-artifact
+        condition: succeeded()
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact: Karate'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/AcceptanceTest'
+          ArtifactName: acceptance-test-artifact
+        condition: succeeded()

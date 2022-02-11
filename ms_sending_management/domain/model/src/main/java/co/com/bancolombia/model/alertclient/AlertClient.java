@@ -14,11 +14,12 @@ import java.time.LocalDateTime;
 public class AlertClient {
 
     private String idAlert;
+    private String alertDescription;
     private Long documentNumber;
-    private Integer idDocumentType;
+    private Integer documentType;
     private Integer numberOperations;
     private Long amountEnable;
-    private Long accumulatedOperations;
+    private Integer accumulatedOperations;
     private Long accumulatedAmount;
     private String associationOrigin;
     private String creationUser;

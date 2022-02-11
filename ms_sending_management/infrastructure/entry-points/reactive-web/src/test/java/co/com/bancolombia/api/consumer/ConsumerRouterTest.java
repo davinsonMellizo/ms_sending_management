@@ -7,6 +7,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.consumer.ConsumerHandler;
 import co.com.bancolombia.api.services.consumer.ConsumerRouter;
 import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.consumer.ConsumerUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,6 +41,10 @@ public class ConsumerRouterTest extends BaseIntegration {
 
     @MockBean
     private ConsumerUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Consumer consumer = new Consumer();
     private final static String ID = "/{id}";

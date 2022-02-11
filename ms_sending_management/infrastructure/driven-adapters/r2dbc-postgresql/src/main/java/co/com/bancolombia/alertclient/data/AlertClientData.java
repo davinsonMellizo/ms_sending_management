@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -20,11 +22,14 @@ public class AlertClientData implements Persistable<String> {
 
     @Id
     private String idAlert;
+    @ReadOnlyProperty
+    private String alertDescription;
     private Long documentNumber;
-    private Integer idDocumentType;
+    @Column("id_document_type")
+    private Integer documentType;
     private Integer numberOperations;
     private Long amountEnable;
-    private Long accumulatedOperations;
+    private Integer accumulatedOperations;
     private Long accumulatedAmount;
     private String associationOrigin;
     private String creationUser;

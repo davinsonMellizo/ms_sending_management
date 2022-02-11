@@ -6,11 +6,11 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ContactMapper {
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "idState", ignore = true)
-    @Mapping(target = "idEnrollmentContact", ignore = true)
-    @Mapping(target = "idContactMedium", ignore = true)
+    //@Mapping(source ="idContactMedium" ,target = "contactMedium")
+    //@Mapping(source ="idState" ,target = "state")
     Contact toEntity(ContactData contactData);
 
+    @Mapping(source ="contactMedium" ,target = "idContactMedium")
+    @Mapping(source ="state" ,target = "idState")
     ContactData toData(Contact contact);
 }

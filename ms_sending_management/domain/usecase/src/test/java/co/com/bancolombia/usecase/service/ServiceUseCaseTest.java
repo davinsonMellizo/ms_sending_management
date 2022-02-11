@@ -31,7 +31,7 @@ public class ServiceUseCaseTest {
     private final Service service = new Service();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         service.setId(0);
     }
 

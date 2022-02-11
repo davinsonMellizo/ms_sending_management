@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @Data
@@ -17,15 +20,14 @@ import javax.validation.constraints.*;
 public class ContactDTO {
 
     @NotNull(message = "{constraint.not_null}")
-    @Size(min = 1, max = 10, message = "{constraint.size}")
-    private String enrollmentContact;
+    @Size(min = 1, max = 3, message = "{constraint.size}")
+    private String consumer;
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 10, message = "{constraint.size}")
     private String contactMedium;
     @NotNull(message = "{constraint.not_null}")
-    @Min(value = 0, message = "{constraint.min}")
-    @Max(value = 99, message = "{constraint.max}")
-    private Integer documentType;
+    @Size(min = 1, max = 2, message = "{constraint.size}")
+    private String documentType;
     @NotNull(message = "{constraint.not_null}")
     @Min(value = 0, message = "{constraint.min}")
     @Max(value = 999999999999999L, message = "{constraint.max}")
@@ -42,7 +44,7 @@ public class ContactDTO {
                 .documentType(this.documentType)
                 .documentNumber(this.documentNumber)
                 .contactMedium(this.contactMedium)
-                .enrollmentContact(this.enrollmentContact)
+                .segment(this.consumer)
                 .value(this.value)
                 .state(this.state)
                 .build());

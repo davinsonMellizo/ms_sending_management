@@ -1,0 +1,27 @@
+rootProject.name = 'ms_functional_adapter'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ":log"
+project(':log').projectDir = file('./infrastructure/helpers/log')
+include ":secrets-manager"
+project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
+include ':rabbit-configurator'
+project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
+include ':async-event-handler'
+project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
+include ':commons'
+project(':commons').projectDir = file('./infrastructure/helpers/commons')
+include ':ibmmq-commons'
+project(':ibmmq-commons').projectDir = file('./infrastructure/helpers/ibmmq-commons')
+include ':s3-bucket'
+project(':s3-bucket').projectDir = file('./infrastructure/helpers/s3-bucket')
+include ':commands_mq'
+project(':commands_mq').projectDir = file('./infrastructure/entry-points/commands_mq')
+include ':ibmmq'
+project(':ibmmq').projectDir = file('./infrastructure/driven-adapters/ibmmq')
+

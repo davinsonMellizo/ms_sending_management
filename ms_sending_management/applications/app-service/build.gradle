@@ -1,13 +1,21 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    implementation project(':rabbit-configurator')
+	implementation project(':async-event-bus')
+	implementation project(':async-sqs')
+    implementation project(':rest-consumer')
+	compile 'org.springframework.boot:spring-boot-starter-webflux'
     implementation project(':reactive-web')
     implementation project(':r2dbc-postgresql')
     implementation project(':model')
     implementation project(':usecase')
+    implementation project(':log')
+    implementation project(':secrets-manager')
     compile 'org.springframework.boot:spring-boot-starter'
     runtime('org.springframework.boot:spring-boot-devtools')
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+
 }
 
 task explodedJar(type: Copy) {

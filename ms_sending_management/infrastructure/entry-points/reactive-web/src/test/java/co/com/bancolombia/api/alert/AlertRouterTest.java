@@ -7,6 +7,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.alert.AlertHandler;
 import co.com.bancolombia.api.services.alert.AlertRouter;
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.alert.AlertUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,6 +38,10 @@ public class AlertRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
+
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Alert alert = new Alert();
     private final static String ID = "/{id}";

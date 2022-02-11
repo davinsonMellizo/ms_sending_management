@@ -1,0 +1,7 @@
+dependencies {
+    compile project(':model')
+    compile project(':commons')
+    compile project(':ibmmq-commons')
+    compile 'org.springframework:spring-context'
+    testCompile project(':model').sourceSets.test.output
+}

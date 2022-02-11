@@ -1,0 +1,8 @@
+{
+  "port": 5672,
+  "host": "localhost",
+  "username": "guest",
+  "password": "guest",
+  "queueName": "ms_email_management"
+}
+

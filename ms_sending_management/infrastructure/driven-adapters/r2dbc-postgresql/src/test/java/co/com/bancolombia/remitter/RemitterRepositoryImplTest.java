@@ -24,7 +24,6 @@ public class RemitterRepositoryImplTest {
         remitter.setId(0);
         remitter.setMail("mail@gmail.com");
         remitter.setState("Activo");
-
     }
 
     @Test
