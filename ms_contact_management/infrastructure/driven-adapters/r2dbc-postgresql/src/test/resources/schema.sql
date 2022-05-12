@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS schalertd;
+CREATE SCHEMA IF NOT EXISTS schalerd;
 
 --
 -- base tables creation

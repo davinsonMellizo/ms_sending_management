@@ -9,6 +9,8 @@ springdoc:
 spring:
   application:
     name: ${APPLICATION_NAME}
+  freemarker:
+    checkTemplateLocation: false
   devtools:
     add-properties: false
   jackson:
@@ -40,3 +42,17 @@ aws:
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}
     endpoint: http://localhost:4566
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, liveness, readiness
+      base-path: ${PATH_BASE}
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness
+  endpoint:
+    health:
+      show-details: never

@@ -7,6 +7,8 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 import static co.com.bancolombia.commons.constants.Provider.*;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
 
@@ -23,11 +25,13 @@ public class SendAlertUseCase {
     }
 
     private Mono<Response> sendSMSInalambria(Alert alert) {
+        System.out.println("para enviar");
         return Mono.just(alert.getProvider())
                 .filter(provider -> provider.equalsIgnoreCase(INALAMBRIA))
                 .map(provider -> SMSInalambria.builder()
-                        .MessageText(alert.getMessage())
+                        .MessageText(alert.getUrl().isEmpty()?alert.getMessage(): alert.getMessage() + " @Url")
                         .Devices(alert.getTo())
+                        .Url(alert.getUrl().isEmpty()?null: alert.getUrl())
                         .Type(1)
                         .build())
                 .flatMap(inalambriaGateway::sendSMS)
@@ -39,13 +43,16 @@ public class SendAlertUseCase {
         return Mono.just(alert.getProvider())
                 .filter(provider -> provider.equalsIgnoreCase(MASIVIAN))
                 .map(provider -> Sms.builder()
-                        .text(alert.getMessage()).Longmessage(true)
-                        .Url(alert.getUrl()).domainshorturl(false)
-                        .To(alert.getTo())
-                        .IsPremium(false).IsFlash(false)
+                        .text(alert.getUrl().isEmpty()? alert.getMessage(): alert.getMessage() + " SHORTURL")
+                        .isLongmessage(true)
+                        .shortUrlConfig(alert.getUrl().isEmpty()?null: Sms.ShortUrlConfig.builder()
+                                .url(alert.getUrl()).build())
+                        .to(alert.getTo())
+                        .isPremium(false).isFlash(false)
                         .build())
                 .flatMap(masivianGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLog(alert, SMS, response));
     }
+
 }

@@ -1,5 +1,6 @@
 package co.com.bancolombia.config;
 
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PostgreSQLConnectionConfigHelperTest {
+class PostgreSQLConnectionConfigHelperTest {
 
     private static final String secretName = "secret-example";
     public static final String host = "example.com";
@@ -36,6 +37,8 @@ public class PostgreSQLConnectionConfigHelperTest {
 
     @Mock
     private SecretsManager secretsManager;
+    @Mock
+    private LoggerBuilder logger;
 
     @BeforeEach
     public void init() {
@@ -46,12 +49,20 @@ public class PostgreSQLConnectionConfigHelperTest {
         properties.setPassword(password);
         properties.setPort(port);
         when(secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class)).thenReturn(Mono.just(properties));
-        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+
     }
 
-   /* @Test
-    public void getConnectionConfig() {
-        assertNotNull(helper.buildConnectionConfiguration(anyString()));
-    }*/
+    @Test
+    void getConnectionReadConfig() {
+        when(secretsNameStandard.secretForPostgresRead()).thenReturn(Mono.just(secretName));
+        assertNotNull(helper.buildConnectionReaderConfiguration("schema"));
+    }
+
+    @Test
+    void getConnectionWriterConfig() {
+        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+        assertNotNull(helper.buildConnectionWriterConfiguration("schema"));
+    }
+
 
 }

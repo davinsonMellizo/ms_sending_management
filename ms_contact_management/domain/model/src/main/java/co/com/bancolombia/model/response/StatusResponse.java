@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class StatusResponse<T> {
-    private String description;
+    private String idResponse;
     private T before;
     private T actual;
 

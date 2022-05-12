@@ -26,7 +26,7 @@ public class Newness {
     private String userCreation;
     private String responseCode;
     private String responseDescription;
-    private Integer voucher;
+    private Long voucher;
     private LocalDateTime dateFistInscription;
     private LocalDateTime dateCreation;
 }

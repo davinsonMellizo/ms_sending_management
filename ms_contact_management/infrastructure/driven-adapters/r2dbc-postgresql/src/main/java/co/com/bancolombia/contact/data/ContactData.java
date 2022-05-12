@@ -22,14 +22,14 @@ public class ContactData {
     private Integer id;
     private String segment;
     @ReadOnlyProperty
-    private String contactMedium;
+    private String contactWay;
     private Integer idContactMedium;
     private Long documentNumber;
     @Column("id_document_type")
     private Integer documentType;
     private String value;
     @ReadOnlyProperty
-    private String state;
+    private String stateContact;
     private Integer idState;
     private Boolean previous;
     private LocalDateTime createdDate;

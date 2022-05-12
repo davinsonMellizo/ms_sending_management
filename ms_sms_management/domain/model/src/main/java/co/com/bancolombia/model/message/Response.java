@@ -1,6 +1,5 @@
 package co.com.bancolombia.model.message;
 
-import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +13,4 @@ public class Response {
     private Integer code;
     private String description;
 
-    public Response(Integer code, BusinessErrorMessage message) {
-        this.code = code;
-        this.description = message.getMessage();
-    }
 }

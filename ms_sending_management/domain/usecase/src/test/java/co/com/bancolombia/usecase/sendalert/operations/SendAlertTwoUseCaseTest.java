@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertTwoUseCaseTest {
+class SendAlertTwoUseCaseTest {
     @InjectMocks
     private SendAlertTwoUseCase sendAlertTwoUseCase;
     @Mock
@@ -67,12 +67,12 @@ public class SendAlertTwoUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorTwoPushTest(){
+    void sendAlertIndicatorTwoPushTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
@@ -86,12 +86,12 @@ public class SendAlertTwoUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorTwoSmsTest(){
+    void sendAlertIndicatorTwoSmsTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("NO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
@@ -104,7 +104,7 @@ public class SendAlertTwoUseCaseTest {
     }
 
     @Test
-    public void errorAlertTransactionNotFoundTest(){
+    void errorAlertTransactionNotFoundTest(){
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.empty());
         when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
                 .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
@@ -113,7 +113,7 @@ public class SendAlertTwoUseCaseTest {
     }
 
     @Test
-    public void errorAlertNotFoundTest(){
+    void errorAlertNotFoundTest(){
         when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
                 .thenReturn(Flux.empty());
         StepVerifier.create(sendAlertTwoUseCase.validateWithCodeTrx(message))

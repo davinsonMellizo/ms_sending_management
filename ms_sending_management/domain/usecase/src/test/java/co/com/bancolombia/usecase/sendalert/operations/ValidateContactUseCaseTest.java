@@ -18,11 +18,12 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidateContactUseCaseTest {
+class ValidateContactUseCaseTest {
     @InjectMocks
     private ValidateContactUseCase validateContactUseCase;
     @Mock
@@ -54,7 +55,7 @@ public class ValidateContactUseCaseTest {
 
 
     @Test
-    public void validateContactsTest(){
+    void validateContactsTest(){
         Contact contactSms = Contact.builder().contactMedium("SMS").value("").build();
         Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).build();
         Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").build();
@@ -65,7 +66,7 @@ public class ValidateContactUseCaseTest {
     }
 
     @Test
-    public void validateContactsErrorTest(){
+    void validateContactsErrorTest(){
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.empty());
         StepVerifier.create(validateContactUseCase.validateDataContact(message, Consumer.builder().segment("").build()))

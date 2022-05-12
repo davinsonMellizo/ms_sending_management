@@ -17,8 +17,12 @@ public class Client {
     private String documentType;
     private String keyMdm;
     private String enrollmentOrigin;
+    private String stateClient;
     private Integer idState;
     private String creationUser;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+
+    private String consumerCode;
+    private String voucher;
 }

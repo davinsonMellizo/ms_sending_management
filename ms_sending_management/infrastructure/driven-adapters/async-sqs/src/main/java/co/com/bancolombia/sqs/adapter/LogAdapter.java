@@ -17,7 +17,8 @@ public class LogAdapter implements LogGateway {
     public Mono<Log> putLogToSQS(Log log) {
         return Mono.just(log)
                 .map(Util::convertToJson)
-                .flatMap(sqsRepository::putQueue)
+                //.flatMap(sqsRepository::putQueue)
+                .flatMap(s -> Mono.empty())
                 .thenReturn(log);
     }
 }

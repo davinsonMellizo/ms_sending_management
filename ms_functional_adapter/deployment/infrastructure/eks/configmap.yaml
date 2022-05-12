@@ -21,6 +21,7 @@ data:
   REQUEST-CONFIG-MQ-KEY: #{request-config-mq-key}#
   CONFIG-LISTENER-MQ-KEY: #{config-listener-mq-key}#
   SECRET_RABBIT: "#{secret-rabbit}#"
+  PATH_BASE: "#{prefix}#/#{service}#"
 
 
 

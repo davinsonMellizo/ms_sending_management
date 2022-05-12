@@ -14,19 +14,17 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class RemitterRepositoryImplExceptionTest {
+class RemitterRepositoryImplExceptionTest {
 
     @InjectMocks
     private RemitterRepositoryImplement repositoryImpl;
@@ -54,7 +52,7 @@ public class RemitterRepositoryImplExceptionTest {
 
 
     @Test
-    public void findRemitterByIdWithException() {
+    void findRemitterByIdWithException() {
         when(repository.findById(anyInt()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findRemitterById(remitter.getId())
@@ -63,46 +61,4 @@ public class RemitterRepositoryImplExceptionTest {
                 .verify();
     }
 
-    @Test
-    public void findAllRemitterWithException() {
-        when(repository.findAll())
-                .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAll()
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void saveRemitterWithException() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.saveRemitter(remitter)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void updateRemitterWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findById(anyInt()))
-                .thenReturn(Mono.just(remitterData));
-        repositoryImpl.updateRemitter(remitter)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void deleteRemitterWithException() {
-        when(repository.deleteById(anyInt()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deleteRemitterById(remitter.getId())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
 }

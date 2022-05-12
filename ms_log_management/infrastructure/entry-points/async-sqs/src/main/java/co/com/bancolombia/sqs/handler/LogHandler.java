@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public class LogHandler{
     private final LogUseCase useCase;
 
-    @QueueListener(value = "${cloud.aws.sqs.queue-endpoint}", concurrencyLevel = 1000)
+    @QueueListener(value = "${cloud.aws.sqs.url}", concurrencyLevel = 1000)
     public void listenLogByQueueListener(@Payload final Log log) {
         useCase.saveLog(log).subscribe();
     }

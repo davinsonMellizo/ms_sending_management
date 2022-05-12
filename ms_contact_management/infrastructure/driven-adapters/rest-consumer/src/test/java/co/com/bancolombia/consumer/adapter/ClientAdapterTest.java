@@ -24,6 +24,7 @@ public class ClientAdapterTest {
 
     private ClientAdapter clientAdapter;
     private RestConsumer restConsumer;
+    private RestConsumer restConsumerIs;
     @Autowired
     private ConsumerProperties properties;
 
@@ -31,19 +32,28 @@ public class ClientAdapterTest {
 
     @BeforeEach
     public void init() {
-        client.setDocumentNumber(new Long(1061772353));
+        client.setDocumentNumber(1061772353L);
         client.setDocumentType("0");
         client.setEnrollmentOrigin("ALM");
 
         restConsumer = new RestConsumer(WebClient.builder()
                 .baseUrl(getBaseUrl(8080))
                 .build());
-        clientAdapter = new ClientAdapter(properties, restConsumer);
+        restConsumerIs = new RestConsumer(WebClient.builder()
+                .baseUrl(getBaseUrl(8080))
+                .build());
+        clientAdapter = new ClientAdapter(properties, restConsumer, restConsumerIs);
     }
 
     @Test
     public void matchClientWithBasicKit(){
         StepVerifier.create(clientAdapter.matchClientWithBasicKit(client))
+                .expectError();
+    }
+
+    @Test
+    public void retrieveAlertInformationTest(){
+        StepVerifier.create(clientAdapter.retrieveAlertInformation(client))
                 .expectError();
     }
 

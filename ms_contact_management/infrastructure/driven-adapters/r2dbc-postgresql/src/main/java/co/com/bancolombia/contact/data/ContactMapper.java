@@ -10,7 +10,7 @@ public interface ContactMapper {
     //@Mapping(source ="idState" ,target = "state")
     Contact toEntity(ContactData contactData);
 
-    @Mapping(source ="contactMedium" ,target = "idContactMedium")
-    @Mapping(source ="state" ,target = "idState")
+    @Mapping(source ="contactWay" ,target = "idContactMedium")
+    @Mapping(source ="stateContact" ,target = "idState")
     ContactData toData(Contact contact);
 }

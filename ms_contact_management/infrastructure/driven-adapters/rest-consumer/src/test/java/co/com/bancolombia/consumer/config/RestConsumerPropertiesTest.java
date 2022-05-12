@@ -18,6 +18,7 @@ public class RestConsumerPropertiesTest {
     private RestConsumerProperties restConsumerConfig = new RestConsumerProperties();
     @Autowired
     private ConsumerProperties consumerProperties;
+
     @Test
     public void beanClientTokenHuaweiTest() {
         assertNotNull(restConsumerConfig.webClientConfig(consumerProperties));

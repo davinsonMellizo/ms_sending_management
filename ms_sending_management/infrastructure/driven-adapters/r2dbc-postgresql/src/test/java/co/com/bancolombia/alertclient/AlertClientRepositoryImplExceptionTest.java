@@ -1,7 +1,6 @@
 package co.com.bancolombia.alertclient;
 
 import co.com.bancolombia.alertclient.data.AlertClientMapper;
-import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,18 +12,12 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AlertClientRepositoryImplExceptionTest {
+class AlertClientRepositoryImplExceptionTest {
 
     @InjectMocks
     private AlertClientRepositoryImplement repositoryImpl;
@@ -52,32 +45,10 @@ public class AlertClientRepositoryImplExceptionTest {
     }
 
     @Test
-    public void saveAlertTemplateWithException() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.save(alertClient)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
+    void test() {
+
     }
 
-    public void findAllAlertClient() {
-        when(repository.alertsClientVisibleChannelByClient(anyLong(), anyInt()))
-                .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.alertsVisibleChannelByClient(1L, 0)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
 
-    public void updateAlertClient() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.updateAlertClient(anyInt(), anyLong(), anyString(), anyLong(), anyInt()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.updateAlertClient(alertClient)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
+
 }

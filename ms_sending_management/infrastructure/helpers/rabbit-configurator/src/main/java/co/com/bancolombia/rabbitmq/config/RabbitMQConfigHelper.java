@@ -22,7 +22,7 @@ public class RabbitMQConfigHelper{
     private final LoggerBuilder logger;
     private final SecretsManager secretsManager;
     private final SecretsNameStandard secretsNameStandard;
-    private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in Security_Filters";
+    private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider";
 
 
     private RabbitMQConnectionProperties rabbitProperties() {
@@ -36,7 +36,6 @@ public class RabbitMQConfigHelper{
     @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
-        System.out.println("Properties"+properties);
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();
 
@@ -45,7 +44,7 @@ public class RabbitMQConfigHelper{
         map.from(properties::getUsername).whenNonNull().to(factory::setUsername);
         map.from(properties::getPassword).whenNonNull().to(factory::setPassword);
         map.from(properties::isSsl).whenTrue().as(isSsl -> factory).to(this::configureSsl);
-        //map.from(false).whenTrue().as(isSsl -> factory).to(this::configureSsl);
+        map.from(false).whenTrue().as(isSsl -> factory).to(this::configureSsl);
 
         return () -> factory;
     }

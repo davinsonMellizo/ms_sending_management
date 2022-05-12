@@ -14,11 +14,12 @@ import java.time.LocalDateTime;
 public class Contact {
     private Integer id;
     private String segment;
-    private String contactMedium;
+    private String contactWay;
     private Long documentNumber;
     private String documentType;
     private String value;
-    private String state;
+    private String stateContact;
+    private Integer idState;
     private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

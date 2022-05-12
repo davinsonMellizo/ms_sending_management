@@ -1,16 +1,15 @@
 package co.com.bancolombia.model.message;
 
 import co.com.bancolombia.Request;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false)
 @Builder(toBuilder = true)
 public class SMSInalambria extends Request {
     private LocalDateTime DateMessage;

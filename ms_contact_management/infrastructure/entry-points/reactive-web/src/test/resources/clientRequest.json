@@ -5,17 +5,15 @@
     "documentType": "CC",
     "keyMdm": "KEY C",
     "enrollmentOrigin": "ALM",
-    "idState": 0,
+    "stateClient": 0,
     "creationUser": "Kevin MELLIZO"
   },
   "contacts":[
     {
       "consumer": "ALM",
-      "contactMedium": "MAIL",
-      "documentNumber": 1061772355,
-      "documentType": "CC",
+      "contactWay": "MAIL",
       "value":"dsfds",
-      "state":"Active"
+      "stateContact":"Active"
     }
   ]
 }

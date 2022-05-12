@@ -19,13 +19,12 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class AlertRepositoryImplExceptionTest {
+class AlertRepositoryImplExceptionTest {
 
     @InjectMocks
     private AlertRepositoryImplement repositoryImpl;
@@ -49,43 +48,10 @@ public class AlertRepositoryImplExceptionTest {
     }
 
     @Test
-    public void findAlertByIdWithException() {
+    void findAlertByIdWithException() {
         when(repository.findById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findAlertById(alert.getId())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void saveAlertWithException() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.saveAlert(alert)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void updateRemitterWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findById(anyString()))
-                .thenReturn(Mono.just(alertData));
-        repositoryImpl.updateAlert(alert)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void deleteRemitterWithException() {
-        when(repository.deleteById(anyString()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deleteAlert(alert.getId())
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

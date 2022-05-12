@@ -3,14 +3,21 @@ package co.com.bancolombia.usecase.client;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
+import co.com.bancolombia.model.client.ResponseUpdateClient;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.gateways.ContactGateway;
+import co.com.bancolombia.model.contactmedium.ContactMedium;
+import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
-import co.com.bancolombia.model.newness.Newness;
-import co.com.bancolombia.model.newness.gateways.NewnessRepository;
+import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.state.State;
+import co.com.bancolombia.model.state.gateways.StateGateway;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,12 +29,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.constants.State.INACTIVE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static co.com.bancolombia.commons.enums.State.ACTIVE;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,21 +52,52 @@ public class ClientUseCaseTest {
     private NewnessUseCase newnessUseCase;
     @Mock
     private DocumentGateway documentGateway;
+    @Mock
+    private ContactGateway contactGateway;
+    @Mock
+    private StateGateway stateGateway;
+    @Mock
+    private ContactMediumGateway mediumGateway;
+    @Mock
+    private ConsumerGateway consumerGateway;
+    @Mock
+    private CommandGateway commandGateway;
+
     private final Client client = new Client();
+    private final ResponseUpdateClient response = new ResponseUpdateClient();
+    private final Contact contact = new Contact();
     private final Document document = new Document();
+    private final State state = new State(0, "Active");
+    private final ContactMedium medium = new ContactMedium(1, "Mail");
+    private final Consumer consumer = new Consumer();
 
     @BeforeEach
     public void init() {
-        client.setDocumentNumber(new Long(1061772353));
-        client.setDocumentType("0");
+        client.setDocumentNumber(1061772353L);
+        client.setDocumentType("CC");
         client.setId(0);
-        client.setIdState(ACTIVE);
+        client.setIdState(ACTIVE.getType());
+        client.setStateClient("Activo");
+        client.setVoucher("123456");
+        client.setCreationUser("user");
+        client.setConsumerCode("SVP");
         document.setId("0");
+
+        contact.setContactWay("SMS");
+        contact.setSegment("SVP");
+        contact.setDocumentNumber(1061772353L);
+        contact.setDocumentType("CC");
+        contact.setValue("3217958455");
+        contact.setStateContact("Active");
+        contact.setId(1);
+        contact.setPrevious(false);
+
+        consumer.setSegment("Personas");
     }
 
     @Test
-    public void inactivateClient(){
-        when(newnessUseCase.saveNewness((Client) any(), anyString()))
+    public void inactivateClient() {
+        when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
@@ -75,12 +111,12 @@ public class ClientUseCaseTest {
 
         verify(clientRepository).inactivateClient(client);
     }
+
     @Test
     public void inactivateClientWithClientInactive(){
-        client.setIdState(INACTIVE);
+        client.setIdState(0);
         when(clientRepository.findClientByIdentification(any()))
-                .thenReturn(Mono.just(client));
-
+                .thenReturn(Mono.empty());
         useCase.inactivateClient(client).as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
@@ -99,7 +135,7 @@ public class ClientUseCaseTest {
 
     @Test
     public void saveClient() {
-        when(newnessUseCase.saveNewness((Client) any(), anyString()))
+        when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.saveClient(any()))
                 .thenReturn(Mono.just(client));
@@ -107,37 +143,48 @@ public class ClientUseCaseTest {
                 .thenReturn(Mono.just(document));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
-        when(clientGateway.matchClientWithBasicKit(any()))
-                .thenReturn(Mono.just(true));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        /*when(clientGateway.matchClientWithBasicKit(any()))
+                .thenReturn(Mono.just(true));*/
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
+        when(contactUseCase.saveContact(any(), anyString()))
+                .thenReturn(Mono.just(contact));
+        when(contactUseCase.validateContacts(any()))
+                .thenReturn(Mono.just(client));
+        when(contactUseCase.validatePhone(any(), any()))
+                .thenReturn(Mono.just(client));
+        when(contactUseCase.validateMail(any(), any()))
+                .thenReturn(Mono.just(client));
+        when(commandGateway.sendCommandEnroll(any())).thenReturn(Mono.empty());
         StepVerifier
-                .create(useCase.saveClient(Enrol.builder().client(client).contacts(new ArrayList<>()).build()))
-                .assertNext(response -> response
-                        .getDocumentNumber()
-                        .equals(client.getDocumentNumber()))
+                .create(useCase.saveClient(Enrol.builder().client(client)
+                        .contactData(List.of(contact)).build(), false, "1123333"))
+                .expectNextCount(1)
                 .verifyComplete();
         verify(clientRepository).saveClient(any());
-        verify(clientGateway).matchClientWithBasicKit(any());
     }
 
     @Test
     public void updateClient() {
-        when(newnessUseCase.saveNewness((Client) any(), anyString()))
+        when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
         when(clientRepository.updateClient(any()))
                 .thenReturn(Mono.just(StatusResponse.<Client>builder()
                         .before(client).actual(client)
                         .build()));
-        Contact contact = new Contact();
-        ArrayList<Contact> contacts = new ArrayList();
-        contacts.add(contact);
-        when(contactUseCase.updateContactRequest(any()))
+        when(contactUseCase.updateContactRequest(any(), anyString()))
                 .thenReturn(Mono.just(StatusResponse.<Contact>builder().before(contact).before(contact).build()));
+        when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
         StepVerifier
-                .create(useCase.updateClient(Enrol.builder().contacts(contacts).client(client).build()))
+                .create(useCase.updateClientMcd(Enrol.builder().contactData(List.of(contact)).client(client).build()))
                 .assertNext(response -> response
                         .getActual().getClient().getDocumentNumber()
                         .equals(client.getDocumentNumber()))
@@ -146,19 +193,30 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void deleteClient() {
-        when(newnessUseCase.saveNewness((Client) any(), anyString()))
-                .thenReturn(Mono.just(client));
-        when(clientRepository.deleteClient(any()))
-                .thenReturn(Mono.just(client));
+    public void updateClientMono() {
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
-        StepVerifier.create(useCase.deleteClient(client))
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(contactUseCase.updateContactRequest(any(), anyString()))
+                .thenReturn(Mono.just(StatusResponse.<Contact>builder().before(contact)
+                        .before(contact).build()));
+        when(clientRepository.updateClient(any()))
+                .thenReturn(Mono.just(StatusResponse.<Client>builder()
+                        .before(client).actual(client)
+                        .build()));
+        when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
+                .thenReturn(Mono.just(client));
+        when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
+        StepVerifier
+                .create(useCase.updateClientMono(Enrol.builder().contactData(List.of(contact))
+                        .client(client).build(), false, "123456"))
                 .expectNextCount(1)
                 .verifyComplete();
-        verify(clientRepository).deleteClient(client);
+        verify(clientRepository).updateClient(any());
+
     }
 
     @Test
@@ -172,26 +230,24 @@ public class ClientUseCaseTest {
     }
 
     @Test
+    public void deleteClient() {
+        when(clientRepository.deleteClient(anyLong(), anyLong()))
+                .thenReturn(Mono.just(1));
+        StepVerifier
+                .create(useCase.deleteClient(123L, 125L))
+                .expectNextCount(1)
+                .verifyComplete();
+        verify(clientRepository).deleteClient(anyLong(), anyLong());
+    }
+
+   /* @Test
     public void updateContactWithException() {
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
-        useCase.updateClient(Enrol.builder().client(client).build())
+        useCase.updateClient(Enrol.builder().client(client)
+                        .contacts(List.of(contact)).build(), client)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
-    }
-
-    @Test
-    public void deleteContactWithException() {
-        when(clientRepository.findClientByIdentification(any()))
-                .thenReturn(Mono.just(client));
-        when(clientRepository.deleteClient(any()))
-                .thenReturn(Mono.empty());
-        when(documentGateway.getDocument(anyString()))
-                .thenReturn(Mono.just(document));
-        useCase.deleteClient(client)
-                .as(StepVerifier::create)
-                .expectError(BusinessException.class)
-                .verify();
-    }
+    }*/
 }

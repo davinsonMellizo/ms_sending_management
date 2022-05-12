@@ -12,20 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.constants.State.INACTIVE;
+import static co.com.bancolombia.commons.enums.State.ACTIVE;
+import static co.com.bancolombia.commons.enums.State.INACTIVE;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
 public class ClientRepositoryImplement
-        extends AdapterOperations<Client, ClientData, Integer, co.com.bancolombia.client.ClientRepository>
+        extends AdapterOperations<Client, ClientData, Integer, IClientRepository>
         implements ClientRepository {
 
     @Autowired
     private TimeFactory timeFactory;
-    private static final int NUMBER_OF_ROWS = 1;
 
     @Autowired
-    public ClientRepositoryImplement(co.com.bancolombia.client.ClientRepository repository, ClientMapper mapper) {
+    public ClientRepositoryImplement(IClientRepository repository, ClientMapper mapper) {
         super(repository, mapper::toData, mapper::toEntity);
     }
 
@@ -39,6 +39,7 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<Client> saveClient(Client client) {
+        System.out.println("Save client and all references");
         return Mono.just(client)
                 .map(this::convertToData)
                 .map(clientData -> clientData.toBuilder()
@@ -52,11 +53,12 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<StatusResponse<Client>> updateClient(StatusResponse<Client> statusResponse) {
+        System.out.println("actual update " + statusResponse.getActual());
+        System.out.println("before update " + statusResponse.getBefore());
         return Mono.just(statusResponse.getActual().toBuilder()
-                .id(statusResponse.getBefore().getId())
-                .creationUser(statusResponse.getBefore().getCreationUser())
-                .createdDate(statusResponse.getBefore().getCreatedDate())
-                .modifiedDate(timeFactory.now()).build())
+                        .id(statusResponse.getBefore().getId())
+                        .createdDate(statusResponse.getBefore().getCreatedDate())
+                        .modifiedDate(timeFactory.now()).build())
                 .map(this::convertToData)
                 .flatMap(this::saveData)
                 .map(this::convertToEntity)
@@ -66,17 +68,16 @@ public class ClientRepositoryImplement
     }
 
     @Override
-    public Mono<Client> deleteClient(Client client) {
-        return repository.deleteClient(client.getDocumentNumber(), client.getDocumentType())
-                .filter(rowsAffected -> rowsAffected == NUMBER_OF_ROWS)
-                .map(integer -> client)
-                .onErrorMap(e -> new TechnicalException(e, DELETE_CLIENT_ERROR));
+    public Mono<Client> inactivateClient(Client client) {
+        return Mono.just(client.toBuilder().idState(client.getIdState() == ACTIVE.getType() ?
+                                INACTIVE.getType() : ACTIVE.getType())
+                        .modifiedDate(timeFactory.now()).build())
+                .flatMap(this::save)
+                .onErrorMap(e -> new TechnicalException(e, INACTIVE_CLIENT_ERROR));
     }
 
     @Override
-    public Mono<Client> inactivateClient(Client client) {
-        return Mono.just(client.toBuilder().idState(INACTIVE).modifiedDate(timeFactory.now()).build())
-                .flatMap(this::save)
-                .onErrorMap(e -> new TechnicalException(e, INACTIVE_CLIENT_ERROR));
+    public Mono<Integer> deleteClient(Long documentInit, Long documentEnd) {
+        return repository.deleteClient(documentInit, documentEnd);
     }
 }

@@ -7,9 +7,11 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.api.services.client.ClientHandler;
 import co.com.bancolombia.api.services.client.ClientRouter;
+import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
-import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.client.ResponseUpdateClient;
+import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.usecase.client.ClientUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,8 +43,13 @@ public class ClientRouterTest extends BaseIntegrationTest {
     private ClientUseCase useCase;
     @MockBean
     private EnrolMapper enrolMapper;
+    @MockBean
+    private LoggerBuilder loggerBuilder;
+
     private String request;
     private final Client client = new Client();
+    private final Contact contact = new Contact();
+    private final ResponseUpdateClient responseUpdateClient= new ResponseUpdateClient();
 
     @BeforeEach
     public void init() {
@@ -54,24 +61,20 @@ public class ClientRouterTest extends BaseIntegrationTest {
         client.setKeyMdm("key");
         client.setId(0);
 
+        contact.setContactWay("");
+        contact.setSegment("0");
+        contact.setDocumentNumber(1061772353L);
+        contact.setDocumentType("0");
+        contact.setValue("correo@gamail.com");
+        contact.setStateContact("0");
+
         request = loadFileConfig("clientRequest.json", String.class);
     }
 
     @Test
-    public void findAllContactsByClient() {
-        when(useCase.findClientByIdentification(any())).thenReturn(Mono.just(client));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getClient())
-                .header("document-number", "1061772353")
-                .header("document-type", "0")
-                .exchange();
-        spec.expectStatus().isOk();
-        verify(useCase).findClientByIdentification(any());
-    }
-
-    @Test
     public void inactivateClient() {
-        when(useCase.inactivateClient(any())).thenReturn(Mono.just(client));
-        final WebTestClient.ResponseSpec spec = webTestClient.put().uri(properties.getClient()+"/inactive")
+        when(useCase.inactivateClient(any())).thenReturn(Mono.just(responseUpdateClient));
+        final WebTestClient.ResponseSpec spec = webTestClient.put().uri(properties.getClient() + "/inactive")
                 .header("document-number", "1061772353")
                 .header("document-type", "0")
                 .exchange();
@@ -81,38 +84,35 @@ public class ClientRouterTest extends BaseIntegrationTest {
 
     @Test
     public void saveClient() {
-        when(useCase.saveClient(any())).thenReturn(Mono.just(client));
+        when(useCase.saveClient(any(), anyBoolean(), anyString())).thenReturn(Mono.just(responseUpdateClient));
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         statusAssertionsWebClientPost(properties.getClient(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).saveClient(any());
+        verify(useCase).saveClient(any(), anyBoolean(), anyString());
+    }
+
+    @Test
+    public void deleteClient() {
+        when(useCase.deleteClient(anyLong(), anyLong())).thenReturn(Mono.just(1));
+        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getClient() + "/delete-range")
+                .header("document-number-init", "1061772353")
+                .header("document-number-end", "1231333")
+                .exchange();
+        spec.expectStatus().isOk();
+        verify(useCase).deleteClient(anyLong(), anyLong());
     }
 
     @Test
     public void updateClient() {
-        when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
-        when(useCase.updateClient(any())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
-                .actual(Enrol.builder().client(client).build()).before(Enrol.builder().client(client).build()).build()));
+        /*when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
+        when(useCase.updateClient(any())).thenReturn(Mono.just(responseUpdateClient));
         statusAssertionsWebClientPut(properties.getClient(),
                 request)
-                .isOk()
-                .expectBody(JsonNode.class)
-                .returnResult();
-        verify(useCase).updateClient(any());
-    }
-
-    @Test
-    public void deleteContacts() {
-        when(useCase.deleteClient(any())).thenReturn(Mono.just(client));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getClient())
-                .header("document-number", "1061772353")
-                .header("document-type", "0")
-                .exchange();
-        spec.expectStatus().isOk();
-        verify(useCase).deleteClient(any());
+                .isOk();
+        verify(useCase).updateClient(any());*/
     }
 
 }

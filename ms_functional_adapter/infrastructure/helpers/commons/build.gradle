@@ -1,7 +1,7 @@
 dependencies {
     implementation project(':model')
-    compile 'org.springframework.boot:spring-boot-starter-freemarker'
-    compile 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-context'
+    implementation "org.springframework.boot:spring-boot-starter-freemarker:${springBootVersion}"
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'

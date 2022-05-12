@@ -1,6 +1,7 @@
 package co.com.bancolombia.newness;
 
 import co.com.bancolombia.AdapterOperations;
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.newness.Newness;
 import co.com.bancolombia.model.newness.gateways.NewnessRepository;
@@ -9,6 +10,8 @@ import co.com.bancolombia.newness.data.NewnessMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
+
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CLIENT_ERROR;
 
 
 @Repository

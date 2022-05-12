@@ -20,16 +20,4 @@ public class DynamoAdapter extends AdapterOperations<TemplateEmail, TemplateEmai
     public Mono<TemplateEmail> findTemplateEmail(String templateName){
         return findById(templateName);
     }
-
-    public Mono<Void> saveTemplateEmail(TemplateEmail templateEmail){
-        return save(templateEmail);
-    }
-
-    public Mono<Void> updateTemplateEmail(TemplateEmail templateEmail){
-        return update(templateEmail);
-    }
-
-    public Mono<Void> deleteTemplateEmail(String templateName){
-        return delete(templateName);
-    }
 }

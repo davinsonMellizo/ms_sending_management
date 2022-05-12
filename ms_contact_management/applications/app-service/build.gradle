@@ -1,15 +1,25 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
+	implementation project(':async-event-handler')
+	implementation project(':async-event-bus')
+	implementation project(':rabbit-configurator')
 	implementation project(':rest-consumer')
-	compile 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     implementation project(':reactive-web')
     implementation project(':r2dbc-postgresql')
     implementation project(':model')
     implementation project(':usecase')
-    compile 'org.springframework.boot:spring-boot-starter'
-    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation project(':log')
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    implementation("com.h2database:h2")
+
 }
 
 task explodedJar(type: Copy) {

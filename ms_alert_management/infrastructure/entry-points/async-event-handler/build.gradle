@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(':log')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation project(':reactive-web')
+    implementation 'org.springframework:spring-context'
+    implementation 'org.reactivecommons:async-commons-starter:1.0.0-beta5'
+}

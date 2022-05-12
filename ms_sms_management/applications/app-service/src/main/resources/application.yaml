@@ -22,10 +22,9 @@ spring:
       root: ${LOG4J_LEVEL}
       reactor:
         netty: false
-
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
-app.async.maxRetries: 0
+app.async.maxRetries: 1
 
 management:
   health:
@@ -56,8 +55,8 @@ adapters:
   rest-client:
     timeout: 1000
     resources:
-      endpointMasivianSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-sms
-      endpointInalambriaSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/inalambria-sms
+      endpointMasivianSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-smsxc
+      endpointInalambriaSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/inalambria-smscc
   secrets-manager:
     secret-rabbit: ${SECRET-RABBIT}
     cache-size: ${CACHE_SECRETS_SIZE}

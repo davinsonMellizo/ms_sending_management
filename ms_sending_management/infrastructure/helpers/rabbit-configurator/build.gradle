@@ -1,6 +1,8 @@
 dependencies {
-    compile project(':log')
-    compile project(':secrets-manager')
-    compile 'org.springframework:spring-context'
-    compile 'org.reactivecommons:async-commons-starter:1.0.0-beta5'
+    implementation project(':log')
+    implementation project(':secrets-manager')
+    implementation 'com.rabbitmq:amqp-client:5.13.1'
+    implementation 'org.springframework:spring-context'
+    implementation 'org.reactivecommons:async-commons-starter:1.0.0-beta5'
+    implementation "org.springframework.boot:spring-boot:${springBootVersion}"
 }

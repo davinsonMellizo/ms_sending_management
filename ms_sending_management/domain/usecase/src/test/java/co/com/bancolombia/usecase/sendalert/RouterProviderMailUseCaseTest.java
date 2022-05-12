@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RouterProviderMailUseCaseTest {
+class RouterProviderMailUseCaseTest {
     @InjectMocks
     private RouterProviderMailUseCase routerProviderMailUseCase;
     @Mock
@@ -60,35 +60,35 @@ public class RouterProviderMailUseCaseTest {
 
 
     @Test
-    public void routeAlertMailTest(){
+    void routeAlertMailTest(){
         Remitter remitter = Remitter.builder().mail("bancolombia@com.co").build();
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(remitterGateway.findRemitterById(anyInt())).thenReturn(Mono.just(remitter));
-        when(providerGateway.findProviderByProviderService(anyInt())).thenReturn(Mono.just(provider));
+        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .verifyComplete();
     }
 
     @Test
-    public void routeAlertMailErrorTest(){
+    void routeAlertMailErrorTest(){
         Remitter remitter = Remitter.builder().mail("bancolombia@com.co").build();
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(remitterGateway.findRemitterById(anyInt())).thenReturn(Mono.just(remitter));
-        when(providerGateway.findProviderByProviderService(anyInt())).thenReturn(Mono.just(provider));
+        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .expectError()
                 .verify();

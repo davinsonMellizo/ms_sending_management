@@ -6,4 +6,6 @@ import lombok.Data;
 public class Transaction {
     String listener;
     String template;
+    String target;
+    String queue;
 }

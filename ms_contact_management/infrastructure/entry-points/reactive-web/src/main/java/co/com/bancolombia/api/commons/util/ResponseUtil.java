@@ -15,10 +15,6 @@ public class ResponseUtil {
         return buildResponse(HttpStatus.OK, response);
     }
 
-    public static <T> Mono<ServerResponse> responseFail(T body) {
-        return buildResponse(INTERNAL_SERVER_ERROR, body);
-    }
-
     public static <T> Mono<ServerResponse> buildResponse(HttpStatus status, T body) {
         return ServerResponse
                 .status(status)

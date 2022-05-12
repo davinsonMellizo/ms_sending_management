@@ -14,18 +14,17 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class PriorityRepositoryImplExceptionTest {
+class PriorityRepositoryImplExceptionTest {
 
     @InjectMocks
     private PriorityRepositoryImplement repositoryImpl;
@@ -49,53 +48,10 @@ public class PriorityRepositoryImplExceptionTest {
     }
 
     @Test
-    public void findPriorityByIdWithException() {
+    void findPriorityByIdWithException() {
         when(repository.findById(anyInt()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findPriorityById(priority.getId())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void findAllProviderWithException() {
-        when(repository.findAllByProviderId(anyString()))
-                .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAllByProvider(priority.getIdProvider())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void savePriorityWithException() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.savePriority(priority)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void updatePriorityWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findById(anyInt()))
-                .thenReturn(Mono.just(priorityData));
-        repositoryImpl.updatePriority(priority)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void deletePriorityWithException() {
-        when(repository.deleteById(anyInt()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deletePriorityById(priority.getId())
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

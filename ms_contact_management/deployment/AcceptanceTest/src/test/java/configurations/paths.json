@@ -1,5 +1,4 @@
 {
-  "urlClient": "http://localhost:8080/alert/api/v1/contact-management/client",
-  "urlContact": "http://localhost:8080/alert/api/v1/contact-management/contact"
+  "urlClient": "#{dns-service}#/api/v1/contact-management/client"
 }
 

@@ -27,12 +27,12 @@ public class ContactRepositoryImplTest {
 
     @BeforeEach
     public void init() {
-        contact.setContactMedium("SMS");
+        contact.setContactWay("1");
         contact.setSegment("ALM");
-        contact.setDocumentNumber(new Long(1061772353));
+        contact.setDocumentNumber(1061772353L);
         contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setState("0");
+        contact.setStateContact("0");
         contact.setCreatedDate(LocalDateTime.now());
         contact.setPrevious(false);
         contact.setId(0);
@@ -50,7 +50,7 @@ public class ContactRepositoryImplTest {
 
     @Test
     public void findIdContact() {
-        contact.setContactMedium("SMS");
+        contact.setContactWay("SMS");
         contact.setSegment("ALM");
         StepVerifier.create(contactRepositoryImplement.findIdContact(contact))
                 .consumeNextWith(contact -> assertEquals(0, contact.getId()))
@@ -59,7 +59,7 @@ public class ContactRepositoryImplTest {
 
     @Test
     public void updateContact() {
-        contact.setContactMedium("0");
+        contact.setContactWay("0");
         contact.setSegment("ALM");
         contact.setValue("3216931596");
         StepVerifier.create(contactRepositoryImplement.updateContact(contact))
@@ -78,7 +78,7 @@ public class ContactRepositoryImplTest {
 
     @Test
     public void deleteContact() {
-        contact.setContactMedium("SMS");
+        contact.setContactWay("SMS");
         contact.setSegment("ALM");
         contactRepositoryImplement.findIdContact(contact)
                 .subscribe(contact -> StepVerifier

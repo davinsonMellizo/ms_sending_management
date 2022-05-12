@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AlertClientRepositoryImplTest {
+class AlertClientRepositoryImplTest {
 
     @Autowired
     private AlertClientRepositoryImplement repositoryImplement;
@@ -32,39 +32,17 @@ public class AlertClientRepositoryImplTest {
         alertClient.setCreationUser("user");
     }
 
-    @Test
-    public void saveAlertClient() {
-        StepVerifier.create(repositoryImplement.save(alertClient))
-                .consumeNextWith(AlertSaved -> assertEquals(alertClient.getIdAlert(), AlertSaved.getIdAlert()))
-                .verifyComplete();
-    }
 
     @Test
-    public void findAllAlertClient() {
-        StepVerifier.create(repositoryImplement.alertsVisibleChannelByClient(1061772353L, 0))
+    void accumulateAlertClient() {
+        StepVerifier.create(repositoryImplement.accumulate(alertClient))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
-    @Test
-    public void updateAlertClient() {
-        StepVerifier.create(repositoryImplement.updateAlertClient(alertClient))
-                .consumeNextWith(response -> assertEquals(1061772353L, response.getDocumentNumber()))
-                .verifyComplete();
-    }
 
     @Test
-    public void deleteAlertClient() {
-        alertClient.setIdAlert("HGD");
-        alertClient.setDocumentNumber(1061772353L);
-        alertClient.setDocumentType(0);
-        StepVerifier.create(repositoryImplement.delete(alertClient))
-                .consumeNextWith(alertClient1 -> assertEquals(alertClient.getIdAlert(), alertClient1.getIdAlert()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void findAlertClient(){
+    void findAlertClient(){
         alertClient.setIdAlert("HGD");
         alertClient.setDocumentNumber(1061772353L);
         alertClient.setDocumentType(0);

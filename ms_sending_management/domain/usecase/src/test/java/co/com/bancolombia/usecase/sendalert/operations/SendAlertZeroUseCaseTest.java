@@ -33,7 +33,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertZeroUseCaseTest {
+class SendAlertZeroUseCaseTest {
     @InjectMocks
     private SendAlertZeroUseCase sendAlertZeroUseCase;
     @Mock
@@ -81,12 +81,12 @@ public class SendAlertZeroUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorZeroPushTest(){
+    void sendAlertIndicatorZeroPushTest(){
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("SI").nature("MO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
@@ -107,12 +107,12 @@ public class SendAlertZeroUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorZeroSmsTest(){
+    void sendAlertIndicatorZeroSmsTest(){
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("NO").nature("MO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
@@ -132,12 +132,12 @@ public class SendAlertZeroUseCaseTest {
     }
 
     @Test
-    public void errorValidateAmountTest(){
+    void errorValidateAmountTest(){
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("NO").nature("MO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
@@ -156,12 +156,12 @@ public class SendAlertZeroUseCaseTest {
     }
 
     @Test
-    public void errorConsumerNotFoundTest(){
+    void errorConsumerNotFoundTest(){
         Alert alert = Alert.builder()
                 .id("AFI").obligatory(false)
                 .push("NO").nature("MO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
@@ -174,7 +174,7 @@ public class SendAlertZeroUseCaseTest {
     }
 
     @Test
-    public void errorClientInactiveTest(){
+    void errorClientInactiveTest(){
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(0)
                 .build()));
@@ -184,7 +184,7 @@ public class SendAlertZeroUseCaseTest {
     }
 
     @Test
-    public void errorClientNotFountTest(){
+    void errorClientNotFountTest(){
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.empty());
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))

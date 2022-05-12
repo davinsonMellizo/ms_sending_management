@@ -46,7 +46,7 @@ public class ContactRepositoryImplement
     @Override
     public Flux<Contact> findIdContact(Contact contact) {
         return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
-                contact.getContactMedium(), contact.getSegment())
+                contact.getContactWay(), contact.getSegment())
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
     }

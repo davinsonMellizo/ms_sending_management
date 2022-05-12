@@ -14,19 +14,17 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CategoryRepositoryImplExceptionTest {
+class CategoryRepositoryImplExceptionTest {
 
     @InjectMocks
     private CategoryRepositoryImplement repositoryImpl;
@@ -48,7 +46,7 @@ public class CategoryRepositoryImplExceptionTest {
     }
 
     @Test
-    public void findCategoryByIdWithException() {
+    void findCategoryByIdWithException() {
         when(repository.findById(anyInt()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findCategoryById(category.getId())
@@ -57,46 +55,4 @@ public class CategoryRepositoryImplExceptionTest {
                 .verify();
     }
 
-    @Test
-    public void findAllCategoryWithException() {
-        when(repository.findAll())
-                .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAll()
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void saveCategoryWithException() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.saveCategory(category)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void updateCategoryWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findById(anyInt()))
-                .thenReturn(Mono.just(categoryData));
-        repositoryImpl.updateCategory(category)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void deleteCategoryWithException() {
-        when(repository.deleteById(anyInt()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deleteCategoryById(category.getId())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
 }

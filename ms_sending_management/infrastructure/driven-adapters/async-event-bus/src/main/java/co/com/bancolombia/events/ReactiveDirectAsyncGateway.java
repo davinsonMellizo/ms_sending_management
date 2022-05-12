@@ -5,15 +5,12 @@ import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Sms;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import org.reactivecommons.api.domain.Command;
-import org.reactivecommons.async.api.AsyncQuery;
 import org.reactivecommons.async.api.DirectAsyncGateway;
 import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
-import java.util.logging.Level;
 
 @AllArgsConstructor
 @EnableDirectAsyncGateway
@@ -24,6 +21,13 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     public static final String SEND_ALERT_SMS = "send.alert.sms";
     private final DirectAsyncGateway gateway;
 
+    @Override
+    public Mono<Response> sendCommandAlertSms(Sms sms) {
+        Command command = new Command<>(SEND_ALERT_SMS, UUID.randomUUID().toString(), sms);
+        return gateway.sendCommand(command,TARGET_NAME_SMS)
+                .then(Mono.empty());
+    }
+
 
     @Override
     public Mono<Response> sendCommandAlertEmail(Mail mail) {
@@ -32,10 +36,4 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
                 .then(Mono.empty());
     }
 
-    @Override
-    public Mono<Response> sendCommandAlertSms(Sms sms) {
-        Command command = new Command<>(SEND_ALERT_SMS, UUID.randomUUID().toString(), sms);
-        return gateway.sendCommand(command,TARGET_NAME_SMS)
-                .then(Mono.empty());
-    }
 }

@@ -28,8 +28,4 @@ public class Transaction {
         return this;
     }
 
-    public Transaction from(Message.From from){
-        this.setFrom(from);
-        return this;
-    }
 }

@@ -15,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.Map;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +38,7 @@ public class IbmmqAdapterTest {
     @BeforeEach
     public void init(){
         transaction = FunctionalAdapterDataTest.buildTransaction();
+        transaction.setPayload(Map.of("test","test"));
     }
 
     @Test

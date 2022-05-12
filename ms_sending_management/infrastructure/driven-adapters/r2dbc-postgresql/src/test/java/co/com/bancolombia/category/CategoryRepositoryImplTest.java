@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class CategoryRepositoryImplTest {
+class CategoryRepositoryImplTest {
 
     @Autowired
     private CategoryRepositoryImplement repositoryImpl;
@@ -26,41 +26,10 @@ public class CategoryRepositoryImplTest {
     }
 
     @Test
-    public void findIdCategory() {
+    void findIdCategory() {
         StepVerifier.create(repositoryImpl.findCategoryById(category.getId()))
                 .consumeNextWith(providerFound -> assertEquals(category.getId(), providerFound.getId()))
                 .verifyComplete();
     }
 
-    @Test
-    public void findAllCategories() {
-        StepVerifier.create(repositoryImpl.findAll())
-                .consumeNextWith(allCats -> assertEquals(3, allCats.size()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void updateCategory() {
-        StepVerifier.create(repositoryImpl.updateCategory(category))
-                .consumeNextWith(status -> assertEquals(category.getId(), status.getActual().getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void saveProvider() {
-        category.setId(3);
-        repositoryImpl.saveCategory(category)
-                .subscribe(cats -> StepVerifier
-                        .create(repositoryImpl.findCategoryById(cats.getId()))
-                        .expectNextCount(1)
-                        .verifyComplete());
-    }
-
-    @Test
-    public void deleteProvider() {
-        category.setId(3);
-        StepVerifier.create(repositoryImpl.deleteCategoryById(category.getId()))
-                .consumeNextWith(s -> assertEquals(category.getId(), s))
-                .verifyComplete();
-    }
 }

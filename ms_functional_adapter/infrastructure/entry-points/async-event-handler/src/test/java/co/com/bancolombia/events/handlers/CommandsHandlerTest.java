@@ -1,5 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
+import co.com.bancolombia.commandsmq.config.ListenerMQ;
 import co.com.bancolombia.events.model.ResourceQuery;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.functionaladapter.FunctionalAdapterUseCase;
@@ -21,12 +22,15 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 public class CommandsHandlerTest {
     @InjectMocks
     private Handler handler;
     @Mock
     private FunctionalAdapterUseCase useCase;
+    @Mock
+    private ListenerMQ listenerMQ;
     @Mock
     private LoggerBuilder logger;
 

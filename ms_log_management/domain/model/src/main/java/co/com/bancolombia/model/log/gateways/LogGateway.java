@@ -9,5 +9,4 @@ import java.util.Map;
 public interface LogGateway {
     Mono<Log> saveLog(Log log);
 
-    Flux<Log> listLogs(Map<String, String> headers);
 }

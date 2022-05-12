@@ -1,11 +1,13 @@
 dependencies {
-    compile project(':model')
-    compile project(':log')
-    compile project(':secrets-manager')
-    compile project(':s3-bucket')
-    compile project(':commons')
-    compile 'org.springframework.boot:spring-boot-starter'
-    compile 'com.ibm.mq:com.ibm.mq.allclient:9.1.5.0'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    testCompile project(':model').sourceSets.test.output
+    implementation project(':log')
+    implementation project(':model')
+    implementation project(':commons')
+    implementation project(':s3-bucket')
+    implementation project(':secrets-manager')
+    implementation 'com.ibm.mq:com.ibm.mq.allclient:9.1.5.0'
+    testImplementation project(':model').sourceSets.test.output
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+
 }

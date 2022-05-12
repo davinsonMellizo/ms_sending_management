@@ -2,4 +2,4 @@ adapters:
   rest-consumer:
     timeout: 1000
     resources:
-      basicKit: localhost:8081/api/v1/sending-management/alert-client/basic-kit
+      basicKit: localhost:8081/api/v1/alert-management/alert-client/basic-kit

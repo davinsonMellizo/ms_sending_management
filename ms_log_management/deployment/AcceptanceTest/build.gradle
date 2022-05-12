@@ -1,0 +1,45 @@
+group 'com.karate.acceptancetest'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+
+    maven { url "https://artifactory.apps.bancolombia.com:443/maven-bancolombia" }
+}
+
+sourceSets {
+    test {
+        java {
+            srcDir file('src/test/java')
+            exclude '**/*UiRunner*.java'
+        }
+        resources {
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+        }
+    }
+}
+
+
+ext {
+    karateVersion = '0.9.2'
+    cucumberReporting = '5.5.2'
+}
+
+dependencies {
+    testCompile "com.intuit.karate:karate-junit4:0.9.6"
+    testCompile "com.intuit.karate:karate-netty:$rootProject.ext.karateVersion"
+    testCompile "com.intuit.karate:karate-apache:$rootProject.ext.karateVersion"
+    testCompile "net.masterthought:cucumber-reporting:$rootProject.ext.cucumberReporting"
+    testImplementation 'junit:junit:4.13.1'
+}
+
+test {
+    include '**/*ParallelTest*'
+}
+
+gradle.startParameter.refreshDependencies = true

@@ -1,0 +1,18 @@
+
+{
+  "client": {
+    "documentNumber": '#(documentNumber)',
+    "documentType": "CC",
+    "keyMdm": "mdm55",
+    "stateClient": "Activo",
+    "creationUser": "usuario"
+  },
+  "contacts": [
+    {
+      "consumer": '#(consumer)',
+      "contactWay": "SMS",
+      "value": "123456",
+      "stateContact": "Activo"
+    }
+  ]
+}

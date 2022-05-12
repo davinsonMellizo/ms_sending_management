@@ -6,7 +6,5 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface LogMapper {
-    Log toEntity(LogData logData);
-
     LogData toData(Log provider);
 }

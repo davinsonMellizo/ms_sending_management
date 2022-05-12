@@ -1,21 +1,17 @@
 {
-  "client":
-  {
+  "client": {
     "documentNumber": '#(documentNumber)',
     "documentType": "CC",
-    "keyMdm": "KEY C",
-    "enrollmentOrigin": "ALM",
-    "idState": 0,
-    "creationUser": "user"
+    "keyMdm": "string",
+    "stateClient": "Activo",
+    "creationUser": "string"
   },
-  "contacts":[
+  "contacts": [
     {
       "consumer": '#(consumer)',
-      "contactMedium": "MAIL",
-      "documentNumber": '#(documentNumber)',
-      "documentType": "CC",
-      "value":"3218975854",
-      "state":"Active"
+      "contactWay": "SMS",
+      "value": "465465456",
+      "stateContact": "Activo"
     }
   ]
 }

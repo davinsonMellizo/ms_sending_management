@@ -37,7 +37,7 @@ public class EventsHandlerTest {
     private Handler handler;
     @Mock
     private S3AsynOperations s3AsynOperations;
-    private String responseS3 = "{ \"data\": [ { \"typeEvent\": \"LISTEN_EVENT\", \"queryName\": \"business.aliasidentity.register.*.distributionMicroservice.resgisterDone\", \"channel\": \"ALERTAS\", \"transaction\": \"0001\", \"template\": \"STIDQSG3EN-SG3\" }, { \"typeEvent\": \"LISTEN_EVENT\", \"queryName\": \"business.aliasidentity.register.*.distributionMicroservice.resgisterRejected\", \"channel\": \"ALERTAS\", \"transaction\": \"0002\", \"template\": \"STIDQSG3EN-SG3\" } ] }";
+    private String responseS3 = "{ \"data\": [ { \"queryName\": \"business.aliasidentity.register.*.distributionMicroservice.resgisterDone\", \"channel\": \"ALERTAS\", \"transaction\": \"0001\", \"template\": \"STIDQSG3EN-SG3\" }, { \"queryName\": \"business.aliasidentity.register.*.distributionMicroservice.resgisterRejected\", \"channel\": \"ALERTAS\", \"transaction\": \"0002\", \"template\": \"STIDQSG3EN-SG3\" } ] }";
 
     @BeforeEach
     public void init(){

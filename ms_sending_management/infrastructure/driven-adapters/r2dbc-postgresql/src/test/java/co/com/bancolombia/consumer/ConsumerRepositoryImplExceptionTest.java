@@ -13,17 +13,15 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class ConsumerRepositoryImplExceptionTest {
+class ConsumerRepositoryImplExceptionTest {
 
     @InjectMocks
     private ConsumerRepositoryImplement repositoryImpl;
@@ -46,7 +44,7 @@ public class ConsumerRepositoryImplExceptionTest {
 
 
     @Test
-    public void findConsumerByIdWithException() {
+    void findConsumerByIdWithException() {
         when(repository.findById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findConsumerById(consumer.getId())
@@ -55,45 +53,4 @@ public class ConsumerRepositoryImplExceptionTest {
                 .verify();
     }
 
-    @Test
-    public void findAllConsumerWithException() {
-        when(repository.findAll())
-                .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAll()
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void saveConsumerWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.saveConsumer(consumer)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void updateConsumerWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findById(anyString()))
-                .thenReturn(Mono.just(consumerData));
-        repositoryImpl.updateConsumer(consumer)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void deleteConsumerWithException() {
-        when(repository.deleteById(anyString()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deleteConsumerById(consumer.getId())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
 }

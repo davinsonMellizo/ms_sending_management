@@ -29,7 +29,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertThreeUseCaseTest {
+class SendAlertThreeUseCaseTest {
     @InjectMocks
     private SendAlertThreeUseCase sendAlertThreeUseCase;
     @Mock
@@ -73,12 +73,12 @@ public class SendAlertThreeUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorThreePushTest(){
+    void sendAlertIndicatorThreePushTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
@@ -95,12 +95,12 @@ public class SendAlertThreeUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorThreeSmsTest(){
+    void sendAlertIndicatorThreeSmsTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("NO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());

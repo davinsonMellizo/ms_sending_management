@@ -17,4 +17,5 @@ public class Error implements Serializable {
     private String domain;
     private String code;
     private String message;
+    private String httpStatus;
 }

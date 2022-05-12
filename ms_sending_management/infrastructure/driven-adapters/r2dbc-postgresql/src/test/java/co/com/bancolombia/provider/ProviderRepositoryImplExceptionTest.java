@@ -14,19 +14,17 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class ProviderRepositoryImplExceptionTest {
+class ProviderRepositoryImplExceptionTest {
 
     @InjectMocks
     private ProviderRepositoryImplement repositoryImpl;
@@ -52,7 +50,7 @@ public class ProviderRepositoryImplExceptionTest {
     }
 
     @Test
-    public void findProviderByIdWithException() {
+    void findProviderByIdWithException() {
         when(repository.findById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findProviderById(provider.getId())
@@ -61,46 +59,4 @@ public class ProviderRepositoryImplExceptionTest {
                 .verify();
     }
 
-    @Test
-    public void findAllProviderWithException() {
-        when(repository.findAll())
-                .thenReturn(Flux.error(RuntimeException::new));
-        repositoryImpl.findAll()
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void saveProviderWithException() {
-        when(timeFactory.now()).thenReturn(NOW);
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.saveProvider(provider)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void updateRemitterWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findById(anyString()))
-                .thenReturn(Mono.just(providerData));
-        repositoryImpl.updateProvider(provider)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    public void deleteRemitterWithException() {
-        when(repository.deleteById(anyString()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deleteProviderById(provider.getId())
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
 }

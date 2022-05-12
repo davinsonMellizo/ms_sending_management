@@ -6,19 +6,14 @@ import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Sms;
-import co.com.bancolombia.model.message.Template;
 import co.com.bancolombia.model.prefix.gateways.PrefixRepository;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.providerservice.ProviderService;
-import co.com.bancolombia.model.providerservice.gateways.ProviderServiceGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-
-import java.util.UUID;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
@@ -26,7 +21,6 @@ import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidM
 
 @RequiredArgsConstructor
 public class RouterProviderSMSUseCase {
-    private final ProviderServiceGateway providerServiceGateway;
     private final PrefixRepository prefixRepository;
     private final ProviderGateway providerGateway;
     private final PriorityGateway priorityGateway;
@@ -43,9 +37,7 @@ public class RouterProviderSMSUseCase {
     }
 
     public Mono<Response> routeAlertsSMS(Message message, Alert alert) {
-        return providerServiceGateway.findProviderService(alert.getIdProviderSms())
-                .map(ProviderService::getIdProvider)
-                .flatMap(providerGateway::findProviderById)
+        return providerGateway.findProviderById(alert.getIdProviderSms())
                 .zipWith(priorityGateway.findPriorityById(alert.getPriority()))
                 .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
                 .doOnError(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
@@ -69,5 +61,6 @@ public class RouterProviderSMSUseCase {
                 .flatMap(commandGateway::sendCommandAlertSms)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build());
     }
+
 
 }

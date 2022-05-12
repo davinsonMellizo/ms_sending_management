@@ -7,9 +7,9 @@ import co.com.bancolombia.usecase.sendalert.operations.*;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
@@ -26,7 +26,7 @@ public class ManagementAlertUseCase {
     private final SendAlertFiveUseCase sendAlertFiveUseCase;
 
     private Function<Message, Mono<Void>> getValidations(Integer idOperation) {
-        final Map<Integer, Function<Message, Mono<Void>>> functions = new HashMap<>();
+        final Map<Integer, Function<Message, Mono<Void>>> functions = new ConcurrentHashMap<>();
         functions.put(0, sendAlertZeroUseCase::sendAlertsIndicatorZero);
         functions.put(1, sendAlertOneUseCase::sendAlertIndicatorOne);
         functions.put(2, sendAlertTwoUseCase::validateWithCodeTrx);
@@ -40,9 +40,9 @@ public class ManagementAlertUseCase {
     public Mono<Void> alertSendingManager(Message message) {
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
-                .filter(function -> function != null)
-                .switchIfEmpty(logUseCase.sendLogError(message.toBuilder().logKey(UUID.randomUUID().toString()).build(),
+                .onErrorResume(e-> logUseCase.sendLogError(message.toBuilder().logKey(UUID.randomUUID().toString()).build(),
                         SEND_220, new Response(1, INVALID_OPERATION)))
                 .flatMap(function -> function.apply(message.toBuilder().logKey(UUID.randomUUID().toString()).build()));
     }
+
 }

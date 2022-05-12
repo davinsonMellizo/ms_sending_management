@@ -17,14 +17,16 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class ClientRouter extends ClientDocumentationApi {
     private final ApiProperties apiProperties;
     private final static String INACTIVE = "/inactive";
+    private final static String DELETE = "/delete-range";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionClient(ClientHandler clientHandler) {
         final String url = apiProperties.getClient();
         return route().POST(url, accept(APPLICATION_JSON), clientHandler::saveClient, save()).build()
-                .and(route().GET(url, accept(APPLICATION_JSON), clientHandler::findClient, find()).build())
                 .and(route().PUT(url, accept(APPLICATION_JSON), clientHandler::updateClient, update()).build())
-                .and(route().PUT(url+INACTIVE, accept(APPLICATION_JSON), clientHandler::inactivateClient, inactive()).build())
-                .and(route().DELETE(url, accept(APPLICATION_JSON), clientHandler::deleteClient, delete()).build());
+                .and(route().PUT(url + INACTIVE, accept(APPLICATION_JSON), clientHandler::inactivateClient,
+                        inactive()).build())
+                .and(route().DELETE(url + DELETE, accept(APPLICATION_JSON),
+                        clientHandler::deleteClient, find()).build());
     }
 }

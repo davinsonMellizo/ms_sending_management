@@ -3,15 +3,13 @@ server:
   port: ${SERVER_PORT}
 spring:
   application:
-    name: "${APPLICATION_NAME}"
+    name: ${APPLICATION_NAME}
   devtools:
     add-properties: false
   jackson:
     default-property-inclusion: NON_NULL
   profiles:
     active: ${SPRING_PROFILE_ACTIVE}
-  webflux:
-    base-path: ${PATH_BASE}
   logging:
     level:
       root: ${LOG4J_LEVEL}
@@ -27,34 +25,30 @@ cloud:
     stack:
       auto: false
     sqs:
-      pollingThreads: 50
-      queue-endpoint: ${SQS-ENDPOINT}
+      url: ${SQS-ENDPOINT}
+      timeout: ${SQS_TIMEOUT}
+      pool-size: ${SQS_POOL_SIZE}
+      region-aws: ${REGION_AWS}
     rds:
       postgresql:
         pool:
-          initial: ${POSTGRESQL-POOL-INITIAL}
-          max: ${POSTGRESQL-POOL-MAX}
-        schema: ${POSTGRESQL-SCHEMA}
+          initial: ${POSTGRESQL_POOL_INITIAL:10}
+          max: ${POSTGRESQL_POOL_MAX:10}
+        schema: ${POSTGRESQL_SCHEMA}
     secrets-manager:
-      secret-rds: ${SECRET-RDS}
+      secret-rds: ${SECRET_RDS}
       endpoint: http://localhost:4566
 
 management:
-  health:
-    probes:
-      enabled: true
-  endpoint:
-    health:
-      show-details: "never"
-      enabled: true
-      cache:
-        time-to-live: "10s"
   endpoints:
     web:
       exposure:
-        include: "health, liveness, readiness"
-      base-path: "/"
+        include: health, liveness, readiness
+      base-path: ${PATH_BASE}
       path-mapping:
-        health: "health"
-        liveness: "liveness"
-        readiness: "readiness"
+        health: health
+        liveness: liveness
+        readiness: readiness
+  endpoint:
+    health:
+      show-details: never

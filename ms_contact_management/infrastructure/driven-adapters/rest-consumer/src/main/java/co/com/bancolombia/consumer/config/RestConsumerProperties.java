@@ -15,18 +15,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Configuration
 public class RestConsumerProperties {
 
-    private ClientHttpConnector clientHttpConnector(int timeout) {
-        return new ReactorClientHttpConnector(HttpClient.create()
-                .option(CONNECT_TIMEOUT_MILLIS, timeout));
-    }
-
     @Bean
     public WebClient webClientConfig(final ConsumerProperties consumerProperties) {
         return WebClient.builder()
-                .clientConnector(clientHttpConnector(consumerProperties.getTimeout()))
+                .clientConnector(getClientHttpConnector(consumerProperties.getTimeout()))
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
                 .build();
     }
+
+    private ClientHttpConnector getClientHttpConnector(int timeout) {
+        return new ReactorClientHttpConnector(HttpClient.create()
+                .compress(true)
+                .keepAlive(true)
+                .option(CONNECT_TIMEOUT_MILLIS, timeout));
+    }
+
 
 }

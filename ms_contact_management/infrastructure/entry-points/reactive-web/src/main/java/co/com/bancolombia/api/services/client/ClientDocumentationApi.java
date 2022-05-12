@@ -1,7 +1,9 @@
 package co.com.bancolombia.api.services.client;
 
 import co.com.bancolombia.api.dto.EnrolDTO;
+import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.client.ResponseUpdateClient;
 import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
@@ -30,18 +32,25 @@ public class ClientDocumentationApi {
                 .operationId("SaveClient").summary("Save Client")
                 .description("save a Client").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().description("Client to create").required(true).implementation(EnrolDTO.class))
-                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL).implementation(Client.class))
-                .response(responseBuilder().responseCode(STATUS_500).description(ERROR).implementation(Error.class));
+                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL)
+                        .implementation(ResponseUpdateClient.class))
+                .response(responseBuilder().responseCode(STATUS_500).description(ERROR)
+                        .implementation(Error.class));
     }
 
     protected Consumer<Builder> find() {
         return ops -> ops.tag(TAG)
-                .operationId("findClient").summary("Find Clients")
-                .description("Find Client by number and type document").tags(new String[]{TAG})
-                .parameter(createHeader(Long.class, DOCUMENT_NUMBER, DOCUMENT_NUMBER_DES))
-                .parameter(createHeader(Integer.class, DOCUMENT_TYPE, DOCUMENT_TYPE_DES))
-                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL).implementation(Client.class))
-                .response(responseBuilder().responseCode(STATUS_500).description(ERROR).implementation(Error.class));
+                .operationId("findClients").summary("Find clients")
+                .description("Find Client by client").tags(new String[]{TAG})
+                .parameter(createHeader(Long.class, "document-number", "Client Document Number"))
+                .parameter(createHeader(String.class, "document-type", "Client Document Type"))
+                .parameter(headerNoRequired(String.class, "consumer", "Code consumer"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL)
+                        .implementation(ResponseContactsDTO.class))
+                .response(responseBuilder().responseCode("400").description("Bad Request")
+                        .implementation(String.class))
+                .response(responseBuilder().responseCode("500").description(ERROR)
+                        .implementation(Error.class));
     }
 
     protected Consumer<Builder> inactive() {
@@ -50,30 +59,34 @@ public class ClientDocumentationApi {
                 .description("Inactive Client by number and type document").tags(new String[]{TAG})
                 .parameter(createHeader(Long.class, DOCUMENT_NUMBER, DOCUMENT_NUMBER_DES))
                 .parameter(createHeader(Integer.class, DOCUMENT_TYPE, DOCUMENT_TYPE_DES))
-                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL).implementation(Client.class))
-                .response(responseBuilder().responseCode(STATUS_500).description(ERROR).implementation(Error.class));
+                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL)
+                        .implementation(ResponseUpdateClient.class))
+                .response(responseBuilder().responseCode(STATUS_500).description(ERROR)
+                        .implementation(Error.class));
     }
 
     protected Consumer<Builder> update() {
         return ops -> ops.tag(TAG)
                 .operationId("updateClient").summary("Update Client")
                 .description("Update client Client ").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Client to Update").required(true).implementation(EnrolDTO.class))
-                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL).implementation(StatusResponse.class))
-                .response(responseBuilder().responseCode(STATUS_500).description(ERROR).implementation(Error.class));
+                .requestBody(requestBodyBuilder().description("Client to Update").required(true)
+                        .implementation(EnrolDTO.class))
+                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL)
+                        .implementation(ResponseUpdateClient
+                                .class))
+                .response(responseBuilder().responseCode(STATUS_500).description(ERROR)
+                        .implementation(Error.class));
     }
 
-    protected Consumer<Builder> delete() {
-        return ops -> ops.tag(TAG)
-                .operationId("deleteClient").summary("Delete Client")
-                .description("Delete a client Client").tags(new String[]{TAG})
-                .parameter(createHeader(Long.class, DOCUMENT_NUMBER, DOCUMENT_NUMBER_DES))
-                .parameter(createHeader(Integer.class, DOCUMENT_TYPE, DOCUMENT_TYPE_DES))
-                .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL).implementation(String.class))
-                .response(responseBuilder().responseCode(STATUS_500).description(ERROR).implementation(Error.class));
+    private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz,
+                                                                              String name, String description) {
+        return parameterBuilder().in(HEADER).implementation(clazz).required(true)
+                .name(name).description(description);
     }
 
-    private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
-        return parameterBuilder().in(HEADER).implementation(clazz).required(true).name(name).description(description);
+    private <T> org.springdoc.core.fn.builders.parameter.Builder headerNoRequired(Class<T> clazz,
+                                                                                  String name, String description) {
+        return parameterBuilder().in(HEADER).implementation(clazz).name(name)
+                .description(description);
     }
 }

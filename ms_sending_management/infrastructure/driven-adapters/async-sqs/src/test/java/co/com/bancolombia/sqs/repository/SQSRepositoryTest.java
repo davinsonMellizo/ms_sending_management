@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class SQSRepositoryTest {
+class SQSRepositoryTest {
 
     @InjectMocks
     private SQSRepository sqsRepository;
@@ -30,7 +30,7 @@ public class SQSRepositoryTest {
         when(properties.getUrl()).thenReturn("localhost");
     }
     @Test
-    public void sendMessageTest(){
+    void sendMessageTest(){
         when(client.sendMessage((SendMessageRequest) any()))
                 .thenReturn(new CompletableFuture<>());
         StepVerifier.create(sqsRepository.putQueue("message"))

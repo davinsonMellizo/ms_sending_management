@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidateAmountUseCaseTest {
+class ValidateAmountUseCaseTest {
     @InjectMocks
     private ValidateAmountUseCase validateAmountUseCase;
     @Mock
@@ -51,11 +51,11 @@ public class ValidateAmountUseCaseTest {
 
 
     @Test
-    public void validateAmountErrorTest(){
+    void validateAmountErrorTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         AlertClient alertClient = AlertClient.builder()
@@ -70,11 +70,11 @@ public class ValidateAmountUseCaseTest {
     }
 
     @Test
-    public void validateAmountTest(){
+    void validateAmountTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         AlertClient alertClient = AlertClient.builder()

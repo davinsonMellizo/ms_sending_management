@@ -2,6 +2,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     implementation project(':async-event-handler')
+    implementation project(':async-event-bus')
     implementation project(':log')
     implementation project(':ibmmq')
     implementation project(':s3-bucket')
@@ -9,8 +10,10 @@ dependencies {
     implementation project(':rabbit-configurator')
     implementation project(':model')
     implementation project(':usecase')
-    implementation 'org.springframework.boot:spring-boot-starter'
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    implementation project(':commands_mq')
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
 }
 
 task explodedJar(type: Copy) {

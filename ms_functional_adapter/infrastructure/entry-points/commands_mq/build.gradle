@@ -1,7 +1,12 @@
 dependencies {
-    compile project(':model')
-    compile project(':usecase')
-    compile project(':ibmmq-commons')
-    compile 'org.springframework:spring-context'
-    testCompile project(':model').sourceSets.test.output
+    implementation project(':log')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation project(':ibmmq-commons')
+    implementation 'org.springframework:spring-context'
+    testImplementation project(':model').sourceSets.test.output
+    implementation group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
+    implementation 'com.ibm.mq:com.ibm.mq.allclient:9.1.5.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+
 }

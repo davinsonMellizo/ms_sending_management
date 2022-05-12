@@ -14,5 +14,5 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class Enrol {
     private Client client;
-    private List<Contact> contacts;
+    private List<Contact> contactData;
 }

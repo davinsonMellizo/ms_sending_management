@@ -4,6 +4,7 @@ import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.client.data.ClientData;
 import co.com.bancolombia.client.data.ClientMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class ClientRepositoryImplement
         implements ClientGateway {
 
     @Autowired
+    private TimeFactory timeFactory;
+
+    @Autowired
     public ClientRepositoryImplement(ClientRepository repository, ClientMapper mapper) {
         super(repository, null, mapper::toEntity);
     }
@@ -26,6 +30,7 @@ public class ClientRepositoryImplement
     public Mono<Client> findClientByIdentification(Long documentNumber, Integer documentType) {
         return repository.findClientByIdentification(documentNumber, Integer.toString(documentType))
                 .map(this::convertToEntity)
+                .doOnNext(client -> System.out.println("cliente datos "+client.getKeyMdm()))
                 .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
     }
 

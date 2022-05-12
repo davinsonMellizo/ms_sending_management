@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertOneUseCaseTest {
+class SendAlertOneUseCaseTest {
     @InjectMocks
     private SendAlertOneUseCase sendAlertOneUseCase;
     @Mock
@@ -59,12 +59,12 @@ public class SendAlertOneUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorOnePushTest(){
+    void sendAlertIndicatorOnePushTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
@@ -76,12 +76,12 @@ public class SendAlertOneUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorOneSMSTest(){
+    void sendAlertIndicatorOneSMSTest(){
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("NO")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));

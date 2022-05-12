@@ -99,6 +99,7 @@ jobs:
           SourceFolder: $(projectName)/applications/app-service/build/libs/
           Contents: |
             *.jar
+            !*plain.jar
           TargetFolder: $(Build.repository.LocalPath)/build/libs/infrastructure/app
 
       - task: ArchiveFiles@2

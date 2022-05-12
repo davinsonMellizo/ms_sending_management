@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer;
 
-import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
+import org.springframework.boot.r2dbc.ConnectionFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -20,7 +20,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     @Override
     @Bean
     public ConnectionFactory connectionFactory() {
-        return H2ConnectionFactory.inMemory("testDbC");
+        return ConnectionFactoryBuilder.withUrl("r2dbc:h2:mem:///testDbC?options=DB_CLOSE_DELAY=-1").build();
     }
 
     @Bean

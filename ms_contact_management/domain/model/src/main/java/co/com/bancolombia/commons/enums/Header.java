@@ -13,6 +13,8 @@ public class Header {
     public static final String CONTACT_MEDIUM = "contact-medium";
     public static final String SEGMENT = "segment";
     public static final String CONSUMER = "consumer";
+    public static final String DOCUMENT_NUMBER_INIT = "document-number-init";
+    public static final String DOCUMENT_NUMBER_END = "document-number-end";
 
     private final String name;
 }

@@ -1,0 +1,22 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation project(':rabbit-configurator')
+    implementation project(':async-event-handler')
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
+    implementation project(':reactive-web')
+    implementation project(':r2dbc-postgresql')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation project(':log')
+    implementation project(':secrets-manager')
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    runtimeOnly ("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}

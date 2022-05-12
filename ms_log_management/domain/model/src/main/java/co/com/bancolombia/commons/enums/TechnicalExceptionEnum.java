@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TechnicalExceptionEnum {
 
+    SQS_ERROR("DST0002","An error has occurred create client sqs"),
     SAVE_LOG_ERROR("DST0002", "An error has occurred saving the log"),
     SECRET_EXCEPTION("DST0002", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("DST0003", "Internal server error"),

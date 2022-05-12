@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class RemitterRepositoryImplTest {
+class RemitterRepositoryImplTest {
 
     @Autowired
     private RemitterRepositoryImplement repositoryImpl;
@@ -27,41 +27,10 @@ public class RemitterRepositoryImplTest {
     }
 
     @Test
-    public void findIdRemitter() {
+    void findIdRemitter() {
         StepVerifier.create(repositoryImpl.findRemitterById(remitter.getId()))
                 .consumeNextWith(remitterFound -> assertEquals(remitter.getId(), remitterFound.getId()))
                 .verifyComplete();
     }
 
-    @Test
-    public void findAllRemitter() {
-        StepVerifier.create(repositoryImpl.findAll())
-                .consumeNextWith(allRemitters -> assertEquals(3, allRemitters.size()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void updateRemitter() {
-        StepVerifier.create(repositoryImpl.updateRemitter(remitter))
-                .consumeNextWith(status -> assertEquals(remitter.getId(), status.getActual().getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void saveRemitter() {
-        remitter.setId(2);
-        repositoryImpl.saveRemitter(remitter)
-                .subscribe(alertSaved -> StepVerifier
-                        .create(repositoryImpl.findRemitterById(alertSaved.getId()))
-                        .expectNextCount(1)
-                        .verifyComplete());
-    }
-
-    @Test
-    public void deleteRemitter() {
-        remitter.setId(1);
-        StepVerifier.create(repositoryImpl.deleteRemitterById(remitter.getId()))
-                .consumeNextWith(s -> assertEquals(remitter.getId(), s))
-                .verifyComplete();
-    }
 }

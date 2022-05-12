@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -23,9 +24,16 @@ public class ClientData{
     private Integer documentType;
     private String keyMdm;
     private String enrollmentOrigin;
+    @ReadOnlyProperty
+    private String stateClient;
     private Integer idState;
     private String creationUser;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+
+    @ReadOnlyProperty
+    private String voucher;
+    @ReadOnlyProperty
+    private String consumerCode;
 
 }

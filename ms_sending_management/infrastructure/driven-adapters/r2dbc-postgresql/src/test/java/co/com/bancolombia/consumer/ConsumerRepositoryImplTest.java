@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ConsumerRepositoryImplTest {
+class ConsumerRepositoryImplTest {
 
     @Autowired
     private ConsumerRepositoryImplement repositoryImpl;
@@ -21,46 +21,16 @@ public class ConsumerRepositoryImplTest {
 
     @BeforeEach
     public void init() {
-        consumer.setId("1");
+        consumer.setId("ALM");
+        consumer.setDescription("consumer");
         consumer.setSegment("4567aaa");
     }
 
     @Test
-    public void findIdConsumer() {
+    void findIdConsumer() {
         StepVerifier.create(repositoryImpl.findConsumerById(consumer.getId()))
                 .consumeNextWith(consumerFound -> assertEquals(consumer.getId(), consumerFound.getId()))
                 .verifyComplete();
     }
 
-    @Test
-    public void findAllConsumer() {
-        StepVerifier.create(repositoryImpl.findAll())
-                .consumeNextWith(consumers -> assertEquals(3, consumers.size()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void updateConsumer() {
-        StepVerifier.create(repositoryImpl.updateConsumer(consumer))
-                .consumeNextWith(status -> assertEquals(consumer.getId(), status.getActual().getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void saveConsumer() {
-        consumer.setId("2");
-        repositoryImpl.saveConsumer(consumer)
-                .subscribe(consumer -> StepVerifier
-                        .create(repositoryImpl.findConsumerById(consumer.getId()))
-                        .expectNextCount(1)
-                        .verifyComplete());
-    }
-
-    @Test
-    public void deleteConsumer() {
-        consumer.setId("1");
-        StepVerifier.create(repositoryImpl.deleteConsumerById(consumer.getId()))
-                .consumeNextWith(s -> assertEquals(consumer.getId(), s))
-                .verifyComplete();
-    }
 }

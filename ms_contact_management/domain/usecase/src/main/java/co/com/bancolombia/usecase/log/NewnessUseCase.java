@@ -12,15 +12,15 @@ import reactor.core.publisher.Mono;
 public class NewnessUseCase {
     private final NewnessRepository newnessRepository;
 
-    public Mono<Client> saveNewness(Client client, String transaction){
-        return FactoryLog.createLog(client, transaction)
+    public Mono<Client> saveNewness(Client client, String transaction, String voucher){
+        return FactoryLog.createLog(client, transaction, voucher)
                 .flatMap(newnessRepository::saveNewness)
                 .onErrorReturn(new Newness())
                 .thenReturn(client);
     }
 
-    public Mono<Contact> saveNewness(Contact contact, String transaction){
-        return FactoryLog.createLog(contact, transaction)
+    public Mono<Contact> saveNewness(Contact contact, String transaction, String voucher){
+        return FactoryLog.createLog(contact, transaction, voucher)
                 .flatMap(newnessRepository::saveNewness)
                 .onErrorReturn(new Newness())
                 .thenReturn(contact);

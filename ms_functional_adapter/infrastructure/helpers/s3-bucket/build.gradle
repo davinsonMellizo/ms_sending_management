@@ -1,9 +1,9 @@
-    dependencies {
-    compile project(':log')
-    compile project(':model')
-    compile project(':commons')
-    compile 'org.springframework:spring-context'
-    compile group: 'software.amazon.awssdk', name: 's3', version: '2.16.91'
-    compile group: 'software.amazon.awssdk', name: 'sts', version: '2.16.91'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.1.RELEASE'
+dependencies {
+    implementation project(':log')
+    implementation project(':model')
+    implementation project(':commons')
+    implementation 'org.springframework:spring-context'
+    implementation group: 'software.amazon.awssdk', name: 's3', version: '2.16.91'
+    implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.16.91'
+    implementation "org.springframework.boot:spring-boot:${springBootVersion}"
 }

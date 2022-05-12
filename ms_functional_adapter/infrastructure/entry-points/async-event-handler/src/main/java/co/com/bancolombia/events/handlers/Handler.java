@@ -1,5 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
+import co.com.bancolombia.commandsmq.config.ListenerMQ;
 import co.com.bancolombia.events.model.ResourceQuery;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.transaction.Transaction;

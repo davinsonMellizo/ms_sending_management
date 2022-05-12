@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class PriorityRepositoryImplTest {
+class PriorityRepositoryImplTest {
 
     @Autowired
     private PriorityRepositoryImplement repositoryImpl;
@@ -28,41 +28,10 @@ public class PriorityRepositoryImplTest {
     }
 
     @Test
-    public void findIdPriority() {
+    void findIdPriority() {
         StepVerifier.create(repositoryImpl.findPriorityById(priority.getId()))
                 .consumeNextWith(priorityFound -> assertEquals(priority.getId(), priorityFound.getId()))
                 .verifyComplete();
     }
 
-    @Test
-    public void findAllPriorities() {
-        StepVerifier.create(repositoryImpl.findAllByProvider(priority.getIdProvider()))
-                .consumeNextWith(allPrior -> assertEquals(3, allPrior.size()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void updatePriority() {
-        StepVerifier.create(repositoryImpl.updatePriority(priority))
-                .consumeNextWith(status -> assertEquals(priority.getId(), status.getActual().getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void saveProvider() {
-        priority.setId(3);
-        repositoryImpl.savePriority(priority)
-                .subscribe(pr -> StepVerifier
-                        .create(repositoryImpl.findPriorityById(pr.getId()))
-                        .expectNextCount(1)
-                        .verifyComplete());
-    }
-
-    @Test
-    public void deleteProvider() {
-        priority.setId(3);
-        StepVerifier.create(repositoryImpl.deletePriorityById(priority.getId()))
-                .consumeNextWith(s -> assertEquals(priority.getId(), s))
-                .verifyComplete();
-    }
 }

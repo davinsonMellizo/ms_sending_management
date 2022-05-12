@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RestConsumerConfigTest {
+class RestConsumerConfigTest {
     @InjectMocks
     private RestConsumerConfig restConsumerConfig;
 
@@ -18,7 +18,7 @@ public class RestConsumerConfigTest {
     }
 
     @Test
-    public void sesConfigTest(){
+    void sesConfigTest(){
         assertThat(restConsumerConfig.webClientConfig(new ConsumerProperties(3600, null))).isNotNull();
     }
 }

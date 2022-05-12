@@ -24,4 +24,5 @@ include ':commands_mq'
 project(':commands_mq').projectDir = file('./infrastructure/entry-points/commands_mq')
 include ':ibmmq'
 project(':ibmmq').projectDir = file('./infrastructure/driven-adapters/ibmmq')
-
+include ':async-event-bus'
+project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')

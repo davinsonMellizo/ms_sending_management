@@ -35,15 +35,15 @@ public class ContactRepositoryImplWithExceptionTest {
 
     @BeforeEach
     public void init() {
-        contact.setContactMedium("1");
+        contact.setContactWay("1");
         contact.setSegment("0");
-        contact.setDocumentNumber(new Long(1061772353));
+        contact.setDocumentNumber(1061772353L);
         contact.setDocumentType("0");
         contact.setValue("correo@gamail.com");
-        contact.setState("0");
+        contact.setStateContact("0");
 
         client.setDocumentType("0");
-        client.setDocumentNumber(new Long(1061772353));
+        client.setDocumentNumber(1061772353L);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ContactRepositoryImplWithExceptionTest {
     public void findIdContact() {
         when(repository.findContact(any(), any(), any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
-        contact.setContactMedium("SMS");
+        contact.setContactWay("SMS");
         contact.setSegment("ALM");
         repositoryImpl.findIdContact(contact)
                 .as(StepVerifier::create)

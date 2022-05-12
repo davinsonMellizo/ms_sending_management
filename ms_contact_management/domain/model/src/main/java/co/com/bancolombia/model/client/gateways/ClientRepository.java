@@ -11,7 +11,8 @@ public interface ClientRepository {
 
     Mono<StatusResponse<Client>> updateClient(StatusResponse<Client> statusResponse);
 
-    Mono<Client> deleteClient(Client client);
-
     Mono<Client> inactivateClient(Client client);
+
+    Mono<Integer> deleteClient(Long documentInit, Long documentEnd);
+
 }

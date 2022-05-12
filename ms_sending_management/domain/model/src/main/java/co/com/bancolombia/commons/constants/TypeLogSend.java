@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TypeLogSend {
 
-    public static String SEND_220 = "220";
-    public static String SEND_230 = "230";
+    public static final String SEND_220 = "220";
+    public static final String SEND_230 = "230";
 
 }

@@ -25,8 +25,7 @@ public class PostgreSQLConnectionConfigHelperTest {
     public static final Integer port = 5432;
 
     @InjectMocks
-    private PostgreSQLConnectionPool helper;
-
+    private PostgreSQLConnectionConfigHelper helper;
 
     public final PostgresqlConnectionProperties properties = new PostgresqlConnectionProperties();
 
@@ -44,13 +43,14 @@ public class PostgreSQLConnectionConfigHelperTest {
         properties.setUsername(username);
         properties.setPassword(password);
         properties.setPort(port);
-        when(secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class)).thenReturn(Mono.just(properties));
+        when(secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
+                .thenReturn(Mono.just(properties));
         when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
     }
 
     @Test
     public void getConnectionConfig() {
-        assertNotNull(helper.getConnectionConfig());
+        assertNotNull(helper.buildConnectionConfiguration(properties.getSchema(), 4));
     }
-
 }
+

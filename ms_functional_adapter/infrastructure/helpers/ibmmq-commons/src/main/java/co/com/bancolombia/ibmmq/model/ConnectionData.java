@@ -2,6 +2,7 @@ package co.com.bancolombia.ibmmq.model;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import lombok.Data;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -47,8 +48,11 @@ public class ConnectionData {
         return getQueue(getListener(keyConnect).getQueueResponse());
     }
 
-    public String getTemplate(String trxId){
-        return getTransactions().get(trxId).getTemplate();
+    public Mono<String> getTemplate(String trxId){
+        return Mono.just(getTransactions().get(trxId).getTemplate());
+    }
+    public Mono<Transaction> getTransaction(String trxId){
+        return Mono.just(getTransactions().get(trxId));
     }
 
 }

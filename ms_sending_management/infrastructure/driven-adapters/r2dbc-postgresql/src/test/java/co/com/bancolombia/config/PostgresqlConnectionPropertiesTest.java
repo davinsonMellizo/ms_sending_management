@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PostgresqlConnectionPropertiesTest {
+class PostgresqlConnectionPropertiesTest {
 
     private PostgresqlConnectionProperties properties;
 
@@ -17,7 +17,7 @@ public class PostgresqlConnectionPropertiesTest {
     public static final Integer port = 5432;
 
     @Test
-    public void propertiesPlainObject() {
+    void propertiesPlainObject() {
         properties = new PostgresqlConnectionProperties();
         properties.setHost(host);
         properties.setDbname(database);

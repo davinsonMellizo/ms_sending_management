@@ -1,0 +1,29 @@
+{
+  "idCampaign": '#(idCampaign)',
+  "idConsumer": '#(idConsumer)',
+  "idProvider": "1",
+  "defaultTemplate": "template",
+  "idRemitter": 1,
+  "sourcePath": '#(sourcePath)',
+  "attachmentPath": "attachmentPath",
+  "creationUser": "lugomez",
+  "state": "ACTIVO",
+  "schedules": [
+    {
+      "id": '#(schedule1_id)',
+      "scheduleType": "MENSUAL",
+      "startDate": "2022-03-08",
+      "startTime": "09:00:00.00",
+      "endDate": "2022-05-08",
+      "endTime": "16:40:00.00"
+    },
+    {
+      "id": '#(schedule2_id)',
+      "scheduleType": "SEMANAL",
+      "startDate": "2022-03-01",
+      "startTime": "07:23:00.00",
+      "endDate": "2022-03-29",
+      "endTime": "20:10:00.00"
+    }
+  ]
+}

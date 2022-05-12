@@ -17,7 +17,7 @@ import java.io.IOException;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 
-public class RestClientTest {
+class RestClientTest {
     private MockWebServer mockServer;
     private RestClient restClient;
     public static final String HOST = "http://localhost:%s/";
@@ -41,7 +41,7 @@ public class RestClientTest {
     }
 
     @Test
-    public void givenPostThenSuccess() {
+    void givenPostThenSuccess() {
         mockServer.enqueue(mockResponseSuccess());
         StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessPush.class, ErrorPush.class))
                 .expectNextCount(1)
@@ -49,7 +49,7 @@ public class RestClientTest {
     }
 
     @Test
-    public void givenPostThenError() {
+    void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
         StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessPush.class, ErrorPush.class))
                 .expectError()

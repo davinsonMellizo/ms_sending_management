@@ -26,11 +26,11 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
     private final Environment environment;
     private LoggerBuilder logger;
 
-    public ExceptionHandler(ErrorAttributes errorAttributes, WebProperties.Resources resourceProperties,
+    public ExceptionHandler(ErrorAttributes errorAttributes, WebProperties webProperties,
                             ApplicationContext applicationContext,
                             ServerCodecConfigurer configurator,
                             Environment environment, final LoggerBuilder loggerBuilder) {
-        super(errorAttributes, resourceProperties, applicationContext);
+        super(errorAttributes, webProperties.getResources(), applicationContext);
         this.setMessageWriters(configurator.getWriters());
         this.environment = environment;
         this.logger = loggerBuilder;

@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class SecretsManagerConfigTest {
+class SecretsManagerConfigTest {
 
     @InjectMocks
     private SecretsManagerConfig secretsManagerConfig;
@@ -25,13 +25,13 @@ public class SecretsManagerConfigTest {
     }
 
     @Test
-    public void beanConnectionSecretsManagerTest() {
+    void beanConnectionSecretsManagerTest() {
         assertThat(secretsManagerConfig.connectionAws())
                 .isNotNull();
     }
 
     @Test
-    public void beanConnectionLocalSecretsManagerTest() {
+    void beanConnectionLocalSecretsManagerTest() {
         assertThat(secretsManagerConfig.connectionLocal("http://localhost:4566"))
                 .isNotNull();
     }

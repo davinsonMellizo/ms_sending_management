@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AlertRepositoryImplTest {
+class AlertRepositoryImplTest {
 
     @Autowired
     private AlertRepositoryImplement AlertRepositoryImplement;
@@ -24,8 +24,8 @@ public class AlertRepositoryImplTest {
     @BeforeEach
     public void init() {
         alert.setId("HGD");
-        alert.setIdProviderMail(1);
-        alert.setIdProviderSms(1);
+        alert.setIdProviderMail("FGH");
+        alert.setIdProviderSms("FGH");
         alert.setIdRemitter(0);
         alert.setTemplateName("Compra");
         alert.setIdState(0);
@@ -46,35 +46,9 @@ public class AlertRepositoryImplTest {
     }
 
     @Test
-    public void findIdAlert() {
+    void findIdAlert() {
         StepVerifier.create(AlertRepositoryImplement.findAlertById(alert.getId()))
                 .consumeNextWith(alertFound -> assertEquals(alert.getId(), alertFound.getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void updateAlert() {
-        alert.setIdState(1);
-        alert.setId("UPD");
-        StepVerifier.create(AlertRepositoryImplement.updateAlert(alert))
-                .consumeNextWith(status -> assertEquals(alert.getId(), status.getActual().getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void saveAlert() {
-        alert.setId("ASL");
-        AlertRepositoryImplement.saveAlert(alert)
-                .subscribe(AlertSaved -> StepVerifier
-                        .create(AlertRepositoryImplement.findAlertById(AlertSaved.getId()))
-                        .expectNextCount(1)
-                        .verifyComplete());
-    }
-
-    @Test
-    public void deleteAlert() {
-        StepVerifier.create(AlertRepositoryImplement.deleteAlert(alert.getId()))
-                .consumeNextWith(s -> assertEquals(alert.getId(), s))
                 .verifyComplete();
     }
 }

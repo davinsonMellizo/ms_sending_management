@@ -2,10 +2,10 @@ package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
-import co.com.bancolombia.consumer.adapter.response.*;
+import co.com.bancolombia.consumer.adapter.response.ErrorPush;
+import co.com.bancolombia.consumer.adapter.response.SuccessPush;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.message.Push;
-import co.com.bancolombia.model.message.Sms;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,14 +16,13 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PushAdapterTest {
+class PushAdapterTest {
 
     @InjectMocks
     private PushAdapter pushAdapter;
@@ -41,7 +40,7 @@ public class PushAdapterTest {
     }
 
     @Test
-    public void sendSmsMasivianSuccessTest(){
+    void sendSmsMasivianSuccessTest(){
         when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.just(SuccessPush.builder()
                         .data(new SuccessPush.Data(SuccessPush.SendMessageResponse
@@ -55,7 +54,7 @@ public class PushAdapterTest {
     }
 
     @Test
-    public void sendMAILErrorMasivianTest(){
+    void sendMAILErrorMasivianTest(){
         when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
@@ -67,7 +66,7 @@ public class PushAdapterTest {
     }
 
     @Test
-    public void sendMAILErrorWebClientTest(){
+    void sendMAILErrorWebClientTest(){
         when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.error(new Throwable("timeout")));
         StepVerifier.create(pushAdapter.sendPush(new Push()))

@@ -32,7 +32,7 @@ public class RouterProviderMailUseCase {
                 .flatMap(message1 -> replaceMessage(message, alert))
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
-                .zipWith(providerGateway.findProviderByProviderService(alert.getIdProviderMail()))
+                .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))
                 .doOnError(e -> logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(1, e.getMessage())))
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,

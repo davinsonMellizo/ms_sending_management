@@ -27,7 +27,7 @@ public class SQSConfigTes {
     }
 
     @Test
-    public void sqsConfigLocalTest(){
+    void sqsConfigLocalTest(){
         assertThat(sqsConfig.sqsConfig()).isNotNull();
     }
 }

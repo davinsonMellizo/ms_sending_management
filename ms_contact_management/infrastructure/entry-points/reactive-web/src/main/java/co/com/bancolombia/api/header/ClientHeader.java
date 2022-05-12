@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -30,7 +31,6 @@ public class ClientHeader {
         return Mono.just(Client.builder()
                 .documentType((this.documentType))
                 .documentNumber(Long.parseLong(this.documentNumber))
-
                 .build());
     }
 }

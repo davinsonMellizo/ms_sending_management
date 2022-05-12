@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ProviderRepositoryImplTest {
+class ProviderRepositoryImplTest {
 
     @Autowired
     private ProviderRepositoryImplement repositoryImpl;
@@ -27,41 +27,10 @@ public class ProviderRepositoryImplTest {
     }
 
     @Test
-    public void findIdProvider() {
+    void findIdProvider() {
         StepVerifier.create(repositoryImpl.findProviderById(provider.getId()))
                 .consumeNextWith(providerFound -> assertEquals(provider.getId(), providerFound.getId()))
                 .verifyComplete();
     }
 
-    @Test
-    public void findAllProvider() {
-        StepVerifier.create(repositoryImpl.findAll())
-                .consumeNextWith(allProviders -> assertEquals(4, allProviders.size()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void updateProvider() {
-        StepVerifier.create(repositoryImpl.updateProvider(provider))
-                .consumeNextWith(status -> assertEquals(provider.getId(), status.getActual().getId()))
-                .verifyComplete();
-    }
-
-    @Test
-    public void saveProvider() {
-        provider.setId("GHJ");
-        repositoryImpl.saveProvider(provider)
-                .subscribe(alertSaved -> StepVerifier
-                        .create(repositoryImpl.findProviderById(alertSaved.getId()))
-                        .expectNextCount(1)
-                        .verifyComplete());
-    }
-
-    @Test
-    public void deleteProvider() {
-        provider.setId("GHJ");
-        StepVerifier.create(repositoryImpl.deleteProviderById(provider.getId()))
-                .consumeNextWith(s -> assertEquals(provider.getId(), s))
-                .verifyComplete();
-    }
 }

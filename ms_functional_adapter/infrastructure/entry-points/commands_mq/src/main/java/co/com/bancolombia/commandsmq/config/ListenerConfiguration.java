@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class ListenerConfiguration {
 
-    /*private final ListenerMQ listenerMQ;
+    private final ListenerMQ listenerMQ;
 
     @Bean
     public ListenerMQ eventHandlers(final JmsManagement management, MqConnector mqConnector) {
@@ -19,5 +19,5 @@ public class ListenerConfiguration {
         connData.getListener()
                 .forEach( event -> mqConnector.eventConsumer(connData.getQueue(event.getQueueResponse()), listenerMQ));
         return null;
-    }*/
+    }
 }

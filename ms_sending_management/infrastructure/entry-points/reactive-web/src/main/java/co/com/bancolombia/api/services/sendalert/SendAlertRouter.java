@@ -20,6 +20,6 @@ public class SendAlertRouter extends SendAlertDocumentationApi {
     @Bean
     public RouterFunction<ServerResponse> routerFunctionSendAlert(SendAlertHandler handler) {
         final String url = apiProperties.getSend();
-        return route().POST(url, accept(APPLICATION_JSON), handler::saveRemitter, send()).build();
+        return route().POST(url, accept(APPLICATION_JSON), handler::sendAlert, send()).build();
     }
 }

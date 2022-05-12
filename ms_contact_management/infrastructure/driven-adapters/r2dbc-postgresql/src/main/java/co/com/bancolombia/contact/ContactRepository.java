@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 public interface ContactRepository extends ReactiveCrudRepository<ContactData, Integer> {
 
     @Query("select c.value, c.created_date, c.modified_date, c.segment, " +
-            "m.code as contact_medium, s.name as state, c.previous " +
+            "m.code as contact_way, s.name as state_contact " +
             "from contact c " +
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +
@@ -20,7 +20,7 @@ public interface ContactRepository extends ReactiveCrudRepository<ContactData, I
                                               @Param("documentType") String documentType);
 
     @Query("select c.value, c.created_date, c.modified_date, c.segment, " +
-            "m.code as contact_medium, s.name as state, c.previous " +
+            "m.code as contact_way, s.name as state_contact " +
             "from contact c " +
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +
@@ -31,7 +31,7 @@ public interface ContactRepository extends ReactiveCrudRepository<ContactData, I
                                                  @Param("documentType") String documentType,
                                                  @Param("segment") String segment);
 
-    @Query("select c.* , c.segment as consumer, m.id as contact_medium, s.id as state " +
+    @Query("select c.* , c.segment as consumer, m.id as contact_way, s.id as state_contact " +
             "FROM contact c " +
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +

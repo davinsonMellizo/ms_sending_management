@@ -1,19 +1,10 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.gateways.PushGateway;
-import co.com.bancolombia.model.prefix.Prefix;
-import co.com.bancolombia.model.prefix.gateways.PrefixRepository;
-import co.com.bancolombia.model.priority.Priority;
-import co.com.bancolombia.model.priority.gateways.PriorityGateway;
-import co.com.bancolombia.model.provider.Provider;
-import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.providerservice.ProviderService;
-import co.com.bancolombia.model.providerservice.gateways.ProviderServiceGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,11 +17,12 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RouterProviderPushUseCaseTest {
+class RouterProviderPushUseCaseTest {
     @InjectMocks
     private RouterProviderPushUseCase routerProviderPushUseCase;
     @Mock
@@ -62,10 +54,10 @@ public class RouterProviderPushUseCaseTest {
 
 
     @Test
-    public void routeAlertPushTest(){
+    void routeAlertPushTest(){
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderSms(0)
+                .idProviderSms("ALM")
                 .priority(0)
                 .build();
         when(pushGateway.sendPush(any())).thenReturn(Mono.just(Response.builder()

@@ -4,15 +4,12 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
 import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
-import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
@@ -21,17 +18,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
 
 @RequiredArgsConstructor
 public class SendAlertThreeUseCase {
     private final RouterProviderPushUseCase routerProviderPushUseCase;
-    private final RouterProviderMailUseCase routerProviderMailUseCase;
     private final RouterProviderSMSUseCase routerProviderSMSUseCase;
     private final AlertTransactionGateway alertTransactionGateway;
-    private final AlertClientGateway alertClientGateway;
     private final ConsumerGateway consumerGateway;
-    private final ContactGateway contactGateway;
     private final ValidateContactUseCase validateContactUseCase;
     private final AlertGateway alertGateway;
     private final LogUseCase logUseCase;

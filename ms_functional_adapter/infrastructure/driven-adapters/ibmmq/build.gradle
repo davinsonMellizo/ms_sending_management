@@ -1,7 +1,9 @@
 dependencies {
-    compile project(':model')
-    compile project(':commons')
-    compile project(':ibmmq-commons')
-    compile 'org.springframework:spring-context'
+    implementation project(':log')
+    implementation project(':model')
+    implementation project(':commons')
+    implementation project(':ibmmq-commons')
+    implementation 'org.springframework:spring-context'
     testCompile project(':model').sourceSets.test.output
+
 }

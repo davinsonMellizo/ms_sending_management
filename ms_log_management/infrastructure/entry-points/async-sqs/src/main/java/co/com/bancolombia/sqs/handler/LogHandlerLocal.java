@@ -16,13 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile({"local"})
 public class LogHandlerLocal {
-    private final LogUseCase useCase;
+   private final LogUseCase useCase;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @SqsListener(value = "${cloud.aws.sqs.queue-endpoint}", deletionPolicy = SqsMessageDeletionPolicy.ALWAYS)
+    @SqsListener(value = "${cloud.aws.sqs.url}", deletionPolicy = SqsMessageDeletionPolicy.ALWAYS)
     public void listenLogBySqsListener(@Payload final String jsonMessage) throws JsonProcessingException {
         Log log =  objectMapper.readValue(jsonMessage, Log.class);
-        System.out.println("llega el mensaje");
         useCase.saveLog(log).subscribe();
     }
 

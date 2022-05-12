@@ -42,10 +42,10 @@ public class MasivianAdapterTest {
 
     @Test
     public void sendMAILSuccessTest(){
-        when(client.post(anyString(), any(), any(),any()))
+        /*when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.just(SuccessMasivianMAIL.builder()
                         .description("success")
-                        .build()));
+                        .build()));*/
         StepVerifier.create(masivianAdapter.sendMAIL(new Mail()))
                 .assertNext(response -> response.getDescription().equals("success"))
                 .verifyComplete();
@@ -53,11 +53,11 @@ public class MasivianAdapterTest {
 
     @Test
     public void sendMAILErrorProviderTest(){
-        when(client.post(anyString(), any(), any(),any()))
+        /*when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
                         .data(new ErrorMasivianMAIL("error", "error authentication"))
-                        .build()));
+                        .build()));*/
         StepVerifier.create(masivianAdapter.sendMAIL(new Mail()))
                 .assertNext(response -> response.getDescription().equals("error authentication"))
                 .verifyComplete();
@@ -65,8 +65,8 @@ public class MasivianAdapterTest {
 
     @Test
     public void sendMAILErrorWebClientTest(){
-        when(client.post(anyString(), any(), any(),any()))
-                .thenReturn(Mono.error(new Throwable("timeout")));
+        /*when(client.post(anyString(), any(), any(),any()))
+                .thenReturn(Mono.error(new Throwable("timeout")));*/
         StepVerifier.create(masivianAdapter.sendMAIL(new Mail()))
                 .assertNext(response -> response.getDescription().equals("timeout"))
                 .verifyComplete();

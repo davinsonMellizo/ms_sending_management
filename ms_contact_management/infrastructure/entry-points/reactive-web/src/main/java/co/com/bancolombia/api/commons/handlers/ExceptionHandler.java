@@ -4,25 +4,22 @@ import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.logging.technical.LoggerFactory;
-import co.com.bancolombia.logging.technical.logger.TechLogger;
-import co.com.bancolombia.logging.technical.message.ObjectTechMsg;
+import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.model.error.Error;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 
 
 @Component
@@ -30,15 +27,16 @@ import java.util.Optional;
 public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
 
     private final Environment environment;
-    private static final TechLogger LOGGER = LoggerFactory.getLog(ExceptionHandler.class.getName());
+    private final LoggerBuilder logger;
 
-    public ExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties,
+    public ExceptionHandler(ErrorAttributes errorAttributes, WebProperties webProperties,
                             ApplicationContext applicationContext,
-                            ServerCodecConfigurer configurer,
-                            Environment environment) {
-        super(errorAttributes, resourceProperties, applicationContext);
-        this.setMessageWriters(configurer.getWriters());
+                            ServerCodecConfigurer configurator,
+                            Environment environment, final LoggerBuilder loggerBuilder) {
+        super(errorAttributes, webProperties.getResources(), applicationContext);
+        this.setMessageWriters(configurator.getWriters());
         this.environment = environment;
+        this.logger = loggerBuilder;
     }
 
     @Override
@@ -52,19 +50,22 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
         return Mono.just(request)
                 .map(this::getError)
                 .flatMap(Mono::error)
-                .onErrorResume(TechnicalException.class, this::buildErrorResponse)
-                .onErrorResume(BusinessException.class, this::buildErrorResponse)
-                .onErrorResume(this::buildErrorResponse)
+                .onErrorResume(TechnicalException.class, this::responseTechnical)
+                .onErrorResume(BusinessException.class, this::responseBusiness)
+                .onErrorResume(ResponseStatusException.class, this::responseStatusException)
+                .onErrorResume(this::responseAnyError)
                 .cast(Error.class)
                 .map(errorResponse -> errorResponse.toBuilder()
                         .domain(request.path())
                         .build())
-                .doAfterTerminate(() -> LOGGER.error(buildObjectTechMsg(throwable, request)))
-                .flatMap(ResponseUtil::responseFail);
+                .doAfterTerminate(() -> logger.error(throwable))
+                .flatMap(e -> ResponseUtil.buildResponse(HttpStatus
+                        .valueOf(Integer.valueOf(e.getHttpStatus())), e));
     }
 
-    private Mono<Error> buildErrorResponse(TechnicalException ex) {
+    private Mono<Error> responseTechnical(TechnicalException ex) {
         return Mono.just(Error.builder()
+                .httpStatus(ex.getException().getHttpStatus())
                 .reason(ex.getMessage())
                 .code(ex.getException().getCode())
                 .message(ex.getException().getMessage())
@@ -72,41 +73,33 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
         );
     }
 
-    private Mono<Error> buildErrorResponse(BusinessException ex) {
+    private Mono<Error> responseBusiness(BusinessException ex) {
         return Mono.just(Error.builder()
+                .httpStatus(ex.getException().getHttpStatus())
                 .reason(ex.getMessage())
-                .code(ex.getBusinessErrorMessage().getCode())
-                .message(ex.getBusinessErrorMessage().getMessage())
+                .code(ex.getException().getCode())
+                .message(ex.getException().getMessage())
                 .build()
         );
     }
 
-    private Mono<Error> buildErrorResponse(Throwable throwable) {
+    private Mono<Error> responseStatusException(ResponseStatusException ex) {
         return Mono.just(Error.builder()
+                .httpStatus(String.valueOf(ex.getStatus().value()))
+                .reason(ex.getReason())
+                .code(TechnicalExceptionEnum.INTERNAL_SERVER_ERROR.getCode())
+                .message(ex.getMessage())
+                .build()
+        );
+    }
+
+    private Mono<Error> responseAnyError(Throwable throwable) {
+        return Mono.just(Error.builder()
+                .httpStatus(TechnicalExceptionEnum.INTERNAL_SERVER_ERROR.getHttpStatus())
                 .reason(throwable.getMessage())
                 .code(TechnicalExceptionEnum.INTERNAL_SERVER_ERROR.getCode())
                 .message(TechnicalExceptionEnum.INTERNAL_SERVER_ERROR.getMessage())
                 .build()
         );
     }
-
-
-    private ObjectTechMsg<Map<String, Object>> buildObjectTechMsg(Throwable throwable, ServerRequest request) {
-        return new ObjectTechMsg(null,
-                environment.getProperty("spring.application.name"),
-                request.path(),
-                Arrays.stream(throwable.getStackTrace())
-                        .findFirst()
-                        .map(StackTraceElement::getClassName)
-                        .orElse(""),
-                List.of(), buildStackTrace(throwable));
-    }
-
-    private Map<String, Object> buildStackTrace(Throwable throwable) {
-
-        return Map.of("stackTrace", Optional.ofNullable(throwable.getStackTrace()).orElse(new StackTraceElement[]{}),
-                "message", Optional.ofNullable(throwable.getMessage()).orElse(""),
-                "exception", throwable.toString());
-    }
-
 }

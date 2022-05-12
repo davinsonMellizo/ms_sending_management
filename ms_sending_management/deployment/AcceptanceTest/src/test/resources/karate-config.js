@@ -7,18 +7,10 @@ function() {
   var envData = read('../configurations/paths.json');
 
   var config = {
-      urlAlert: '',
-      urlRemitter: '',
-      urlService: '',
-      urlProvider: '',
-      urlConsumer: ''
+      urlSend: ''
   }
 
-  config.urlAlert = envData.urlAlert;
-  config.urlRemitter = envData.urlRemitter;
-  config.urlService = envData.urlService;
-  config.urlProvider = envData.urlProvider;
-  config.urlConsumer = envData.urlConsumer;
+  config.urlSend = envData.urlSend;
   return config
 
 }

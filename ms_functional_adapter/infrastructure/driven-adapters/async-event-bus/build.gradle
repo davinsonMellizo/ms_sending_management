@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(':log')
+    implementation project(':model')
+    implementation project(':commons')
+    implementation project(':ibmmq-commons')
+    implementation 'org.springframework:spring-context'
+    testImplementation project(':model').sourceSets.test.output
+    implementation 'org.reactivecommons:async-commons-starter:1.0.0-beta1'
+
+}

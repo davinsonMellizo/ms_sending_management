@@ -59,14 +59,6 @@ CREATE TABLE IF NOT EXISTS remitter (
 	CONSTRAINT remitter_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS service (
-	id int2 NOT NULL,
-	name varchar(50) NOT NULL,
-	creation_user varchar(20) NULL,
-	state varchar(10) NOT NULL,
-	created_date timestamp NOT NULL,
-	CONSTRAINT service_pkey PRIMARY KEY (id)
-);
 
 CREATE TABLE IF NOT EXISTS category (
 	id int2 NOT NULL,
@@ -87,20 +79,12 @@ CREATE TABLE IF NOT EXISTS priority (
  	CONSTRAINT priority_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id)
 );
 
-CREATE TABLE IF NOT EXISTS provider_service (
-	id serial NOT NULL,
-	id_provider varchar(3) NOT NULL,
-	id_service int2 NOT NULL,
- 	CONSTRAINT provider_service_pkey PRIMARY KEY (id),
- 	CONSTRAINT provider_service_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id),
- 	CONSTRAINT provider_service_service_fkey FOREIGN KEY (id_service) REFERENCES service(id)
-);
 
 CREATE TABLE IF NOT EXISTS alert (
 	id varchar(3) NOT NULL,
 	template_name varchar(100) NOT NULL,
-	id_provider_mail int4 NOT NULL,
-	id_provider_sms int4 NOT NULL,
+	id_provider_mail varchar(3) NOT NULL,
+	id_provider_sms varchar(3) NOT NULL,
 	id_remitter int2 NOT NULL,
 	id_category int2 NOT NULL,
 	description varchar(50) NOT NULL,
@@ -118,8 +102,8 @@ CREATE TABLE IF NOT EXISTS alert (
 	creation_user varchar(20) NULL,
 	created_date timestamp NOT NULL,
 	CONSTRAINT alert_pkey PRIMARY KEY (id),
-	CONSTRAINT alert_provider_mail_fkey FOREIGN KEY (id_provider_mail) REFERENCES provider_service(id),
-	CONSTRAINT alert_provider_sms_fkey FOREIGN KEY (id_provider_sms) REFERENCES provider_service(id),
+	CONSTRAINT alert_provider_mail_fkey FOREIGN KEY (id_provider_mail) REFERENCES provider(id),
+	CONSTRAINT alert_provider_sms_fkey FOREIGN KEY (id_provider_sms) REFERENCES provider(id),
 	CONSTRAINT alert_remitter_fkey FOREIGN KEY (id_remitter) REFERENCES remitter(id),
 	CONSTRAINT alert_category_fkey FOREIGN KEY (id_category) REFERENCES category(id),
 	CONSTRAINT alert_priority_fkey FOREIGN KEY (priority) REFERENCES priority(id),
@@ -143,7 +127,8 @@ CREATE TABLE IF NOT EXISTS log_send (
 );
 
 CREATE TABLE IF NOT EXISTS consumer (
-	id varchar(3) NOT NULL,
+	id varchar(10) NOT NULL,
+	description varchar(50) NOT NULL,
 	segment varchar(10) NOT NULL,
 	CONSTRAINT consumer_pkey PRIMARY KEY (id)
 );

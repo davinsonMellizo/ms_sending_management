@@ -1,0 +1,22 @@
+rootProject.name = 'ms_alert_management'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ":log"
+project(':log').projectDir = file('./infrastructure/helpers/log')
+include ":secrets-manager"
+project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
+include ':rabbit-configurator'
+project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
+include ":commons"
+project(':commons').projectDir = file('./infrastructure/helpers/commons')
+include ':r2dbc-postgresql'
+project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
+include ':reactive-web'
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':async-event-handler'
+project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')

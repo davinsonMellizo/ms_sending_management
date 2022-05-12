@@ -1,11 +1,12 @@
 package co.com.bancolombia.api.commons.util;
 
 import co.com.bancolombia.api.header.ClientHeader;
-import co.com.bancolombia.api.header.ContactHeader;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static co.com.bancolombia.commons.enums.Header.*;
@@ -24,20 +25,11 @@ public class ParamsUtil {
                 .build());
     }
 
-    public static Mono<ContactHeader> getContactHeaders(ServerRequest request) {
-        return Mono.just(ContactHeader.builder()
-                .documentNumber(getHeader(request, DOCUMENT_NUMBER))
-                .documentType(getHeader(request, DOCUMENT_TYPE))
-                .contactMedium(getHeader(request, CONTACT_MEDIUM))
-                .consumer(getHeader(request, CONSUMER))
-                .build());
-    }
-
     public static String getHeader(ServerRequest request, String header) {
         return ofEmpty(request.headers().firstHeader(header)).orElse("");
     }
 
-    public String getConsumer(ServerRequest request){
+    public String getConsumer(ServerRequest request) {
         return getHeader(request, CONSUMER);
     }
 

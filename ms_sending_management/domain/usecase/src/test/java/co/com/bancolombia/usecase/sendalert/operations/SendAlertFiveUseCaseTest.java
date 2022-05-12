@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertFiveUseCaseTest {
+class SendAlertFiveUseCaseTest {
     @InjectMocks
     private SendAlertFiveUseCase sendAlertFiveUseCase;
     @Mock
@@ -65,12 +65,12 @@ public class SendAlertFiveUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorFivePushTest(){
+    void sendAlertIndicatorFivePushTest(){
         Alert alert = Alert.builder()
                 .id("AFI").idState(1)
                 .push("SI")
                 .message("${name}")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
@@ -82,12 +82,12 @@ public class SendAlertFiveUseCaseTest {
     }
 
     @Test
-    public void sendAlertIndicatorFiveSmsTest(){
+    void sendAlertIndicatorFiveSmsTest(){
         Alert alert = Alert.builder()
                 .id("AFI").idState(1)
                 .message("${name}")
                 .push("NO")
-                .idProviderMail(0)
+                .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());

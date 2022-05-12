@@ -25,7 +25,7 @@ public class FunctionalAdapterDataTest {
                 .nroTransaction("123456")
                 .from(buildFrom())
                 .template("{ \"name\" : \"prueba\"}")
-                .payload(Map.of("test","test"))
+                .payload("ALERTAS0060")
                 .build();
     }
 }

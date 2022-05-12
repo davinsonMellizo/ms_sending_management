@@ -15,6 +15,5 @@ public class ResourceQuery {
         private String channel;
         private String transaction;
         private String template;
-        private TypeEvent typeEvent;
     }
 }

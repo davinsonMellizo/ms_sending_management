@@ -10,10 +10,6 @@ import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.providerservice.ProviderService;
-import co.com.bancolombia.model.providerservice.gateways.ProviderServiceGateway;
-import co.com.bancolombia.model.remitter.Remitter;
-import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,11 +26,10 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RouterProviderSMSUseCaseTest {
+class RouterProviderSMSUseCaseTest {
     @InjectMocks
     private RouterProviderSMSUseCase routerProviderSMSUseCase;
-    @Mock
-    private ProviderServiceGateway providerServiceGateway;
+
     @Mock
     private PrefixRepository prefixRepository;
     @Mock
@@ -70,39 +65,35 @@ public class RouterProviderSMSUseCaseTest {
 
 
     @Test
-    public void routeAlertSmsTest(){
+    void routeAlertSmsTest(){
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderSms(0)
+                .idProviderSms("0")
                 .priority(0)
                 .build();
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(prefixRepository.findPrefix(anyString())).thenReturn(Mono.just(Prefix.builder().code("321").build()));
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
-        when(providerServiceGateway.findProviderService(anyInt())).thenReturn(Mono.just(ProviderService.builder()
-                .idProvider("1").build()));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
                 .verifyComplete();
     }
 
     @Test
-    public void routeAlertSmsErrorTest(){
+    void routeAlertSmsErrorTest(){
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderSms(0)
+                .idProviderSms("0")
                 .priority(0)
                 .build();
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(prefixRepository.findPrefix(anyString())).thenReturn(Mono.just(Prefix.builder().code("321").build()));
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
-        when(providerServiceGateway.findProviderService(anyInt())).thenReturn(Mono.just(ProviderService.builder()
-                .idProvider("1").build()));
-        when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
+         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
                 .expectError()
         .verify();
