@@ -66,7 +66,6 @@ public class ClientUseCase {
     }
 
     private Mono<Client> createClientAndContacts(Enrol enrol, String voucher) {
-        System.out.println("creando nuevo cliente ->>>> ");
         return contactUseCase.validateContacts(enrol)
                 .flatMap(enrol2 -> validateDocument(enrol))
                 .flatMap(this::validateCreationUserChannel)
@@ -186,8 +185,10 @@ public class ClientUseCase {
     }
 
     public Mono<ResponseUpdateClient> updateClient(Enrol enrol, Client client, boolean isISeries) {
-
-        return getResponseClientISeriesBridge(client, enrol)
+        return Mono.just(enrol.getClient())
+                .flatMap(cli2 -> contactUseCase.validatePhone(enrol, cli2))
+                .flatMap(cli3 -> contactUseCase.validateMail(enrol, cli3))
+                .flatMap(client1 -> getResponseClientISeriesBridge(client, enrol))
                 .flatMap(resp -> Flux.fromIterable(enrol.getContactData())
                         .map(contact -> contact.toBuilder().documentType(enrol.getClient().getDocumentType())
                                 .documentNumber(enrol.getClient().getDocumentNumber())

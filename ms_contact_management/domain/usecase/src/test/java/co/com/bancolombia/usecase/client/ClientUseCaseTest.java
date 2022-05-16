@@ -31,6 +31,7 @@ import reactor.test.StepVerifier;
 
 import java.util.List;
 
+import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
@@ -194,6 +195,10 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateClientMono() {
+        when(contactUseCase.validatePhone(any(), any()))
+                .thenReturn(Mono.just(client));
+        when(contactUseCase.validateMail(any(), any()))
+                .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))

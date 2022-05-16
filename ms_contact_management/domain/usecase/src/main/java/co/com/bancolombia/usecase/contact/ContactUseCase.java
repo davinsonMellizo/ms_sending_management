@@ -169,22 +169,24 @@ public class ContactUseCase {
 
     public Mono<Client> validatePhone(Enrol enrol, Client client) {
         return Flux.fromIterable(enrol.getContactData())
-                .filter(cnt -> SMS.equals(cnt.getContactWay()) &&
-                        cnt.getValue().chars().allMatch(Character::isDigit)
-                        && cnt.getValue().length() >= 10)
-                .map(contact -> client)
+                .filter(cnt -> SMS.equals(cnt.getContactWay()) )
+                .filter(cnt -> !(cnt.getValue().chars().allMatch(Character::isDigit)
+                        && cnt.getValue().length() >= 10))
                 .next()
-                .switchIfEmpty(Mono.error(new BusinessException(INVALID_PHONE)));
+                .flatMap(contact -> Mono.error(new BusinessException(INVALID_PHONE)))
+                .map(contact -> client)
+                .switchIfEmpty(Mono.just(client));
     }
 
     public Mono<Client> validateMail(Enrol enrol, Client client) {
         final var pattern = "^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
         return Flux.fromIterable(enrol.getContactData())
-                .filter(cnt -> MAIL.equals(cnt.getContactWay()) &&
-                        Pattern.compile(pattern).matcher(cnt.getValue()).matches())
-                .map(contact -> client)
+                .filter(cnt -> MAIL.equals(cnt.getContactWay()))
+                .filter(cnt -> !Pattern.compile(pattern).matcher(cnt.getValue()).matches())
                 .next()
-                .switchIfEmpty(Mono.error(new BusinessException(INVALID_EMAIL)));
+                .flatMap(contact -> Mono.error(new BusinessException(INVALID_EMAIL)))
+                .map(o -> client)
+                .switchIfEmpty(Mono.just(client));
     }
 
     public Mono<Client> validateContacts(Enrol enrol) {
