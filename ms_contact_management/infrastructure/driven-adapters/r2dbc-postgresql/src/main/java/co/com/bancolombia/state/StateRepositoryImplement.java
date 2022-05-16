@@ -13,13 +13,13 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class StateRepositoryImplement
-        extends AdapterOperations<State, StateData, String, StateRepository>
+        extends AdapterOperations<State, StateData, String, StateRepository, StateRepository>
         implements StateGateway {
 
 
     @Autowired
     public StateRepositoryImplement(StateRepository repository, StateMapper mapper) {
-        super(repository, null, mapper::toEntity);
+        super(repository, repository, null, mapper::toEntity);
     }
 
     @Override

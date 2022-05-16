@@ -34,6 +34,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .block();
     }
 
+
     @Bean
     public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value("${adapters.postgresql.schema}") String schema){
         PostgresqlConnectionProperties properties =  postgresProperties();
@@ -47,6 +48,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "disable")
                 .option(Option.valueOf("schema"), schema)
+
                 .build();
 
     }

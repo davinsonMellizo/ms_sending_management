@@ -16,6 +16,7 @@ data:
   CACHE_SECRETS_SIZE: "#{cache-secrets-size}#"
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
   SECRET-RDS: #{secret-rds}#
+  SECRET-RDS-READ: #{secret-rds-read}#
   PATH_BASE: "#{prefix}#/#{service}#"
   CONTACT: "#{contact}#"
   CLIENT: "#{client}#"

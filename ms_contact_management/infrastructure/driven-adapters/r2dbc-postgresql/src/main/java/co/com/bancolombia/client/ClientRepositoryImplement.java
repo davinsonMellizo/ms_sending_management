@@ -3,6 +3,8 @@ package co.com.bancolombia.client;
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.client.data.ClientData;
 import co.com.bancolombia.client.data.ClientMapper;
+import co.com.bancolombia.client.reader.IClientRepositoryReader;
+import co.com.bancolombia.client.writer.IClientRepository;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
@@ -18,21 +20,22 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
 public class ClientRepositoryImplement
-        extends AdapterOperations<Client, ClientData, Integer, IClientRepository>
+        extends AdapterOperations<Client, ClientData, Integer, IClientRepository, IClientRepositoryReader>
         implements ClientRepository {
 
     @Autowired
     private TimeFactory timeFactory;
 
     @Autowired
-    public ClientRepositoryImplement(IClientRepository repository, ClientMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+    public ClientRepositoryImplement(IClientRepository repository, IClientRepositoryReader repositoryRead,
+                                     ClientMapper mapper) {
+        super(repository, repositoryRead, mapper::toData, mapper::toEntity);
     }
 
 
     @Override
     public Mono<Client> findClientByIdentification(Client client) {
-        return repository.findClientByIdentification(client.getDocumentNumber(), client.getDocumentType())
+        return repositoryRead.findClientByIdentification(client.getDocumentNumber(), client.getDocumentType())
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
     }

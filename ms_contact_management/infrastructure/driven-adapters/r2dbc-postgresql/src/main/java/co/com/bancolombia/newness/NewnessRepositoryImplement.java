@@ -16,14 +16,14 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CLIEN
 
 @Repository
 public class NewnessRepositoryImplement
-        extends AdapterOperations<Newness, NewnessData, Integer, INewnessRepository>
+        extends AdapterOperations<Newness, NewnessData, Integer, INewnessRepository, INewnessRepository>
         implements NewnessRepository {
 
     @Autowired
     private TimeFactory timeFactory;
 
     public NewnessRepositoryImplement(INewnessRepository repository, NewnessMapper mapper) {
-        super(repository, mapper::toData, null);
+        super(repository, repository, mapper::toData, null);
     }
 
     @Override

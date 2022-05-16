@@ -14,18 +14,20 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CONSU
 
 
 @Repository
-public class ConsumerRepositoryImplement extends AdapterOperations<Consumer, ConsumerData, String, ConsumerRepository>
+public class ConsumerRepositoryImplement
+        extends AdapterOperations<Consumer, ConsumerData, String, ConsumerRepository, ConsumerRepository>
         implements ConsumerGateway {
 
     @Autowired
     public ConsumerRepositoryImplement(ConsumerRepository repository, ConsumerMapper mapper) {
-        super(repository, null, mapper::toEntity);
+        super(repository,repository, null, mapper::toEntity);
     }
 
     @Override
     public Mono<Consumer> findConsumerById(String id) {
         return repository.findById(id)
                 .map(this::convertToEntity)
+                .doOnNext(System.out::println)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONSUMER_BY_ID_ERROR));
     }
 

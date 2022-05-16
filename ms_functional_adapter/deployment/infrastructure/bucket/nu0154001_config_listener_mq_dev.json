@@ -42,26 +42,26 @@
       },
       "ALERTAS0001": {
         "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\", } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
-        "target": "ms_contact_management",
+        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
+        "target": "contact_management",
         "queue": "send.create.client"
       },
       "ALERTAS0002": {
         "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\", } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
-        "target": "ms_contact_management",
+        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
+        "target": "contact_management",
         "queue": "send.update.client"
       },
       "ALERTAS0003": {
         "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\", } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
-        "target": "ms_contact_management",
+        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(111)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
+        "target": "contact_management",
         "queue": "send.create.client"
       },
       "ALERTAS0004": {
         "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\", } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
-        "target": "ms_contact_management",
+        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(111)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
+        "target": "contact_management",
         "queue": "send.update.client"
       },
       "PROVIDER001": {

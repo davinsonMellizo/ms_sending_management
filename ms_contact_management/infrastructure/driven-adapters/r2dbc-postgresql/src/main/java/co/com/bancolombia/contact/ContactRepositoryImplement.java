@@ -4,6 +4,8 @@ import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.contact.data.ContactData;
 import co.com.bancolombia.contact.data.ContactMapper;
+import co.com.bancolombia.contact.reader.ContactRepositoryReader;
+import co.com.bancolombia.contact.writer.ContactRepository;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
@@ -17,27 +19,28 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @Repository
 public class ContactRepositoryImplement
-        extends AdapterOperations<Contact, ContactData, Integer, ContactRepository>
+        extends AdapterOperations<Contact, ContactData, Integer, ContactRepository, ContactRepositoryReader>
         implements ContactGateway {
 
     @Autowired
     private TimeFactory timeFactory;
 
     @Autowired
-    public ContactRepositoryImplement(ContactRepository repository, ContactMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+    public ContactRepositoryImplement(ContactRepository repository, ContactRepositoryReader repositoryReader,
+                                      ContactMapper mapper) {
+        super(repository, repositoryReader, mapper::toData, mapper::toEntity);
     }
 
     @Override
     public Flux<Contact> contactsByClient(Client client) {
-        return repository.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
+        return repositoryRead.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
                 .map(Mono::just)
                 .flatMap(this::doQuery)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
     }
     @Override
     public Flux<Contact> contactsByClientAndSegment(Client client, String segment) {
-        return repository.contactsByClientAndSegment(client.getDocumentNumber(), client.getDocumentType(), segment)
+        return repositoryRead.contactsByClientAndSegment(client.getDocumentNumber(), client.getDocumentType(), segment)
                 .map(Mono::just)
                 .flatMap(this::doQuery)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
@@ -45,7 +48,7 @@ public class ContactRepositoryImplement
 
     @Override
     public Flux<Contact> findIdContact(Contact contact) {
-        return repository.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
+        return repositoryRead.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactWay(), contact.getSegment())
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONTACT_ERROR));
@@ -62,7 +65,7 @@ public class ContactRepositoryImplement
         return Mono.just(pContact)
                 .map(this::convertToData)
                 .map(contact -> contact.toBuilder().modifiedDate(timeFactory.now()).build())
-                .flatMap(repository::save)
+                .flatMap(this::saveData)
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_CONTACT_ERROR));
     }

@@ -13,13 +13,13 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class ContactMediumRepositoryImplement
-        extends AdapterOperations<ContactMedium, ContactMediumData, String, ContactMediumRepository>
+        extends AdapterOperations<ContactMedium, ContactMediumData, String, ContactMediumRepository, ContactMediumRepository>
         implements ContactMediumGateway {
 
 
     @Autowired
     public ContactMediumRepositoryImplement(ContactMediumRepository repository, ContactMediumMapper mapper) {
-        super(repository, null, mapper::toEntity);
+        super(repository, repository, null, mapper::toEntity);
     }
 
     @Override

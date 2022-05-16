@@ -1,5 +1,6 @@
 package co.com.bancolombia.config;
 
+import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,8 @@ public class PostgreSQLConnectionConfigHelperTest {
 
     @Mock
     private SecretsManager secretsManager;
+    @Mock
+    private LoggerBuilder logger;
 
     @BeforeEach
     public void init() {
@@ -43,14 +46,21 @@ public class PostgreSQLConnectionConfigHelperTest {
         properties.setUsername(username);
         properties.setPassword(password);
         properties.setPort(port);
-        when(secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
-                .thenReturn(Mono.just(properties));
-        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+        when(secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class)).thenReturn(Mono.just(properties));
+
     }
 
     @Test
-    public void getConnectionConfig() {
-        assertNotNull(helper.buildConnectionConfiguration(properties.getSchema(), 4));
+    void getConnectionReadConfig() {
+        when(secretsNameStandard.secretForPostgresRead()).thenReturn(Mono.just(secretName));
+        assertNotNull(helper.buildConnectionReaderConfiguration("schema", 1));
     }
+
+    @Test
+    void getConnectionWriterConfig() {
+        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+        assertNotNull(helper.buildConnectionWriterConfiguration("schema",1));
+    }
+
 }
 

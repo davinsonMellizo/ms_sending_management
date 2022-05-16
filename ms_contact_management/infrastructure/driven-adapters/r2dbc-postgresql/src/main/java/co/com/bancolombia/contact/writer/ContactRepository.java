@@ -1,4 +1,4 @@
-package co.com.bancolombia.contact;
+package co.com.bancolombia.contact.writer;
 
 import co.com.bancolombia.contact.data.ContactData;
 import org.springframework.data.r2dbc.repository.Query;
@@ -8,8 +8,8 @@ import reactor.core.publisher.Flux;
 
 public interface ContactRepository extends ReactiveCrudRepository<ContactData, Integer> {
 
-    @Query("select c.value, c.created_date, c.modified_date, c.segment, " +
-            "m.code as contact_way, s.name as state_contact " +
+    /*@Query("select c.value, c.created_date, c.modified_date, c.segment, " +
+           "m.code as contact_way, s.name as state_contact " +
             "from contact c " +
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +
@@ -41,6 +41,6 @@ public interface ContactRepository extends ReactiveCrudRepository<ContactData, I
     Flux<ContactData> findContact(@Param("documentNumber") Long documentNumber,
                                   @Param("documentType") String documentType,
                                   @Param("contactMedium") String contactMedium,
-                                  @Param("segment") String segment);
+                                  @Param("segment") String segment);*/
 
 }

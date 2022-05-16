@@ -7,39 +7,36 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
-
 import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.dialect.PostgresDialect;
-
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator;
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.transaction.ReactiveTransactionManager;
 
 @Configuration
-@EnableR2dbcRepositories(entityOperationsRef = "writerR2dbcEntityOperations",
-        basePackages={"co.com.bancolombia.client.writer"})
-public class DatabaseConfig extends AbstractR2dbcConfiguration {
+@EnableR2dbcRepositories(entityOperationsRef = "readerR2dbcEntityOperations",
+        basePackages={"co.com.bancolombia.client.reader"})
+public class DatabaseReaderConfig {
 
-    @Override
-    @Bean("Writer")
+    @Bean("Reader")
     public ConnectionFactory connectionFactory() {
-        return ConnectionFactoryBuilder.withUrl("r2dbc:h2:mem:///testDbCW?options=DB_CLOSE_DELAY=-1").build();
+        return ConnectionFactoryBuilder.withUrl("r2dbc:h2:mem:///testDbCR?options=DB_CLOSE_DELAY=-1").build();
     }
 
     @Bean
-    public R2dbcEntityOperations writerR2dbcEntityOperations(@Qualifier("Writer") final ConnectionFactory connectionFactory) {
+    public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader")ConnectionFactory connectionFactory) {
 
         DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
     }
 
-
-
     @Bean
-    public ConnectionFactoryInitializer initializerWriter(@Qualifier("Writer") final ConnectionFactory connectionFactory) {
+    public ConnectionFactoryInitializer initializerReader(@Qualifier("Reader") final ConnectionFactory connectionFactory) {
         ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
         initializer.setConnectionFactory(connectionFactory);
         CompositeDatabasePopulator populator = new CompositeDatabasePopulator();

@@ -168,7 +168,6 @@ public class ClientUseCase {
     }
 
     private Mono<StatusResponse<Enrol>> responseUpdate(Enrol enrol, StatusResponse<Client> responseClient) {
-        System.out.println("responseUpdate macd");
         Enrol enrolActual = Enrol.builder().contactData(new ArrayList<>()).build();
         Enrol enrolBefore = Enrol.builder().contactData(new ArrayList<>()).build();
         StatusResponse<Enrol> responseUpdate = new StatusResponse<>(SUCCESS_ENROLL.getCode(), enrolActual, enrolBefore);
@@ -178,7 +177,6 @@ public class ClientUseCase {
                         .segment(enrol.getClient().getConsumerCode())
                         .build())
                 .flatMap(contact -> contactUseCase.updateContactRequest(contact, ""))
-                .doOnNext(respon -> System.out.println("Aqui respuesta --- " + respon))
                 .doOnNext(response -> responseUpdate.getActual().getContactData().add(response.getActual()))
                 .doOnNext(response -> responseUpdate.getBefore().getContactData().add(response.getBefore()))
                 .doOnNext(response -> responseUpdate.getActual().setClient(responseClient.getActual()))
@@ -188,7 +186,7 @@ public class ClientUseCase {
     }
 
     public Mono<ResponseUpdateClient> updateClient(Enrol enrol, Client client, boolean isISeries) {
-        System.out.println("entra a actualizar cliente ->>>> ");
+
         return getResponseClientISeriesBridge(client, enrol)
                 .flatMap(resp -> Flux.fromIterable(enrol.getContactData())
                         .map(contact -> contact.toBuilder().documentType(enrol.getClient().getDocumentType())
@@ -196,7 +194,6 @@ public class ClientUseCase {
                                 .segment(enrol.getClient().getConsumerCode())
                                 .build())
                         .flatMap(contact -> contactUseCase.updateContactRequest(contact, client.getVoucher()))
-                        .doOnNext(contactStatusResponse -> System.out.println("aquiii retornando " + contactStatusResponse))
                         .collectList()
                         .filter(cc -> isISeries)
                         .flatMap(pp -> getResponse(enrol.getClient().getVoucher(), SUCCESS_UPDATE))

@@ -25,14 +25,14 @@ public enum DocumentTypeEnum {
 
     public static DocumentTypeEnum fromValue(String value) throws IllegalArgumentException {
         return Arrays.stream(DocumentTypeEnum.values())
-                .filter(enumerator -> enumerator.value.equals(value))
+                .filter(enumerator -> enumerator.value.equals(value) || Integer.toString(enumerator.id).equals( value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Tipo de documento no valido: " + value));
     }
 
     public static DocumentTypeEnum fromId(String value) throws IllegalArgumentException {
         return Arrays.stream(DocumentTypeEnum.values())
-                .filter(enumerator -> String.valueOf(enumerator.id).equals(value))
+                .filter(enumerator -> enumerator.value.equals(value) || Integer.toString(enumerator.id).equals( value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Id de documento no valido: " + value));
     }

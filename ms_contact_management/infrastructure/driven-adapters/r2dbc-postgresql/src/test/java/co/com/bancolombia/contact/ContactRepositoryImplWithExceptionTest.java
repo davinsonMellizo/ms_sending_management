@@ -2,6 +2,8 @@ package co.com.bancolombia.contact;
 
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.contact.data.ContactMapper;
+import co.com.bancolombia.contact.reader.ContactRepositoryReader;
+import co.com.bancolombia.contact.writer.ContactRepository;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +31,7 @@ public class ContactRepositoryImplWithExceptionTest {
     @InjectMocks
     private ContactRepositoryImplement repositoryImpl;
     @Mock
+    private ContactRepositoryReader repositoryReader;@Mock
     private ContactRepository repository;
     @Spy
     private ContactMapper mapper = Mappers.getMapper(ContactMapper.class);
@@ -48,7 +51,7 @@ public class ContactRepositoryImplWithExceptionTest {
 
     @Test
     public void findAllContactsByClient() {
-        when(repository.findAllContactsByClient(any(), any()))
+        when(repositoryReader.findAllContactsByClient(any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
         repositoryImpl.contactsByClient(client)
                 .as(StepVerifier::create)
@@ -58,7 +61,7 @@ public class ContactRepositoryImplWithExceptionTest {
 
     @Test
     public void findIdContact() {
-        when(repository.findContact(any(), any(), any(), any()))
+        when(repositoryReader.findContact(any(), any(), any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
         contact.setContactWay("SMS");
         contact.setSegment("ALM");

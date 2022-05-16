@@ -13,11 +13,11 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_DOCUM
 
 @Repository
 public class DocumentRepositoryImplement
-        extends AdapterOperations<Document, DocumentData, String, DocumentRepository>
+        extends AdapterOperations<Document, DocumentData, String, DocumentRepository, DocumentRepository>
         implements DocumentGateway {
 
     public DocumentRepositoryImplement(DocumentRepository repository, DocumentMapper mapper) {
-        super(repository, null, mapper::toEntity);
+        super(repository, repository, null, mapper::toEntity);
     }
 
     @Override

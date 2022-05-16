@@ -26,6 +26,7 @@ spring:
 adapters:
   secrets-manager:
     secret-rds: "${SECRET-RDS}"
+    secret-rds-read: "${SECRET-RDS-READ}"
     secret-rabbit: "${SECRET-RABBIT}"
     cache-size: "${CACHE_SECRETS_SIZE}"
     cache-time: "${CACHE_SECRETS_SECONDS}"

@@ -15,10 +15,15 @@ import reactor.core.publisher.Mono;
 public class SecretsNameStandard {
 
     private String secretRds;
+    private String secretRdsRead;
     private String secretRabbit;
 
     public Mono<String> secretForPostgres() {
         return Mono.just(secretRds);
+    }
+
+    public Mono<String> secretForPostgresRead() {
+        return Mono.just(secretRdsRead);
     }
 
     public Mono<String> secretForRabbitMQ() {

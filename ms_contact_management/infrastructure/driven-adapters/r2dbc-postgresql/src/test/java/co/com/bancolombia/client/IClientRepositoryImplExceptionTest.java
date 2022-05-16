@@ -2,6 +2,8 @@ package co.com.bancolombia.client;
 
 
 import co.com.bancolombia.client.data.ClientMapper;
+import co.com.bancolombia.client.reader.IClientRepositoryReader;
+import co.com.bancolombia.client.writer.IClientRepository;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.client.Client;
@@ -30,7 +32,10 @@ public class IClientRepositoryImplExceptionTest {
     @InjectMocks
     private ClientRepositoryImplement repositoryImpl;
     @Mock
+    private IClientRepositoryReader repositoryReader;
+    @Mock
     private IClientRepository repository;
+
     @Spy
     private ClientMapper mapper = Mappers.getMapper(ClientMapper.class);
     private static final LocalDateTime NOW = LocalDateTime.now();
@@ -52,7 +57,7 @@ public class IClientRepositoryImplExceptionTest {
 
     @Test
     public void findClientByDocument() {
-        when(repository.findClientByIdentification(any(), any()))
+        when(repositoryReader.findClientByIdentification(any(), any()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findClientByIdentification(client)
                 .as(StepVerifier::create)
