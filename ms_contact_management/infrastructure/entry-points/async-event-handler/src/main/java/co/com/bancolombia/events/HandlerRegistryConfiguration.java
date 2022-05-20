@@ -5,7 +5,8 @@ import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static co.com.bancolombia.events.config.EventNameConfig.*;
+import static co.com.bancolombia.events.config.EventNameConfig.SEND_CREATE_ISERIES;
+import static co.com.bancolombia.events.config.EventNameConfig.SEND_UPDATE_ISERIES;
 import static org.reactivecommons.async.api.HandlerRegistry.register;
 
 @Configuration

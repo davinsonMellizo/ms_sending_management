@@ -7,10 +7,6 @@ import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.usecase.client.ClientUseCase;
-
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
-import static co.com.bancolombia.usecase.commons.BridgeContact.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -18,6 +14,9 @@ import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners;
 import reactor.core.publisher.Mono;
 import reactor.function.Function3;
+
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
+import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
 
 
 @AllArgsConstructor

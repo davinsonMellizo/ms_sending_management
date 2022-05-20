@@ -166,3 +166,25 @@ CREATE TABLE IF NOT EXISTS contact (
  	CONSTRAINT contact_state_fkey FOREIGN KEY (id_state) REFERENCES state(id),
  	CONSTRAINT contact_client_type_fkey FOREIGN KEY (document_number, id_document_type) REFERENCES client(document_number, id_document_type) on delete cascade on update cascade
 );
+
+CREATE TABLE IF NOT EXISTS newness (
+	id serial primary KEY,
+	document_type int2 NOT NULL,
+	document_number int8 NOT NULL,
+	contact varchar(60) NULL,
+	channel_transaction varchar(3) NULL,
+	id_alert varchar(3) NULL,
+	description_alert varchar(50) NULL,
+	active boolean NULL,
+	transaction_description varchar(50) NULL,
+	number_operations int2 NULL,
+	amount_enable int8 NULL,
+	user_creation varchar(20) NULL,
+	response_code varchar(3) NULL,
+	response_description varchar(50) NULL,
+	voucher int8 NULL,
+	date_first_inscription timestamp NULL,
+	date_creation timestamp NOT NULL
+
+);
+

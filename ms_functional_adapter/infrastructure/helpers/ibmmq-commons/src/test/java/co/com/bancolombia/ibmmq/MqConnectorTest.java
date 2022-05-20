@@ -11,19 +11,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.test.StepVerifier;
 
-import javax.jms.Connection;
-import javax.jms.Destination;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.JMSProducer;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
-import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.JMSProducer;
+import javax.jms.JMSException;
+import javax.jms.Connection;
+import javax.jms.JMSContext;
+import javax.jms.MessageConsumer;
+import javax.jms.Session;
+import javax.jms.Destination;
+import javax.jms.MessageListener;
 import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +30,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MqConnectorTest {
+class MqConnectorTest {
 
     @InjectMocks
     private MqConnector mqConnector;
@@ -67,7 +66,7 @@ public class MqConnectorTest {
     }
 
     @Test
-    public void sendMessageToQueueTest() throws JMSException {
+    void sendMessageToQueueTest() throws JMSException {
         when(connectionsManagement.getConnectionData()).thenReturn(connectionData);
         when(connectionData.getQueueFromTransaction(anyString())).thenReturn(queue);
         when(connectionData.getQueueResponseFromTransaction(anyString())).thenReturn(queue);
@@ -81,7 +80,7 @@ public class MqConnectorTest {
     }
 
     @Test
-    public void givenErrorWhenSendMessageToQueueTest() throws JMSException {
+    void givenErrorWhenSendMessageToQueueTest() throws JMSException {
         when(connectionsManagement.getConnectionData()).thenReturn(connectionData);
         when(connectionData.getQueueFromTransaction(anyString())).thenReturn(queue);
         when(connectionData.getQueueResponseFromTransaction(anyString())).thenReturn(queue);
@@ -90,7 +89,7 @@ public class MqConnectorTest {
     }
 
     @Test
-    public void eventConsumerTest(){
+    void eventConsumerTest() {
         mqConnector.eventConsumer(queue, msgListener);
     }
 }

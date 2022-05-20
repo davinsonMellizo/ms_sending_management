@@ -1,6 +1,5 @@
 package co.com.bancolombia.commandsmq.config;
 
-import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.ibmmq.MqConnector;
 import co.com.bancolombia.ibmmq.jms.JmsManagement;
@@ -9,6 +8,7 @@ import co.com.bancolombia.model.datatest.DataTest;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.usecase.functionaladapter.FunctionalAdapterUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,12 +22,13 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import java.io.IOException;
 
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_JMS_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ListenerConfigurationTest {
+class ListenerConfigurationTest {
 
     @InjectMocks
     private ListenerConfiguration listenerConfiguration;
@@ -64,25 +65,45 @@ public class ListenerConfigurationTest {
     }
 
     @Test
-    public void eventHandlers(){
+    void eventHandlers() {
         when(management.getConnectionData()).thenReturn(connData);
         assertThat(listenerConfiguration.eventHandlers(management, mqConnector)).isNull();
     }
 
     @Test
-    public void onMessageTest() throws JMSException {
+    void onMessageTest() throws JMSException {
         when(message.getJMSCorrelationID()).thenReturn("123asd");
         when(message.getBody(any())).thenReturn(payload);
         when(useCase.sendTransactionToRabbit(any())).thenReturn(Mono.empty());
-        listenerMQ.onMessage(message);
+        try {
+            listenerMQ.onMessage(message);
+        }catch (Exception e){
+            Assertions.fail(e.getMessage());
+        }
     }
 
     @Test
-    public void onMessageTestWithError() throws JMSException {
+    void onMessageErrorTest() throws JMSException {
+        when(message.getJMSCorrelationID()).thenReturn("123asd");
+        when(message.getBody(any())).thenReturn(payload);
+        when(useCase.sendTransactionToRabbit(any())).thenReturn(Mono.error(new TechnicalException(TECHNICAL_JMS_ERROR)));
+        try {
+            listenerMQ.onMessage(message);
+        }catch (Exception e){
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void onMessageTestWithError() throws JMSException {
         when(message.getJMSCorrelationID()).thenReturn("123asd");
         when(message.getBody(any())).thenReturn(payload);
         when(useCase.sendTransactionToRabbit(any())).thenReturn(Mono.empty());
-        listenerMQ.onMessage(message);
+        try {
+            listenerMQ.onMessage(message);
+        }catch (Exception e){
+            Assertions.fail(e.getMessage());
+        }
     }
 
 

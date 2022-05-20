@@ -8,14 +8,17 @@ import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
 import org.springframework.boot.context.properties.PropertyMapper;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @RequiredArgsConstructor
-public class RabbitMQConfigHelper{
+public class RabbitMQConfigHelper {
     private final LoggerBuilder logger;
     private final SecretsManager secretsManager;
     private final SecretsNameStandard secretsNameStandard;
@@ -31,8 +34,8 @@ public class RabbitMQConfigHelper{
 
     @Primary
     @Bean
-    @Profile({"dev","qa","pdn"})
-    public ConnectionFactoryProvider getConnectionFactoryProvider(){
+    @Profile({"dev", "qa", "pdn"})
+    public ConnectionFactoryProvider getConnectionFactoryProvider() {
         RabbitMQConnectionProperties properties = rabbitProperties();
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();

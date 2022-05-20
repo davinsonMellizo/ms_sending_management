@@ -15,38 +15,31 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.jms.JMSException;
-import javax.net.ssl.CertPathTrustManagerParameters;
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.CertPathTrustManagerParameters;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
 import java.security.cert.CertPathBuilder;
-import java.security.cert.CertificateException;
-import java.security.cert.PKIXBuilderParameters;
 import java.security.cert.PKIXRevocationChecker;
+import java.security.cert.PKIXBuilderParameters;
 import java.security.cert.X509CertSelector;
-
+import java.security.cert.CertificateException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.ibm.msg.client.jms.JmsConstants.PASSWORD;
-import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_RECONNECT;
 import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CM_CLIENT;
 import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_TEMPORARY_MODEL;
+import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_RECONNECT;
 
 @Component
 @RequiredArgsConstructor
@@ -55,16 +48,16 @@ public class JmsExtConnectionFactory {
     private final SecretsManager secretManager;
     private final LoggerBuilder loggerBuilder;
 
-    private Map<String,JmsConnectionFactory> mapConnFactory;
+    private Map<String, JmsConnectionFactory> mapConnFactory;
     private static final String TLS = "TLSv1.3";
 
     @PostConstruct
-    private void init(){
+    private void init() {
         mapConnFactory = new HashMap<>();
     }
 
     public JmsConnectionFactory connectionFactory(ConnectionDTO conn) {
-        if(!mapConnFactory.containsKey(conn.getName())){
+        if (!mapConnFactory.containsKey(conn.getName())) {
             try {
                 MQProperties properties = secretManager.getSecret(conn.getSecret(), MQProperties.class).block();
                 System.setProperty("com.ibm.mq.cfg.useIBMCipherMappings", "false");
@@ -90,7 +83,7 @@ public class JmsExtConnectionFactory {
                 mqConnection.setTransportType(WMQ_CM_CLIENT);
                 mqConnection.setClientReconnectOptions(WMQ_CLIENT_RECONNECT);
                 mqConnection.setSSLSocketFactory(sslSocketFactory);
-                mapConnFactory.put(conn.getName(),mqConnection);
+                mapConnFactory.put(conn.getName(), mqConnection);
                 return mqConnection;
             } catch (JMSException | MalformedURLException e) {
                 loggerBuilder.error(e);

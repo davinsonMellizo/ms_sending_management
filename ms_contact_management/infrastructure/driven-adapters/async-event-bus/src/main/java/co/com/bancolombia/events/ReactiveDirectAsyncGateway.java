@@ -2,7 +2,6 @@ package co.com.bancolombia.events;
 
 import co.com.bancolombia.model.bridge.Bridge;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.Command;

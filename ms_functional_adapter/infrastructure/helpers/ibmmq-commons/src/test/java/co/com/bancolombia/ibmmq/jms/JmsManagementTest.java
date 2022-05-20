@@ -15,21 +15,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Mono;
 
-import javax.jms.Connection;
-import javax.jms.ExceptionListener;
-import javax.jms.JMSConsumer;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.JMSProducer;
-import javax.jms.MessageConsumer;
-import javax.jms.Queue;
-import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.JMSProducer;
+import javax.jms.JMSException;
+import javax.jms.Connection;
+import javax.jms.JMSContext;
+import javax.jms.JMSConsumer;
+import javax.jms.ExceptionListener;
+import javax.jms.MessageConsumer;
+import javax.jms.Session;
+import javax.jms.Queue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,14 +38,14 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class JmsManagementTest {
+class JmsManagementTest {
 
     @Spy
     @InjectMocks
@@ -64,7 +63,8 @@ public class JmsManagementTest {
     @Mock
     private ExceptionListener exceptionListener = new ExceptionListener() {
         @Override
-        public void onException(JMSException exception) {}
+        public void onException(JMSException exception) {
+        }
     };
     @Mock
     private ProducerManagement producerManagement;
@@ -92,15 +92,15 @@ public class JmsManagementTest {
     private MQTemporaryQueue temporaryQueue;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         ReflectionTestUtils.setField(management, "exceptionListener", exceptionListener);
         when(s3AsynOperations.getFileAsInputStream(any(), any()))
-                .thenReturn(Mono.just( getInputStream("s3_config-listener-mq.json")));
+                .thenReturn(Mono.just(getInputStream("s3_config-listener-mq.json")));
         when(s3AsynOperations.getFileAsString(any(), any()))
-                .thenReturn(Mono.just( loadFileConfig("s3_config-listener-mq.json")));
+                .thenReturn(Mono.just(loadFileConfig("s3_config-listener-mq.json")));
         when(connectionFactory.connectionFactory(any())).thenReturn(jmsConnectionFactory);
         try {
-            doReturn(true).when(management).saveToFile(any(),any());
+            doReturn(true).when(management).saveToFile(any(), any());
             when(jmsConnectionFactory.createContext()).thenReturn(jmsContext);
             when(jmsContext.createQueue(any())).thenReturn(moQueue);
             when(jmsConnectionFactory.createConnection()).thenReturn(connection);
@@ -108,26 +108,26 @@ public class JmsManagementTest {
             when(session.createTemporaryQueue()).thenReturn(temporaryQueue);
             when(temporaryQueue.getQueueName()).thenReturn("temporaryQueue");
             management.init();
-        }catch (IOException | JMSException e){
+        } catch (IOException | JMSException e) {
             Assertions.fail(e.getMessage());
         }
     }
 
     @Test
-    public void getTextMessage() {
+    void getTextMessage() {
         when(jmsContext.createTextMessage(any())).thenReturn(textMessage);
         assertThat(management.getTextMessage("connFactory1", "message")).isInstanceOf(TextMessage.class);
     }
 
     @Test
-    public void getJmsProducer() {
+    void getJmsProducer() {
         when(jmsContext.createProducer()).thenReturn(jmsProducer);
         assertThat(management.getJmsProducer("connFactory1")).isNotNull();
         verify(jmsContext).createProducer();
     }
 
     @Test
-    public void getQueueConsumer() {
+    void getQueueConsumer() {
         QueueDto dto = new QueueDto();
         dto.setConnection("connFactory1");
         dto.setName("DEV.QUEUE.1");
@@ -135,7 +135,7 @@ public class JmsManagementTest {
     }
 
     @Test
-    public void getQueueConsumerTemporary() {
+    void getQueueConsumerTemporary() {
         QueueDto dto = new QueueDto();
         dto.setConnection("connFactory1");
         dto.setName("DEV.QUEUE.1");
@@ -144,7 +144,7 @@ public class JmsManagementTest {
     }
 
     @Test
-    public void getQueueCProducer() {
+    void getQueueCProducer() {
         QueueDto dto = new QueueDto();
         dto.setConnection("connFactory1");
         dto.setName("DEV.QUEUE.1");
@@ -152,13 +152,13 @@ public class JmsManagementTest {
     }
 
     @Test
-    public void resetConnection() {
+    void resetConnection() {
         management.resetConnection("connFactory1");
         verify(connectionFactory, atLeast(2)).connectionFactory(any());
     }
 
     @Test
-    public void setMessageListener() {
+    void setMessageListener() {
         try {
             QueueDto dto = new QueueDto();
             dto.setConnection("connFactory1");
@@ -166,16 +166,17 @@ public class JmsManagementTest {
             when(connection.createSession()).thenReturn(session);
             when(session.createConsumer(any())).thenReturn(messageConsumer);
 
-            management.setMessageListener(dto, msg -> {});
+            management.setMessageListener(dto, msg -> {
+            });
             verify(connection, times(2)).createSession();
             verify(session).createConsumer(any());
             verify(messageConsumer).setMessageListener(any());
-        }catch (JMSException e){
+        } catch (JMSException e) {
             Assertions.fail(e.getMessage());
         }
     }
 
-    private AwsProperties buildAwsProperties(){
+    private AwsProperties buildAwsProperties() {
         AwsProperties properties = new AwsProperties();
         properties.setRegion("us-east");
         properties.setS3(new AwsProperties.S3());
@@ -185,21 +186,21 @@ public class JmsManagementTest {
         return properties;
     }
 
-    private  String loadFileConfig(String filename){
-        try(InputStream inputStream =Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)){
+    private String loadFileConfig(String filename) {
+        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)) {
             return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                     .lines()
                     .collect(Collectors.joining("\n"));
-        }catch(IOException e){
+        } catch (IOException e) {
             Assertions.fail(e.getMessage());
             return null;
         }
     }
 
-    private  InputStream getInputStream(String filename){
-        try(InputStream inputStream =Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)){
+    private InputStream getInputStream(String filename) {
+        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)) {
             return inputStream;
-        }catch(IOException e){
+        } catch (IOException e) {
             Assertions.fail(e.getMessage());
             return null;
         }

@@ -5,7 +5,6 @@ import co.com.bancolombia.model.log.LoggerBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.jms.MessageListener;
@@ -13,7 +12,7 @@ import javax.jms.MessageListener;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class ReconnectSupervisorTest {
+class ReconnectSupervisorTest {
     @Mock
     JmsManagement wrapper;
     @Mock
@@ -22,8 +21,8 @@ public class ReconnectSupervisorTest {
     LoggerBuilder loggerBuilder;
 
     @Test
-    public void shouldStartWorkerOnError() {
-        ReconnectSupervisor supervisor = new ReconnectSupervisor(wrapper,listener, loggerBuilder);
+    void shouldStartWorkerOnError() {
+        ReconnectSupervisor supervisor = new ReconnectSupervisor(wrapper, listener, loggerBuilder);
         assertThat(supervisor.isRunning()).isFalse();
     }
 }

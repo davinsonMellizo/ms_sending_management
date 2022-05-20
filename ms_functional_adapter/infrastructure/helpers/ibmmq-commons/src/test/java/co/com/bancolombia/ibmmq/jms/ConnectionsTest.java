@@ -4,7 +4,6 @@ import com.ibm.msg.client.jms.JmsConnectionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.jms.Connection;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ConnectionsTest {
+class ConnectionsTest {
 
     @Mock
     private JmsConnectionFactory factory;
@@ -29,10 +28,10 @@ public class ConnectionsTest {
     private Connection connection;
 
     @Test
-    public void validCreateObject() throws JMSException {
+    void validCreateObject() throws JMSException {
         when(factory.createContext()).thenReturn(context);
         when(factory.createConnection()).thenReturn(connection);
-        ConnectionJms conn = new ConnectionJms(factory,exceptionListener);
+        ConnectionJms conn = new ConnectionJms(factory, exceptionListener);
         assertThat(conn).isNotNull();
     }
 }

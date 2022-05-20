@@ -25,4 +25,9 @@ data:
   POSTGRESQL_POOL_INITIAL: "#{postgresql-pool-initial}#"
   POSTGRESQL_POOL_MAX: "#{postgresql-pool-max}#"
   SECRET-RABBIT: #{secret-rabbit}#
+  RETRIEVE: #{api-retrieve-iseries}#
+  CLIENT_ID: #{client-id}#
+  CLIENT_SECRET: #{client-secret}#
+  MESSAGE_ID: #{message-id}#
+
 

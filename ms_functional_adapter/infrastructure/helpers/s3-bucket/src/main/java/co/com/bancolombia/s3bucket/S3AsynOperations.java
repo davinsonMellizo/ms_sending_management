@@ -21,7 +21,7 @@ public class S3AsynOperations {
 
     private final S3AsyncClient s3AsyncClient;
 
-    public Mono<String> getFileAsString(String bucketName, String objectKey){
+    public Mono<String> getFileAsString(String bucketName, String objectKey) {
         return getRequest(bucketName, objectKey)
                 .flatMap(this::getFileAsBytes)
                 .map(response -> fromByteArray(response, response.asByteArray()))
@@ -32,11 +32,11 @@ public class S3AsynOperations {
                 });
     }
 
-    private Mono<ResponseBytes> getFileAsBytes(GetObjectRequest request){
+    private Mono<ResponseBytes> getFileAsBytes(GetObjectRequest request) {
         return Mono.fromFuture(s3AsyncClient.getObject(request, AsyncResponseTransformer.toBytes()));
     }
 
-    public Mono<InputStream> getFileAsInputStream(String bucketName, String objectKey){
+    public Mono<InputStream> getFileAsInputStream(String bucketName, String objectKey) {
         return getRequest(bucketName, objectKey)
                 .flatMap(this::getFileAsBytes)
                 .map(response -> fromByteArray(response, response.asByteArray()))
@@ -47,7 +47,7 @@ public class S3AsynOperations {
                 });
     }
 
-    private Mono<GetObjectRequest> getRequest(String bucketName, String objectKey){
+    private Mono<GetObjectRequest> getRequest(String bucketName, String objectKey) {
         return Mono.just(GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(objectKey)

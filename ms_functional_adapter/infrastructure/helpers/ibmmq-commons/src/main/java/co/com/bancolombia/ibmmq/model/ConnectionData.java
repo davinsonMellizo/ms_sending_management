@@ -17,7 +17,7 @@ public class ConnectionData {
     private List<Listener> listener;
     private Map<String, Transaction> transactions;
 
-    public QueueDto getQueue(String nameQueue){
+    public QueueDto getQueue(String nameQueue) {
         return getQueues()
                 .stream()
                 .filter(conn -> conn.getName().equals(nameQueue))
@@ -25,7 +25,7 @@ public class ConnectionData {
                 .orElseThrow(() -> new TechnicalException(TECHNICAL_CONFIG_TRANSACTION_NOT_FOUND));
     }
 
-    public Listener getListener(String keyConnect){
+    public Listener getListener(String keyConnect) {
         String idListener = getTransactions().get(keyConnect).getListener();
         return getListener()
                 .stream()
@@ -34,24 +34,25 @@ public class ConnectionData {
                 .orElseThrow(() -> new TechnicalException(TECHNICAL_CONFIG_TRANSACTION_NOT_FOUND));
     }
 
-    public void setNameQueueListener(String name,String namePrev){
+    public void setNameQueueListener(String name, String namePrev) {
         getListener().stream()
                 .filter(queue -> queue.getQueueResponse().equals(namePrev))
                 .forEachOrdered(queue -> queue.setQueueResponse(name));
     }
 
-    public QueueDto getQueueFromTransaction(String keyConnect){
+    public QueueDto getQueueFromTransaction(String keyConnect) {
         return getQueue(getListener(keyConnect).getQueueRequest());
     }
 
-    public QueueDto getQueueResponseFromTransaction(String keyConnect){
+    public QueueDto getQueueResponseFromTransaction(String keyConnect) {
         return getQueue(getListener(keyConnect).getQueueResponse());
     }
 
-    public Mono<String> getTemplate(String trxId){
+    public Mono<String> getTemplate(String trxId) {
         return Mono.just(getTransactions().get(trxId).getTemplate());
     }
-    public Mono<Transaction> getTransaction(String trxId){
+
+    public Mono<Transaction> getTransaction(String trxId) {
         return Mono.just(getTransactions().get(trxId));
     }
 

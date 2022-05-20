@@ -1,128 +1,128 @@
 {
-    "connections": [
-      {
-        "name": "connFactory1",
-        "qmGroup": "*ALESGRP",
-        "temporaryQueueModel": "",
-        "secret": "nu0154001-alertas-dev-mq-functional-adapters",
-        "applicationName": "ms_functional_adapter",
-        "outputConcurrency": 10,
-        "replyTimeOut": 10,
-        "ccdtBucketName": "nu0154001_alert_ccdt_dev.json",
-        "jksBucketName": "nu0154001_alert_dev.jks",
-        "ccdtPath": "/appuser/nu0154001_alert_ccdt_dev.json",
-        "jksPath": "/appuser/nu0154001_alert_dev.jks"
-      }
-    ],
-    "queues" : [
-      {
-        "name" : "WWW_LOGALERTAS_CD.QL.REQ",
-        "connection": "connFactory1"
-      },
-      {
-        "name" : "CD_LOGALERTAS_WWW.QL.RES",
-        "connection": "connFactory1"
-      }
-    ],
-    "listener": [
-      {
-        "name": "id1",
-        "queueRequest": "WWW_LOGALERTAS_CD.QL.REQ",
-        "queueResponse": "CD_LOGALERTAS_WWW.QL.RES"
-      }
-    ],
-    "transactions": {
-      "ALERTAS0041": {
-        "listener" : "id1",
-        "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
-      },
-      "ALERTAS0050": {
-        "listener" : "id1",
-        "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
-      },
-      "ALERTAS0001": {
-        "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
-        "target": "contact_management",
-        "queue": "send.create.client"
-      },
-      "ALERTAS0002": {
-        "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
-        "target": "contact_management",
-        "queue": "send.update.client"
-      },
-      "ALERTAS0003": {
-        "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(111)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
-        "target": "contact_management",
-        "queue": "send.create.client"
-      },
-      "ALERTAS0004": {
-        "listener" : "id1",
-        "template" : "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(111)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
-        "target": "contact_management",
-        "queue": "send.update.client"
-      },
-      "PROVIDER001": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : \"${payload?substring(11, 14)?trim}\",\"name\" : \"${payload?substring(14, 34)?trim}\",\"typeService\" : \"${payload?substring(34, 35)?trim}\",\"creationUser\" : \"${payload?substring(35)}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.create.provider"
-      },
-      "PROVIDER002": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : \"${payload?substring(11, 14)?trim}\",\"name\" : \"${payload?substring(14, 34)?trim}\",\"typeService\" : \"${payload?substring(34, 35)?trim}\",\"creationUser\" : \"${payload?substring(35)}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.update.provider"
-      },
-      "REMITTER001": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : ${payload?substring(11, 13)?trim?number},\"mail\" : \"${payload?substring(13, 83)?trim}\",\"state\" : \"${payload?substring(83, 93)?trim}\",\"creationUser\" : \"${payload?substring(93)}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.create.remitter"
-      },
-      "REMITTER002": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : ${payload?substring(11, 13)?trim?number},\"mail\" : \"${payload?substring(13, 83)?trim}\",\"state\" : \"${payload?substring(83, 93)?trim}\",\"creationUser\" : \"${payload?substring(93)}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.update.remitter"
-      },
-      "ALERT000001": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : \"${payload?substring(11, 14)?trim}\", \"templateName\" : \"${payload?substring(14, 114)?trim}\", \"idProviderMail\" : \"${payload?substring(114, 118)?trim}\", \"idProviderSms\" : \"${payload?substring(118, 122)?trim}\", \"idRemitter\" : ${payload?substring(122, 124)?trim?number}, \"description\" : \"${payload?substring(124, 174)?trim}\", \"nature\" : \"${payload?substring(174, 176)?trim}\", \"obligatory\" : ${payload?substring(176, 177)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"message\" : \"${payload?substring(177, 677)?trim}\", \"idCategory\" : ${payload?substring(677, 679)?trim}, \"priority\" : ${payload?substring(679, 681)?trim}, \"subjectMail\" : \"${payload?substring(681, 731)?trim}\", \"visibleChannel\" : ${payload?substring(731, 732)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"attentionLine\" : \"${payload?substring(732, 747)?trim}\", \"idState\" : ${payload?substring(747, 749)?trim}, \"push\" : \"${payload?substring(749, 751)?trim}\", \"basicKit\" : ${payload?substring(751, 752)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"creationUser\" : \"${payload?substring(752,772)?trim}\" }",
-        "target": "ms_alert_management",
-        "queue": "send.create.alert"
-      },
-      "ALERT000002": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : \"${payload?substring(11, 14)?trim}\", \"templateName\" : \"${payload?substring(14, 114)?trim}\", \"idProviderMail\" : \"${payload?substring(114, 118)?trim}\", \"idProviderSms\" : \"${payload?substring(118, 122)?trim}\", \"idRemitter\" : ${payload?substring(122, 124)?trim?number}, \"description\" : \"${payload?substring(124, 174)?trim}\", \"nature\" : \"${payload?substring(174, 176)?trim}\", \"obligatory\" : ${payload?substring(176, 177)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"message\" : \"${payload?substring(177, 677)?trim}\", \"idCategory\" : ${payload?substring(677, 679)?trim}, \"priority\" : ${payload?substring(679, 681)?trim}, \"subjectMail\" : \"${payload?substring(681, 731)?trim}\", \"visibleChannel\" : ${payload?substring(731, 732)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"attentionLine\" : \"${payload?substring(732, 747)?trim}\", \"idState\" : ${payload?substring(747, 749)?trim}, \"push\" : \"${payload?substring(749, 751)?trim}\", \"basicKit\" : ${payload?substring(751, 752)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"creationUser\" : \"${payload?substring(752,772)?trim}\" }",
-        "target": "ms_alert_management",
-        "queue": "send.update.alert"
-      },
-      "ALERTRANS01": {
-        "listener" : "id1",
-        "template" : "{ \"idAlert\" : \"${payload?substring(11, 14)?trim}\", \"idConsumer\" : \"${payload?substring(14, 24)?trim}\", \"idTransaction\" : \"${payload?substring(24, 28)?trim}\", \"creationUser\" : \"${payload?substring(28)}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.create.alert.trx"
-      },
-      "ALERTRANS02": {
-        "listener" : "id1",
-        "template" : "{ \"idAlert\" : \"${payload?substring(11, 14)?trim}\", \"idConsumer\" : \"${payload?substring(14, 24)?trim}\", \"idTransaction\" : \"${payload?substring(24, 28)?trim}\", \"creationUser\" : \"${payload?substring(28)}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.delete.alert.trx"
-      },
-      "CONSUMERS01": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : \"${payload?substring(11, 21)?trim}\",\"description\" : \"${payload?substring(21, 71)?trim}\",\"segment\" : \"${payload?substring(71)?trim}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.create.consumer"
-      },
-      "CONSUMERS02": {
-        "listener" : "id1",
-        "template" : "{ \"id\" : \"${payload?substring(11, 21)?trim}\",\"description\" : \"${payload?substring(21, 71)?trim}\",\"segment\" : \"${payload?substring(71)?trim}\"}",
-        "target": "ms_alert_management",
-        "queue": "send.update.consumer"
-      }
+  "connections": [
+    {
+      "name": "connFactory1",
+      "qmGroup": "*ALESGRP",
+      "temporaryQueueModel": "",
+      "secret": "nu0154001-alertas-dev-mq-functional-adapters",
+      "applicationName": "ms_functional_adapter",
+      "outputConcurrency": 10,
+      "replyTimeOut": 10,
+      "ccdtBucketName": "nu0154001_alert_ccdt_dev.json",
+      "jksBucketName": "nu0154001_alert_dev.jks",
+      "ccdtPath": "/appuser/nu0154001_alert_ccdt_dev.json",
+      "jksPath": "/appuser/nu0154001_alert_dev.jks"
+    }
+  ],
+  "queues": [
+    {
+      "name": "WWW_LOGALERTAS_CD.QL.REQ",
+      "connection": "connFactory1"
+    },
+    {
+      "name": "CD_LOGALERTAS_WWW.QL.RES",
+      "connection": "connFactory1"
+    }
+  ],
+  "listener": [
+    {
+      "name": "id1",
+      "queueRequest": "WWW_LOGALERTAS_CD.QL.REQ",
+      "queueResponse": "CD_LOGALERTAS_WWW.QL.RES"
+    }
+  ],
+  "transactions": {
+    "ALERTAS0041": {
+      "listener": "id1",
+      "template": "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "ALERTAS0050": {
+      "listener": "id1",
+      "template": "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+    },
+    "ALERTAS0001": {
+      "listener": "id1",
+      "template": "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
+      "target": "contact_management",
+      "queue": "send.create.client"
+    },
+    "ALERTAS0002": {
+      "listener": "id1",
+      "template": "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(191)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" }, { \"contactChannel\": \"${payload?substring(111, 121)?trim}\", \"dataValue\": \"${payload?substring(131, 191)?trim}\", \"status\": \"${payload?substring(121, 131)?trim}\" } ] }",
+      "target": "contact_management",
+      "queue": "send.update.client"
+    },
+    "ALERTAS0003": {
+      "listener": "id1",
+      "template": "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(111)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
+      "target": "contact_management",
+      "queue": "send.create.client"
+    },
+    "ALERTAS0004": {
+      "listener": "id1",
+      "template": "{ \"customer\": { \"identification\": { \"type\": \"${payload?substring(11, 13)?trim}\", \"number\": ${ payload?substring(13, 28) } }, \"keyMdm\": \"\", \"status\": \"Activo\", \"traceability\": { \"consumerCode\": \"${payload?substring(28, 31)?trim}\", \"creationUser\": \"${payload?substring(111)}\" } }, \"contactData\": [ { \"contactChannel\": \"${payload?substring(31, 41)?trim}\", \"dataValue\": \"${payload?substring(51, 111)?trim}\", \"status\": \"${payload?substring(41, 51)?trim}\" } ] }",
+      "target": "contact_management",
+      "queue": "send.update.client"
+    },
+    "PROVIDER001": {
+      "listener": "id1",
+      "template": "{ \"id\" : \"${payload?substring(11, 14)?trim}\",\"name\" : \"${payload?substring(14, 34)?trim}\",\"typeService\" : \"${payload?substring(34, 35)?trim}\",\"creationUser\" : \"${payload?substring(35)}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.create.provider"
+    },
+    "PROVIDER002": {
+      "listener": "id1",
+      "template": "{ \"id\" : \"${payload?substring(11, 14)?trim}\",\"name\" : \"${payload?substring(14, 34)?trim}\",\"typeService\" : \"${payload?substring(34, 35)?trim}\",\"creationUser\" : \"${payload?substring(35)}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.update.provider"
+    },
+    "REMITTER001": {
+      "listener": "id1",
+      "template": "{ \"id\" : ${payload?substring(11, 13)?trim?number},\"mail\" : \"${payload?substring(13, 83)?trim}\",\"state\" : \"${payload?substring(83, 93)?trim}\",\"creationUser\" : \"${payload?substring(93)}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.create.remitter"
+    },
+    "REMITTER002": {
+      "listener": "id1",
+      "template": "{ \"id\" : ${payload?substring(11, 13)?trim?number},\"mail\" : \"${payload?substring(13, 83)?trim}\",\"state\" : \"${payload?substring(83, 93)?trim}\",\"creationUser\" : \"${payload?substring(93)}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.update.remitter"
+    },
+    "ALERT000001": {
+      "listener": "id1",
+      "template": "{ \"id\" : \"${payload?substring(11, 14)?trim}\", \"templateName\" : \"${payload?substring(14, 114)?trim}\", \"idProviderMail\" : \"${payload?substring(114, 118)?trim}\", \"idProviderSms\" : \"${payload?substring(118, 122)?trim}\", \"idRemitter\" : ${payload?substring(122, 124)?trim?number}, \"description\" : \"${payload?substring(124, 174)?trim}\", \"nature\" : \"${payload?substring(174, 176)?trim}\", \"obligatory\" : ${payload?substring(176, 177)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"message\" : \"${payload?substring(177, 677)?trim}\", \"idCategory\" : ${payload?substring(677, 679)?trim}, \"priority\" : ${payload?substring(679, 681)?trim}, \"subjectMail\" : \"${payload?substring(681, 731)?trim}\", \"visibleChannel\" : ${payload?substring(731, 732)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"attentionLine\" : \"${payload?substring(732, 747)?trim}\", \"idState\" : ${payload?substring(747, 749)?trim}, \"push\" : \"${payload?substring(749, 751)?trim}\", \"basicKit\" : ${payload?substring(751, 752)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"creationUser\" : \"${payload?substring(752,772)?trim}\" }",
+      "target": "ms_alert_management",
+      "queue": "send.create.alert"
+    },
+    "ALERT000002": {
+      "listener": "id1",
+      "template": "{ \"id\" : \"${payload?substring(11, 14)?trim}\", \"templateName\" : \"${payload?substring(14, 114)?trim}\", \"idProviderMail\" : \"${payload?substring(114, 118)?trim}\", \"idProviderSms\" : \"${payload?substring(118, 122)?trim}\", \"idRemitter\" : ${payload?substring(122, 124)?trim?number}, \"description\" : \"${payload?substring(124, 174)?trim}\", \"nature\" : \"${payload?substring(174, 176)?trim}\", \"obligatory\" : ${payload?substring(176, 177)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"message\" : \"${payload?substring(177, 677)?trim}\", \"idCategory\" : ${payload?substring(677, 679)?trim}, \"priority\" : ${payload?substring(679, 681)?trim}, \"subjectMail\" : \"${payload?substring(681, 731)?trim}\", \"visibleChannel\" : ${payload?substring(731, 732)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"attentionLine\" : \"${payload?substring(732, 747)?trim}\", \"idState\" : ${payload?substring(747, 749)?trim}, \"push\" : \"${payload?substring(749, 751)?trim}\", \"basicKit\" : ${payload?substring(751, 752)?replace(\"S\", \"true\")?replace(\"N\", \"false\")}, \"creationUser\" : \"${payload?substring(752,772)?trim}\" }",
+      "target": "ms_alert_management",
+      "queue": "send.update.alert"
+    },
+    "ALERTRANS01": {
+      "listener": "id1",
+      "template": "{ \"idAlert\" : \"${payload?substring(11, 14)?trim}\", \"idConsumer\" : \"${payload?substring(14, 24)?trim}\", \"idTransaction\" : \"${payload?substring(24, 28)?trim}\", \"creationUser\" : \"${payload?substring(28)}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.create.alert.trx"
+    },
+    "ALERTRANS02": {
+      "listener": "id1",
+      "template": "{ \"idAlert\" : \"${payload?substring(11, 14)?trim}\", \"idConsumer\" : \"${payload?substring(14, 24)?trim}\", \"idTransaction\" : \"${payload?substring(24, 28)?trim}\", \"creationUser\" : \"${payload?substring(28)}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.delete.alert.trx"
+    },
+    "CONSUMERS01": {
+      "listener": "id1",
+      "template": "{ \"id\" : \"${payload?substring(11, 21)?trim}\",\"description\" : \"${payload?substring(21, 71)?trim}\",\"segment\" : \"${payload?substring(71)?trim}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.create.consumer"
+    },
+    "CONSUMERS02": {
+      "listener": "id1",
+      "template": "{ \"id\" : \"${payload?substring(11, 21)?trim}\",\"description\" : \"${payload?substring(21, 71)?trim}\",\"segment\" : \"${payload?substring(71)?trim}\"}",
+      "target": "ms_alert_management",
+      "queue": "send.update.consumer"
     }
   }
+}

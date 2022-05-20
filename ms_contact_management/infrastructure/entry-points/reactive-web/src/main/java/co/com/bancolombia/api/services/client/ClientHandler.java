@@ -9,20 +9,15 @@ import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.commons.enums.Header;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.client.ClientUseCase;
-
-import static co.com.bancolombia.usecase.commons.BridgeContact.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADERS_MISSING_ERROR;
+import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
 
 @Component
 @RequiredArgsConstructor

@@ -1,10 +1,7 @@
 package co.com.bancolombia.contact.writer;
 
 import co.com.bancolombia.contact.data.ContactData;
-import org.springframework.data.r2dbc.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import reactor.core.publisher.Flux;
 
 public interface ContactRepository extends ReactiveCrudRepository<ContactData, Integer> {
 

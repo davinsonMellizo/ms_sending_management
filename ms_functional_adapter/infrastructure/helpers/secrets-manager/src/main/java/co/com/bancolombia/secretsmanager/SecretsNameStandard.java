@@ -20,8 +20,8 @@ public class SecretsNameStandard {
     public Mono<String> secretForPostgres() {
         return Mono.just(secretRds);
     }
+
     public Mono<String> secretForRabbitMQ() {
-        System.out.println("rabbit secret ++ " + secretRabbit);
         return Mono.just(secretRabbit);
     }
 }

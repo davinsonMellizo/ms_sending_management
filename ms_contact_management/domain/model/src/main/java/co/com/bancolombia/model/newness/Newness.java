@@ -27,6 +27,6 @@ public class Newness {
     private String responseCode;
     private String responseDescription;
     private Long voucher;
-    private LocalDateTime dateFistInscription;
+    private LocalDateTime dateFirstInscription;
     private LocalDateTime dateCreation;
 }

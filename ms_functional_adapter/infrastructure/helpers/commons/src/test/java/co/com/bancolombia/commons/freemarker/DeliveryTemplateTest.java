@@ -11,18 +11,18 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class DeliveryTemplateTest {
+class DeliveryTemplateTest {
 
     private static final String templateTest = "<#assign headers = data.headers>${BusinessUtil.getValue(headers,'message-id')}";
 
     @Test
-    public void createTest(){
+    void createTest() {
         assertThat(CommonTemplate.create(templateTest)).isNotNull();
     }
 
     @Test
-    public void converFuncion(){
-        Map<String,Object> data = new HashMap<>();
+    void converFuncion() {
+        Map<String, Object> data = new HashMap<>();
         data.put("data", Map.of("headers", Map.of("message-id", "123456789")));
         CommonTemplate.create(templateTest).flatMap(tem -> tem.process(data)).block();
         StepVerifier.create(CommonTemplate.create(templateTest).flatMap(tem -> tem.process(data)))

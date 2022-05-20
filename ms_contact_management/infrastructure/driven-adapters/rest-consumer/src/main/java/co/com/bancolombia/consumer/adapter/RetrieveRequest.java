@@ -1,7 +1,10 @@
 package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.model.Request;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor

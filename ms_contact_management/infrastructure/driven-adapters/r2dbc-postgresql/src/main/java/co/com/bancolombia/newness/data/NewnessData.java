@@ -30,6 +30,6 @@ public class NewnessData {
     private String responseCode;
     private String responseDescription;
     private Integer voucher;
-    private LocalDateTime dateFistInscription;
+    private LocalDateTime dateFirstInscription;
     private LocalDateTime dateCreation;
 }

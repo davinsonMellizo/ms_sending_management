@@ -7,7 +7,6 @@ import co.com.bancolombia.model.bridge.Bridge;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
 import co.com.bancolombia.model.client.ResponseUpdateClient;
-import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.document.Document;
@@ -23,10 +22,10 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static co.com.bancolombia.commons.enums.State.ACTIVE;
-import static co.com.bancolombia.commons.enums.State.INACTIVE;
 import static co.com.bancolombia.commons.constants.Transaction.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.State.ACTIVE;
+import static co.com.bancolombia.commons.enums.State.INACTIVE;
 import static co.com.bancolombia.usecase.commons.BridgeContact.*;
 
 @RequiredArgsConstructor
@@ -36,7 +35,6 @@ public class ClientUseCase {
     private final DocumentGateway documentGateway;
     private final ContactUseCase contactUseCase;
     private final NewnessUseCase newnessUseCase;
-    private final ClientGateway clientGateway;
     private final CommandGateway commandGateway;
     private final ConsumerGateway consumerGateway;
 
@@ -73,7 +71,6 @@ public class ClientUseCase {
                 .flatMap(cli3 -> contactUseCase.validateMail(enrol, cli3))
                 .flatMap(clientRepository::saveClient)
                 .flatMap(client -> newnessUseCase.saveNewness(client, CREATE_CLIENT, voucher))
-                /*.flatMap(clientGateway::matchClientWithBasicKit)*/ // basic kit ms alert mgm
                 .map(aBoolean -> enrol.getContactData())
                 .flatMapMany(Flux::fromIterable)
                 .map(contact -> contact.toBuilder().documentType(enrol.getClient().getDocumentType())

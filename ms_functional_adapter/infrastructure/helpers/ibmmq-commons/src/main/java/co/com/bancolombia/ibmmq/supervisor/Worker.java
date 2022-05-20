@@ -49,7 +49,7 @@ public class Worker implements Runnable {
         try {
             Thread.sleep(SLEEP_TIME);
         } catch (InterruptedException e) {
-            log.info("Cannot sleep the thread"+ e.getMessage());
+            log.info("Cannot sleep the thread" + e.getMessage());
             Thread.currentThread().interrupt();
         }
     }

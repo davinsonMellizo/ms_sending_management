@@ -1,6 +1,5 @@
 package co.com.bancolombia.config;
 
-import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;

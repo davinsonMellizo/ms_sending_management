@@ -10,7 +10,7 @@ public class ResourceQuery {
     private List<Resource> data;
 
     @Data
-    public static class Resource{
+    public static class Resource {
         private String queryName;
         private String channel;
         private String transaction;

@@ -1,6 +1,5 @@
 package co.com.bancolombia.usecase.functionaladapter;
 
-import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.transaction.Transaction;
 import co.com.bancolombia.model.transaction.gateways.CommandGateway;
 import co.com.bancolombia.model.transaction.gateways.TransactionGateway;
@@ -15,27 +14,28 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class FunctionalAdapterUseCaseTest {
+class FunctionalAdapterUseCaseTest {
     @Mock
     private TransactionGateway transactionGateway;
-    @Mock private CommandGateway commandGateway;
+    @Mock
+    private CommandGateway commandGateway;
     @InjectMocks
     private FunctionalAdapterUseCase useCase;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void handleSendAlert() {
+    void handleSendAlert() {
         when(transactionGateway.sendTransactionToMQ(any())).thenReturn(Mono.empty());
         StepVerifier.create(useCase.sendTransactionToMQ(new Transaction()))
                 .verifyComplete();
     }
 
     @Test
-    public void handleSendAlertToRabbit() {
+    void handleSendAlertToRabbit() {
         when(commandGateway.sendTransaction(any())).thenReturn(Mono.empty());
         StepVerifier.create(useCase.sendTransactionToRabbit(new Transaction()))
                 .verifyComplete();

@@ -37,20 +37,20 @@ public class IbmmqAdapter implements TransactionGateway {
                 });
     }
 
-    private Mono<String> buildDataFromTemplate(Transaction transaction){
+    private Mono<String> buildDataFromTemplate(Transaction transaction) {
         return CommonTemplate.create(transaction.getTemplate())
                 .flatMap(tpl -> tpl.process(transaction.getPayload()))
-                .doOnError(throwable ->loggerBuilder.info(throwable.getMessage()))
-                .onErrorResume(throwable ->  Mono.empty());
+                .doOnError(throwable -> loggerBuilder.info(throwable.getMessage()))
+                .onErrorResume(throwable -> Mono.empty());
     }
 
     private Message buildMessage(String textMessage) {
-            return Message.builder()
-                    .messageId(textMessage)
-                    .build();
+        return Message.builder()
+                .messageId(textMessage)
+                .build();
     }
 
-    private String keyConnection(Transaction transaction){
+    private String keyConnection(Transaction transaction) {
         return transaction.getChannel().concat(transaction.getNroTransaction());
     }
 }

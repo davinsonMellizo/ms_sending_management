@@ -1,0 +1,3164 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/Chart.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+<link rel="stylesheet" href="css/cucumber.css" type="text/css"/>
+<link rel="stylesheet" href="css/font-awesome.min.css"/>
+<link rel="shortcut icon" href="images/favicon.png"/>
+
+<script>
+$(document).ready(function() {
+    // this will tell tablesorter to try looking for the data-value attribute
+    // if present, it'll sort by that instead
+    // otherwise, it'll sort by the text content of the table cell
+    $("#tablesorter").tablesorter({
+        textAttribute: 'data-value',
+        // ignores the first row of the header, the 'scenario', 'steps', since
+        // sorting those doesn't make sense
+        selectorHeaders: '> thead tr:not(.dont-sort) th',
+        // use a stable sort
+        sortStable: true
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<title>Cucumber Reports  - Feature: karate/features/consumer.feature</title>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse">
+      <p class="navbar-text navbar-left">Cucumber Report</p>
+      <ul class="nav navbar-nav navbar-right">
+        <li role="presentation" ><a href="overview-features.html">Features</a></li>
+        <li role="presentation" ><a href="overview-tags.html">Tags</a></li>
+        <li role="presentation" ><a href="overview-steps.html">Steps</a></li>
+        <li role="presentation" ><a href="overview-failures.html">Failures</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container-fluid">
+  <div class="col-md-5 col-md-offset-1">
+
+<table class="table table-bordered" id="build-info">
+  <thead>
+    <tr>
+      <th>Project</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="info">
+      <td>acceptance test</td>
+      <td>17 May 2022, 08:40</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  <div class="col-md-3 col-md-offset-2">
+  </div>
+</div>
+
+
+<div id="report-lead" class="container-fluid">
+  <div class="col-md-10 col-md-offset-1">
+    <h2>Feature Report</h2>
+  </div>
+</div>
+
+
+<div class="container-fluid" id="report">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <table class="stats-table">
+
+
+<thead>
+  <tr class="header dont-sort">
+      <th></th>
+    <th colspan="6">Steps</th>
+    <th colspan="3">Scenarios</th>
+    <th colspan="2">Features</th>
+  </tr>
+  <tr>
+    <th>Feature</th>
+    <th class="passed">Passed</th>
+    <th class="failed">Failed</th>
+    <th class="skipped">Skipped</th>
+    <th class="pending">Pending</th>
+    <th class="undefined">Undefined</th>
+    <th class="total">Total</th>
+
+    <th class="passed">Passed</th>
+    <th class="failed">Failed</th>
+    <th class="total">Total</th>
+
+    <th>Duration</th>
+    <th>Status</th>
+  </tr>
+</thead>
+
+
+        <tbody>
+        <tr>
+          <td class="tagname">karate/features/consumer.feature</td>
+          <td      class="passed"    >55</td>
+          <td >0</td>
+          <td >0</td>
+          <td >0</td>
+          <td >0</td>
+          <td class="total">55</td>
+
+          <td  class="passed"    >10</td>
+          <td >0</td>
+          <td class="total">10</td>
+
+          <td class="duration" data-value="4921759800">4.921</td>
+          <td class="passed">Passed</td>
+        </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-1 col-md-offset-10">
+      <i class="fa fa-chevron-circle-down fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('show')"></i>
+      <i class="fa fa-chevron-circle-up fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('hide')"></i>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid" id="report">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="feature">
+
+<div class="tags indention">
+</div>
+
+
+<div class="brief passed">
+  <span class="keyword indention">Feature</span>
+  <span class="name">karate/features/consumer.feature</span>
+
+
+</div>
+
+        <div class="description indention">CRUD Consumer</div>
+
+        <div class="elements inner-level">
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-1">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-1" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-2">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-2" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">1.105</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-3">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Successful case Find consumer by id</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-3" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-4">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-4" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def urlFind = urlConsumer + &quot;/TES&quot;</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">url urlFind</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method GET</span>
+
+  <span class="lead-duration duration">1.104</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-5">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-5" class="collapse collapsable-details">
+        <pre>08:40:08.261 request:
+1 &gt; GET https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer/TES
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+
+
+08:40:09.362 response time in milliseconds: 1100
+1 &lt; 200
+1 &lt; Date: Tue, 17 May 2022 13:40:51 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 315
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; Transfer-Encoding: chunked
+1 &lt; X-Iinfo: 15-21281470-21280021 PNYy RT(1652794849814 483) q(0 0 0 -1) r(5 5) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=ZvniPJr; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=tZM XfEOKalo: HtT; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=zjqCrzBeQnk; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=3l1kABrF8AyPe4X1RIutFOKlg2IAAAAAXi1mp7rgfeayVwdCtKDXFA==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=RAqQVOmEqXeWfVS0XTqfbAAAAADzZLJBVpVUElUYfg8IE74D; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=8YJCN4cJRA+En7MhPSgInOKlg2IAAAAAQUIPAAAAAACkNmKhRsUfZqMhvtL8iTA/; Max-Age=1684315528000; Expires=Thu, 17 Mar 55396 06:06:49 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;id&quot;:&quot;TES&quot;,&quot;description&quot;:&quot;Consumer eceptance test&quot;,&quot;segment&quot;:&quot;Personas&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 200</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.id == 'TES'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-6">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-6" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-7">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-7" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.297</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-8">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Successful case Find all consumers</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-8" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-9">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-9" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method GET</span>
+
+  <span class="lead-duration duration">0.297</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-10">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-10" class="collapse collapsable-details">
+        <pre>08:40:09.367 request:
+1 &gt; GET https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+
+
+08:40:09.664 response time in milliseconds: 297
+1 &lt; 200
+1 &lt; Date: Tue, 17 May 2022 13:40:51 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 10
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; Transfer-Encoding: chunked
+1 &lt; X-Iinfo: 14-14471006-14470517 PNYy RT(1652794850888 35) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=VgOWUMc; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=bZU XEEOKaly: Stj; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=bpszRqyAAZB; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=YOdGOIbR1mexe4X1RIutFOOlg2IAAAAA45CyInmiASFEuF2cXCfzbw==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=RhvoHvLcCmcuYkcTXTqfbAAAAAA3Tb1MX4hzLQuaqfd1kwqc; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=08WmRxfMRoKdkl+6QwYEg+Olg2IAAAAAQUIPAAAAAABsomCaWWUHHw9TQdIMGDbC; Max-Age=1684315516000; Expires=Thu, 17 Mar 55396 02:46:49 GMT; Domain=apps.ambientesbc.com; Secure
+[{&quot;id&quot;:&quot;ELI&quot;,&quot;description&quot;:&quot;Consumer delete aceptance&quot;,&quot;segment&quot;:&quot;Personas&quot;},{&quot;id&quot;:&quot;TES&quot;,&quot;description&quot;:&quot;Consumer eceptance test&quot;,&quot;segment&quot;:&quot;Personas&quot;},{&quot;id&quot;:&quot;UPD&quot;,&quot;description&quot;:&quot;Consumer updateaceptance&quot;,&quot;segment&quot;:&quot;Personas&quot;},{&quot;id&quot;:&quot;ALM&quot;,&quot;description&quot;:&quot;ALM&quot;,&quot;segment&quot;:&quot;ALM&quot;},{&quot;id&quot;:&quot;SVP&quot;,&quot;description&quot;:&quot;SVP&quot;,&quot;segment&quot;:&quot;Personas&quot;},{&quot;id&quot;:&quot;VLP&quot;,&quot;description&quot;:&quot;SVP&quot;,&quot;segment&quot;:&quot;Personas&quot;}]
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 200</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-11">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-11" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-12">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-12" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.331</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-13">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Successful case Delete consumer by id</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-13" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-14">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-14" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def urlDelete = urlConsumer + &quot;/ELI&quot;</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">url urlDelete</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method DELETE</span>
+
+  <span class="lead-duration duration">0.330</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-15">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-15" class="collapse collapsable-details">
+        <pre>08:40:09.668 request:
+1 &gt; DELETE https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer/ELI
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+
+
+08:40:09.997 response time in milliseconds: 329
+1 &lt; 200
+1 &lt; Date: Tue, 17 May 2022 13:40:51 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Content-Length: 3
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 19
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; X-Iinfo: 17-38002447-38000671 PNNy RT(1652794851208 46) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=eQjmyWl; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=pZn XjKOaalw: XtY; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=WGxoJPquVdH; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=TSNrItdrTS/ae4X1RIutFOOlg2IAAAAARQH380UO+ZD9r0FHpsMHFg==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=GuzKG5TQBxWg22JfXTqfbAAAAACT6J8wZ29ppDB3HoDAOCqs; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=9uQtR62GTj2goKIBbc/LfOOlg2IAAAAAQUIPAAAAAAArT/YLqTlWt7BufGerKpRI; Max-Age=1684315502000; Expires=Wed, 16 Mar 55396 22:53:29 GMT; Domain=apps.ambientesbc.com; Secure
+ELI
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 200</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match response == 'ELI'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-16">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-16" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-17">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-17" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.337</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-18">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Successful case Save consumer</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-18" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-19">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-19" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def id = &quot;SAV&quot;</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">request read(&quot;../data/consumer.json&quot;)</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method POST</span>
+
+  <span class="lead-duration duration">0.335</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-20">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-20" class="collapse collapsable-details">
+        <pre>08:40:10.002 request:
+1 &gt; POST https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer
+1 &gt; Content-Type: application/json; charset=UTF-8
+1 &gt; Content-Length: 48
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+{&quot;id&quot;:&quot;SAV&quot;,&quot;description&quot;:&quot;SAV&quot;,&quot;segment&quot;:&quot;Per&quot;}
+
+08:40:10.337 response time in milliseconds: 335
+1 &lt; 200
+1 &lt; Date: Tue, 17 May 2022 13:40:52 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 13
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; Transfer-Encoding: chunked
+1 &lt; X-Iinfo: 15-21281724-21280021 PNYy RT(1652794851553 42) q(0 0 0 -1) r(2 2) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=dCZdhha; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=UZO XDDObalA: FtS; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=jEkotNdycHk; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=SVWLZDvL1Hj7e4X1RIutFOOlg2IAAAAAFBs9WVq/yF5DyP280MZLiA==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=huuxfCeXZQbHCuA/XTqfbAAAAAD7ssu2PCfCAFDzk82RTHUc; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=5k6uB+oVRdu931GNTI4+CeOlg2IAAAAAQUIPAAAAAAClPHveafhocPXwD+EXlp6z; Max-Age=1684315528000; Expires=Thu, 17 Mar 55396 06:06:50 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;id&quot;:&quot;SAV&quot;,&quot;description&quot;:&quot;SAV&quot;,&quot;segment&quot;:&quot;Per&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 200</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.id == 'SAV'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-21">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-21" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-22">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-22" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.353</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-23">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Successful case Update consumer</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-23" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-24">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-24" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def id = &quot;UPD&quot;</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">request read(&quot;../data/consumer.json&quot;)</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method PUT</span>
+
+  <span class="lead-duration duration">0.352</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-25">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-25" class="collapse collapsable-details">
+        <pre>08:40:10.342 request:
+1 &gt; PUT https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer
+1 &gt; Content-Type: application/json; charset=UTF-8
+1 &gt; Content-Length: 48
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+{&quot;id&quot;:&quot;UPD&quot;,&quot;description&quot;:&quot;SAV&quot;,&quot;segment&quot;:&quot;Per&quot;}
+
+08:40:10.693 response time in milliseconds: 351
+1 &lt; 200
+1 &lt; Date: Tue, 17 May 2022 13:40:52 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Content-Length: 182
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 14
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; X-Iinfo: 16-30086208-30086217 NNNY CT(92 93 0) RT(1652794851889 44) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=eRqzVrj; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=oZr XrrOkalw: xtu; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=ByvDFMvDWzF; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=5/JmC1wgvlcWfIX1RIutFOSlg2IAAAAAlH3fKw+9gI7Vd4QLEOhK/w==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=I6VOMpO4QF7qJVhmXTqfbAAAAACGZDxA/W+gtHvlNrTIzrtc; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=jP797nbORLuXnENZQuxgcOSlg2IAAAAAQUIPAAAAAADZkhe2iao6rgtHr2lsmTOb; Max-Age=1684315516000; Expires=Thu, 17 Mar 55396 02:46:50 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;description&quot;:&quot;Actualizaci&oacute;n Exitosa&quot;,&quot;before&quot;:{&quot;id&quot;:&quot;UPD&quot;,&quot;description&quot;:&quot;Consumer updateaceptance&quot;,&quot;segment&quot;:&quot;Personas&quot;},&quot;actual&quot;:{&quot;id&quot;:&quot;UPD&quot;,&quot;description&quot;:&quot;SAV&quot;,&quot;segment&quot;:&quot;Per&quot;}}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 200</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.actual.id == 'UPD'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-26">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-26" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-27">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-27" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.348</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-28">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Error case Find consumer by id</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-28" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-29">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-29" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def urlFind = urlConsumer + &quot;/10&quot;</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">url urlFind</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method GET</span>
+
+  <span class="lead-duration duration">0.347</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-30">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-30" class="collapse collapsable-details">
+        <pre>08:40:10.698 request:
+1 &gt; GET https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer/10
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+
+
+08:40:11.043 response time in milliseconds: 345
+1 &lt; 500
+1 &lt; Date: Tue, 17 May 2022 13:40:52 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 12
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; Transfer-Encoding: chunked
+1 &lt; X-Iinfo: 17-38002629-37999659 PNYy RT(1652794852220 36) q(0 0 0 -1) r(2 2) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=SUCsFpJ; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=GZX XRsOdalt: Cty; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=GicmTHZjTib; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=ncxkYX7Y4mUzfIX1RIutFOSlg2IAAAAAh8LsuPelgggzFDNeuhReag==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=UFieS/pAHweqvYNfXTqfbAAAAAAke+IgULJl+16V+R5pu9Az; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=CCXNSvRlQeKtUp1pWLFwieSlg2IAAAAAQUIPAAAAAADI8kngGKcarLsAT2ONHtKm; Max-Age=1684315502000; Expires=Wed, 16 Mar 55396 22:53:31 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;domain&quot;:&quot;/consumer/10&quot;,&quot;code&quot;:&quot;380&quot;,&quot;message&quot;:&quot;Consumer Not Found&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 500</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.code == '380'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-31">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-31" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-32">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-32" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.842</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-33">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Error case Update consumer</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-33" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-34">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-34" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def id = 10</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">request read(&quot;../data/consumer.json&quot;)</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method PUT</span>
+
+  <span class="lead-duration duration">0.840</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-35">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-35" class="collapse collapsable-details">
+        <pre>08:40:11.049 request:
+1 &gt; PUT https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer
+1 &gt; Content-Type: application/json; charset=UTF-8
+1 &gt; Content-Length: 45
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+{&quot;id&quot;:10,&quot;description&quot;:&quot;SAV&quot;,&quot;segment&quot;:&quot;Per&quot;}
+
+08:40:11.889 response time in milliseconds: 840
+1 &lt; 500
+1 &lt; Date: Tue, 17 May 2022 13:40:53 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Content-Length: 66
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 17
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; X-Iinfo: 15-21281953-21280021 PNNy RT(1652794852586 556) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=NcQKfjn; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=RZP XafOCalf: YtB; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=qnKCTGyQMtH; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=C+RaGqjdowp/fIX1RIutFOWlg2IAAAAAlx+cHK0CfvPqPMAQ/KG0QA==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=IE2rV5g9ZTR5Z9ADXTqfbAAAAACN0ISGkd+xcrXDD0L4CPyM; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=YGKbjzjMR02NwYyfGcIbtOWlg2IAAAAAQUIPAAAAAACk55OEfa5g3jV16N3RfvHI; Max-Age=1684315528000; Expires=Thu, 17 Mar 55396 06:06:51 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;domain&quot;:&quot;/consumer&quot;,&quot;code&quot;:&quot;380&quot;,&quot;message&quot;:&quot;Consumer Not Found&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 500</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.code == '380'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-36">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-36" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-37">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-37" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.334</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-38">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Error case Delete consumer by id</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-38" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-39">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-39" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">def urlDelete = urlConsumer + &quot;/10&quot;</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">url urlDelete</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method DELETE</span>
+
+  <span class="lead-duration duration">0.334</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-40">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-40" class="collapse collapsable-details">
+        <pre>08:40:11.894 request:
+1 &gt; DELETE https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer/10
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+
+
+08:40:12.227 response time in milliseconds: 332
+1 &lt; 500
+1 &lt; Date: Tue, 17 May 2022 13:40:54 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Content-Length: 69
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 14
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; X-Iinfo: 15-21282139-21279931 PNNN RT(1652794853453 33) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=ujLnKwz; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=VZr XLTOwalT: etV; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=yUfqTUCFvCR; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=zpBUaPCGvWSXfIX1RIutFOWlg2IAAAAA4h8Y7q/ZDNNEV1988KfVKA==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=OxRdEa0rviiCEAPlXTqfbAAAAABycjSZSx12OkLiahxrkTNd; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=K9ZwsbXUTaai1qBYlCABn+Wlg2IAAAAAQUIPAAAAAADEl4wo7XKmIBUgVOTK94ef; Max-Age=1684315528000; Expires=Thu, 17 Mar 55396 06:06:52 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;domain&quot;:&quot;/consumer/10&quot;,&quot;code&quot;:&quot;380&quot;,&quot;message&quot;:&quot;Consumer Not Found&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 500</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.code == '380'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-41">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-41" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-42">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-42" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.634</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-43">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Error case Save consumer, missing parameter per body</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-43" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-44">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-44" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">request {}</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method POST</span>
+
+  <span class="lead-duration duration">0.634</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-45">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-45" class="collapse collapsable-details">
+        <pre>08:40:12.234 request:
+1 &gt; POST https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer
+1 &gt; Content-Type: application/json; charset=UTF-8
+1 &gt; Content-Length: 2
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+{}
+
+08:40:12.866 response time in milliseconds: 632
+1 &lt; 500
+1 &lt; Date: Tue, 17 May 2022 13:40:54 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 8
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; Transfer-Encoding: chunked
+1 &lt; X-Iinfo: 14-14471124-14470517 PNYy RT(1652794853768 53) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=XWeaHfP; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=nZU XHQOqalM: TtO; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=ABPTSpymHoc; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=HgEhGeitd3+4fIX1RIutFOWlg2IAAAAAPmfa1g+ZpPEDHh8FLOdO+w==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=IFPxJz9nhBLpCPZZXTqfbAAAAADA8S7PwBnHTR/lyjYWz1kI; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=+W+5aYToSnugyBqP1VitMuWlg2IAAAAAQUIPAAAAAABOAZpZUbzbI7CrYBHp5iiC; Max-Age=1684315516000; Expires=Thu, 17 Mar 55396 02:46:52 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;reason&quot;:&quot;description must not be null, id must not be null, segment must not be null&quot;,&quot;domain&quot;:&quot;/consumer&quot;,&quot;code&quot;:&quot;301&quot;,&quot;message&quot;:&quot;Missing parameters per body&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 500</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.code == '301'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.000</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-46">
+
+<div class="brief passed">
+  <span class="keyword indention">Background</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-46" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-47">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-47" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-* passed">
+  <span class="keyword indention">*</span>
+  <span class="name">url urlConsumer</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<div class="element">
+
+
+<div class="tags indention">
+</div>
+
+
+  <span class="lead-duration duration">0.336</span>
+
+
+  <span data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#element-48">
+
+<div class="brief passed">
+  <span class="keyword indention">Scenario</span>
+  <span class="name">Error case Update consumer, missing parameter per body</span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </span>
+  <div class="description indention"></div>
+
+  <div id="element-48" class="collapse collapsable-details ">
+
+
+
+
+
+<div class="steps inner-level">
+  <div data-toggle="collapse" class=" collapsed  collapsable-control" data-target="#steps-49">
+
+<div class="brief passed">
+  <span class="keyword indention">Steps</span>
+  <span class="name"></span>
+
+
+     <i class="chevron fa fa-fw"></i>
+</div>
+
+  </div>
+
+  <div id="steps-49" class="inner-level collapse collapsable-details ">
+      <div class="step">
+
+
+<div class="brief step-name-Given passed">
+  <span class="keyword indention">Given</span>
+  <span class="name">request {}</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-When passed">
+  <span class="keyword indention">When</span>
+  <span class="name">method PUT</span>
+
+  <span class="lead-duration duration">0.336</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+  <div class="inner-level">
+    <div class="docstring indention">
+      <div data-toggle="collapse" class="collapsable-control" data-target="#msg-50">
+          <a>Doc string</a>
+      </div>
+      <div id="msg-50" class="collapse collapsable-details">
+        <pre>08:40:12.874 request:
+1 &gt; PUT https://canales-digitales-ext-dev.apps.ambientesbc.com/alertas/api/v1/alert-management/consumer
+1 &gt; Content-Type: application/json; charset=UTF-8
+1 &gt; Content-Length: 2
+1 &gt; Host: canales-digitales-ext-dev.apps.ambientesbc.com
+1 &gt; Connection: Keep-Alive
+1 &gt; User-Agent: Apache-HttpClient/4.5.13 (Java/11.0.9)
+1 &gt; Accept-Encoding: gzip,deflate
+{}
+
+08:40:13.209 response time in milliseconds: 335
+1 &lt; 500
+1 &lt; Date: Tue, 17 May 2022 13:40:55 GMT
+1 &lt; Content-Type: application/json
+1 &lt; Content-Length: 162
+1 &lt; Connection: keep-alive
+1 &lt; x-envoy-upstream-service-time: 10
+1 &lt; server: istio-envoy
+1 &lt; Strict-Transport-Security: max-age=31536000
+1 &lt; X-CDN: Imperva
+1 &lt; X-Iinfo: 18-47298888-47296457 PNNy RT(1652794854413 51) q(0 0 0 -1) r(1 1) U5
+1 &lt; Set-Cookie: ___utmvasEBuYmmmZ=joxNCYZ; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvbsEBuYmmmZ=ZZD XYtOxala: MtU; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: ___utmvmsEBuYmmmZ=fcMxxEXPSPY; Domain=canales-digitales-ext-dev.apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: incap_ses_1490_2705991=1uCaDKZVQQ3rfIX1RIutFOalg2IAAAAAkXu0edDT19NHAIPQGZGpTg==; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: nlbi_2705991=ZlxXbX6Se3QtNBwRXTqfbAAAAAAaM6r8EP2j6Ovko49kC4zJ; Domain=apps.ambientesbc.com; Secure
+1 &lt; Set-Cookie: visid_incap_2705991=/dh3FrndSCuvuw9v02FZdOalg2IAAAAAQUIPAAAAAABq5e5KbfKMdZPoAyDnPKcA; Max-Age=1684315503000; Expires=Wed, 16 Mar 55396 23:10:13 GMT; Domain=apps.ambientesbc.com; Secure
+{&quot;reason&quot;:&quot;description must not be null, segment must not be null, id must not be null&quot;,&quot;domain&quot;:&quot;/consumer&quot;,&quot;code&quot;:&quot;301&quot;,&quot;message&quot;:&quot;Missing parameters per body&quot;}
+
+</pre>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-Then passed">
+  <span class="keyword indention">Then</span>
+  <span class="name">status 500</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="step">
+
+
+<div class="brief step-name-And passed">
+  <span class="keyword indention">And</span>
+  <span class="name">match $.code == '301'</span>
+
+  <span class="lead-duration duration">0.000</span>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-1 col-md-offset-10">
+      <i class="fa fa-chevron-circle-down fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('show')"></i>
+      <i class="fa fa-chevron-circle-up fa-2x collapsable-control"
+        onClick="javascript:$('#report .collapsable-details').collapse('hide')"></i>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<nav class="navbar navbar-default" id="footer">
+  <div class="container-fluid">
+    <p class="navbar-text navbar-right">
+        <small>generate Cucumber HTML reports via:&nbsp;</small>
+        <a class="navbar-link" href="https://github.com/jenkinsci/cucumber-reports-plugin">Jenkins Plugin</a> |
+        <a class="navbar-link" href="https://github.com/damianszczepanik/cucumber-reporting">Standalone</a> |
+        <a class="navbar-link" href="https://github.com/damianszczepanik/cucumber-sandwich">Sandwich</a> |
+        <a class="navbar-link" href="https://github.com/damianszczepanik/maven-cucumber-reporting">Maven</a>
+        &nbsp;&nbsp;
+    </p>
+  </div>
+</nav>
+
+</body>
+</html>

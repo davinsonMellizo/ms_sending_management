@@ -6,9 +6,9 @@ import co.com.bancolombia.ibmmq.model.ConnectionData;
 import co.com.bancolombia.ibmmq.model.QueueDto;
 import com.ibm.mq.jms.MQQueue;
 
-import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSContext;
+import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Session;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,15 +29,15 @@ public class QueueManagement {
         this.queues = new ConcurrentHashMap<>();
         this.queues = this.data.getQueues()
                 .stream()
-                .collect(Collectors.toConcurrentMap(QueueDto::getName,this::getQueue));
+                .collect(Collectors.toConcurrentMap(QueueDto::getName, this::getQueue));
     }
 
-    public void initQueues(String connectionName){
+    public void initQueues(String connectionName) {
         removeQueue(connectionName);
         this.queues = this.data.getQueues()
                 .stream()
                 .filter(queueDto -> queueDto.getConnection().equals(connectionName))
-                .collect(Collectors.toConcurrentMap(QueueDto::getName,this::getQueue));
+                .collect(Collectors.toConcurrentMap(QueueDto::getName, this::getQueue));
     }
 
     public Destination getQueue(QueueDto dto) {
@@ -55,13 +55,13 @@ public class QueueManagement {
     }
 
     private Destination createQueue(QueueDto dto) {
-        if(dto.isTemporary()){
+        if (dto.isTemporary()) {
             MQQueue queue = createTemporaryQueue(connectionsMap.get(dto.getConnection()).getConnection());
-            data.setNameQueueListener(queue.getQueueName(),dto.getName());
+            data.setNameQueueListener(queue.getQueueName(), dto.getName());
             dto.setName(queue.getQueueName());
             return queue;
-        }else{
-            return createQueue(connectionsMap.get(dto.getConnection()).getContext(),dto.getName());
+        } else {
+            return createQueue(connectionsMap.get(dto.getConnection()).getContext(), dto.getName());
         }
     }
 

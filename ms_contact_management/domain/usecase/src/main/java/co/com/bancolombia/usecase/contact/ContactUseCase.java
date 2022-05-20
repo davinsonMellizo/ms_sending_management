@@ -4,6 +4,7 @@ import co.com.bancolombia.commons.enums.DocumentTypeEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
+import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
 import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
@@ -28,11 +29,10 @@ import java.util.regex.Pattern;
 
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
-import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.Transaction.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
-import static co.com.bancolombia.usecase.commons.ValidateData.isValidMailOrMobile;
 
 @RequiredArgsConstructor
 public class ContactUseCase {
@@ -43,13 +43,17 @@ public class ContactUseCase {
     private final ConsumerGateway consumerGateway;
     private final ContactMediumGateway contactMediumGateway;
     private final ClientRepository clientRepository;
+    private final ClientGateway clientGateway;
 
     public Mono<ResponseContacts> findContactsByClient(Client pClient, String consumerCode) {
         return clientRepository.findClientByIdentification(pClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
                 .filter(client -> client.getIdState() == ACTIVE.getType())
                 .flatMap(client -> findAllContacts(client, consumerCode))
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
+                .onErrorResume(e -> e.getMessage().equals(CLIENT_NOT_FOUND.getMessage()),
+                        e-> clientGateway.retrieveAlertInformation(pClient))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
     private Mono<ResponseContacts> findAllContacts(Client client, String consumerCode) {

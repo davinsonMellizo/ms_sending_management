@@ -3,12 +3,9 @@ package co.com.bancolombia.api.services.contact;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
-import co.com.bancolombia.api.dto.EnrolDTO;
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.api.header.ClientHeader;
-import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.usecase.client.ClientUseCase;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +13,6 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADERS_MISSING_ERROR;
 
 @Component

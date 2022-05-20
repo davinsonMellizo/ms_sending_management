@@ -19,12 +19,12 @@ public class HandlerRegistryConfiguration {
 
     @Bean
     public HandlerRegistry queryHandler(@Value("${aws.s3.request-config-mq-key}") String configMQKey,
-                                                    @Value("${aws.s3.bucket}") String bucketName) {
+                                        @Value("${aws.s3.bucket}") String bucketName) {
         HandlerRegistry register = HandlerRegistry.register();
         ResourceQuery resourceQuery = JsonUtils.stringToType(
                 s3AsynOperations.getFileAsString(bucketName, configMQKey).block(), ResourceQuery.class);
 
-        resourceQuery.getData().forEach(resource -> handler.listenerMessage( resource, register));
+        resourceQuery.getData().forEach(resource -> handler.listenerMessage(resource, register));
         return register;
     }
 

@@ -23,7 +23,7 @@ public class Transaction {
     private Map<String, Object> data;
     private Message.From from;
 
-    public Transaction data(Map<String, Object> data){
+    public Transaction data(Map<String, Object> data) {
         this.setData(data);
         return this;
     }

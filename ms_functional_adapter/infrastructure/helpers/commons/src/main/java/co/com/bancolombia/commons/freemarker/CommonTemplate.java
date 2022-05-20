@@ -5,11 +5,12 @@ import co.com.bancolombia.commons.freemarker.config.FreemarkerConfig;
 import co.com.bancolombia.commons.utils.BusinessUtil;
 import co.com.bancolombia.commons.utils.JsonUtils;
 import freemarker.ext.beans.BeansWrapperBuilder;
-import freemarker.template.Configuration;
+
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
+import freemarker.template.Configuration;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateException;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class CommonTemplate {
     private Template template;
     private Map<String, Object> map;
 
-    private CommonTemplate(String stringTemplate){
+    private CommonTemplate(String stringTemplate) {
         try {
             Configuration config = new FreemarkerConfig(Configuration.VERSION_2_3_30);
             template = new Template(UUID.randomUUID().toString(), new StringReader(stringTemplate), config);
@@ -36,7 +37,7 @@ public class CommonTemplate {
             TemplateHashModel model = new BeansWrapperBuilder(Configuration.VERSION_2_3_30).build().getStaticModels();
             map.put(UTIL, model.get(JsonUtils.class.getName()));
             map.put(BUSINESS_UTIL, model.get(BusinessUtil.class.getName()));
-        }catch (IOException | TemplateModelException exception) {
+        } catch (IOException | TemplateModelException exception) {
             throw new TechnicalException(exception, TECHNICAL_FREEMARKER_ERROR);
         }
     }
@@ -45,16 +46,16 @@ public class CommonTemplate {
         return Mono.just(new CommonTemplate(template));
     }
 
-    public Mono<String> process(Object data){
+    public Mono<String> process(Object data) {
         return process(data, String.class);
     }
 
-    public <T> Mono<T> process(Object data, Class<T> cls){
+    public <T> Mono<T> process(Object data, Class<T> cls) {
         try (StringWriter writer = new StringWriter()) {
             this.map.putAll(JsonUtils.convertValue(data, Map.class));
             this.template.process(map, writer);
-            if (cls.equals(String.class)){
-                return Mono.just((T)writer.toString());
+            if (cls.equals(String.class)) {
+                return Mono.just((T) writer.toString());
             }
             return Mono.just(JsonUtils.readValue(writer.toString(), cls));
         } catch (IOException | TemplateException e) {

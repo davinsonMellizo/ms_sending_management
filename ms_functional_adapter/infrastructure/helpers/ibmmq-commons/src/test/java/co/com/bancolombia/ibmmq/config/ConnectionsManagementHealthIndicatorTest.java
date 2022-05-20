@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -22,9 +21,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ConnectionsManagementHealthIndicatorTest {
@@ -41,10 +40,6 @@ public class ConnectionsManagementHealthIndicatorTest {
     @Mock
     private ConnectionData connectionData;
 
-    private static final String connName = "connFactory1";
-    private static final String qm = "QM1";
-    public static final String QUEUE_MANAGER = "queueManager";
-
     @BeforeEach
     public void init() throws JMSException {
         when(cm.getConnectionData()).thenReturn(connectionData);
@@ -56,31 +51,25 @@ public class ConnectionsManagementHealthIndicatorTest {
     }
 
     @Test
-    public void shouldBeUp() throws JMSException {
+    void shouldBeUp() throws JMSException {
         when(connection.getMetaData()).thenReturn(connectionMetaData);
         when(connectionMetaData.getJMSProviderName()).thenReturn("jMSProviderName");
-        // Arrange
         doNothing().when(connection).start();
         doNothing().when(connection).close();
         ConnectionsManagementHealthIndicator indicator = new ConnectionsManagementHealthIndicator(cm);
-        // Act
         Health health = indicator.getHealth(true);
-        // Assert
         assertThat(health.getStatus()).isEqualTo(Status.UP);
-        assertThat(((Map)health.getDetails().entrySet().stream().findFirst().get().getValue()).get("provider"))
+        assertThat(((Map) health.getDetails().entrySet().stream().findFirst().get().getValue()).get("provider"))
                 .isEqualTo("jMSProviderName");
     }
 
     @Test
-    public void shouldBeDown() throws JMSException {
-        // Arrange
+    void shouldBeDown() throws JMSException {
         doThrow(new JMSException("Invalid Status")).when(connection).start();
         ConnectionsManagementHealthIndicator indicator = new ConnectionsManagementHealthIndicator(cm);
-        // Act
         Health health = indicator.getHealth(true);
-        // Assert
         assertThat(health.getStatus()).isEqualTo(Status.DOWN);
-        assertThat(((Map)health.getDetails().entrySet().stream().findFirst().get().getValue()).get("error"))
+        assertThat(((Map) health.getDetails().entrySet().stream().findFirst().get().getValue()).get("error"))
                 .isEqualTo("javax.jms.JMSException: Invalid Status");
     }
 }

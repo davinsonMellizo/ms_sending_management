@@ -4,9 +4,9 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
-public class FreemarkerConfig extends Configuration{
+public class FreemarkerConfig extends Configuration {
 
-    public FreemarkerConfig(Version version){
+    public FreemarkerConfig(Version version) {
         super(version);
         setDefaultEncoding("UTF-8");
         setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);

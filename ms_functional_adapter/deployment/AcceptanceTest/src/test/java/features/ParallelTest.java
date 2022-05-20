@@ -13,6 +13,6 @@ import java.util.Collection;
 import java.util.List;
 
 @RunWith(Karate.class)
-public class ParallelTest {
+class ParallelTest {
 
 }

@@ -1,5 +1,6 @@
 package co.com.bancolombia.consumer;
 
+import co.com.bancolombia.consumer.adapter.Error;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.Request;
 import co.com.bancolombia.model.client.ResponseClient;
@@ -62,7 +63,7 @@ public class RestConsumerTest {
         HashMap headers = new HashMap();
         Request request = Request.builder().headers(headers).build();
         StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), request,
-                ResponseClient.class))
+                ResponseClient.class, Error.class))
                 .expectNextMatches(response -> ((ResponseClient) response).getResponse()==true)
                 .verifyComplete();
     }

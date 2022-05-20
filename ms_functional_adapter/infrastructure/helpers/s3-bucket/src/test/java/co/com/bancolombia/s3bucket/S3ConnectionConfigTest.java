@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.Assert;
 import software.amazon.awssdk.regions.Region;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class S3ConnectionConfigTest {
+class S3ConnectionConfigTest {
     @InjectMocks
     private S3ConnectionConfig s3ConnectionConfigMock;
 
@@ -23,7 +22,7 @@ public class S3ConnectionConfigTest {
     private S3ConnectionProperties s3ConnectionProperties;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
         when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
         when(s3ConnectionProperties.getMaximumPoolSize()).thenReturn(50);
@@ -32,13 +31,13 @@ public class S3ConnectionConfigTest {
     }
 
     @Test
-    public void s3AsyncClientTest() throws IOException {
+    void s3AsyncClientTest() throws IOException {
         Assert.notNull(s3ConnectionConfigMock.s3AsyncClient());
     }
 
     @Test
-    public void s3AsyncClientLocalTest() throws IOException {
+    void s3AsyncClientLocalTest() throws IOException {
         when(s3ConnectionProperties.getEndpoint()).thenReturn("http://localhost:4566");
-        Assert.notNull(s3ConnectionConfigMock.s3AsyncClientLocal( ));
+        Assert.notNull(s3ConnectionConfigMock.s3AsyncClientLocal());
     }
 }

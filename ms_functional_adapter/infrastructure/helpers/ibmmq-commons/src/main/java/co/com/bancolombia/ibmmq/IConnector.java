@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 import javax.jms.MessageListener;
 
-public interface IConnector<T>{
+public interface IConnector<T> {
 
     Mono<T> sendMessageToQueue(String message, String keyConnect, String correlationID);
 

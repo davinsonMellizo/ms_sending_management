@@ -19,7 +19,7 @@ public class AwsProperties {
     @Component
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class S3{
+    public static class S3 {
         private String endpoint;
         private String bucket;
         private String configListenerMqKey;

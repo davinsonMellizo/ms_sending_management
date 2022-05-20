@@ -1,6 +1,5 @@
 package co.com.bancolombia.usecase.commons;
 
-import co.com.bancolombia.commons.enums.DocumentTypeEnum;
 import co.com.bancolombia.commons.enums.Response;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.contact.Contact;

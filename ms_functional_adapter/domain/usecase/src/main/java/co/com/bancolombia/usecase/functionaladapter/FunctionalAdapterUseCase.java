@@ -12,12 +12,12 @@ public class FunctionalAdapterUseCase {
     private final CommandGateway commandGateway;
     private final TransactionGateway transactionGateway;
 
-    public Mono<Void> sendTransactionToMQ(Transaction transaction){
+    public Mono<Void> sendTransactionToMQ(Transaction transaction) {
         return transactionGateway.sendTransactionToMQ(transaction)
                 .then(Mono.empty());
     }
 
-    public Mono<Void> sendTransactionToRabbit(Transaction transaction){
+    public Mono<Void> sendTransactionToRabbit(Transaction transaction) {
         return commandGateway.sendTransaction(transaction)
                 .then(Mono.empty());
     }

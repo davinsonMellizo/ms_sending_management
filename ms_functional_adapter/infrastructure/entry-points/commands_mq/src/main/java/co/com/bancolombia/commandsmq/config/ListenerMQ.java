@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-
 import java.time.LocalDateTime;
 
 import static com.ibm.msg.client.jms.JmsConstants.JMSX_DELIVERY_COUNT;
@@ -36,12 +35,12 @@ public class ListenerMQ implements MessageListener {
         useCase.sendTransactionToRabbit(getMessage(message))
                 .onErrorResume(e -> discard(e, message))
                 .thenReturn(message.getBody(String.class) + LocalDateTime.now())
-                .doOnNext(System.out::println)
+                .doOnNext(loggerBuilder::info)
                 .subscribe();
     }
 
 
-    private Transaction getMessage(Message message){
+    private Transaction getMessage(Message message) {
         try {
             return Transaction.builder()
                     .payload(message.getBody(String.class).substring(META_DATA))
@@ -53,11 +52,13 @@ public class ListenerMQ implements MessageListener {
     }
 
     private Mono<Void> discard(Throwable error, Message message) {
-        final boolean isRetry = error instanceof TechnicalException && ((TechnicalException) error).getException().isRetry();
+        final boolean isRetry = error instanceof TechnicalException
+                && ((TechnicalException) error).getException().isRetry();
+
         final int maxRetries = env.getProperty(MAX_RETRIES, Integer.class);
         return Mono.defer(() -> {
             try {
-                if (message.getIntProperty(JMSX_DELIVERY_COUNT) > maxRetries  || isRetry) {
+                if (message.getIntProperty(JMSX_DELIVERY_COUNT) > maxRetries || isRetry) {
                     return Mono.empty();
                 }
             } catch (JMSException e) {

@@ -1,6 +1,5 @@
 package co.com.bancolombia.events.handlers;
 
-import co.com.bancolombia.commandsmq.config.ListenerMQ;
 import co.com.bancolombia.events.model.ResourceQuery;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.transaction.Transaction;
@@ -21,7 +20,7 @@ public class Handler {
     private final FunctionalAdapterUseCase useCase;
     private final LoggerBuilder loggerBuilder;
 
-    public HandlerRegistry listenerMessage( ResourceQuery.Resource resource, HandlerRegistry register){
+    public HandlerRegistry listenerMessage(ResourceQuery.Resource resource, HandlerRegistry register) {
         return register.handleCommand(resource.getQueryName(), message -> Mono.just(message)
                 .doOnNext(e -> loggerBuilder.info(e.getData()))
                 .flatMap(command -> useCase.sendTransactionToMQ(Transaction.builder()

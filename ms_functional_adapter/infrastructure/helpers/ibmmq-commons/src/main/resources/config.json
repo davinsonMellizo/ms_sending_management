@@ -9,17 +9,17 @@
       "secret": "connection1"
     }
   ],
-  "queues" : [
+  "queues": [
     {
-      "name" : "DEV.QUEUE.1",
+      "name": "DEV.QUEUE.1",
       "connection": "connFactory1"
     },
     {
-      "name" : "DEV.QUEUE.2",
+      "name": "DEV.QUEUE.2",
       "connection": "connFactory1"
     },
     {
-      "name" : "DEV.QUEUE.3",
+      "name": "DEV.QUEUE.3",
       "connection": "connFactory1"
     }
   ],
@@ -37,16 +37,16 @@
   ],
   "transactions": {
     "ALM9610": {
-      "listener" : "id1",
-      "template" : "{ \"name\" : \"${payload?substring(5, 20)}\"}"
+      "listener": "id1",
+      "template": "{ \"name\" : \"${payload?substring(5, 20)}\"}"
     },
     "ALM9369": {
-      "listener" : "id1",
-      "template" : "{ \"name\" : \"${payload?substring(5, 25)}\"}"
+      "listener": "id1",
+      "template": "{ \"name\" : \"${payload?substring(5, 25)}\"}"
     },
     "APP9369": {
-      "listener" : "id2",
-      "template" : "{ \"name\" : \"${payload?substring(0, 20)}\"}"
+      "listener": "id2",
+      "template": "{ \"name\" : \"${payload?substring(0, 20)}\"}"
     }
   }
 }

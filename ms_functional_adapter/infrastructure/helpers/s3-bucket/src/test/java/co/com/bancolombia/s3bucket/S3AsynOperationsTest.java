@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.test.StepVerifier;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -20,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class S3AsynOperationsTest {
+class S3AsynOperationsTest {
     @InjectMocks
     private S3AsynOperations s3AsynOperations;
     @Mock
@@ -32,8 +31,9 @@ public class S3AsynOperationsTest {
 
     private static final CompletableFuture<InputStream> completableFutureInputStream
             = CompletableFuture.supplyAsync(() -> ResponseBytes.fromByteArray("test", "test".getBytes()).asInputStream());
+
     @Test
-    public void getFileAsStringTest(){
+    void getFileAsStringTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
         StepVerifier.create(s3AsynOperations.getFileAsString(bucketName, ccdtKey))
@@ -41,11 +41,11 @@ public class S3AsynOperationsTest {
     }
 
     @Test
-    public void getFileAsInputStreamTest(){
+    void getFileAsInputStreamTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
         StepVerifier.create(s3AsynOperations.getFileAsInputStream(bucketName, ccdtKey))
-                .expectNextMatches( v -> Objects.nonNull(v))
+                .expectNextMatches(v -> Objects.nonNull(v))
                 .verifyComplete();
     }
 

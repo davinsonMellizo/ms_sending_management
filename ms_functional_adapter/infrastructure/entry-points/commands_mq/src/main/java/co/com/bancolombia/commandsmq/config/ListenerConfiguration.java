@@ -17,7 +17,7 @@ public class ListenerConfiguration {
     public ListenerMQ eventHandlers(final JmsManagement management, MqConnector mqConnector) {
         ConnectionData connData = management.getConnectionData();
         connData.getListener()
-                .forEach( event -> mqConnector.eventConsumer(connData.getQueue(event.getQueueResponse()), listenerMQ));
+                .forEach(event -> mqConnector.eventConsumer(connData.getQueue(event.getQueueResponse()), listenerMQ));
         return null;
     }
 }

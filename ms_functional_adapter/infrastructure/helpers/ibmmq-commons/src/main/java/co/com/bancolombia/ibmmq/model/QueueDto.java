@@ -8,7 +8,7 @@ public class QueueDto {
     private String connection;
     private boolean temporary;
 
-    public void setNameTemporary(String name, ConnectionData conn){
+    public void setNameTemporary(String name, ConnectionData conn) {
         conn.getListener().stream()
                 .filter(queue -> queue.getQueueResponse().equals(this.name))
                 .peek(queue -> queue.setQueueResponse(name));

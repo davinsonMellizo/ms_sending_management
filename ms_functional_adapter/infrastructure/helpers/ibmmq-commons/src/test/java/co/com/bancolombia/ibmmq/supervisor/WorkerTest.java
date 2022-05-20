@@ -10,23 +10,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.jms.Connection;
 import javax.jms.JMSException;
-import javax.jms.JMSRuntimeException;
+import javax.jms.Connection;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 import javax.jms.Session;
+import javax.jms.JMSRuntimeException;
+import javax.jms.MessageListener;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 
 @ExtendWith(MockitoExtension.class)
-public class WorkerTest {
+class WorkerTest {
     @Mock
     private JmsManagement config;
     @Mock
@@ -43,12 +42,12 @@ public class WorkerTest {
     private static final ConnectionData connectionData = JsonUtils.stringToType(DataTest.config, ConnectionData.class);
 
     @BeforeEach
-    public void init(){
+    public void init() {
         when(config.getConnectionData()).thenReturn(connectionData);
     }
 
     @Test
-    public void shouldRunUntilSuccess() throws JMSException {
+    void shouldRunUntilSuccess() throws JMSException {
         Worker worker = new Worker(config, listener, log);
         worker.setConnectionName("connFactory1");
         worker.run();
@@ -56,7 +55,7 @@ public class WorkerTest {
     }
 
     @Test
-    public void shouldRunTimes() throws JMSException {
+    void shouldRunTimes() throws JMSException {
         Mockito.doThrow(new JMSRuntimeException(""))
                 .doNothing()
                 .when(config)

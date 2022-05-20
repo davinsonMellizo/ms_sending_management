@@ -2,10 +2,8 @@ package co.com.bancolombia.api.services.client;
 
 import co.com.bancolombia.api.dto.EnrolDTO;
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
-import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.ResponseUpdateClient;
 import co.com.bancolombia.model.error.Error;
-import co.com.bancolombia.model.response.StatusResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
