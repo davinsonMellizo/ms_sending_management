@@ -1,9 +1,14 @@
 package co.com.bancolombia.model.message;
 
 import co.com.bancolombia.Request;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import lombok.Setter;
+import lombok.Builder;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,7 +17,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Builder(toBuilder = true)
 public class SMSInalambria extends Request {
-    private LocalDateTime DateMessage;
+    private transient LocalDateTime DateMessage;
     private String Devices;
     private Integer FlashSMS;
     private Integer HasMore;

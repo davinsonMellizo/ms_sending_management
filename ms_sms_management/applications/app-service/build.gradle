@@ -1,17 +1,21 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    implementation project(':dynamodb')
+    implementation project(':dynamo-commons')
+    implementation project(':redis')
     implementation project(':async-sqs')
 	implementation project(':rest-consumer')
     implementation project(':async-event-handler')
     implementation project(':rabbit-configurator')
     implementation project(':secrets-manager')
-	compile 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation project(':s3-bucket')
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation project(':model')
     implementation project(':usecase')
     implementation project(':log')
-    compile 'org.springframework.boot:spring-boot-starter'
-    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'co.com.bancolombia:healthcheck-exec-cmd:trunk.20210419.1'

@@ -1,18 +1,32 @@
 
 {
-  "client": {
-    "documentNumber": '#(documentNumber)',
-    "documentType": "CC",
+  "customer": {
+    "identification": {
+      "type": "CC",
+      "number": '#(documentNumber)'
+    },
     "keyMdm": "mdm55",
-    "stateClient": "Activo",
-    "creationUser": "usuario"
+    "status": "Activo",
+    "traceability": {
+      "consumerCode": '#(consumer)',
+      "creationUser": "usuario"
+    }
   },
-  "contacts": [
+  "contactData": [
     {
-      "consumer": '#(consumer)',
-      "contactWay": "SMS",
-      "value": "123456",
-      "stateContact": "Activo"
+      "contactChannel": "PUSH",
+      "dataValue": "valuepush",
+      "status": "Inactivo"
+    },
+    {
+      "contactChannel": "MAIL",
+      "dataValue": "mail@mail.com",
+      "status": "Activo"
+    },
+    {
+      "contactChannel": "SMS",
+      "dataValue": "3207288543",
+      "status": "Activo"
     }
   ]
 }

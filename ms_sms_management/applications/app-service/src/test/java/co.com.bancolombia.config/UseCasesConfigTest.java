@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UseCasesConfigTest {
+class UseCasesConfigTest {
     @InjectMocks
     private UseCasesConfig useCasesConfig;
 
@@ -33,7 +33,7 @@ public class UseCasesConfigTest {
     }
 
     @Test
-    public void putLogTest(){
+     void putLogTest(){
         assertThat(useCasesConfig.customOpenAPI("1")).isNotNull();
     }
 

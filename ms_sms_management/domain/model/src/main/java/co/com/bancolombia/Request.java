@@ -1,6 +1,6 @@
 package co.com.bancolombia;
 
-import lombok.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Map;

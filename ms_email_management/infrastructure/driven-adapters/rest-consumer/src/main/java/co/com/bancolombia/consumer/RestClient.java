@@ -21,16 +21,14 @@ public class RestClient<T extends Request,R> {
     private final WebClient webClient;
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
-        Map<String,String> header = new HashMap<>();
-        header.put("x-mock-match-request-headers", "true");
-        header.put("token", "token-valid");
+        System.out.println("los headers para enviar al proveedor"+request.getHeaders());
         return webClient.post()
                 .uri(route)
                 .contentType(APPLICATION_JSON)
-                .headers(head -> head.setAll(header))
+                .headers(head -> head.setAll(request.getHeaders()))
                 .bodyValue(cleanHeader(request))
                 .retrieve()
-                .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
+                //.onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
                 .bodyToMono(clazz);
     }
 

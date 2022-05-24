@@ -25,7 +25,8 @@ public class SecretsManagerConfig {
 
     @Bean
     @Profile("local")
-    public AWSSecretManagerConnectorAsync connectionLocal(@Value("${adapters.secrets-manager.endpoint}") String endpoint) {
+    public AWSSecretManagerConnectorAsync connectionLocal
+            (@Value("${adapters.secrets-manager.endpoint}") String endpoint) {
         return new AWSSecretManagerConnectorAsync(AWSSecretsManagerConfig.builder()
                 .endpoint(endpoint)
                 .build());

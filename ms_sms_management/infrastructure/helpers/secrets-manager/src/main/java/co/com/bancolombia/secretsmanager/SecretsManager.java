@@ -20,7 +20,7 @@ public class SecretsManager {
         return awsSecretManagerConnector.getSecret(secret, cls)
                 .doOnSuccess(e -> logger.info(String.format("Secret %s was obtained successfully", secret)))
                 .onErrorMap(error -> {
-                    String message = String.join(" ", secret, error.getMessage());
+                    var message = String.join(" ", secret, error.getMessage());
                     return new TechnicalException(message, SECRET_EXCEPTION);
                 });
     }

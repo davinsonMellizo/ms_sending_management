@@ -188,7 +188,6 @@ public class ContactUseCaseTest {
     @Test
     public void validateContacts() {
         enrol.setContactData(List.of(contact));
-        System.out.println(enrol);
         StepVerifier
                 .create(useCase.validateContacts(enrol))
                 .assertNext(response -> response
@@ -202,7 +201,6 @@ public class ContactUseCaseTest {
         contact.setContactWay("SMS");
         contact.setValue("3207288544");
         enrol.setContactData(List.of(contact));
-        System.out.println(enrol);
         StepVerifier
                 .create(useCase.validatePhone(enrol, client))
                 .assertNext(response -> response
@@ -216,7 +214,6 @@ public class ContactUseCaseTest {
         contact.setContactWay("MAIL");
         contact.setValue("mail@mail.com");
         enrol.setContactData(List.of(contact));
-        System.out.println(enrol);
         StepVerifier
                 .create(useCase.validateMail(enrol, client))
                 .assertNext(response -> response
@@ -230,7 +227,6 @@ public class ContactUseCaseTest {
         contact.setContactWay("SMS");
         contact.setValue("1235");
         enrol.setContactData(List.of(contact));
-        System.out.println(enrol);
         useCase.validatePhone(enrol, client)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
@@ -242,7 +238,6 @@ public class ContactUseCaseTest {
         contact.setContactWay("MAIL");
         contact.setValue("zzzzz");
         enrol.setContactData(List.of(contact));
-        System.out.println(enrol);
         useCase.validateMail(enrol, client)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)

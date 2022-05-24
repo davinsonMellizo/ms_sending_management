@@ -13,6 +13,7 @@ import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 @RequiredArgsConstructor
 public class LogUseCase {
     private final LogGateway logGateway;
+    private static final int CODE_RESPONSE_200 =200;
 
     public <T> Mono<T> sendLog(Alert alert, TemplateEmail template, String medium, Response response) {
         return logGateway.putLogToSQS(Log.builder()
@@ -24,7 +25,7 @@ public class LogUseCase {
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 .build())
-                .filter(log -> response.getCode()!=200)
-                .flatMap(log -> Mono.error(new Throwable()));
+                .filter(log -> response.getCode()!= CODE_RESPONSE_200)
+                .flatMap(log -> Mono.error(new Throwable(response.getCode().toString())));
     }
 }

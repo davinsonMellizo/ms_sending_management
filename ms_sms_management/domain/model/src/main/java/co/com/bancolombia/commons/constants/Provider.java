@@ -1,13 +1,16 @@
 package co.com.bancolombia.commons.constants;
 
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+//@RequiredArgsConstructor
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class Provider {
-    public static String INALAMBRIA = "INA";
-    public static String MASIVIAN = "MAS";
-    public static String CONTACTABILIDAD = "PUSH";
+    public static final String INALAMBRIA = "INA";
+    public static final String MASIVIAN = "MAS";
+    public static final String CONTACTABILIDAD = "PUSH";
 }

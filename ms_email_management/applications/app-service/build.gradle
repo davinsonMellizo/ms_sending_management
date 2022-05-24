@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    implementation project(':redis')
     implementation project(':async-sqs')
     implementation project(':ses')
 	implementation project(':dynamodb')
@@ -10,11 +11,12 @@ dependencies {
     implementation project(':dynamo-commons')
     implementation project(':rabbit-configurator')
     implementation project(':secrets-manager')
-	compile 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation project(':s3-bucket')
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'//
     implementation project(':model')
     implementation project(':usecase')
-    compile 'org.springframework.boot:spring-boot-starter'
-    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')///
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }

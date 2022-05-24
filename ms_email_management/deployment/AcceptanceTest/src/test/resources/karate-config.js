@@ -8,7 +8,7 @@ function() {
   var config = {
       host: '127.0.0.1',
       port: 5672,
-      queueName: 'ms_sms_management',
+      queueName: 'ms_email_management',
       username: 'guest',
       password: 'guest',
   }

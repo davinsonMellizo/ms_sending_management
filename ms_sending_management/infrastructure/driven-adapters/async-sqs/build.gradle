@@ -1,5 +1,6 @@
 dependencies {
-    compile project(':model')
+    implementation project(':log')
+    implementation project(':model')
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     implementation group: 'software.amazon.awssdk', name: 'sqs', version: '2.16.91'
 

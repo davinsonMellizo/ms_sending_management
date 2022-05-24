@@ -27,7 +27,6 @@ public class ConsumerRepositoryImplement
     public Mono<Consumer> findConsumerById(String id) {
         return repository.findById(id)
                 .map(this::convertToEntity)
-                .doOnNext(System.out::println)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CONSUMER_BY_ID_ERROR));
     }
 

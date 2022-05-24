@@ -20,7 +20,12 @@ public class ConsumerProperties {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Resources {
-        private String endpointMasivianSms;
+        private String endpointMasivSms;
+        private String endpointMasivAutToken;
+        private String endpointMasivToken;
         private String endpointInalambriaSms;
+        private String endpointInalambriaToken;
+        private String endpointInalambriaRefreshToken;
+
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
@@ -23,14 +24,19 @@ public class RestClientTest {
     private MockWebServer mockServer;
     private RestClient restClient;
     public static final String HOST = "http://localhost:%s/";
+    private Mail mail;
 
     @BeforeEach
     public void init() {
+        mail = new Mail();
         mockServer = new MockWebServer();
         restClient = new RestClient(WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
                 .build());
         mockServer.url(getBaseUrl(mockServer.getPort()));
+
+        mail.setHeaders(Map.of("Authorization","TokenTest"));
+
     }
 
     public static String getBaseUrl(int port){
@@ -45,7 +51,7 @@ public class RestClientTest {
     @Test
     public void givenPostThenSuccess() {
         mockServer.enqueue(mockResponseSuccess());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Mail(), SuccessMasivianMAIL.class, ErrorMasivianMAIL.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), mail, SuccessMasivianMAIL.class, ErrorMasivianMAIL.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -53,7 +59,7 @@ public class RestClientTest {
     @Test
     public void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Mail(), SuccessMasivianMAIL.class, ErrorMasivianMAIL.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), mail, SuccessMasivianMAIL.class, ErrorMasivianMAIL.class))
                 .expectError()
                 .verify();
     }

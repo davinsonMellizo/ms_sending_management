@@ -12,4 +12,5 @@ import lombok.Setter;
 public class ErrorMasivianMAIL{
     private String status;
     private String description;
+    private String data;
 }

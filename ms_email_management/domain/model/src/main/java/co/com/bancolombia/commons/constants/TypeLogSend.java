@@ -1,13 +1,14 @@
 package co.com.bancolombia.commons.constants;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class TypeLogSend {
 
-    public static String SEND_220 = "220";
-    public static String SEND_230 = "230";
+    public static final String SEND_220 = "220";
+    public static final String SEND_230 = "230";
 
 }

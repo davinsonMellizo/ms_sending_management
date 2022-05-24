@@ -11,7 +11,7 @@ dependencies {
     implementation project(':async-event-bus')
     implementation project(':r2dbc-postgresql')
     implementation project(':rabbit-configurator')
-    runtime("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'

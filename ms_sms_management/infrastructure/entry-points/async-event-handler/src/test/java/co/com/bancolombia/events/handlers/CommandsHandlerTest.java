@@ -15,7 +15,7 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class CommandsHandlerTest {
+class CommandsHandlerTest {
     @InjectMocks
     private CommandsHandler commandsHandler;
     @Mock
@@ -27,7 +27,7 @@ public class CommandsHandlerTest {
     }
 
     @Test
-    public void handleSendAlert() {
+    void handleSendAlert() {
         when(useCase.sendAlert(any())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.handleSendAlert(new Command<Alert>("alert", "alert",
                 Alert.builder().build())))

@@ -1,9 +1,14 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Mail;
+import co.com.bancolombia.model.message.Recipient;
+import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.TemplateEmail;
+import co.com.bancolombia.model.message.TemplateMasivian;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
-import co.com.bancolombia.model.message.gateways.PinpointGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
+import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
@@ -11,20 +16,22 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 
-import static co.com.bancolombia.commons.constants.Provider.*;
-import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
+import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
+import static co.com.bancolombia.commons.constants.Provider.SES;
 import static co.com.bancolombia.commons.enums.TemplateType.SIMPLE;
-import static co.com.bancolombia.usecase.sendalert.commons.Medium.*;
+import static co.com.bancolombia.usecase.sendalert.commons.Medium.EMAIL;
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
-    private final PinpointGateway pinpointGateway;
+    private final TemplateEmailGateway templateEmailGateway;
     private final MasivianGateway masivianGateway;
     private final SesGateway sesGateway;
     private final LogUseCase logUseCase;
+    private final GeneratorTokenUseCase generatorTokenUseCase;
+    private static final int CONSTANT =23;
 
     public Mono<Void> sendAlert(Alert alert) {
-        return pinpointGateway.findTemplateEmail(alert.getTemplate().getName())
+        return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));
     }
@@ -49,19 +56,44 @@ public class SendAlertUseCase {
     }
 
     public Mono<Response> sendEmailByMasivian(Alert alert, TemplateEmail templateEmail) {
+        System.out.println("estoy en el send email "+alert.getProvider());
         ArrayList<Recipient> recipients = new ArrayList<>();
         recipients.add(new Recipient(alert.getDestination().getToAddress()));
+        final String[] tokenTemp = {""};
         return Mono.just(alert.getProvider())
                 .filter(provider -> provider.equalsIgnoreCase(MASIVIAN))
-                .map(provider -> Mail.builder()
+                .flatMap(provider ->generatorTokenUseCase.getNameToken(alert))
+                .map(nameToken -> Mail.builder()
                         .From(alert.getFrom())
                         .Subject(templateEmail.getSubject())
                         .Recipients(recipients)
                         .Template(new TemplateMasivian(SIMPLE.getType(), templateEmail.getBodyHtml()))
                         .Attachments(alert.getAttachments())
+                        .parameters(new ArrayList<>())
+                        .nameToken(nameToken)
                         .build())
+                .flatMap(mail->generatorTokenUseCase.getToken(mail))
+                .doOnNext(getHeaders-> {tokenTemp[0] = String.valueOf(getHeaders.getHeaders()); })
                 .flatMap(masivianGateway::sendMAIL)
+                .doOnNext(System.out::println)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response));
+                .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response))
+                .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0],templateEmail))
+                .map(o->(Response) o);
+    }
+    private Mono<Void> filterErrorMAS(Throwable error, Alert alert, String tokentemp,TemplateEmail templateEmail) {
+        return Mono.just(error)
+                .filter(catchError -> catchError.getMessage().contains("401"))
+                .flatMap(next-> replaceBadToken(alert,tokentemp.substring(tokentemp.indexOf("bearer") + CONSTANT,
+                        tokentemp.indexOf("}")),templateEmail))
+                .switchIfEmpty(Mono.error(error));
+
+    }
+    private Mono<Void> replaceBadToken(Alert alert, String tokentemp, TemplateEmail templateEmail){
+        return generatorTokenUseCase.deleteToken(tokentemp,alert)
+                .map(d->new Response())
+                .switchIfEmpty(sendEmailByMasivian(alert,templateEmail))
+                .then(Mono.empty());
+
     }
 }

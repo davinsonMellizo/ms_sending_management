@@ -1,10 +1,11 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE)
 public class Medium {
-    public static String EMAIL = "MAIL";
+    public static final String EMAIL = "MAIL";
 }

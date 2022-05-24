@@ -2,19 +2,14 @@ package co.com.bancolombia.dynamo;
 
 import co.com.bancolombia.dynamo.annotation.DynamoDbTableAdapter;
 import org.modelmapper.ModelMapper;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import software.amazon.awssdk.core.async.SdkPublisher;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
-import software.amazon.awssdk.enhanced.dynamodb.model.Page;
-import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
 import java.lang.reflect.ParameterizedType;
 
-import static reactor.core.publisher.Mono.from;
 import static reactor.core.publisher.Mono.fromFuture;
 
 public class AdapterOperations<E, D> {
@@ -33,21 +28,9 @@ public class AdapterOperations<E, D> {
         this.table = client.table(tableName, TableSchema.fromBean(dataClass));
     }
 
-    protected Mono<Void> save(E entity) {
-        return fromFuture(table.putItem(toData(entity)));
-    }
-
     protected Mono<E> findById(String partitionKey){
         return fromFuture(table.getItem(buildKey(partitionKey)))
             .map(this::toEntity);
-    }
-
-    protected Mono<Void> update(E entity) {
-        return fromFuture(table.putItem(toData(entity)));
-    }
-
-    protected Mono<Void> delete(String partitionKey) {
-        return fromFuture(table.deleteItem(buildKey(partitionKey))).then();
     }
 
     private Key buildKey(String partitionKey) {
@@ -59,9 +42,21 @@ public class AdapterOperations<E, D> {
     private E toEntity(D data){
         return (data != null) ? mapper.map(data, entityClass) : null;
     }
-
+/*
     private D toData(E entity){
         return (entity != null) ? mapper.map(entity, dataClass) : null;
     }
 
+    protected Mono<Void> save(E entity) {
+        return fromFuture(table.putItem(toData(entity)));
+    }
+
+    protected Mono<Void> update(E entity) {
+        return fromFuture(table.putItem(toData(entity)));
+    }
+
+    protected Mono<Void> delete(String partitionKey) {
+        return fromFuture(table.deleteItem(buildKey(partitionKey))).then();
+    }
+*/
 }

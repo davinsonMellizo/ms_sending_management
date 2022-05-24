@@ -1,14 +1,9 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
-import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.TemplateEmail;
 import lombok.experimental.UtilityClass;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 
 @UtilityClass
@@ -24,7 +19,8 @@ public class Util {
 
     private TemplateEmail replaceParameterTemplate(Alert alert, TemplateEmail templateEmail) {
         alert.getTemplate().getParameters().forEach(parameter -> {
-            String message = templateEmail.getBodyHtml().replace("${" + parameter.getName() + "}", parameter.getValue());
+            String message = templateEmail.getBodyHtml().replace("${" + parameter.getName() + "}",
+                    parameter.getValue());
             templateEmail.setBodyHtml(message);
         });
 

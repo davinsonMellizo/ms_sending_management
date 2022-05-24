@@ -6,11 +6,11 @@ Feature: CRUD client
 
   Scenario: Successful case Find Client
     Given header document-number = result.value
-    And header document-type = "0"
+    And header document-type = "1"
     When method GET
     Then status 200
     Then print result.value
-    And match $.documentNumber == Number(result.value)
+    And match $.customer.identification.number == Number(result.value)
 
   Scenario: Successful case Update Client
     * def consumer = "ALM"
@@ -25,7 +25,7 @@ Feature: CRUD client
     Given header document-number = "1000000010"
     And header document-type = "0"
     When method GET
-    Then status 500
+    Then status 409
     And match $.code == '373'
 
   Scenario: Error case Update Client
@@ -33,17 +33,17 @@ Feature: CRUD client
     Given request read("../data/client.json")
     When method PUT
     Then status 500
-    And match $.code == '301'
+    And match $.code == 'T0006'
 
   Scenario: Error case Save client, missing parameter per body
     Given request {}
     When method POST
     Then status 500
-    And match $.code == 'DST0012'
+    And match $.code == 'T0018'
 
   Scenario: Error case Update client, missing parameter per body
     Given request {}
     When method PUT
     Then status 500
-    And match $.code == 'DST0012'
+    And match $.code == 'T0018'
 

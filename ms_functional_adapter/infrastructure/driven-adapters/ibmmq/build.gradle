@@ -4,6 +4,6 @@ dependencies {
     implementation project(':commons')
     implementation project(':ibmmq-commons')
     implementation 'org.springframework:spring-context'
-    testCompile project(':model').sourceSets.test.output
+    testImplementation project(':model').sourceSets.test.output
 
 }

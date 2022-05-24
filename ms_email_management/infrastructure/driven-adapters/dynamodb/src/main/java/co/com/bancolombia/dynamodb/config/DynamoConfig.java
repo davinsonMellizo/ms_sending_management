@@ -34,7 +34,7 @@ public class DynamoConfig {
         }
     }
 
-    /*@Bean
+    @Bean
     @Profile({"dev", "cer", "pdn"})
     public DynamoDbAsyncClient clientEnvironments(){
         return DynamoDbAsyncClient.create();
@@ -50,11 +50,12 @@ public class DynamoConfig {
     }
 
     @Bean
+    //@Profile({"local"})
     @Primary
     public DynamoDbEnhancedAsyncClient clientEnhanced(final DynamoDbAsyncClient client){
         return DynamoDbEnhancedAsyncClient.builder()
                 .dynamoDbClient(client)
                 .build();
-    }*/
+    }
 
 }

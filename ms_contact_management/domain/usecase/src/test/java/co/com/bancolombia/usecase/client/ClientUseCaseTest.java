@@ -146,8 +146,6 @@ public class ClientUseCaseTest {
                 .thenReturn(Mono.empty());
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
-        /*when(clientGateway.matchClientWithBasicKit(any()))
-                .thenReturn(Mono.just(true));*/
         when(documentGateway.getDocument(anyString()))
                 .thenReturn(Mono.just(document));
         when(contactUseCase.saveContact(any(), anyString()))

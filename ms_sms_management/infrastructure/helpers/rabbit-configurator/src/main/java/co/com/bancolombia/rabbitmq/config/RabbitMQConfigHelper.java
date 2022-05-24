@@ -37,8 +37,8 @@ public class RabbitMQConfigHelper{
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
         System.out.println("Properties"+properties);
-        final ConnectionFactory factory = new ConnectionFactory();
-        PropertyMapper map = PropertyMapper.get();
+        var factory = new ConnectionFactory();
+        var map = PropertyMapper.get();
 
         map.from(properties::getHostname).whenNonNull().to(factory::setHost);
         map.from(properties::getPort).to(factory::setPort);

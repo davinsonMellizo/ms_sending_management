@@ -21,4 +21,4 @@ Feature: re-usable feature to create a single document
     Given request read("../data/client.json")
     When method POST
     Then status 200
-    And match $.idResponse == '120'
+    And match $.idResponse == "120"

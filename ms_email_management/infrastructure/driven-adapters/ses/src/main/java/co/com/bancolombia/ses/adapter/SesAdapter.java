@@ -36,7 +36,8 @@ public class SesAdapter implements SesGateway {
         try {
             message.setSubject(templateEmail.getSubject(), "UTF-8");
             message.setFrom(new InternetAddress(alert.getFrom()));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(alert.getDestination().getToAddress()));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(alert.getDestination().getToAddress()));
 
             MimeMultipart msg_body = new MimeMultipart("alternative");
             MimeBodyPart htmlPart = new MimeBodyPart();

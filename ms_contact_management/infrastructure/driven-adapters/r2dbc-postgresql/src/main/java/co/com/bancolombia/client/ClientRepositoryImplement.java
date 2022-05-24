@@ -42,7 +42,6 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<Client> saveClient(Client client) {
-        System.out.println("Save client and all references");
         return Mono.just(client)
                 .map(this::convertToData)
                 .map(clientData -> clientData.toBuilder()
@@ -56,8 +55,6 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<StatusResponse<Client>> updateClient(StatusResponse<Client> statusResponse) {
-        System.out.println("actual update " + statusResponse.getActual());
-        System.out.println("before update " + statusResponse.getBefore());
         return Mono.just(statusResponse.getActual().toBuilder()
                         .id(statusResponse.getBefore().getId())
                         .createdDate(statusResponse.getBefore().getCreatedDate())

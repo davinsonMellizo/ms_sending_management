@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertUseCaseTest {
+class SendAlertUseCaseTest {
 
     @InjectMocks
     private SendAlertUseCase useCase;
@@ -29,15 +30,17 @@ public class SendAlertUseCaseTest {
     private LogUseCase logUseCase;
     @Mock
     private MasivianGateway masivianGateway;
-
+    @Mock
+    private GeneratorTokenUseCase generatorTokenUseCase;
     @Mock
     private InalambriaGateway inalambriaGateway;
+
     private Alert alert = new Alert();
 
     @BeforeEach
     public void init() {
         alert.setTo("3215982557");
-        alert.setUrl("");
+        alert.setUrl("URl");
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name","bancolombia",""));
@@ -47,7 +50,10 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianTest(){
+    void sendAlertMasivianTest(){
+        when(generatorTokenUseCase.getTokenMAS(any(),any()))
+                .thenReturn(Mono.just(SMSMasiv.builder().customData("test").isFlash(false)
+                        .isLongmessage(false).isPremium(false).text("textTest").to("123456789").build()));
          when(masivianGateway.sendSMS(any()))
                 .thenReturn(Mono.just(Response.builder()
                         .code(200)
@@ -61,8 +67,13 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertInalambriaTest(){
+    void sendAlertInalambriaTest(){
         alert.setProvider("INA");
+        when(generatorTokenUseCase.getTokenINA(any(),any()))
+                .thenReturn(Mono.just(SMSInalambria.builder().DateMessage(LocalDateTime.now())
+                        .Devices("DevicesTest").FlashSMS(123).HasMore(1234).MessageData("MessageDataTest")
+                        .MessagePattern("MessagePatternTest").MessageText("MessageTextTest").TemplateId(12345)
+                        .TransactionNumber(2).Type(1).Url("UrlTest").build()));
         when(inalambriaGateway.sendSMS(any()))
                 .thenReturn(Mono.just(Response.builder()
                         .code(200)
@@ -76,9 +87,12 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianErrorTest(){
+    void sendAlertMasivianError401Test(){
+        when(generatorTokenUseCase.getTokenMAS(any(),any()))
+                .thenReturn(Mono.just(SMSMasiv.builder().customData("test").isFlash(false)
+                        .isLongmessage(false).isPremium(false).text("textTest").to("123456789").build()));
         when(masivianGateway.sendSMS(any()))
-                .thenReturn(Mono.error(new Throwable("error")));
+                .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
                 .create(useCase.sendAlert(alert))
                 .expectError()
@@ -86,15 +100,33 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertInalambriaErrorTest(){
+    void sendAlertInalambriaError401Test(){
         alert.setProvider("INA");
+        when(generatorTokenUseCase.getTokenINA(any(),any()))
+                .thenReturn(Mono.just(SMSInalambria.builder().DateMessage(LocalDateTime.now())
+                        .Devices("DevicesTest").FlashSMS(123).HasMore(1234).MessageData("MessageDAtaTes")
+                        .MessagePattern("MessagePatternTest").MessageText("MessageTextTest").TemplateId(12345)
+                        .TransactionNumber(2).Type(1).Url("UrlTest").build()));
         when(inalambriaGateway.sendSMS(any()))
-                .thenReturn(Mono.error(new Throwable("error")));
+                .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
                 .create(useCase.sendAlert(alert))
                 .expectError()
                 .verify();
     }
-
-
+    @Test
+    void sendAlertInalambriaError500Test(){
+        alert.setProvider("INA");
+        when(generatorTokenUseCase.getTokenINA(any(),any()))
+                .thenReturn(Mono.just(SMSInalambria.builder().DateMessage(LocalDateTime.now())
+                        .Devices("DevicesTest").FlashSMS(123).HasMore(1234).MessageData("MessageDAtaTes")
+                        .MessagePattern("MessagePatternTest").MessageText("MessageTextTest").TemplateId(12345)
+                        .TransactionNumber(2).Type(1).Url("UrlTest").build()));
+        when(inalambriaGateway.sendSMS(any()))
+                .thenReturn(Mono.error(new Throwable("500 error")));
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .expectError()
+                .verify();
+    }
 }

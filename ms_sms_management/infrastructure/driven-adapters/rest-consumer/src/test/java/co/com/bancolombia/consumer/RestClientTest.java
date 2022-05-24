@@ -2,7 +2,7 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.adapter.response.ErrorMasivianSMS;
 import co.com.bancolombia.consumer.adapter.response.SuccessMasivianSMS;
-import co.com.bancolombia.model.message.Sms;
+import co.com.bancolombia.model.message.SMSMasiv;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -13,22 +13,32 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 
-public class RestClientTest {
+
+
+class RestClientTest {
+
     private MockWebServer mockServer;
     private RestClient restClient;
     public static final String HOST = "http://localhost:%s/";
+    private SMSMasiv SMSMasiv;
 
     @BeforeEach
     public void init() {
         mockServer = new MockWebServer();
+        SMSMasiv = new SMSMasiv();
         restClient = new RestClient(WebClient.builder()
+                .baseUrl(getBaseUrl(mockServer.getPort()))
+                .build(),WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
                 .build());
         mockServer.url(getBaseUrl(mockServer.getPort()));
+        SMSMasiv.setHeaders(Map.of("Authorization","TokenTest"));
+
     }
 
     public static String getBaseUrl(int port){
@@ -41,19 +51,29 @@ public class RestClientTest {
     }
 
     @Test
-    public void givenPostThenSuccess() {
+    void givenPostThenSuccess() {
         mockServer.enqueue(mockResponseSuccess());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), SMSMasiv,
+                        SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    public void givenPostThenError() {
+    void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), SMSMasiv,
+                        SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectError()
                 .verify();
+    }
+    @Test
+    void givenPostThenSuccesWtihmasivapp(){
+        mockServer.enqueue(mockResponseSuccess());
+        StepVerifier.create(restClient.post("masivapp.com/test", SMSMasiv,
+                        SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     public static MockResponse mockResponseSuccess() {

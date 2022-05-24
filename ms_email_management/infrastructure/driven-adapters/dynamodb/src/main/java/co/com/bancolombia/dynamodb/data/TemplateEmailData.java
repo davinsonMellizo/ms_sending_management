@@ -7,6 +7,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 
 @Data
 @DynamoDbBean
+//@DynamoDbTableAdapter(tableName = "template-email")
 @DynamoDbTableAdapter(tableName = "alertas-qa-nu0154001-template-email")
 public class TemplateEmailData {
     private String name;

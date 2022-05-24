@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LogUseCaseTest {
+class LogUseCaseTest {
     @InjectMocks
     private LogUseCase logUseCase;
     @Mock
@@ -42,9 +42,21 @@ public class LogUseCaseTest {
     }
 
     @Test
-    public void putLogTest(){
+    void putLogTest(){
         StepVerifier.create(logUseCase.sendLog(alert, "", response))
                 .expectError();
+    }
+    @Test
+    void putLogTestWithCode200(){
+        response.setCode(200);
+        StepVerifier.create(logUseCase.sendLog(alert, "", response))
+                .verifyComplete();
+    }
+    @Test
+    void putLogTestWithCode202(){
+        response.setCode(202);
+        StepVerifier.create(logUseCase.sendLog(alert, "", response))
+                .verifyComplete();
     }
 
 }

@@ -23,5 +23,7 @@ public class Mail extends Request {
     private List<Recipient> Recipients;
     private List<Attachment> Attachments;
 
+    private String nameToken;
+
 
 }
