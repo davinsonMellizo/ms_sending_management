@@ -28,10 +28,8 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<Client> findClientByIdentification(Long documentNumber, Integer documentType) {
-        System.out.println("ini "+timeFactory.now().getNano());
         return repository.findClientByIdentification(documentNumber, Integer.toString(documentType))
                 .map(this::convertToEntity)
-                .doOnNext(client -> System.out.println("fin "+timeFactory.now().getNano()))
                 .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
     }
 

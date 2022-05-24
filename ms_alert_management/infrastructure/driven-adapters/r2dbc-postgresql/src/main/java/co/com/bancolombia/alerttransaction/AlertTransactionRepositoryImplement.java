@@ -34,7 +34,6 @@ public class AlertTransactionRepositoryImplement
     public Mono<AlertTransaction> saveAlertTransaction(AlertTransaction alertTransaction) {
         return Mono.just(alertTransaction)
                 .map(this::convertToData)
-                .doOnNext(alertTransactionData -> System.out.println("alertassas"+alertTransactionData))
                 .map(data -> data.toBuilder().createdDate(timeFactory.now()).build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)

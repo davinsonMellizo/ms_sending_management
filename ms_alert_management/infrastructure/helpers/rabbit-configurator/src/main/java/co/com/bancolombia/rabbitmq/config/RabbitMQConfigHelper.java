@@ -36,7 +36,6 @@ public class RabbitMQConfigHelper{
     @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
-        System.out.println("Properties"+properties);
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();
 

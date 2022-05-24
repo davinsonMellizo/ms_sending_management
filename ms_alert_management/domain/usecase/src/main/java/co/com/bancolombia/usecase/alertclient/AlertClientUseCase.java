@@ -30,7 +30,6 @@ public class AlertClientUseCase {
     private final AlertGateway alertGateway;
 
     public Mono<ResponseClient> matchClientWithBasicKit(Map<String, String> headers) {
-        System.out.println("create kit basic");
         return alertGateway.findAlertKitBasic()
                 .map(alert -> AlertClient.builder()
                         .documentType(Integer.parseInt(headers.get(DOCUMENT_TYPE)))
