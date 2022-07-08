@@ -3,6 +3,8 @@ package co.com.bancolombia.consumer;
 import co.com.bancolombia.Request;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -19,9 +21,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 public class RestClient<T extends Request,R> {
 
     private final WebClient webClient;
+    private final Log LOGGER = LogFactory.getLog(RestClient.class);
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
-        System.out.println("los headers para enviar al proveedor"+request.getHeaders());
         return webClient.post()
                 .uri(route)
                 .contentType(APPLICATION_JSON)

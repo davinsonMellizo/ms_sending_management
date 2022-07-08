@@ -19,13 +19,15 @@ public class ResponseContactsDTO {
     public ResponseContactsDTO(ResponseContacts responseContacts) {
         this.customer = new ResponseCustomerDTO();
         this.contactData = new ArrayList<>();
+        this.customer.setMdmKey(responseContacts.getKeyMdm());
+        this.customer.setStatus(responseContacts.getStatus());
+        this.customer.setPreference(responseContacts.getPreference());
+        this.customer.setDelegate(responseContacts.getDelegate());
         this.customer.setIdentification(IdentificationDTO.builder()
                 .documentNumber(responseContacts.getDocumentNumber())
                 .documentType(responseContacts.getDocumentType()).build());
         this.customer.setTraceability(ResponseTraceabilityDTO.builder()
-                .mdmKey(responseContacts.getKeyMdm())
                 .enrollmentOrigin(responseContacts.getEnrollmentOrigin())
-                .status(responseContacts.getStatus())
                 .creationUser(responseContacts.getCreationUser())
                 .createdDate(responseContacts.getCreatedDate())
                 .modifiedDate(responseContacts.getModifiedDate()).build());
@@ -42,6 +44,10 @@ class ResponseCustomerDTO {
 
     private IdentificationDTO identification;
     private ResponseTraceabilityDTO traceability;
+    private String status;
+    private String mdmKey;
+    private Integer preference;
+    private Boolean delegate;
 }
 
 @NoArgsConstructor
@@ -50,9 +56,7 @@ class ResponseCustomerDTO {
 @Builder(toBuilder = true)
 class ResponseTraceabilityDTO {
 
-    private String mdmKey;
     private String enrollmentOrigin;
-    private String status;
     private String creationUser;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

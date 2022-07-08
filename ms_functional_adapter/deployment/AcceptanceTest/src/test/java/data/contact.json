@@ -1,0 +1,8 @@
+{
+  "consumer": '#(consumer)',
+  "contactMedium": "SMS",
+  "documentNumber": '#(documentNumber)',
+  "documentType": 0,
+  "value": "3217937584",
+  "state": "Active"
+}

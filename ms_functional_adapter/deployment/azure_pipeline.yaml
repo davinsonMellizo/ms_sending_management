@@ -95,6 +95,7 @@ jobs:
           Contents: |
             infrastructure/**
             AcceptanceTest/**
+            PerformanceTest/**
           TargetFolder: $(Build.repository.LocalPath)/build/libs
 
       - task: CopyFiles@2
@@ -156,4 +157,11 @@ jobs:
         inputs:
           PathtoPublish: '$(Build.repository.LocalPath)/build/libs/AcceptanceTest'
           ArtifactName: acceptance-test-artifact
+        condition: succeeded()
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact: JMeter'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/PerformanceTest'
+          ArtifactName: PerformanceTest-artifact
         condition: succeeded()

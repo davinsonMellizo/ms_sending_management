@@ -104,14 +104,6 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
-        when(stateGateway.findState(any()))
-                .thenReturn(Mono.just(state));
-        when(mediumGateway.findContactMediumByCode(any()))
-                .thenReturn(Mono.just(medium));
-        when(documentGateway.getDocument(anyString()))
-                .thenReturn(Mono.just(document));
-        when(consumerGateway.findConsumerById(anyString()))
-                .thenReturn(Mono.just(consumer));
         StepVerifier
                 .create(useCase.saveContact(contact, "voucher"))
                 .assertNext(response -> response
@@ -119,12 +111,13 @@ public class ContactUseCaseTest {
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).saveContact(any());
-        verify(mediumGateway).findContactMediumByCode(any());
     }
 
     @Test
     public void updateContact() {
         contact.setPrevious(false);
+        when(contactGateway.saveContact(any()))
+                .thenReturn(Mono.just(contact));
         when(newnessUseCase.saveNewness((Contact) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(consumerGateway.findConsumerById(anyString()))
@@ -135,8 +128,9 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(contactGateway.findIdContact(any()))
+        when(contactGateway.findContactsByClientSegmentAndMedium(any()))
                 .thenReturn(Flux.just(contact));
+
         StepVerifier
                 .create(useCase.updateContactRequest(contact, "12345"))
                 .assertNext(response -> response
@@ -144,7 +138,6 @@ public class ContactUseCaseTest {
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).updateContact(any());
-        verify(stateGateway).findState(any());
     }
 
     @Test
@@ -162,7 +155,7 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(contactGateway.findIdContact(any()))
+        when(contactGateway.findContactsByClientSegmentAndMedium(any()))
                 .thenReturn(Flux.just(contact.toBuilder().value("69784585254").build(),
                         contact.toBuilder().previous(false).value("69784585254").build()));
         StepVerifier
@@ -172,25 +165,24 @@ public class ContactUseCaseTest {
                         .equals(contact.getDocumentNumber()))
                 .verifyComplete();
         verify(contactGateway).updateContact(any());
-        verify(stateGateway).findState(any());
+
     }
 
-    @Test
-    public void updateContactWithException() {
-        when(clientRepository.findClientByIdentification(any()))
-                .thenReturn(Mono.empty());
-        useCase.updateContactRequest(contact, "123456")
-                .as(StepVerifier::create)
-                .expectError(BusinessException.class)
-                .verify();
-    }
+
 
     @Test
     public void validateContacts() {
         enrol.setContactData(List.of(contact));
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
+        when(mediumGateway.findContactMediumByCode(any()))
+                .thenReturn(Mono.just(medium));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+
         StepVerifier
                 .create(useCase.validateContacts(enrol))
-                .assertNext(response -> response
+                .assertNext(response -> response.getClient()
                         .getConsumerCode()
                         .equals(client.getConsumerCode()))
                 .verifyComplete();
@@ -202,8 +194,8 @@ public class ContactUseCaseTest {
         contact.setValue("3207288544");
         enrol.setContactData(List.of(contact));
         StepVerifier
-                .create(useCase.validatePhone(enrol, client))
-                .assertNext(response -> response
+                .create(useCase.validatePhone(enrol))
+                .assertNext(response -> response.getClient()
                         .getConsumerCode()
                         .equals(client.getConsumerCode()))
                 .verifyComplete();
@@ -213,10 +205,11 @@ public class ContactUseCaseTest {
     public void validateMail() {
         contact.setContactWay("MAIL");
         contact.setValue("mail@mail.com");
+        contact.setEnvironmentType("Personal");
         enrol.setContactData(List.of(contact));
         StepVerifier
-                .create(useCase.validateMail(enrol, client))
-                .assertNext(response -> response
+                .create(useCase.validateMail(enrol))
+                .assertNext(response -> response.getClient()
                         .getConsumerCode()
                         .equals(client.getConsumerCode()))
                 .verifyComplete();
@@ -227,7 +220,7 @@ public class ContactUseCaseTest {
         contact.setContactWay("SMS");
         contact.setValue("1235");
         enrol.setContactData(List.of(contact));
-        useCase.validatePhone(enrol, client)
+        useCase.validatePhone(enrol)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
@@ -237,8 +230,9 @@ public class ContactUseCaseTest {
     public void validateMailException() {
         contact.setContactWay("MAIL");
         contact.setValue("zzzzz");
+        contact.setEnvironmentType("Personal");
         enrol.setContactData(List.of(contact));
-        useCase.validateMail(enrol, client)
+        useCase.validateMail(enrol)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();

@@ -47,7 +47,7 @@ public class ContactRepositoryImplement
     }
 
     @Override
-    public Flux<Contact> findIdContact(Contact contact) {
+    public Flux<Contact> findContactsByClientSegmentAndMedium(Contact contact) {
         return repositoryRead.findContact(contact.getDocumentNumber(), contact.getDocumentType(),
                 contact.getContactWay(), contact.getSegment())
                 .map(this::convertToEntity)

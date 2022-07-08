@@ -3,6 +3,8 @@ package co.com.bancolombia.consumer;
 import co.com.bancolombia.Request;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -12,10 +14,6 @@ import reactor.core.publisher.Mono;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-
-
-
-
 @Component
 @RequiredArgsConstructor
 public class RestClient<T extends Request,R> {
@@ -24,9 +22,10 @@ public class RestClient<T extends Request,R> {
     @Autowired
     @Qualifier("INA")
     private final WebClient webClientConfigIna;
+    private final Log LOGGER= LogFactory.getLog(RestClient.class);
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
-        System.out.println("los headers para enviar al proveedor" + request.getHeaders());
+
         if (route.contains("masivapp.com")) {
             return webClient.post()
                     .uri(route)

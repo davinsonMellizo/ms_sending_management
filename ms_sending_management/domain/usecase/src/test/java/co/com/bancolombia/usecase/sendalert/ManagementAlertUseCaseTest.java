@@ -44,7 +44,7 @@ class ManagementAlertUseCaseTest {
     @Test
     void alertSendingManager(){
         message.setOperation(0);
-        when(sendAlertZeroUseCase.sendAlertsIndicatorZero(any())).thenReturn(Mono.empty());
+        when(sendAlertZeroUseCase.indicatorZero(any())).thenReturn(Mono.empty());
         StepVerifier.create(managementAlertUseCase.alertSendingManager(message))
                 .verifyComplete();
     }

@@ -12,10 +12,12 @@ import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.SignalType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase {
@@ -27,11 +29,8 @@ public class GeneratorTokenUseCase {
     public Mono<Mail> getToken(Mail mail) {
         return  Mono.just(mail.getNameToken())
                 .flatMap(nameToken->token.get(nameToken, ArrayList.class))
-                .doOnNext(d-> System.out.println("TRaje esto de cache "+d))
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProvider(mail.getFrom().split("@")[1].split(">")[0], mail.getNameToken()))
-                //control de errores desde acá
-
                 .map(tokens->tokens.get(0).toString())
                 .map(token1->Map.of("Authorization","Bearer "+token1))
                 .map(headers->setToken(mail,headers));

@@ -35,7 +35,7 @@ public class DynamoConfig {
     }
 
     @Bean
-    @Profile({"dev", "cer", "pdn"})
+    @Profile({"dev", "qa", "pdn"})
     public DynamoDbAsyncClient clientEnvironments(){
         return DynamoDbAsyncClient.create();
     }

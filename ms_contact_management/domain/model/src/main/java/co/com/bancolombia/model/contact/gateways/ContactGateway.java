@@ -10,7 +10,7 @@ public interface ContactGateway {
 
     Flux<Contact> contactsByClientAndSegment(Client client, String segment);
 
-    Flux<Contact> findIdContact(Contact contact);
+    Flux<Contact> findContactsByClientSegmentAndMedium(Contact contact);
 
     Mono<Contact> saveContact(Contact contact);
 

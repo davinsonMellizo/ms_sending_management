@@ -7,6 +7,7 @@ import co.com.bancolombia.usecase.sendalert.operations.*;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +19,6 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_OPER
 @RequiredArgsConstructor
 public class ManagementAlertUseCase {
     private final LogUseCase logUseCase;
-
     private final SendAlertZeroUseCase sendAlertZeroUseCase;
     private final SendAlertOneUseCase sendAlertOneUseCase;
     private final SendAlertTwoUseCase sendAlertTwoUseCase;
@@ -27,7 +27,7 @@ public class ManagementAlertUseCase {
 
     private Function<Message, Mono<Void>> getValidations(Integer idOperation) {
         final Map<Integer, Function<Message, Mono<Void>>> functions = new ConcurrentHashMap<>();
-        functions.put(0, sendAlertZeroUseCase::sendAlertsIndicatorZero);
+        functions.put(0, sendAlertZeroUseCase::indicatorZero);
         functions.put(1, sendAlertOneUseCase::sendAlertIndicatorOne);
         functions.put(2, sendAlertTwoUseCase::validateWithCodeTrx);
         functions.put(3, sendAlertThreeUseCase::validateOthersChannels);
@@ -38,11 +38,12 @@ public class ManagementAlertUseCase {
     }
 
     public Mono<Void> alertSendingManager(Message message) {
+        String logKey = LocalDate.now().toString()+UUID.randomUUID().toString().substring(16);
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
-                .onErrorResume(e-> logUseCase.sendLogError(message.toBuilder().logKey(UUID.randomUUID().toString()).build(),
+                .onErrorResume(e-> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, new Response(1, INVALID_OPERATION)))
-                .flatMap(function -> function.apply(message.toBuilder().logKey(UUID.randomUUID().toString()).build()));
+                .flatMap(function -> function.apply(message.toBuilder().logKey(logKey).build()));
     }
 
 }

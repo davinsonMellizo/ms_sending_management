@@ -74,6 +74,7 @@ class SendAlertZeroUseCaseTest {
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
+        message.setPreferences(new ArrayList<>());
         ArrayList<Parameter> parameters = new ArrayList<>();
         Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
         parameters.add(parameter);
@@ -88,6 +89,7 @@ class SendAlertZeroUseCaseTest {
                 .message("${name}")
                 .idProviderMail("TOD")
                 .idRemitter(0)
+                .basicKit(false)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
@@ -98,11 +100,10 @@ class SendAlertZeroUseCaseTest {
         when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(Consumer.builder().build()));
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
         when(routerProviderPushUseCase.sendPush(any(), any())).thenReturn(Mono.just(new Response()));
-        when(routerProviderSMSUseCase.routeAlertsSMS(any(), any())).thenReturn(Mono.empty());
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
         when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
                 .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
-        StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))
+        StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
                 .verifyComplete();
     }
 
@@ -114,6 +115,7 @@ class SendAlertZeroUseCaseTest {
                 .message("${name}")
                 .idProviderMail("TOD")
                 .idRemitter(0)
+                .basicKit(false)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
@@ -127,7 +129,7 @@ class SendAlertZeroUseCaseTest {
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
         when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
                 .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
-        StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))
+        StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
                 .verifyComplete();
     }
 
@@ -139,6 +141,7 @@ class SendAlertZeroUseCaseTest {
                 .message("${name}")
                 .idProviderMail("TOD")
                 .idRemitter(0)
+                .basicKit(false)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
@@ -151,7 +154,7 @@ class SendAlertZeroUseCaseTest {
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
         when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
                 .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
-        StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))
+        StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
                 .verifyComplete();
     }
 
@@ -163,13 +166,14 @@ class SendAlertZeroUseCaseTest {
                 .message("${name}")
                 .idProviderMail("TOD")
                 .idRemitter(0)
+                .basicKit(false)
                 .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
                 .build()));
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.empty());
-        StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))
+        StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
                 .verifyComplete();
     }
 
@@ -179,7 +183,7 @@ class SendAlertZeroUseCaseTest {
                 .idState(0)
                 .build()));
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
-        StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))
+        StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
                 .verifyComplete();
     }
 
@@ -187,7 +191,7 @@ class SendAlertZeroUseCaseTest {
     void errorClientNotFountTest(){
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.empty());
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
-        StepVerifier.create(sendAlertZeroUseCase.sendAlertsIndicatorZero(message))
+        StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
                 .verifyComplete();
     }
 

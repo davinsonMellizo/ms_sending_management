@@ -32,6 +32,7 @@ public class ContactData {
     private String stateContact;
     private Integer idState;
     private Boolean previous;
+    private String environmentType;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 }

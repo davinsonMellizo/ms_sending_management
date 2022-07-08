@@ -5,6 +5,7 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,8 +20,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
 public class RestConsumerProperties {
-
     @Bean
+    @Profile({"dev", "qa", "pdn"})
     public WebClient webClientConfig(final ConsumerProperties consumerProperties) {
         return WebClient.builder()
                 .clientConnector(getClientHttpConnector(consumerProperties.getTimeout()))
@@ -30,6 +31,24 @@ public class RestConsumerProperties {
     }
 
     private ClientHttpConnector getClientHttpConnector(int timeout) {
+        return new ReactorClientHttpConnector(HttpClient.create()
+                .compress(true)
+                .keepAlive(true)
+                .option(CONNECT_TIMEOUT_MILLIS, timeout)
+        );
+    }
+
+    @Bean
+    @Profile("local")
+    public WebClient webClientConfigLocal(final ConsumerProperties consumerProperties) {
+        return WebClient.builder()
+                .clientConnector(getClientHttpConnectorInsecure(consumerProperties.getTimeout()))
+                .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
+                .build();
+    }
+
+    private ClientHttpConnector getClientHttpConnectorInsecure(int timeout) {
         try {
             SslContext sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
                     .build();

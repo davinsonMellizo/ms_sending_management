@@ -7,6 +7,7 @@ import co.com.bancolombia.model.token.Secret;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
@@ -17,8 +18,8 @@ public class DynamoAdapter extends AdapterOperations<Secret, SecretData> impleme
     @Autowired
     private SecretsManager secretsManager;
 
-    public DynamoAdapter(final DynamoDbEnhancedAsyncClient client) {
-        super(client);
+    public DynamoAdapter(final DynamoDbEnhancedAsyncClient client,@Value("${spring.profiles.active}") String profile) {
+        super(client,profile);
     }
 
     @Override

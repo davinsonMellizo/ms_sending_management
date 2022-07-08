@@ -65,7 +65,7 @@ public class ContactRepositoryImplWithExceptionTest {
                 .thenReturn(Flux.error(RuntimeException::new));
         contact.setContactWay("SMS");
         contact.setSegment("ALM");
-        repositoryImpl.findIdContact(contact)
+        repositoryImpl.findContactsByClientSegmentAndMedium(contact)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

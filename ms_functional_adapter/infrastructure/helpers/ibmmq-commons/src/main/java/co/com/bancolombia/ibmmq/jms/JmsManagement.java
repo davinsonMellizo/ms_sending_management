@@ -144,7 +144,7 @@ public class JmsManagement {
     }
 
     public boolean saveToFile(InputStream stream, String path) throws IOException {
-        File directory = new File(path);
+        var directory = new File(path);
         if (!directory.exists()) {
             directory.mkdirs();
         }

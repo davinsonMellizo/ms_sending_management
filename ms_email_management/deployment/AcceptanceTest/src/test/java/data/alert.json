@@ -1,0 +1,21 @@
+
+{
+  "operation": '#(operation)',
+  "documentType": 0,
+  "documentNumber": 2000100000,
+  "consumer": "SVP",
+  "alert": "120",
+  "transactionCode": "1000",
+  "amount": 60,
+  "url": "www.google.com",
+  "phone": "3215058449",
+  "phoneIndicator": "+57",
+  "mail": "davinson.mellizo@gmailcom",
+  "parameters":[
+    {
+      "name": "nombre",
+      "value": "Davinson Mellizo"
+    }
+  ],
+  "attachments": [ ]
+}

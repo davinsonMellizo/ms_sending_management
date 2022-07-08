@@ -1,3 +1,0 @@
-app.async.withDLQRetry: true
-app.async.retryDelay: 1000
-app.async.maxRetries: 1

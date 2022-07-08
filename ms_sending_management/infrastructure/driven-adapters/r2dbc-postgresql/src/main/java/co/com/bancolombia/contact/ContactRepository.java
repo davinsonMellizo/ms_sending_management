@@ -8,7 +8,6 @@ import reactor.core.publisher.Flux;
 
 public interface ContactRepository extends ReactiveCrudRepository<ContactData, Integer> {
 
-    //TODO: modificar la consulta
     @Query("select c.* , m.code as contact_medium, s.name as state " +
             "from contact c " +
             "inner join contact_medium m on c.id_contact_medium = m.id " +

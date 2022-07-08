@@ -27,6 +27,7 @@ class ReactiveEventsGatewayTest {
 
     @InjectMocks
     private ReactiveDirectAsyncGateway reactiveDirectAsyncGateway;
+    
     @Mock
     private DirectAsyncGateway directAsyncGateway;
     @Mock
@@ -53,7 +54,6 @@ class ReactiveEventsGatewayTest {
 
     @Test
     void sendEventTest() {
-
         when(directAsyncGateway.sendCommand(any(), anyString())).thenReturn(Mono.empty());
         StepVerifier.create(reactiveDirectAsyncGateway.sendTransaction(transaction)).verifyComplete();
     }

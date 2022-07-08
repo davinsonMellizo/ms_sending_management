@@ -26,8 +26,8 @@ spring:
 adapters:
   secrets-manager:
     secret-rds: "${SECRET-RDS}"
-    secret-rds-read: "${SECRET-RDS-READ}"
     secret-rabbit: "${SECRET-RABBIT}"
+    secret-retrieve: "${SECRET-RETRIEVE}"
     cache-size: "${CACHE_SECRETS_SIZE}"
     cache-time: "${CACHE_SECRETS_SECONDS}"
     endpoint: "http://localhost:4566"
@@ -52,6 +52,7 @@ cloud:
           initial: "${POSTGRESQL_POOL_INITIAL:10}"
           max: "${POSTGRESQL_POOL_MAX:10}"
         schema: "${POSTGRESQL_SCHEMA}"
+        hostRead: "${HOST_RDS_READ}"
 management:
   health:
     probes:

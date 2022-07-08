@@ -4,8 +4,6 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
-import co.com.bancolombia.model.prefix.Prefix;
-import co.com.bancolombia.model.prefix.gateways.PrefixRepository;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
@@ -30,8 +28,6 @@ class RouterProviderSMSUseCaseTest {
     @InjectMocks
     private RouterProviderSMSUseCase routerProviderSMSUseCase;
 
-    @Mock
-    private PrefixRepository prefixRepository;
     @Mock
     private ProviderGateway providerGateway;
     @Mock
@@ -74,7 +70,6 @@ class RouterProviderSMSUseCaseTest {
                 .build();
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(prefixRepository.findPrefix(anyString())).thenReturn(Mono.just(Prefix.builder().code("321").build()));
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
@@ -91,7 +86,6 @@ class RouterProviderSMSUseCaseTest {
                 .build();
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(prefixRepository.findPrefix(anyString())).thenReturn(Mono.just(Prefix.builder().code("321").build()));
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
          when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))

@@ -1,6 +1,8 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.document.Document;
+import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Response;
@@ -29,6 +31,8 @@ class RouterProviderPushUseCaseTest {
     private PushGateway pushGateway;
     @Mock
     private LogUseCase logUseCase;
+    @Mock
+    private DocumentGateway documentGateway;
 
     private Message message = new Message();
 
@@ -46,6 +50,7 @@ class RouterProviderPushUseCaseTest {
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
+        message.setLogKey("testKey");
         ArrayList<Parameter> parameters = new ArrayList<>();
         Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
         parameters.add(parameter);
@@ -59,11 +64,13 @@ class RouterProviderPushUseCaseTest {
                 .push("SI")
                 .idProviderSms("ALM")
                 .priority(0)
+                .idCategory(1)
                 .build();
         when(pushGateway.sendPush(any())).thenReturn(Mono.just(Response.builder()
                 .description("success").code(200)
                 .build()));
         when(logUseCase.sendLogPush(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
+        when(documentGateway.getDocument(anyString())).thenReturn(Mono.just(Document.builder().code("testCode").build()));
         StepVerifier.create(routerProviderPushUseCase.sendPush(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

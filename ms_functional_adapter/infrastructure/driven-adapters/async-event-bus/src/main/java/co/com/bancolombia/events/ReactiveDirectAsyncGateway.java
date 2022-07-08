@@ -13,6 +13,7 @@ import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGatewa
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,7 +28,6 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     private static final String PAYLOAD_TAG = "payload";
     private static final Integer TEMPLATE_LONG = 11;
     private final LoggerBuilder loggerBuilder;
-
 
     @Override
     public Mono<Void> sendTransaction(Transaction transaction) {

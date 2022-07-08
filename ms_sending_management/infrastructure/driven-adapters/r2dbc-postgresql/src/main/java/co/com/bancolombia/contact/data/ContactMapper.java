@@ -7,7 +7,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ContactMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "idState", ignore = true)
     @Mapping(target = "idEnrollmentContact", ignore = true)
     @Mapping(target = "idContactMedium", ignore = true)
     Contact toEntity(ContactData contactData);

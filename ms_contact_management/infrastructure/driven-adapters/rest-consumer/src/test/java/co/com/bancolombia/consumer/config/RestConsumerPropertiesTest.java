@@ -20,7 +20,11 @@ public class RestConsumerPropertiesTest {
     private ConsumerProperties consumerProperties;
 
     @Test
-    public void beanClientTokenHuaweiTest() {
+    public void webClientConfig() {
         assertNotNull(restConsumerConfig.webClientConfig(consumerProperties));
+    }
+    @Test
+    public void webClientConfigLocal() {
+        assertNotNull(restConsumerConfig.webClientConfigLocal(consumerProperties));
     }
 }

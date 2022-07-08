@@ -21,10 +21,11 @@ import java.time.Duration;
 @Configuration
 @EnableR2dbcRepositories(entityOperationsRef = "readerR2dbcEntityOperations",
         basePackages={"co.com.bancolombia.remitter","co.com.bancolombia.provider",
-                "co.com.bancolombia.priority","co.com.bancolombia.prefix",
+                "co.com.bancolombia.priority","co.com.bancolombia.document",
                 "co.com.bancolombia.contact","co.com.bancolombia.consumer",
                 "co.com.bancolombia.client","co.com.bancolombia.category",
-                "co.com.bancolombia.alert","co.com.bancolombia.alerttransaction"})
+                "co.com.bancolombia.alert","co.com.bancolombia.alerttransaction"
+        })
 @RequiredArgsConstructor
 public class PostgreSQLAdapterConfig{
 

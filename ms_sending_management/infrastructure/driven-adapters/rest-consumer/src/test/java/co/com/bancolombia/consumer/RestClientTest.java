@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
@@ -42,16 +43,20 @@ class RestClientTest {
 
     @Test
     void givenPostThenSuccess() {
+        Sms sms = new Sms();
+        sms.setHeaders(new HashMap<>());
         mockServer.enqueue(mockResponseSuccess());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessPush.class, ErrorPush.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), sms, SuccessPush.class, ErrorPush.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
     void givenPostThenError() {
+        Sms sms = new Sms();
+        sms.setHeaders(new HashMap<>());
         mockServer.enqueue(mockResponseError());
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), new Sms(), SuccessPush.class, ErrorPush.class))
+        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), sms, SuccessPush.class, ErrorPush.class))
                 .expectError()
                 .verify();
     }

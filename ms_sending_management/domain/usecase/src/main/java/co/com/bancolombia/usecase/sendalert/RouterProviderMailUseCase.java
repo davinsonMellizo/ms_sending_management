@@ -41,7 +41,7 @@ public class RouterProviderMailUseCase {
 
     private Mono<Message> replaceMessage(Message message, Alert alert) {
         return Mono.just(message.getOperation())
-                .filter(operation -> operation != 1)
+                .filter(operation -> operation == 1) // TODO VALIDATE IF IT IS EQUALS OR DIFFERENT
                 .map(operation -> message.setParameters(List.of(Parameter.builder()
                                 .Value(alert.getMessage())
                                 .Name("message")

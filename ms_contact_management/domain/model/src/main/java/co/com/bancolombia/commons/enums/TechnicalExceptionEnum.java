@@ -26,6 +26,7 @@ public enum TechnicalExceptionEnum {
     SECRET_EXCEPTION("T0016", "An error occurred while trying to get AWS secrets", "500"),
     JSON_CONVERT_ERROR("T0016", "Error converting the Object to String","500"),
     INTERNAL_SERVER_ERROR("T0018", "Internal server error","500"),
+    UNAUTHORIZED("T0019", "Invalid client id or secret for iseries","500"),
     HEADERS_MISSING_ERROR("T0301", "Missing parameters per Headers","400"),
     BODY_MISSING_ERROR("T0302", "Missing parameters per body","400");
 

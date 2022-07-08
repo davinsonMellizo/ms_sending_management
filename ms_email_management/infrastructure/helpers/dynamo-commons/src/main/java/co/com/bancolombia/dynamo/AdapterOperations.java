@@ -19,12 +19,13 @@ public class AdapterOperations<E, D> {
     private Class<D> dataClass;
     private final ModelMapper mapper;
 
-    public AdapterOperations(final DynamoDbEnhancedAsyncClient client) {
+    public AdapterOperations(final DynamoDbEnhancedAsyncClient client, String profile) {
         ParameterizedType params = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.entityClass = (Class<E>) params.getActualTypeArguments()[0];
         this.dataClass = (Class<D>) params.getActualTypeArguments()[1];
         this.mapper = new ModelMapper();
         String tableName = dataClass.getAnnotation(DynamoDbTableAdapter.class).tableName();
+        tableName=tableName.replace("${env}",profile);
         this.table = client.table(tableName, TableSchema.fromBean(dataClass));
     }
 

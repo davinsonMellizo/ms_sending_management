@@ -21,19 +21,13 @@ Feature: CRUD client
     Then print result.value
     And match $.idResponse == '120'
 
-  Scenario: Error case Find Client
-    Given header document-number = "1000000010"
-    And header document-type = "0"
-    When method GET
-    Then status 409
-    And match $.code == '373'
 
   Scenario: Error case Update Client
     * def documentNumber = "1000000010"
     Given request read("../data/client.json")
     When method PUT
-    Then status 500
-    And match $.code == 'T0006'
+    Then status 409
+    And match $.code == '372'
 
   Scenario: Error case Save client, missing parameter per body
     Given request {}

@@ -6,6 +6,8 @@ import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,7 @@ public class RabbitMQConfigHelper{
     private final SecretsManager secretsManager;
     private final SecretsNameStandard secretsNameStandard;
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in Security_Filters";
+    private final Log LOGGER = LogFactory.getLog(RabbitMQConfigHelper.class);
 
 
     private RabbitMQConnectionProperties rabbitProperties() {
@@ -36,7 +39,7 @@ public class RabbitMQConfigHelper{
     @Profile({"dev", "qa", "pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
-        System.out.println("Properties"+properties);
+
         var factory = new ConnectionFactory();
         var map = PropertyMapper.get();
 

@@ -30,7 +30,6 @@ public class ClientRepositoryImplement
     public Mono<Client> findClientByIdentification(Long documentNumber, Integer documentType) {
         return repository.findClientByIdentification(documentNumber, Integer.toString(documentType))
                 .map(this::convertToEntity)
-                .doOnNext(client -> System.out.println("cliente datos "+client.getKeyMdm()))
                 .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
     }
 

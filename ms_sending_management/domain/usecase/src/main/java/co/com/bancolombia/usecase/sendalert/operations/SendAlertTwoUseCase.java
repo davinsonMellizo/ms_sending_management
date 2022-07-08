@@ -18,8 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_TRANSACTION_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailOrMobile;
 
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class SendAlertTwoUseCase {
     public Mono<Void> validateWithCodeTrx(Message message) {
         return Flux.just(message)
                 .filter(isValidMailOrMobile)
-                .switchIfEmpty(Mono.error(new Throwable("Invalid Data contact")))
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(alertTransactionGateway::findAllAlertTransaction)
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_TRANSACTION_NOT_FOUND)))
                 .map(AlertTransaction::getIdAlert)

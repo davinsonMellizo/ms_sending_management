@@ -49,20 +49,7 @@ class SerializatorHelperTest {
         sHelper.deserializeTo("{}", Token.class);
         verify(objectMapper).readValue(anyString(), any(Class.class));
     }
-/*
-    @SneakyThrows
-    @Test
-    @DisplayName("Should handle error on parse json II")
-    void testRaiseError3() {
-        JsonProcessingException e = new JsonProcessingException("Dummy Error") {
-        };
-        doThrow(e).when(objectMapper).readValue(anyString(), any(TypeReference.class));
-        SerializatorHelper<CommissionResponse> sHelper = new SerializatorHelper<>(objectMapper);
-        //CommissionResponse p = sHelper.deserializeWith("{}", new TypeReference<>() {        });
-        assertNull(p);
-        verify(objectMapper).readValue(anyString(), any(TypeReference.class));
-    }
-*/
+
     @SneakyThrows
     @Test
     @DisplayName("Should handle null args")
@@ -72,8 +59,6 @@ class SerializatorHelperTest {
         assertNull(sHelper.serialize(null));
         assertNull(sHelper.deserializeTo(null, Token.class));
         assertNull(sHelper.deserializeTo("pparker", null));
-        //assertNull(sHelper.deserializeWith(null, new TypeReference<>() {}));
-        //assertNull(sHelper.deserializeWith("pparker", null));
 
         verify(objectMapper, times(0)).writeValueAsString(any(Token.class));
         verify(objectMapper, times(0)).readValue(anyString(), any(Class.class));

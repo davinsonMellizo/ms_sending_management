@@ -4,6 +4,7 @@ import co.com.bancolombia.dynamo.AdapterOperations;
 import co.com.bancolombia.dynamodb.data.TemplateEmailData;
 import co.com.bancolombia.model.message.TemplateEmail;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
@@ -13,8 +14,8 @@ public class DynamoAdapter extends AdapterOperations<TemplateEmail, TemplateEmai
         implements TemplateEmailGateway {
 
 
-    public DynamoAdapter(final DynamoDbEnhancedAsyncClient client) {
-        super(client);
+    public DynamoAdapter(final DynamoDbEnhancedAsyncClient client,@Value("${spring.profiles.active}") String profile ) {
+        super(client,profile);
     }
 
     @Override

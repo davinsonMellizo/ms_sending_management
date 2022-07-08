@@ -39,7 +39,7 @@ public class ClientHandler {
         return serverRequest.bodyToMono(EnrolDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .map(enrolMapper::toEntity)
-                .flatMap(cc -> clientUseCase.saveClient(cc, Boolean.FALSE, getVoucher()))
+                .flatMap(cc -> clientUseCase.saveClientRequest(cc, Boolean.FALSE, getVoucher()))
                 .flatMap(ResponseUtil::responseOk);
     }
 
@@ -49,7 +49,7 @@ public class ClientHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .map(enrolMapper::toEntity)
-                .flatMap(cli -> clientUseCase.updateClientMono(cli, Boolean.FALSE, getVoucher()))
+                .flatMap(cli -> clientUseCase.updateClientRequest(cli, Boolean.FALSE, getVoucher()))
                 .flatMap(ResponseUtil::responseOk);
     }
 

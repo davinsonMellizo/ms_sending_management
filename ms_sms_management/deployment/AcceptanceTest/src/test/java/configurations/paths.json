@@ -1,0 +1,3 @@
+{
+  "urlSend": "#{dns-service}#/api/v1/sending-management/send"
+}

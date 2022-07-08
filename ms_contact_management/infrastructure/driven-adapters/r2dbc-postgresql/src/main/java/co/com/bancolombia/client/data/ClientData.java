@@ -23,6 +23,8 @@ public class ClientData{
     @Column("id_document_type")
     private Integer documentType;
     private String keyMdm;
+    private Integer preference;
+    private Boolean delegate;
     private String enrollmentOrigin;
     @ReadOnlyProperty
     private String stateClient;

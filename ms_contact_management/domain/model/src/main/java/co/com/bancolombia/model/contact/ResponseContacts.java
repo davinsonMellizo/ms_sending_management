@@ -17,6 +17,8 @@ public class ResponseContacts {
     private Long documentNumber;
     private String documentType;
     private String keyMdm;
+    private Integer preference;
+    private Boolean delegate;
     private String enrollmentOrigin;
     private String status;
     private String creationUser;

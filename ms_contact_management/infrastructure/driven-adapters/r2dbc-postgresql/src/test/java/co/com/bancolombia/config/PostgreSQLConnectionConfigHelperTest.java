@@ -52,8 +52,8 @@ public class PostgreSQLConnectionConfigHelperTest {
 
     @Test
     void getConnectionReadConfig() {
-        when(secretsNameStandard.secretForPostgresRead()).thenReturn(Mono.just(secretName));
-        assertNotNull(helper.buildConnectionReaderConfiguration("schema", 1));
+        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+        assertNotNull(helper.buildConnectionReaderConfiguration("schema","host", 1));
     }
 
     @Test

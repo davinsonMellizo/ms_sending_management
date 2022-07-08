@@ -20,6 +20,7 @@ public class Contact {
     private String value;
     private String stateContact;
     private Integer idState;
+    private String environmentType;
     private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

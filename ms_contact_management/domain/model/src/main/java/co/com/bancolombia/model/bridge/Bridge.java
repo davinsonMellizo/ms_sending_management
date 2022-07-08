@@ -18,7 +18,7 @@ public class Bridge {
     private String valueEmail;
     private String valuePush;
     private String stateSms;
-    private String stateMEmail;
+    private String stateEmail;
     private String statePush;
     private String voucher;
     private String date;

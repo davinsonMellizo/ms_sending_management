@@ -46,7 +46,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .build();
 
     }
-   /* @Bean
+    /*@Bean
     public ConnectionFactoryOptions buildConnectionConfiguration(@Value("${adapters.postgresql.schema}") String schema){
         PostgresqlConnectionProperties properties =  postgresProperties();
         logger.info("data secret rds:"+properties);

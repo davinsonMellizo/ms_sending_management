@@ -16,6 +16,7 @@ public class Message {
     private Integer operation;
     private Integer documentType;
     private Long documentNumber;
+    private ArrayList preferences;
     private String consumer;
     private String alert;
     private String transactionCode;

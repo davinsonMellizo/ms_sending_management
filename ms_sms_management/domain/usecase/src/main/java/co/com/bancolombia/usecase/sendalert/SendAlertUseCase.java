@@ -9,7 +9,8 @@ import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-
+import reactor.core.publisher.SignalType;
+import java.util.logging.Level;
 import static co.com.bancolombia.commons.constants.Provider.INALAMBRIA;
 import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
@@ -43,7 +44,6 @@ public class SendAlertUseCase {
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(inalambriaGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .doOnNext(System.out::println)
                 .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
                 .map(Response.class::cast)
@@ -67,13 +67,11 @@ public class SendAlertUseCase {
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .doOnNext(System.out::println)
                 .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
                 .map(Response.class::cast);
     }
     private Mono<Void> filterError(Throwable error, Alert alert, String tokentemp){
-        System.out.println("voy con el token temp "+error.getMessage());
         return Mono.just(error)
                 .filter(catchError -> catchError.getMessage().contains("401"))
                 .flatMap(renew-> replaceBadToken(alert,tokentemp.substring(tokentemp

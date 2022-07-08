@@ -84,14 +84,14 @@ public class ClientRouterTest extends BaseIntegrationTest {
 
     @Test
     public void saveClient() {
-        when(useCase.saveClient(any(), anyBoolean(), anyString())).thenReturn(Mono.just(responseUpdateClient));
+        when(useCase.saveClientRequest(any(), anyBoolean(), anyString())).thenReturn(Mono.just(responseUpdateClient));
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         statusAssertionsWebClientPost(properties.getClient(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).saveClient(any(), anyBoolean(), anyString());
+        verify(useCase).saveClientRequest(any(), anyBoolean(), anyString());
     }
 
     @Test

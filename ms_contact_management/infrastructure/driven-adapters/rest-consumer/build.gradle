@@ -1,6 +1,7 @@
 dependencies {
     implementation project(':log')
     implementation project(':model')
+    implementation project(':secrets-manager')
     implementation 'org.springframework:spring-context'
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     testImplementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.5.0'

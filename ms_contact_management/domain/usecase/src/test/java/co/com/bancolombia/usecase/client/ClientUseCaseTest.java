@@ -31,7 +31,6 @@ import reactor.test.StepVerifier;
 
 import java.util.List;
 
-import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
@@ -151,14 +150,20 @@ public class ClientUseCaseTest {
         when(contactUseCase.saveContact(any(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(contactUseCase.validateContacts(any()))
-                .thenReturn(Mono.just(client));
-        when(contactUseCase.validatePhone(any(), any()))
-                .thenReturn(Mono.just(client));
-        when(contactUseCase.validateMail(any(), any()))
-                .thenReturn(Mono.just(client));
+                .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
+        when(contactUseCase.validatePhone(any()))
+                .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
+        when(contactUseCase.validateMail(any()))
+                .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
         when(commandGateway.sendCommandEnroll(any())).thenReturn(Mono.empty());
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
         StepVerifier
-                .create(useCase.saveClient(Enrol.builder().client(client)
+                .create(useCase.saveClientRequest(Enrol.builder().client(client)
                         .contactData(List.of(contact)).build(), false, "1123333"))
                 .expectNextCount(1)
                 .verifyComplete();
@@ -167,36 +172,10 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateClient() {
-        when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
-                .thenReturn(Mono.just(client));
-        when(clientRepository.findClientByIdentification(any()))
-                .thenReturn(Mono.just(client));
-        when(documentGateway.getDocument(anyString()))
-                .thenReturn(Mono.just(document));
-        when(consumerGateway.findConsumerById(anyString()))
-                .thenReturn(Mono.just(consumer));
-        when(clientRepository.updateClient(any()))
-                .thenReturn(Mono.just(StatusResponse.<Client>builder()
-                        .before(client).actual(client)
-                        .build()));
-        when(contactUseCase.updateContactRequest(any(), anyString()))
-                .thenReturn(Mono.just(StatusResponse.<Contact>builder().before(contact).before(contact).build()));
-        when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
-        StepVerifier
-                .create(useCase.updateClientMcd(Enrol.builder().contactData(List.of(contact)).client(client).build()))
-                .assertNext(response -> response
-                        .getActual().getClient().getDocumentNumber()
-                        .equals(client.getDocumentNumber()))
-                .verifyComplete();
-        verify(clientRepository).updateClient(any());
-    }
-
-    @Test
-    public void updateClientMono() {
-        when(contactUseCase.validatePhone(any(), any()))
-                .thenReturn(Mono.just(client));
-        when(contactUseCase.validateMail(any(), any()))
-                .thenReturn(Mono.just(client));
+        when(contactUseCase.validatePhone(any()))
+                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
+        when(contactUseCase.validateMail(any()))
+                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
@@ -214,7 +193,38 @@ public class ClientUseCaseTest {
                 .thenReturn(Mono.just(client));
         when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
         StepVerifier
-                .create(useCase.updateClientMono(Enrol.builder().contactData(List.of(contact))
+                .create(useCase.updateClientMcd(Enrol.builder().contactData(List.of(contact)).client(client).build()))
+                .assertNext(response -> response
+                        .getActual().getClient().getDocumentNumber()
+                        .equals(client.getDocumentNumber()))
+                .verifyComplete();
+        verify(clientRepository).updateClient(any());
+    }
+
+    @Test
+    public void updateClientMono() {
+        when(contactUseCase.validatePhone(any()))
+                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
+        when(contactUseCase.validateMail(any()))
+                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+        when(documentGateway.getDocument(anyString()))
+                .thenReturn(Mono.just(document));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(contactUseCase.updateContactRequest(any(), anyString()))
+                .thenReturn(Mono.just(StatusResponse.<Contact>builder().before(contact)
+                        .before(contact).build()));
+        when(clientRepository.updateClient(any()))
+                .thenReturn(Mono.just(StatusResponse.<Client>builder()
+                        .before(client).actual(client)
+                        .build()));
+        when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
+                .thenReturn(Mono.just(client));
+        when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
+        StepVerifier
+                .create(useCase.updateClientRequest(Enrol.builder().contactData(List.of(contact))
                         .client(client).build(), false, "123456"))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -52,6 +52,7 @@ public class ListenerMQ implements MessageListener {
     }
 
     private Mono<Void> discard(Throwable error, Message message) {
+        loggerBuilder.info("Discard message by error");
         final boolean isRetry = error instanceof TechnicalException
                 && ((TechnicalException) error).getException().isRetry();
 

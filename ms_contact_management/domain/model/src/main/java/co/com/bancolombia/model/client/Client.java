@@ -19,6 +19,8 @@ public class Client {
     private String enrollmentOrigin;
     private String stateClient;
     private Integer idState;
+    private Boolean delegate;
+    private Integer preference;
     private String creationUser;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

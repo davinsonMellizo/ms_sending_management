@@ -15,6 +15,23 @@
       <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Gestor de Cabecera HTTP" enabled="true">
         <collectionProp name="HeaderManager.headers">
           <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">document-number</stringProp>
+            <stringProp name="Header.value">${document_number}</stringProp>
+          </elementProp>
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">document-type</stringProp>
+            <stringProp name="Header.value">0</stringProp>
+          </elementProp>
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">Content-Type</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Gestor de Cabecera HTTP" enabled="false">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
             <stringProp name="Header.name">Content-Type</stringProp>
             <stringProp name="Header.value">application/json</stringProp>
           </elementProp>
@@ -22,34 +39,18 @@
             <stringProp name="Header.name">Host</stringProp>
             <stringProp name="Header.value">canales-digitales-ext-qa.apps.ambientesbc.com</stringProp>
           </elementProp>
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name"></stringProp>
+            <stringProp name="Header.value"></stringProp>
+          </elementProp>
         </collectionProp>
       </HeaderManager>
       <hashTree/>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="VariablesUsedInTest" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="users_crud" elementType="Argument">
-            <stringProp name="Argument.name">users_crud</stringProp>
-            <stringProp name="Argument.value">${__P(users_crud,38)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="duration_crud" elementType="Argument">
-            <stringProp name="Argument.name">duration_crud</stringProp>
-            <stringProp name="Argument.value">${__P(duration_crud,300)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="rampup_crud" elementType="Argument">
-            <stringProp name="Argument.name">rampup_crud</stringProp>
-            <stringProp name="Argument.value">${__P(rampup_crud,60)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="alert_client_data" elementType="Argument">
-            <stringProp name="Argument.name">alert_client_data</stringProp>
-            <stringProp name="Argument.value">${__P(dataAlertClient,DT_request_alert_client.csv)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
           <elementProp name="ip" elementType="Argument">
             <stringProp name="Argument.name">ip</stringProp>
-            <stringProp name="Argument.value">${__P(ip,canales-digitales-ext-qa.apps.ambientesbc.com)}</stringProp>
+            <stringProp name="Argument.value">${__P(ip,canales-digitales-int-qa.apps.ambientesbc.com)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="users_alert_client" elementType="Argument">
@@ -67,8 +68,65 @@
             <stringProp name="Argument.value">${__P(rampup_alert_client,60)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="alert_data" elementType="Argument">
+            <stringProp name="Argument.name">alert_data</stringProp>
+            <stringProp name="Argument.value">${__P(dataSendAlert,DT_request_alert.csv)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="users_alert_client_save" elementType="Argument">
+            <stringProp name="Argument.name">users_alert_client_save</stringProp>
+            <stringProp name="Argument.value">${__P(users_alert_client_save,7)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="tps_save_alert_client" elementType="Argument">
+            <stringProp name="Argument.name">tps_save_alert_client</stringProp>
+            <stringProp name="Argument.value">${__P(tps_save_alert_client,7)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="count" elementType="Argument">
+            <stringProp name="Argument.name">count</stringProp>
+            <stringProp name="Argument.value">${__P(count,2000010001)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Ver Árbol de Resultados" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -113,24 +171,44 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${users_crud}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${rampup_crud}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${duration_crud}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
-      <hashTree/>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_find_provider" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Variables definidas por el Usuario" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">alertas/api/v1/alert-management/provider/INA</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SC_category" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Controlador Bucle" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${users_crud}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${rampup_crud}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${duration_crud}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -154,7 +232,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_updatecategory" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_updatecategory" enabled="false">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -191,10 +269,10 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${users_crud}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${rampup_crud}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${duration_crud}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -218,7 +296,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_update_priority" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_update_priority" enabled="false">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -257,10 +335,10 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${users_crud}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${rampup_crud}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${duration_crud}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -302,33 +380,18 @@
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Dt_Request_alert_client" enabled="true">
           <stringProp name="delimiter">;</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="filename">${alert_client_data}</stringProp>
-          <boolProp name="ignoreFirstLine">false</boolProp>
+          <stringProp name="filename">${alert_data}</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
           <stringProp name="shareMode">shareMode.all</stringProp>
           <boolProp name="stopThread">false</boolProp>
-          <stringProp name="variableNames">document_number</stringProp>
+          <stringProp name="variableNames">document_number,alert,transaction,operation</stringProp>
         </CSVDataSet>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_find_alert_client" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Variables definidas por el Usuario" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="document-number" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${document_number}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">document-number</stringProp>
-              </elementProp>
-              <elementProp name="document-type" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">0</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">document-type</stringProp>
-              </elementProp>
-            </collectionProp>
+            <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.domain">${ip}</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
@@ -353,13 +416,13 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">[&#xd;
     {&#xd;
-        &quot;idAlert&quot;: &quot;100&quot;,&#xd;
+        &quot;idAlert&quot;: &quot;${alert}&quot;,&#xd;
         &quot;alertDescription&quot;: &quot;Alerta&quot;,&#xd;
         &quot;documentNumber&quot;: ${document_number},&#xd;
         &quot;documentType&quot;: 0,&#xd;
-        &quot;numberOperations&quot;: 5,&#xd;
-        &quot;amountEnable&quot;: 50000,&#xd;
-        &quot;associationOrigin&quot;: &quot;ALM&quot;,&#xd;
+        &quot;numberOperations&quot;: 2,&#xd;
+        &quot;amountEnable&quot;: 50,&#xd;
+        &quot;associationOrigin&quot;: &quot;MAD&quot;,&#xd;
         &quot;creationUser&quot;: &quot;Davinson&quot;&#xd;
     }&#xd;
 ]</stringProp>
@@ -382,6 +445,50 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_save_alert_client" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+   &quot;idAlert&quot;: &quot;${alert}&quot;,&#xd;
+   &quot;alertDescription&quot;: &quot;Alerta&quot;,&#xd;
+   &quot;documentNumber&quot;: ${document},&#xd;
+   &quot;documentType&quot;: 0,&#xd;
+   &quot;numberOperations&quot;: 2,&#xd;
+   &quot;amountEnable&quot;: 50,&#xd;
+   &quot;associationOrigin&quot;: &quot;MAD&quot;,&#xd;
+   &quot;creationUser&quot;: &quot;Davinson&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">alertas/api/v1/alert-management/alert-client</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Contador" enabled="true">
+          <stringProp name="CounterConfig.start">${count}</stringProp>
+          <stringProp name="CounterConfig.end"></stringProp>
+          <stringProp name="CounterConfig.incr">1</stringProp>
+          <stringProp name="CounterConfig.name">document</stringProp>
+          <stringProp name="CounterConfig.format">0000000000</stringProp>
+          <boolProp name="CounterConfig.per_user">false</boolProp>
+        </CounterConfig>
+        <hashTree/>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SC_alert" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -389,10 +496,10 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${send_alert_users}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${send_alert_rampup}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${send_alert_duration}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -416,52 +523,6 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_update_alert" enabled="true">
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-    &quot;id&quot;: &quot;100&quot;,&#xd;
-    &quot;idProviderMail&quot;:&quot;MAS&quot;,&#xd;
-    &quot;idProviderSms&quot;: &quot;INA&quot;,&#xd;
-    &quot;templateName&quot;: &quot;compra&quot;,&#xd;
-    &quot;idRemitter&quot;: 0,&#xd;
-    &quot;idState&quot;: 1,&#xd;
-    &quot;priority&quot;: 0,&#xd;
-    &quot;idCategory&quot;: 0,&#xd;
-    &quot;description&quot;: &quot;Alerta&quot;,&#xd;
-    &quot;nature&quot;: &quot;MO&quot;,&#xd;
-    &quot;message&quot;: &quot;Señor ${Nombre} su comprar fue exitosa&quot;,&#xd;
-    &quot;subjectMail&quot;: &quot;subjectMail&quot;,&#xd;
-    &quot;attentionLine&quot;: &quot;3216958714&quot;,&#xd;
-    &quot;pathAttachedMail&quot;: &quot;url&quot;,&#xd;
-    &quot;obligatory&quot;: true,&#xd;
-    &quot;basicKit&quot;: true,&#xd;
-    &quot;push&quot;: &quot;NO&quot;,&#xd;
-    &quot;visibleChannel&quot;: true,&#xd;
-    &quot;creationUser&quot;:&quot;Davinson&quot;&#xd;
-}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">alertas/api/v1/alert-management/alert</stringProp>
-          <stringProp name="HTTPSampler.method">PUT</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SC_consumer" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -469,10 +530,10 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${users_crud}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${rampup_crud}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${duration_crud}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -496,7 +557,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_update_consumer" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_update_consumer" enabled="false">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -533,10 +594,10 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${users_crud}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${rampup_crud}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${users_alert_client}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampup_alert_client}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${duration_crud}</stringProp>
+        <stringProp name="ThreadGroup.duration">${duration_alert_client}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -560,7 +621,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SC_update_remitter" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SC_update_remitter" enabled="false">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -592,10 +653,10 @@
         </HTTPSamplerProxy>
         <hashTree/>
       </hashTree>
-      <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="bzm - Concurrency Thread Group" enabled="true">
+      <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="SC_Alert_client" enabled="false">
         <elementProp name="ThreadGroup.main_controller" elementType="com.blazemeter.jmeter.control.VirtualUserController"/>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <stringProp name="TargetLevel">${__tstFeedback(Controlador_TPS_tx,1,5,10)}</stringProp>
+        <stringProp name="TargetLevel">${__tstFeedback(Controlador_TPS_tx,1,${users_alert_client_save},10)}</stringProp>
         <stringProp name="RampUp">1</stringProp>
         <stringProp name="Steps"></stringProp>
         <stringProp name="Hold">10</stringProp>
@@ -606,73 +667,23 @@
       <hashTree>
         <kg.apc.jmeter.timers.VariableThroughputTimer guiclass="kg.apc.jmeter.timers.VariableThroughputTimerGui" testclass="kg.apc.jmeter.timers.VariableThroughputTimer" testname="Controlador_TPS_tx" enabled="true">
           <collectionProp name="load_profile">
-            <collectionProp name="137852887">
+            <collectionProp name="-575098288">
               <stringProp name="49">1</stringProp>
-              <stringProp name="1629">30</stringProp>
-              <stringProp name="1629">30</stringProp>
+              <stringProp name="501388364">${tps_save_alert_client}</stringProp>
+              <stringProp name="1074428802">${duration_alert_client}/6</stringProp>
             </collectionProp>
-            <collectionProp name="-716251193">
-              <stringProp name="1629">30</stringProp>
-              <stringProp name="1629">30</stringProp>
-              <stringProp name="48687">120</stringProp>
+            <collectionProp name="1772031056">
+              <stringProp name="501388364">${tps_save_alert_client}</stringProp>
+              <stringProp name="501388364">${tps_save_alert_client}</stringProp>
+              <stringProp name="-1630130871">(${duration_alert_client}/6)*4</stringProp>
             </collectionProp>
-            <collectionProp name="-1944975568">
-              <stringProp name="1629">30</stringProp>
+            <collectionProp name="328352796">
+              <stringProp name="501388364">${tps_save_alert_client}</stringProp>
               <stringProp name="49">1</stringProp>
-              <stringProp name="1629">30</stringProp>
+              <stringProp name="1074428802">${duration_alert_client}/6</stringProp>
             </collectionProp>
           </collectionProp>
         </kg.apc.jmeter.timers.VariableThroughputTimer>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_find_provider" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Variables definidas por el Usuario" enabled="true">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">alertas/api/v1/alert-management/provider/INA</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-        </HTTPSamplerProxy>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_update_provider" enabled="false">
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-    &quot;id&quot;: &quot;INA&quot;,&#xd;
-    &quot;name&quot;:&quot;Inalambria&quot;,&#xd;
-    &quot;typeService&quot;: &quot;A&quot;,&#xd;
-    &quot;creationUser&quot;:&quot;Davinson&quot;&#xd;
-}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">alertas/api/v1/alert-management/provider</stringProp>
-          <stringProp name="HTTPSampler.method">PUT</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-        </HTTPSamplerProxy>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Ver Árbol de Resultados" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -711,42 +722,61 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <timestamp>true</timestamp>
-              <success>true</success>
-              <label>true</label>
-              <code>true</code>
-              <message>true</message>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
-              <responseData>false</responseData>
-              <samplerData>false</samplerData>
-              <xml>false</xml>
-              <fieldNames>true</fieldNames>
-              <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
-              <responseDataOnError>false</responseDataOnError>
-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-              <assertionsResultsToSave>0</assertionsResultsToSave>
-              <bytes>true</bytes>
-              <sentBytes>true</sentBytes>
-              <url>true</url>
-              <threadCounts>true</threadCounts>
-              <idleTime>true</idleTime>
-              <connectTime>true</connectTime>
-            </value>
-          </objProp>
-          <stringProp name="filename"></stringProp>
-        </ResultCollector>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_save_alert_client" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+   &quot;idAlert&quot;: &quot;${alert}&quot;,&#xd;
+   &quot;alertDescription&quot;: &quot;Alerta&quot;,&#xd;
+   &quot;documentNumber&quot;: ${document},&#xd;
+   &quot;documentType&quot;: 0,&#xd;
+   &quot;numberOperations&quot;: 2,&#xd;
+   &quot;amountEnable&quot;: 50,&#xd;
+   &quot;associationOrigin&quot;: &quot;MAD&quot;,&#xd;
+   &quot;creationUser&quot;: &quot;Davinson&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">alertas/api/v1/alert-management/alert-client</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Contador" enabled="true">
+          <stringProp name="CounterConfig.start">2000005001</stringProp>
+          <stringProp name="CounterConfig.end"></stringProp>
+          <stringProp name="CounterConfig.incr">1</stringProp>
+          <stringProp name="CounterConfig.name">document</stringProp>
+          <stringProp name="CounterConfig.format">0000000000</stringProp>
+          <boolProp name="CounterConfig.per_user">false</boolProp>
+        </CounterConfig>
+        <hashTree/>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Dt_Request_alert_client" enabled="true">
+          <stringProp name="delimiter">;</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="filename">${alert_data}</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="variableNames">document_number,alert,transaction,operation</stringProp>
+        </CSVDataSet>
         <hashTree/>
       </hashTree>
     </hashTree>

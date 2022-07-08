@@ -28,5 +28,8 @@ public class ContactDTO {
     @Size(min = 1, max = 10, message = "{constraint.size}")
     @JsonProperty("status")
     private String stateContact;
+    @Size(max = 10, message = "{constraint.size}")
+    @Builder.Default
+    private String environmentType = "";
 
 }

@@ -31,16 +31,12 @@ ext {
 }
 
 dependencies {
-    implementation 'org.projectlombok:lombok:1.18.20'
-    testImplementation group: 'com.intuit.karate', name: 'karate-junit4', version: '1.2.0.RC1'
+    testImplementation "com.intuit.karate:karate-junit4:0.9.6"
     testImplementation "com.intuit.karate:karate-netty:$rootProject.ext.karateVersion"
     testImplementation "com.intuit.karate:karate-apache:$rootProject.ext.karateVersion"
     testImplementation "net.masterthought:cucumber-reporting:$rootProject.ext.cucumberReporting"
     testImplementation 'junit:junit:4.13.1'
-    compileOnly 'org.reactivecommons:async-commons-starter:1.0.0-beta5'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
 }
 
 test {

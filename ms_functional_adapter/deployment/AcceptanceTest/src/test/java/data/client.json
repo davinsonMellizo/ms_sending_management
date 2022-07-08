@@ -1,0 +1,32 @@
+
+{
+  "customer": {
+    "identification": {
+      "type": "CC",
+      "number": '#(documentNumber)'
+    },
+    "keyMdm": "mdm55",
+    "status": "Activo",
+    "traceability": {
+      "consumerCode": '#(consumer)',
+      "creationUser": "usuario"
+    }
+  },
+  "contactData": [
+    {
+      "contactChannel": "PUSH",
+      "dataValue": "valuepush",
+      "status": "Inactivo"
+    },
+    {
+      "contactChannel": "MAIL",
+      "dataValue": "mail@mail.com",
+      "status": "Activo"
+    },
+    {
+      "contactChannel": "SMS",
+      "dataValue": "3207288543",
+      "status": "Activo"
+    }
+  ]
+}

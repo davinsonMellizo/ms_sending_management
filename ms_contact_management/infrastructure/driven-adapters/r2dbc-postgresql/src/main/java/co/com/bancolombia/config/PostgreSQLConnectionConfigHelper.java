@@ -30,12 +30,6 @@ public class PostgreSQLConnectionConfigHelper {
                 .block();
     }
 
-    private PostgresqlConnectionProperties postgresPropertiesRead() {
-        return secretsNameStandard.secretForPostgresRead()
-                .flatMap(secretName -> secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
-                .block();
-    }
-
     @Bean
     public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value("${cloud.aws.rds.postgresql.schema}") String schema,
                                                                  @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
@@ -57,14 +51,15 @@ public class PostgreSQLConnectionConfigHelper {
 
     @Bean
     public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value("${cloud.aws.rds.postgresql.schema}") String schema,
+                                                                       @Value("${cloud.aws.rds.postgresql.hostRead}") String hostRead,
                                                                        @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
-        PostgresqlConnectionProperties properties =  postgresPropertiesRead();
+        PostgresqlConnectionProperties properties =  postgresProperties();
         logger.info("data secret rds:"+properties);
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)
                 .option(DRIVER,"pool")
                 .option(PROTOCOL, "postgresql")
-                .option(HOST, properties.getHost())
+                .option(HOST, hostRead)
                 .option(PORT, properties.getPort())
                 .option(USER,properties.getUsername())
                 .option(PASSWORD,properties.getPassword())
@@ -73,29 +68,6 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(Option.valueOf("schema"), schema)
                 .build();
     }
-
-    /*@Bean
-    public ConnectionFactoryOptions buildConnectionReaderConfiguration(
-            @Value("${cloud.aws.rds.postgresql.schema}") String schema,
-            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
-
-        PostgresqlConnectionProperties properties =  postgresPropertiesRead();
-        logger.info("data secret rds:"+properties);
-        return ConnectionFactoryOptions.builder()
-                .option(MAX_SIZE, max)
-                .option(DRIVER,"pool")
-                .option(PROTOCOL, "postgresql")
-                .option(HOST, "nu0154001-alertas-qa-clusteraurora.cluster-ro-c1ldabd6xbtl.us-east-1.rds.amazonaws.com")
-                .option(PORT, 50000)
-                .option(USER,"cnxalerq")
-                .option(PASSWORD, "#V364md7RHE0kn7")
-                .option(DATABASE, "alertqcd")
-                .option(Option.valueOf("sslmode"), "disable")
-                .option(Option.valueOf("schema"), "schalerd")
-                .build();
-
-    }
-*/
 
 }
 

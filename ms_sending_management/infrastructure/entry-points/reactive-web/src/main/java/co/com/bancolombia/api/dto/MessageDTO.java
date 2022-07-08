@@ -20,6 +20,8 @@ public class MessageDTO {
     private Integer operation;
     private Integer documentType;
     private Long documentNumber;
+    @Builder.Default
+    private ArrayList preferences= new ArrayList<>();
     private String consumer;
     private String alert;
     private String transactionCode;
@@ -42,6 +44,7 @@ public class MessageDTO {
                 .operation(this.operation)
                 .documentNumber(this.documentNumber)
                 .documentType(this.documentType)
+                .preferences(this.preferences)
                 .consumer(this.consumer)
                 .alert(this.alert)
                 .transactionCode(this.transactionCode)

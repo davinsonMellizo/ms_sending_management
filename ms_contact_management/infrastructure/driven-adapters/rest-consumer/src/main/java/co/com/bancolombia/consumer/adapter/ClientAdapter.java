@@ -11,6 +11,8 @@ import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.ResponseContacts;
+import co.com.bancolombia.secretsmanager.SecretsManager;
+import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,57 +21,57 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.UUID;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.constants.ContactWay.*;
-import static co.com.bancolombia.commons.enums.Header.*;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UNAUTHORIZED;
 
 @Component
 @RequiredArgsConstructor
 public class ClientAdapter implements ClientGateway {
 
     private final ConsumerProperties properties;
-    private final RestConsumer<Request, ResponseClient> restConsumer;
     private final RestConsumer<RetrieveRequest, Response> restConsumerIs;
+    private final SecretsManager secretsManager;
+    private final SecretsNameStandard secretsNameStandard;
     private static final Integer NOT_FOUNT = 404;
-
-    @Override
-    public Mono<Boolean> matchClientWithBasicKit(Client client) {
-        HashMap<String, String> headers = new HashMap();
-        headers.put(DOCUMENT_TYPE, client.getDocumentType());
-        headers.put(DOCUMENT_NUMBER, Long.toString(client.getDocumentNumber()));
-        headers.put(ASSOCIATION_ORIGIN, client.getEnrollmentOrigin());
-
-        return Mono.just(Request.builder().headers(headers).build())
-                .flatMap(clientRequest -> restConsumer.post(properties.getResources().getBasicKit(),
-                        clientRequest, ResponseClient.class, Error.class))
-                .map(ResponseClient::getResponse);
-    }
+    private static final Integer UNAUTHORIZED_CODE = 401;
 
     @Override
     public Mono<ResponseContacts> retrieveAlertInformation(Client client) {
         var header = new HashMap<String,String>();
-        header.put("message-id", properties.getMessageId());
-        header.put("x-ibm-client-id", properties.getClientId());
-        header.put("x-ibm-client-secret", properties.getClientSecret());
+        header.put("message-id", UUID.randomUUID().toString());
 
-        return Mono.just(RetrieveRequest.builder().headers(header)
+        return secretsNameStandard.secretForRetrieve()
+                .flatMap(secretsName -> secretsManager.getSecret(secretsName, SecretRetrieve.class))
+                .doOnNext(secret -> header.put("x-ibm-client-id", secret.getClientId()))
+                .doOnNext(secret -> header.put("x-ibm-client-secret", secret.getClientSecret()))
+                .map(s -> RetrieveRequest.builder().headers(header)
                         .data(DataRequest.builder().customerIdentification(CustomerIdentification
                                 .builder()
                                 .documentNumber(String.valueOf(client.getDocumentNumber()))
                                 .documentType(client.getDocumentType())
                                 .build()).build()).build())
                 .flatMap(cli -> restConsumerIs.post(properties.getResources().getRetrieveInfo(),
-                        cli, Response.class, Error.class))
+                        cli, Response.class, ResponseError.class))
                 .filter(response -> Objects.nonNull(response.getData().getAlertIndicators()))
                 .filter(response -> !(response.getData().getAlertIndicators().isEmpty()))
-                .onErrorResume(e -> ((Error)e).getHttpsStatus().equals(NOT_FOUNT),e -> Mono.empty())
-                .onErrorMap(throwable -> new TechnicalException(INTERNAL_SERVER_ERROR))
+                .onErrorMap(e -> !(e instanceof Error), e-> new TechnicalException(e.getMessage(),INTERNAL_SERVER_ERROR))
+                .onErrorResume(e -> e instanceof Error && ((Error)e).getHttpsStatus().equals(NOT_FOUNT),e -> Mono.empty())
+                .onErrorMap(e -> e instanceof Error && ((Error)e).getHttpsStatus().equals(UNAUTHORIZED_CODE),
+                        e -> new TechnicalException(UNAUTHORIZED))
+                .onErrorMap(Error.class, e  -> new TechnicalException(getErrorsDetail(e),INTERNAL_SERVER_ERROR))
                 .flatMap(response -> getResponse(response, client));
+    }
+    private String getErrorsDetail(Error e){
+        return ((ResponseError)e.getData()).getErrors().stream().map(ResponseError.Error::getDetail)
+                .collect(Collectors.joining(","));
     }
 
     private Mono<ResponseContacts> getResponse(Response response, Client client) {

@@ -19,6 +19,10 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.function.BiFunction;
+
+import static co.com.bancolombia.commons.constants.Medium.MAIL;
+import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
@@ -39,6 +43,7 @@ public class SendAlertZeroUseCase {
     private Flux<Alert> validateObligation(Alert pAlert, Message message) {
         return Flux.just(pAlert)
                 .filter(alert -> !alert.getObligatory())
+                .filter(alert -> !alert.getBasicKit())
                 .filter(alert -> alert.getNature().equals("MO"))
                 .flatMap(alert -> validateAmountUseCase.validateAmount(alert, message))
                 .switchIfEmpty(Mono.just(pAlert))
@@ -49,10 +54,16 @@ public class SendAlertZeroUseCase {
     private Flux<Void> routeAlert(Alert alert, Message message) {
         return Mono.just(message)
                 .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase("Si"))
-                .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1, alert))
-                .switchIfEmpty(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
-                .concatWith(routerProviderMailUseCase.routeAlertMail(message, alert))
+                .flatMap(message1 -> sendAlert(message1, alert, SMS, routerProviderPushUseCase::sendPush))
+                .switchIfEmpty(sendAlert(message, alert, SMS, routerProviderSMSUseCase::routeAlertsSMS))
+                .concatWith(sendAlert(message, alert, MAIL, routerProviderMailUseCase::routeAlertMail))
                 .thenMany(Flux.empty());
+    }
+    private Mono<Response> sendAlert(Message message, Alert alert, String medium,
+                                     BiFunction<Message, Alert, Mono<Response>> function ){
+        return Mono.just(function)
+                .filter(bFunction -> message.getPreferences().isEmpty() || message.getPreferences().contains(medium))
+                .flatMap(bFunction -> bFunction.apply(message, alert));
     }
 
     private Flux<Void> validateAlerts(Message message) {
@@ -67,7 +78,7 @@ public class SendAlertZeroUseCase {
                 .flatMap(alert -> routeAlert(alert, message));
     }
 
-    public Mono<Void> sendAlertsIndicatorZero(Message message) {
+    public Mono<Void> indicatorZero(Message message) {
         return Mono.just(message)
                 .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(), message.getDocumentType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))

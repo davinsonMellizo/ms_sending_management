@@ -51,15 +51,17 @@ class ValidateContactUseCaseTest {
         Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
         parameters.add(parameter);
         message.setParameters(parameters);
+
     }
 
 
     @Test
     void validateContactsTest(){
-        Contact contactSms = Contact.builder().contactMedium("SMS").value("").build();
-        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).build();
-        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").build();
+        Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false).build();
+        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false).build();
+        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false).build();
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
+
         StepVerifier.create(validateContactUseCase.validateDataContact(message, Consumer.builder().segment("").build()))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -1,9 +1,9 @@
 package co.com.bancolombia.usecase.commons;
 
-import co.com.bancolombia.commons.enums.DocumentTypeEnum;
 import co.com.bancolombia.model.bridge.Bridge;
 import co.com.bancolombia.model.client.Enrol;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.document.Document;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
@@ -18,17 +18,16 @@ public class BridgeContact {
     public final int ZERO = 0;
     public final int ONE = 1;
 
-    public Bridge getMapToSendToBridgeMQ(Enrol enrol, String voucher) {
+    public Bridge getMapToSendToBridgeMQ(Enrol enrol, String voucher, Document document) {
         return Bridge.builder()
-                .documentType(String.valueOf(DocumentTypeEnum
-                        .fromValue(enrol.getClient().getDocumentType()).getId()))
+                .documentType(document.getId())
                 .documentNumber(String.valueOf(enrol.getClient().getDocumentNumber()))
                 .channel(enrol.getClient().getConsumerCode())
                 .valueSms(getValue(enrol, SMS))
                 .valueEmail(getValue(enrol, MAIL))
                 .valuePush(getValue(enrol, PUSH))
                 .stateSms(getState(enrol, SMS))
-                .stateMEmail(getState(enrol, MAIL))
+                .stateEmail(getState(enrol, MAIL))
                 .statePush(getState(enrol, PUSH))
                 .voucher(voucher)
                 .date(LocalDateTime.now().toString())

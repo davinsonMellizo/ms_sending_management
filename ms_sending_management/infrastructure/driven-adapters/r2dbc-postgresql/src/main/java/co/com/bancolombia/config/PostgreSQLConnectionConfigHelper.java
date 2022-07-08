@@ -28,12 +28,6 @@ public class PostgreSQLConnectionConfigHelper {
                 .flatMap(secretName -> secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
                 .block();
     }
-    private PostgresqlConnectionProperties postgresPropertiesRead() {
-        return secretsNameStandard.secretForPostgresRead()
-                .flatMap(secretName -> secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
-                .block();
-    }
-
 
     @Bean
     public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value("${adapters.postgresql.schema}") String schema){
@@ -54,12 +48,13 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value("${adapters.postgresql.schema}") String schema){
-        PostgresqlConnectionProperties properties =  postgresPropertiesRead();
+    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value("${adapters.postgresql.schema}") String schema,
+                                                                       @Value("${adapters.postgresql.hostRead}") String hostRead){
+        PostgresqlConnectionProperties properties =  postgresProperties();
         logger.info("data secret rds:"+properties);
         return ConnectionFactoryOptions.builder()
                 .option(DRIVER,"postgresql")
-                .option(HOST, properties.getHost())
+                .option(HOST, hostRead)
                 .option(PORT, properties.getPort())
                 .option(USER,properties.getUsername())
                 .option(PASSWORD,properties.getPassword())

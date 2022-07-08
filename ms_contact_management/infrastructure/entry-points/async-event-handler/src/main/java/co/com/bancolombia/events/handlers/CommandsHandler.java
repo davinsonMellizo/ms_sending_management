@@ -30,10 +30,10 @@ public class CommandsHandler {
 
 
     public Mono<Void> saveClient(Command<String> command){
-        return handleSendAlert(command.getData(), useCase::saveClient);
+        return handleSendAlert(command.getData(), useCase::saveClientRequest);
     }
     public Mono<Void> updateClient(Command<String> command){
-        return handleSendAlert(command.getData(), useCase::updateClientMono);
+        return handleSendAlert(command.getData(), useCase::updateClientRequest);
     }
 
     private  <M, R> Mono<Void> handleSendAlert(String data, Function3<M,Boolean,String, Mono<R>> use) {

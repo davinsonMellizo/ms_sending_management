@@ -9,23 +9,25 @@ import reactor.core.publisher.Flux;
 public interface ContactRepositoryReader extends ReactiveCrudRepository<ContactData, Integer> {
 
     @Query("select c.value, c.created_date, c.modified_date, c.segment, " +
-            "m.code as contact_way, s.name as state_contact " +
+            "m.code as contact_way, s.name as state_contact, c.environment_type " +
             "from contact c " +
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +
             "inner join state s on c.id_state = s.id " +
             "where c.document_number::int8 = :documentNumber " +
+            "and c.previous = false "+
             "and (d.id::text = :documentType or d.code = :documentType)")
     Flux<ContactData> findAllContactsByClient(@Param("documentNumber") Long documentNumber,
                                               @Param("documentType") String documentType);
 
     @Query("select c.value, c.created_date, c.modified_date, c.segment, " +
-            "m.code as contact_way, s.name as state_contact " +
+            "m.code as contact_way, s.name as state_contact, c.environment_type " +
             "from contact c " +
             "inner join document_type d on d.id = c.id_document_type "+
             "inner join contact_medium m on c.id_contact_medium = m.id " +
             "inner join state s on c.id_state = s.id " +
             "where c.document_number::int8 = :documentNumber and c.segment = :segment " +
+            "and c.previous = false "+
             "and (d.id::text = :documentType or d.code = :documentType)")
     Flux<ContactData> contactsByClientAndSegment(@Param("documentNumber") Long documentNumber,
                                                  @Param("documentType") String documentType,

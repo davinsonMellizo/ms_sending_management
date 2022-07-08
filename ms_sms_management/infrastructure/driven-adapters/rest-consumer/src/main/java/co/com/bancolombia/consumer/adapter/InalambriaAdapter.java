@@ -15,6 +15,8 @@ import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.RequestTokenInalambria;
 import co.com.bancolombia.model.token.Token;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -36,9 +38,10 @@ public class InalambriaAdapter implements InalambriaGateway {
     private static final Integer CONSTANT = 3;
     private static final Integer CONSTANT2 = 1000;
 
+    private final Log LOGGER = LogFactory.getLog(InalambriaAdapter.class);
+
     @Override
     public Mono<Response> sendSMS(SMSInalambria sms) {
-        System.out.println("listo"+sms);
         return client.post(properties.getResources().getEndpointInalambriaSms(), sms,
                 SuccessInalambriaSMS.class, ErrorInalambriaSMS.class)
                 //Mono.just(SuccessInalambriaSMS.builder().messageText("Success").build())

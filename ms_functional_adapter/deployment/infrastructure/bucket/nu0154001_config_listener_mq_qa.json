@@ -10,8 +10,8 @@
       "replyTimeOut": 10,
       "ccdtBucketName": "nu0154001_alert_ccdt_qa.json",
       "jksBucketName": "nu0154001_alert_qa.jks",
-      "ccdtPath": "/appuser/nu0154001_alert_ccdt_qa.json",
-      "jksPath": "/appuser/nu0154001_alert_qa.jks"
+      "ccdtPath": "/var/tmp/nu0154001_alert_ccdt_qa.json",
+      "jksPath": "/var/tmp/nu0154001_alert_qa.jks"
     }
   ],
   "queues": [
@@ -123,6 +123,12 @@
       "template": "{ \"id\" : \"${payload?substring(11, 21)?trim}\",\"description\" : \"${payload?substring(21, 71)?trim}\",\"segment\" : \"${payload?substring(71)?trim}\"}",
       "target": "ms_alert_management",
       "queue": "send.update.consumer"
+    },
+    "ENVIOPUSH01": {
+      "listener": "id1",
+      "template": "{ \"messageId\": \"${payload?substring(11, 31)?trim}\", \"customerDocumentType\": \"${payload?substring(31, 35)?trim}\", \"customerDocumentNumber\": \"${payload?substring(35, 55)?trim}\", \"customerMdmKey\": \"${payload?substring(55, 75)?trim}\", \"customerNickname\": \"${payload?substring(75, 89)?trim}\", \"applicationCode\": \"${payload?substring(89, 99)?trim}\", \"categoryId\": \"${payload?substring(99, 102)?trim}\", \"consumerId\": \"${payload?substring(102, 105)?trim}\", \"message\": \"${payload?substring(105, 2105)?trim}\" }",
+      "target": "ms_send_manager_rs",
+      "queue": "send.iseries.push"
     }
   }
 }

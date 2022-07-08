@@ -24,12 +24,12 @@ public enum TechnicalExceptionEnum {
     TECHNICAL_JSON_CONVERT("DST0041", "An error occurred while converting object to json "),
     SECRET_EXCEPTION("302", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("302", "Internal server error"),
+    FIND_DOCUMENT_ERROR("T0013", "An error occurred while find a document"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
     INVALID_HEADER_ERROR("301", "Invalid headers"),
     HEADER_MISSING_ERROR("301", "Missing parameters per header");
 
     private final String code;
     private final String message;
-
 
 }

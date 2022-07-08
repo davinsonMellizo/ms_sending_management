@@ -20,11 +20,13 @@ public class ValidateContactUseCase {
     private final LogUseCase logUseCase;
     public Mono<Message> validateDataContact(Message message, Consumer consumer) {
         return contactGateway.findAllContactsByClient(message.toBuilder().consumer(consumer.getSegment()).build())
+                .filter(contact -> contact.getIdState() == ACTIVE)
+                .filter(contact -> !contact.getPrevious())
                 .collectMap(Contact::getContactMedium)
                 .filter(contacts -> !contacts.isEmpty())
                 .map(contacts -> message.toBuilder()
                         .phone(contacts.get("SMS") != null ? contacts.get("SMS").getValue() : "")
-                        .push(contacts.get("PUSH") != null ? contacts.get("PUSH").getIdState() == ACTIVE ? true : false : false)
+                        .push(contacts.get("PUSH") != null ? true: false)
                         .mail(contacts.get("MAIL") != null ? contacts.get("MAIL").getValue() : "").build())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,

@@ -6,7 +6,6 @@ import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Sms;
-import co.com.bancolombia.model.prefix.gateways.PrefixRepository;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
@@ -21,7 +20,6 @@ import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidM
 
 @RequiredArgsConstructor
 public class RouterProviderSMSUseCase {
-    private final PrefixRepository prefixRepository;
     private final ProviderGateway providerGateway;
     private final PriorityGateway priorityGateway;
     private final CommandGateway commandGateway;
@@ -30,8 +28,6 @@ public class RouterProviderSMSUseCase {
     public Mono<Response> validateMobile(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMobile)
-                .map(message1 -> message.getPhone().substring(0, 3))
-                .flatMap(prefixRepository::findPrefix)
                 .switchIfEmpty(logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, INVALID_CONTACT)))
                 .flatMap(prefix -> routeAlertsSMS(message, alert));
     }

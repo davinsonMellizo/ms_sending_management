@@ -21,5 +21,7 @@ public class ClientDTO {
     @Size(max = 10, message = "{constraint.size}")
     @JsonProperty("status")
     private String stateClient;
+    private Integer preference;
+    private Boolean delegate;
     private TraceabilityDTO traceability;
 }

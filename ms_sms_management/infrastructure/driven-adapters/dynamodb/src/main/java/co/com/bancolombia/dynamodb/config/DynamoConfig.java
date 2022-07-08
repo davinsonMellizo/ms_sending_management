@@ -21,8 +21,9 @@ public class DynamoConfig {
     private final Properties properties;
 
     @Bean
-    @Profile({"dev", "cer", "pdn"})
+    @Profile({"dev", "qa", "pdn"})
     public DynamoDbEnhancedAsyncClient dynamodbConfig() {
+
         try {
             DynamoDbAsyncClient ddb = DynamoDbAsyncClient.builder()
                     .region(Region.US_EAST_1)
