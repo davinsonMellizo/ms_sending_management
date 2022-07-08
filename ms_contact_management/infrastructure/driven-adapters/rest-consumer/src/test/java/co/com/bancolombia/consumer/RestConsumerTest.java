@@ -2,6 +2,7 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.adapter.Error;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
+import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.model.Request;
 import co.com.bancolombia.model.client.ResponseClient;
 import okhttp3.mockwebserver.MockResponse;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,8 @@ public class RestConsumerTest {
     private MockWebServer mockServer;
     private RestConsumer restClient;
     private final ResponseClient client = new ResponseClient();
+    @Mock
+    private LoggerBuilder loggerBuilder;
 
     @Autowired
     private ConsumerProperties properties;
@@ -44,7 +48,7 @@ public class RestConsumerTest {
         mockServer = new MockWebServer();
         restClient = new RestConsumer(WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
-                .build());
+                .build(), loggerBuilder);
         mockServer.url(getBaseUrl(mockServer.getPort()));
     }
 

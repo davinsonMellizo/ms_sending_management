@@ -1,5 +1,6 @@
 package co.com.bancolombia.consumer.config;
 
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.s3bucket.S3AsynOperations;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import io.netty.handler.ssl.SslContext;
@@ -36,8 +37,10 @@ class RestConsumerConfigTest {
     private AwsProperties awsProperties;
     @Mock
     private S3AsynOperations s3AsynOperations;
-   @Mock
-   private SslContext sslContext;
+    @Mock
+    private SslContext sslContext;
+    @Mock
+    private LoggerBuilder loggerBuilder;
 
     private static final InputStream inputStream
             = new ByteArrayInputStream("test".getBytes(StandardCharsets.UTF_8));
@@ -67,15 +70,15 @@ class RestConsumerConfigTest {
     }
 
     @Test
-    void ConfigMASTest() {
+    void ConfigMASTest()  {
         assertThat(restConsumerConfig.webClientConfig(new ConsumerProperties(3600, null))).isNotNull();
     }
     @Test
-    void configINATest(){
+    void configINATest() throws SSLException {
         assertThat(restConsumerConfig.webClientConfigIna(new ConsumerProperties(3600, null))).isNotNull();
     }
     @org.junit.Test(expected = SSLException.class)
-    public void configINAErrorTest(){
+    public void configINAErrorTest() throws SSLException {
 
         SSLException e =new SSLException("TEst");
         restConsumerConfig.webClientConfigIna(new ConsumerProperties(3600, null));

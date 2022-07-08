@@ -1,10 +1,8 @@
 package co.com.bancolombia.consumer;
 
-import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.ErrorMasivianMAIL;
 import co.com.bancolombia.consumer.adapter.response.SuccessMasivianMAIL;
 import co.com.bancolombia.model.message.Mail;
-import com.sun.net.httpserver.Authenticator;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;

@@ -1,6 +1,7 @@
 package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.adapter.Error;
+import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.model.Request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ public class RestConsumer<T extends Request,R> {
 
     private final WebClient webClient;
     private final ObjectMapper  mapper = new ObjectMapper();
+    private final LoggerBuilder loggerBuilder;
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
         Map<String,String> header = request.getHeaders();
@@ -40,7 +42,7 @@ public class RestConsumer<T extends Request,R> {
         try {
             data = mapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            loggerBuilder.error(e);
         }
         return data;
     }

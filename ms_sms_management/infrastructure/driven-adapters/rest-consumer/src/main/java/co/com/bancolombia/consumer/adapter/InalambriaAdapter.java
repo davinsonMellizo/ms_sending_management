@@ -44,7 +44,6 @@ public class InalambriaAdapter implements InalambriaGateway {
     public Mono<Response> sendSMS(SMSInalambria sms) {
         return client.post(properties.getResources().getEndpointInalambriaSms(), sms,
                 SuccessInalambriaSMS.class, ErrorInalambriaSMS.class)
-                //Mono.just(SuccessInalambriaSMS.builder().messageText("Success").build())
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getMessageText()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()

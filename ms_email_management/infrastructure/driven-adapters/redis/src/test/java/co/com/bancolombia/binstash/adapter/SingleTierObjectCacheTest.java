@@ -38,7 +38,7 @@ class SingleTierObjectCacheTest {
     private String serializedPerson;
 
     @BeforeEach
-    void before() {
+    void before() throws JsonProcessingException {
         objectMapper = new ObjectMapper();
 
         token = new Token();
@@ -48,9 +48,7 @@ class SingleTierObjectCacheTest {
         token.setTokenType("tokenType");
 
         serializedPerson = "";
-        try {
-            serializedPerson = this.objectMapper.writeValueAsString(token);
-        } catch (JsonProcessingException e) {}
+        serializedPerson = this.objectMapper.writeValueAsString(token);
         serializatorHelper = new SerializatorHelper<>(objectMapper);
 
         cache = new SingleTierObjectCache<>(mockedStash, serializatorHelper);
