@@ -2,7 +2,14 @@ package co.com.bancolombia.model.template.dto;
 
 import co.com.bancolombia.Request;
 import co.com.bancolombia.commons.constants.Constants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Builder;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +26,12 @@ public class TemplateRequest extends Request {
     private String messageBody;
     private String plainText;
     private String creationUser;
+    @Builder.Default
+    private String creationDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     private String modificationUser;
+    @Builder.Default
+    private String modificationDate = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
 
     @Override
     public boolean equals(Object obj) {

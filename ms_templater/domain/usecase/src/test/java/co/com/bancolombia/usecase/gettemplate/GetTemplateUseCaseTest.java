@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.gettemplate;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.template.dto.TemplateRequest;
 import co.com.bancolombia.model.template.dto.TemplateResponse;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import co.com.bancolombia.usecase.SampleData;
@@ -36,10 +37,10 @@ class GetTemplateUseCaseTest {
     @Test
     void getTemplateSuccessfulTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+                .thenReturn(Mono.just(SampleData.templateRequest()));
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
                 .assertNext(templateResponses ->
-                        Assertions.assertThat(templateResponses).isInstanceOf(TemplateResponse.class))
+                        Assertions.assertThat(templateResponses).isInstanceOf(TemplateRequest.class))
                 .verifyComplete();
     }
 

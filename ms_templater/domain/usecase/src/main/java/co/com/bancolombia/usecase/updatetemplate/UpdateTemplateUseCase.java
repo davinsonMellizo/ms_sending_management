@@ -1,35 +1,37 @@
 package co.com.bancolombia.usecase.updatetemplate;
 
-import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.template.dto.TemplateRequest;
+import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.UpdateTemplateResponse;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class UpdateTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<Map<String, TemplateRequest>> updateTemplate(TemplateRequest templateRequest) {
-        Map<String, TemplateRequest> templateResponseMap = new HashMap<>();
-        return validateTemplate(templateRequest.getIdTemplate())
+    public Mono<UpdateTemplateResponse> updateTemplate(TemplateRequest request) {
+        UpdateTemplateResponse updateResponse = UpdateTemplateResponse.builder().build();
+        return validateTemplate(request.getIdTemplate())
                 .flatMap(response -> {
-                    templateResponseMap.put(Constants.BEFORE, response);
-                    return templateRepository.updateTemplate(templateRequest);
+                    updateResponse.setBefore(response);
+                    return templateRepository
+                            .updateTemplate(request.toBuilder().creationDate(response.getCreationDate()).build())
+                            .map(unused -> request.getIdTemplate());
+
                 })
-                .map(templateRequest1 -> {
-                    templateResponseMap.put(Constants.ACTUAL, templateRequest1);
-                    return templateResponseMap;
+                .flatMap(s -> validateTemplate(s))
+                .map(templateResponse -> {
+                    updateResponse.setCurrent(templateResponse);
+                    return updateResponse;
                 });
     }
 
-    public Mono<TemplateRequest> validateTemplate(String idTemplate) {
+    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
         return templateRepository.getTemplate(idTemplate)
                 .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
     }

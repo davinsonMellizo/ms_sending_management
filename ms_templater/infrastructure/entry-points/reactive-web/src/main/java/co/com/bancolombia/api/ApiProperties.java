@@ -17,4 +17,5 @@ public class ApiProperties {
     private String getTemplate;
     private String putTemplate;
     private String deleteTemplate;
+    private String createMessage;
 }

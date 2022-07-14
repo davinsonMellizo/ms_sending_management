@@ -21,7 +21,8 @@ class RouterTest {
                 "/template/create",
                 "/template/get",
                 "/template/update",
-                "/template/delete"
+                "/template/delete",
+                "/template/createmessage"
         ));
         router.routerFunction(handler);
         assertThat(router).isInstanceOf(Router.class);

@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class TemplaterDTO {
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 50, message = "Longitud maxima de 50 caracteres")

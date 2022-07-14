@@ -44,6 +44,7 @@ entries:
     get_template: ${PATH_GET-TEMPLATE}
     put_template: ${PATH_PUT-TEMPLATE}
     delete_template: ${PATH_DELETE-TEMPLATE}
+    create_message: ${PATH_CREATE-MESSAGE}
 
 management:
   health:

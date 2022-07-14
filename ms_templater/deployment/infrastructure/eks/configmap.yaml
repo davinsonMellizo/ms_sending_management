@@ -20,3 +20,4 @@ data:
   PATH_GET-TEMPLATE: #{get}#
   PATH_PUT-TEMPLATE: #{put}#
   PATH_DELETE-TEMPLATE: #{delete}#
+  PATH_CREATE-MESSAGE: #{create-message}#

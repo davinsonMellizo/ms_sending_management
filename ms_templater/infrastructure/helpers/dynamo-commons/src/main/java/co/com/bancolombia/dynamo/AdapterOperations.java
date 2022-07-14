@@ -37,9 +37,8 @@ public class AdapterOperations<E, D> {
                 .map(this::toEntity);
     }
 
-    protected Mono<E> update(E entity) {
-        return fromFuture(table.putItem(toData(entity)))
-                .then(findById("0002"));
+    protected Mono<D> update(E entity) {
+        return fromFuture(table.updateItem(toData(entity)));
     }
 
     protected Mono<Void> delete(String partitionKey) {
@@ -52,11 +51,11 @@ public class AdapterOperations<E, D> {
                 .build();
     }
 
-    private E toEntity(D data){
+    private E toEntity(D data) {
         return (data != null) ? mapper.map(data, entityClass) : null;
     }
 
-    private D toData(E entity){
+    private D toData(E entity) {
         return (entity != null) ? mapper.map(entity, dataClass) : null;
     }
 

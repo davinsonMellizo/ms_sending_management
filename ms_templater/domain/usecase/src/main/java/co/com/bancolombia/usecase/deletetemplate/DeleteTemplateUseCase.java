@@ -15,7 +15,7 @@ public class DeleteTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-//    public Mono<TemplateResponse> deleteTemplate(TemplateRequest templateRequest) {
+//    public Mono<TemplateRequest> deleteTemplate(TemplateRequest templateRequest) {
 //        return validateTemplate(templateRequest.getIdTemplate())
 //                .map(templateResponse -> {
 //                    templateRepository.deleteTemplate(templateRequest);
@@ -23,7 +23,7 @@ public class DeleteTemplateUseCase {
 //                });
 //    }
 //
-//    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
+//    public Mono<TemplateRequest> validateTemplate(String idTemplate) {
 //        return templateRepository.getTemplate(idTemplate)
 //                .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
 //    }
