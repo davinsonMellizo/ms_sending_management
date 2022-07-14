@@ -26,32 +26,32 @@ class CreateTemplateUseCaseTest {
     @Mock
     private TemplateRepository templateRepository;
 
-//    @BeforeAll
-//    public void init() {
-//        MockitoAnnotations.openMocks(this);
-//        Mockito.when(templateRepository.createTemplate(Mockito.any()))
-//                .thenReturn(Mono.just(SampleData.templateResponse()));
-//    }
-//
-//    @Test
-//    void createTemplateSuccessfulTest() {
-//        Mockito.when(templateRepository.getTemplate(SampleData.templateRequest().getIdTemplate()))
-//                .thenReturn(Mono.just(TemplateResponse.builder().build()));
-//        StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
-//                .assertNext(templateResponse ->
-//                        Assertions.assertThat(templateResponse).isInstanceOf(TemplateResponse.class))
-//                .verifyComplete();
-//    }
-//
-//    @Test
-//    void createTemplateErrorTest() {
-//        Mockito.when(templateRepository.getTemplate(SampleData.templateRequest().getIdTemplate()))
-//                .thenReturn(Mono.just(SampleData.templateResponse()));
-//        StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
-//                .expectErrorMatches(throwable ->
-//                        throwable instanceof BusinessException &&
-//                                ((BusinessException) throwable).getException()
-//                                        .equals(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS))
-//                .verify();
-//    }
+    @BeforeAll
+    public void init() {
+        MockitoAnnotations.openMocks(this);
+        Mockito.when(templateRepository.createTemplate(Mockito.any()))
+                .thenReturn(Mono.just(SampleData.templateResponse()));
+    }
+
+    @Test
+    void createTemplateSuccessfulTest() {
+        Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
+                .thenReturn(Mono.empty());
+        StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
+                .assertNext(templateResponse ->
+                        Assertions.assertThat(templateResponse).isInstanceOf(TemplateResponse.class))
+                .verifyComplete();
+    }
+
+    @Test
+    void createTemplateErrorTest() {
+        Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
+                .thenReturn(Mono.just(SampleData.templateResponse()));
+        StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
+                .expectErrorMatches(throwable ->
+                        throwable instanceof BusinessException &&
+                                ((BusinessException) throwable).getException()
+                                        .equals(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS))
+                .verify();
+    }
 }

@@ -11,6 +11,7 @@ public class SampleData {
 
     public static TemplateRequest templateRequest() {
         return TemplateRequest.builder()
+                .idTemplate("001")
                 .messageType("EMAIL")
                 .description("First Template")
                 .messageSubject("Subject")

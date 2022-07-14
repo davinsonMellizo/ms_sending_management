@@ -37,10 +37,10 @@ class GetTemplateUseCaseTest {
     @Test
     void getTemplateSuccessfulTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
-                .thenReturn(Mono.just(SampleData.templateRequest()));
+                .thenReturn(Mono.just(SampleData.templateResponse()));
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
                 .assertNext(templateResponses ->
-                        Assertions.assertThat(templateResponses).isInstanceOf(TemplateRequest.class))
+                        Assertions.assertThat(templateResponses).isInstanceOf(TemplateResponse.class))
                 .verifyComplete();
     }
 

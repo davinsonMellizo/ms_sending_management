@@ -69,140 +69,140 @@ class HandlerTest {
                 .thenReturn(Mono.just(SampleData.deleteTemplaterDTO()));
     }
 
-//    @Test
-//    void headersTemplate() {
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put(Constants.ID_TEMPLATE, "01");
-//        headers.put(Constants.MESSAGE_TYPE, "Type");
-//        MockServerRequest request = MockServerRequest.builder()
-//                .header(Constants.ID_TEMPLATE, "01")
-//                .header(Constants.MESSAGE_TYPE, "Type")
-//                .build();
-//        Mockito.when(genericBaseHandler.setHeaders(request))
-//                .thenReturn(headers);
-//        StepVerifier.create(handler.templaterDTOMono(request))
-//                .assertNext(templaterDTO -> Assertions.assertThat(templaterDTO).isInstanceOf(TemplaterDTO.class))
-//                .verifyComplete();
-//    }
-//
-//    @Test
-//    void getTemplateSuccessful() {
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put(Constants.ID_TEMPLATE, "01");
-//        headers.put(Constants.MESSAGE_TYPE, "Type");
-//        MockServerRequest request = MockServerRequest.builder()
-//                .header(Constants.ID_TEMPLATE, "01")
-//                .header(Constants.MESSAGE_TYPE, "Type")
-//                .build();
-//        Mockito.when(getTemplateUseCase.getTemplate(headers))
-//                .thenReturn(Mono.just(SampleData.templaterRequest()));
-//        StepVerifier.create(handler.getTemplate(request))
-//                .assertNext(serverResponse ->
-//                        Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class))
-//                .verifyComplete();
-//    }
-//
-//    @Test
-//    void getTemplateUnsuccessfulBusiness() {
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put(Constants.ID_TEMPLATE, "01");
-//        headers.put(Constants.MESSAGE_TYPE, "Type");
-//        MockServerRequest request = MockServerRequest.builder()
-//                .header(Constants.ID_TEMPLATE, "01")
-//                .header(Constants.MESSAGE_TYPE, "Type")
-//                .build();
-//        Mockito.when(getTemplateUseCase.getTemplate(headers))
-//                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
-//        StepVerifier.create(handler.getTemplate(request))
-//                .assertNext(serverResponse -> {
-//                    Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(serverResponse.statusCode()).isEqualTo(HttpStatus.CONFLICT);
-//                }).verifyComplete();
-//    }
-//
-//    @Test
-//    void getTemplateUnsuccessfulTechnical() {
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put(Constants.ID_TEMPLATE, "01");
-//        headers.put(Constants.MESSAGE_TYPE, "Type");
-//        MockServerRequest request = MockServerRequest.builder()
-//                .header(Constants.ID_TEMPLATE, "01")
-//                .header(Constants.MESSAGE_TYPE, "Type")
-//                .build();
-//        Mockito.when(getTemplateUseCase.getTemplate(headers))
-//                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
-//        StepVerifier.create(handler.getTemplate(request))
-//                .assertNext(serverResponse -> {
-//                    Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(serverResponse.statusCode()).isEqualTo(HttpStatus.CONFLICT);
-//                }).verifyComplete();
-//    }
+    @Test
+    void headersTemplate() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.ID_TEMPLATE, "01");
+        headers.put(Constants.MESSAGE_TYPE, "Type");
+        MockServerRequest request = MockServerRequest.builder()
+                .header(Constants.ID_TEMPLATE, "01")
+                .header(Constants.MESSAGE_TYPE, "Type")
+                .build();
+        Mockito.when(genericBaseHandler.setHeaders(request))
+                .thenReturn(headers);
+        StepVerifier.create(handler.templaterDTOMono(request))
+                .assertNext(templaterDTO -> Assertions.assertThat(templaterDTO).isInstanceOf(TemplaterDTO.class))
+                .verifyComplete();
+    }
 
-//    @Test
-//    void createTemplateSuccess() {
-//        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
-//                .thenReturn(Mono.just(SampleData.templateResponse()));
-//        StepVerifier.create(handler.createTemplate(request))
-//                .assertNext(res -> {
-//                    Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.OK);
-//                }).verifyComplete();
-//    }
-//
-//    @Test
-//    void createTemplateUnsuccessfulTechnical() {
-//        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
-//                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
-//        StepVerifier.create(handler.createTemplate(request))
-//                .assertNext(res -> {
-//                    Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.CONFLICT);
-//                }).verifyComplete();
-//    }
-//
-//    @Test
-//    void createTemplateUnsuccessfulBusiness() {
-//        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
-//                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS)));
-//        StepVerifier.create(handler.createTemplate(request))
-//                .assertNext(res -> {
-//                    Assertions.assertThat(res)
-//                            .isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.CONFLICT);
-//                }).verifyComplete();
-//    }
-//
-//    @Test
-//    void updateTemplateSuccess() {
-//        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
-//                .thenReturn(Mono.just(Map.of(Constants.ACTUAL, TemplateResponse.builder().build())));
-//        StepVerifier.create(handler.updateTemplate(request))
-//                .assertNext(serverResponse ->
-//                        Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class)
-//                ).verifyComplete();
-//    }
-//
-//    @Test
-//    void updateTemplateUnsuccessfulBusinessTest() {
-//        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
-//                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
-//        StepVerifier.create(handler.updateTemplate(request))
-//                .assertNext(res -> {
-//                    Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.CONFLICT);
-//                }).verifyComplete();
-//    }
-//
-//    @Test
-//    void updateTemplateUnsuccessfulTechnicalTest() {
-//        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
-//                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
-//        StepVerifier.create(handler.updateTemplate(request))
-//                .assertNext(serverResponse -> {
-//                    Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class);
-//                    Assertions.assertThat(serverResponse.statusCode()).isEqualTo(HttpStatus.CONFLICT);
-//                }).verifyComplete();
-//    }
+    @Test
+    void getTemplateSuccessful() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.ID_TEMPLATE, "01");
+        headers.put(Constants.MESSAGE_TYPE, "Type");
+        MockServerRequest request = MockServerRequest.builder()
+                .header(Constants.ID_TEMPLATE, "01")
+                .header(Constants.MESSAGE_TYPE, "Type")
+                .build();
+        Mockito.when(getTemplateUseCase.getTemplate(headers))
+                .thenReturn(Mono.just(SampleData.templateResponse()));
+        StepVerifier.create(handler.getTemplate(request))
+                .assertNext(serverResponse ->
+                        Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class))
+                .verifyComplete();
+    }
+
+    @Test
+    void getTemplateUnsuccessfulBusiness() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.ID_TEMPLATE, "01");
+        headers.put(Constants.MESSAGE_TYPE, "Type");
+        MockServerRequest request = MockServerRequest.builder()
+                .header(Constants.ID_TEMPLATE, "01")
+                .header(Constants.MESSAGE_TYPE, "Type")
+                .build();
+        Mockito.when(getTemplateUseCase.getTemplate(headers))
+                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
+        StepVerifier.create(handler.getTemplate(request))
+                .assertNext(serverResponse -> {
+                    Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(serverResponse.statusCode()).isEqualTo(HttpStatus.CONFLICT);
+                }).verifyComplete();
+    }
+
+    @Test
+    void getTemplateUnsuccessfulTechnical() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.ID_TEMPLATE, "01");
+        headers.put(Constants.MESSAGE_TYPE, "Type");
+        MockServerRequest request = MockServerRequest.builder()
+                .header(Constants.ID_TEMPLATE, "01")
+                .header(Constants.MESSAGE_TYPE, "Type")
+                .build();
+        Mockito.when(getTemplateUseCase.getTemplate(headers))
+                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
+        StepVerifier.create(handler.getTemplate(request))
+                .assertNext(serverResponse -> {
+                    Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(serverResponse.statusCode()).isEqualTo(HttpStatus.CONFLICT);
+                }).verifyComplete();
+    }
+
+    @Test
+    void createTemplateSuccess() {
+        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
+                .thenReturn(Mono.just(SampleData.templateResponse()));
+        StepVerifier.create(handler.createTemplate(request))
+                .assertNext(res -> {
+                    Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.OK);
+                }).verifyComplete();
+    }
+
+    @Test
+    void createTemplateUnsuccessfulTechnical() {
+        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
+                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
+        StepVerifier.create(handler.createTemplate(request))
+                .assertNext(res -> {
+                    Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.CONFLICT);
+                }).verifyComplete();
+    }
+
+    @Test
+    void createTemplateUnsuccessfulBusiness() {
+        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
+                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS)));
+        StepVerifier.create(handler.createTemplate(request))
+                .assertNext(res -> {
+                    Assertions.assertThat(res)
+                            .isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.CONFLICT);
+                }).verifyComplete();
+    }
+
+    @Test
+    void updateTemplateSuccess() {
+        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
+                .thenReturn(Mono.just(SampleData.updateTemplateResponse()));
+        StepVerifier.create(handler.updateTemplate(request))
+                .assertNext(serverResponse ->
+                        Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class)
+                ).verifyComplete();
+    }
+
+    @Test
+    void updateTemplateUnsuccessfulBusinessTest() {
+        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
+                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
+        StepVerifier.create(handler.updateTemplate(request))
+                .assertNext(res -> {
+                    Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(res.statusCode()).isEqualTo(HttpStatus.CONFLICT);
+                }).verifyComplete();
+    }
+
+    @Test
+    void updateTemplateUnsuccessfulTechnicalTest() {
+        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
+                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
+        StepVerifier.create(handler.updateTemplate(request))
+                .assertNext(serverResponse -> {
+                    Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class);
+                    Assertions.assertThat(serverResponse.statusCode()).isEqualTo(HttpStatus.CONFLICT);
+                }).verifyComplete();
+    }
 //
 //    @Test
 //    void deleteTemplateSuccess() {

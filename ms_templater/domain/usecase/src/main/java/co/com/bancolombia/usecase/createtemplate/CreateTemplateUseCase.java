@@ -15,15 +15,13 @@ public class CreateTemplateUseCase {
 
     public Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest) {
         return validateTemplate(templateRequest.getIdTemplate())
-                .flatMap(templateResponse -> {
-                    if (!templateResponse.getIdTemplate().isEmpty()) {
-                        throw new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS);
-                    }
-                    return templateRepository.createTemplate(templateRequest);
-                });
+                .switchIfEmpty(Mono.defer(() -> templateRepository.createTemplate(templateRequest)));
     }
 
     public Mono<TemplateResponse> validateTemplate(String idTemplate) {
-        return templateRepository.getTemplate(idTemplate);
+        return templateRepository.getTemplate(idTemplate)
+                .filter(templateResponse -> !templateResponse.getIdTemplate().isEmpty())
+                .flatMap(templateResponse ->
+                        Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS)));
     }
 }

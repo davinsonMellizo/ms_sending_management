@@ -4,6 +4,7 @@ import co.com.bancolombia.api.dto.DeleteTemplaterDTO;
 import co.com.bancolombia.api.dto.TemplaterDTO;
 import co.com.bancolombia.model.template.dto.TemplateRequest;
 import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.UpdateTemplateResponse;
 
 public class SampleData {
 
@@ -47,6 +48,13 @@ public class SampleData {
                 .messageBody("Body")
                 .plainText("Text")
                 .idConsumer("ConsumerID")
+                .build();
+    }
+
+    public static UpdateTemplateResponse updateTemplateResponse() {
+        return UpdateTemplateResponse.builder()
+                .before(templateResponse())
+                .current(templateResponse())
                 .build();
     }
 
