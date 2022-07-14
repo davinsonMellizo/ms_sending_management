@@ -24,7 +24,7 @@ public class UpdateTemplateUseCase {
                             .map(unused -> request.getIdTemplate());
 
                 })
-                .flatMap(s -> validateTemplate(s))
+                .flatMap(this::validateTemplate)
                 .map(templateResponse -> {
                     updateResponse.setCurrent(templateResponse);
                     return updateResponse;

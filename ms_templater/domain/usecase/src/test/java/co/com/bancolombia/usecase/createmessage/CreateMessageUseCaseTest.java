@@ -1,7 +1,8 @@
-package co.com.bancolombia.usecase.createtemplate;
+package co.com.bancolombia.usecase.createmessage;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.template.dto.MessageResponse;
 import co.com.bancolombia.model.template.dto.TemplateResponse;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import co.com.bancolombia.usecase.SampleData;
@@ -17,10 +18,10 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CreateTemplateUseCaseTest {
+class CreateMessageUseCaseTest {
 
     @InjectMocks
-    private CreateTemplateUseCase createTemplateUseCase;
+    private CreateMessageUseCase createMessageUseCase;
 
     @Mock
     private TemplateRepository templateRepository;
@@ -28,29 +29,26 @@ class CreateTemplateUseCaseTest {
     @BeforeAll
     public void init() {
         MockitoAnnotations.openMocks(this);
-        Mockito.when(templateRepository.createTemplate(Mockito.any()))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
     }
 
     @Test
-    void createTemplateSuccessfulTest() {
+    void createMessageSuccessfulTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
-                .thenReturn(Mono.empty());
-        StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
-                .assertNext(templateResponse ->
-                        Assertions.assertThat(templateResponse).isInstanceOf(TemplateResponse.class))
+                .thenReturn(Mono.just(SampleData.templateResponse()));
+        StepVerifier.create(createMessageUseCase.createMessage(SampleData.testHeader()))
+                .assertNext(templateResponses ->
+                        Assertions.assertThat(templateResponses).isInstanceOf(MessageResponse.class))
                 .verifyComplete();
     }
 
     @Test
-    void createTemplateErrorTest() {
+    void createMessageErrorTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
-        StepVerifier.create(createTemplateUseCase.createTemplate(SampleData.templateRequest()))
-                .expectErrorMatches(throwable ->
-                        throwable instanceof BusinessException &&
-                                ((BusinessException) throwable).getException()
-                                        .equals(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS))
+                .thenReturn(Mono.empty());
+        StepVerifier.create(createMessageUseCase.createMessage(SampleData.testHeader()))
+                .expectErrorMatches(throwable -> throwable instanceof BusinessException &&
+                        ((BusinessException) throwable).getException()
+                                .equals(BusinessExceptionEnum.TEMPLATE_NOT_FOUND))
                 .verify();
     }
 }

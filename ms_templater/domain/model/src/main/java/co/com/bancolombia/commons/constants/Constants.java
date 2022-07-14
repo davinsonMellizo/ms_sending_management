@@ -2,8 +2,6 @@ package co.com.bancolombia.commons.constants;
 
 public class Constants {
 
-    public static final String ACTUAL = "actual";
-    public static final String BEFORE = "before";
     public static final String CREATE_MESSAGE = "Template successfully created";
     public static final String DELETE_MESSAGE = "Template successfully deleted";
     public static final String ID_TEMPLATE = "idTemplate";
