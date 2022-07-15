@@ -2,8 +2,7 @@ package co.com.bancolombia.usecase.gettemplate;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import co.com.bancolombia.usecase.SampleData;
 import org.assertj.core.api.Assertions;
@@ -14,11 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.util.ArrayList;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetTemplateUseCaseTest {
@@ -37,10 +33,10 @@ class GetTemplateUseCaseTest {
     @Test
     void getTemplateSuccessfulTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+                .thenReturn(Mono.just(SampleData.template()));
         StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
                 .assertNext(templateResponses ->
-                        Assertions.assertThat(templateResponses).isInstanceOf(TemplateResponse.class))
+                        Assertions.assertThat(templateResponses).isInstanceOf(Template.class))
                 .verifyComplete();
     }
 

@@ -2,81 +2,56 @@ package co.com.bancolombia.dynamodb.adapter;
 
 import co.com.bancolombia.dynamo.AdapterOperations;
 import co.com.bancolombia.dynamodb.data.Templater;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 
 @Repository
-public class DynamoAdapter extends AdapterOperations<TemplateRequest, Templater> implements TemplateRepository {
+public class DynamoAdapter extends AdapterOperations<Template, Templater> implements TemplateRepository {
 
     public DynamoAdapter(final DynamoDbEnhancedAsyncClient client) {
         super(client);
     }
 
     @Override
-    public Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest) {
-        return save(templateRequest.toBuilder().idTemplate(null).build())
-                .then(findById(templateRequest.getIdTemplate()))
-                .map(response -> TemplateResponse.builder()
-                        .idTemplate(response.getIdTemplate())
-                        .messageType(response.getMessageType())
-                        .version(response.getVersion())
-                        .idConsumer(response.getIdConsumer())
-                        .description(response.getDescription())
-                        .messageSubject(response.getMessageSubject())
-                        .messageBody(response.getMessageBody())
-                        .plainText(response.getPlainText())
-                        .creationUser(response.getCreationUser())
-                        .creationDate(response.getCreationDate())
-                        .modificationUser(response.getModificationUser())
-                        .modificationDate(response.getModificationDate())
-                        .build());
+    public Mono<Template> createTemplate(Template template) {
+        return save(template)
+                .then(findById(template.getIdTemplate()));
     }
 
     @Override
-    public Mono<TemplateResponse> getTemplate(String idTemplate) {
-        return findById(idTemplate)
-                .map(templateRequest -> TemplateResponse.builder()
-                        .idTemplate(templateRequest.getIdTemplate())
-                        .messageType(templateRequest.getMessageType())
-                        .version(templateRequest.getVersion())
-                        .idConsumer(templateRequest.getIdConsumer())
-                        .description(templateRequest.getDescription())
-                        .messageSubject(templateRequest.getMessageSubject())
-                        .messageBody(templateRequest.getMessageBody())
-                        .plainText(templateRequest.getPlainText())
-                        .creationUser(templateRequest.getCreationUser())
-                        .creationDate(templateRequest.getCreationDate())
-                        .modificationUser(templateRequest.getModificationUser())
-                        .modificationDate(templateRequest.getModificationDate())
-                        .build());
+    public Mono<Template> getTemplate(String idTemplate) {
+        return findById(idTemplate);
     }
 
     @Override
-    public Mono<TemplateResponse> updateTemplate(TemplateRequest templateRequest) {
-        return update(templateRequest)
-                .map(response -> TemplateResponse.builder()
-                        .idTemplate(response.getIdTemplate())
-                        .messageType(response.getMessageType())
-                        .version(response.getVersion())
-                        .idConsumer(response.getIdConsumer())
-                        .description(response.getDescription())
-                        .messageSubject(response.getMessageSubject())
-                        .messageBody(response.getMessageBody())
-                        .plainText(response.getPlainText())
-                        .creationUser(response.getCreationUser())
-                        .creationDate(response.getCreationDate())
-                        .modificationUser(response.getModificationUser())
-                        .modificationDate(response.getModificationDate())
-                        .build());
+    public Mono<Template> updateTemplate(Template template) {
+        return update(template)
+                .flatMap(this::templateGenerator);
     }
 
     @Override
-    public Mono<TemplateRequest> deleteTemplate(TemplateRequest templateRequest) {
-        return delete(templateRequest.getIdTemplate())
-                .map(unused -> TemplateRequest.builder().build());
+    public Mono<Template> deleteTemplate(Template template) {
+        return delete(template.getIdTemplate())
+                .map(unused -> Template.builder().build());
+    }
+
+    protected Mono<Template> templateGenerator(Templater templater) {
+        return Mono.just(Template.builder()
+                .idTemplate(templater.getIdTemplate())
+                .messageType(templater.getMessageType())
+                .version(templater.getVersion())
+                .idConsumer(templater.getIdConsumer())
+                .description(templater.getDescription())
+                .messageSubject(templater.getMessageSubject())
+                .messageBody(templater.getMessageBody())
+                .plainText(templater.getPlainText())
+                .creationUser(templater.getCreationUser())
+                .creationDate(templater.getCreationDate())
+                .modificationUser(templater.getModificationUser())
+                .modificationDate(templater.getModificationDate())
+                .build());
     }
 }

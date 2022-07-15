@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateTemplateResponse {
-    private TemplateResponse before;
-    private TemplateResponse current;
+    private Template before;
+    private Template current;
 }

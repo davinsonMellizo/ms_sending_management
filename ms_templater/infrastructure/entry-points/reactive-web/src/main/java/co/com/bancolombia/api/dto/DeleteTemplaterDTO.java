@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.model.template.dto.TemplateRequest;
+import co.com.bancolombia.model.template.dto.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +21,8 @@ public class DeleteTemplaterDTO {
     private String idTemplate;
 
 
-    public Mono<TemplateRequest> toModel() {
-        return Mono.just(TemplateRequest.builder()
+    public Mono<Template> toModel() {
+        return Mono.just(Template.builder()
                 .idTemplate(this.idTemplate)
                 .build());
     }

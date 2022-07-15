@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.model.template.dto.TemplateRequest;
+import co.com.bancolombia.model.template.dto.Template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @Builder(toBuilder = true)
@@ -54,8 +56,9 @@ public class TemplaterDTO {
     private String modificationUser;
 
 
-    public Mono<TemplateRequest> toModel() {
-        return Mono.just(TemplateRequest.builder()
+    public Mono<Template> toModel() {
+        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+        return Mono.just(Template.builder()
                 .idTemplate(this.idTemplate)
                 .messageType(this.messageType)
                 .version(this.version)
@@ -65,7 +68,9 @@ public class TemplaterDTO {
                 .messageBody(this.messageBody)
                 .plainText(this.plainText)
                 .creationUser(this.creationUser)
+                .creationDate(dateTime)
                 .modificationUser(this.modificationUser)
+                .modificationDate(dateTime)
                 .build());
     }
 }

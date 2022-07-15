@@ -23,7 +23,7 @@ public class MessageRequest extends Request {
         if (!super.equals(obj)) {
             return false;
         }
-        TemplateRequest fobj = (TemplateRequest) obj;
+        Template fobj = (Template) obj;
         return idTemplate.equals(fobj.getPlainText());
     }
 

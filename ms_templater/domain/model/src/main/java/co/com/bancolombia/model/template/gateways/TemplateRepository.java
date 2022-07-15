@@ -1,13 +1,11 @@
 package co.com.bancolombia.model.template.gateways;
 
-import co.com.bancolombia.model.template.dto.MessageRequest;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import reactor.core.publisher.Mono;
 
 public interface TemplateRepository {
-    Mono<TemplateResponse> getTemplate(String idTemplate);
-    Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest);
-    Mono<TemplateResponse> updateTemplate(TemplateRequest templateRequest);
-    Mono<TemplateRequest> deleteTemplate(TemplateRequest templateRequest);
+    Mono<Template> getTemplate(String idTemplate);
+    Mono<Template> createTemplate(Template template);
+    Mono<Template> updateTemplate(Template template);
+    Mono<Template> deleteTemplate(Template template);
 }

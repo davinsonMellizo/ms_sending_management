@@ -2,7 +2,6 @@ package co.com.bancolombia.usecase.deletetemplate;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import co.com.bancolombia.usecase.SampleData;
 import org.assertj.core.api.Assertions;

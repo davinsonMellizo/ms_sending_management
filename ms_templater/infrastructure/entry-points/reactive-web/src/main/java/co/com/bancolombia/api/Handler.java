@@ -22,6 +22,8 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -53,9 +55,6 @@ public class Handler extends GenericBaseHandler {
 
     protected Mono<ServerResponse> getTemplate(ServerRequest serverRequest) {
         return templaterDTOMono(serverRequest)
-                .flatMap(TemplaterDTO::toModel)
-                .map(templateRequest -> templateRequest.headers(setHeaders(serverRequest)))
-                .map(Request::getHeaders)
                 .flatMap(getTemplateUseCase::getTemplate)
                 .flatMap(resp -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
@@ -68,13 +67,8 @@ public class Handler extends GenericBaseHandler {
                         .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
     }
 
-    protected Mono<TemplaterDTO> templaterDTOMono(ServerRequest serverRequest) {
-        return Mono.just(setHeaders(serverRequest)).map(stringStringMap ->
-                TemplaterDTO.builder()
-                        .idTemplate(stringStringMap.get(Constants.ID_TEMPLATE))
-                        .messageType(stringStringMap.get(Constants.MESSAGE_TYPE))
-                        .messageSubject(stringStringMap.get(Constants.MESSAGE_SUBJECT))
-                        .build())
+    protected Mono<Map<String, String>> templaterDTOMono(ServerRequest serverRequest) {
+        return Mono.just(setHeaders(serverRequest))
                 .switchIfEmpty(Mono.empty());
     }
 

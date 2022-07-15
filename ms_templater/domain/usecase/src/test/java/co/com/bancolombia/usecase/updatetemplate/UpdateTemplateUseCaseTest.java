@@ -27,9 +27,9 @@ class UpdateTemplateUseCaseTest {
     public void init() {
         MockitoAnnotations.openMocks(this);
         Mockito.when(templateRepository.updateTemplate(Mockito.any()))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+                .thenReturn(Mono.just(SampleData.template()));
         Mockito.when(templateRepository.getTemplate(SampleData.templateRequestUpdate().getIdTemplate()))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+                .thenReturn(Mono.just(SampleData.template()));
     }
 
     @Test

@@ -2,8 +2,7 @@ package co.com.bancolombia.usecase.updatetemplate;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.dto.UpdateTemplateResponse;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ public class UpdateTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<UpdateTemplateResponse> updateTemplate(TemplateRequest request) {
+    public Mono<UpdateTemplateResponse> updateTemplate(Template request) {
         UpdateTemplateResponse updateResponse = UpdateTemplateResponse.builder().build();
         return validateTemplate(request.getIdTemplate())
                 .flatMap(response -> {
@@ -31,7 +30,7 @@ public class UpdateTemplateUseCase {
                 });
     }
 
-    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
+    public Mono<Template> validateTemplate(String idTemplate) {
         return templateRepository.getTemplate(idTemplate)
                 .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
     }

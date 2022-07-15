@@ -8,7 +8,7 @@ import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.usecase.createtemplate.CreateTemplateUseCase;
 import co.com.bancolombia.usecase.deletetemplate.DeleteTemplateUseCase;
 import co.com.bancolombia.usecase.gettemplate.GetTemplateUseCase;
@@ -61,8 +61,8 @@ class HandlerTest {
     @BeforeAll
     public void init() {
         MockitoAnnotations.openMocks(this);
-        Mockito.when(request.bodyToMono(TemplateRequest.class))
-                .thenReturn(Mono.just(SampleData.templaterRequest()));
+        Mockito.when(request.bodyToMono(Template.class))
+                .thenReturn(Mono.just(SampleData.template()));
         Mockito.when(request.bodyToMono(TemplaterDTO.class))
                 .thenReturn(Mono.just(SampleData.templaterDTO()));
         Mockito.when(request.bodyToMono(DeleteTemplaterDTO.class))
@@ -81,7 +81,7 @@ class HandlerTest {
         Mockito.when(genericBaseHandler.setHeaders(request))
                 .thenReturn(headers);
         StepVerifier.create(handler.templaterDTOMono(request))
-                .assertNext(templaterDTO -> Assertions.assertThat(templaterDTO).isInstanceOf(TemplaterDTO.class))
+                .assertNext(templaterDTO -> Assertions.assertThat(templaterDTO).isInstanceOf(Map.class))
                 .verifyComplete();
     }
 
@@ -95,7 +95,7 @@ class HandlerTest {
                 .header(Constants.MESSAGE_TYPE, "Type")
                 .build();
         Mockito.when(getTemplateUseCase.getTemplate(headers))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+                .thenReturn(Mono.just(SampleData.template()));
         StepVerifier.create(handler.getTemplate(request))
                 .assertNext(serverResponse ->
                         Assertions.assertThat(serverResponse).isInstanceOf(ServerResponse.class))
@@ -140,8 +140,8 @@ class HandlerTest {
 
     @Test
     void createTemplateSuccess() {
-        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
-                .thenReturn(Mono.just(SampleData.templateResponse()));
+        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(Template.class)))
+                .thenReturn(Mono.just(SampleData.template()));
         StepVerifier.create(handler.createTemplate(request))
                 .assertNext(res -> {
                     Assertions.assertThat(res).isInstanceOf(ServerResponse.class);
@@ -151,7 +151,7 @@ class HandlerTest {
 
     @Test
     void createTemplateUnsuccessfulTechnical() {
-        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
+        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(Template.class)))
                 .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
         StepVerifier.create(handler.createTemplate(request))
                 .assertNext(res -> {
@@ -162,7 +162,7 @@ class HandlerTest {
 
     @Test
     void createTemplateUnsuccessfulBusiness() {
-        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(TemplateRequest.class)))
+        Mockito.when(createTemplateUseCase.createTemplate(Mockito.any(Template.class)))
                 .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_ALREADY_EXISTS)));
         StepVerifier.create(handler.createTemplate(request))
                 .assertNext(res -> {
@@ -174,7 +174,7 @@ class HandlerTest {
 
     @Test
     void updateTemplateSuccess() {
-        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
+        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(Template.class)))
                 .thenReturn(Mono.just(SampleData.updateTemplateResponse()));
         StepVerifier.create(handler.updateTemplate(request))
                 .assertNext(serverResponse ->
@@ -184,7 +184,7 @@ class HandlerTest {
 
     @Test
     void updateTemplateUnsuccessfulBusinessTest() {
-        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
+        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(Template.class)))
                 .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
         StepVerifier.create(handler.updateTemplate(request))
                 .assertNext(res -> {
@@ -195,7 +195,7 @@ class HandlerTest {
 
     @Test
     void updateTemplateUnsuccessfulTechnicalTest() {
-        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(TemplateRequest.class)))
+        Mockito.when(updateTemplateUseCase.updateTemplate(Mockito.any(Template.class)))
                 .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
         StepVerifier.create(handler.updateTemplate(request))
                 .assertNext(serverResponse -> {
@@ -206,7 +206,7 @@ class HandlerTest {
 //
 //    @Test
 //    void deleteTemplateSuccess() {
-//        Mockito.when(deleteTemplateUseCase.deleteTemplate(Mockito.any(TemplateRequest.class)))
+//        Mockito.when(deleteTemplateUseCase.deleteTemplate(Mockito.any(Template.class)))
 //                .thenReturn(Mono.just(TemplateResponse.builder().build()));
 //        StepVerifier.create(handler.deleteTemplate(request))
 //                .assertNext(serverResponse ->
@@ -216,7 +216,7 @@ class HandlerTest {
 //
 //    @Test
 //    void deleteTemplateUnsuccessfulBusinessTest() {
-//        Mockito.when(deleteTemplateUseCase.deleteTemplate(Mockito.any(TemplateRequest.class)))
+//        Mockito.when(deleteTemplateUseCase.deleteTemplate(Mockito.any(Template.class)))
 //                .thenReturn(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
 //        StepVerifier.create(handler.deleteTemplate(request))
 //                .assertNext(res -> {
@@ -227,7 +227,7 @@ class HandlerTest {
 //
 //    @Test
 //    void deleteTemplateUnsuccessfulTechnicalTest() {
-//        Mockito.when(deleteTemplateUseCase.deleteTemplate(Mockito.any(TemplateRequest.class)))
+//        Mockito.when(deleteTemplateUseCase.deleteTemplate(Mockito.any(Template.class)))
 //                .thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.MISSING_PARAMETER)));
 //        StepVerifier.create(handler.deleteTemplate(request))
 //                .assertNext(serverResponse -> {

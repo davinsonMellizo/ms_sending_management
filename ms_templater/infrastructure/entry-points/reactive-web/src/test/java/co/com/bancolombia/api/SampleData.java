@@ -2,14 +2,13 @@ package co.com.bancolombia.api;
 
 import co.com.bancolombia.api.dto.DeleteTemplaterDTO;
 import co.com.bancolombia.api.dto.TemplaterDTO;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.dto.UpdateTemplateResponse;
 
 public class SampleData {
 
-    public static TemplateRequest templaterRequest() {
-        return TemplateRequest.builder()
+    public static Template template() {
+        return Template.builder()
                 .idTemplate("01")
                 .messageType("Type")
                 .description("Firts template")
@@ -40,21 +39,10 @@ public class SampleData {
                 .build();
     }
 
-    public static TemplateResponse templateResponse() {
-        return TemplateResponse.builder()
-                .idTemplate("01")
-                .messageType("Type")
-                .messageSubject("Subject")
-                .messageBody("Body")
-                .plainText("Text")
-                .idConsumer("ConsumerID")
-                .build();
-    }
-
     public static UpdateTemplateResponse updateTemplateResponse() {
         return UpdateTemplateResponse.builder()
-                .before(templateResponse())
-                .current(templateResponse())
+                .before(template())
+                .current(template())
                 .build();
     }
 

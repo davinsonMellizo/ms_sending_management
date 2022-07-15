@@ -2,8 +2,7 @@ package co.com.bancolombia.usecase.createtemplate;
 
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.template.dto.TemplateRequest;
-import co.com.bancolombia.model.template.dto.TemplateResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -13,12 +12,12 @@ public class CreateTemplateUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<TemplateResponse> createTemplate(TemplateRequest templateRequest) {
-        return validateTemplate(templateRequest.getIdTemplate())
-                .switchIfEmpty(Mono.defer(() -> templateRepository.createTemplate(templateRequest)));
+    public Mono<Template> createTemplate(Template template) {
+        return validateTemplate(template.getIdTemplate())
+                .switchIfEmpty(Mono.defer(() -> templateRepository.createTemplate(template)));
     }
 
-    public Mono<TemplateResponse> validateTemplate(String idTemplate) {
+    public Mono<Template> validateTemplate(String idTemplate) {
         return templateRepository.getTemplate(idTemplate)
                 .filter(templateResponse -> !templateResponse.getIdTemplate().isEmpty())
                 .flatMap(templateResponse ->
