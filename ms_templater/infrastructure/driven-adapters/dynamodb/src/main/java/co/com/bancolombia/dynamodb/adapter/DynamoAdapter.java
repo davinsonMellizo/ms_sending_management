@@ -15,11 +15,12 @@ public class DynamoAdapter extends AdapterOperations<Template, Templater> implem
         super(client);
     }
 
-    @Override
-    public Mono<Template> createTemplate(Template template) {
-        return save(template)
-                .then(findById(template.getIdTemplate()));
-    }
+//    @Override
+//    public Mono<Template> saveTemplate(Template template) {
+//        return save(template)
+//                .then(getTemplate(template.getIdTemplate()));
+////                .then(findById(template.getIdTemplate()));
+//    }
 
     @Override
     public Mono<Template> getTemplate(String idTemplate) {
@@ -27,7 +28,7 @@ public class DynamoAdapter extends AdapterOperations<Template, Templater> implem
     }
 
     @Override
-    public Mono<Template> updateTemplate(Template template) {
+    public Mono<Template> saveTemplate(Template template) {
         return update(template)
                 .flatMap(this::templateGenerator);
     }

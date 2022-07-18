@@ -1,13 +1,9 @@
 package co.com.bancolombia.api;
 
-import co.com.bancolombia.Request;
 import co.com.bancolombia.api.commons.ErrorHandler;
 import co.com.bancolombia.api.commons.RequestValidator;
-import co.com.bancolombia.api.dto.DeleteTemplaterDTO;
-import co.com.bancolombia.api.dto.MessageDTO;
 import co.com.bancolombia.api.dto.TemplaterDTO;
 import co.com.bancolombia.api.utils.ResponseDTO;
-import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.createmessage.CreateMessageUseCase;
@@ -42,9 +38,9 @@ public class Handler extends GenericBaseHandler {
                 .doOnSuccess(validator::validateBody)
                 .flatMap(TemplaterDTO::toModel)
                 .flatMap(createTemplateUseCase::createTemplate)
-                .flatMap(templateResponse -> ServerResponse.status(HttpStatus.OK)
+                .flatMap(template -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
-                        .bodyValue(ResponseDTO.success(Constants.CREATE_MESSAGE, templateResponse, serverRequest)))
+                        .bodyValue(ResponseDTO.success(template, serverRequest)))
                 .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
                         .contentType(APPLICATION_JSON)
                         .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))
@@ -56,9 +52,9 @@ public class Handler extends GenericBaseHandler {
     protected Mono<ServerResponse> getTemplate(ServerRequest serverRequest) {
         return templaterDTOMono(serverRequest)
                 .flatMap(getTemplateUseCase::getTemplate)
-                .flatMap(resp -> ServerResponse.status(HttpStatus.OK)
+                .flatMap(template -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
-                        .bodyValue(ResponseDTO.getSuccess(resp, serverRequest)))
+                        .bodyValue(ResponseDTO.success(template, serverRequest)))
                 .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
                         .contentType(APPLICATION_JSON)
                         .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))
@@ -77,9 +73,9 @@ public class Handler extends GenericBaseHandler {
                 .doOnSuccess(validator::validateBody)
                 .flatMap(TemplaterDTO::toModel)
                 .flatMap(updateTemplateUseCase::updateTemplate)
-                .flatMap(responseMap -> ServerResponse.status(HttpStatus.OK)
+                .flatMap(response -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
-                        .bodyValue(ResponseDTO.success(Constants.UPDATE_MESSAGE, responseMap, serverRequest)))
+                        .bodyValue(ResponseDTO.success(response, serverRequest)))
                 .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
                         .contentType(APPLICATION_JSON)
                         .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))

@@ -19,7 +19,7 @@ public class UpdateTemplateUseCase {
                 .flatMap(response -> {
                     updateResponse.setBefore(response);
                     return templateRepository
-                            .updateTemplate(request.toBuilder().creationDate(response.getCreationDate()).build())
+                            .saveTemplate(request.toBuilder().creationDate(response.getCreationDate()).build())
                             .map(unused -> request.getIdTemplate());
 
                 })

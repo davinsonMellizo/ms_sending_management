@@ -14,7 +14,7 @@ public class CreateTemplateUseCase {
 
     public Mono<Template> createTemplate(Template template) {
         return validateTemplate(template.getIdTemplate())
-                .switchIfEmpty(Mono.defer(() -> templateRepository.createTemplate(template)));
+                .switchIfEmpty(Mono.defer(() -> templateRepository.saveTemplate(template)));
     }
 
     public Mono<Template> validateTemplate(String idTemplate) {

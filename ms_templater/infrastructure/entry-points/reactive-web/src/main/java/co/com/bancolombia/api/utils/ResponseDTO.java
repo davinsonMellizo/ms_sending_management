@@ -27,14 +27,7 @@ public class ResponseDTO<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T error;
 
-    public static <T> ResponseDTO success(String description, T object, ServerRequest request) {
-        return ResponseDTO.builder()
-                .meta(MetaDTO.build(object, request))
-                .data(ResponseDTO.builder().description(description).object(object).build())
-                .build();
-    }
-
-    public static <T> ResponseDTO getSuccess(T data, ServerRequest request) {
+    public static <T> ResponseDTO success(T data, ServerRequest request) {
         return ResponseDTO.builder()
                 .meta(MetaDTO.build(data, request))
                 .data(data)

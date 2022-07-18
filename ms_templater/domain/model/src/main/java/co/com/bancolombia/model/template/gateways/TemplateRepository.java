@@ -5,7 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface TemplateRepository {
     Mono<Template> getTemplate(String idTemplate);
-    Mono<Template> createTemplate(Template template);
-    Mono<Template> updateTemplate(Template template);
+    Mono<Template> saveTemplate(Template template);
     Mono<Template> deleteTemplate(Template template);
 }

@@ -28,7 +28,7 @@ class CreateTemplateUseCaseTest {
     @BeforeAll
     public void init() {
         MockitoAnnotations.openMocks(this);
-        Mockito.when(templateRepository.createTemplate(Mockito.any()))
+        Mockito.when(templateRepository.saveTemplate(Mockito.any()))
                 .thenReturn(Mono.just(SampleData.template()));
     }
 
