@@ -1,4 +1,5 @@
 package co.com.bancolombia.api.commons;
+
 import co.com.bancolombia.api.utils.ErrorDTO;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
@@ -22,5 +23,9 @@ public class ErrorHandler {
                 .detail(object.getException().getMessage())
                 .source("ms_templater")
                 .build();
+    }
+
+    private ErrorHandler() {
+        throw new IllegalStateException("Utility class");
     }
 }
