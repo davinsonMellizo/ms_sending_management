@@ -34,7 +34,7 @@ class GetTemplateUseCaseTest {
     void getTemplateSuccessfulTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
                 .thenReturn(Mono.just(SampleData.template()));
-        StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
+        StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.getRequest()))
                 .assertNext(templateResponses ->
                         Assertions.assertThat(templateResponses).isInstanceOf(Template.class))
                 .verifyComplete();
@@ -44,7 +44,7 @@ class GetTemplateUseCaseTest {
     void getTemplateErrorTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
                 .thenReturn(Mono.empty());
-        StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.testHeader()))
+        StepVerifier.create(getTemplateUseCase.getTemplate(SampleData.getRequest()))
                 .expectErrorMatches(throwable -> throwable instanceof BusinessException &&
                         ((BusinessException) throwable).getException()
                                 .equals(BusinessExceptionEnum.TEMPLATE_NOT_FOUND))

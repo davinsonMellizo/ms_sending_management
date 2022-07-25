@@ -34,7 +34,7 @@ class CreateMessageUseCaseTest {
     void createMessageSuccessfulTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
                 .thenReturn(Mono.just(SampleData.template()));
-        StepVerifier.create(createMessageUseCase.createMessage(SampleData.testHeader()))
+        StepVerifier.create(createMessageUseCase.createMessage(SampleData.messageRequest()))
                 .assertNext(templateResponses ->
                         Assertions.assertThat(templateResponses).isInstanceOf(MessageResponse.class))
                 .verifyComplete();
@@ -44,7 +44,7 @@ class CreateMessageUseCaseTest {
     void createMessageErrorTest() {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
                 .thenReturn(Mono.empty());
-        StepVerifier.create(createMessageUseCase.createMessage(SampleData.testHeader()))
+        StepVerifier.create(createMessageUseCase.createMessage(SampleData.messageRequest()))
                 .expectErrorMatches(throwable -> throwable instanceof BusinessException &&
                         ((BusinessException) throwable).getException()
                                 .equals(BusinessExceptionEnum.TEMPLATE_NOT_FOUND))

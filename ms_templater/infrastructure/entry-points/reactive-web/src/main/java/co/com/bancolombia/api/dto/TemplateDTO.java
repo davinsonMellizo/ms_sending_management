@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TemplaterDTO {
+public class TemplateDTO {
     @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 50, message = "Longitud maxima de 50 caracteres")
     private String idTemplate;
@@ -49,11 +50,13 @@ public class TemplaterDTO {
     @Size(min = 1, max = 10000, message = "Longitud maxima de 10000 caracteres")
     private String plainText;
 
+    @NotNull(message = "Campo obligatorio")
     @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
-    private String creationUser;
+    private String user;
 
-    @Size(min = 1, max = 20, message = "Longitud maxima de 20 caracteres")
-    private String modificationUser;
+    @NotNull(message = "Campo obligatorio")
+    @Pattern(regexp = "^[0-1]$", message = "valor debe ser 0 o 1")
+    private String status;
 
 
     public Mono<Template> toModel() {
@@ -67,10 +70,11 @@ public class TemplaterDTO {
                 .messageSubject(this.messageSubject)
                 .messageBody(this.messageBody)
                 .plainText(this.plainText)
-                .creationUser(this.creationUser)
+                .creationUser(this.user)
                 .creationDate(dateTime)
-                .modificationUser(this.modificationUser)
+                .modificationUser(this.user)
                 .modificationDate(dateTime)
+                .status(this.status)
                 .build());
     }
 }

@@ -2,7 +2,11 @@ package co.com.bancolombia.api;
 
 import co.com.bancolombia.api.commons.ErrorHandler;
 import co.com.bancolombia.api.commons.RequestValidator;
-import co.com.bancolombia.api.dto.TemplaterDTO;
+import co.com.bancolombia.api.dto.DeleteTemplateDTO;
+import co.com.bancolombia.api.dto.GetTemplateDTO;
+import co.com.bancolombia.api.dto.MessageDTO;
+import co.com.bancolombia.api.dto.TemplateDTO;
+import co.com.bancolombia.api.utils.Params;
 import co.com.bancolombia.api.utils.ResponseDTO;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
@@ -18,13 +22,11 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
-public class Handler extends GenericBaseHandler {
+public class Handler {
 
     private final CreateTemplateUseCase createTemplateUseCase;
     private final GetTemplateUseCase getTemplateUseCase;
@@ -34,9 +36,9 @@ public class Handler extends GenericBaseHandler {
     private final RequestValidator validator;
 
     protected Mono<ServerResponse> createTemplate(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(TemplaterDTO.class)
+        return serverRequest.bodyToMono(TemplateDTO.class)
                 .doOnSuccess(validator::validateBody)
-                .flatMap(TemplaterDTO::toModel)
+                .flatMap(TemplateDTO::toModel)
                 .flatMap(createTemplateUseCase::createTemplate)
                 .flatMap(template -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
@@ -50,7 +52,9 @@ public class Handler extends GenericBaseHandler {
     }
 
     protected Mono<ServerResponse> getTemplate(ServerRequest serverRequest) {
-        return templaterDTOMono(serverRequest)
+        return Params.getTemplateParams(serverRequest)
+                .doOnNext(validator::validateBody)
+                .flatMap(GetTemplateDTO::toModel)
                 .flatMap(getTemplateUseCase::getTemplate)
                 .flatMap(template -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
@@ -63,15 +67,10 @@ public class Handler extends GenericBaseHandler {
                         .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
     }
 
-    protected Mono<Map<String, String>> templaterDTOMono(ServerRequest serverRequest) {
-        return Mono.just(setHeaders(serverRequest))
-                .switchIfEmpty(Mono.empty());
-    }
-
     protected Mono<ServerResponse> updateTemplate(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(TemplaterDTO.class)
+        return serverRequest.bodyToMono(TemplateDTO.class)
                 .doOnSuccess(validator::validateBody)
-                .flatMap(TemplaterDTO::toModel)
+                .flatMap(TemplateDTO::toModel)
                 .flatMap(updateTemplateUseCase::updateTemplate)
                 .flatMap(response -> ServerResponse.status(HttpStatus.OK)
                         .contentType(APPLICATION_JSON)
@@ -84,39 +83,35 @@ public class Handler extends GenericBaseHandler {
                         .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
     }
 
-//    protected Mono<ServerResponse> deleteTemplate(ServerRequest serverRequest) {
-//        return serverRequest.bodyToMono(DeleteTemplaterDTO.class)
-//                .doOnSuccess(validator::validateBody)
-//                .flatMap(DeleteTemplaterDTO::toModel)
-//                .flatMap(deleteTemplateUseCase::deleteTemplate)
-//                .flatMap(responseMap -> ServerResponse.status(HttpStatus.OK)
-//                        .contentType(APPLICATION_JSON)
-//                        .bodyValue(ResponseDTO.success(Constants.DELETE_MESSAGE, responseMap,
-//                                serverRequest)))
-//                .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
-//                        .contentType(APPLICATION_JSON)
-//                        .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))
-//                .onErrorResume(BusinessException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
-//                        .contentType(APPLICATION_JSON)
-//                        .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
-//    }
+    protected Mono<ServerResponse> deleteTemplate(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(DeleteTemplateDTO.class)
+                .doOnSuccess(validator::validateBody)
+                .flatMap(DeleteTemplateDTO::toModel)
+                .flatMap(deleteTemplateUseCase::deleteTemplate)
+                .flatMap(response -> ServerResponse.status(HttpStatus.OK)
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(ResponseDTO.success(response, serverRequest)))
+                .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))
+                .onErrorResume(BusinessException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
+    }
 
-//    protected Mono<ServerResponse> createMessage(ServerRequest serverRequest) {
-//        return serverRequest.bodyToMono(MessageDTO.class)
-//                .doOnSuccess(validator::validateBody)
-//                .flatMap(MessageDTO::toModel)
-//                .map(templateRequest -> templateRequest.headers(setHeaders(serverRequest)))
-//                .map(Request::getHeaders)
-//                .flatMap(createMessageUseCase::createMessage)
-//                .flatMap(templateResponse -> ServerResponse.status(HttpStatus.OK)
-//                        .contentType(APPLICATION_JSON)
-//                        .bodyValue(ResponseDTO.success(Constants.CREATE_MESSAGE, templateResponse,
-//                                serverRequest)))
-//                .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
-//                        .contentType(APPLICATION_JSON)
-//                        .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))
-//                .onErrorResume(BusinessException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
-//                        .contentType(APPLICATION_JSON)
-//                        .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
-//    }
+    protected Mono<ServerResponse> createMessage(ServerRequest serverRequest) {
+        return Params.getMessageParams(serverRequest)
+                .doOnNext(validator::validateBody)
+                .flatMap(MessageDTO::toModel)
+                .flatMap(createMessageUseCase::createMessage)
+                .flatMap(message -> ServerResponse.status(HttpStatus.OK)
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(ResponseDTO.success(message, serverRequest)))
+                .onErrorResume(TechnicalException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(ResponseDTO.failed(ErrorHandler.technical(error), serverRequest)))
+                .onErrorResume(BusinessException.class, error -> ServerResponse.status(HttpStatus.CONFLICT)
+                        .contentType(APPLICATION_JSON)
+                        .bodyValue(ResponseDTO.failed(ErrorHandler.business(error), serverRequest)));
+    }
 }

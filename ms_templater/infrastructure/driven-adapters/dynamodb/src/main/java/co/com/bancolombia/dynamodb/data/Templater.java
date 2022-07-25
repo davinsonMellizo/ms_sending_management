@@ -21,6 +21,7 @@ public class Templater {
     private String creationDate;
     private String modificationUser;
     private String modificationDate;
+    private String status;
 
     @DynamoDbPartitionKey
     public String getIdTemplate() {

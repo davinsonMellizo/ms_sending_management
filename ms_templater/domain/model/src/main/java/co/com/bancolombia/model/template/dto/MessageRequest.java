@@ -1,6 +1,5 @@
 package co.com.bancolombia.model.template.dto;
 
-import co.com.bancolombia.Request;
 import co.com.bancolombia.commons.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,15 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Builder;
 
+import java.util.Map;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Builder(toBuilder = true)
 
-public class MessageRequest extends Request {
+public class MessageRequest {
     private String idTemplate;
-    private String messageValues;
+    private Map<String, String> messageValues;
 
     @Override
     public boolean equals(Object obj) {

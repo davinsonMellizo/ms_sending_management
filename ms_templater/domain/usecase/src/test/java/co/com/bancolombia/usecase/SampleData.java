@@ -1,9 +1,8 @@
 package co.com.bancolombia.usecase;
 
-import co.com.bancolombia.commons.constants.Constants;
+import co.com.bancolombia.model.template.dto.MessageRequest;
 import co.com.bancolombia.model.template.dto.Template;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SampleData {
@@ -40,11 +39,16 @@ public class SampleData {
                 .build();
     }
 
-    public static Map<String, String> testHeader() {
-        Map<String, String> testHeader = new HashMap<>();
-        testHeader.put(Constants.ID_TEMPLATE, "001");
-        testHeader.put(Constants.MESSAGE_TYPE, "Test");
-        testHeader.put(Constants.MESSAGE_SUBJECT, "Test");
-        return testHeader;
+    public static MessageRequest messageRequest() {
+        return MessageRequest.builder()
+                .idTemplate("001")
+                .messageValues(Map.of("name", "Test"))
+                .build();
+    }
+
+    public static Template getRequest() {
+        return Template.builder()
+                .idTemplate("001")
+                .build();
     }
 }

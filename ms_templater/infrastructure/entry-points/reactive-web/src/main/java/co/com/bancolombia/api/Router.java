@@ -25,8 +25,8 @@ public class Router {
         return (route(POST(apiProperties.getCreateTemplate()).and(accept(APPLICATION_JSON)), handler::createTemplate)
                 .andRoute(GET(apiProperties.getGetTemplate()).and(accept(APPLICATION_JSON)), handler::getTemplate)
                 .andRoute(PUT(apiProperties.getPutTemplate()).and(accept(APPLICATION_JSON)), handler::updateTemplate)
-//                .andRoute(PUT(apiProperties.getDeleteTemplate()).and(accept(MediaType.APPLICATION_JSON)),
-//                        handler::deleteTemplate)
+                .andRoute(PUT(apiProperties.getDeleteTemplate()).and(accept(APPLICATION_JSON)), handler::deleteTemplate)
+                .andRoute(GET(apiProperties.getCreateMessage()).and(accept(APPLICATION_JSON)), handler::createMessage)
         );
     }
 }

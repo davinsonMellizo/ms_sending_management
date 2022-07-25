@@ -1,5 +1,6 @@
 package co.com.bancolombia.usecase.updatetemplate;
 
+import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.template.dto.Template;
@@ -19,7 +20,8 @@ public class UpdateTemplateUseCase {
                 .flatMap(response -> {
                     updateResponse.setBefore(response);
                     return templateRepository
-                            .saveTemplate(request.toBuilder().creationDate(response.getCreationDate()).build())
+                            .saveTemplate(request.toBuilder().creationDate(response.getCreationDate())
+                                    .creationUser(response.getCreationUser()).build())
                             .map(unused -> request.getIdTemplate());
 
                 })

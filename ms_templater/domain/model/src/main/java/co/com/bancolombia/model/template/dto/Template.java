@@ -25,6 +25,7 @@ public class Template {
     private String creationDate;
     private String modificationUser;
     private String modificationDate;
+    private String status;
 
     @Override
     public boolean equals(Object obj) {

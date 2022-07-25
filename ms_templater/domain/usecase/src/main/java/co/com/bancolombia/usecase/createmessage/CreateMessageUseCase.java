@@ -3,7 +3,9 @@ package co.com.bancolombia.usecase.createmessage;
 import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.template.dto.MessageRequest;
 import co.com.bancolombia.model.template.dto.MessageResponse;
+import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.gateways.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -15,14 +17,30 @@ public class CreateMessageUseCase {
 
     private final TemplateRepository templateRepository;
 
-    public Mono<MessageResponse> createMessage(Map<String, String> header) {
-        return templateRepository.getTemplate(header.get(Constants.ID_TEMPLATE))
-                .map(templateResponse -> MessageResponse.builder()
-                        .idTemplate(templateResponse.getIdTemplate())
-                        .messageSubject(templateResponse.getMessageSubject())
-                        .messageBody("")
-                        .plainText("")
+    public Mono<MessageResponse> createMessage(MessageRequest messageRequest) {
+        return validateTemplate(messageRequest.getIdTemplate())
+                .filter(template -> template.getStatus().equals(Constants.ENABLED))
+                .flatMap(template -> replaceData(messageRequest.getMessageValues(), template))
+                .map(template -> MessageResponse.builder()
+                        .idTemplate(template.getIdTemplate())
+                        .messageSubject(template.getMessageSubject())
+                        .messageBody(template.getMessageBody())
+                        .plainText(template.getPlainText())
                         .build())
+                .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_DISABLED)));
+    }
+
+    private Mono<Template> replaceData(Map<String, String> data, Template template) {
+        data.forEach((s, s2) -> {
+            template.setMessageSubject(template.getMessageSubject().replace(s, s2));
+            template.setMessageBody(template.getMessageBody().replace(s, s2));
+            template.setPlainText(template.getPlainText().replace(s, s2));
+        });
+        return Mono.just(template);
+    }
+
+    public Mono<Template> validateTemplate(String idTemplate) {
+        return templateRepository.getTemplate(idTemplate)
                 .switchIfEmpty(Mono.error(new BusinessException(BusinessExceptionEnum.TEMPLATE_NOT_FOUND)));
     }
 }

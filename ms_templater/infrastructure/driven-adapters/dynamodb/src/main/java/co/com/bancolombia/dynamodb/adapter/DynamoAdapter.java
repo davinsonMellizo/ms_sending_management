@@ -46,6 +46,7 @@ public class DynamoAdapter extends AdapterOperations<Template, Templater> implem
                 .creationDate(templater.getCreationDate())
                 .modificationUser(templater.getModificationUser())
                 .modificationDate(templater.getModificationDate())
+                .status(templater.getStatus())
                 .build());
     }
 }

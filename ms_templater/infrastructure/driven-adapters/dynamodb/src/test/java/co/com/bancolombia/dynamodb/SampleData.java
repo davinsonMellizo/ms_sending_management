@@ -53,12 +53,4 @@ public class SampleData {
                 .idTemplate("001")
                 .build();
     }
-
-    public static Map<String, String> testHeader() {
-        Map<String, String> testHeader = new HashMap<>();
-        testHeader.put(Constants.ID_TEMPLATE, "001");
-        testHeader.put(Constants.MESSAGE_TYPE, "Test");
-        testHeader.put(Constants.MESSAGE_SUBJECT, "Test");
-        return testHeader;
-    }
 }
