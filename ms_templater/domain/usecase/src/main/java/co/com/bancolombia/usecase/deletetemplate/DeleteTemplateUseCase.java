@@ -1,5 +1,6 @@
 package co.com.bancolombia.usecase.deletetemplate;
 
+import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.template.dto.Template;
@@ -12,7 +13,6 @@ import reactor.core.publisher.Mono;
 public class DeleteTemplateUseCase {
 
     private final TemplateRepository templateRepository;
-    private final static String ZERO = "0";
 
     public Mono<UpdateTemplateResponse> deleteTemplate(Template request) {
         UpdateTemplateResponse updateResponse = UpdateTemplateResponse.builder().build();
@@ -22,7 +22,7 @@ public class DeleteTemplateUseCase {
                     return templateRepository
                             .saveTemplate(response.toBuilder().modificationDate(request.getModificationDate())
                                     .modificationUser(request.getModificationUser())
-                                    .status(ZERO).build())
+                                    .status(Constants.DISABLED).build())
                             .map(unused -> request.getIdTemplate());
 
                 })

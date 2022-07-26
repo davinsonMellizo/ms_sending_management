@@ -7,6 +7,7 @@ public class Constants {
     public static final int ZERO = 0;
 
     public static final String ENABLED = "1";
+    public static final String DISABLED = "0";
 
     private Constants() {
         throw new IllegalStateException("Utility class");

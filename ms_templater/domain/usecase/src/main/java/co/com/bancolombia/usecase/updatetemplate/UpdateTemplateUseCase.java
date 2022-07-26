@@ -1,6 +1,5 @@
 package co.com.bancolombia.usecase.updatetemplate;
 
-import co.com.bancolombia.commons.constants.Constants;
 import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.template.dto.Template;
