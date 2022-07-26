@@ -5,7 +5,12 @@ import co.com.bancolombia.api.dto.TemplateDTO;
 import co.com.bancolombia.model.template.dto.MessageResponse;
 import co.com.bancolombia.model.template.dto.Template;
 import co.com.bancolombia.model.template.dto.UpdateTemplateResponse;
+import org.json.JSONObject;
 import org.springframework.mock.web.reactive.function.server.MockServerRequest;
+import reactor.core.publisher.Mono;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SampleData {
 
@@ -72,9 +77,12 @@ public class SampleData {
     }
 
     public static MockServerRequest createMessageRequest() {
+        Map<String, String> data = new HashMap<>();
+        data.put("name", "test");
+        JSONObject obj = new JSONObject();
         return MockServerRequest.builder()
                 .queryParam("idTemplate", "001")
-                .build();
+                .body(Mono.just(data));
     }
 
 }

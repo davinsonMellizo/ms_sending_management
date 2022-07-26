@@ -3,6 +3,7 @@ package co.com.bancolombia.usecase;
 import co.com.bancolombia.model.template.dto.MessageRequest;
 import co.com.bancolombia.model.template.dto.Template;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class SampleData {
@@ -17,6 +18,7 @@ public class SampleData {
                 .plainText("Message")
                 .creationUser("User ID_TEMPLATE")
                 .idConsumer("Consumer ID_TEMPLATE")
+                .status("1")
                 .build();
     }
 
@@ -40,9 +42,12 @@ public class SampleData {
     }
 
     public static MessageRequest messageRequest() {
+        Map<String, String> data = new HashMap<>();
+        data.put("name", "test");
+        data.put("balance", "test");
         return MessageRequest.builder()
                 .idTemplate("001")
-                .messageValues(Map.of("name", "Test"))
+                .messageValues(data)
                 .build();
     }
 

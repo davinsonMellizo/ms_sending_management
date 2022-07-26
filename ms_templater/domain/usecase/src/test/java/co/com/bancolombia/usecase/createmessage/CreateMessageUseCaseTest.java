@@ -35,8 +35,7 @@ class CreateMessageUseCaseTest {
         Mockito.when(templateRepository.getTemplate(Mockito.anyString()))
                 .thenReturn(Mono.just(SampleData.template()));
         StepVerifier.create(createMessageUseCase.createMessage(SampleData.messageRequest()))
-                .assertNext(templateResponses ->
-                        Assertions.assertThat(templateResponses).isInstanceOf(MessageResponse.class))
+                .assertNext(message -> Assertions.assertThat(message).isInstanceOf(MessageResponse.class))
                 .verifyComplete();
     }
 
