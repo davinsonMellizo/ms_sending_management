@@ -1,6 +1,5 @@
 package co.com.bancolombia.model.template.dto;
 
-import co.com.bancolombia.commons.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
