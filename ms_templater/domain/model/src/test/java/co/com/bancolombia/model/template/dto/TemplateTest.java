@@ -19,9 +19,4 @@ class TemplateTest {
         assertThat(template).isNotEqualTo(Template.builder().build());
         assertThat(template.hashCode()).isGreaterThan(Constants.PRIME);
     }
-
-    @Test
-    void emptyTemplateRequestTest() {
-        assertThat(Template.builder().build().hashCode()).isEqualTo(Constants.PRIME);
-    }
 }

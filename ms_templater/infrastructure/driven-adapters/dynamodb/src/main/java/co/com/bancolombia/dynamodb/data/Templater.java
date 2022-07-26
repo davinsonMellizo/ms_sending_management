@@ -15,6 +15,7 @@ public class Templater extends Template {
     private String idTemplate;
 
     @DynamoDbPartitionKey
+    @Override
     public String getIdTemplate() {
         return idTemplate;
     }
