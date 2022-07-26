@@ -16,8 +16,4 @@ class EnumsTest {
                 .isEqualTo(TechnicalExceptionEnum.TECHNICAL_SAVE.getCode());
     }
 
-    @Test
-    void businessExceptionEnumTest() {
-        assertThat(BusinessExceptionEnum.TEMPLATE_NOT_FOUND).isInstanceOf(Enum.class);
-    }
 }
