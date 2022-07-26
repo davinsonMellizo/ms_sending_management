@@ -26,20 +26,4 @@ public class Template {
     private String modificationUser;
     private String modificationDate;
     private String status;
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
-        Template fobj = (Template) obj;
-        return idTemplate.equals(fobj.getPlainText());
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = Constants.PRIME;
-        int result = Constants.ONE;
-        return prime * result + ((idTemplate == null) ? Constants.ZERO : idTemplate.hashCode());
-    }
 }
