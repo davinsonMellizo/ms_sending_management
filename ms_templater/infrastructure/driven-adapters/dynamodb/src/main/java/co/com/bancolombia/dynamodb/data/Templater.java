@@ -12,11 +12,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 @DynamoDbTableAdapter(tableName = "alertas-local-nu0154001-templater-table")
 @EqualsAndHashCode(callSuper=false)
 public class Templater extends Template {
-    private String idTemplate;
 
     @DynamoDbPartitionKey
     @Override
     public String getIdTemplate() {
-        return idTemplate;
+        return super.getIdTemplate();
     }
 }
