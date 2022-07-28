@@ -12,6 +12,7 @@ public class ErrorDTO {
     private String code;
     private String type;
     private String title;
+    private String reason;
     private String detail;
     private String source;
 }

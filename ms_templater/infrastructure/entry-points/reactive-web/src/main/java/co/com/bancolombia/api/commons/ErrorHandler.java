@@ -10,6 +10,7 @@ public class ErrorHandler {
                 .code(object.getException().getCode())
                 .type("Business")
                 .title(object.getException().toString())
+                .reason(object.getException().getMessage())
                 .detail(object.getException().getMessage())
                 .source("ms_templater")
                 .build();
@@ -20,7 +21,8 @@ public class ErrorHandler {
                 .code(object.getException().getCode())
                 .type("Technical")
                 .title(object.getException().toString())
-                .detail(object.getException().getMessage())
+                .reason(object.getException().getMessage())
+                .detail(object.getMessage())
                 .source("ms_templater")
                 .build();
     }
