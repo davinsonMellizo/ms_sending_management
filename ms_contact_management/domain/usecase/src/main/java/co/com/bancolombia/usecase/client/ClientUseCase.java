@@ -89,6 +89,7 @@ public class ClientUseCase {
                 .flatMapMany(Flux::fromIterable)
                 .flatMap(contact -> contactUseCase.saveContact(contact, voucher))
                 .doOnNext(response -> responseCreate.getActual().getContactData().add(response))
+                .last()
                 .then(sendCreateToIseries(enrol,voucher,responseCreate,isIseries));
     }
 

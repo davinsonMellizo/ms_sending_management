@@ -1,5 +1,5 @@
 server:
-  port: "${SERVER_PORT}"
+  port: 8080
   servlet:
     encoding:
       charset: "UTF-8"
@@ -8,48 +8,45 @@ springdoc:
   version: 1
 spring:
   application:
-    name: "${APPLICATION_NAME}"
+    name: contact_management
   devtools:
     add-properties: false
   jackson:
     default-property-inclusion: "NON_NULL"
-  profiles:
-    active: ${SPRING_PROFILE_ACTIVE:local}
   webflux:
-    base-path: "${PATH_BASE}"
+    base-path: /api/v1/contact-management
   logging:
     level:
-      root: "${LOG4J_LEVEL}"
+      root: INFO
       reactor:
         netty: false
 
 adapters:
   secrets-manager:
-    secret-rds: "${SECRET-RDS}"
-    secret-rabbit: "${SECRET-RABBIT}"
-    secret-retrieve: "${SECRET-RETRIEVE}"
-    cache-size: "${CACHE_SECRETS_SIZE}"
-    cache-time: "${CACHE_SECRETS_SECONDS}"
+    secret-rds: alertas-local-secretrds-CNX
+    secret-rabbit: alertas-local-secretrabbit-CNX
+    cache-size: 300
+    cache-time: 2
     endpoint: "http://localhost:4566"
   entries:
     reactive-web:
-      path-base: "${PATH_BASE}"
-      contact: "${CONTACT}"
-      client: "${CLIENT}"
+      path-base: /api/v1/contact-management
+      contact: /contact
+      client: /client
   rest-consumer:
     timeout: 1000
     resources:
-      retrieveInfo: "${RETRIEVE}"
+      retrieveInfo: https://internal-apigateway-dev.bancolombia.corp/int/development/v1/business-support/document-management/document-services/customers/actions/retrieve/information
 
 cloud:
   aws:
     rds:
       postgresql:
         pool:
-          initial: "${POSTGRESQL_POOL_INITIAL:10}"
-          max: "${POSTGRESQL_POOL_MAX:10}"
-        schema: "${POSTGRESQL_SCHEMA}"
-        hostRead: "${HOST_RDS_READ}"
+          initial: 10
+          max: 10
+        schema: schalertd
+        hostRead: localhost
 management:
   health:
     probes:
@@ -75,5 +72,8 @@ app.async.retryDelay: 1000
 app.async.maxRetries: 1
 
 d2b:
+  aws:
+    secrets-manager:
+      endpoint: "http://localhost:4566"
   secrets:
-    apic: "${SECRET-RETRIEVE}"
+    apic: "nu0154001-alertas-local-dev-iseries-retrieve"

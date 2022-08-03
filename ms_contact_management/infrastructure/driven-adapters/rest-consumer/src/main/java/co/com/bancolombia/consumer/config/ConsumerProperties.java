@@ -16,15 +16,10 @@ public class ConsumerProperties {
     private int timeout;
     private Resources resources;
 
-    private String clientId;
-    private String clientSecret;
-    private String messageId;
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Resources {
-        private String basicKit;
         private String retrieveInfo;
     }
 }

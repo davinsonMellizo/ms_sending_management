@@ -1,0 +1,29 @@
+{
+  "channel": [
+    {
+      "connectionManagement": {
+        "sharingConversations": 1,
+        "clientWeight": 50,
+        "affinity": "none",
+        "defaultReconnect": "yes",
+        "disconnectInterval": 6000,
+        "heartbeatInterval": 600,
+        "keepAliveInterval": -1
+      },
+      "general": {
+        "description": "QM1"
+      },
+      "name": "DEV.ADMIN.SVRCONN",
+      "clientConnection": {
+        "connection": [
+          {
+            "host": "localhost",
+            "port": 1414
+          }
+        ],
+        "queueManager": "QM1"
+      },
+      "type": "clientConnection"
+    }
+  ]
+}

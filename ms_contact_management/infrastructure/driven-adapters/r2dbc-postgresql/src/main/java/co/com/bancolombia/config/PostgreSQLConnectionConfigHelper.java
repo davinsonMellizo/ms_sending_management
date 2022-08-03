@@ -1,8 +1,7 @@
 package co.com.bancolombia.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.log.LoggerBuilder;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import io.r2dbc.spi.ConnectionFactoryOptions;
 import io.r2dbc.spi.Option;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +16,16 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @RequiredArgsConstructor
 public class PostgreSQLConnectionConfigHelper {
 
-    private final SecretsManager secretsManager;
-    private final SecretsNameStandard secretsNameStandard;
+    private final SyncSecretVault syncSecretVault;
 
     private final LoggerBuilder logger;
+    @Value("${adapters.secrets-manager.secret-rds}")
+    private String secretName;
 
 
 
     private PostgresqlConnectionProperties postgresProperties() {
-        return secretsNameStandard.secretForPostgres()
-                .flatMap(secretName -> secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
-                .block();
+        return syncSecretVault.getSecret(secretName, PostgresqlConnectionProperties.class);
     }
 
     @Bean
@@ -54,7 +52,6 @@ public class PostgreSQLConnectionConfigHelper {
                                                                        @Value("${cloud.aws.rds.postgresql.hostRead}") String hostRead,
                                                                        @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
         PostgresqlConnectionProperties properties =  postgresProperties();
-        logger.info("data secret rds:"+properties);
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)
                 .option(DRIVER,"pool")

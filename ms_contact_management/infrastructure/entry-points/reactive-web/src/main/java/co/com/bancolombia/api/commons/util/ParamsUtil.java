@@ -23,12 +23,16 @@ public class ParamsUtil {
                 .build());
     }
 
+    public static String getConsumerCode(ServerRequest request) {
+        return getHeader(request, CONSUMER_CODE);
+    }
+
     public static String getHeader(ServerRequest request, String header) {
         return ofEmpty(request.headers().firstHeader(header)).orElse("");
     }
 
     public String getConsumer(ServerRequest request) {
-        return getHeader(request, CONSUMER);
+        return getHeader(request, CONSUMER_CODE);
     }
 
 }

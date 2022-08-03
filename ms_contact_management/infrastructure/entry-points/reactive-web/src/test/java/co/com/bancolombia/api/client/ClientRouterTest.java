@@ -4,6 +4,7 @@ import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegrationTest;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.dto.IdentificationDTO;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.api.services.client.ClientHandler;
 import co.com.bancolombia.api.services.client.ClientRouter;
@@ -75,8 +76,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     public void inactivateClient() {
         when(useCase.inactivateClient(any())).thenReturn(Mono.just(responseUpdateClient));
         final WebTestClient.ResponseSpec spec = webTestClient.put().uri(properties.getClient() + "/inactive")
-                .header("document-number", "1061772353")
-                .header("document-type", "0")
+                .bodyValue(IdentificationDTO.builder().documentNumber(1L).documentType("CC").build())
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).inactivateClient(any());

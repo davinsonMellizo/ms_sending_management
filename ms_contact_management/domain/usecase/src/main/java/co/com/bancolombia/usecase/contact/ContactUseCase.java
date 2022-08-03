@@ -186,6 +186,7 @@ public class ContactUseCase {
                 .map(data -> contact.toBuilder()
                         .stateContact(Integer.toString(data.getT1().getId()))
                         .contactWay(Integer.toString(data.getT2().getId()))
+                        .contactWayName(data.getT2().getCode())
                         .previous(false)
                         .segment(data.getT3().getSegment())
                         .build())

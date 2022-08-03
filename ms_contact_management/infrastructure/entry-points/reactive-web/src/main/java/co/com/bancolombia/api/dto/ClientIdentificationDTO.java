@@ -17,14 +17,16 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Data
 @Builder(toBuilder = true)
-public class IdentificationDTO {
+public class ClientIdentificationDTO {
 
     @NotNull(message = "{constraint.not_null}")
     @Size(min = 1, max = 4, message = "{constraint.size}")
+    @JsonProperty("type")
     private String documentType;
     @Max(value = 999999999999999L, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
+    @JsonProperty("number")
     private Long documentNumber;
 
     public Mono<Client> toClient() {

@@ -18,8 +18,7 @@ public class FunctionalAdapterUseCase {
     }
 
     public Mono<Void> sendTransactionToRabbit(Transaction transaction) {
-        return commandGateway.sendTransaction(transaction)
-                .then(Mono.empty());
+        return commandGateway.sendTransaction(transaction);
     }
 
 }

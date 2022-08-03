@@ -23,7 +23,7 @@ public class ResponseContactsDTO {
         this.customer.setStatus(responseContacts.getStatus());
         this.customer.setPreference(responseContacts.getPreference());
         this.customer.setDelegate(responseContacts.getDelegate());
-        this.customer.setIdentification(IdentificationDTO.builder()
+        this.customer.setIdentification(ClientIdentificationDTO.builder()
                 .documentNumber(responseContacts.getDocumentNumber())
                 .documentType(responseContacts.getDocumentType()).build());
         this.customer.setTraceability(ResponseTraceabilityDTO.builder()
@@ -42,7 +42,7 @@ public class ResponseContactsDTO {
 @Builder(toBuilder = true)
 class ResponseCustomerDTO {
 
-    private IdentificationDTO identification;
+    private ClientIdentificationDTO identification;
     private ResponseTraceabilityDTO traceability;
     private String status;
     private String mdmKey;

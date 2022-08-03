@@ -1,67 +1,33 @@
 package co.com.bancolombia.consumer.config;
 
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import co.com.bancolombia.d2b.webclient.D2BWebClientFactory;
+import co.com.bancolombia.d2b.webclient.model.WebClientRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.client.reactive.ClientHttpConnector;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.SSLException;
+import java.util.HashMap;
 
-import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
 public class RestConsumerProperties {
-    @Bean
-    @Profile({"dev", "qa", "pdn"})
-    public WebClient webClientConfig(final ConsumerProperties consumerProperties) {
-        return WebClient.builder()
-                .clientConnector(getClientHttpConnector(consumerProperties.getTimeout()))
-                .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
-                .build();
-    }
 
-    private ClientHttpConnector getClientHttpConnector(int timeout) {
-        return new ReactorClientHttpConnector(HttpClient.create()
-                .compress(true)
-                .keepAlive(true)
-                .option(CONNECT_TIMEOUT_MILLIS, timeout)
+    @Bean
+    public WebClient webClientConfig(D2BWebClientFactory d2bWebClientFactory,
+                                     ExchangeFilterFunction apicCredentialsExchangeFunction) {
+        var header = new HashMap<String, String>();
+        header.put(CONTENT_TYPE, APPLICATION_JSON_VALUE);
+        header.put(ACCEPT, APPLICATION_JSON_VALUE);
+        return d2bWebClientFactory.createWebClientFor(
+                WebClientRequest.builder()
+                        .defaultStaticHeaders(header)
+                        .exchangeFilterFunction(apicCredentialsExchangeFunction)
+                        .build()
         );
-    }
-
-    @Bean
-    @Profile("local")
-    public WebClient webClientConfigLocal(final ConsumerProperties consumerProperties) {
-        return WebClient.builder()
-                .clientConnector(getClientHttpConnectorInsecure(consumerProperties.getTimeout()))
-                .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
-                .build();
-    }
-
-    private ClientHttpConnector getClientHttpConnectorInsecure(int timeout) {
-        try {
-            SslContext sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
-                    .build();
-
-            return new ReactorClientHttpConnector(HttpClient.create()
-                    .secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
-                    .compress(true)
-                    .keepAlive(true)
-                    .option(CONNECT_TIMEOUT_MILLIS, timeout)
-            );
-        } catch (SSLException e) {
-            return null;
-        }
     }
 
 }

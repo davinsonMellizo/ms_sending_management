@@ -15,13 +15,12 @@ import javax.validation.constraints.Size;
 @Builder(toBuilder = true)
 public class ClientDTO {
 
-    private IdentificationDTO identification;
+    private ClientIdentificationDTO identification;
     private String keyMdm;
     @NotNull(message = "{constraint.not_null}")
     @Size(max = 10, message = "{constraint.size}")
     @JsonProperty("status")
     private String stateClient;
-    private Integer preference;
     private Boolean delegate;
     private TraceabilityDTO traceability;
 }

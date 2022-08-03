@@ -1,23 +1,23 @@
 package co.com.bancolombia.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.log.LoggerBuilder;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PostgreSQLConnectionConfigHelperTest {
 
-    private static final String secretName = "secret-example";
     public static final String host = "example.com";
     public static final String database = "database-name";
     public static final String schema = "schema";
@@ -31,10 +31,7 @@ public class PostgreSQLConnectionConfigHelperTest {
     public final PostgresqlConnectionProperties properties = new PostgresqlConnectionProperties();
 
     @Mock
-    private SecretsNameStandard secretsNameStandard;
-
-    @Mock
-    private SecretsManager secretsManager;
+    private SyncSecretVault secretsManager;
     @Mock
     private LoggerBuilder logger;
 
@@ -46,19 +43,16 @@ public class PostgreSQLConnectionConfigHelperTest {
         properties.setUsername(username);
         properties.setPassword(password);
         properties.setPort(port);
-        when(secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class)).thenReturn(Mono.just(properties));
-
+        when(secretsManager.getSecret(any(), any())).thenReturn(properties);
     }
 
     @Test
-    void getConnectionReadConfig() {
-        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+    void getConnectionReadConfig() throws SecretException {
         assertNotNull(helper.buildConnectionReaderConfiguration("schema","host", 1));
     }
 
     @Test
-    void getConnectionWriterConfig() {
-        when(secretsNameStandard.secretForPostgres()).thenReturn(Mono.just(secretName));
+    void getConnectionWriterConfig() throws SecretException {
         assertNotNull(helper.buildConnectionWriterConfiguration("schema",1));
     }
 

@@ -32,27 +32,31 @@ public class ListenerMQ implements MessageListener {
     @SneakyThrows
     @Override
     public void onMessage(Message message) {
-        useCase.sendTransactionToRabbit(getMessage(message))
-                .onErrorResume(e -> discard(e, message))
-                .thenReturn(message.getBody(String.class) + LocalDateTime.now())
+        loggerBuilder.info("sistema");
+        getMessage(message)
+                .flatMap(useCase::sendTransactionToRabbit)
+                .doOnError(e -> discard(e, message))
+                .thenReturn("final del mensaje "+message.getBody(String.class) + LocalDateTime.now())
                 .doOnNext(loggerBuilder::info)
                 .subscribe();
     }
 
-
-    private Transaction getMessage(Message message) {
+    private Mono<Transaction> getMessage(Message message) {
         try {
-            return Transaction.builder()
-                    .payload(message.getBody(String.class).substring(META_DATA))
-                    .correlationID(message.getJMSCorrelationID())
-                    .build();
+            return Mono.just(message.getBody(String.class))
+                    .filter(payload -> payload.length()>META_DATA)
+                    .map(payload -> payload.substring(META_DATA))
+                    .map(payload -> Transaction.builder()
+                            .payload(payload)
+                            .build());
         } catch (JMSException e) {
-            return null;
+            return Mono.error(e);
         }
+
     }
 
     private Mono<Void> discard(Throwable error, Message message) {
-        loggerBuilder.info("Discard message by error");
+        loggerBuilder.info("descartar");
         final boolean isRetry = error instanceof TechnicalException
                 && ((TechnicalException) error).getException().isRetry();
 

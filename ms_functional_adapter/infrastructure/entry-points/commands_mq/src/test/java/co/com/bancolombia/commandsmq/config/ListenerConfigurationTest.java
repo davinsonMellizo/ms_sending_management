@@ -72,7 +72,6 @@ class ListenerConfigurationTest {
 
     @Test
     void onMessageTest() throws JMSException {
-        when(message.getJMSCorrelationID()).thenReturn("123asd");
         when(message.getBody(any())).thenReturn(payload);
         when(useCase.sendTransactionToRabbit(any())).thenReturn(Mono.empty());
         try {
@@ -84,7 +83,6 @@ class ListenerConfigurationTest {
 
     @Test
     void onMessageErrorTest() throws JMSException {
-        when(message.getJMSCorrelationID()).thenReturn("123asd");
         when(message.getBody(any())).thenReturn(payload);
         when(useCase.sendTransactionToRabbit(any())).thenReturn(Mono.error(new TechnicalException(TECHNICAL_JMS_ERROR)));
         try {
@@ -96,7 +94,6 @@ class ListenerConfigurationTest {
 
     @Test
     void onMessageTestWithError() throws JMSException {
-        when(message.getJMSCorrelationID()).thenReturn("123asd");
         when(message.getBody(any())).thenReturn(payload);
         when(useCase.sendTransactionToRabbit(any())).thenReturn(Mono.empty());
         try {

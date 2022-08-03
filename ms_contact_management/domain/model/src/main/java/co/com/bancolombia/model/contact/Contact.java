@@ -15,6 +15,7 @@ public class Contact {
     private Integer id;
     private String segment;
     private String contactWay;
+    private String contactWayName;
     private Long documentNumber;
     private String documentType;
     private String value;

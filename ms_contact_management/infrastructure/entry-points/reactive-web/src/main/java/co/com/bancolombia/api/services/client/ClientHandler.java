@@ -4,7 +4,7 @@ import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.api.dto.EnrolDTO;
-import co.com.bancolombia.api.header.ClientHeader;
+import co.com.bancolombia.api.dto.IdentificationDTO;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.commons.enums.Header;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
@@ -16,7 +16,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADERS_MISSING_ERROR;
 import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
 
 @Component
@@ -27,10 +26,11 @@ public class ClientHandler {
     private final EnrolMapper enrolMapper;
 
     public Mono<ServerResponse> inactivateClient(ServerRequest serverRequest) {
-        return ParamsUtil.getClientHeaders(serverRequest)
-                .switchIfEmpty(Mono.error(new TechnicalException(HEADERS_MISSING_ERROR)))
+        return serverRequest.bodyToMono(IdentificationDTO.class)
+                .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObjectHeaders)
-                .flatMap(ClientHeader::toModel)
+                .flatMap(IdentificationDTO::toClient)
+                .map(client -> client.toBuilder().enrollmentOrigin(ParamsUtil.getConsumerCode(serverRequest)).build())
                 .flatMap(clientUseCase::inactivateClient)
                 .flatMap(ResponseUtil::responseOk);
     }

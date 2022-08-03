@@ -5,14 +5,10 @@ import co.com.bancolombia.commons.enums.State;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestConsumer;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
-import co.com.bancolombia.model.Request;
 import co.com.bancolombia.model.client.Client;
-import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.ResponseContacts;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -38,8 +34,6 @@ public class ClientAdapter implements ClientGateway {
 
     private final ConsumerProperties properties;
     private final RestConsumer<RetrieveRequest, Response> restConsumerIs;
-    private final SecretsManager secretsManager;
-    private final SecretsNameStandard secretsNameStandard;
     private static final Integer NOT_FOUNT = 404;
     private static final Integer UNAUTHORIZED_CODE = 401;
 
@@ -48,11 +42,7 @@ public class ClientAdapter implements ClientGateway {
         var header = new HashMap<String,String>();
         header.put("message-id", UUID.randomUUID().toString());
 
-        return secretsNameStandard.secretForRetrieve()
-                .flatMap(secretsName -> secretsManager.getSecret(secretsName, SecretRetrieve.class))
-                .doOnNext(secret -> header.put("x-ibm-client-id", secret.getClientId()))
-                .doOnNext(secret -> header.put("x-ibm-client-secret", secret.getClientSecret()))
-                .map(s -> RetrieveRequest.builder().headers(header)
+        return Mono.just(RetrieveRequest.builder().headers(header)
                         .data(DataRequest.builder().customerIdentification(CustomerIdentification
                                 .builder()
                                 .documentNumber(String.valueOf(client.getDocumentNumber()))

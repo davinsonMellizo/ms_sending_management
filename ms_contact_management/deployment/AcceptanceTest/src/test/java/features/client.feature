@@ -21,6 +21,14 @@ Feature: CRUD client
     Then print result.value
     And match $.idResponse == '120'
 
+  Scenario: Successful case Inactive client
+    * def documentNumber = result.value
+    * url urlClient + "/inactive"
+    Given request read("../data/identification.json")
+    When method PUT
+    Then status 200
+    Then print result.value
+    And match $.idResponse == '120'
 
   Scenario: Error case Update Client
     * def documentNumber = "1000000010"

@@ -1,27 +1,20 @@
 package co.com.bancolombia.rabbitmq.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class RabbitMQConfigHelperTest {
-    public static final String SECRET = "any-secret-dev";
-
     @Mock
-    private SecretsManager secretsManager;
-    @Mock
-    private SecretsNameStandard secretsNameStandard;
+    private SyncSecretVault secretsManager;
 
     @InjectMocks
     private RabbitMQConfigHelper rabbitMQConfigHelper;
@@ -33,8 +26,7 @@ public class RabbitMQConfigHelperTest {
 
     @Test
     public void connectionRabbitWhenSecretExistTest() {
-        when(secretsManager.getSecret(anyString(), any())).thenReturn(Mono.just(properties()));
-        when(secretsNameStandard.secretForRabbitMQ()).thenReturn(Mono.just("name"));
+        when(secretsManager.getSecret(any(), any())).thenReturn(properties());
         assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
     }
 

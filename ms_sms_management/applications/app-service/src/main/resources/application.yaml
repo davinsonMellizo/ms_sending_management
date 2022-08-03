@@ -62,10 +62,10 @@ adapters:
       endpointMasivSms: https://api-sms.masivapp.com/send-message
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
-      #endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
-      endpointInalambriaSms: https://restcert.inalambria.com/mtmessage
-      endpointInalambriaToken: https://restcert.inalambria.com/token/
-      #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
+      endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
+      #endpointInalambriaSms: https://restcert.inalambria.com/mtmessage
+      #endpointInalambriaToken: https://restcert.inalambria.com/token/
+      endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
   secrets-manager:
     secret-rabbit: ${SECRET-RABBIT}
     #secret-inalambria: ${SECRET-INALAMBRIA}

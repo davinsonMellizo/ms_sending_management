@@ -3,19 +3,13 @@ package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestConsumer;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
-import co.com.bancolombia.log.LoggerBuilder;
-import co.com.bancolombia.model.Request;
+import co.com.bancolombia.d2b.model.secret.AsyncSecretVault;
 import co.com.bancolombia.model.client.Client;
-import co.com.bancolombia.model.client.ResponseClient;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,7 +17,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UNAUTHORIZED;
@@ -40,9 +33,7 @@ public class ClientAdapterTest {
     @Mock
     private RestConsumer<RetrieveRequest, Response> restConsumerIs;
     @Mock
-    private SecretsManager secretsManager;
-    @Mock
-    private SecretsNameStandard secretsName;
+    private AsyncSecretVault secretsManager;
     @Mock
     private ConsumerProperties properties;
     private final ObjectMapper mapper = new ObjectMapper();
@@ -54,13 +45,11 @@ public class ClientAdapterTest {
         client.setDocumentType("0");
         client.setEnrollmentOrigin("ALM");
         client.setDocumentNumber(1061772353L);
-        when(secretsName.secretForRetrieve()).thenReturn(Mono.just("secret"));
-        when(secretsManager.getSecret(anyString(), any())).thenReturn(Mono.just(new SecretRetrieve("","")));
     }
 
     @Test
     void retrieveAlertInformationTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost","localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
         client.setDocumentType("CC");
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
@@ -72,7 +61,7 @@ public class ClientAdapterTest {
     }
     @Test
     void retrieveErrorCertTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost","localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());
@@ -82,7 +71,7 @@ public class ClientAdapterTest {
     }
     @Test
     void retrieveErrorNotFountCertTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost","localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());
@@ -92,7 +81,7 @@ public class ClientAdapterTest {
     }
     @Test
     void retrieveErrorUnauthorizedTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost","localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());
@@ -102,7 +91,7 @@ public class ClientAdapterTest {
     }
     @Test
     void retrieveErrorAnyTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost","localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());

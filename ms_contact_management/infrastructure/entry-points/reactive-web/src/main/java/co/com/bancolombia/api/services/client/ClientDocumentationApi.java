@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.services.client;
 
 import co.com.bancolombia.api.dto.EnrolDTO;
+import co.com.bancolombia.api.dto.IdentificationDTO;
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.client.ResponseUpdateClient;
 import co.com.bancolombia.model.error.Error;
@@ -8,8 +9,7 @@ import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
 
-import static co.com.bancolombia.commons.enums.Header.DOCUMENT_NUMBER;
-import static co.com.bancolombia.commons.enums.Header.DOCUMENT_TYPE;
+import static co.com.bancolombia.commons.enums.Header.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
@@ -22,6 +22,7 @@ public class ClientDocumentationApi {
     private final String SUCCESSFUL = "successful";
     private final String STATUS_500 = "500";
     private final String STATUS_200 = "200";
+    private final String CONSUMER_CODE_DES = "Consumer Code";
     private final String DOCUMENT_TYPE_DES = "Client Document Type";
     private final String DOCUMENT_NUMBER_DES = "Client Document Number";
 
@@ -55,8 +56,9 @@ public class ClientDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("inactiveClient").summary("Inactive Client")
                 .description("Inactive Client by number and type document").tags(new String[]{TAG})
-                .parameter(createHeader(Long.class, DOCUMENT_NUMBER, DOCUMENT_NUMBER_DES))
-                .parameter(createHeader(Integer.class, DOCUMENT_TYPE, DOCUMENT_TYPE_DES))
+                .parameter(createHeader(String.class, CONSUMER_CODE, CONSUMER_CODE_DES))
+                .requestBody(requestBodyBuilder().description("Customer identification").required(true)
+                        .implementation(IdentificationDTO.class))
                 .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL)
                         .implementation(ResponseUpdateClient.class))
                 .response(responseBuilder().responseCode(STATUS_500).description(ERROR)

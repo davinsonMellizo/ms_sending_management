@@ -36,8 +36,13 @@ public class BridgeContact {
     }
 
     private String getValue(Enrol enrol, String contactWay) {
-        return enrol.getContactData().stream().filter(contact -> contact.getContactWay()
-                .equals(contactWay)).map(Contact::getValue).collect(Collectors.joining());
+        return enrol.getContactData().stream()
+                .filter(contact -> getName(contact).equals(contactWay))
+                .map(Contact::getValue)
+                .collect(Collectors.joining());
+    }
+    private String getName(Contact contact){
+        return contact.getContactWayName() != null ? contact.getContactWayName() : contact.getContactWay();
     }
 
     private String getState(Enrol enrol, String contactWay) {
