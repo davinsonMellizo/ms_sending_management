@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,7 +26,6 @@ public class RestClient<T extends Request,R> {
     private final Log LOGGER= LogFactory.getLog(RestClient.class);
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
-
         if (route.contains("masivapp.com")) {
             return webClient.post()
                     .uri(route)
@@ -33,7 +33,7 @@ public class RestClient<T extends Request,R> {
                     .headers(head -> head.setAll(request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
-                    //.onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
+                    .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
                     .bodyToMono(clazz);
         } else {
             return webClientConfigIna.post().uri(route)
@@ -41,7 +41,7 @@ public class RestClient<T extends Request,R> {
                     .headers(head -> head.setAll(request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
-                    //.onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
+                    .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
                     .bodyToMono(clazz);
         }
     }

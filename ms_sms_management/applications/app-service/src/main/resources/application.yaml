@@ -25,7 +25,6 @@ spring:
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
-
 management:
   health:
     probes:
@@ -47,6 +46,10 @@ management:
         readiness: "readiness"
 
 adapters:
+  repositories:
+    tables:
+      namesmap:
+        secret-priority: "${SECRET_PRIORITY}"
   async-sqs:
     url: ${SQS_URL}
     timeout: ${SQS_TIMEOUT}
