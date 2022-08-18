@@ -39,7 +39,6 @@ public class RestConsumerConfig {
     private ClientHttpConnector clientHttpConnectorWithSsl(int timeout) {
 
         KeyStore truststore = null;
-
         try {
             var propertiesSsl = secretManager
                     .getSecret(awsProperties.getNameSecretBucketSsl(),PropertiesSsl.class).block();

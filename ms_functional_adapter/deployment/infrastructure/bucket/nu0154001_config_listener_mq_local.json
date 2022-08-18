@@ -16,19 +16,19 @@
   ],
   "queues": [
     {
-      "name": "DEV.QUEUE.1",
+      "name": "ORDER.REQUEST",
       "connection": "localhost(1414)"
     },
     {
-      "name": "DEV.QUEUE.2",
+      "name": "ORDER.RESPONSE",
       "connection": "localhost(1414)"
     }
   ],
   "listener": [
     {
       "name": "id1",
-      "queueRequest": "DEV.QUEUE.1",
-      "queueResponse": "DEV.QUEUE.2"
+      "queueRequest": "ORDER.REQUEST",
+      "queueResponse": "ORDER.RESPONSE"
     }
   ],
   "transactions": {

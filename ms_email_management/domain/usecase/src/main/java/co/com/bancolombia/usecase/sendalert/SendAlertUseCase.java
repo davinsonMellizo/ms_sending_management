@@ -58,7 +58,6 @@ public class SendAlertUseCase {
     }
 
     public Mono<Response> sendEmailByMasivian(Alert alert, TemplateEmail templateEmail) {
-        System.out.println("estoy en el send email "+alert.getProvider());
         ArrayList<Recipient> recipients = new ArrayList<>();
         recipients.add(new Recipient(alert.getDestination().getToAddress()));
         final String[] tokenTemp = {""};

@@ -7,7 +7,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 
 @Data
 @DynamoDbBean
-@DynamoDbTableAdapter(tableName = "alertas-${env}-nu0154001-secret-priority")
+@DynamoDbTableAdapter(tableName = "secret-priority")
 public class SecretData {
     private String secretName;
     private String priorityProvider;

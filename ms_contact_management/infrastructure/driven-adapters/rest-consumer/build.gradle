@@ -7,5 +7,4 @@ dependencies {
     testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.8.0'
     
     implementation 'co.com.bancolombia.d2b:web-client:1.0.4'
-    implementation 'co.com.bancolombia.d2b:apic-creds-injector:1.0.4'
 }

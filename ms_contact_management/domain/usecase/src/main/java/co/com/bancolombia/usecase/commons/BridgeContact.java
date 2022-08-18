@@ -46,8 +46,10 @@ public class BridgeContact {
     }
 
     private String getState(Enrol enrol, String contactWay) {
-        final var state = enrol.getContactData().stream().filter(contact -> contact.getContactWay()
-                .equals(contactWay)).map(Contact::getStateContact).collect(Collectors.joining());
+        final var state = enrol.getContactData().stream()
+                .filter(contact -> getName(contact).equals(contactWay))
+                .map(Contact::getStateContact)
+                .collect(Collectors.joining());
         return state.isEmpty() ? state : state.substring(ZERO, ONE);
     }
 

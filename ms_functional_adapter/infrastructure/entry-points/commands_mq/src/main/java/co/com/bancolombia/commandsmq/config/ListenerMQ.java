@@ -32,7 +32,7 @@ public class ListenerMQ implements MessageListener {
     @SneakyThrows
     @Override
     public void onMessage(Message message) {
-        loggerBuilder.info("sistema");
+        loggerBuilder.info("sistema"+LocalDateTime.now());
         getMessage(message)
                 .flatMap(useCase::sendTransactionToRabbit)
                 .doOnError(e -> discard(e, message))

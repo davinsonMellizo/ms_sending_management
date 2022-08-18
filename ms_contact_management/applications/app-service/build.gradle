@@ -4,6 +4,7 @@ dependencies {
     implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 	implementation project(':async-event-handler')
 	implementation project(':async-event-bus')
+	implementation project(':injector')
 	implementation project(':rabbit-configurator')
 	implementation project(':rest-consumer')
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"

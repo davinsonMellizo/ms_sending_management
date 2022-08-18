@@ -36,7 +36,7 @@ adapters:
   rest-consumer:
     timeout: 1000
     resources:
-      retrieveInfo: https://internal-apigateway-dev.bancolombia.corp/int/development/v1/business-support/document-management/document-services/customers/actions/retrieve/information
+      retrieveInfo: https://gw-distribucion-digital-dev.apps.ambientesbc.lab/private-bancolombia/development/v1/business-support/document-management/document-services/customers/actions/retrieve/information
 
 cloud:
   aws:
