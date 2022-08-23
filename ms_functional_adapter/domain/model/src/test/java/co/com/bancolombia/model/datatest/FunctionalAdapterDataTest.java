@@ -3,8 +3,6 @@ package co.com.bancolombia.model.datatest;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.transaction.Transaction;
 
-import java.util.Map;
-
 public class FunctionalAdapterDataTest {
 
     public static Message buildMessage() {

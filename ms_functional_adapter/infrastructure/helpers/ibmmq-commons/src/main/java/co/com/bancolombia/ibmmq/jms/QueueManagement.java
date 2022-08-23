@@ -6,9 +6,9 @@ import co.com.bancolombia.ibmmq.model.ConnectionData;
 import co.com.bancolombia.ibmmq.model.QueueDto;
 import com.ibm.mq.jms.MQQueue;
 
+import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSContext;
-import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Session;
 import java.util.concurrent.ConcurrentHashMap;

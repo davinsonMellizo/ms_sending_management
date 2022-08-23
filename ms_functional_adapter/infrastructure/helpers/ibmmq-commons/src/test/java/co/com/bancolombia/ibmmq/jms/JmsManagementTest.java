@@ -19,16 +19,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Mono;
 
-import javax.jms.TextMessage;
-import javax.jms.JMSProducer;
-import javax.jms.JMSException;
 import javax.jms.Connection;
-import javax.jms.JMSContext;
-import javax.jms.JMSConsumer;
 import javax.jms.ExceptionListener;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.JMSProducer;
 import javax.jms.MessageConsumer;
-import javax.jms.Session;
 import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,11 +38,11 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JmsManagementTest {

@@ -5,12 +5,11 @@ import co.com.bancolombia.commons.freemarker.config.FreemarkerConfig;
 import co.com.bancolombia.commons.utils.BusinessUtil;
 import co.com.bancolombia.commons.utils.JsonUtils;
 import freemarker.ext.beans.BeansWrapperBuilder;
-
-import freemarker.template.Template;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
-import freemarker.template.TemplateException;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;

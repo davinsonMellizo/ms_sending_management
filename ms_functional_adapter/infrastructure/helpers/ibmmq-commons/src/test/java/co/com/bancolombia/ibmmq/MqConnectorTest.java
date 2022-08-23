@@ -14,15 +14,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.test.StepVerifier;
 
-import javax.jms.TextMessage;
-import javax.jms.JMSProducer;
-import javax.jms.JMSException;
 import javax.jms.Connection;
-import javax.jms.JMSContext;
-import javax.jms.MessageConsumer;
-import javax.jms.Session;
 import javax.jms.Destination;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.JMSProducer;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.any;

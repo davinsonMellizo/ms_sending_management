@@ -1,0 +1,36 @@
+{
+  "channel": [
+    {
+      "connectionManagement": {
+        "sharingConversations": 1,
+        "clientWeight": 50,
+        "affinity": "none",
+        "defaultReconnect": "yes",
+        "disconnectInterval": 6000,
+        "heartbeatInterval": 600,
+        "keepAliveInterval": -1
+      },
+      "general": {
+        "description": "ALESGRP"
+      },
+      "name": "ALES.SVRCONN",
+      "clientConnection": {
+        "connection": [
+          {
+            "host": "pawsqmgrscd01.apps.bancolombia.corp",
+            "port": 1416
+          },
+          {
+            "host": "pawsqmgrscd02.apps.bancolombia.corp",
+            "port": 1417
+          }
+        ],
+        "queueManager": "ALESGRP"
+      },
+      "transmissionSecurity": {
+        "cipherSpecification": "TLS_RSA_WITH_AES_128_CBC_SHA256"
+      },
+      "type": "clientConnection"
+    }
+  ]
+}

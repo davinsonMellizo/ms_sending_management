@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import javax.jms.TextMessage;
-import javax.jms.JMSProducer;
 import javax.jms.JMSException;
-import javax.jms.MessageListener;
+import javax.jms.JMSProducer;
 import javax.jms.JMSRuntimeException;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_JMS_ERROR;
 

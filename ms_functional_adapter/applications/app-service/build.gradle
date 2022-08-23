@@ -14,6 +14,7 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
 }
 
 task explodedJar(type: Copy) {
