@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'com.bancolombia'
+version '1.0-SNAPSHOT'
+
+repositories {
+    maven { url "https://artifactory.apps.bancolombia.com/maven-bancolombia" }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'com.intuit.karate:karate-junit5:1.2.0'
+    testImplementation 'net.masterthought:cucumber-reporting:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "karate.options", System.properties.getProperty("karate.options")
+    systemProperty "karate.env", System.properties.getProperty("karate.env")
+    outputs.upToDateWhen { false }
+}
