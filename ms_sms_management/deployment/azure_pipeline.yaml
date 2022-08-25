@@ -78,7 +78,7 @@ jobs:
           jdkVersionOption: '1.11'
         condition: succeededOrFailed()
 
-      - template: validations.yaml@Template_DevSecOps_Dependencies
+     # - template: validations.yaml@Template_DevSecOps_Dependencies
 
       - task: PublishTestResults@2
         displayName: 'Publish Test Results'
