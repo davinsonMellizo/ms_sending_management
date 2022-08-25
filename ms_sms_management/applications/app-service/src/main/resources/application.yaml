@@ -49,7 +49,7 @@ adapters:
   repositories:
     tables:
       namesmap:
-        secret-priority: "${SECRET_PRIORITY}"
+        secret-priority: "${TABLE_NAME_SECRET_PRIORITY}"
   async-sqs:
     url: ${SQS_URL}
     timeout: ${SQS_TIMEOUT}
