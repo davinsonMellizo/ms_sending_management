@@ -10,15 +10,15 @@ variables:
   - name: 'NU'
     value: 'NU0154001_Alertas_MR'
 
-#resources:
-#  - repo: self
-
 resources:
-  repositories:
-    - repository: Template_DevSecOps_Dependencies
-      type: git
-      ref: refs/heads/trunk
-      name: Template_DevSecOps_Dependencies
+  - repo: self
+
+#resources:
+#  repositories:
+#    - repository: Template_DevSecOps_Dependencies
+#      type: git
+#      ref: refs/heads/trunk
+#      name: Template_DevSecOps_Dependencies
 
 
 trigger:
@@ -79,7 +79,7 @@ jobs:
           jdkVersionOption: '1.11'
         condition: succeededOrFailed()
         
-      - template: validations.yaml@Template_DevSecOps_Dependencies
+#      - template: validations.yaml@Template_DevSecOps_Dependencies
 
       - task: PublishTestResults@2
         displayName: 'Publish Test Results'

@@ -41,26 +41,10 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(USER,properties.getUsername())
                 .option(PASSWORD,properties.getPassword())
                 .option(DATABASE, properties.getDbname())
-                .option(Option.valueOf("sslmode"), "disable")
+                .option(Option.valueOf("sslmode"), "verify-full")
                 .option(Option.valueOf("schema"), schema)
                 .build();
 
     }
-    /*@Bean
-    public ConnectionFactoryOptions buildConnectionConfiguration(@Value("${adapters.postgresql.schema}") String schema){
-        PostgresqlConnectionProperties properties =  postgresProperties();
-        logger.info("data secret rds:"+properties);
-        return ConnectionFactoryOptions.builder()
-                .option(DRIVER,"postgresql")
-                .option(HOST, "nu0154001-alertas-qa-clusteraurora.cluster-c1ldabd6xbtl.us-east-1.rds.amazonaws.com")
-                .option(PORT, 50000)
-                .option(USER,"cnxalerq")
-                .option(PASSWORD, "#V364md7RHE0kn7")
-                .option(DATABASE, "alertqcd")
-                .option(Option.valueOf("sslmode"), "disable")
-                .option(Option.valueOf("schema"), "schalerd")
-                .build();
-
-    }*/
 }
 

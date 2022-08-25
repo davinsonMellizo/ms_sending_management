@@ -42,7 +42,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(USER,properties.getUsername())
                 .option(PASSWORD,properties.getPassword())
                 .option(DATABASE, properties.getDbname())
-                .option(Option.valueOf("sslmode"), "disable")
+                .option(Option.valueOf("sslmode"), "verify-full")
                 .option(Option.valueOf("schema"), schema)
                 .build();
     }
@@ -61,7 +61,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(USER,properties.getUsername())
                 .option(PASSWORD,properties.getPassword())
                 .option(DATABASE, properties.getDbname())
-                .option(Option.valueOf("sslmode"), "disable")
+                .option(Option.valueOf("sslmode"), "verify-full")
                 .option(Option.valueOf("schema"), schema)
                 .build();
     }

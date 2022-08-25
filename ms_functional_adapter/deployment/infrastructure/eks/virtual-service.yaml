@@ -14,11 +14,11 @@ spec:
     istio: ingressgateway # use istio default controller
   servers:
     - port:
-        number: 80
-        name: http
-        protocol: HTTP
+        number: #{gateway-port}#
+        name: #{gateway-protocol-name}#
+        protocol: #{gateway-protocol}#
       hosts:
-        - #{gateway-host-smoke}#
+          - #{gateway-host}#
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
