@@ -26,8 +26,8 @@ data:
   EXPIRE_TIME_CACHE: "#{cache-time}#"
   S3-BUCKET: #{s3-bucket}#
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
-  TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}
-  TABLE_NAME_TEMPLATE_EMAIL: #{table-name-template-email}
+  TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}#
+  TABLE_NAME_TEMPLATE_EMAIL: #{table-name-template-email}#
 
 
 
