@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.TrustManagerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;

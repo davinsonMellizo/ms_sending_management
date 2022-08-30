@@ -50,7 +50,6 @@ public class DynamoConfig {
     }
 
     @Bean
-    //@Profile({"local"})
     @Primary
     public DynamoDbEnhancedAsyncClient clientEnhanced(final DynamoDbAsyncClient client){
         return DynamoDbEnhancedAsyncClient.builder()

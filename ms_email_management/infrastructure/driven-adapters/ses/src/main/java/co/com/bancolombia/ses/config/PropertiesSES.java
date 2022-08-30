@@ -1,4 +1,4 @@
-package co.com.bancolombia.dynamodb.config;
+package co.com.bancolombia.ses.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @ConfigurationProperties(prefix = "adapters.aws")
-public class Properties {
+public class PropertiesSES {
     private String regionAws;
     private String endpoint;
 }

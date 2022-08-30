@@ -1,6 +1,5 @@
 package co.com.bancolombia.sqs.repository;
 
-import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.sqs.config.SQSProperties;
 import lombok.RequiredArgsConstructor;
