@@ -48,7 +48,6 @@ public class SendAlertUseCase {
     private Mono<Response> sendEmailBySes(Alert alert, TemplateEmail templateEmail) {
         System.out.println("Send useCase");
         return Mono.just(alert.getProvider())
-                .log("info")
                 .filter(provider -> provider.equalsIgnoreCase(SES))
                 .flatMap(provider ->  sesGateway.sendEmail(templateEmail, alert))
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
