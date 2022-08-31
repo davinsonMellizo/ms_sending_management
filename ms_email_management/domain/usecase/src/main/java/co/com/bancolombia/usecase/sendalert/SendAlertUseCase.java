@@ -31,12 +31,14 @@ public class SendAlertUseCase {
     private static final int CONSTANT =23;
 
     public Mono<Void> sendAlert(Alert alert) {
+        System.out.println("Send useCase 2");
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));
     }
 
     public Mono<Void> sendAlertToProviders(Alert alert, TemplateEmail templateEmail) {
+        System.out.println("Send useCase 1 ");
         return validateAttachments(alert)
                 .flatMap(alert1 ->  sendEmailByMasivian(alert1, templateEmail))
                 .concatWith(sendEmailBySes(alert, templateEmail))
@@ -44,7 +46,9 @@ public class SendAlertUseCase {
     }
 
     private Mono<Response> sendEmailBySes(Alert alert, TemplateEmail templateEmail) {
+        System.out.println("Send useCase");
         return Mono.just(alert.getProvider())
+                .log("info")
                 .filter(provider -> provider.equalsIgnoreCase(SES))
                 .flatMap(provider ->  sesGateway.sendEmail(templateEmail, alert))
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())

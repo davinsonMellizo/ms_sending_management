@@ -1,5 +1,6 @@
 package co.com.bancolombia.ses.adapter;
 
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.TemplateEmail;
@@ -29,8 +30,11 @@ public class SesAdapter implements SesGateway {
 
     private final SesAsyncClient client;
 
+    private final LoggerBuilder loggerBuilder;
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
+
+        loggerBuilder.info("Send Message SES");
         Session session = Session.getDefaultInstance(new Properties());
         MimeMessage message = new MimeMessage(session);
         try {
