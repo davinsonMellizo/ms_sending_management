@@ -1,6 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
-import co.com.bancolombia.model.log.LoggerBuilder;
+
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,6 @@ public class CommandsHandler {
 
     private final SendAlertUseCase useCase;
 
-    private final LoggerBuilder loggerBuilder;
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {
         return useCase.sendAlert(command.getData());
