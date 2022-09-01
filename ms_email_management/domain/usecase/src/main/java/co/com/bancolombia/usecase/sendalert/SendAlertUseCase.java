@@ -38,7 +38,6 @@ public class SendAlertUseCase {
 
     public Mono<Void> sendAlertToProviders(Alert alert, TemplateEmail templateEmail) {
         return validateAttachments(alert)
-                .log()
                 .flatMap(alert1 ->  sendEmailByMasivian(alert1, templateEmail))
                 .concatWith(sendEmailBySes(alert, templateEmail))
                 .thenEmpty(Mono.empty());
@@ -48,6 +47,7 @@ public class SendAlertUseCase {
         return Mono.just(alert.getProvider())
                 .filter(provider -> provider.equalsIgnoreCase(SES))
                 .flatMap(provider ->  sesGateway.sendEmail(templateEmail, alert))
+                .log()
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response));
     }
