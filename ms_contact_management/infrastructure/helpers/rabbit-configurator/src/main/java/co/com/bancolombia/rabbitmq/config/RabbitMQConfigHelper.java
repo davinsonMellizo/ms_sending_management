@@ -21,12 +21,13 @@ import java.security.NoSuchAlgorithmException;
 public class RabbitMQConfigHelper{
     private final LoggerBuilder logger;
     private final SyncSecretVault syncSecretVault;
+    private static final String TLS = "TLSv1.2";
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in Contact Management services";
+
     @Value("${adapters.secrets-manager.secret-rabbit}")
     private String secretName;
 
-
-    private RabbitMQConnectionProperties rabbitProperties() {
+    public RabbitMQConnectionProperties rabbitProperties() {
         return syncSecretVault.getSecret(secretName, RabbitMQConnectionProperties.class);
     }
 
@@ -47,10 +48,10 @@ public class RabbitMQConfigHelper{
         return () -> factory;
     }
 
-    private void configureSsl(ConnectionFactory factory) {
+    private void configureSsl(ConnectionFactory factory)  {
         try {
-            factory.useSslProtocol();
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            factory.useSslProtocol(TLS);
+        } catch (NoSuchAlgorithmException | KeyManagementException e ) {
             logger.info(String.format(FAIL_MSG, e));
         }
     }

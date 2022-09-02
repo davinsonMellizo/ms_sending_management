@@ -27,6 +27,7 @@ adapters:
   secrets-manager:
     secret-rds: "${SECRET-RDS}"
     secret-rabbit: "${SECRET-RABBIT}"
+    changeit: "${CHANGEIT}"
     secret-retrieve: "${SECRET-RETRIEVE}"
     cache-size: "${CACHE_SECRETS_SIZE}"
     cache-time: "${CACHE_SECRETS_SECONDS}"

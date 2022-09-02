@@ -26,5 +26,6 @@ data:
   SECRET-RABBIT: #{secret-rabbit}#
   RETRIEVE: #{api-retrieve-iseries}#
   SECRET-RETRIEVE: #{secret-retrieve}#
+  CHANGEIT: #{changeit}#
 
 

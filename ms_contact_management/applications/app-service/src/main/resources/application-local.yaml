@@ -25,6 +25,7 @@ adapters:
   secrets-manager:
     secret-rds: alertas-local-secretrds-CNX
     secret-rabbit: alertas-local-secretrabbit-CNX
+    changeit: changeit
     cache-size: 300
     cache-time: 2
     endpoint: "http://localhost:4566"

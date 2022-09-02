@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT}
+  port: 8080
   servlet:
     encoding:
       charset: UTF-8
@@ -8,18 +8,16 @@ springdoc:
   version: 1
 spring:
   application:
-    name: ${APPLICATION_NAME}
+    name: ms_alert_management
   devtools:
     add-properties: false
   jackson:
     default-property-inclusion: NON_NULL
-  profiles:
-    active: ${SPRING_PROFILE_ACTIVE:local}
   webflux:
-    base-path: ${PATH_BASE}
+    base-path: /api/v1/alert-management
   logging:
     level:
-      root: ${LOG4J_LEVEL}
+      root: INFO
       reactor:
         netty: false
 
@@ -49,24 +47,24 @@ management:
 
 adapters:
   postgresql:
-    schema: ${POSTGRESQL_SCHEMA}
+    schema: schalerd
     pool:
-      initial: ${POSTGRESQL_POOL_INITIAL:10}
-      max: ${POSTGRESQL_POOL_MAX:10}
+      initial: 10
+      max: 10
   secrets-manager:
-    secret-rabbit: ${SECRET-RABBIT}
-    secret-rds: ${SECRET-RDS}
-    cache-size: ${CACHE_SECRETS_SIZE}
-    cache-time: ${CACHE_SECRETS_SECONDS}
+    secret-rabbit: alertas-local-secretrabbit-CNX
+    secret-rds: alertas-local-secretrds-CNX
+    cache-size: 300
+    cache-time: 2
     endpoint: http://localhost:4566
   entries:
     reactive-web:
-      path-base: ${PATH_BASE}
-      alert: ${ALERT}
-      campaign: ${CAMPAIGN}
-      remitter: ${REMITTER}
-      provider: ${PROVIDER}
-      service: ${SERVICE}
-      consumer: ${CONSUMER}
-      category: ${CATEGORY}
-      priority: ${PRIORITY}
+      path-base: /api/v1/alert-management
+      alert: /alert
+      campaign: /campaign
+      remitter: /remitter
+      provider: /provide
+      service: /service
+      consumer: /consumer
+      category: /category
+      priority: /priority

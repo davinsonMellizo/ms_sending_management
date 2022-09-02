@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
+import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -23,6 +24,7 @@ public class RabbitMQConfigHelper{
     private final SecretsManager secretsManager;
     private final SecretsNameStandard secretsNameStandard;
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in Security_Filters";
+    private static final String TLS = "TLSv1.2";
 
 
     private RabbitMQConnectionProperties rabbitProperties() {
