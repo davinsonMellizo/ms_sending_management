@@ -15,7 +15,11 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.DELETE_CONTACT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_ALL_CONTACT_BY_CLIENT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CONTACT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CONTACT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UPDATE_CONTACT_ERROR;
 
 @Repository
 public class ContactRepositoryImplement

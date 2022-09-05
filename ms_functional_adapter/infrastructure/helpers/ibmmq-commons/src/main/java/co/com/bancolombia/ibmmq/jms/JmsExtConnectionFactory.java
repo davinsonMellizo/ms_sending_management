@@ -119,12 +119,14 @@ public class JmsExtConnectionFactory {
             if (keyStorePassword != null) {
                 kmf.init(caCertsKeyStore, keyStorePassword.toCharArray());
             }
+
+            SecureRandom secureRandom = SecureRandom.getInstance("CBC");
+
             tmf.init(new CertPathTrustManagerParameters(pkixParams));
             final SSLContext sslContext = SSLContext.getInstance(TLS);
-            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), secureRandom);
             return sslContext;
-        } catch (KeyStoreException | InvalidAlgorithmParameterException | NoSuchAlgorithmException |
-                UnrecoverableKeyException | KeyManagementException | IOException | CertificateException e) {
+        } catch (KeyStoreException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException | IOException | CertificateException e) {
             loggerBuilder.error(e);
             throw new TechnicalException(e, TechnicalExceptionEnum.TECHNICAL_SSL_CONTEXT_ERROR);
         }

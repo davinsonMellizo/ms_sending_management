@@ -1,7 +1,6 @@
 package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.model.client.Client;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

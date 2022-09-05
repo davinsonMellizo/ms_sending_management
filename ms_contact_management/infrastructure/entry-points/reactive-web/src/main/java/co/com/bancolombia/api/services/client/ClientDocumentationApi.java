@@ -9,7 +9,7 @@ import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
 
-import static co.com.bancolombia.commons.enums.Header.*;
+import static co.com.bancolombia.commons.enums.Header.CONSUMER_CODE;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;

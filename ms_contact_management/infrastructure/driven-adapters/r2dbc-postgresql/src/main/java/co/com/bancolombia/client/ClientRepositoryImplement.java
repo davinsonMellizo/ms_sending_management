@@ -16,7 +16,10 @@ import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CLIENT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INACTIVE_CLIENT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CLIENT_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UPDATE_CLIENT_ERROR;
 
 @Repository
 public class ClientRepositoryImplement

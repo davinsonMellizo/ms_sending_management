@@ -23,11 +23,21 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static co.com.bancolombia.commons.constants.Transaction.*;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.constants.Transaction.CREATE_CLIENT;
+import static co.com.bancolombia.commons.constants.Transaction.INACTIVE_CLIENT;
+import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CLIENT;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_REGISTERED;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.DOCUMENT_TYPE_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.STATE_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_CHANGE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_ENROLL;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_UPDATE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.USER_NOT_VALID_SSAL_TEL;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
-import static co.com.bancolombia.usecase.commons.BridgeContact.*;
+import static co.com.bancolombia.usecase.commons.BridgeContact.getMapToSendToBridgeMQ;
+import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
 
 @RequiredArgsConstructor
 public class ClientUseCase {

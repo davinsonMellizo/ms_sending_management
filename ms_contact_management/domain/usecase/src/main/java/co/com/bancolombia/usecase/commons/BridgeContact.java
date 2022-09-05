@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static co.com.bancolombia.commons.constants.ContactWay.*;
+import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
+import static co.com.bancolombia.commons.constants.ContactWay.PUSH;
+import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 
 @UtilityClass
 public class BridgeContact {

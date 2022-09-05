@@ -24,6 +24,7 @@ public class RabbitMQConfigHelper{
     private final LoggerBuilder logger;
     private final SecretsManager secretsManager;
     private final SecretsNameStandard secretsNameStandard;
+    private static final String TLS = "TLSv1.2";
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in Security_Filters";
     private final Log LOGGER = LogFactory.getLog(RabbitMQConfigHelper.class);
 
@@ -54,7 +55,7 @@ public class RabbitMQConfigHelper{
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            factory.useSslProtocol();
+            factory.useSslProtocol(TLS);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }

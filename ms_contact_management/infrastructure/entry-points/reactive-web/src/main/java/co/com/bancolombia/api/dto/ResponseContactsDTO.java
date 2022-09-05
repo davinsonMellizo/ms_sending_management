@@ -1,7 +1,11 @@
 package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.model.contact.ResponseContacts;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

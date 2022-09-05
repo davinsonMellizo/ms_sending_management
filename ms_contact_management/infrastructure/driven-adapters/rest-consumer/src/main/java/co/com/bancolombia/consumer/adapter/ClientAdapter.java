@@ -17,14 +17,16 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.Objects;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static co.com.bancolombia.commons.constants.ContactWay.*;
+import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
+import static co.com.bancolombia.commons.constants.ContactWay.PUSH;
+import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UNAUTHORIZED;
 
