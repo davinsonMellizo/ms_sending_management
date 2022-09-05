@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
+import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -53,7 +54,11 @@ public class RabbitMQConfigHelper {
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            factory.useSslProtocol(TLS);
+            SSLContext c = SSLContext.getInstance(TLS);
+            c.init(null, null, null);
+
+            factory.useSslProtocol(c);
+
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }

@@ -53,7 +53,10 @@ public class RabbitMQConfigHelper{
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            factory.useSslProtocol(TLS);
+            SSLContext c = SSLContext.getInstance(TLS);
+            c.init(null, null, null);
+
+            factory.useSslProtocol(c);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }

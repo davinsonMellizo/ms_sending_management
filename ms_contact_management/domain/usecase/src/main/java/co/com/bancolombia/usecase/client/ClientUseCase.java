@@ -36,8 +36,7 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_UPDA
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.USER_NOT_VALID_SSAL_TEL;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
-import static co.com.bancolombia.usecase.commons.BridgeContact.getMapToSendToBridgeMQ;
-import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
+import static co.com.bancolombia.usecase.commons.BridgeContact.*;
 
 @RequiredArgsConstructor
 public class ClientUseCase {
