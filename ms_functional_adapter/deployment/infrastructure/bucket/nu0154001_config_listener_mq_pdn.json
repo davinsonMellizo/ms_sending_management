@@ -127,7 +127,7 @@
     "ENVIOPUSH01": {
       "listener": "id1",
       "template": "{ \"messageId\": \"${payload?substring(11, 31)?trim}\", \"customerDocumentType\": \"${payload?substring(31, 35)?trim}\", \"customerDocumentNumber\": \"${payload?substring(35, 55)?trim}\", \"customerMdmKey\": \"${payload?substring(55, 75)?trim}\", \"customerNickname\": \"${payload?substring(75, 89)?trim}\", \"applicationCode\": \"${payload?substring(89, 99)?trim}\", \"categoryId\": \"${payload?substring(99, 102)?trim}\", \"consumerId\": \"${payload?substring(102, 105)?trim}\", \"message\": \"${payload?substring(105)?trim}\" }",
-      "target": "ms_functional_adapter",
+      "target": "ms_functional_adapter_push",
       "queue": "send.iseries.push"
     }
   }

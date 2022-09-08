@@ -40,6 +40,7 @@ dependencies {
     testImplementation "com.intuit.karate:karate-apache:$rootProject.ext.karateVersion"
     testImplementation "net.masterthought:cucumber-reporting:$rootProject.ext.cucumberReporting"
     testImplementation 'junit:junit:4.13.2'
+
 }
 
 test {

@@ -16,7 +16,6 @@ public class ParallelTest {
 
     @Test
     public void testParallel() {
-
     }
 
     public static void generateReport(String karateOutputPath) {

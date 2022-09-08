@@ -21,6 +21,7 @@
     {
       "contactChannel": "MAIL",
       "dataValue": "mail@mail.com",
+      "environmentType": "Laboral",
       "status": "Activo"
     },
     {
