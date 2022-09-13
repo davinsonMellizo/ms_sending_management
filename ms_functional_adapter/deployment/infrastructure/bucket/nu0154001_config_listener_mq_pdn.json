@@ -4,7 +4,7 @@
       "name": "connFactory1",
       "qmGroup": "*ALESGRP",
       "temporaryQueueModel": "",
-      "secret": "nu0154001-alertas-pdn-mq-functional-adapters",
+      "secret": "nu0146001-app-personas-pdn-mq-functional-adapters-app",
       "applicationName": "ms_functional_adapter",
       "outputConcurrency": 10,
       "replyTimeOut": 10,
