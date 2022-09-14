@@ -5,17 +5,11 @@ function fn(){
     karate.configure('readTimeout',connectTimeout);
     karate.configure('ssl',true);
 
+    var envData = read('../data/variable.json');
+
     return {
-
            api: {
-                    reqresURL: 'http://localhost:8071',
-
+                    reqresURL: envData.url,
            }
-
-
     }
-
-
-
-
 }

@@ -11,7 +11,7 @@ Feature: management of microservice templater
 
       @GetWithId
       Scenario: Get an user with id
-        * def pathUser = '/api/v1/templater/get'
+        * def pathUser = '/get'
         * param idTemplate = '0001'
         Given path pathUser
         When method get
@@ -48,7 +48,7 @@ Feature: management of microservice templater
 
       @GetWithIdDon'tFound
       Scenario: Get an user with id but don't found
-        * def pathUser = '/api/v1/templater/get'
+        * def pathUser = '/get'
         * param idTemplate = '0002'
         Given path pathUser
         When method get
@@ -95,7 +95,7 @@ Feature: management of microservice templater
           }
           """
           * print info
-          * def pathUser = '/api/v1/templater/create'
+          * def pathUser = '/create'
           Given path pathUser
           And request info
           When method post
@@ -148,7 +148,7 @@ Feature: management of microservice templater
           }
           """
           * print info
-          * def pathUser = '/api/v1/templater/create'
+          * def pathUser = '/create'
           Given path pathUser
           And request info
           When method post
@@ -194,7 +194,7 @@ Feature: management of microservice templater
         }
         """
           * print info
-          * def pathUser = '/api/v1/templater/create'
+          * def pathUser = '/create'
           Given path pathUser
           And request info
           When method post
@@ -239,7 +239,7 @@ Feature: management of microservice templater
           "status": "1"
         }
         """
-        * def pathUser = '/api/v1/templater/update'
+        * def pathUser = '/update'
         Given path pathUser
         And request info
         When method put
@@ -308,7 +308,7 @@ Feature: management of microservice templater
           "status": "2"
         }
         """
-        * def pathUser = '/api/v1/templater/update'
+        * def pathUser = '/update'
         Given path pathUser
         And request info
         When method put
@@ -345,7 +345,7 @@ Feature: management of microservice templater
          "user": "MAQUIJAN"
         }
         """
-        * def pathUser = '/api/v1/templater/delete'
+        * def pathUser = '/delete'
         Given path pathUser
         And request info
         When method put
@@ -406,7 +406,7 @@ Feature: management of microservice templater
          "user": "MAQUIJAN"
         }
         """
-        * def pathUser = '/api/v1/templater/delete'
+        * def pathUser = '/delete'
         Given path pathUser
         And request info
         When method put
@@ -436,7 +436,7 @@ Feature: management of microservice templater
 
       @CreateMessageWithMethodGetHappyCase
       Scenario: create a message with get
-        * def pathUser = '/api/v1/templater/get'
+        * def pathUser = '/get'
         * param idTemplate = '0001'
         Given path pathUser
         When method get
@@ -473,7 +473,7 @@ Feature: management of microservice templater
 
       @CreateMessageWithMethodGetAlternativeCase
       Scenario: Get an message failed with get
-        * def pathUser = '/api/v1/templater/get'
+        * def pathUser = '/get'
         * param idTemplate = '0002'
         Given path pathUser
         When method get

@@ -97,8 +97,8 @@ jobs:
         inputs:
           SourceFolder: $(projectName)/deployment
           Contents: |
-            infrastructure/**
             acceptance-test/**
+            infrastructure/**
             performance-test/**
           TargetFolder: $(Build.repository.LocalPath)/build/libs
 
@@ -148,13 +148,13 @@ jobs:
           ArtifactName: eks-artifact
         condition: succeeded()
 
-#      - task: PublishBuildArtifacts@1
-#        displayName: 'Publish artifact: Karate'
-#        inputs:
-#          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/acceptance-test'
-#          ArtifactName: acceptance-test-artifact
-#        condition: succeeded()
-#
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact: Karate'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/acceptance-test'
+          ArtifactName: acceptance-test-artifact
+        condition: succeeded()
+
 #      - task: PublishBuildArtifacts@1
 #        displayName: 'Publish artifact: Performance'
 #        inputs:
