@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: #{app-gateway}#
+  name: #{app-gateway-smoke}#
   namespace: #{namespace}#
   labels:
     app.bancolombia.com.co/env: #{env}#
@@ -18,12 +18,20 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - #{gateway-host}#
+        - #{gateway-host-smoke}#
+          #   tls:
+          #     httpsRedirect: true
+          # - port:
+          #     number: 443
+          #     name: https
+          #     protocol: HTTP
+          #   hosts:
+        #   - "#{gateway-host}#"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: #{name}#-vs-2
+  name: #{name}#-vs-5
   namespace: #{namespace}#
   labels:
     app.bancolombia.com.co/env: #{env}#
@@ -33,9 +41,9 @@ metadata:
     app.bancolombia.com.co/pmo: #{pmo}#
 spec:
   hosts:
-    - #{gateway-host}#
+    - #{gateway-host-smoke}#
   gateways:
-    - #{app-gateway}#
+    - #{app-gateway-smoke}#
   http:
     - match:
         - uri:
@@ -47,3 +55,4 @@ spec:
             host: #{name}#
             port:
               number: 80
+      #websocketUpgrade: true #if websockets are required

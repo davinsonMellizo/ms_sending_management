@@ -9,15 +9,16 @@ metadata:
     app.kubernetes.io/version: v1.0
     app.kubernetes.io/part-of: #{name}#
 data:
-  SERVER_PORT: "#{service-port}#"
+  SERVER_PORT: #{service-port}#
+  AWS_REGION: #{aws-region}#
   APPLICATION_NAME: #{application-name}#
-  SPRING_PROFILE_ACTIVE:  #{spring-profile-active}#
-  LOG4J_LEVEL:  #{log-level}#
-  CACHE_SECRETS_SIZE: "#{cache-secrets-size}#"
-  CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
-  PATH_BASE: #{path-base}#
-  PATH_CREATE-TEMPLATE: #{create}#
-  PATH_GET-TEMPLATE: #{get}#
-  PATH_PUT-TEMPLATE: #{put}#
-  PATH_DELETE-TEMPLATE: #{delete}#
+  SPRING_PROFILE_ACTIVE: #{spring-profile-active}#
+  LOG4J_LEVEL: #{log-level}#
+  CACHE_SECRETS_SIZE: #{cache-secrets-size}#
+  CACHE_SECRETS_SECONDS: #{cache-secrets-seconds}#
+  PATH_BASE: "#{prefix}#/#{service}#"
+  PATH_CREATE-TEMPLATE: #{create-template}#
+  PATH_GET-TEMPLATE: #{get-template}#
+  PATH_PUT-TEMPLATE: #{put-template}#
+  PATH_DELETE-TEMPLATE: #{delete-template}#
   PATH_CREATE-MESSAGE: #{create-message}#

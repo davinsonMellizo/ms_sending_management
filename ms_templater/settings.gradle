@@ -1,4 +1,4 @@
-rootProject.name = 'Templater'
+rootProject.name = 'ms_templater'
 
 include ':app-service'
 include ':model'
