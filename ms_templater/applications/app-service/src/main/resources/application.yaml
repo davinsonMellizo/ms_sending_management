@@ -8,7 +8,6 @@ springdoc:
 project:
   name: ${PROJECT_NAME}
   env: ${ENVIRONMENT}
-  table-name: ${TABLE_NAME}
 
 spring:
   application:

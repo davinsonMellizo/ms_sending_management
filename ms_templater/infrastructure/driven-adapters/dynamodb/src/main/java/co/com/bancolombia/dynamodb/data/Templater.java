@@ -1,6 +1,7 @@
 package co.com.bancolombia.dynamodb.data;
 
 import co.com.bancolombia.dynamo.annotation.DynamoDbTableAdapter;
+import co.com.bancolombia.dynamo.config.SourceName;
 import co.com.bancolombia.model.template.dto.Template;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 
 @Data
 @DynamoDbBean
-@DynamoDbTableAdapter(tableName = "alertas-local-nu0154001-templater-table")
+@DynamoDbTableAdapter(tableName = SourceName.TABLE_NAME)
 @EqualsAndHashCode(callSuper=false)
 public class Templater extends Template {
 
@@ -17,5 +18,6 @@ public class Templater extends Template {
     @Override
     public String getIdTemplate() {
         return super.getIdTemplate();
+
     }
 }

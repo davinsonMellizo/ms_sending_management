@@ -149,14 +149,14 @@ jobs:
         condition: succeeded()
 
       - task: PublishBuildArtifacts@1
-        displayName: 'Publish artifact: Karate'
+        displayName: 'Publish Artifact: Karate'
         inputs:
           PathtoPublish: '$(Build.repository.LocalPath)/build/libs/acceptance-test'
           ArtifactName: acceptance-test-artifact
         condition: succeeded()
 
 #      - task: PublishBuildArtifacts@1
-#        displayName: 'Publish artifact: Performance'
+#        displayName: 'Publish Artifact: Performance'
 #        inputs:
 #          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/performance-test'
 #          ArtifactName: performance-test-artifact
