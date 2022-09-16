@@ -7,9 +7,11 @@ function fn(){
 
     var envData = read('../data/variable.json');
 
-    return {
-           api: {
-                    reqresURL: envData.url,
-           }
+    var config = {
+        templaterUrl: ' ',
     }
+
+    config.templaterUrl = envData.url;
+
+    return config
 }
