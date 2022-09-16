@@ -1,0 +1,6 @@
+{
+  "idTemplate": "#string",
+  "messageSubject": "#string",
+  "messageBody": "#string",
+  "plainText": "#string"
+}

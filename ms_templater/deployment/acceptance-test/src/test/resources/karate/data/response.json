@@ -1,0 +1,15 @@
+{
+  "idTemplate": "#string",
+  "messageType": "#string",
+  "version": "#string",
+  "idConsumer": "#string",
+  "description": "#string",
+  "messageSubject": "#string",
+  "messageBody": "#string",
+  "plainText": "#string",
+  "creationUser": "#string",
+  "creationDate": "#string",
+  "modificationUser": "#string",
+  "modificationDate": "#string",
+  "status": "#string"
+}

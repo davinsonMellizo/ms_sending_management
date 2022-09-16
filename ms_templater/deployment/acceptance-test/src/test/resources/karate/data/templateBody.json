@@ -1,0 +1,12 @@
+{
+  "idTemplate": "0001",
+  "messageType": "SMS",
+  "version": "1",
+  "idConsumer": "1",
+  "description": "SMS TEMPLATE",
+  "messageSubject": "SMS",
+  "messageBody": "HTML",
+  "plainText": "PLAIN",
+  "user": "TEST",
+  "status": "1"
+}
