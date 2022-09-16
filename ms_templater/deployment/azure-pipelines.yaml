@@ -156,9 +156,9 @@ jobs:
           ArtifactName: acceptance-test-artifact
         condition: succeeded()
 
-#      - task: PublishBuildArtifacts@1
-#        displayName: 'Publish Artifact: Performance'
-#        inputs:
-#          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/performance-test'
-#          ArtifactName: performance-test-artifact
-#        condition: succeeded()
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Performance'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/performance-test'
+          ArtifactName: performance-test-artifact
+        condition: succeeded()
