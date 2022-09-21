@@ -1,0 +1,12 @@
+{
+  "idTemplate": "0001",
+  "messageType": "TEST",
+  "version": "1",
+  "idConsumer": "1",
+  "description": "TEST TEMPLATE",
+  "messageSubject": "TEST",
+  "messageBody": "TEST HTML",
+  "plainText": "TEST PLAIN",
+  "user": "TEST",
+  "status": "1"
+}
