@@ -1,0 +1,26 @@
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+jobs:
+  - job: build
+    pool:
+      name: Build
+      demands: agent.os -equals linux
+
+    steps:
+      - task: ArchiveFiles@2
+        displayName: 'Comprimir Ruta'
+        inputs:
+          rootFolderOrFile: .
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
+      
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Scripts_ETL'
+        inputs:
+          PathtoPublish: 'etl/scripts_etl/scripts'
+          ArtifactName: 'Scripts_ETL'
+      
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Acceptance Test'
+        inputs:
+          PathtoPublish: 'etl/scripts_etl/test/acceptance-test'
+          ArtifactName: AcceptanceTest
