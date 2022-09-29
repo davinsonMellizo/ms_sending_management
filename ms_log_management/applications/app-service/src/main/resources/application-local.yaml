@@ -1,18 +1,16 @@
 ##Spring Configuration
 server:
-  port: ${SERVER_PORT}
+  port: 8080
 spring:
   application:
-    name: ${APPLICATION_NAME}
+    name: ms_management_log
   devtools:
     add-properties: false
   jackson:
     default-property-inclusion: NON_NULL
-  profiles:
-    active: ${SPRING_PROFILE_ACTIVE:local}
   logging:
     level:
-      root: ${LOG4J_LEVEL}
+      root: INFO
       reactor:
         netty: false
 
@@ -25,18 +23,19 @@ cloud:
     stack:
       auto: false
     sqs:
-      url: ${SQS-ENDPOINT}
-      timeout: ${SQS_TIMEOUT}
-      pool-size: ${SQS_POOL_SIZE}
-      region-aws: ${REGION_AWS}
+      url: http://localhost:4566/000000000000/logs-alert
+      timeout: 300
+      pool-size: 2
+      region-aws: us-east-1
     rds:
       postgresql:
         pool:
-          initial: ${POSTGRESQL_POOL_INITIAL:10}
-          max: ${POSTGRESQL_POOL_MAX:10}
-        schema: ${POSTGRESQL_SCHEMA}
+          initial: 10
+          max: 10
+        schema: schalerd
     secrets-manager:
-      secret-rds: ${SECRET_RDS}
+      secret-rds: alertas-local-secretrds-CNX
+      secret-rabbit: alertas-local-secretrabbit-CNX
       endpoint: http://localhost:4566
 
 management:
@@ -44,7 +43,7 @@ management:
     web:
       exposure:
         include: health, liveness, readiness
-      base-path: ${PATH_BASE}
+      base-path: /api/v1/log-management
       path-mapping:
         health: health
         liveness: liveness
