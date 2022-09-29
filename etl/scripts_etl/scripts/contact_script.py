@@ -30,7 +30,7 @@ CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 
 # Glue Context
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'glue_database', 'glue_database_table',
-    'source_massive_file_path', 'bucket_destination_path'])
+                                     'source_massive_file_path', 'bucket_destination_path'])
 
 glueContext = GlueContext(SparkContext())
 spark = glueContext.spark_session
@@ -60,8 +60,8 @@ print('CONTACTS_DYF_COUNT:', contacts_dyf.count())
 
 # Obtener los datos actuales de contactos
 contacts_dyf = contacts_dyf.filter(
-    lambda x: x.id_state == 1 and x.previous is False and \
-        x.id_contact_medium in [int(CONTACT_MEDIUM_EMAIL), int(CONTACT_MEDIUM_SMS)]
+    lambda x: x.id_state == 1 and x.previous is False and
+    x.id_contact_medium in [int(CONTACT_MEDIUM_EMAIL), int(CONTACT_MEDIUM_SMS)]
 )
 
 # Seleccionar campos necesarios del DynamicFrame de contactos
@@ -86,17 +86,18 @@ user_id_not_found_df = massive_df.join(
 
 # Unir DataFrames para identificar los números de documento no encontrados en la DB
 massive_df = massive_df.join(
-    user_id_not_found_df, massive_df.UserId ==  user_id_not_found_df.UserIdNotFound, 'full'
+    user_id_not_found_df, massive_df.UserId == user_id_not_found_df.UserIdNotFound, 'full'
 )
 
 # Agregar columna con el ID del tipo de canal
-massive_df = massive_df.withColumn('contact_medium', \
-    when(massive_df.ChannelType == CHANNEL_EMAIL, CONTACT_MEDIUM_EMAIL) \
-    .otherwise(CONTACT_MEDIUM_SMS))
+massive_df = massive_df.withColumn('contact_medium',
+                                   when(massive_df.ChannelType ==
+                                        CHANNEL_EMAIL, CONTACT_MEDIUM_EMAIL)
+                                   .otherwise(CONTACT_MEDIUM_SMS))
 
 # Unir DataFrame a procesar con los datos de contacto
 massive_df = massive_df.join(
-    contacts_df, (massive_df.UserId == contacts_df.document_number) & \
+    contacts_df, (massive_df.UserId == contacts_df.document_number) &
     (massive_df.contact_medium == contacts_df.id_contact_medium), 'full'
 )
 
@@ -107,40 +108,42 @@ massive_df = massive_df.dropna(subset='ChannelType')
 massive_df = massive_df.fillna({'PhoneIndicator': '+57'})
 
 # Asignar mensaje de error si el UserID no existe en la DB
-massive_df = massive_df.withColumn('Error', \
-    when(massive_df.UserId == massive_df.UserIdNotFound, USER_ID_MSG_ERR) \
-    .otherwise(massive_df.Error))
+massive_df = massive_df.withColumn('Error',
+                                   when(massive_df.UserId ==
+                                        massive_df.UserIdNotFound, USER_ID_MSG_ERR)
+                                   .otherwise(massive_df.Error))
 
 # Asignar mensaje de error si el email no existe en la DB
-massive_df = massive_df.withColumn('Error', \
-    when((massive_df.ChannelType == CHANNEL_EMAIL) & \
-        (massive_df.UserIdNotFound.isNull()) & \
-        (massive_df.id_contact_medium.isNull()), EMAIL_MSG_ERR) \
-    .otherwise(massive_df.Error))
+massive_df = massive_df.withColumn('Error',
+                                   when((massive_df.ChannelType == CHANNEL_EMAIL) &
+                                        (massive_df.UserIdNotFound.isNull()) &
+                                        (massive_df.id_contact_medium.isNull()), EMAIL_MSG_ERR)
+                                   .otherwise(massive_df.Error))
 
 # Asignar mensaje de error si el número de celular no existe en la DB
-massive_df = massive_df.withColumn('Error', \
-    when((massive_df.ChannelType == CHANNEL_SMS) & \
-        (massive_df.UserIdNotFound.isNull()) & \
-        (massive_df.id_contact_medium.isNull()), SMS_MSG_ERR) \
-    .otherwise(massive_df.Error))
+massive_df = massive_df.withColumn('Error',
+                                   when((massive_df.ChannelType == CHANNEL_SMS) &
+                                        (massive_df.UserIdNotFound.isNull()) &
+                                        (massive_df.id_contact_medium.isNull()), SMS_MSG_ERR)
+                                   .otherwise(massive_df.Error))
 
 # Asignar el email
-massive_df = massive_df.withColumn('Email', \
-    when((massive_df.ChannelType == CHANNEL_EMAIL) & \
-        (massive_df.id_contact_medium == CONTACT_MEDIUM_EMAIL), massive_df.value) \
-    .otherwise(massive_df.Email))
+massive_df = massive_df.withColumn('Email',
+                                   when((massive_df.ChannelType == CHANNEL_EMAIL) &
+                                        (massive_df.id_contact_medium == CONTACT_MEDIUM_EMAIL), massive_df.value)
+                                   .otherwise(massive_df.Email))
 
 # Asignar el número de celular
-massive_df = massive_df.withColumn('Phone', \
-    when((massive_df.ChannelType == CHANNEL_SMS) & \
-        (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS), massive_df.value) \
-    .otherwise(massive_df.Phone))
+massive_df = massive_df.withColumn('Phone',
+                                   when((massive_df.ChannelType == CHANNEL_SMS) &
+                                        (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS), massive_df.value)
+                                   .otherwise(massive_df.Phone))
 
 # Invertir el ID del tipo de canal
-massive_df = massive_df.withColumn('contact_medium', \
-    when(massive_df.ChannelType == CHANNEL_EMAIL, CONTACT_MEDIUM_SMS) \
-    .otherwise(CONTACT_MEDIUM_EMAIL))
+massive_df = massive_df.withColumn('contact_medium',
+                                   when(massive_df.ChannelType ==
+                                        CHANNEL_EMAIL, CONTACT_MEDIUM_SMS)
+                                   .otherwise(CONTACT_MEDIUM_EMAIL))
 
 # Seleccionar campos del DataFrame de contacto
 contacts_df = massive_df.select(*CONTACTS_COLUMNS).dropna()
@@ -150,23 +153,24 @@ massive_df = massive_df.drop(*CONTACTS_COLUMNS)
 
 # Unir DataFrame a procesar con los datos de contacto
 massive_df = massive_df.join(
-    contacts_df, (massive_df.UserId == contacts_df.document_number) & \
+    contacts_df, (massive_df.UserId == contacts_df.document_number) &
     (massive_df.contact_medium == contacts_df.id_contact_medium), 'full'
 )
 
 # Si el canal es EMAIL asignar el número de celular
-massive_df = massive_df.withColumn('Phone', \
-    when((massive_df.ChannelType == CHANNEL_EMAIL) & \
-        (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS), massive_df.value) \
-    .otherwise(massive_df.Phone))
+massive_df = massive_df.withColumn('Phone',
+                                   when((massive_df.ChannelType == CHANNEL_EMAIL) &
+                                        (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS), massive_df.value)
+                                   .otherwise(massive_df.Phone))
 
 # Si el canal es SMS asignar el email
-massive_df = massive_df.withColumn('Email', \
-    when((massive_df.ChannelType == CHANNEL_SMS) & \
-        (massive_df.id_contact_medium == CONTACT_MEDIUM_EMAIL), massive_df.value) \
-    .otherwise(massive_df.Email))
+massive_df = massive_df.withColumn('Email',
+                                   when((massive_df.ChannelType == CHANNEL_SMS) &
+                                        (massive_df.id_contact_medium == CONTACT_MEDIUM_EMAIL), massive_df.value)
+                                   .otherwise(massive_df.Email))
 
-massive_df = massive_df.drop('contact_medium', 'UserIdNotFound', *CONTACTS_COLUMNS)
+massive_df = massive_df.drop(
+    'contact_medium', 'UserIdNotFound', *CONTACTS_COLUMNS)
 
 # Escribir DataFrame en bucket de S3 en formato de archivo CSV separados por tipo de canal
 massive_df.coalesce(1).write \
