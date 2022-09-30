@@ -27,3 +27,5 @@ data:
   S3-BUCKET: #{s3-bucket}#
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
   TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}#
+  ENDPOINT_INALAMBRIA_SMS: #{endpoint-inalambria-sms}#
+  ENDPOINT_INALAMBRIA_TOKEN: #{endpoint-inalambria-token}#
