@@ -24,11 +24,6 @@ cloud:
     region: us-east-1
     stack:
       auto: false
-    sqs:
-      url: ${SQS-ENDPOINT}
-      timeout: ${SQS_TIMEOUT}
-      pool-size: ${SQS_POOL_SIZE}
-      region-aws: ${REGION_AWS}
     rds:
       postgresql:
         pool:

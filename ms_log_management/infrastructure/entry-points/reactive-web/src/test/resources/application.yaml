@@ -1,0 +1,4 @@
+adapters:
+  entries:
+    reactive-web:
+      log: /log

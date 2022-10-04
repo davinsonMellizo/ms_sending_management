@@ -8,6 +8,8 @@ spring:
     add-properties: false
   jackson:
     default-property-inclusion: NON_NULL
+  webflux:
+    base-path: /alertas/api/v1/log-management
   logging:
     level:
       root: INFO
@@ -17,22 +19,22 @@ spring:
 springdoc:
   version: 1
 
+adapters:
+  entries:
+    reactive-web:
+      log: /log
 cloud:
   aws:
     region: us-east-1
     stack:
       auto: false
-    sqs:
-      url: http://localhost:4566/000000000000/logs-alert
-      timeout: 300
-      pool-size: 2
-      region-aws: us-east-1
     rds:
       postgresql:
         pool:
           initial: 10
           max: 10
         schema: schalerd
+        hostRead: localhost
     secrets-manager:
       secret-rds: alertas-local-secretrds-CNX
       secret-rabbit: alertas-local-secretrabbit-CNX
@@ -43,7 +45,7 @@ management:
     web:
       exposure:
         include: health, liveness, readiness
-      base-path: /api/v1/log-management
+      base-path: /
       path-mapping:
         health: health
         liveness: liveness
@@ -51,3 +53,13 @@ management:
   endpoint:
     health:
       show-details: never
+
+d2b:
+  aws:
+    secrets-manager:
+      endpoint: "http://localhost:4566"
+
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 1
+

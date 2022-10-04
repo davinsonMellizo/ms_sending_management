@@ -8,12 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TechnicalExceptionEnum {
 
-    SQS_ERROR("DST0002","An error has occurred create client sqs"),
-    SAVE_LOG_ERROR("DST0002", "An error has occurred saving the log"),
-    SECRET_EXCEPTION("DST0002", "An error occurred while trying to get AWS secrets"),
+    SAVE_LOG_ERROR("DST0001", "An error has occurred saving the log"),
+    FIND_LOG_ERROR("DST0002", "An error has occurred searching the log"),
     INTERNAL_SERVER_ERROR("DST0003", "Internal server error"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
-    HEADER_MISSING_ERROR("301", "Missing parameters per header");
+    HEADER_ERROR("302", "Error with sent filters");
 
     private final String code;
     private final String message;

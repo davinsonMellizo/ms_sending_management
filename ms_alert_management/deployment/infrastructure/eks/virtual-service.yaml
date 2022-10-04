@@ -18,7 +18,7 @@ spec:
         name: #{gateway-protocol-name}#
         protocol: #{gateway-protocol}#
       hosts:
-          - #{gateway-host}#
+          - #{gateway-host-smoke}#
 
 ---
 apiVersion: networking.istio.io/v1alpha3
