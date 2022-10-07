@@ -1,6 +1,5 @@
 package co.com.bancolombia.usecase.contact;
 
-import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
@@ -32,6 +31,7 @@ import static co.com.bancolombia.commons.constants.Transaction.DELETE_CONTACT_PR
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACTS_EMPTY;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_EMAIL;
@@ -89,7 +89,7 @@ public class ContactUseCase {
     private Mono<Consumer> findConsumer(String consumerCode){
         return Mono.just(consumerCode)
                 .flatMap(consumerGateway::findConsumerById)
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
+                .switchIfEmpty(Mono.error(new BusinessException(CONSUMER_NOT_FOUND)));
     }
 
     public Mono<Contact> saveContact(Contact pContact, String voucher) {

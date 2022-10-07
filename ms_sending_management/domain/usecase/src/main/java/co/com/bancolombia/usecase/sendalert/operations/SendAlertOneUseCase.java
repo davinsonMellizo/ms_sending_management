@@ -32,4 +32,5 @@ public class SendAlertOneUseCase {
                 .flatMap(alert -> routeAlerts(message, alert));
     }
 
+
 }

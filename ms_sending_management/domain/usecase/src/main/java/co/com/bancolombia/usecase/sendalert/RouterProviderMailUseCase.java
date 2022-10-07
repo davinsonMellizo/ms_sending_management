@@ -29,9 +29,8 @@ public class RouterProviderMailUseCase {
     public Mono<Response> routeAlertMail(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMail)
-                .flatMap(message1 -> replaceMessage(message, alert))
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
-                .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
+                .flatMap(message1 -> getRemitter(alert, message))
                 .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))
                 .doOnError(e -> logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(1, e.getMessage())))
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
@@ -39,14 +38,11 @@ public class RouterProviderMailUseCase {
                         new Response(1, e.getBusinessErrorMessage().getMessage())));
     }
 
-    private Mono<Message> replaceMessage(Message message, Alert alert) {
-        return Mono.just(message.getOperation())
-                .filter(operation -> operation == 1) // TODO VALIDATE IF IT IS EQUALS OR DIFFERENT
-                .map(operation -> message.setParameters(List.of(Parameter.builder()
-                                .Value(alert.getMessage())
-                                .Name("message")
-                                .build())))
-                .thenReturn(message);
+    private Mono<Remitter> getRemitter(Alert alert, Message message){
+        return Mono.just(message.getRemitter())
+                .filter(remitter -> remitter.isEmpty() || (message.getOperation() !=1))
+                .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
+                .switchIfEmpty(Mono.just(Remitter.builder().mail(message.getRemitter()).build()));
     }
 
     public Mono<Response> buildMail(Message message, Alert alert, Remitter remitter, Provider provider) {
