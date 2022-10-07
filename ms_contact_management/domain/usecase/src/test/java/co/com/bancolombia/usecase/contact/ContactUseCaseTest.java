@@ -87,16 +87,13 @@ public class ContactUseCaseTest {
                 .thenReturn(Mono.just(List.of(contact)));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
-        when(consumerGateway.findConsumerById(anyString()))
-                .thenReturn(Mono.just(consumer));
-        when(contactGateway.contactsByClientAndSegment(any(), anyString()))
-                .thenReturn(Mono.just(List.of(contact)));
         StepVerifier
-                .create(useCase.findContactsByClient(client, "sss"))
+                .create(useCase.findContactsByClient(client, ""))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(contactGateway).contactsByClient(client);
     }
+    
 
     @Test
     public void saveContact() {
