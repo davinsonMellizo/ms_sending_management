@@ -1,0 +1,76 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: false
+
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 1
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+adapters:
+  postgresql:
+    schema: ${POSTGRESQL_SCHEMA}
+    hostRead: ${HOST_RDS_READ}
+    pool:
+      initial: ${POSTGRESQL_POOL_INITIAL:10}
+      max: ${POSTGRESQL_POOL_MAX:10}
+  async-sqs:
+    url: ${SQS_URL}
+    timeout: ${SQS_TIMEOUT}
+    pool-size: ${SQS_POOL_SIZE}
+    region-aws: ${REGION_AWS}
+  rest-client:
+    timeout: 1000
+    resources:
+      endpointPush: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/push
+  secrets-manager:
+    secret-rabbit: ${SECRET-RABBIT}
+    secret-rds-read: ${SECRET-RDS-READ}
+    secret-rds: ${SECRET-RDS}
+    cache-size: ${CACHE_SECRETS_SIZE}
+    cache-time: ${CACHE_SECRETS_SECONDS}
+    endpoint: http://localhost:4566
+  entries:
+    reactive-web:
+      path-base: ${PATH_BASE}
+      send: ${SEND}
