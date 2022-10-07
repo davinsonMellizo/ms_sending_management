@@ -8,6 +8,4 @@ import org.mapstruct.Mapping;
 public interface AlertMapper {
     Alert toEntity(AlertData alertData);
 
-    @Mapping(target = "isNew", ignore = true)
-    AlertData toData(Alert alert);
 }

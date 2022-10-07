@@ -84,13 +84,13 @@ public class ContactUseCaseTest {
     @Test
     public void findAllContactByClient() {
         when(contactGateway.contactsByClient(any()))
-                .thenReturn(Flux.just(contact));
+                .thenReturn(Mono.just(List.of(contact)));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
         when(contactGateway.contactsByClientAndSegment(any(), anyString()))
-                .thenReturn(Flux.just(contact));
+                .thenReturn(Mono.just(List.of(contact)));
         StepVerifier
                 .create(useCase.findContactsByClient(client, "sss"))
                 .expectNextCount(1)

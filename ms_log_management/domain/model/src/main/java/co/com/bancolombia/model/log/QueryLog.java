@@ -18,4 +18,6 @@ public class QueryLog {
     private String documentNumber;
     private String documentType;
     private String contactValue;
+    private String consumer;
+    private String provider;
 }

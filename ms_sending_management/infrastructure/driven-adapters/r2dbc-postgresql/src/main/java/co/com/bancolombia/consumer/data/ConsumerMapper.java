@@ -9,6 +9,4 @@ public interface ConsumerMapper {
 
     Consumer toEntity(ConsumerData consumerData);
 
-    @Mapping(target = "isNew", ignore = true)
-    ConsumerData toData(Consumer consumer);
 }

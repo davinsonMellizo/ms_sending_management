@@ -18,7 +18,7 @@ public class PriorityRepositoryImplement extends AdapterOperations<Priority, Pri
 
     @Autowired
     public PriorityRepositoryImplement(PriorityRepository repository, PriorityMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override

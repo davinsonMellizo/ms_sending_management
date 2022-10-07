@@ -22,6 +22,8 @@ public class QueryLogDto {
     private String documentNumber;
     private String documentType;
     private String contactValue;
+    private String consumer;
+    private String provider;
 
 
     public Mono<QueryLog> toModel() {
@@ -32,6 +34,8 @@ public class QueryLogDto {
                 .referenceDate(this.referenceDate)
                 .endDate(this.endDate)
                 .startDate(this.startDate)
+                .consumer(this.consumer)
+                .provider(this.provider)
                 .build());
     }
 }

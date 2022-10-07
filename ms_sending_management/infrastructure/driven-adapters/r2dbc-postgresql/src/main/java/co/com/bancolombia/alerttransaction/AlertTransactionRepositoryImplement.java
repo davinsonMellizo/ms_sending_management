@@ -21,7 +21,7 @@ public class AlertTransactionRepositoryImplement
 
     @Autowired
     public AlertTransactionRepositoryImplement(AlertTransactionRepository repository, AlertTransactionMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
 

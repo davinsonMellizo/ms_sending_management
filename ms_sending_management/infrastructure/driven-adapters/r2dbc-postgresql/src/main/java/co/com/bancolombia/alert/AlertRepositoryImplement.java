@@ -23,7 +23,7 @@ public class AlertRepositoryImplement
 
     @Autowired
     public AlertRepositoryImplement(AlertRepository repository, AlertMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.log;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
@@ -24,7 +25,7 @@ class LogUseCaseTest {
     @InjectMocks
     private LogUseCase logUseCase;
     @Mock
-    private LogGateway logGateway;
+    private CommandGateway logGateway;
     private Message message = new Message();
     private Response response = new Response();
     private Alert alert = new Alert();
@@ -32,7 +33,7 @@ class LogUseCaseTest {
     @BeforeEach
     public void init (){
         message.setParameters(new ArrayList<>());
-        when(logGateway.putLogToSQS(any())).thenReturn(Mono.just(new Log()));
+        when(logGateway.sendCommandLogAlert(any())).thenReturn(Mono.just(new Log()));
     }
 
     @Test

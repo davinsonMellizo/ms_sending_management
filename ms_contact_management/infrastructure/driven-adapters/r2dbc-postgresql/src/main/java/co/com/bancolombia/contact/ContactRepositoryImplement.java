@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.DELETE_CONTACT_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_ALL_CONTACT_BY_CLIENT_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CONTACT_ERROR;
@@ -36,17 +38,19 @@ public class ContactRepositoryImplement
     }
 
     @Override
-    public Flux<Contact> contactsByClient(Client client) {
+    public Mono<List<Contact>> contactsByClient(Client client) {
         return repositoryRead.findAllContactsByClient(client.getDocumentNumber(), client.getDocumentType())
                 .map(Mono::just)
                 .flatMap(this::doQuery)
+                .collectList()
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
     }
     @Override
-    public Flux<Contact> contactsByClientAndSegment(Client client, String segment) {
+    public Mono<List<Contact>> contactsByClientAndSegment(Client client, String segment) {
         return repositoryRead.contactsByClientAndSegment(client.getDocumentNumber(), client.getDocumentType(), segment)
                 .map(Mono::just)
                 .flatMap(this::doQuery)
+                .collectList()
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CONTACT_BY_CLIENT_ERROR));
     }
 

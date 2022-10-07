@@ -1,12 +1,14 @@
 package co.com.bancolombia.alerttransaction;
 
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.message.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -25,7 +27,12 @@ class AlertTransactionRepositoryImplTest {
 
     @Test
     void test() {
-
+        Message message = new Message();
+        message.setTransactionCode("0520");
+        message.setConsumer("VLP");
+        StepVerifier.create(repositoryImplement.findAllAlertTransaction(message))
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
 }

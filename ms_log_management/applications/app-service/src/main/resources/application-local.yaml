@@ -1,9 +1,9 @@
 ##Spring Configuration
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
-    name: ms_management_log
+    name: ms_log_management
   devtools:
     add-properties: false
   jackson:
@@ -23,6 +23,7 @@ adapters:
   entries:
     reactive-web:
       log: /log
+
 cloud:
   aws:
     region: us-east-1

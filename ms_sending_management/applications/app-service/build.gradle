@@ -4,7 +4,6 @@ dependencies {
     implementation project(':log')
     implementation project(':model')
     implementation project(':usecase')
-    implementation project(':async-sqs')
     implementation project(':reactive-web')
     implementation project(':rest-consumer')
     implementation project(':secrets-manager')

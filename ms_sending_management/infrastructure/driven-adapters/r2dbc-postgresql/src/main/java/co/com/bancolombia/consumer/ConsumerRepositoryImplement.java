@@ -18,7 +18,7 @@ public class ConsumerRepositoryImplement extends AdapterOperations<Consumer, Con
 
     @Autowired
     public ConsumerRepositoryImplement(ConsumerRepository repository, ConsumerMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override

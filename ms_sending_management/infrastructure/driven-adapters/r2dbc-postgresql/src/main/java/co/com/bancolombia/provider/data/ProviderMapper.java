@@ -8,6 +8,5 @@ import org.mapstruct.Mapping;
 public interface ProviderMapper {
     Provider toEntity(ProviderData providerData);
 
-    @Mapping(target = "isNew", ignore = true)
-    ProviderData toData(Provider provider);
+
 }

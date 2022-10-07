@@ -15,10 +15,14 @@ public interface LogRepositoryReader extends ReactiveCrudRepository<LogData, Str
             "where (document_number::text like :documentNumber||'%' or document_number is null) and " +
             "(document_type like :documentType||'%' or document_type is null ) and " +
             "(contact like :contact||'%' or contact is null)  and " +
+            "(consumer like :consumer||'%' or consumer is null)  and " +
+            "(provider like :provider||'%' or provider is null)  and " +
             "date_creation BETWEEN :startDate AND :endDate")
     Flux<Log> findAllLogByFilters(@Param("documentNumber") String documentNumber,
                                   @Param("documentType") String documentType,
                                   @Param("contact") String contact,
+                                  @Param("consumer") String consumer,
+                                  @Param("provider") String provider,
                                   @Param("startDate")LocalDateTime startDate,
                                   @Param("endDate") LocalDateTime endDate);
 

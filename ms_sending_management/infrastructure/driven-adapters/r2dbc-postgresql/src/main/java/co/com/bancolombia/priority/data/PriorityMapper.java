@@ -9,6 +9,4 @@ public interface PriorityMapper {
 
     Priority toEntity(PriorityData priorityData);
 
-    @Mapping(target = "isNew", ignore = true)
-    PriorityData toData(Priority priority);
 }

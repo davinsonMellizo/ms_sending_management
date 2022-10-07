@@ -19,6 +19,8 @@ public class ParamsUtil {
     private final static  String DOCUMENT_NUMBER= "document-number";
     private final static  String DOCUMENT_TYPE= "document-type";
     private final static  String CONTACT= "contact";
+    private final static  String CONSUMER= "consumer";
+    private final static  String PROVIDER= "provider";
     private final static  String START_DATE= "start-date";
     private final static  String END_DATE= "end-date";
 
@@ -53,6 +55,8 @@ public class ParamsUtil {
                 .documentNumber(getHeader(request, DOCUMENT_NUMBER))
                 .documentType(getHeader(request, DOCUMENT_TYPE))
                 .contactValue(getHeader(request, CONTACT))
+                .consumer(getHeader(request, CONSUMER))
+                .provider(getHeader(request, PROVIDER))
                 .referenceDate(LocalDateTime.now().minusDays(90))
                 .build())
                 .flatMap(queryLogDto -> getHeaderDate(request, START_DATE, queryLogDto, queryLogDto::setStartDate))

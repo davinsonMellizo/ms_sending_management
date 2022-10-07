@@ -13,13 +13,12 @@ data:
   APPLICATION_NAME: #{application-name}#
   SPRING_PROFILE_ACTIVE:  #{spring-profile-active}#
   LOG4J_LEVEL:  #{log-level}#
-  SQS-ENDPOINT: #{log-url}#
-  SQS_TIMEOUT: "#{log-tmo}#"
-  SQS_POOL_SIZE: "#{sqs-pool-size}#"
-  REGION_AWS: #{aws-region}#
-  POSTGRESQL_SCHEMA: #{postgresql-schema}#
+  PATH_FIND_LOG: #{path-find-log}#
   POSTGRESQL_POOL_INITIAL: "#{postgresql-pool-initial}#"
   POSTGRESQL_POOL_MAX: "#{postgresql-pool-max}#"
+  POSTGRESQL_SCHEMA: #{postgresql-schema}#
+  HOST_RDS_READ: #{host-rds-read}#
+  SECRET_RABBIT: #{secret-rabbit}#
   SECRET_RDS: #{secret-rds}#
   PATH_BASE: "#{prefix}#/#{service}#"
 

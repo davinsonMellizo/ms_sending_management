@@ -8,6 +8,4 @@ import org.mapstruct.Mapping;
 public interface RemitterMapper {
     Remitter toEntity(RemitterData remitterData);
 
-    @Mapping(target = "isNew", ignore = true)
-    RemitterData toData(Remitter remitter);
 }

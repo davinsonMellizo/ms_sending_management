@@ -9,6 +9,4 @@ public interface CategoryMapper {
 
     Category toEntity(CategoryData categoryData);
 
-    @Mapping(target = "isNew", ignore = true)
-    CategoryData toData(Category category);
 }
