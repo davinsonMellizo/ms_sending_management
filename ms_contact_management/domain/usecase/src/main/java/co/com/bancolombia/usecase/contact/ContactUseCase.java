@@ -31,6 +31,7 @@ import static co.com.bancolombia.commons.constants.Transaction.DELETE_CONTACT_PR
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND_PER_CHANNEL;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACTS_EMPTY;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA;
@@ -57,22 +58,56 @@ public class ContactUseCase {
                 .filter(client -> client.getIdState() == ACTIVE.getType())
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .map(client -> client.toBuilder().documentType(pClient.getDocumentType()).build())
-                .flatMap(client -> findAllContacts(client, consumerCode))
+                .flatMap(client -> findContactsCloud(client, consumerCode))
                 .onErrorResume(e -> e.getMessage().equals(CLIENT_NOT_FOUND.getMessage()),
-                        e-> documentGateway.getDocument(pClient.getDocumentType())
-                                .flatMap(document -> clientGateway.retrieveAlertInformation(pClient.toBuilder()
-                                .documentType(document.getCode())
-                                .build())))
+                        e-> findClientsIseries(pClient,consumerCode));
+    }
+
+    private Mono<ResponseContacts> findContactsCloud(Client pClient, String pConsumerCode){
+        return Mono.just(pConsumerCode)
+                .filter(consumerCode -> consumerCode.isEmpty())
+                .flatMap(consumerCode -> findConsumer(consumerCode))
+                .flatMap(consumer -> findClientByChanelCloud(pClient, consumer.getId()))
+                .switchIfEmpty(findClientWithoutChanelCloud(pClient));
+    }
+
+    private Mono<ResponseContacts> findClientsIseries(Client pClient, String pConsumerCode){
+        return Mono.just(pConsumerCode)
+                .filter(consumerCode -> consumerCode.isEmpty())
+                .flatMap(consumerCode -> findConsumer(consumerCode))
+                .flatMap(consumer -> findClientByChanelIseries(pClient, consumer.getId()))
+                .switchIfEmpty(findClientWithoutChanelIseries(pClient))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
-    private Mono<ResponseContacts> findAllContacts(Client client, String consumerCode) {
-        return Mono.just(consumerCode)
-                .filter(consumerFilter -> !consumerFilter.isEmpty())
-                .flatMap(this::findConsumer)
+    private Mono<ResponseContacts> findClientByChanelCloud(Client client, String consumerCode){
+        return findConsumer(consumerCode)
                 .flatMap(consumer -> contactGateway.contactsByClientAndSegment(client, consumer.getSegment()))
-                .switchIfEmpty(contactGateway.contactsByClient(client))
-                .map(contacts -> ResponseContacts.<Contact>builder()
+                .filter(contacts -> contacts.isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)))
+                .flatMap(contacts -> buildResponse(client,contacts));
+    }
+    private Mono<ResponseContacts> findClientByChanelIseries(Client client, String consumerCode){
+        return documentGateway.getDocument(client.getDocumentType())
+                .flatMap(document ->clientGateway.retrieveAlertInformation(client.toBuilder()
+                        .documentType(document.getCode()).build()))
+                .flatMap(contacts -> filterContactsByConsumer(contacts, consumerCode));
+    }
+
+    private Mono<ResponseContacts> findClientWithoutChanelCloud(Client client){
+        return contactGateway.contactsByClient(client)
+                .flatMap(contacts -> buildResponse(client,contacts));
+    }
+    private Mono<ResponseContacts> findClientWithoutChanelIseries(Client client){
+        return documentGateway.getDocument(client.getDocumentType())
+                .flatMap(document ->clientGateway.retrieveAlertInformation(client.toBuilder()
+                                .documentType(document.getCode())
+                                .build()));
+    }
+
+    private Mono<ResponseContacts> buildResponse(Client client, List<Contact> contacts){
+        return Mono.just(
+                ResponseContacts.<Contact>builder()
                         .contacts(contacts)
                         .documentNumber(client.getDocumentNumber())
                         .documentType(client.getDocumentType())
@@ -84,8 +119,22 @@ public class ContactUseCase {
                         .creationUser(client.getCreationUser())
                         .createdDate(client.getCreatedDate())
                         .modifiedDate(client.getModifiedDate())
-                        .build());
+                        .build()
+        );
     }
+
+
+    private Mono<ResponseContacts> filterContactsByConsumer(ResponseContacts responseContacts, String segment){
+        return  Mono.just(responseContacts.getContacts())
+                .filter(contacts -> contacts.isEmpty())
+                .flatMapMany(contacts -> Flux.fromIterable(contacts))
+                .filter(contact -> contact.getSegment().equals(segment))
+                .collectList()
+                .map(contacts -> responseContacts.toBuilder().contacts(contacts).build())
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
+    }
+
+
     private Mono<Consumer> findConsumer(String consumerCode){
         return Mono.just(consumerCode)
                 .flatMap(consumerGateway::findConsumerById)

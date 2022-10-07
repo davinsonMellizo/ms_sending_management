@@ -38,6 +38,7 @@ public class MessageDTO {
     private List<Parameter> parameters = new ArrayList<>();
     @Builder.Default
     private ArrayList<Attachment> attachments = new ArrayList<>();;
+    private String remitter;
 
     public Mono<Message> toModel(){
         return Mono.just(Message.builder()
@@ -55,6 +56,7 @@ public class MessageDTO {
                 .mail(this.mail)
                 .parameters(this.parameters)
                 .attachments(this.attachments)
+                .remitter(this.remitter)
                 .build());
     }
 }

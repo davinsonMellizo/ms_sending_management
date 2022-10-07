@@ -16,6 +16,7 @@ public enum BusinessErrorMessage {
     DOCUMENT_TYPE_NOT_FOUND("375", "Document Type Not Found", "409"),
     STATE_NOT_FOUND("376", "State Not Found", "409"),
     CONSUMER_NOT_FOUND("377", "Consumer Not Found", "409"),
+    CLIENT_NOT_FOUND_PER_CHANNEL("378", "Client not registered in channel", "409"),
     SUCCESS_ENROLL("120", "Successful enrollment", "409"),
     SUCCESS_UPDATE("120", "Successful update", "409"),
     SUCCESS_CHANGE("120", "Successful change", "409"),
