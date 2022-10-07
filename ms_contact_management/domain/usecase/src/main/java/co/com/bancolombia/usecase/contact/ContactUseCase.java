@@ -65,7 +65,7 @@ public class ContactUseCase {
 
     private Mono<ResponseContacts> findContactsCloud(Client pClient, String pConsumerCode){
         return Mono.just(pConsumerCode)
-                .filter(consumerCode -> consumerCode.isEmpty())
+                .filter(consumerCode -> !consumerCode.isEmpty())
                 .flatMap(consumerCode -> findConsumer(consumerCode))
                 .flatMap(consumer -> findClientByChanelCloud(pClient, consumer.getId()))
                 .switchIfEmpty(findClientWithoutChanelCloud(pClient));
@@ -73,19 +73,22 @@ public class ContactUseCase {
 
     private Mono<ResponseContacts> findClientsIseries(Client pClient, String pConsumerCode){
         return Mono.just(pConsumerCode)
-                .filter(consumerCode -> consumerCode.isEmpty())
+                .filter(consumerCode -> !consumerCode.isEmpty())
                 .flatMap(consumerCode -> findConsumer(consumerCode))
                 .flatMap(consumer -> findClientByChanelIseries(pClient, consumer.getId()))
                 .switchIfEmpty(findClientWithoutChanelIseries(pClient))
+                .onErrorMap(BusinessException.class, e-> new BusinessException(CLIENT_NOT_FOUND))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
     private Mono<ResponseContacts> findClientByChanelCloud(Client client, String consumerCode){
         return findConsumer(consumerCode)
                 .flatMap(consumer -> contactGateway.contactsByClientAndSegment(client, consumer.getSegment()))
-                .filter(contacts -> contacts.isEmpty())
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)))
-                .flatMap(contacts -> buildResponse(client,contacts));
+                .filter(contacts -> !contacts.isEmpty())
+                .flatMap(contacts -> buildResponse(client,contacts))
+                .switchIfEmpty(findClientByChanelIseries(client,consumerCode))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
+
     }
     private Mono<ResponseContacts> findClientByChanelIseries(Client client, String consumerCode){
         return documentGateway.getDocument(client.getDocumentType())
@@ -122,7 +125,6 @@ public class ContactUseCase {
                         .build()
         );
     }
-
 
     private Mono<ResponseContacts> filterContactsByConsumer(ResponseContacts responseContacts, String segment){
         return  Mono.just(responseContacts.getContacts())
