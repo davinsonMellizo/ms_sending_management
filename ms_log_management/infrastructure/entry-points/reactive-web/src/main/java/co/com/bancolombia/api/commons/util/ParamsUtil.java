@@ -37,30 +37,29 @@ public class ParamsUtil {
         return ofEmpty(request.headers().firstHeader(header)).orElse("");
     }
     private static  Mono<QueryLogDto> getHeaderDate(ServerRequest request, String header, QueryLogDto queryLogDto,
-                                                    Consumer<LocalDateTime> setDate) {
+                                                    Integer daysHotData) {
         return ofEmptyDate(request.headers().firstHeader(header))
-                .switchIfEmpty(Mono.just(LocalDateTime.now().minusDays(90)))
-                .doOnNext(localDateTime -> setDate.accept(localDateTime))
+                .switchIfEmpty(Mono.just(LocalDateTime.now().minusDays(daysHotData)))
+                .doOnNext(localDateTime -> queryLogDto.setStartDate(localDateTime))
                 .thenReturn(queryLogDto);
     }
-    private static  Mono<QueryLogDto> getHeaderEndDate(ServerRequest request, String header, QueryLogDto queryLogDto,
-                                                    Consumer<LocalDateTime> setDate) {
+    private static  Mono<QueryLogDto> getHeaderEndDate(ServerRequest request, String header, QueryLogDto queryLogDto) {
         return ofEmptyDate(request.headers().firstHeader(header))
-                .doOnNext(localDateTime -> setDate.accept(localDateTime))
+                .doOnNext(localDateTime -> queryLogDto.setEndDate(localDateTime))
                 .thenReturn(queryLogDto);
     }
 
-    public static Mono<QueryLogDto> getClientHeaders(ServerRequest request) {
+    public static Mono<QueryLogDto> getClientHeaders(ServerRequest request, Integer daysHotData) {
         return Mono.just(QueryLogDto.builder()
                 .documentNumber(getHeader(request, DOCUMENT_NUMBER))
                 .documentType(getHeader(request, DOCUMENT_TYPE))
                 .contactValue(getHeader(request, CONTACT))
                 .consumer(getHeader(request, CONSUMER))
                 .provider(getHeader(request, PROVIDER))
-                .referenceDate(LocalDateTime.now().minusDays(90))
+                .referenceDate(LocalDateTime.now().minusDays(daysHotData))
                 .build())
-                .flatMap(queryLogDto -> getHeaderDate(request, START_DATE, queryLogDto, queryLogDto::setStartDate))
-                .flatMap(queryLogDto -> getHeaderEndDate(request, END_DATE, queryLogDto, queryLogDto::setEndDate))
+                .flatMap(queryLogDto -> getHeaderDate(request, START_DATE, queryLogDto, daysHotData))
+                .flatMap(queryLogDto -> getHeaderEndDate(request, END_DATE, queryLogDto))
                 .onErrorMap(e-> new TechnicalException(e, TechnicalExceptionEnum.HEADER_ERROR));
     }
 

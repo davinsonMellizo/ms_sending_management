@@ -21,6 +21,7 @@ data:
   SECRET_RABBIT: #{secret-rabbit}#
   SECRET_RDS: #{secret-rds}#
   PATH_BASE: "#{prefix}#/#{service}#"
+  DAYS_HOT_DATA: #{days-hot-data}#
 
 
 

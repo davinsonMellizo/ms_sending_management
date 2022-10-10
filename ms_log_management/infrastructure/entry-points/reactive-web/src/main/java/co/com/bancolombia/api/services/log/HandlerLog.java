@@ -16,9 +16,8 @@ import reactor.core.publisher.Mono;
 public class HandlerLog {
     private  final LogUseCase useCase;
 
-
-    public Mono<ServerResponse> findLogsByDate(ServerRequest serverRequest) {
-        return ParamsUtil.getClientHeaders(serverRequest)
+    public Mono<ServerResponse> findLogsByDate(ServerRequest serverRequest, Integer daysHotDate) {
+        return ParamsUtil.getClientHeaders(serverRequest, daysHotDate)
                 .flatMap(QueryLogDto::toModel)
                 .flatMap(useCase::findLogsByDate)
                 .flatMap(ResponseUtil::responseOk);

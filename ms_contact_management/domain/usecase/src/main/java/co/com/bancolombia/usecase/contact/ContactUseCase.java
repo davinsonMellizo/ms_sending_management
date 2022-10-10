@@ -131,6 +131,7 @@ public class ContactUseCase {
                 .flatMapMany(contacts -> Flux.fromIterable(contacts))
                 .filter(contact -> contact.getSegment().equals(segment))
                 .collectList()
+                .filter(contacts -> contacts.isEmpty())
                 .map(contacts -> responseContacts.toBuilder().contacts(contacts).build())
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
     }
