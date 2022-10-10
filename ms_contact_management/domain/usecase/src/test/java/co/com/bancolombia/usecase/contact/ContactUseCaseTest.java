@@ -93,7 +93,7 @@ public class ContactUseCaseTest {
                 .verifyComplete();
         verify(contactGateway).contactsByClient(client);
     }
-    
+
 
     @Test
     public void saveContact() {
