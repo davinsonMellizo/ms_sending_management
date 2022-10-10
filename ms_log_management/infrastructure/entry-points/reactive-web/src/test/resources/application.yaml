@@ -1,4 +1,5 @@
 adapters:
+  days-hot-data: 90
   entries:
     reactive-web:
       log: /log

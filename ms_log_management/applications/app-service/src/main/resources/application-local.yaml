@@ -1,6 +1,6 @@
 ##Spring Configuration
 server:
-  port: 8081
+  port: 8080
 spring:
   application:
     name: ms_log_management
