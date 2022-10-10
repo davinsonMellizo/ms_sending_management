@@ -77,7 +77,7 @@ public class ContactUseCase {
                 .flatMap(consumerCode -> findConsumer(consumerCode))
                 .flatMap(consumer -> findClientByChanelIseries(pClient, consumer.getSegment()))
                 .switchIfEmpty(findClientWithoutChanelIseries(pClient))
-                .onErrorMap(BusinessException.class, e-> new BusinessException(CLIENT_NOT_FOUND))
+                .onErrorMap(e-> e.getMessage().equals(CLIENT_NOT_FOUND_PER_CHANNEL) ,e-> new BusinessException(CLIENT_NOT_FOUND))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
@@ -127,11 +127,11 @@ public class ContactUseCase {
 
     private Mono<ResponseContacts> filterContactsByConsumer(ResponseContacts responseContacts, String segment){
         return  Mono.just(responseContacts.getContacts())
-                .filter(contacts -> contacts.isEmpty())
+                .filter(contacts -> !contacts.isEmpty())
                 .flatMapMany(contacts -> Flux.fromIterable(contacts))
                 .filter(contact -> contact.getSegment().equals(segment))
                 .collectList()
-                .filter(contacts -> contacts.isEmpty())
+                .filter(contacts -> !contacts.isEmpty())
                 .map(contacts -> responseContacts.toBuilder().contacts(contacts).build())
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
     }

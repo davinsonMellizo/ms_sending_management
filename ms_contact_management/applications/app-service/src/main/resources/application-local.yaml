@@ -77,4 +77,4 @@ d2b:
     secrets-manager:
       endpoint: http://localhost:4566
   secrets:
-    apic: nu0154001-alertas-local-iseries-retrieve
+    apic: nu0154001-alertas-local-iseries-retrieve-information
