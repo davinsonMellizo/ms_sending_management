@@ -13,15 +13,15 @@ data:
   APPLICATION_NAME: #{application-name}#
   SPRING_PROFILE_ACTIVE:  #{spring-profile-active}#
   LOG4J_LEVEL:  #{log-level}#
-  PATH_FIND_LOG: #{path-find-log}#
+  PATH_FIND_LOG: "#{path-find-log}#"
   POSTGRESQL_POOL_INITIAL: "#{postgresql-pool-initial}#"
   POSTGRESQL_POOL_MAX: "#{postgresql-pool-max}#"
-  POSTGRESQL_SCHEMA: #{postgresql-schema}#
-  HOST_RDS_READ: #{host-rds-read}#
-  SECRET_RABBIT: #{secret-rabbit}#
-  SECRET_RDS: #{secret-rds}#
+  POSTGRESQL_SCHEMA: "#{postgresql-schema}#"
+  HOST_RDS_READ: "#{host-rds-read}#"
+  SECRET_RABBIT: "#{secret-rabbit}#"
+  SECRET_RDS: "#{secret-rds}#"
   PATH_BASE: "#{prefix}#/#{service}#"
-  DAYS_HOT_DATA: #{days-hot-data}#
+  DAYS_HOT_DATA: "#{days-hot-data}#"
 
 
 
