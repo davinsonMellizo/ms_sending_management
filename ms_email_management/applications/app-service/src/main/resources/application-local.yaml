@@ -1,0 +1,84 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: false
+  output:
+    ansi:
+      enabled: ALWAYS
+
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 0
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+adapters:
+  dynamo-repository:
+    region-aws: ${REGION_AWS}
+    endpoint: http://localhost:4566
+  async-sqs:
+    url: ${SQS_URL}
+    timeout: ${SQS_TIMEOUT}
+    pool-size: ${SQS_POOL_SIZE}
+    region-aws: ${REGION_AWS}
+  rest-client:
+    timeout: 1000
+    resources:
+      endpointMasivianMail: https://api.masiv.masivian.com/email/v1/delivery
+      #endpointMasivianMail: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
+      endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
+      endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
+  secrets-manager:
+    secret-rabbit: ${SECRET-RABBIT}
+    cache-size: ${CACHE_SECRETS_SIZE}
+    cache-time: ${CACHE_SECRETS_SECONDS}
+    endpoint: http://localhost:4566
+aws:
+  region: ${REGION_AWS}
+  nameSecretBucketSsl: ${NAME-SECRET-BUCKET-SSL}
+  s3:
+    endpoint: http://localhost:4566
+    bucket: ${S3-BUCKET}
+stash:
+  redis:
+    expireTime: ${EXPIRE_TIME_CACHE}
+    host: ${CACHE}
+    port: ${CACHE_PORT}

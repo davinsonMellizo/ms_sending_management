@@ -1,0 +1,85 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: false
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 1
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+adapters:
+  async-sqs:
+    url: ${SQS_URL}
+    timeout: ${SQS_TIMEOUT}
+    pool-size: ${SQS_POOL_SIZE}
+    region-aws: ${REGION_AWS}
+  dynamo-repository:
+    region-aws: ${REGION_AWS}
+    endpoint: http://localhost:4566
+  rest-client:
+    timeout: 1000
+    resources:
+      #endpointMasivSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-sms
+      endpointMasivSms: https://api-sms.masivapp.com/send-message
+      endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
+      endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
+      endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
+      #endpointInalambriaSms: https://restcert.inalambria.com/mtmessage
+      #endpointInalambriaToken: https://restcert.inalambria.com/token/
+      endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
+  secrets-manager:
+    secret-rabbit: ${SECRET-RABBIT}
+    #secret-inalambria: ${SECRET-INALAMBRIA}
+    cache-size: ${CACHE_SECRETS_SIZE}
+    cache-time: ${CACHE_SECRETS_SECONDS}
+    endpoint: http://localhost:4566
+aws:
+  region: ${REGION_AWS}
+  nameSecretBucketSsl: ${NAME-SECRET-BUCKET-SSL}
+  s3:
+    endpoint: http://localhost:4566
+    bucket: ${S3-BUCKET}
+stash:
+  redis:
+    expireTime: ${EXPIRE_TIME_CACHE}
+    host: ${CACHE}
+    port: ${CACHE_PORT}

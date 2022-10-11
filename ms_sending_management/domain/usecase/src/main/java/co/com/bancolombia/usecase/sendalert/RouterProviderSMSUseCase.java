@@ -48,7 +48,7 @@ public class RouterProviderSMSUseCase {
     private Mono<Response> sendSMS(Message message, Alert alert, Provider provider) {
         return Mono.just(Sms.builder()
                 .logKey(message.getLogKey())
-                .priority(alert.getPriority())
+                .priority(message.getPriority() != null? message.getPriority(): alert.getPriority())
                 .to(message.getPhoneIndicator() + message.getPhone())
                 .message(alert.getMessage())
                 .provider(provider.getId())

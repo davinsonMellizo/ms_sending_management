@@ -24,6 +24,7 @@ public class Message {
     private String url;
     private String template;
     private String remitter;
+    private Integer priority;
     private String logKey;
 
     private String phone;
