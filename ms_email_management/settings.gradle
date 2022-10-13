@@ -30,3 +30,5 @@ include ':redis'
 project(':redis').projectDir = file('./infrastructure/driven-adapters/redis')
 include ':s3-bucket'
 project(':s3-bucket').projectDir = file('./infrastructure/helpers/s3-bucket')
+include ':async-event-bus'
+project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')

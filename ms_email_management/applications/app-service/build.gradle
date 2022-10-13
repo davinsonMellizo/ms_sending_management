@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	implementation project(':async-event-bus')
     implementation project(':redis')
     implementation project(':async-sqs')
     implementation project(':ses')
