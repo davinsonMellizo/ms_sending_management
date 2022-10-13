@@ -19,6 +19,8 @@ import org.springframework.r2dbc.core.DatabaseClient;
         basePackages={"co.com.bancolombia.log.writer"})
 public class PostgreSQLAdapterConfig{
 
+
+
     @Bean("Writer")
     public ConnectionFactory initializer(@Qualifier("buildConnectionWriterConfiguration")
                                              final ConnectionFactoryOptions options) {

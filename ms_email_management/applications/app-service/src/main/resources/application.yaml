@@ -14,7 +14,7 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
   profiles:
-    active: ${SPRING_PROFILE_ACTIVE}
+    active: ${SPRING_PROFILE_ACTIVE:local}
   webflux:
     base-path: ${PATH_BASE}
   logging:
