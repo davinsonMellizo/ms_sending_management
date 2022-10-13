@@ -1,6 +1,7 @@
 package co.com.bancolombia.events;
 
 //import co.com.bancolombia.model.events.gateways.EventsGateway;
+import co.com.bancolombia.model.events.gateways.EventsGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 //import org.reactivecommons.api.domain.DomainEvent;
@@ -16,8 +17,7 @@ import static reactor.core.publisher.Mono.from;
 @Log
 @RequiredArgsConstructor
 //@EnableDomainEventBus
-public class ReactiveEventsGateway //implements EventsGateway
-{
+public class ReactiveEventsGateway implements EventsGateway {
     public static final String SOME_EVENT_NAME = "some.event.name";
    // private final DomainEventBus domainEventBus;
 
