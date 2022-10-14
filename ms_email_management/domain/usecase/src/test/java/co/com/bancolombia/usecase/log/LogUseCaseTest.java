@@ -1,7 +1,7 @@
 package co.com.bancolombia.usecase.log;
 
+import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.log.Log;
-import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.TemplateEmail;
@@ -24,7 +24,7 @@ public class LogUseCaseTest {
     @InjectMocks
     private LogUseCase logUseCase;
     @Mock
-    private LogGateway logGateway;
+    private CommandGateway commandGateway;
     private Alert alert = new Alert();
     private TemplateEmail templateEmail = new TemplateEmail();
     private Response response = new Response();
@@ -36,7 +36,7 @@ public class LogUseCaseTest {
         alert.setDestination(Alert.Destination.builder().toAddress("email").build());
         response.setCode(1);
         response.setDescription("description");
-        when(logGateway.putLogToSQS(any())).thenReturn(Mono.just(new Log()));
+        when(commandGateway.sendCommanLogEmail(any())).thenReturn(Mono.just(new Log()));
     }
 
     @Test
