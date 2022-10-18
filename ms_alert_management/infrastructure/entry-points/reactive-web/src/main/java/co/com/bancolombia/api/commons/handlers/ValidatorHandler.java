@@ -20,12 +20,21 @@ public class ValidatorHandler {
     private final Validator validator;
     private final LoggerBuilder logger;
 
-    public <T> void validateObject(T object) {
-        Set<ConstraintViolation<T>> constraints = validator.validate(object);
+    private <T> void validateConstraints(Set<ConstraintViolation<T>> constraints) {
         if (!constraints.isEmpty()) {
             logger.error(new TechnicalException(getMessage(constraints), BODY_MISSING_ERROR));
             throw new TechnicalException(getMessage(constraints), BODY_MISSING_ERROR);
         }
+    }
+
+    public <T> void validateObject(T object) {
+        Set<ConstraintViolation<T>> constraints = validator.validate(object);
+        validateConstraints(constraints);
+    }
+
+    public <T> void validateObject(T object, Class<?> clazz) {
+        Set<ConstraintViolation<T>> constraints = validator.validate(object, clazz);
+        validateConstraints(constraints);
     }
 
     public <T> void validateObjectHeaders(T object) {

@@ -62,9 +62,10 @@ adapters:
       path-base: /api/v1/alert-management
       alert: /alert
       campaign: /campaign
-      remitter: /remitter
-      provider: /provide
-      service: /service
       consumer: /consumer
       category: /category
       priority: /priority
+      provider: /provider
+      remitter: /remitter
+      service: /service
+      schedule: /schedule

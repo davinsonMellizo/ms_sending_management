@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RemitterUseCaseTest {
+class RemitterUseCaseTest {
 
     @InjectMocks
     private RemitterUseCase useCase;
@@ -34,7 +34,7 @@ public class RemitterUseCaseTest {
     private final Remitter remitter = new Remitter();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         remitter.setId(0);
     }
 

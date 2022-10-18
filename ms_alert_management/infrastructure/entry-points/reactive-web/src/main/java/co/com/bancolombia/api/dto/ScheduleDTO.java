@@ -1,12 +1,16 @@
 package co.com.bancolombia.api.dto;
 
+import co.com.bancolombia.api.commons.validators.constraints.FieldsValueMatch;
+import co.com.bancolombia.api.commons.validators.groups.OnCreate;
+import co.com.bancolombia.api.commons.validators.groups.OnUpdate;
+import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.model.schedule.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -16,20 +20,23 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ScheduleDTO {
+@FieldsValueMatch(
+        field = "startTime",
+        fieldMatch = "endTime",
+        message = "startTime and endTime fields values don't match"
+)
+public class ScheduleDTO extends DTO<Schedule> {
 
-    @Min(value = 1, message = "{constraint.min}")
-    private Integer id;
-
-    @Size(min = 1, max = 5, message = "{constraint.size}")
+    @Size(min = 1, max = 50, message = "{constraint.size}")
+    @NotNull(message = "{constraint.not_null}")
     private String idCampaign;
-
-    @Size(min = 1, max = 3, message = "{constraint.size}")
-    private String idConsumer;
 
     @Size(min = 1, max = 10, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
-    private String scheduleType;
+    private String idConsumer;
+
+    @NotNull(message = "{constraint.not_null}")
+    private ScheduleType scheduleType;
 
     @NotNull(message = "{constraint.not_null}")
     private LocalDate startDate;
@@ -37,17 +44,18 @@ public class ScheduleDTO {
     @NotNull(message = "{constraint.not_null}")
     private LocalTime startTime;
 
-    @NotNull(message = "{constraint.not_null}")
     private LocalDate endDate;
 
-    @NotNull(message = "{constraint.not_null}")
     private LocalTime endTime;
 
+    @Size(min = 1, max = 20, message = "{constraint.size}")
     private String creationUser;
 
-    public Schedule toModel() {
-        return Schedule.builder()
-                .id(this.id)
+    @Size(min = 1, max = 20, message = "{constraint.size}")
+    private String modifiedUser;
+
+    public Mono<Schedule> toModel() {
+        return Mono.just(Schedule.builder()
                 .idCampaign(this.idCampaign)
                 .idConsumer(this.idConsumer)
                 .scheduleType(this.scheduleType)
@@ -56,6 +64,7 @@ public class ScheduleDTO {
                 .endDate(this.endDate)
                 .endTime(this.endTime)
                 .creationUser(this.creationUser)
-                .build();
+                .modifiedUser(this.modifiedUser)
+                .build());
     }
 }

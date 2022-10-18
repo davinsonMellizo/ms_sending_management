@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryDTO {
+public class CategoryDTO extends DTO<Category> {
 
     @Max(value = 999, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")

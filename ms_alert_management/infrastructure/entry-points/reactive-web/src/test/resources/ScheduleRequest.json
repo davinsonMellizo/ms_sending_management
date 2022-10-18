@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "idCampaign": "1",
+  "idConsumer": "ALM",
+  "scheduleType": "ON_DEMAND",
+  "startDate": "2022-10-06",
+  "startTime": "14:30:00.00",
+  "endDate": "2022-10-20",
+  "endTime": "14:30:00.00",
+  "creationUser": "lugomez"
+}

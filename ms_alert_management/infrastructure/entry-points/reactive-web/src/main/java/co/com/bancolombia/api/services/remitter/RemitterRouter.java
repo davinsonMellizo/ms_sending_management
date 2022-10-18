@@ -16,7 +16,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class RemitterRouter extends RemitterDocumentationApi {
     private final ApiProperties apiProperties;
-    private static String ID = "/{id}";
+    private static final String ID = "/{id}";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionRemitter(RemitterHandler handler) {

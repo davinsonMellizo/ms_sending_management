@@ -1,6 +1,7 @@
 package co.com.bancolombia.campaign.data;
 
 import co.com.bancolombia.model.schedule.Schedule;
+import io.r2dbc.postgresql.codec.Json;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,22 +19,24 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("campaign")
-public class CampaignData implements Persistable<Integer> {
+public class CampaignData implements Persistable<String> {
 
     @Id
-    private Integer id;
     private String idCampaign;
     private String idConsumer;
-    private String idProvider;
+    private Json provider;
     private Integer idRemitter;
     private String defaultTemplate;
     private String description;
     private String sourcePath;
     private boolean attachment;
     private String attachmentPath;
+    private boolean dataEnrichment;
     private String state;
     private String creationUser;
     private LocalDateTime createdDate;
+    private String modifiedUser;
+    private LocalDateTime modifiedDate;
 
     @Transient
     private List<Schedule> schedules;
@@ -42,7 +45,11 @@ public class CampaignData implements Persistable<Integer> {
     private Boolean isNew;
 
     @Override
-    @Transient
+    public String getId() {
+        return this.getIdCampaign();
+    }
+
+    @Override
     public boolean isNew() {
         return this.isNew;
     }

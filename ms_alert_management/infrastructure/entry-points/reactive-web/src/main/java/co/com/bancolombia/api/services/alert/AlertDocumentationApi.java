@@ -14,9 +14,9 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class AlertDocumentationApi {
 
-    private final static String TAG = "Alert";
-    private final static String ERROR = "Error";
-    private final static String SUCCESSFUL = "successful";
+    private static final String TAG = "Alert";
+    private static final String ERROR = "Error";
+    private static final String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)

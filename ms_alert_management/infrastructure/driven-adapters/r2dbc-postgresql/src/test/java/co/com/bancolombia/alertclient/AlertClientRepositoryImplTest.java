@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AlertClientRepositoryImplTest {
+class AlertClientRepositoryImplTest {
 
     @Autowired
     private AlertClientRepositoryImplement repositoryImplement;

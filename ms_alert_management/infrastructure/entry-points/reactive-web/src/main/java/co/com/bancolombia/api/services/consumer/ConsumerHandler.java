@@ -2,7 +2,7 @@ package co.com.bancolombia.api.services.consumer;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
-import co.com.bancolombia.api.commons.util.ResponseUtil;
+import co.com.bancolombia.api.dto.ResponseDTO;
 import co.com.bancolombia.api.dto.ConsumerDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.consumer.ConsumerUseCase;
@@ -24,12 +24,12 @@ public class ConsumerHandler {
     public Mono<ServerResponse> findConsumer(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
                 .flatMap(useCase::findConsumerById)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> findAllConsumer(ServerRequest serverRequest) {
         return useCase.findAllConsumer()
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> saveConsumer(ServerRequest serverRequest) {
@@ -38,7 +38,7 @@ public class ConsumerHandler {
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(ConsumerDTO::toModel)
                 .flatMap(useCase::saveConsumer)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> updateConsumer(ServerRequest serverRequest) {
@@ -47,12 +47,12 @@ public class ConsumerHandler {
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(ConsumerDTO::toModel)
                 .flatMap(useCase::updateConsumer)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> deleteConsumer(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
                 .flatMap(useCase::deleteConsumerById)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 }

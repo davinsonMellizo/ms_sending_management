@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ConsumerDTO extends DTO{
+public class ConsumerDTO extends DTO<Consumer> {
 
     @Size(min = 1, max = 10, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")

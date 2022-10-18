@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlertClientDTO {
+public class AlertClientDTO extends DTO<AlertClient> {
 
     @Size(min = 1, max = 3, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
@@ -41,6 +41,7 @@ public class AlertClientDTO {
     @Builder.Default
     private String creationUser = "";
 
+    @Override
     public Mono<AlertClient> toModel() {
         return Mono.just(AlertClient.builder()
                 .idAlert(this.idAlert)
@@ -53,5 +54,4 @@ public class AlertClientDTO {
                 .alertDescription(this.alertDescription)
                 .build());
     }
-
 }

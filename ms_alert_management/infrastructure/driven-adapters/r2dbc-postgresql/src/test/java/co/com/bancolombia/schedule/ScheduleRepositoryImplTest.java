@@ -1,5 +1,6 @@
 package co.com.bancolombia.schedule;
 
+import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.schedule.Schedule;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ScheduleRepositoryImplTest {
+class ScheduleRepositoryImplTest {
 
     @Autowired
     private ScheduleRepositoryImplement repositoryImpl;
@@ -32,24 +33,20 @@ public class ScheduleRepositoryImplTest {
 
     @BeforeEach
     public void init() {
-        campaign.setId(1);
         campaign.setIdCampaign("1");
         campaign.setIdConsumer("ALM");
-        campaign.setIdProvider("HJK");
+        campaign.setProvider("{\"idProvider\":\"INA\",\"channelType\":\"PUSH\"}");
         campaign.setIdRemitter(0);
-        campaign.setDefaultTemplate("template");
-        campaign.setDescription("description");
         campaign.setSourcePath("source_path");
-        campaign.setAttachment(true);
-        campaign.setAttachmentPath("attachment_path");
-        campaign.setState("ACTIVO");
+        campaign.setAttachment(false);
+        campaign.setState("1");
         campaign.setCreatedDate(NOW);
         campaign.setCreationUser("lugomez");
 
-        schedule.setId(1);
+        schedule.setId(1L);
         schedule.setIdCampaign("1");
-        schedule.setIdConsumer("0");
-        schedule.setScheduleType("MENSUAL");
+        schedule.setIdConsumer("ALM");
+        schedule.setScheduleType(ScheduleType.DAILY);
         schedule.setStartDate(DATE_NOW);
         schedule.setStartTime(TIME_NOW);
         schedule.setEndDate(DATE_NOW.plusMonths(1));
@@ -59,9 +56,30 @@ public class ScheduleRepositoryImplTest {
     }
 
     @Test
-    void findSchedulesByCampaign() {
-        StepVerifier.create(repositoryImpl.findSchedulesByCampaign(campaign))
-                .consumeNextWith(allSchedules -> assertEquals(2, allSchedules.getSchedules().size()))
+    void saveSchedule() {
+        schedule.setId(4L);
+        repositoryImpl.saveSchedule(schedule)
+                .subscribe(s -> StepVerifier
+                        .create(repositoryImpl.findScheduleById(s.getId()))
+                        .expectNextCount(1)
+                        .consumeNextWith(status -> assertEquals(status.getId(), schedule.getId()))
+                        .verifyComplete()
+                );
+    }
+
+    @Test
+    void updateSchedule() {
+        schedule.setScheduleType(ScheduleType.HOURLY);
+        StepVerifier.create(repositoryImpl.updateSchedule(schedule, schedule.getId()))
+                .consumeNextWith(status ->
+                        assertEquals(schedule.getScheduleType(), status.getActual().getScheduleType()))
+                .verifyComplete();
+    }
+
+    @Test
+    void findScheduleById() {
+        StepVerifier.create(repositoryImpl.findScheduleById(schedule.getId()))
+                .consumeNextWith(scheduleFound -> assertEquals(schedule.getId(), scheduleFound.getId()))
                 .verifyComplete();
     }
 
@@ -76,19 +94,17 @@ public class ScheduleRepositoryImplTest {
     }
 
     @Test
-    void updateSchedulesByCampaign() {
-        campaign.getSchedules().get(0).setScheduleType("SEMANAL");
-        StepVerifier.create(repositoryImpl.updateSchedulesByCampaign(campaign))
-                .consumeNextWith(status -> assertEquals(campaign.getSchedules().get(0).getScheduleType(), status.getSchedules().get(0).getScheduleType()))
+    void findSchedulesByCampaign() {
+        StepVerifier.create(repositoryImpl.findSchedulesByCampaign(campaign))
+                .consumeNextWith(allSchedules -> assertEquals(2, allSchedules.getSchedules().size()))
                 .verifyComplete();
     }
 
     @Test
-    void deleteSchedulesByCampaign() {
-        campaign.setIdCampaign("2");
-        campaign.setIdConsumer("1");
-        StepVerifier.create(repositoryImpl.deleteSchedulesByCampaign(campaign))
-                .consumeNextWith(s -> assertEquals(campaign.getIdCampaign(), s))
+    void updateSchedulesByCampaign() {
+        campaign.getSchedules().get(0).setScheduleType(ScheduleType.HOURLY);
+        StepVerifier.create(repositoryImpl.updateSchedulesByCampaign(campaign))
+                .consumeNextWith(status -> assertEquals(campaign.getSchedules().get(0).getScheduleType(), status.getSchedules().get(0).getScheduleType()))
                 .verifyComplete();
     }
 }

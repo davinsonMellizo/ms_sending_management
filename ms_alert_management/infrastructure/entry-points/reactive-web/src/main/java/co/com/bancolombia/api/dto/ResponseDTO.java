@@ -1,15 +1,33 @@
-package co.com.bancolombia.api.commons.util;
+package co.com.bancolombia.api.dto;
 
-import lombok.experimental.UtilityClass;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@UtilityClass
-public class ResponseUtil {
+@Data
+@Builder(toBuilder = true)
+public class ResponseDTO<T> {
+
+    @Autowired
+    private MetaDTO.Meta meta;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private T data;
+
+    public static <T> ResponseDTO success(T data, ServerRequest request) {
+        return ResponseDTO.builder()
+                .meta(MetaDTO.build(data, request))
+                .data(data)
+                .build();
+    }
 
     public static <T> Mono<ServerResponse> responseOk(T response) {
         return buildResponse(HttpStatus.OK, response);

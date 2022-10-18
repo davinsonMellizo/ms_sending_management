@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ProviderUseCaseTest {
+class ProviderUseCaseTest {
 
     @InjectMocks
     private ProviderUseCase useCase;
@@ -34,7 +34,7 @@ public class ProviderUseCaseTest {
     private final Provider provider = new Provider();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         provider.setId("ALT");
     }
 

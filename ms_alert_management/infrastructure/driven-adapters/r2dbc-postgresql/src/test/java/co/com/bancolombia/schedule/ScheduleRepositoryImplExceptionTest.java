@@ -1,6 +1,8 @@
 package co.com.bancolombia.schedule;
 
+import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.schedule.Schedule;
 import co.com.bancolombia.schedule.data.ScheduleData;
@@ -25,14 +27,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SpringBootTest
-public class ScheduleRepositoryImplExceptionTest {
+class ScheduleRepositoryImplExceptionTest {
 
     @InjectMocks
     private ScheduleRepositoryImplement repositoryImpl;
@@ -43,6 +44,9 @@ public class ScheduleRepositoryImplExceptionTest {
     @Spy
     private ScheduleMapper mapper = Mappers.getMapper(ScheduleMapper.class);
 
+    @Mock
+    private TimeFactory timeFactory;
+
     private final Campaign campaign = new Campaign();
     private final Schedule schedule = new Schedule();
     private final ScheduleData scheduleData = new ScheduleData();
@@ -52,41 +56,66 @@ public class ScheduleRepositoryImplExceptionTest {
 
     @BeforeEach
     public void init() {
-        campaign.setId(1);
         campaign.setIdCampaign("1");
         campaign.setIdConsumer("ALM");
-        campaign.setIdProvider("HJK");
+        campaign.setProvider("{\"idProvider\":\"INA\",\"channelType\":\"PUSH\"}");
         campaign.setIdRemitter(0);
-        campaign.setDefaultTemplate("template");
-        campaign.setDescription("description");
         campaign.setSourcePath("source_path");
-        campaign.setAttachment(true);
-        campaign.setAttachmentPath("attachment_path");
-        campaign.setState("ACTIVO");
+        campaign.setAttachment(false);
+        campaign.setState("0");
         campaign.setCreatedDate(NOW);
         campaign.setCreationUser("lugomez");
 
-        schedule.setId(1);
+        schedule.setId(1L);
         schedule.setIdCampaign("1");
-        schedule.setIdConsumer("0");
-        schedule.setScheduleType("MENSUAL");
+        schedule.setIdConsumer("ALM");
+        schedule.setScheduleType(ScheduleType.ON_DEMAND);
         schedule.setStartDate(DATE_NOW);
         schedule.setStartTime(TIME_NOW);
         schedule.setEndDate(DATE_NOW.plusMonths(1));
         schedule.setEndTime(TIME_NOW);
 
-        scheduleData.setId(1);
+        scheduleData.setId(2L);
         scheduleData.setIdCampaign("1");
-        scheduleData.setIdConsumer("0");
-        scheduleData.setScheduleType("MENSUAL");
+        scheduleData.setIdConsumer("ALM");
+        scheduleData.setScheduleType(ScheduleType.DAILY);
         scheduleData.setStartDate(DATE_NOW);
         scheduleData.setStartTime(TIME_NOW);
-        scheduleData.setEndDate(DATE_NOW.plusMonths(1));
-        scheduleData.setEndTime(TIME_NOW);
 
         campaign.setSchedules(List.of(schedule));
     }
 
+    @Test
+    void saveScheduleWithException() {
+        when(repository.save(any()))
+                .thenReturn(Mono.error(RuntimeException::new));
+        repositoryImpl.saveSchedule(schedule)
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
+    }
+
+    @Test
+    void updateScheduleWithException() {
+        when(repository.save(any()))
+                .thenReturn(Mono.error(RuntimeException::new));
+        when(repository.findById(anyLong()))
+                .thenReturn(Mono.just(scheduleData));
+        repositoryImpl.updateSchedule(schedule, schedule.getId())
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
+    }
+
+    @Test
+    void findScheduleByIdWithException() {
+        when(repository.findById(anyLong()))
+                .thenReturn(Mono.error(RuntimeException::new));
+        repositoryImpl.findScheduleById(schedule.getId())
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
+    }
 
     @Test
     void findSchedulesByCampaignWithException() {
@@ -115,16 +144,6 @@ public class ScheduleRepositoryImplExceptionTest {
         when(repository.findSchedulesByCampaign(anyString(), anyString()))
                 .thenReturn(Flux.just(scheduleData));
         repositoryImpl.updateSchedulesByCampaign(campaign)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    void deleteSchedulesByCampaignWithException() {
-        when(repository.deleteSchedulesByCampaign(anyString(), anyString()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        repositoryImpl.deleteSchedulesByCampaign(campaign)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();

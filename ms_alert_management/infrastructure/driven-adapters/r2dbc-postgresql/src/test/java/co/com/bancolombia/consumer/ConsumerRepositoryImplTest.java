@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ConsumerRepositoryImplTest {
+class ConsumerRepositoryImplTest {
 
     @Autowired
     private ConsumerRepositoryImplement repositoryImpl;

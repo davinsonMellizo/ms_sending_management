@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryUseCaseTest {
+class CategoryUseCaseTest {
 
     @InjectMocks
     private CategoryUseCase useCase;
@@ -33,7 +33,7 @@ public class CategoryUseCaseTest {
     private final Category category = new Category();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         category.setId(1);
     }
 

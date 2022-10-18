@@ -27,7 +27,6 @@ public class CategoryData implements Persistable<Integer> {
     private Boolean isNew;
 
     @Override
-    @Transient
     public boolean isNew() {
         return this.isNew;
     }

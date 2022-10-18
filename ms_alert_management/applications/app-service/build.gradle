@@ -12,8 +12,7 @@ dependencies {
     implementation project(':secrets-manager')
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     runtimeOnly ("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
-
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.11'
 }
 
 task explodedJar(type: Copy) {

@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterWithExceptionTest extends BaseIntegration {
+class AlertRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
@@ -57,8 +57,7 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     void saveAlertWithException() {
         when(useCase.saveAlertRequest(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
-        statusAssertionsWebClientPost(properties.getAlert(),
-                request)
+        statusAssertionsWebClientPost(properties.getAlert(), request)
                 .is5xxServerError();
         verify(useCase).saveAlertRequest(any());
     }
@@ -66,21 +65,18 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     void updateAlertsWithException() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
-                request)
+        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(), request)
                 .is5xxServerError()
                 .expectBody(JsonNode.class)
                 .returnResult()
                 .getResponseBody();
-
         Assertions.assertEquals(ALERT_NOT_FOUND.getCode(), response.get("code").textValue());
     }
 
     @Test
     void updateAlertWithExceptionTechnical() {
         when(useCase.updateAlertRequest(any())).thenReturn(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
-        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(),
-                "{}")
+        JsonNode response = statusAssertionsWebClientPut(properties.getAlert(), "{}")
                 .is5xxServerError()
                 .expectBody(JsonNode.class)
                 .returnResult()
@@ -91,7 +87,8 @@ public class AlertRouterWithExceptionTest extends BaseIntegration {
     @Test
     void deleteAlertsWithException() {
         when(useCase.deleteAlertRequest(any())).thenReturn(Mono.error(new Exception()));
-        final WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getAlert() + ID, "ALT")
+        final WebTestClient.ResponseSpec spec = webTestClient.delete()
+                .uri(properties.getAlert() + ID, "ALT")
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }

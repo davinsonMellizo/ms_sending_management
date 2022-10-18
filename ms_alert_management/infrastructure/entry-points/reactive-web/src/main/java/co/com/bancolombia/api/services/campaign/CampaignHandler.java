@@ -2,8 +2,11 @@ package co.com.bancolombia.api.services.campaign;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
-import co.com.bancolombia.api.commons.util.ResponseUtil;
+import co.com.bancolombia.api.commons.validators.groups.OnCreate;
+import co.com.bancolombia.api.commons.validators.groups.OnDelete;
+import co.com.bancolombia.api.commons.validators.groups.OnUpdate;
 import co.com.bancolombia.api.dto.CampaignDTO;
+import co.com.bancolombia.api.dto.ResponseDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.campaign.CampaignUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,45 +19,53 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
 
 @Component
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class CampaignHandler {
 
     private final CampaignUseCase useCase;
     private final ValidatorHandler validatorHandler;
 
     public Mono<ServerResponse> findCampaign(ServerRequest serverRequest) {
-        return ParamsUtil.getCampaignHeader(serverRequest)
+        return ParamsUtil.getCampaignParams(serverRequest)
                 .flatMap(CampaignDTO::toModel)
                 .flatMap(useCase::findCampaignById)
-                .flatMap(ResponseUtil::responseOk);
+                .map(campaigns -> ResponseDTO.success(campaigns, serverRequest))
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> findAllCampaign(ServerRequest serverRequest) {
         return useCase.findAllCampaign()
-                .flatMap(ResponseUtil::responseOk);
+                .map(campaigns -> ResponseDTO.success(campaigns, serverRequest))
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> saveCampaign(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(CampaignDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObject)
+                .doOnNext(campaignDTO -> validatorHandler.validateObject(campaignDTO, OnCreate.class))
                 .flatMap(CampaignDTO::toModel)
                 .flatMap(useCase::saveCampaign)
-                .flatMap(ResponseUtil::responseOk);
+                .map(campaign -> ResponseDTO.success(campaign, serverRequest))
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> updateCampaign(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(CampaignDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                .doOnNext(validatorHandler::validateObject)
+                .doOnNext(campaignDTO -> validatorHandler.validateObject(campaignDTO, OnUpdate.class))
                 .flatMap(CampaignDTO::toModel)
                 .flatMap(useCase::updateCampaign)
-                .flatMap(ResponseUtil::responseOk);
+                .map(campaign -> ResponseDTO.success(campaign, serverRequest))
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> deleteCampaign(ServerRequest serverRequest) {
-        return ParamsUtil.getCampaignHeader(serverRequest)
+        return serverRequest.bodyToMono(CampaignDTO.class)
+                .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .doOnNext(campaignDTO -> validatorHandler.validateObject(campaignDTO, OnDelete.class))
                 .flatMap(CampaignDTO::toModel)
                 .flatMap(useCase::deleteCampaignById)
-                .flatMap(ResponseUtil::responseOk);
+                .map(campaign -> ResponseDTO.success(campaign, serverRequest))
+                .flatMap(ResponseDTO::responseOk);
     }
 }

@@ -13,9 +13,9 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class RemitterDocumentationApi {
 
-    private final static String TAG = "Remitter";
-    private final static String ERROR = "Error";
-    private final static String SUCCESSFUL = "successful";
+    private static final String TAG = "Remitter";
+    private static final String ERROR = "Error";
+    private static final String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)

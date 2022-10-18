@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RemitterDTO extends DTO{
+public class RemitterDTO extends DTO<Remitter> {
 
     @Max(value = 99, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")

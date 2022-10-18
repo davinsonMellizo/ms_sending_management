@@ -25,7 +25,6 @@ public class ConsumerData implements Persistable<String> {
     private Boolean isNew;
 
     @Override
-    @Transient
     public boolean isNew() {
         return this.isNew;
     }

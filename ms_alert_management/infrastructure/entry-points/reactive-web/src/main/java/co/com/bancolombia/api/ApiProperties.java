@@ -12,15 +12,16 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @ConfigurationProperties(prefix = "adapters.entries.reactive-web")
 public class ApiProperties {
-    private String pathBase;
     private String alert;
     private String campaign;
-    private String provider;
-    private String service;
-    private String remitter;
-    private String consumer;
     private String category;
+    private String consumer;
+    private String pathBase;
     private String priority;
+    private String provider;
+    private String remitter;
     private String send;
+    private String service;
+    private String schedule;
 
 }

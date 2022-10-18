@@ -15,7 +15,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class CampaignRouter extends CampaignDocumentationApi {
 
-    private final static String ALL = "/all-campaign";
+    private static final String ALL = "/all";
     private final ApiProperties apiProperties;
 
     @Bean

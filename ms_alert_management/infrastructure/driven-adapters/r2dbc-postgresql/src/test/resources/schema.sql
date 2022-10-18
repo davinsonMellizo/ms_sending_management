@@ -185,39 +185,40 @@ CREATE TABLE IF NOT EXISTS alert_client (
     CONSTRAINT alert_client_client_fkey FOREIGN KEY (document_number, id_document_type) REFERENCES client(document_number, id_document_type) on delete cascade on update cascade
 );
 
+--CREATE TYPE IF NOT EXISTS"JSONB" as json;
 CREATE TABLE IF NOT EXISTS campaign (
-	id SERIAL NOT NULL,
-	id_campaign varchar(50) NOT NULL,
-	id_consumer varchar(3) NOT NULL,
-	id_provider varchar(3) NOT NULL,
+    id_campaign VARCHAR(50) NOT NULL,
+    id_consumer VARCHAR(10) NOT NULL,
+	provider VARCHAR(50) NOT NULL,
     id_remitter int2 NOT NULL,
-	default_template varchar(50),
-	description varchar(200),
-    source_path varchar(200) NOT NULL,
-	attachment boolean,
-	attachment_path varchar(200),
-	state varchar(10),
-	creation_user varchar(20) NULL,
-	created_date timestamp NOT NULL,
-    modified_user varchar(20) NULL,
-	modified_date timestamp NULL,
-	CONSTRAINT campaign_pkey PRIMARY KEY (id),
-	CONSTRAINT campaign_provider_fkey FOREIGN KEY (id_provider) REFERENCES provider(id),
+    default_template VARCHAR(50),
+    description VARCHAR(200),
+    source_path VARCHAR(255) NOT NULL,
+    attachment BOOLEAN,
+    attachment_path VARCHAR(255),
+    data_enrichment BOOLEAN NOT NULL,
+    state CHAR(1) NOT NULL DEFAULT '1',
+    creation_user VARCHAR(20) NULL,
+    created_date TIMESTAMP NOT NULL,
+    modified_user VARCHAR(20) NULL,
+    modified_date TIMESTAMP NULL,
+    CONSTRAINT campaign_pkey PRIMARY KEY (id_campaign, id_consumer),
     CONSTRAINT campaign_consumer_fkey FOREIGN KEY (id_consumer) REFERENCES consumer(id),
     CONSTRAINT campaign_remitter_fkey FOREIGN KEY (id_remitter) REFERENCES remitter(id)
 );
 
- CREATE TABLE IF NOT EXISTS schedule(
-	id SERIAL NOT NULL,
-	id_campaign varchar(50) NOT NULL,
-	id_consumer varchar(3) NOT NULL,
-	schedule_type varchar(10),
-	start_date date,
-	start_time time,
-	end_date date,
-	end_time time,
-	creation_user varchar(20) NULL,
-	created_date timestamp NOT NULL,
-	CONSTRAINT schedule_pkey PRIMARY KEY (id),
-	FOREIGN KEY (id_campaign, id_consumer) REFERENCES campaign(id_campaign, id_consumer)
+CREATE TABLE IF NOT EXISTS schedule(
+    id SERIAL PRIMARY KEY,
+    id_campaign VARCHAR(50) NOT NULL,
+    id_consumer VARCHAR(10) NOT NULL,
+    schedule_type VARCHAR(10) NOT NULL,
+    start_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_date DATE,
+    end_time TIME,
+    creation_user VARCHAR(20) NULL,
+    created_date TIMESTAMP NOT NULL,
+    modified_user VARCHAR(20) NULL,
+    modified_date TIMESTAMP NULL,
+    FOREIGN KEY (id_campaign, id_consumer) REFERENCES campaign(id_campaign, id_consumer)
 );

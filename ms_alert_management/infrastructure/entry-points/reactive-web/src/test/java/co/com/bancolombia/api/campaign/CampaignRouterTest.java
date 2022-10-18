@@ -6,8 +6,6 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.services.campaign.CampaignHandler;
 import co.com.bancolombia.api.services.campaign.CampaignRouter;
-import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
@@ -25,8 +23,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CATEGORY_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,7 +36,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class CampaignRouterTest extends BaseIntegration {
+class CampaignRouterTest extends BaseIntegration {
 
     @MockBean
     private CampaignUseCase useCase;
@@ -51,12 +47,21 @@ public class CampaignRouterTest extends BaseIntegration {
     private String request;
     private final Campaign campaign = new Campaign();
     private String url;
-    private final static String ALL = "/all-campaign";
+    private final static String ALL = "/all";
 
     @BeforeEach
-    public void init() {
+    void init() {
         url = properties.getCampaign();
         request = loadFileConfig("CampaignRequest.json", String.class);
+    }
+
+    @Test
+    void findAll() {
+        when(useCase.findAllCampaign())
+                .thenReturn(Mono.just(List.of(campaign)));
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + ALL).exchange();
+        spec.expectStatus().isOk();
+        verify(useCase).findAllCampaign();
     }
 
     @Test
@@ -71,21 +76,19 @@ public class CampaignRouterTest extends BaseIntegration {
     }
 
     @Test
-    void findAll() {
-        when(useCase.findAllCampaign())
-                .thenReturn(Mono.just(List.of(campaign)));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url + ALL)
-                .exchange();
+    void findCampaignById() {
+        when(useCase.findCampaignById(any()))
+                .thenReturn(Mono.just(campaign));
+        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url).exchange();
         spec.expectStatus().isOk();
-        verify(useCase).findAllCampaign();
+        verify(useCase).findCampaignById(any());
     }
 
     @Test
     void update() {
         when(useCase.updateCampaign(any())).thenReturn(Mono.just(StatusResponse.<Campaign>builder()
                 .actual(campaign).before(campaign).build()));
-        statusAssertionsWebClientPut(url,
-                request)
+        statusAssertionsWebClientPut(url, request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
@@ -96,24 +99,10 @@ public class CampaignRouterTest extends BaseIntegration {
     void delete() {
         when(useCase.deleteCampaignById(any()))
                 .thenReturn(Mono.just("1"));
-        WebTestClient.ResponseSpec spec = webTestClient.delete().uri(url)
-                .exchange();
-        spec.expectStatus().isOk();
+        statusAssertionsWebClientDelete(url, request)
+                .isOk()
+                .expectBody(JsonNode.class)
+                .returnResult();
         verify(useCase).deleteCampaignById(any());
-    }
-
-    @Test
-    void saveCampaignWithException() {
-        when(useCase.saveCampaign(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
-        statusAssertionsWebClientPost(url, request)
-                .is5xxServerError();
-        verify(useCase).saveCampaign(any());
-    }
-
-    @Test
-    void updateCampaignWithException() {
-        when(useCase.updateCampaign(any())).thenReturn(Mono.error(new BusinessException(CATEGORY_NOT_FOUND)));
-        statusAssertionsWebClientPut(url, request)
-                .is5xxServerError();
     }
 }

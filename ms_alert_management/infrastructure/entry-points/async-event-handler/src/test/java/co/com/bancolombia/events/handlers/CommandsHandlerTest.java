@@ -20,7 +20,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class CommandsHandlerTest {
+class CommandsHandlerTest {
     @InjectMocks
     private CommandsHandler commandsHandler;
     @Mock
@@ -39,7 +39,7 @@ public class CommandsHandlerTest {
 
     @BeforeEach
     public void init(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

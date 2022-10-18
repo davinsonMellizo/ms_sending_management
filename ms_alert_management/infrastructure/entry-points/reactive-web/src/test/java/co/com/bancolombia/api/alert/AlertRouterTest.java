@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertRouterTest extends BaseIntegration {
+class AlertRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertUseCase useCase;
@@ -63,8 +63,7 @@ public class AlertRouterTest extends BaseIntegration {
     @Test
     void saveAlert() {
         when(useCase.saveAlertRequest(any())).thenReturn(Mono.just(alert));
-        statusAssertionsWebClientPost(properties.getAlert(),
-                request)
+        statusAssertionsWebClientPost(properties.getAlert(), request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
@@ -77,8 +76,7 @@ public class AlertRouterTest extends BaseIntegration {
                 .before(alert)
                 .actual(alert)
                 .build()));
-        statusAssertionsWebClientPut(properties.getAlert(),
-                request)
+        statusAssertionsWebClientPut(properties.getAlert(), request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
