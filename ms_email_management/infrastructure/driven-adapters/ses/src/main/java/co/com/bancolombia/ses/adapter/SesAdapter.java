@@ -59,9 +59,9 @@ public class SesAdapter implements SesGateway {
                 SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
                         .rawMessage(rawMessage).build();
 
-                //return Mono.just(Response.builder().code(202).description("response.getMessageId()").build());
+                //return Mono.just(Response.builder().code(202).description("COD:" +rawEmailRequest).build());
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .map(response -> Response.builder().code(200).description("ses sendRawEmail").build());
+                        .map(response -> Response.builder().code(200).description("ses:" +response.join().messageId()).build());
 
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
