@@ -1,6 +1,7 @@
 package co.com.bancolombia.ses.adapter;
 
 
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.TemplateEmail;
@@ -29,6 +30,8 @@ import java.util.Properties;
 public class SesAdapter implements SesGateway {
 
     private final SesAsyncClient client;
+
+    private final LoggerBuilder loggerBuilder;
 
 
     @Override
@@ -61,7 +64,11 @@ public class SesAdapter implements SesGateway {
 
                 //return Mono.just(Response.builder().code(202).description("COD:" +rawEmailRequest).build());
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .map(response -> Response.builder().code(200).description("ses:" +response.join().messageId()).build());
+                        .doOnNext(res-> loggerBuilder.info(res.join().messageId()))
+                        .map(response -> Response.builder().code(200).description("ses sendRawEmail").build());
+
+
+
 
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
