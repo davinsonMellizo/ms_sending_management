@@ -37,7 +37,6 @@ public class SesAdapter implements SesGateway {
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
 
-
         Session session = Session.getDefaultInstance(new Properties());
         MimeMessage message = new MimeMessage(session);
         try {
@@ -45,7 +44,6 @@ public class SesAdapter implements SesGateway {
             message.setFrom(new InternetAddress(alert.getFrom()));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(alert.getDestination().getToAddress()));
-
             MimeMultipart msg_body = new MimeMultipart("alternative");
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(templateEmail.getBodyHtml(), "text/html; charset=UTF-8");
@@ -62,20 +60,13 @@ public class SesAdapter implements SesGateway {
                 SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
                         .rawMessage(rawMessage).build();
 
-                //return Mono.just(Response.builder().code(202).description("COD:" +rawEmailRequest).build());
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .doOnNext(res-> loggerBuilder.info(res.join().messageId()))
-                        .map(response -> Response.builder().code(200).description("ses sendRawEmail").build());
-
-
-
-
+                        .map(response -> Response.builder().code(200).description("ses sendRawEmail"+ response.join().messageId()).build());
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
             }
         } catch (MessagingException e) {
             return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
-
         }
     }
 }
