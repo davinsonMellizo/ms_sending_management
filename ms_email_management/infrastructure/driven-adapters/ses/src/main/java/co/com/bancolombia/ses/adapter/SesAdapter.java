@@ -33,6 +33,8 @@ public class SesAdapter implements SesGateway {
 
     private final LoggerBuilder loggerBuilder;
 
+    private final int codigoResponse=200;
+
 
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
@@ -62,7 +64,7 @@ public class SesAdapter implements SesGateway {
 
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
                         .doOnNext(res-> loggerBuilder.info(res.join().messageId()))
-                        .map(response -> Response.builder().code(200).description("ses sendRawEmail").build());
+                        .map(response -> Response.builder().code(codigoResponse).description("ses sendRawEmail").build());
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
             }} catch (MessagingException e) {
