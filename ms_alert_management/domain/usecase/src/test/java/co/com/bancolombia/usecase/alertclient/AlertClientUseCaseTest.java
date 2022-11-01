@@ -5,6 +5,7 @@ import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.client.ResponseClient;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AlertClientUseCaseTest {
+class AlertClientUseCaseTest {
 
     @Mock
     private AlertClientGateway alertClientGateway;
@@ -87,8 +88,7 @@ public class AlertClientUseCaseTest {
                 .thenReturn(Flux.just(alert));
         useCase.matchClientWithBasicKit(headers)
                 .as(StepVerifier::create)
-                .assertNext(response -> response
-                        .getResponse())
+                .assertNext(ResponseClient::getResponse)
                 .verifyComplete();
     }
 

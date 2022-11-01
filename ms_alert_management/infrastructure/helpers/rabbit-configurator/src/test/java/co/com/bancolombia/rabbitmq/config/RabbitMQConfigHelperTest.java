@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
-public class RabbitMQConfigHelperTest {
+class RabbitMQConfigHelperTest {
     public static final String SECRET = "any-secret-dev";
 
 

@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertClientRouterTest extends BaseIntegration {
+class AlertClientRouterTest extends BaseIntegration {
 
     @MockBean
     private AlertClientUseCase useCase;

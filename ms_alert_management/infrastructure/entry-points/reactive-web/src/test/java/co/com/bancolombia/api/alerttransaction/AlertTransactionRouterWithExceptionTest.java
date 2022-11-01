@@ -30,7 +30,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class AlertTransactionRouterWithExceptionTest extends BaseIntegration {
+class AlertTransactionRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private AlertTransactionUseCase useCase;

@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class SecretsManagerConfigTest {
+class SecretsManagerConfigTest {
 
     @InjectMocks
     private SecretsManagerConfig secretsManagerConfig;

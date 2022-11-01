@@ -64,9 +64,10 @@ adapters:
       path-base: ${PATH_BASE}
       alert: ${ALERT}
       campaign: ${CAMPAIGN}
-      remitter: ${REMITTER}
-      provider: ${PROVIDER}
-      service: ${SERVICE}
-      consumer: ${CONSUMER}
       category: ${CATEGORY}
+      consumer: ${CONSUMER}
       priority: ${PRIORITY}
+      provider: ${PROVIDER}
+      remitter: ${REMITTER}
+      service: ${SERVICE}
+      schedule: ${SCHEDULE}

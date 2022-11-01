@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.commons.handlers;
 
-import co.com.bancolombia.api.commons.util.ResponseUtil;
+import co.com.bancolombia.api.dto.ResponseDTO;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.error.Error;
@@ -54,7 +54,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                         .domain(request.path())
                         .build())
                 .doAfterTerminate(() -> logger.error(throwable))
-                .flatMap(ResponseUtil::responseFail);
+                .flatMap(ResponseDTO::responseFail);
     }
 
     private Mono<Error> buildErrorResponse(TechnicalException ex) {

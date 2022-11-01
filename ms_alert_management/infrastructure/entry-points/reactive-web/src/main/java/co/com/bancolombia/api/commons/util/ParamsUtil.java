@@ -61,28 +61,29 @@ public class ParamsUtil {
                 Pattern.compile("^[0-9]+$").matcher(headers.getT2()).matches();
     }
 
-    public static Mono<CampaignDTO> getCampaignHeader(ServerRequest request) {
+    public static Mono<CampaignDTO> getCampaignParams(ServerRequest request) {
         return Mono.just(CampaignDTO.builder()
-                .idCampaign(request.headers().firstHeader(ID_CAMPAIGN))
-                .idConsumer(request.headers().firstHeader(ID_CONSUMER))
+                .idCampaign(request.queryParams().getFirst(ID_CAMPAIGN))
+                .idConsumer(request.queryParams().getFirst(ID_CONSUMER))
                 .build());
     }
 
-    public Map<String, String> setHeaders(ServerRequest serverRequest){
+    public Map<String, String> setHeaders(ServerRequest serverRequest) {
         return serverRequest.headers()
                 .asHttpHeaders()
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, v -> String.join(",", v.getValue())));
     }
 
-    public Mono<Map<String, String>> validateHeaderBasicKit(ServerRequest request){
+    public Mono<Map<String, String>> validateHeaderBasicKit(ServerRequest request) {
         return Mono.just(setHeaders(request))
                 .filter(headers -> headers.containsKey(DOCUMENT_TYPE))
                 .filter(headers -> headers.containsKey(DOCUMENT_NUMBER))
                 .filter(headers -> headers.containsKey(ASSOCIATION_ORIGIN));
 
     }
-    public Mono<Map<String, String>> validateHeaderFindAlertClient(ServerRequest request){
+
+    public Mono<Map<String, String>> validateHeaderFindAlertClient(ServerRequest request) {
         return Mono.just(setHeaders(request))
                 .filter(headers -> headers.containsKey(DOCUMENT_TYPE))
                 .filter(headers -> headers.containsKey(DOCUMENT_NUMBER));

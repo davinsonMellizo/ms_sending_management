@@ -2,7 +2,7 @@ package co.com.bancolombia.api.services.priority;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
-import co.com.bancolombia.api.commons.util.ResponseUtil;
+import co.com.bancolombia.api.dto.ResponseDTO;
 import co.com.bancolombia.api.dto.PriorityDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.priority.PriorityUseCase;
@@ -24,13 +24,13 @@ public class PriorityHandler {
         return ParamsUtil.getId(serverRequest)
                 .map(Integer::parseInt)
                 .flatMap(useCase::findPriorityById)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> findAllPriorityByProvider(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
                 .flatMap(useCase::findAllByProvider)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> savePriority(ServerRequest serverRequest) {
@@ -39,7 +39,7 @@ public class PriorityHandler {
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(PriorityDTO::toModel)
                 .flatMap(useCase::savePriority)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> updatePriority(ServerRequest serverRequest) {
@@ -48,14 +48,14 @@ public class PriorityHandler {
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(PriorityDTO::toModel)
                 .flatMap(useCase::updatePriority)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> deletePriorityById(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
                 .map(Integer::parseInt)
                 .flatMap(useCase::deletePriorityById)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
 }

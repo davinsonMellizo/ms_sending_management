@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ProviderRouterWithExceptionTest extends BaseIntegration {
+class ProviderRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private ProviderUseCase useCase;

@@ -41,7 +41,6 @@ public class AlertClientData implements Persistable<String> {
     private String id;
 
     @Override
-    @Transient
     public boolean isNew() {
         return this.id == null ? true : false;
     }

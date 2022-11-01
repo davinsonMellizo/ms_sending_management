@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ConsumerRouterWithExceptionTest extends BaseIntegration {
+class ConsumerRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private ConsumerUseCase useCase;

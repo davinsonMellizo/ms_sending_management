@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class RemitterRepositoryImplTest {
+class RemitterRepositoryImplTest {
 
     @Autowired
     private RemitterRepositoryImplement repositoryImpl;
@@ -59,7 +59,7 @@ public class RemitterRepositoryImplTest {
 
     @Test
     void deleteRemitter() {
-        remitter.setId(1);
+        remitter.setId(2);
         StepVerifier.create(repositoryImpl.deleteRemitterById(remitter.getId()))
                 .consumeNextWith(s -> assertEquals(remitter.getId(), s))
                 .verifyComplete();

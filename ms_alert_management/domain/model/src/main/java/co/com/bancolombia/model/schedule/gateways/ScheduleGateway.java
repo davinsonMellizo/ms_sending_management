@@ -1,17 +1,23 @@
 package co.com.bancolombia.model.schedule.gateways;
 
 import co.com.bancolombia.model.campaign.Campaign;
+import co.com.bancolombia.model.response.StatusResponse;
+import co.com.bancolombia.model.schedule.Schedule;
 import reactor.core.publisher.Mono;
 
 
 public interface ScheduleGateway {
+
+    Mono<Schedule> saveSchedule(Schedule schedule);
+
+    Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id);
+
+    Mono<Schedule> findScheduleById(Long id);
 
     Mono<Campaign> saveSchedulesByCampaign(Campaign campaign);
 
     Mono<Campaign> updateSchedulesByCampaign(Campaign campaign);
 
     Mono<Campaign> findSchedulesByCampaign(Campaign campaign);
-
-    Mono<String> deleteSchedulesByCampaign(Campaign campaign);
 
 }

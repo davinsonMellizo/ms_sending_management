@@ -2,7 +2,7 @@ package co.com.bancolombia.api.services.alerttransaction;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
-import co.com.bancolombia.api.commons.util.ResponseUtil;
+import co.com.bancolombia.api.dto.ResponseDTO;
 import co.com.bancolombia.api.dto.AlertTransactionDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.usecase.alerttransaction.AlertTransactionUseCase;
@@ -23,7 +23,7 @@ public class AlertTransactionHandler {
     public Mono<ServerResponse> findAllAlertTransaction(ServerRequest serverRequest) {
         return ParamsUtil.getId(serverRequest)
                 .flatMap(useCase::findAllAlertTransaction)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> saveAlertTransaction(ServerRequest serverRequest) {
@@ -32,7 +32,7 @@ public class AlertTransactionHandler {
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertTransactionDTO::toModel)
                 .flatMap(useCase::saveAlertTransaction)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
     public Mono<ServerResponse> deleteAlertTransaction(ServerRequest serverRequest) {
@@ -40,7 +40,7 @@ public class AlertTransactionHandler {
                 .doOnNext(validatorHandler::validateObjectHeaders)
                 .flatMap(AlertTransactionDTO::toModel)
                 .flatMap(useCase::deleteAlertTransaction)
-                .flatMap(ResponseUtil::responseOk);
+                .flatMap(ResponseDTO::responseOk);
     }
 
 }

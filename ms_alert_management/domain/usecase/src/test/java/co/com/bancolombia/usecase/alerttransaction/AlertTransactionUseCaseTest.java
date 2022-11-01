@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AlertTransactionUseCaseTest {
+class AlertTransactionUseCaseTest {
 
     @InjectMocks
     private AlertTransactionUseCase useCase;
@@ -31,7 +31,7 @@ public class AlertTransactionUseCaseTest {
     private final AlertTransaction alertTransaction = new AlertTransaction();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         alertTransaction.setIdAlert("ALT");
     }
 

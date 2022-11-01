@@ -29,7 +29,6 @@ public class ClientData implements Persistable<Integer> {
     private LocalDateTime modifiedDate;
 
     @Override
-    @Transient
     public boolean isNew() {
         return true;
     }

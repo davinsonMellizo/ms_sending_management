@@ -2,6 +2,7 @@ package co.com.bancolombia.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -56,6 +57,16 @@ public class BaseIntegration {
 
     protected StatusAssertions statusAssertionsWebClientPut(String path, String requestBody) {
         return webTestClient.put()
+                .uri(path)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(requestBody))
+                .exchange()
+                .expectStatus();
+    }
+
+    protected StatusAssertions statusAssertionsWebClientDelete(String path, String requestBody) {
+        return webTestClient
+                .method(HttpMethod.DELETE)
                 .uri(path)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(requestBody))

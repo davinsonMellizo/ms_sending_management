@@ -1,0 +1,61 @@
+##Spring Configuration
+server:
+  port: ${SERVER_PORT}
+
+springdoc:
+  version: 1
+
+project:
+  name: ${PROJECT_NAME}
+  env: ${ENVIRONMENT}
+
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: OFF
+
+adapters:
+  dynamo-repository:
+    region-aws: ${AWS_REGION}
+    endpoint: http://localhost:4566
+
+entries:
+  reactive-web:
+    base-path: ${PATH_BASE}
+    create_template: ${PATH_CREATE-TEMPLATE}
+    get_template: ${PATH_GET-TEMPLATE}
+    put_template: ${PATH_PUT-TEMPLATE}
+    delete_template: ${PATH_DELETE-TEMPLATE}
+    create_message: ${PATH_CREATE-MESSAGE}
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: never
+      enabled: true
+      cache:
+        time-to-live: 10s
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness
+      exposure:
+        include: health, liveness, readiness

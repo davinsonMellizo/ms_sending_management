@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation group: 'software.amazon.awssdk', name: 'dynamodb-enhanced', version: '2.14.13'
+    implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.16.88'
+    implementation project(':dynamo-commons')
+}

@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ConsumerUseCaseTest {
+class ConsumerUseCaseTest {
 
     @InjectMocks
     private ConsumerUseCase useCase;
@@ -33,7 +33,7 @@ public class ConsumerUseCaseTest {
     private final Consumer consumer = new Consumer();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         consumer.setId("1");
     }
 

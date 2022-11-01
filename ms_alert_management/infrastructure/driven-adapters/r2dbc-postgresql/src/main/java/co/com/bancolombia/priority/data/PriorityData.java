@@ -29,7 +29,6 @@ public class PriorityData implements Persistable<Integer> {
     private Boolean isNew;
 
     @Override
-    @Transient
     public boolean isNew() {
         return this.isNew;
     }

@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class CategoryRouterTest extends BaseIntegration {
+class CategoryRouterTest extends BaseIntegration {
 
     @MockBean
     private CategoryUseCase useCase;

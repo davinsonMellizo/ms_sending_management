@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class RemitterRouterWithExceptionTest extends BaseIntegration {
+class RemitterRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
     private RemitterUseCase useCase;

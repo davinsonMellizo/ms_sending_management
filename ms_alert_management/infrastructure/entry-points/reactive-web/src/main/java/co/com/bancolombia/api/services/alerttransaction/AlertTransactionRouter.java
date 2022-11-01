@@ -16,8 +16,8 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class AlertTransactionRouter extends AlertTransactionDocumentationApi {
     private final ApiProperties apiProperties;
-    private final static String RELATION = "-transaction";
-    private static String ID = "/{id}";
+    private static final String RELATION = "-transaction";
+    private static final String ID = "/{id}";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionAlertTransaction(AlertTransactionHandler handler) {

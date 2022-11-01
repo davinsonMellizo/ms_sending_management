@@ -19,7 +19,8 @@ INSERT INTO provider(id, name, type_service, creation_user, created_date) VALUES
 
 INSERT INTO remitter(id, mail, state, creation_user, created_date) VALUES
 (0, 'dmellizo@bancolombia.com.co', 'Activo', 'Davinson', '2021-02-16 10:10:25-05'),
-(1, 'dmellizo@bancolombia.com.co', 'Activo', 'Davinson', '2021-02-16 10:10:25-05');
+(1, 'dmellizo@bancolombia.com.co', 'Activo', 'Davinson', '2021-02-16 10:10:25-05'),
+(2, 'dmellizo@bancolombia.com.co', 'Activo', 'Davinson', '2021-02-16 10:10:25-05');
 
 INSERT INTO alert_template(id, field, initial_position, final_position, creation_user, created_date) VALUES
 (0, 'campo1', 0, 10, 'davinson', '2021-02-16 10:10:25-05');
@@ -55,11 +56,11 @@ INSERT INTO alert_client(id_alert, document_number, id_document_type, number_ope
 ('HGD', 1061772353, 0, 5, 2, 1, 4, 'tst', 'tst1', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00'),
 ('UPD', 1061772353, 0, 1, 3, 4, 5, 'tsa', 'tst2', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00', '2023-05-20 04:00:00-00');
 
-INSERT INTO campaign(id, id_campaign, id_consumer, id_provider, id_remitter, default_template, description, source_path, attachment, attachment_path, state, creation_user, created_date) VALUES
-(1, '1', 'ALM', 'HJK', 0, 'template', 'description',  'sourcePath', true, 'attachmentPath', 'ACTIVO', 'lugomez', '2022-03-09 11:16:37.915029'),
-(2, '2', 'VLP', 'FGH', 0, 'template_1', 'description_1',  'sourcePath_1', false, null, 'ACTIVO', 'lugomez', '2022-03-10 15:18:02.037538');
+INSERT INTO campaign(id_campaign, id_consumer, provider, id_remitter, default_template, description, source_path, attachment, attachment_path, state, creation_user, created_date, modified_user, modified_date, data_enrichment) VALUES
+('1', 'ALM', '{"idProvider": "HJK", "channelType": "SMS"}', 0,  'template_1', null, 'sourcePath', true, 'attachmentPath', '1', 'lugomez', '2022-03-09 11:16:37.915029', null, null, true),
+('2', 'VLP', '{"idProvider": "FGH", "channelType": "MAIL"}', 1,  'template_2', null, 'sourcePath', false, null, '1', 'lugomez', '2022-10-07 08:30:37.915029', null, null, false);
 
-INSERT INTO schedule(id, id_campaign, id_consumer, schedule_type, start_date, start_time, end_date, end_time, creation_user, created_date) VALUES
-(1, '1', 'ALM', 'MENSUAL', '2022-03-05', '23:00:00', '2022-04-05', '09:30:00', null, '2022-03-10 15:16:05.73199'),
-(2, '1', 'ALM', 'MENSUAL', '2022-03-10', '05:45:00', '2022-04-10', '11:34:00', null, '2022-03-10 15:16:05.73199'),
-(3, '2', 'VLP', 'DIARIO', '2022-03-10', '11:30:00', '2022-03-11',  '06:15:00', null, '2022-03-10 15:18:02.037538');
+INSERT INTO schedule(id, id_campaign, id_consumer, schedule_type, start_date, start_time, end_date, end_time, creation_user, created_date, modified_user, modified_date) VALUES
+(1, '1', 'ALM', 'DAILY', '2022-03-05', '23:00:00', '2022-04-05', '23:00:00', 'lugomez', '2022-03-10 15:16:05.73199', null, null),
+(2, '1', 'ALM', 'ON_DEMAND', '2022-03-10', '05:45:00', '2022-04-10', '05:45:00', 'lugomez', '2022-03-10 15:16:05.73199', null, null),
+(3, '2', 'VLP', 'MONTHLY', '2022-04-15', '11:30:00', '2022-05-15',  '11:30:00', 'lugomez', '2022-04-15 09:18:02.037538', null, null);

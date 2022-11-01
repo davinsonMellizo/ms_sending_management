@@ -15,9 +15,9 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class AlertClientRouter extends AlertClientDocumentationApi {
     private final ApiProperties apiProperties;
-    private final static String RELATION = "-client";
-    private final static String ID = "/{id}";
-    private final static String KIT = "/basic-kit";
+    private static final String RELATION = "-client";
+    private static final String ID = "/{id}";
+    private static final String KIT = "/basic-kit";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionAlertClient(AlertClientHandler handler) {

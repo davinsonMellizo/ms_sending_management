@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class AlertTransactionRepositoryImplExceptionTest {
+class AlertTransactionRepositoryImplExceptionTest {
 
     @InjectMocks
     private AlertTransactionRepositoryImplement repositoryImpl;

@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class PriorityRouterTest extends BaseIntegration {
+class PriorityRouterTest extends BaseIntegration {
 
     @MockBean
     private PriorityUseCase useCase;

@@ -1,0 +1,16 @@
+rootProject.name = 'ms_templater'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':reactive-web'
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':dynamodb'
+project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
+include ":commons"
+project(':commons').projectDir = file('./infrastructure/helpers/commons')
+include ':dynamo-commons'
+project(':dynamo-commons').projectDir = file('./infrastructure/helpers/dynamo-commons')

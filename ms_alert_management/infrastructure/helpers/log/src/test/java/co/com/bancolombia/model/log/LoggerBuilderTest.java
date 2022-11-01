@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-public class LoggerBuilderTest {
+class LoggerBuilderTest {
 
     private static final String TRANSACTION_ID = "asdfghj-asdfghj-asdfghj";
     private static final String CHANNEL = "Any";
     private static final String SERVICE = "/service";
     private static final String DATA = "string any data";
-    private LoggerBuilder loggerBuilder = new LoggerBuilder(CHANNEL);
+    private final LoggerBuilder loggerBuilder = new LoggerBuilder(CHANNEL);
 
     @Test
     void givenErrorWhenValuesThenSuccessTest() {

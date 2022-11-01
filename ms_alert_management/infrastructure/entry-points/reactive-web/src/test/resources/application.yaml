@@ -3,10 +3,11 @@ adapters:
     reactive-web:
       path-base: /api/v1/alert-management
       alert: /alert
-      provider: /provider
-      remitter: /remitter
-      service: /service
+      campaign: /campaign
       consumer: /consumer
       category: /category
       priority: /priority
-      campaign: /campaign
+      provider: /provider
+      remitter: /remitter
+      service: /service
+      schedule: /schedule

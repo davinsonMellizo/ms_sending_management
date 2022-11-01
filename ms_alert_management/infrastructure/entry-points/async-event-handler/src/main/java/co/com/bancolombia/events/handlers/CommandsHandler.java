@@ -40,43 +40,51 @@ public class CommandsHandler {
     public Mono<Void> saveProvider(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseProvider::saveProvider, ProviderDTO.class);
     }
-    public Mono<Void> updateProvider(Command<String> command){
+
+    public Mono<Void> updateProvider(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseProvider::updateProvider, ProviderDTO.class);
     }
-    public Mono<Void> saveRemitter(Command<String> command){
+
+    public Mono<Void> saveRemitter(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseRemitter::saveRemitter, RemitterDTO.class);
     }
-    public Mono<Void> updateRemitter(Command<String> command){
+
+    public Mono<Void> updateRemitter(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseRemitter::updateRemitter, RemitterDTO.class);
     }
-    public Mono<Void> saveAlert(Command<String> command){
+
+    public Mono<Void> saveAlert(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseAlert::saveAlertRequest, AlertDTO.class);
     }
-    public Mono<Void> updateAlert(Command<String> command){
+
+    public Mono<Void> updateAlert(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseAlert::updateAlertRequest, AlertDTO.class);
     }
-    public Mono<Void> saveAlertTrx(Command<String> command){
+
+    public Mono<Void> saveAlertTrx(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseAlertTrx::saveAlertTransaction, AlertTransactionDTO.class);
     }
-    public Mono<Void> deleteAlertTrx(Command<String> command){
+
+    public Mono<Void> deleteAlertTrx(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseAlertTrx::deleteAlertTransaction, AlertTransactionDTO.class);
     }
-    public Mono<Void> saveConsumer(Command<String> command){
+
+    public Mono<Void> saveConsumer(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseConsumer::saveConsumer, ConsumerDTO.class);
     }
-    public Mono<Void> updateConsumer(Command<String> command){
+
+    public Mono<Void> updateConsumer(Command<String> command) {
         return handleSendAlert(command.getData(), useCaseConsumer::updateConsumer, ConsumerDTO.class);
     }
 
-    private  <T extends DTO, M, R> Mono<Void> handleSendAlert(String data, Function<M, Mono<R>> use, Class clazz) {
+    private <T extends DTO<M>, M, R> Mono<Void> handleSendAlert(String data, Function<M, Mono<R>> use, Class<?> clazz) {
         var mapper = new ObjectMapper();
         try {
             Object mstCode = mapper.readValue(data, clazz);
-            return Mono.just((T)mstCode)
+            return Mono.just((T) mstCode)
                     .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                     .doOnNext(validatorHandler::validateObject)
                     .flatMap(DTO::toModel)
-                    .map(m  -> (M)m)
                     .flatMap(use)
                     .onErrorResume(BusinessException.class, e -> Mono.empty())
                     .onErrorResume(TechnicalException.class, this::onErrorByData)
@@ -87,7 +95,7 @@ public class CommandsHandler {
         return Mono.error(new Throwable());
     }
 
-    private <M> Mono<M> onErrorByData(TechnicalException exception){
+    private <M> Mono<M> onErrorByData(TechnicalException exception) {
         return Mono.just(exception)
                 .filter(e -> !e.getException().equals(BODY_MISSING_ERROR))
                 .flatMap(Mono::error);

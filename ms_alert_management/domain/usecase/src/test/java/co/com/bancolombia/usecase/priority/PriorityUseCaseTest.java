@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PriorityUseCaseTest {
+class PriorityUseCaseTest {
 
     @InjectMocks
     private PriorityUseCase useCase;
@@ -32,7 +32,7 @@ public class PriorityUseCaseTest {
     private final Priority priority = new Priority();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         priority.setId(1);
     }
 

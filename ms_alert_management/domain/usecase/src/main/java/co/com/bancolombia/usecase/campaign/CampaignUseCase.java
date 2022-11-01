@@ -17,9 +17,7 @@ public class CampaignUseCase {
     private final CampaignGateway campaignGateway;
 
     public Mono<List<Campaign>> findAllCampaign() {
-        return campaignGateway.findAll()
-                .filter(campaigns -> !campaigns.isEmpty())
-                .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)));
+        return campaignGateway.findAll().collectList();
     }
 
     public Mono<Campaign> findCampaignById(Campaign campaign) {
@@ -39,6 +37,9 @@ public class CampaignUseCase {
     public Mono<String> deleteCampaignById(Campaign campaign) {
         return campaignGateway.findCampaignById(campaign)
                 .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
+                .map(c -> c.toBuilder()
+                        .modifiedUser(campaign.getModifiedUser())
+                        .build())
                 .flatMap(campaignGateway::deleteCampaignById);
     }
 }

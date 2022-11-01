@@ -11,15 +11,18 @@ import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.gateways.ScheduleGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.DELETE_CAMPAIGN_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_ALL_CAMPAIGN_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CAMPAIGN_BY_ID_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CAMPAIGN_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UPDATE_CAMPAIGN_ERROR;
 
 @Repository
 public class CampaignRepositoryImplement
-        extends AdapterOperations<Campaign, CampaignData, Integer, CampaignRepository>
+        extends AdapterOperations<Campaign, CampaignData, String, CampaignRepository>
         implements CampaignGateway {
 
     @Autowired
@@ -34,11 +37,10 @@ public class CampaignRepositoryImplement
     private ScheduleGateway scheduleGateway;
 
     @Override
-    public Mono<List<Campaign>> findAll() {
+    public Flux<Campaign> findAll() {
         return repository.findAll()
                 .map(this::convertToEntity)
-                .flatMap(campaign -> scheduleGateway.findSchedulesByCampaign(campaign))
-                .collectList()
+                .flatMap(scheduleGateway::findSchedulesByCampaign)
                 .onErrorMap(e -> new TechnicalException(e, FIND_ALL_CAMPAIGN_ERROR));
     }
 
@@ -56,6 +58,7 @@ public class CampaignRepositoryImplement
                 .map(campaignData -> campaignData.toBuilder()
                         .isNew(true)
                         .createdDate(timeFactory.now())
+                        .modifiedUser(null)
                         .build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)
@@ -68,9 +71,7 @@ public class CampaignRepositoryImplement
         return findCampaignById(campaign)
                 .map(campaignFound -> StatusResponse.<Campaign>builder()
                         .before(campaignFound)
-                        .actual(campaign.toBuilder()
-                                .id(campaignFound.getId())
-                                .build())
+                        .actual(campaign)
                         .build())
                 .flatMap(this::update);
     }
@@ -81,20 +82,19 @@ public class CampaignRepositoryImplement
                 .map(data -> data.toBuilder()
                         .isNew(false)
                         .createdDate(response.getBefore().getCreatedDate())
+                        .creationUser(response.getBefore().getCreationUser())
+                        .state(data.getState() != null ? data.getState() : response.getBefore().getState())
+                        .modifiedDate(timeFactory.now())
                         .build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)
-                .flatMap(scheduleGateway::updateSchedulesByCampaign)
-                .map(actual -> response.toBuilder().actual(actual).description("Actualizacion Exitosa").build())
+                .map(actual -> response.toBuilder().actual(actual).description("Actualizacion exitosa").build())
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_CAMPAIGN_ERROR));
     }
 
     @Override
     public Mono<String> deleteCampaignById(Campaign campaign) {
-        return scheduleGateway.deleteSchedulesByCampaign(campaign)
-                .onErrorMap(e -> new TechnicalException(e, DELETE_CAMPAIGN_ERROR))
-                .thenReturn(campaign.getIdCampaign())
-                .flatMap(idCampaign -> repository.deleteCampaign(idCampaign, campaign.getIdConsumer()))
+        return repository.deleteCampaign(campaign)
                 .onErrorMap(e -> new TechnicalException(e, DELETE_CAMPAIGN_ERROR))
                 .thenReturn(campaign.getIdCampaign());
     }

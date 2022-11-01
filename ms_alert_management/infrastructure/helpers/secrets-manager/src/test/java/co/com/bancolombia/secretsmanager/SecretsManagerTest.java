@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 import static org.mockito.Mockito.when;
 import static reactor.core.publisher.Mono.just;
 
-public class SecretsManagerTest {
+class SecretsManagerTest {
 
     public static final String SECRET = "any-secret-dev";
 
