@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 public class ClientDTO {
 
     private ClientIdentificationDTO identification;
+    @Size(max = 20, message = "{constraint.size}")
     private String keyMdm;
     @NotNull(message = "{constraint.not_null}")
     @Size(max = 10, message = "{constraint.size}")

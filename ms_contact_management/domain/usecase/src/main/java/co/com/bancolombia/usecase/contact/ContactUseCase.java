@@ -204,10 +204,18 @@ public class ContactUseCase {
                 .filter(cnt -> SMS.equals(cnt.getContactWay()) )
                 .filter(cnt -> !(cnt.getValue().chars().allMatch(Character::isDigit)
                         && cnt.getValue().length() >= 10))
+                .flatMap(this::validateCountryCode)
                 .next()
                 .flatMap(contact -> Mono.error(new BusinessException(INVALID_PHONE)))
                 .map(contact -> enrol)
                 .switchIfEmpty(Mono.just(enrol));
+    }
+
+    private Mono<Contact> validateCountryCode(Contact contact){
+        return Mono.just(contact)
+                .filter(contact1 -> !contact1.getValue().substring(0,1).equals("+"))
+                .map(contact1 -> contact1.toBuilder().value("+57"+contact.getValue()).build())
+                .switchIfEmpty(Mono.just(contact));
     }
 
     public Mono<Enrol> validateMail(Enrol enrol) {

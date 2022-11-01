@@ -69,7 +69,7 @@ public class ClientUseCase {
                 .flatMap(client -> updateClientAndContacts(enrol, client.toBuilder().voucher(voucher).build(), isSeries))
                 .flatMap(statusResponse -> getResponse(enrol.getClient().getVoucher(), SUCCESS_UPDATE))
                 .switchIfEmpty(createClientAndContacts(enrol, voucher, isSeries)
-                        .then(getResponse(enrol.getClient().getVoucher(), SUCCESS_ENROLL)));
+                        .then(getResponse(voucher, SUCCESS_ENROLL)));
 
     }
 
