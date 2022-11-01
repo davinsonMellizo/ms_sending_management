@@ -99,10 +99,18 @@ public class RestConsumerConfig {
     @Autowired
     public WebClient webClientConfigIna(final ConsumerProperties consumerProperties) {
         return WebClient.builder()
-                .clientConnector(clientHttpConnectorWithoutSsl(consumerProperties.getTimeout()))
+                .clientConnector(getClientHttpConnector(consumerProperties.getTimeout()))
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
                 .build();
+    }
+
+    private ClientHttpConnector getClientHttpConnector(int timeout) {
+        return new ReactorClientHttpConnector(HttpClient.create()
+                .compress(true)
+                .keepAlive(true)
+                .option(CONNECT_TIMEOUT_MILLIS, timeout)
+        );
     }
 
 }
