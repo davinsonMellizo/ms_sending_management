@@ -21,6 +21,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CLIENT;
@@ -59,6 +60,7 @@ public class ClientUseCase {
                 .flatMap(clientRepository::inactivateClient)
                 .map(client -> client.toBuilder()
                         .voucher(getVoucher()).build())
+                .map(client -> client.toBuilder().enrollmentOrigin(pClient.getEnrollmentOrigin()).build())
                 .flatMap(client -> newnessUseCase.saveNewness(client, INACTIVE_CLIENT, client.getVoucher()))
                 .flatMap(client -> getResponse(client.getVoucher(), SUCCESS_CHANGE));
     }
@@ -148,17 +150,19 @@ public class ClientUseCase {
                 .flatMap(contactUseCase::validatePhone)
                 .flatMap(contactUseCase::validateMail)
                 .flatMap(client1 -> updateClient(client, enrol))
-                .flatMap(statusResponse -> Flux.fromIterable(enrol.getContactData())
+                .doOnNext(responseClient -> responseUpdate.getActual().setClient(responseClient.getActual()))
+                .doOnNext(responseClient -> responseUpdate.getBefore().setClient(responseClient.getBefore()))
+                .flatMap(responseClient -> Flux.fromIterable(enrol.getContactData())
                         .map(contact -> contact.toBuilder().documentType(enrol.getClient().getDocumentType())
                                 .documentNumber(enrol.getClient().getDocumentNumber())
                                 .segment(enrol.getClient().getConsumerCode())
                                 .build())
+                        .map(contact -> contact.toBuilder()
+                                .documentType(responseClient.getBefore().getDocumentType()).build())
                         .flatMap(contact -> contactUseCase.updateContactRequest(contact, client.getVoucher()))
-                        .doOnNext(response -> responseUpdate.getActual().getContactData().add(response.getActual()))
-                        .doOnNext(response -> responseUpdate.getBefore().getContactData().add(response.getBefore()))
-                        .doOnNext(response -> responseUpdate.getActual().setClient(statusResponse.getActual()))
-                        .doOnNext(response -> responseUpdate.getBefore().setClient(statusResponse.getBefore()))
-                        .last()
+                        .doOnNext(response -> enrolBefore.getContactData().add(response.getActual()))
+                        .doOnNext(response -> enrolActual.getContactData().add(response.getBefore()))
+                        .collectList()
                         .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate,isISeries)));
     }
 

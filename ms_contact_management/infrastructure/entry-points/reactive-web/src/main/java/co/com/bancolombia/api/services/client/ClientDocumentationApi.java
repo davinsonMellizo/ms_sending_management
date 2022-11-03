@@ -23,8 +23,6 @@ public class ClientDocumentationApi {
     private final String STATUS_500 = "500";
     private final String STATUS_200 = "200";
     private final String CONSUMER_CODE_DES = "Consumer Code";
-    private final String DOCUMENT_TYPE_DES = "Client Document Type";
-    private final String DOCUMENT_NUMBER_DES = "Client Document Number";
 
     protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)

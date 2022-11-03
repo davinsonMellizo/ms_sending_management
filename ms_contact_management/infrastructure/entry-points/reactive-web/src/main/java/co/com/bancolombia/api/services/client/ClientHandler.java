@@ -38,6 +38,7 @@ public class ClientHandler {
     public Mono<ServerResponse> saveClient(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(EnrolDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .doOnNext(validatorHandler::validateObject)
                 .map(enrolMapper::toEntity)
                 .flatMap(cc -> clientUseCase.saveClientRequest(cc, Boolean.FALSE, getVoucher()))
                 .flatMap(ResponseUtil::responseOk);
