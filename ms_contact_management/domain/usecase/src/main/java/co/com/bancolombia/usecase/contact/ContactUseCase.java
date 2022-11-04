@@ -42,6 +42,7 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_ENVI
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_PHONE;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
+import static java.lang.Enum.valueOf;
 
 @RequiredArgsConstructor
 public class ContactUseCase {
@@ -149,6 +150,7 @@ public class ContactUseCase {
 
     public Mono<Contact> saveContact(Contact pContact, String voucher) {
         return Mono.just(pContact)
+                .flatMap(this::validateCountryCode)
                 .flatMap(contactGateway::saveContact)
                 .flatMap(contact -> newnessUseCase.saveNewness(contact, CREATE_CONTACT, voucher));
     }
@@ -182,8 +184,10 @@ public class ContactUseCase {
                                                                String voucher) {
         return stateGateway.findState(newContact.getStateContact())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_DATA)))
-                .map(state -> response.getActual().toBuilder().value(newContact.getValue())
-                        .idState(state.getId()).environmentType(newContact.getEnvironmentType())
+                .zipWith(validateCountryCode(newContact))
+                .map(data -> response.getActual().toBuilder().value(data.getT2().getValue())
+                        .stateContact(data.getT1().getId().toString())
+                        .environmentType(data.getT2().getEnvironmentType())
                         .build())
                 .flatMap(contactGateway::updateContact)
                 .doOnNext(contactResponse -> newnessUseCase.saveNewness(response.getActual(), UPDATE_CONTACT, voucher))
@@ -208,9 +212,7 @@ public class ContactUseCase {
     public Mono<Enrol> validatePhone(Enrol enrol) {
         return Flux.fromIterable(enrol.getContactData())
                 .filter(cnt -> SMS.equals(cnt.getContactWay()) )
-                .filter(cnt -> !(cnt.getValue().chars().allMatch(Character::isDigit)
-                        && cnt.getValue().length() >= 10))
-                .flatMap(this::validateCountryCode)
+                .filter(cnt -> cnt.getValue().length() < 10)
                 .next()
                 .flatMap(contact -> Mono.error(new BusinessException(INVALID_PHONE)))
                 .map(contact -> enrol)
@@ -219,6 +221,7 @@ public class ContactUseCase {
 
     private Mono<Contact> validateCountryCode(Contact contact){
         return Mono.just(contact)
+                .filter(contact1 -> contact1.getContactWayName().equals(SMS))
                 .filter(contact1 -> !contact1.getValue().substring(0,1).equals("+"))
                 .map(contact1 -> contact1.toBuilder().value("+57"+contact.getValue()).build())
                 .switchIfEmpty(Mono.just(contact));

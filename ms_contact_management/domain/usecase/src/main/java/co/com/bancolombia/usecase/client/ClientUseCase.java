@@ -155,7 +155,7 @@ public class ClientUseCase {
                 .flatMap(responseClient -> Flux.fromIterable(enrol.getContactData())
                         .map(contact -> contact.toBuilder().documentType(enrol.getClient().getDocumentType())
                                 .documentNumber(enrol.getClient().getDocumentNumber())
-                                .segment(enrol.getClient().getConsumerCode())
+                                .segment(enrol.getClient().getConsumerCode()).contactWayName(contact.getContactWay())
                                 .build())
                         .map(contact -> contact.toBuilder()
                                 .documentType(responseClient.getBefore().getDocumentType()).build())
@@ -167,11 +167,10 @@ public class ClientUseCase {
     }
 
     public Mono<StatusResponse<Client>> updateClient(Client client, Enrol enrol) {
-        return Mono.just(client)
-                .flatMap(clientBefore -> buildRequestToUpdateClient(clientBefore, enrol.getClient().toBuilder()
-                        .idState(enrol.getClient().getStateClient()
-                                .equalsIgnoreCase(ACTIVE.getValue()) ? ACTIVE.getType() : INACTIVE.getType())
-                        .enrollmentOrigin(enrol.getClient().getConsumerCode()).build()))
+        return stateGateway.findState(enrol.getClient().getStateClient())
+                .switchIfEmpty(Mono.error(new BusinessException(STATE_NOT_FOUND)))
+                .flatMap(state -> buildRequestToUpdateClient(client, enrol.getClient().toBuilder()
+                        .idState(state.getId()).enrollmentOrigin(enrol.getClient().getConsumerCode()).build()))
                 .flatMap(clientRepository::updateClient)
                 .flatMap(response -> newnessUseCase.saveNewness(response.getBefore(), UPDATE_CLIENT, client.getVoucher())
                         .thenReturn(response));
