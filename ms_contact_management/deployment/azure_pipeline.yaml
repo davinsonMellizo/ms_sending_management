@@ -31,10 +31,10 @@ jobs:
         - java
         - JAVA_HOME_11_X64
     steps:
-      #- script: |
-          #cd $(Build.SourcesDirectory)/$(projectName)/
-          #gradle wrapper
-        #displayName: 'Generate gradle wrapper'
+      - script: |
+          cd $(Build.SourcesDirectory)/$(projectName)/
+          gradle wrapper
+        displayName: 'Generate gradle wrapper'
       - task: SonarQubePrepare@4
         displayName: 'Prepare analysis on SonarQube'
         inputs:
