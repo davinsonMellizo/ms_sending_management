@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        cleanArchitectureVersion = '2.4.5'
+        cleanArchitectureVersion = '1.9.8'
         springBootVersion = '2.6.7'
         springCloudVersion = '2021.0.2'
         sonarVersion = '3.0'
