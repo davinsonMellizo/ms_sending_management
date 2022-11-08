@@ -25,10 +25,8 @@ public class NewnessRepositoryImplement
 
     @Override
     public Mono<Newness> saveNewness(Newness newness) {
-        System.out.println("VOUCHER"+newness.getVoucher());
         return Mono.just(newness.toBuilder().dateCreation(timeFactory.now()).build())
                 .map(this::convertToData)
-                .doOnNext(System.out::println)
                 .flatMap(repository::save)
                 .thenReturn(newness);
     }
