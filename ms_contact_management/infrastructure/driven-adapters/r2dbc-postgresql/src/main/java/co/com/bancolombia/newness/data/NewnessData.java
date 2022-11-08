@@ -29,7 +29,7 @@ public class NewnessData {
     private String userCreation;
     private String responseCode;
     private String responseDescription;
-    private Integer voucher;
+    private Long voucher;
     private LocalDateTime dateFirstInscription;
     private LocalDateTime dateCreation;
 }
