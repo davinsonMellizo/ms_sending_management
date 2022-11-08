@@ -70,6 +70,7 @@ public class ContactUseCaseTest {
         contact.setValue("321795845");
         contact.setStateContact("Active");
         contact.setId(1);
+        contact.setContactWayName("SMS");
 
         client.setDocumentNumber(1061772353L);
         client.setDocumentType("0");
