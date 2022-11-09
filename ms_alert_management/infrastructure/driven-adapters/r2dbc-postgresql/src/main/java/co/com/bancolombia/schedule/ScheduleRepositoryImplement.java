@@ -1,6 +1,8 @@
 package co.com.bancolombia.schedule;
 
 import co.com.bancolombia.AdapterOperations;
+import co.com.bancolombia.campaign.data.CampaignMapper;
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.campaign.Campaign;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CAMPAIGN_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CAMPAIGN_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_SCHEDULE_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CAMPAIGN_BY_ID_ERROR;
@@ -33,8 +37,19 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
     @Autowired
     private TimeFactory timeFactory;
 
+    @Autowired
+    private CampaignMapper campaignMapper;
+
     @Override
-    public Mono<Schedule> saveSchedule(Schedule schedule) {
+    public Mono<Campaign> saveSchedule(Schedule schedule) {
+        return repository.findCampaignById(schedule.getIdCampaign(), schedule.getIdConsumer())
+                .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
+                .map(campaignMapper::toEntity)
+                .zipWith(this.save(schedule))
+                .map(t -> t.getT1().toBuilder().schedules(List.of(t.getT2())).build());
+    }
+
+    private Mono<Schedule> save(Schedule schedule) {
         return Mono.just(schedule)
                 .map(this::convertToData)
                 .map(scheduleData -> scheduleData.toBuilder()
@@ -68,6 +83,8 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
                 .map(this::convertToData)
                 .map(data -> data.toBuilder()
                         .id(response.getBefore().getId())
+                        .idCampaign(response.getBefore().getIdCampaign())
+                        .idConsumer(response.getBefore().getIdConsumer())
                         .createdDate(response.getBefore().getCreatedDate())
                         .creationUser(response.getBefore().getCreationUser())
                         .modifiedDate(timeFactory.now())
@@ -96,25 +113,6 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
                                 .idConsumer(campaign.getIdConsumer())
                                 .creationUser(campaign.getCreationUser())
                                 .createdDate(timeFactory.now())
-                                .build())
-                        .collect(Collectors.toList()))
-                .flatMap(scheduleList -> repository.saveAll(scheduleList)
-                        .map(this::convertToEntity)
-                        .collectList()
-                        .map(campaign::withSchedules))
-                .onErrorMap(e -> new TechnicalException(e, SAVE_CAMPAIGN_ERROR));
-    }
-
-    @Override
-    public Mono<Campaign> updateSchedulesByCampaign(Campaign campaign) {
-        return Mono.just(campaign.getSchedules())
-                .map(schedules -> schedules.stream().map(this::convertToData)
-                        .map(scheduleData -> scheduleData.toBuilder()
-                                .idCampaign(campaign.getIdCampaign())
-                                .idConsumer(campaign.getIdConsumer())
-                                .creationUser(campaign.getCreationUser())
-                                .createdDate(campaign.getCreatedDate())
-                                .modifiedDate(timeFactory.now())
                                 .build())
                         .collect(Collectors.toList()))
                 .flatMap(scheduleList -> repository.saveAll(scheduleList)

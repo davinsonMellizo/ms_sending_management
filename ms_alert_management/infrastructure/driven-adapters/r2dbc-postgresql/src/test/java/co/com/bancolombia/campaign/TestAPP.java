@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.springframework.boot.SpringApplication.run;
 
 @SpringBootApplication
@@ -26,13 +28,13 @@ public class TestAPP {
     public ScheduleGateway scheduleGateway() {
         return new ScheduleGateway() {
             @Override
-            public Mono<Schedule> saveSchedule(Schedule schedule) {
-                return Mono.just(schedule);
+            public Mono<Campaign> saveSchedule(Schedule schedule) {
+                return Mono.just(Campaign.builder().schedules(List.of(schedule)).build());
             }
 
             @Override
             public Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id) {
-                return Mono.just(StatusResponse.<Schedule>builder().actual(schedule).build());
+                return Mono.just(StatusResponse.<Schedule>builder().before(schedule).actual(schedule).build());
             }
 
             @Override
@@ -42,11 +44,6 @@ public class TestAPP {
 
             @Override
             public Mono<Campaign> saveSchedulesByCampaign(Campaign campaign) {
-                return Mono.just(campaign);
-            }
-
-            @Override
-            public Mono<Campaign> updateSchedulesByCampaign(Campaign campaign) {
                 return Mono.just(campaign);
             }
 

@@ -66,8 +66,7 @@ class ProviderUseCaseTest {
                 .thenReturn(Mono.just(provider));
         StepVerifier
                 .create(useCase.saveProvider(provider))
-                .assertNext(response -> response
-                        .getId().equals(provider.getId()))
+                .assertNext(response -> assertEquals(response.getId(), provider.getId()))
                 .verifyComplete();
         verify(providerGateway).saveProvider(any());
     }
@@ -78,9 +77,7 @@ class ProviderUseCaseTest {
                 .thenReturn(Mono.just(StatusResponse.<Provider>builder().actual(provider).before(provider).build()));
         StepVerifier
                 .create(useCase.updateProvider(provider))
-                .assertNext(response -> response
-                        .getActual().getId()
-                        .equals(provider.getId()))
+                .assertNext(response -> assertEquals(response.getActual().getId(), provider.getId()))
                 .verifyComplete();
         verify(providerGateway).updateProvider(any());
     }

@@ -5,6 +5,8 @@ import co.com.bancolombia.model.response.StatusResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 public interface CampaignGateway {
 
     Flux<Campaign> findAll();
@@ -15,6 +17,6 @@ public interface CampaignGateway {
 
     Mono<StatusResponse<Campaign>> updateCampaign(Campaign campaign);
 
-    Mono<String> deleteCampaignById(Campaign campaign);
+    Mono<Map<String, String>> deleteCampaignById(Campaign campaign);
 
 }

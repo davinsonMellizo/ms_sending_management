@@ -30,57 +30,65 @@ import java.util.stream.Collectors;
         checkedField = "attachment",
         checkedValue = true,
         requiredField = "attachmentPath",
-        message = "attachmentPath must not be null",
+        message = "attachmentPath no debe ser nulo",
         groups = {OnCreate.class, OnUpdate.class}
 )
 public class CampaignDTO extends DTO<Campaign> {
 
-    @Size(min = 1, max = 50, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class, OnDelete.class})
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class, OnUpdate.class, OnDelete.class})
+    @Size(min = 1, max = 50, groups = {OnCreate.class, OnUpdate.class, OnDelete.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class, OnDelete.class}, message = "no debe ser nulo")
     private String idCampaign;
 
-    @Size(min = 1, max = 10, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class, OnDelete.class})
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class, OnUpdate.class, OnDelete.class})
+    @Size(min = 1, max = 10, groups = {OnCreate.class, OnUpdate.class, OnDelete.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class, OnDelete.class}, message = "no debe ser nulo")
     private String idConsumer;
 
-    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class})
+    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe se ser nulo o vacío")
     private JsonNode provider;
 
-    @Min(value = 0, message = "{constraint.min}", groups = {OnCreate.class, OnUpdate.class})
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class, OnUpdate.class})
+    @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "debe ser mayor que {value}")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Integer idRemitter;
 
-    @Size(min = 1, max = 50, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 1, max = 50, groups = {OnCreate.class, OnUpdate.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
     private String defaultTemplate;
 
-    @Size(min = 1, max = 200, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 1, max = 200, groups = {OnCreate.class, OnUpdate.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
     private String description;
 
-    @Size(min = 1, max = 255, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class})
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 1, max = 255, groups = {OnCreate.class, OnUpdate.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private String sourcePath;
 
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class, OnUpdate.class})
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Boolean attachment;
 
-    @Size(min = 1, max = 255, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 1, max = 255, groups = {OnCreate.class, OnUpdate.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
     private String attachmentPath;
 
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class, OnUpdate.class})
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Boolean dataEnrichment;
 
-    @Pattern(regexp = "^0$|^1$", message = "allowed input: 0 or 1", groups = {OnCreate.class, OnUpdate.class})
+    @Pattern(regexp = "^0$|^1$", message = "debe ser 0 o 1", groups = {OnCreate.class, OnUpdate.class})
     private String state;
 
-    @Size(min = 1, max = 20, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class})
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class})
+    @Size(min = 1, max = 20, groups = {OnCreate.class, OnUpdate.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(groups = {OnCreate.class}, message = "no debe ser nulo")
     private String creationUser;
 
-    @Size(min = 1, max = 20, message = "{constraint.size}", groups = {OnCreate.class, OnUpdate.class, OnDelete.class})
+    @Size(min = 1, max = 20, groups = {OnCreate.class, OnUpdate.class, OnDelete.class},
+            message = "debe tener entre {min} y {max} caracteres de longitud")
     private String modifiedUser;
 
-    @NotNull(message = "{constraint.not_null}", groups = {OnCreate.class})
-    @Size(min = 1, max = 50, message = "must be between {min} and {max} items", groups = {OnCreate.class})
+    @NotNull(groups = {OnCreate.class}, message = "no debe ser nulo")
+    @Size(min = 1, max = 50, groups = {OnCreate.class}, message = "debe tener entre {min} y {max} horarios")
     private @Valid List<CampaignScheduleDTO> schedules;
 
     private List<Schedule> schedulesToModel() {

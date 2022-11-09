@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -52,8 +53,7 @@ class AlertTransactionUseCaseTest {
                 .thenReturn(Mono.just(alertTransaction));
         StepVerifier
                 .create(useCase.saveAlertTransaction(alertTransaction))
-                .assertNext(response -> response
-                        .getIdAlert().equals(alertTransaction.getIdAlert()))
+                .assertNext(response -> assertEquals(response.getIdAlert(), alertTransaction.getIdAlert()))
                 .verifyComplete();
         verify(alertTransactionGateway).saveAlertTransaction(any());
     }

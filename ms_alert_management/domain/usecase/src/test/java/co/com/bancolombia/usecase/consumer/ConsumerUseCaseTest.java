@@ -65,8 +65,7 @@ class ConsumerUseCaseTest {
                 .thenReturn(Mono.just(consumer));
         StepVerifier
                 .create(useCase.saveConsumer(consumer))
-                .assertNext(response -> response
-                        .getId().equals(consumer.getId()))
+                .assertNext(response -> assertEquals(response.getId(), consumer.getId()))
                 .verifyComplete();
         verify(consumerGateway).saveConsumer(any());
     }
@@ -78,9 +77,7 @@ class ConsumerUseCaseTest {
                         .actual(consumer).before(consumer).build()));
         StepVerifier
                 .create(useCase.updateConsumer(consumer))
-                .assertNext(response -> response
-                        .getActual().getId()
-                        .equals(consumer.getId()))
+                .assertNext(response -> assertEquals(response.getActual().getId(), consumer.getId()))
                 .verifyComplete();
         verify(consumerGateway).updateConsumer(any());
     }

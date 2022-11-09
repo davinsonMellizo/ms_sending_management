@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import static co.com.bancolombia.commons.constants.Header.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,8 +63,7 @@ class AlertClientUseCaseTest {
                 .thenReturn(Mono.just(alertClient));
         useCase.saveAlertClient(List.of(alertClient))
                 .as(StepVerifier::create)
-                .assertNext(response -> response
-                        .getIdAlert().equals(alertClient.getIdAlert()))
+                .assertNext(response -> assertEquals(response.getIdAlert(), alertClient.getIdAlert()))
                 .verifyComplete();
         verify(alertClientGateway).save(any());
     }
@@ -104,8 +104,7 @@ class AlertClientUseCaseTest {
                 .thenReturn(Flux.just(alertClient));
         useCase.updateAlertClient(List.of(alertClient))
                 .as(StepVerifier::create)
-                .assertNext(response -> response
-                        .getIdAlert().equals(alertClient.getIdAlert()))
+                .assertNext(response -> assertEquals(response.getIdAlert(), alertClient.getIdAlert()))
                 .verifyComplete();
         verify(alertClientGateway).updateAlertClient(any());
         verify(alertClientGateway).findAlertsByClient(anyLong(), anyInt());
@@ -140,7 +139,7 @@ class AlertClientUseCaseTest {
                 .thenReturn(Mono.just(alertClient));
         useCase.deleteAlertClient(alertClient)
                 .as(StepVerifier::create)
-                .assertNext(alertClientD -> alertClientD.getIdAlert().equals(alertClient.getIdAlert()))
+                .assertNext(alertClientD -> assertEquals(alertClientD.getIdAlert(), alertClient.getIdAlert()))
                 .verifyComplete();
         verify(alertClientGateway).delete(any());
     }

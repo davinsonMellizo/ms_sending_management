@@ -41,9 +41,6 @@ public class CampaignData implements Persistable<String> {
     @Transient
     private List<Schedule> schedules;
 
-    @Transient
-    private Boolean isNew;
-
     @Override
     public String getId() {
         return this.getIdCampaign();
@@ -51,7 +48,7 @@ public class CampaignData implements Persistable<String> {
 
     @Override
     public boolean isNew() {
-        return this.isNew;
+        return true;
     }
 
 }

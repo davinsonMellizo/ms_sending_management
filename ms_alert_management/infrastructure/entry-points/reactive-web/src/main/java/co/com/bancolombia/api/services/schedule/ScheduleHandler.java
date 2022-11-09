@@ -40,8 +40,8 @@ public class ScheduleHandler {
 
     public Mono<ServerResponse> updateSchedule(ServerRequest serverRequest) {
         return Mono.zip(ParamsUtil.getId(serverRequest), serverRequest.bodyToMono(ScheduleDTO.class))
+                .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .flatMap(t -> Mono.just(t.getT2())
-                        .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                         .doOnNext(validatorHandler::validateObject)
                         .flatMap(ScheduleDTO::toModel)
                         .flatMap(schedule -> useCase.updateSchedule(schedule, Long.valueOf(t.getT1())))

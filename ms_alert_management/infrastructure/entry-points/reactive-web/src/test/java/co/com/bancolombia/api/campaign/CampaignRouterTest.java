@@ -22,6 +22,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -53,6 +54,8 @@ class CampaignRouterTest extends BaseIntegration {
     void init() {
         url = properties.getCampaign();
         request = loadFileConfig("CampaignRequest.json", String.class);
+        campaign.setIdCampaign("1");
+        campaign.setIdConsumer("SVP");
     }
 
     @Test
@@ -77,10 +80,15 @@ class CampaignRouterTest extends BaseIntegration {
 
     @Test
     void findCampaignById() {
-        when(useCase.findCampaignById(any()))
-                .thenReturn(Mono.just(campaign));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url).exchange();
-        spec.expectStatus().isOk();
+        when(useCase.findCampaignById(any())).thenReturn(Mono.just(campaign));
+        webTestClient.get().uri(uriBuilder -> uriBuilder
+                        .path(url)
+                        .queryParam("id-campaign", campaign.getIdCampaign())
+                        .queryParam("id-consumer", campaign.getIdConsumer())
+                        .build())
+                .exchange()
+                .expectStatus()
+                .isOk();
         verify(useCase).findCampaignById(any());
     }
 
@@ -98,7 +106,9 @@ class CampaignRouterTest extends BaseIntegration {
     @Test
     void delete() {
         when(useCase.deleteCampaignById(any()))
-                .thenReturn(Mono.just("1"));
+                .thenReturn(Mono.just(
+                        Map.of("idCampaign", campaign.getIdCampaign(), "idConsumer", campaign.getIdConsumer())
+                ));
         statusAssertionsWebClientDelete(url, request)
                 .isOk()
                 .expectBody(JsonNode.class)

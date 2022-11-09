@@ -23,9 +23,15 @@ data:
   CONSUMER: "#{consumer}#"
   CATEGORY: "#{category}#"
   PRIORITY: "#{priority}#"
+  CAMPAIGN: "#{campaign}#"
+  SCHEDULE: "#{schedule}#"
   POSTGRESQL_SCHEMA: #{postgresql-schema}#
   POSTGRESQL_POOL_INITIAL: "#{postgresql-pool-initial}#"
   POSTGRESQL_POOL_MAX: "#{postgresql-pool-max}#"
   SECRET-RABBIT: #{secret-rabbit}#
-
-
+  GLUE_DATABASE: "#{glue-database}#"
+  GLUE_DATABASE_TABLE: "#{glue-database-table}#"
+  GLUE_BUCKET_SOURCE_PATH: "#{glue-bucket-source-path}#"
+  GLUE_BUCKET_DESTINATION_PATH: "#{glue-bucket-destination-path}#"
+  GLUE_JOB_NAME: "#{glue-job-name}#"
+  GLUE_CRAWLER_NAME: "#{glue-crawler-name}#"

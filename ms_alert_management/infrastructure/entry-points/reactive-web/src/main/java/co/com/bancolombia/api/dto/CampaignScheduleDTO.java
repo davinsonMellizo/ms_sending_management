@@ -1,5 +1,6 @@
 package co.com.bancolombia.api.dto;
 
+import co.com.bancolombia.api.commons.validators.constraints.DateGreaterThan;
 import co.com.bancolombia.api.commons.validators.constraints.FieldsValueMatch;
 import co.com.bancolombia.api.commons.validators.groups.OnCreate;
 import co.com.bancolombia.commons.enums.ScheduleType;
@@ -20,17 +21,23 @@ import java.time.LocalTime;
 @FieldsValueMatch(
         field = "startTime",
         fieldMatch = "endTime",
-        message = "startTime and endTime fields values don't match",
+        message = "startTime y endTime no coinciden los valores",
+        groups = {OnCreate.class}
+)
+@DateGreaterThan(
+        startDate = "startDate",
+        endDate = "endDate",
+        message = "startDate debe ser posterior a endDate",
         groups = {OnCreate.class}
 )
 public class CampaignScheduleDTO {
-    @NotNull(message = "{constraint.not_null}")
+    @NotNull(message = "no debe ser nulo", groups = {OnCreate.class})
     private ScheduleType scheduleType;
 
-    @NotNull(message = "{constraint.not_null}")
+    @NotNull(message = "no debe ser nulo", groups = {OnCreate.class})
     private LocalDate startDate;
 
-    @NotNull(message = "{constraint.not_null}")
+    @NotNull(message = "no debe ser nulo", groups = {OnCreate.class})
     private LocalTime startTime;
 
     private LocalDate endDate;

@@ -18,8 +18,8 @@ public enum BusinessErrorMessage {
     CATEGORY_NOT_FOUND("381", "Category Not Found"),
     PRIORITY_NOT_FOUND("382", "Priority Not Found"),
     PROVIDER_SERVICE_NOT_FOUND("383", "Provider Service Not Found"),
-    CAMPAIGN_NOT_FOUND("384", "Campaign Not Found"),
-    SCHEDULE_NOT_FOUND("384", "Schedule Not Found");
+    CAMPAIGN_NOT_FOUND("384", "Campana no encontrada"),
+    SCHEDULE_NOT_FOUND("384", "Horario no encontrado");
 
     private final String code;
     private final String message;

@@ -17,7 +17,6 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -43,12 +42,12 @@ class CampaignRepositoryImplTest {
         campaign.setSourcePath("source_path");
         campaign.setAttachment(true);
         campaign.setAttachmentPath("attachment_path");
-        campaign.setState("ACTIVO");
+        campaign.setState("1");
         campaign.setCreatedDate(NOW);
         campaign.setCreationUser("lugomez");
 
-        schedule.setIdCampaign("1");
-        schedule.setIdConsumer("ALM");
+        schedule.setIdCampaign(campaign.getIdCampaign());
+        schedule.setIdConsumer(campaign.getIdConsumer());
         schedule.setScheduleType(ScheduleType.DAILY);
         schedule.setStartDate(DATE_NOW);
         schedule.setStartTime(TIME_NOW);
@@ -82,15 +81,4 @@ class CampaignRepositoryImplTest {
                         .consumeNextWith(status -> assertEquals(status.getIdCampaign(), campaign.getIdCampaign()))
                         .verifyComplete());
     }
-
-//    @Test
-//    void updateCampaign() {
-//        campaign.setIdCampaign("1");
-//        campaign.setProvider("");
-//        campaign.setAttachment(false);
-//        campaign.setAttachmentPath(null);
-//        StepVerifier.create(repositoryImpl.updateCampaign(campaign))
-//                .consumeNextWith(status -> assertNull(status.getActual().getAttachmentPath()))
-//                .verifyComplete();
-//    }
 }

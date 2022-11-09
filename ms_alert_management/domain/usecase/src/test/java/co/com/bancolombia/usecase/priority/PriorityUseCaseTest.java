@@ -64,8 +64,7 @@ class PriorityUseCaseTest {
                 .thenReturn(Mono.just(priority));
         StepVerifier
                 .create(useCase.savePriority(priority))
-                .assertNext(response -> response
-                        .getId().equals(priority.getId()))
+                .assertNext(response -> assertEquals(response.getId(), priority.getId()))
                 .verifyComplete();
         verify(priorityGateway).savePriority(any());
     }
@@ -77,9 +76,7 @@ class PriorityUseCaseTest {
                         .actual(priority).before(priority).build()));
         StepVerifier
                 .create(useCase.updatePriority(priority))
-                .assertNext(response -> response
-                        .getActual().getId()
-                        .equals(priority.getId()))
+                .assertNext(response -> assertEquals(response.getActual().getId(), priority.getId()))
                 .verifyComplete();
         verify(priorityGateway).updatePriority(any());
     }

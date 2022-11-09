@@ -1,6 +1,8 @@
 package co.com.bancolombia.schedule;
 
+import co.com.bancolombia.campaign.data.CampaignMapper;
 import co.com.bancolombia.commons.enums.ScheduleType;
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
 import co.com.bancolombia.model.campaign.Campaign;
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -27,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CAMPAIGN_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +50,9 @@ class ScheduleRepositoryImplExceptionTest {
 
     @Mock
     private TimeFactory timeFactory;
+
+    @MockBean
+    private CampaignMapper campaignMapper;
 
     private final Campaign campaign = new Campaign();
     private final Schedule schedule = new Schedule();
@@ -67,8 +74,8 @@ class ScheduleRepositoryImplExceptionTest {
         campaign.setCreationUser("lugomez");
 
         schedule.setId(1L);
-        schedule.setIdCampaign("1");
-        schedule.setIdConsumer("ALM");
+        schedule.setIdCampaign(campaign.getIdCampaign());
+        schedule.setIdConsumer(campaign.getIdConsumer());
         schedule.setScheduleType(ScheduleType.ON_DEMAND);
         schedule.setStartDate(DATE_NOW);
         schedule.setStartTime(TIME_NOW);
@@ -76,8 +83,8 @@ class ScheduleRepositoryImplExceptionTest {
         schedule.setEndTime(TIME_NOW);
 
         scheduleData.setId(2L);
-        scheduleData.setIdCampaign("1");
-        scheduleData.setIdConsumer("ALM");
+        scheduleData.setIdCampaign(campaign.getIdCampaign());
+        scheduleData.setIdConsumer(campaign.getIdConsumer());
         scheduleData.setScheduleType(ScheduleType.DAILY);
         scheduleData.setStartDate(DATE_NOW);
         scheduleData.setStartTime(TIME_NOW);
@@ -87,11 +94,11 @@ class ScheduleRepositoryImplExceptionTest {
 
     @Test
     void saveScheduleWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
+        when(repository.findCampaignById(anyString(), anyString()))
+                .thenReturn(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)));
         repositoryImpl.saveSchedule(schedule)
                 .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
+                .expectError(BusinessException.class)
                 .verify();
     }
 
@@ -132,18 +139,6 @@ class ScheduleRepositoryImplExceptionTest {
         when(repository.save(any()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.saveSchedulesByCampaign(campaign)
-                .as(StepVerifier::create)
-                .expectError(TechnicalException.class)
-                .verify();
-    }
-
-    @Test
-    void updateSchedulesByCampaignWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
-        when(repository.findSchedulesByCampaign(anyString(), anyString()))
-                .thenReturn(Flux.just(scheduleData));
-        repositoryImpl.updateSchedulesByCampaign(campaign)
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)
                 .verify();
