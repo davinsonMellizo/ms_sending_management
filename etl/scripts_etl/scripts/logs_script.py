@@ -30,7 +30,7 @@ logs_dyf = glueContext.create_dynamic_frame.from_catalog(database=glue_database,
 
 print('Logs number dyf:', logs_dyf.count())
 
-# Obtener los datos actuales de contactos
+# filtrar los logs ateriores a 30 días
 logs_dyf = logs_dyf.filter(logs_dyf["date_creation"] < date_sub(current_date(), 30))
    
   
