@@ -38,7 +38,7 @@ logs_dyf = logs_dyf.filter(
         lambda x: x.date_creation < date_sub(current_date(), 30) )
 
 # Seleccionar campos necesarios del DynamicFrame de logs
-contacts_dyf = contacts_dyf.select_fields(LOGS_COLUMNS)
+logs_dyf = logs_dyf.select_fields(LOGS_COLUMNS)
    
 
 # Convertir DynamicFrame a Apache DataFrame
