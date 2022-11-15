@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DynamoAdapterTest {
+class DynamoAdapterTest {
 
     private static final String TEMPLATE_NAME ="Compra";
 
