@@ -35,7 +35,7 @@ logs_dyf = glueContext.create_dynamic_frame.from_catalog(database=glue_database,
 print('Logs number dyf:', logs_dyf.count())
 
 # filtrar los logs ateriores a 30 días
-df_logs = df_logs.filter(df_logs["date_creation"] < date_sub(current_date(), 30))
+logs_dyf = logs_dyf.filter(logs_dyf["date_creation"] < date_sub(current_date(), 30))
 print('Logs number dyf filter:', logs_dyf.count())
 # Seleccionar campos necesarios del DynamicFrame de logs
 logs_dyf = logs_dyf.select_fields(LOGS_COLUMNS)
