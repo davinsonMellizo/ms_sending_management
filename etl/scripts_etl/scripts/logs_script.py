@@ -11,6 +11,9 @@ from pyspark.context import SparkContext
 from pyspark.sql import *
 from datetime import datetime
 
+LOGS_COLUMNS: List[str] = ['id', 'log_key' ,'document_type' ,'document_number' ,'log_type' ,'medium' ,
+	'contact' ,'message_sent' ,'consumer' ,'alert_id' ,'alert_description','transaction_id','amount',	'response_code'  ,
+	'response_description' ,'priority int2','provider','template','operation_id','operation_description','date_creation']
 
 # Glue Context
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'glue_database', 'glue_database_table', 'bucket_destination_path'])
@@ -33,8 +36,11 @@ print('Logs number dyf:', logs_dyf.count())
 # filtrar los logs ateriores a 30 días
 logs_dyf = logs_dyf.filter(
         lambda x: x.date_creation < date_sub(current_date(), 30) )
+
+# Seleccionar campos necesarios del DynamicFrame de logs
+contacts_dyf = contacts_dyf.select_fields(LOGS_COLUMNS)
    
-  
+
 # Convertir DynamicFrame a Apache DataFrame
 logs_df = logs_dyf.toDF()
 
