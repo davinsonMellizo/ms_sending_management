@@ -13,6 +13,7 @@ import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.ses.SesAsyncClient;
 import software.amazon.awssdk.services.ses.model.RawMessage;
 import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
+import software.amazon.awssdk.services.ses.model.SendRawEmailResponse;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -63,8 +64,8 @@ public class SesAdapter implements SesGateway {
                         .rawMessage(rawMessage).build();
 
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .doOnNext(res-> loggerBuilder.info(res.join().messageId()))
                         .map(response -> Response.builder().code(codigoResponse).description("ses sendRawEmail").build());
+
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
             }} catch (MessagingException e) {

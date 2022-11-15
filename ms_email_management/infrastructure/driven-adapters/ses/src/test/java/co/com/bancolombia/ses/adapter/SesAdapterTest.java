@@ -26,7 +26,7 @@ public class SesAdapterTest {
 
     @Test
     public void findTemplateEmailTest() {
-        /*
+
         TemplateEmail templateEmail = TemplateEmail.builder()
                 .bodyHtml("html").subject("subject").build();
         Alert alert = Alert.builder()
@@ -36,6 +36,6 @@ public class SesAdapterTest {
                 .thenReturn(new CompletableFuture<>());
         StepVerifier.create(sesAdapter.sendEmail(templateEmail, alert))
                 .expectNextCount(1)
-                .verifyComplete();*/
+                .verifyComplete();
     }
 }

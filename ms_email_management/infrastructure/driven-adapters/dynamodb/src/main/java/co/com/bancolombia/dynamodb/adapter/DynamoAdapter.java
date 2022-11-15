@@ -20,7 +20,6 @@ public class DynamoAdapter extends AdapterOperations<TemplateEmail, TemplateEmai
 
     @Override
     public Mono<TemplateEmail> findTemplateEmail(String templateName) {
-        //return Mono.just(new TemplateEmail());
         return findById(templateName);
     }
 }
