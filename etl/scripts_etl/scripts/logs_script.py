@@ -10,6 +10,7 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from pyspark.sql import *
 from datetime import datetime
+from pyspark.sql.functions import *
 
 LOGS_COLUMNS: List[str] = ['id', 'log_key' ,'document_type' ,'document_number' ,'log_type' ,'medium' ,
 	'contact' ,'message_sent' ,'consumer' ,'alert_id' ,'alert_description','transaction_id','amount',	'response_code'  ,
