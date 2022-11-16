@@ -70,8 +70,7 @@ public class S3Client {
                     String fileName = "massive-file";
                     try (FileOutputStream fos = new FileOutputStream(fileName)) {
                         fos.write(bytes);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (Exception ignored) {
                     }
                     return fileName;
                 }).orElse(null);
@@ -119,6 +118,9 @@ public class S3Client {
         Multimap<String, Map<String, Object>> smsCsvProcess = getRecordsFromBucket(
                 s3Properties.getBucketNameTarget(), s3Properties.getSmsPrefix());
 
+        Multimap<String, Map<String, Object>> pushCsvProcess = getRecordsFromBucket(
+                s3Properties.getBucketNameTarget(), s3Properties.getPushPrefix());
+
         long channelTypeEmailCount = massiveCsv.get("DATA").stream()
                 .filter(stringObjectMap -> stringObjectMap.get("ChannelType").equals("EMAIL"))
                 .count();
@@ -127,6 +129,12 @@ public class S3Client {
                 .filter(stringObjectMap -> stringObjectMap.get("ChannelType").equals("SMS"))
                 .count();
 
-        return channelTypeEmailCount == emailCsvProcess.size() && channelTypeSmsCount == smsCsvProcess.size();
+        long channelTypePushCount = massiveCsv.get("DATA").stream()
+                .filter(stringObjectMap -> stringObjectMap.get("ChannelType").equals("PUSH"))
+                .count();
+
+        return channelTypeEmailCount == emailCsvProcess.size() &&
+                channelTypeSmsCount == smsCsvProcess.size() &&
+                channelTypePushCount == pushCsvProcess.size();
     }
 }

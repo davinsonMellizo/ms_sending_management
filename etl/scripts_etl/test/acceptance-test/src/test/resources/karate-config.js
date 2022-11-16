@@ -13,7 +13,8 @@ function () {
                 bucketNameTarget: 'nu0154001-alertas-dev-glue-processed-data',
                 massivePrefix: 'test',
                 emailPrefix: 'test/ChannelType=EMAIL',
-                smsPrefix: 'test/ChannelType=SM'
+                smsPrefix: 'test/ChannelType=SMS',
+                pushPrefix: 'test/ChannelType=PUSH'
             }
         },
     }
