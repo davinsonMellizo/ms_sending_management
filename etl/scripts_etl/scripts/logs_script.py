@@ -42,11 +42,22 @@ logs_dyf = logs_dyf.select_fields(LOGS_COLUMNS)
    
 
 # Convertir DynamicFrame a Apache DataFrame
-logs_df = logs_dyf.toDF()
+#logs_df = logs_dyf.toDF()
 
 
+#logs_df.write.parquet('s3://{bucket_destination_path}/date_sub(current_date(), 31)') 
 
-logs_df.write.parquet('s3://{bucket_destination_path}/date_sub(current_date(), 31)') 
+glueContext.write_dynamic_frame.from_options(
+    frame=logs_dyf.coalesce(1),
+    connection_type='s3',
+    format='parquet',
+    connection_options={
+        'path': f's3://{bucket_destination_path}/date_sub(current_date(), 31)',
+    },
+    format_options={
+        'useGlueParquetWriter': True
+    },
+)
 
 # Finalizar Job
 job.commit()
