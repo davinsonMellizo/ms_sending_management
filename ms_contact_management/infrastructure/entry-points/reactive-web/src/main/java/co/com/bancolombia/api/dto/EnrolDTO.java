@@ -20,5 +20,4 @@ public class EnrolDTO {
     @JsonProperty("customer")
     private @Valid ClientDTO client;
 
-    private List<@Valid ContactDTO> contactData;
 }
