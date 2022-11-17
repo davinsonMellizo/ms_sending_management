@@ -5,8 +5,11 @@ import co.com.bancolombia.model.response.StatusResponse;
 import reactor.core.publisher.Mono;
 
 public interface CampaignGlueGateway {
-    Mono<Campaign> campaignCreateTrigger(Campaign campaign);
-    Mono<Campaign> campaignStartTrigger(Campaign campaign);
-    Mono<Campaign> campaignStopTrigger(Campaign campaign);
-    Mono<StatusResponse<Campaign>> campaignUpdateTrigger(StatusResponse<Campaign> response);
+    Mono<Campaign> createTrigger(Campaign campaign);
+
+    Mono<Campaign> startTrigger(Campaign campaign);
+
+    Mono<Campaign> stopTrigger(Campaign campaign);
+
+    Mono<StatusResponse<Campaign>> updateTrigger(StatusResponse<Campaign> response);
 }

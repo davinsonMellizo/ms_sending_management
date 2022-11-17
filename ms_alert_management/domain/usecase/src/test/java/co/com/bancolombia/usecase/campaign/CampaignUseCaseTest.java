@@ -77,7 +77,7 @@ class CampaignUseCaseTest {
     void saveCampaign() {
         when(campaignGateway.saveCampaign(any()))
                 .thenReturn(Mono.just(campaign));
-        when(glueGateway.campaignCreateTrigger(any()))
+        when(glueGateway.createTrigger(any()))
                 .thenReturn(Mono.just(campaign));
         StepVerifier.create(useCase.saveCampaign(campaign))
                 .assertNext(response -> assertEquals(response.getIdCampaign(), campaign.getIdCampaign()))
@@ -91,7 +91,7 @@ class CampaignUseCaseTest {
                 .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
                         .actual(campaign).before(campaign).build()));
 
-        when(glueGateway.campaignUpdateTrigger(any()))
+        when(glueGateway.updateTrigger(any()))
                 .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
                         .actual(campaign).before(campaign).build()));
 
@@ -112,11 +112,11 @@ class CampaignUseCaseTest {
                 .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
                         .actual(campaign).before(campaignInactive).build()));
 
-        when(glueGateway.campaignUpdateTrigger(any()))
+        when(glueGateway.updateTrigger(any()))
                 .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
                         .actual(campaign).before(campaignInactive).build()));
 
-        when(glueGateway.campaignStartTrigger(any()))
+        when(glueGateway.startTrigger(any()))
                 .thenReturn(Mono.just(campaign));
 
         StepVerifier.create(useCase.updateCampaign(campaign))
@@ -139,7 +139,7 @@ class CampaignUseCaseTest {
     void deleteCampaign() {
         when(campaignGateway.findCampaignById(any()))
                 .thenReturn(Mono.just(campaign));
-        when(glueGateway.campaignStopTrigger(any()))
+        when(glueGateway.stopTrigger(any()))
                 .thenReturn(Mono.just(campaign));
         when(campaignGateway.deleteCampaignById(any()))
                 .thenReturn(Mono.just(

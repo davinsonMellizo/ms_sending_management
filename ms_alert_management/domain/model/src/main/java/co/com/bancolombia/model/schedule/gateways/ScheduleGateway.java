@@ -10,7 +10,7 @@ public interface ScheduleGateway {
 
     Mono<Campaign> saveSchedule(Schedule schedule);
 
-    Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id);
+    Mono<StatusResponse<Campaign>> updateSchedule(Schedule schedule, Long id);
 
     Mono<Schedule> findScheduleById(Long id);
 

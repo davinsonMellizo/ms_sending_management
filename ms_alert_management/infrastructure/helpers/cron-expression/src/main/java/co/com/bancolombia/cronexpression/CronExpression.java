@@ -23,6 +23,7 @@ public class CronExpression {
                 yearCron(scheduleType, startDate, endDate) + ")";
     }
 
+
     private String yearCron(ScheduleType scheduleType, LocalDate startDate, LocalDate endDate) {
         String endYear = endDate != null && endDate.getYear() != startDate.getYear() ? "-" + endDate.getYear() : "";
         String cron = endDate != null ? startDate.getYear() + endYear : "*";
@@ -34,7 +35,8 @@ public class CronExpression {
     }
 
     private String hourCron(ScheduleType scheduleType, LocalTime startTime) {
-        return ScheduleType.HOURLY.equals(scheduleType) ? startTime.getHour() + "/1" : String.valueOf(startTime.getHour());
+        int hour = startTime.plusHours(5).getHour();
+        return ScheduleType.HOURLY.equals(scheduleType) ? hour + "/1" : String.valueOf(hour);
     }
 
     private String dayCron(ScheduleType scheduleType, LocalDate startDate, LocalDate endDate) {

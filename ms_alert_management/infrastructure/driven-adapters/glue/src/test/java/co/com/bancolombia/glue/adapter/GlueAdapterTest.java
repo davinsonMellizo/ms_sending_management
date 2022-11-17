@@ -92,7 +92,7 @@ class GlueAdapterTest {
                 .thenReturn("cron(* * * * * *)");
         when(glueOperations.createTrigger(anyString(), any(), anyString(), any(), anyBoolean()))
                 .thenReturn(Mono.just(true));
-        StepVerifier.create(glueAdapter.campaignCreateTrigger(campaign))
+        StepVerifier.create(glueAdapter.createTrigger(campaign))
                 .assertNext(res -> assertEquals(res, campaign))
                 .verifyComplete();
     }
@@ -102,7 +102,7 @@ class GlueAdapterTest {
         when(glueOperations.startTrigger(anyString()))
                 .thenReturn(Mono.just(true));
 
-        StepVerifier.create(glueAdapter.campaignStartTrigger(campaign))
+        StepVerifier.create(glueAdapter.startTrigger(campaign))
                 .assertNext(res -> assertEquals(res, campaign))
                 .verifyComplete();
     }
@@ -112,7 +112,7 @@ class GlueAdapterTest {
         when(glueOperations.stopTrigger(anyString()))
                 .thenReturn(Mono.just(true));
 
-        StepVerifier.create(glueAdapter.campaignStopTrigger(campaign))
+        StepVerifier.create(glueAdapter.stopTrigger(campaign))
                 .assertNext(res -> assertEquals(res, campaign))
                 .verifyComplete();
     }

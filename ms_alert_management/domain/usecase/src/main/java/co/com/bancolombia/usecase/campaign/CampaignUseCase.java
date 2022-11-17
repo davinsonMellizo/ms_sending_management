@@ -30,16 +30,16 @@ public class CampaignUseCase {
 
     public Mono<Campaign> saveCampaign(Campaign campaign) {
         return campaignGateway.saveCampaign(campaign)
-                .flatMap(glueGateway::campaignCreateTrigger);
+                .flatMap(glueGateway::createTrigger);
     }
 
     public Mono<StatusResponse<Campaign>> updateCampaign(Campaign campaign) {
         return campaignGateway.updateCampaign(campaign)
                 .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
-                .flatMap(glueGateway::campaignUpdateTrigger)
+                .flatMap(glueGateway::updateTrigger)
                 .map(res -> {
                     if (!res.getActual().getState().equals(res.getBefore().getState())) {
-                        glueGateway.campaignStartTrigger(res.getActual());
+                        glueGateway.startTrigger(res.getActual());
                     }
                     return res.toBuilder()
                             .before(res.getBefore().toBuilder().schedules(null).build())
@@ -51,7 +51,7 @@ public class CampaignUseCase {
     public Mono<Map<String, String>> deleteCampaignById(Campaign campaign) {
         return this.findCampaignById(campaign)
                 .map(c -> c.toBuilder().modifiedUser(campaign.getModifiedUser()).build())
-                .flatMap(glueGateway::campaignStopTrigger)
+                .flatMap(glueGateway::stopTrigger)
                 .flatMap(campaignGateway::deleteCampaignById);
     }
 }

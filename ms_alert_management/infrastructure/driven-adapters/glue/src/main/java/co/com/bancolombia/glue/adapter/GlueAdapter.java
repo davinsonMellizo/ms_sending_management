@@ -8,7 +8,6 @@ import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.Schedule;
-import co.com.bancolombia.model.schedule.gateways.ScheduleGlueGateway;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,7 +21,7 @@ import java.util.Map;
 
 @Repository
 @AllArgsConstructor
-public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
+public class GlueAdapter implements CampaignGlueGateway {
 
     @Autowired
     private CronExpression cronExpression;
@@ -51,6 +50,10 @@ public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
         );
     }
 
+    private String getBucketDestinationPath(String sourcePath) {
+        return sourcePath.replaceAll("(?i).csv", "/");
+    }
+
     private Action getTriggerAction(Campaign campaign) {
         return Action
                 .builder()
@@ -58,15 +61,17 @@ public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
                 .arguments(Map.of(
                         GLUE_DATABASE, properties.getGlueDatabase(),
                         GLUE_DATABASE_TABLE, properties.getGlueDatabaseTable(),
-                        SOURCE_MASSIVE_FILE, String.format("%s/%s", properties.getBucketSourcePath(), campaign.getSourcePath()),
-                        BUCKET_DESTINATION_PATH, String.format("%s/%s", properties.getBucketDestinationPath(), campaign.getSourcePath()),
+                        SOURCE_MASSIVE_FILE, String.format("%s/%s", properties.getBucketSourcePath(),
+                                campaign.getSourcePath()),
+                        BUCKET_DESTINATION_PATH, String.format("%s/%s", properties.getBucketDestinationPath(),
+                                this.getBucketDestinationPath(campaign.getSourcePath())),
                         DATA_ENRICHMENT, String.format("%s", campaign.isDataEnrichment())
                 ))
                 .build();
     }
 
     @Override
-    public Mono<Campaign> campaignCreateTrigger(Campaign campaign) {
+    public Mono<Campaign> createTrigger(Campaign campaign) {
         return Flux.fromIterable(campaign.getSchedules())
                 .flatMap(schedule -> this.glueOperations.createTrigger(
                         this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), schedule.getId()),
@@ -80,7 +85,7 @@ public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
     }
 
     @Override
-    public Mono<Campaign> campaignStartTrigger(Campaign campaign) {
+    public Mono<Campaign> startTrigger(Campaign campaign) {
         return Flux.fromIterable(campaign.getSchedules())
                 .flatMap(schedule -> this.glueOperations.startTrigger(
                         this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), schedule.getId())
@@ -90,7 +95,7 @@ public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
     }
 
     @Override
-    public Mono<Campaign> campaignStopTrigger(Campaign campaign) {
+    public Mono<Campaign> stopTrigger(Campaign campaign) {
         return Flux.fromIterable(campaign.getSchedules())
                 .flatMap(schedule -> this.glueOperations.stopTrigger(
                         this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), schedule.getId())
@@ -100,7 +105,7 @@ public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
     }
 
     @Override
-    public Mono<StatusResponse<Campaign>> campaignUpdateTrigger(StatusResponse<Campaign> response) {
+    public Mono<StatusResponse<Campaign>> updateTrigger(StatusResponse<Campaign> response) {
         return Flux.fromIterable(response.getActual().getSchedules())
                 .flatMap(schedule -> this.glueOperations.updateTrigger(
                         this.getTriggerName(
@@ -110,26 +115,11 @@ public class GlueAdapter implements CampaignGlueGateway, ScheduleGlueGateway {
                         ),
                         TriggerUpdate
                                 .builder()
+                                .schedule(this.getCronExpression(schedule))
                                 .actions(this.getTriggerAction(response.getActual()))
                                 .build()
                 ))
                 .collectList()
-                .thenReturn(response);
-    }
-
-    @Override
-    public Mono<StatusResponse<Schedule>> updateSchedule(StatusResponse<Schedule> response) {
-        return this.glueOperations.updateTrigger(
-                        this.getTriggerName(
-                                response.getActual().getIdCampaign(),
-                                response.getActual().getIdConsumer(),
-                                response.getActual().getId()
-                        ),
-                        TriggerUpdate
-                                .builder()
-                                .schedule(this.getCronExpression(response.getActual()))
-                                .build()
-                )
                 .thenReturn(response);
     }
 }

@@ -14,11 +14,13 @@ import co.com.bancolombia.schedule.data.ScheduleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CAMPAIGN_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SCHEDULE_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CAMPAIGN_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_SCHEDULE_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CAMPAIGN_BY_ID_ERROR;
@@ -68,30 +70,34 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
     }
 
     @Override
-    public Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id) {
+    public Mono<StatusResponse<Campaign>> updateSchedule(Schedule schedule, Long id) {
         return repository.findById(id)
+                .switchIfEmpty(Mono.error(new BusinessException(SCHEDULE_NOT_FOUND)))
                 .map(this::convertToEntity)
-                .map(scheduleFound -> StatusResponse.<Schedule>builder()
-                        .before(scheduleFound)
-                        .actual(schedule)
-                        .build())
-                .flatMap(this::update);
+                .zipWith(repository.findCampaignById(schedule.getIdCampaign(), schedule.getIdConsumer())
+                        .map(campaignMapper::toEntity))
+                .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
+                .flatMap(t -> this.update(t, schedule));
     }
 
-    private Mono<StatusResponse<Schedule>> update(StatusResponse<Schedule> response) {
-        return Mono.just(response.getActual())
+    private Mono<StatusResponse<Campaign>> update(Tuple2<Schedule, Campaign> t, Schedule schedule) {
+        return Mono.just(schedule)
                 .map(this::convertToData)
                 .map(data -> data.toBuilder()
-                        .id(response.getBefore().getId())
-                        .idCampaign(response.getBefore().getIdCampaign())
-                        .idConsumer(response.getBefore().getIdConsumer())
-                        .createdDate(response.getBefore().getCreatedDate())
-                        .creationUser(response.getBefore().getCreationUser())
+                        .id(t.getT1().getId())
+                        .idCampaign(schedule.getIdCampaign())
+                        .idConsumer(schedule.getIdConsumer())
+                        .createdDate(t.getT1().getCreatedDate())
+                        .creationUser(t.getT1().getCreationUser())
                         .modifiedDate(timeFactory.now())
                         .build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)
-                .map(actual -> response.toBuilder().actual(actual).description("Actualizacion exitosa").build())
+                .map(scheduleUpdated -> StatusResponse.<Campaign>builder()
+                        .before(t.getT2().toBuilder().schedules(List.of(t.getT1())).build())
+                        .actual(t.getT2().toBuilder().schedules(List.of(scheduleUpdated)).build())
+                        .description("Actualizacion exitosa")
+                        .build())
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_SCHEDULE_ERROR));
     }
 

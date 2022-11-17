@@ -1,5 +1,6 @@
 package co.com.bancolombia.schedule;
 
+import co.com.bancolombia.campaign.data.CampaignData;
 import co.com.bancolombia.campaign.data.CampaignMapper;
 import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.commons.exceptions.BusinessException;
@@ -9,6 +10,7 @@ import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.schedule.Schedule;
 import co.com.bancolombia.schedule.data.ScheduleData;
 import co.com.bancolombia.schedule.data.ScheduleMapper;
+import io.r2dbc.postgresql.codec.Json;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -51,10 +52,11 @@ class ScheduleRepositoryImplExceptionTest {
     @Mock
     private TimeFactory timeFactory;
 
-    @MockBean
-    private CampaignMapper campaignMapper;
+    @Spy
+    private CampaignMapper campaignMapper = Mappers.getMapper(CampaignMapper.class);
 
     private final Campaign campaign = new Campaign();
+    private final CampaignData campaignData = new CampaignData();
     private final Schedule schedule = new Schedule();
     private final ScheduleData scheduleData = new ScheduleData();
     private static final LocalDateTime NOW = LocalDateTime.now();
@@ -90,6 +92,11 @@ class ScheduleRepositoryImplExceptionTest {
         scheduleData.setStartTime(TIME_NOW);
 
         campaign.setSchedules(List.of(schedule));
+
+        campaignData.setIdCampaign(campaign.getIdCampaign());
+        campaignData.setIdCampaign(campaign.getIdConsumer());
+        campaignData.setProvider(Json.of(campaign.getProvider()));
+        campaignData.setSchedules(campaign.getSchedules());
     }
 
     @Test
@@ -104,10 +111,12 @@ class ScheduleRepositoryImplExceptionTest {
 
     @Test
     void updateScheduleWithException() {
-        when(repository.save(any()))
-                .thenReturn(Mono.error(RuntimeException::new));
         when(repository.findById(anyLong()))
                 .thenReturn(Mono.just(scheduleData));
+        when(repository.findCampaignById(anyString(), anyString()))
+                .thenReturn(Mono.just(campaignData));
+        when(repository.save(any()))
+                .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.updateSchedule(schedule, schedule.getId())
                 .as(StepVerifier::create)
                 .expectError(TechnicalException.class)

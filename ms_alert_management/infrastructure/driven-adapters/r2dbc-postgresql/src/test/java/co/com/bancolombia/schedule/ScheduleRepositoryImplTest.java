@@ -1,6 +1,5 @@
 package co.com.bancolombia.schedule;
 
-import co.com.bancolombia.campaign.data.CampaignMapper;
 import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.schedule.Schedule;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
 
@@ -26,9 +24,6 @@ class ScheduleRepositoryImplTest {
 
     @Autowired
     private ScheduleRepositoryImplement repositoryImpl;
-
-    @MockBean
-    private CampaignMapper campaignMapper;
 
     private final Campaign campaign = new Campaign();
     private final Schedule schedule = new Schedule();
@@ -77,7 +72,7 @@ class ScheduleRepositoryImplTest {
         schedule.setScheduleType(ScheduleType.HOURLY);
         StepVerifier.create(repositoryImpl.updateSchedule(schedule, schedule.getId()))
                 .consumeNextWith(status ->
-                        assertEquals(schedule.getScheduleType(), status.getActual().getScheduleType()))
+                        assertEquals(schedule.getScheduleType(), status.getActual().getSchedules().get(0).getScheduleType()))
                 .verifyComplete();
     }
 
@@ -94,7 +89,8 @@ class ScheduleRepositoryImplTest {
                 .subscribe(alertSaved -> StepVerifier
                         .create(repositoryImpl.findSchedulesByCampaign(campaign))
                         .expectNextCount(1)
-                        .consumeNextWith(status -> assertEquals(campaign.getSchedules().get(0).getId(), status.getSchedules().get(0).getId()))
+                        .consumeNextWith(status -> assertEquals(campaign.getSchedules().get(0).getId(),
+                                status.getSchedules().get(0).getId()))
                         .verifyComplete());
     }
 

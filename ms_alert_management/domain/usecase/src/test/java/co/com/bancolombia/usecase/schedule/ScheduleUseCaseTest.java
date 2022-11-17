@@ -7,7 +7,6 @@ import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.Schedule;
 import co.com.bancolombia.model.schedule.gateways.ScheduleGateway;
-import co.com.bancolombia.model.schedule.gateways.ScheduleGlueGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SCHEDULE_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -38,9 +38,6 @@ class ScheduleUseCaseTest {
 
     @Mock
     private CampaignGlueGateway campaignGlueGateway;
-
-    @Mock
-    private ScheduleGlueGateway scheduleGlueGateway;
 
     private final Campaign campaign = new Campaign();
     private final Schedule schedule = new Schedule();
@@ -67,7 +64,7 @@ class ScheduleUseCaseTest {
         when(scheduleGateway.saveSchedule(any()))
                 .thenReturn(Mono.just(campaign));
 
-        when(campaignGlueGateway.campaignCreateTrigger(any()))
+        when(campaignGlueGateway.createTrigger(any()))
                 .thenReturn(Mono.just(campaign));
 
         StepVerifier.create(useCase.saveSchedule(schedule))
@@ -102,12 +99,12 @@ class ScheduleUseCaseTest {
     @Test
     void updateSchedule() {
         when(scheduleGateway.updateSchedule(any(), anyLong()))
-                .thenReturn(Mono.just(StatusResponse.<Schedule>builder()
-                        .actual(schedule).before(schedule).build()));
+                .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
+                        .actual(campaign).before(campaign).build()));
 
-        when(scheduleGlueGateway.updateSchedule(any()))
-                .thenReturn(Mono.just(StatusResponse.<Schedule>builder()
-                        .actual(schedule).before(schedule).build()));
+        when(campaignGlueGateway.updateTrigger(any()))
+                .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
+                        .actual(campaign).before(campaign).build()));
 
         StepVerifier.create(useCase.updateSchedule(schedule, schedule.getId()))
                 .assertNext(response -> assertEquals(response.getActual().getId(), schedule.getId()))
@@ -119,7 +116,8 @@ class ScheduleUseCaseTest {
     @Test
     void updateScheduleWithException() {
         when(scheduleGateway.updateSchedule(any(), anyLong()))
-                .thenReturn(Mono.empty());
+                .thenReturn(Mono.error(new BusinessException(SCHEDULE_NOT_FOUND)));
+
         useCase.updateSchedule(schedule, schedule.getId())
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)

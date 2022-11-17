@@ -5,7 +5,6 @@ import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.Schedule;
 import co.com.bancolombia.model.schedule.gateways.ScheduleGateway;
-import co.com.bancolombia.model.schedule.gateways.ScheduleGlueGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -16,11 +15,10 @@ public class ScheduleUseCase {
     private final ScheduleGateway scheduleGateway;
 
     private final CampaignGlueGateway campaignGlueGateway;
-    private final ScheduleGlueGateway scheduleGlueGateway;
 
     public Mono<Schedule> saveSchedule(Schedule schedule) {
         return scheduleGateway.saveSchedule(schedule)
-                .flatMap(campaignGlueGateway::campaignCreateTrigger)
+                .flatMap(campaignGlueGateway::createTrigger)
                 .map(campaign -> campaign.getSchedules().get(0));
     }
 
@@ -31,8 +29,13 @@ public class ScheduleUseCase {
 
     public Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id) {
         return scheduleGateway.updateSchedule(schedule, id)
-                .switchIfEmpty(Mono.error(new BusinessException(SCHEDULE_NOT_FOUND)))
-                .flatMap(scheduleGlueGateway::updateSchedule);
+                .flatMap(campaignGlueGateway::updateTrigger)
+                .map(campaignStatusResponse -> StatusResponse.<Schedule>builder()
+                        .before(campaignStatusResponse.getBefore().getSchedules().get(0))
+                        .actual(campaignStatusResponse.getActual().getSchedules().get(0))
+                        .description(campaignStatusResponse.getDescription())
+                        .build()
+                );
     }
 
 }

@@ -33,8 +33,11 @@ public class TestAPP {
             }
 
             @Override
-            public Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id) {
-                return Mono.just(StatusResponse.<Schedule>builder().before(schedule).actual(schedule).build());
+            public Mono<StatusResponse<Campaign>> updateSchedule(Schedule schedule, Long id) {
+                return Mono.just(StatusResponse.<Campaign>builder()
+                        .before(Campaign.builder().schedules(List.of(schedule)).build())
+                        .actual(Campaign.builder().schedules(List.of(schedule)).build())
+                        .build());
             }
 
             @Override
