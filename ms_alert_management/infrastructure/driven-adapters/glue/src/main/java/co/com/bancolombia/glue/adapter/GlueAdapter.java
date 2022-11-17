@@ -44,10 +44,10 @@ public class GlueAdapter implements CampaignGlueGateway {
     }
 
     private String getCronExpression(Schedule schedule) {
-        return cronExpression.dateToCron(
+        return !ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()) ? cronExpression.dateToCron(
                 schedule.getScheduleType(), schedule.getStartDate(),
                 schedule.getStartTime(), schedule.getEndDate()
-        );
+        ) : null;
     }
 
     private String getBucketDestinationPath(String sourcePath) {
