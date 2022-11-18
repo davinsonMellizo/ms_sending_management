@@ -1,10 +1,10 @@
 package co.com.bancolombia.events.handlers;
 
-import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
-import co.com.bancolombia.api.dto.EnrolDTO;
-import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.events.commons.ValidatorBodyHandler;
+import co.com.bancolombia.events.dto.EnrolDTO;
+import co.com.bancolombia.events.mapper.EnrolIseriesMapper;
 import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.usecase.client.ClientUseCase;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,8 +25,8 @@ public class CommandsHandler {
 
     private final LoggerBuilder logger;
     private final ClientUseCase useCase;
-    private final EnrolMapper enrolMapper;
-    private final ValidatorHandler validatorHandler;
+    private final EnrolIseriesMapper enrolIseriesMapper;
+    private final ValidatorBodyHandler validatorBodyHandler;
 
 
     public Mono<Void> saveClient(Command<String> command){
@@ -42,8 +42,8 @@ public class CommandsHandler {
             Object mstCode = mapper.readValue(data, EnrolDTO.class);
             return Mono.just((EnrolDTO)mstCode)
                     .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                    .doOnNext(validatorHandler::validateObject)
-                    .map(enrolMapper::toEntity)
+                    .doOnNext(validatorBodyHandler::validateObject)
+                    .map(enrolIseriesMapper::toEntity)
                     .map(m  -> (M)m)
                     .flatMap(m ->  use.apply(m, Boolean.TRUE, getVoucher()))
                     .onErrorResume(BusinessException.class, e -> Mono.empty())

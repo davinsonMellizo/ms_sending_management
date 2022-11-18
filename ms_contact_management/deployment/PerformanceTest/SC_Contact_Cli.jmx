@@ -115,7 +115,7 @@
           </elementProp>
           <elementProp name="transactions_path" elementType="Argument">
             <stringProp name="Argument.name">transactions_path</stringProp>
-            <stringProp name="Argument.value">${__P(transactions_path,${__P(transactions_path,/alertas/api/v1/contact-management/client)})}</stringProp>
+            <stringProp name="Argument.value">${__P(transactions_path,${__P(transactions_path,alertas/api/v1/contact-management/client)})}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="ramp_up" elementType="Argument">
@@ -199,28 +199,29 @@
         &quot;traceability&quot;: {&#xd;
             &quot;consumerCode&quot;: &quot;SVP&quot;,&#xd;
             &quot;creationUser&quot;: &quot;usermayo&quot;&#xd;
-        }&#xd;
-    },&#xd;
-    &quot;contactData&quot;: [&#xd;
-        {&#xd;
-            &quot;contactChannel&quot;: &quot;PUSH&quot;,&#xd;
-            &quot;dataValue&quot;: &quot;465465456&quot;,&#xd;
-		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
         },&#xd;
-        {&#xd;
-            &quot;contactChannel&quot;: &quot;MAIL&quot;,&#xd;
-            &quot;dataValue&quot;: &quot;mai@mail.com&quot;,&#xd;
-  		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-        },&#xd;
-        {&#xd;
-            &quot;contactChannel&quot;: &quot;SMS&quot;,&#xd;
-            &quot;dataValue&quot;: &quot;3207288543&quot;,&#xd;
-		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-        }&#xd;
-    ]&#xd;
+	    &quot;contactData&quot;: [&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;PUSH&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;465465456&quot;,&#xd;
+			  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        },&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;MAIL&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;mai@mail.com&quot;,&#xd;
+	  		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        },&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;SMS&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;3207288543&quot;,&#xd;
+			  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        }&#xd;
+	    ]&#xd;
+	 &#xd;
+    }&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -285,65 +286,38 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-&#xd;
     &quot;customer&quot;: {&#xd;
-&#xd;
         &quot;identification&quot;: {&#xd;
-&#xd;
             &quot;type&quot;: &quot;1&quot;,&#xd;
-&#xd;
             &quot;number&quot;: ${document_valid}&#xd;
-&#xd;
         },&#xd;
-&#xd;
         &quot;keyMdm&quot;: &quot;string&quot;,&#xd;
-&#xd;
         &quot;status&quot;: &quot;Activo&quot;,&#xd;
-&#xd;
         &quot;traceability&quot;: {&#xd;
-&#xd;
             &quot;consumerCode&quot;: &quot;SVP&quot;,&#xd;
-&#xd;
             &quot;creationUser&quot;: &quot;usermayo&quot;&#xd;
-&#xd;
-        }&#xd;
-&#xd;
-    },&#xd;
-&#xd;
-    &quot;contactData&quot;: [&#xd;
-&#xd;
-        {&#xd;
-&#xd;
-            &quot;contactChannel&quot;: &quot;PUSH&quot;,&#xd;
-&#xd;
-            &quot;dataValue&quot;: &quot;465465456&quot;,&#xd;
-		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-&#xd;
         },&#xd;
-&#xd;
-        {&#xd;
-&#xd;
-            &quot;contactChannel&quot;: &quot;MAIL&quot;,&#xd;
-&#xd;
-            &quot;dataValue&quot;: &quot;mai@mail.com&quot;,&#xd;
-  		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-&#xd;
-        },&#xd;
-&#xd;
-        {&#xd;
-&#xd;
-            &quot;contactChannel&quot;: &quot;SMS&quot;,&#xd;
-&#xd;
-            &quot;dataValue&quot;: &quot;3207288543&quot;,&#xd;
-		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-&#xd;
-        }&#xd;
-&#xd;
-    ]&#xd;
-&#xd;
+	    &quot;contactData&quot;: [&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;PUSH&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;465465456&quot;,&#xd;
+			  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        },&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;MAIL&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;mai@mail.com&quot;,&#xd;
+	  		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        },&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;SMS&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;3207288543&quot;,&#xd;
+			  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        }&#xd;
+	    ]&#xd;
+    }&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -404,30 +378,29 @@
         &quot;traceability&quot;: {&#xd;
             &quot;consumerCode&quot;: &quot;SVP&quot;,&#xd;
             &quot;creationUser&quot;: &quot;usermayo&quot;&#xd;
-        }&#xd;
-    },&#xd;
-&#xd;
-    &quot;contactData&quot;: [&#xd;
-        {&#xd;
-            &quot;contactChannel&quot;: &quot;PUSH&quot;,&#xd;
-            &quot;dataValue&quot;: &quot;465465456&quot;,&#xd;
-		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
         },&#xd;
-        {&#xd;
-            &quot;contactChannel&quot;: &quot;MAIL&quot;,&#xd;
-            &quot;dataValue&quot;: &quot;mai@mail.com&quot;,&#xd;
-  		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-        },&#xd;
-        {&#xd;
-            &quot;contactChannel&quot;: &quot;SMS&quot;,&#xd;
-            &quot;dataValue&quot;: &quot;3207288543&quot;,&#xd;
-		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
-            &quot;status&quot;: &quot;Activo&quot;&#xd;
-        }&#xd;
-&#xd;
-    ]&#xd;
+	    &quot;contactData&quot;: [&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;PUSH&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;465465456&quot;,&#xd;
+			  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        },&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;MAIL&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;mai@mail.com&quot;,&#xd;
+	  		  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        },&#xd;
+	        {&#xd;
+	            &quot;contactChannel&quot;: &quot;SMS&quot;,&#xd;
+	            &quot;dataValue&quot;: &quot;3207288543&quot;,&#xd;
+			  &quot;environmentType&quot;: &quot;Personal&quot;,&#xd;
+	            &quot;status&quot;: &quot;Activo&quot;&#xd;
+	        }&#xd;
+	&#xd;
+	    ]&#xd;
+    }&#xd;
 &#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
