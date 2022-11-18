@@ -5,6 +5,7 @@ import co.com.bancolombia.cronexpression.CronExpression;
 import co.com.bancolombia.glue.config.model.GlueConnectionProperties;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.schedule.Schedule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,8 @@ class GlueAdapterTest {
     @Mock
     private CronExpression cronExpression;
 
+    @Mock
+    private LoggerBuilder loggerBuilder;
     private static final String GLUE_DATABASE = "glue-database";
     private static final String GLUE_DATABASE_TABLE = "glue-database-table";
     private static final String BUCKET_SOURCE_PATH = "bucket-source-path";

@@ -40,9 +40,10 @@ public class CronExpression {
     }
 
     private String dayCron(ScheduleType scheduleType, LocalDate startDate, LocalDate endDate) {
+        String weekly =  ScheduleType.WEEKLY.equals(scheduleType)? "?": "*";
         String cron = (ScheduleType.HOURLY.equals(scheduleType) && endDate != null) ||
                 (ScheduleType.DAILY.equals(scheduleType) && endDate != null) ?
-                startDate.getDayOfMonth() + "-" + endDate.getDayOfMonth() : "*";
+                startDate.getDayOfMonth() + "-" + endDate.getDayOfMonth() :weekly;
 
         return ScheduleType.ONE_TIME.equals(scheduleType) || ScheduleType.MONTHLY.equals(scheduleType) ?
                 String.valueOf(startDate.getDayOfMonth()) : cron;
