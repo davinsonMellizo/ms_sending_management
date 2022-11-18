@@ -74,13 +74,13 @@ class CronExpressionTest {
     @Test
     void weeklySuccess() {
         String cron = cronExpression.dateToCron(ScheduleType.WEEKLY, startDate, startAndEndTime, endDate);
-        Assertions.assertEquals("cron(0 13 * 10-12 FRI 2022)", cron);
+        Assertions.assertEquals("cron(0 13 ? 10-12 FRI 2022)", cron);
     }
 
     @Test
     void weeklySuccessNoEnd() {
         String cron = cronExpression.dateToCron(ScheduleType.WEEKLY, startDate, startAndEndTime, null);
-        Assertions.assertEquals("cron(0 13 * * FRI *)", cron);
+        Assertions.assertEquals("cron(0 13 ? * FRI *)", cron);
     }
 
     @Test
