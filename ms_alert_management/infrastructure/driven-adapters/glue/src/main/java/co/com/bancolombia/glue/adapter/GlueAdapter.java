@@ -6,6 +6,7 @@ import co.com.bancolombia.glue.config.model.GlueConnectionProperties;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.Schedule;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class GlueAdapter implements CampaignGlueGateway {
 
     private final GlueConnectionProperties properties;
     private final GlueOperations glueOperations;
+    private final LoggerBuilder logger;
 
     private static final String GLUE_DATABASE = "--glue_database";
     private static final String GLUE_DATABASE_TABLE = "--glue_database_table";
@@ -78,7 +80,7 @@ public class GlueAdapter implements CampaignGlueGateway {
                         this.getTriggerType(schedule.getScheduleType()),
                         this.getCronExpression(schedule),
                         this.getTriggerAction(campaign),
-                        ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()) ? null : true
+                        !ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()) ? true : null
                 ))
                 .collectList()
                 .thenReturn(campaign);
@@ -87,6 +89,10 @@ public class GlueAdapter implements CampaignGlueGateway {
     @Override
     public Mono<Campaign> startTrigger(Campaign campaign) {
         return Flux.fromIterable(campaign.getSchedules())
+                .filter(schedule -> !ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()))
+                .doOnNext(e -> logger.info(
+                        String.format("HORARIO =>%s", this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), e.getId()))
+                ))
                 .flatMap(schedule -> this.glueOperations.startTrigger(
                         this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), schedule.getId())
                 ))
@@ -97,6 +103,7 @@ public class GlueAdapter implements CampaignGlueGateway {
     @Override
     public Mono<Campaign> stopTrigger(Campaign campaign) {
         return Flux.fromIterable(campaign.getSchedules())
+                .filter(schedule -> !ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()))
                 .flatMap(schedule -> this.glueOperations.stopTrigger(
                         this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), schedule.getId())
                 ))
