@@ -20,7 +20,6 @@ public interface EnrolMapper {
     @Mapping(source = "client.identification.documentNumber", target = "client.documentNumber")
     @Mapping(source = "client.traceability.consumerCode", target = "client.consumerCode")
     @Mapping(source = "client.traceability.creationUser", target = "client.creationUser")
-    @Mapping(source = "client.contactData", target = "contactData")
     Enrol toEntity(EnrolDTO clientData);
 
     @Mapping(target = "id", ignore = true)

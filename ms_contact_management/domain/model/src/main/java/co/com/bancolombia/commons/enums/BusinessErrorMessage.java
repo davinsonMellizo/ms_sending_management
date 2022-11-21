@@ -12,7 +12,6 @@ public enum BusinessErrorMessage {
     CLIENT_INACTIVE("166", "Client is inactive", "409"),
     INVALID_DATA("372", "Base data is not valid", "409"),
     CLIENT_NOT_FOUND("373", "Unregistered client", "409"),
-    //CONTACT_NOT_FOUND("374", "Contact Not Found", "409"),
     DOCUMENT_TYPE_NOT_FOUND("375", "Document Type Not Found", "409"),
     STATE_NOT_FOUND("376", "State Not Found", "409"),
     CONSUMER_NOT_FOUND("377", "Consumer Not Found", "409"),

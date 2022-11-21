@@ -42,7 +42,6 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_ENVI
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_PHONE;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
-import static java.lang.Enum.valueOf;
 
 @RequiredArgsConstructor
 public class ContactUseCase {

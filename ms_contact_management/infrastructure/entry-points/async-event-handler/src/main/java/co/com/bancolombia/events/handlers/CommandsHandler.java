@@ -1,10 +1,10 @@
 package co.com.bancolombia.events.handlers;
 
+import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.dto.EnrolDTO;
+import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.events.commons.ValidatorBodyHandler;
-import co.com.bancolombia.events.dto.EnrolDTO;
-import co.com.bancolombia.events.mapper.EnrolIseriesMapper;
 import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.usecase.client.ClientUseCase;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,9 +25,8 @@ public class CommandsHandler {
 
     private final LoggerBuilder logger;
     private final ClientUseCase useCase;
-    private final EnrolIseriesMapper enrolIseriesMapper;
-    private final ValidatorBodyHandler validatorBodyHandler;
-
+    private final EnrolMapper enrolIseriesMapper;
+    private final ValidatorHandler validatorBodyHandler;
 
     public Mono<Void> saveClient(Command<String> command){
         return handleSendAlert(command.getData(), useCase::saveClientRequest);
