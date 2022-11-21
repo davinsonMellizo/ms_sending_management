@@ -6,16 +6,13 @@ import co.com.bancolombia.model.campaign.gateways.CampaignGateway;
 import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CAMPAIGN_NOT_FOUND;
 
-@Log
 @RequiredArgsConstructor
 public class CampaignUseCase {
 
@@ -40,14 +37,9 @@ public class CampaignUseCase {
         return campaignGateway.updateCampaign(campaign)
                 .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
                 .flatMap(glueGateway::updateTrigger)
-                .doOnNext(c -> log.log(Level.INFO, String.format("CAMPAIGN => %s", c)))
                 .flatMap(res -> {
-                    log.log(Level.INFO, "INICIANDO...");
                     if (!res.getActual().getState().equals(res.getBefore().getState())) {
-                        log.log(Level.INFO, "START_TRIGGER...");
-                        return glueGateway.startTrigger(res.getActual())
-                                .doOnNext(e -> log.log(Level.INFO, String.format("TRIGGER... => %s", e)))
-                                .map(c -> res);
+                        return glueGateway.startTrigger(res);
                     }
                     return Mono.just(res);
                 })

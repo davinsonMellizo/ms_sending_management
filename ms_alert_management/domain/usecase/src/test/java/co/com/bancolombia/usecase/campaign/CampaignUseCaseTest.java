@@ -117,7 +117,10 @@ class CampaignUseCaseTest {
                         .actual(campaign).before(campaignInactive).build()));
 
         when(glueGateway.startTrigger(any()))
-                .thenReturn(Mono.just(campaign));
+                .thenReturn(Mono.just(StatusResponse.<Campaign>builder()
+                        .before(campaign)
+                        .actual(campaign)
+                        .build()));
 
         StepVerifier.create(useCase.updateCampaign(campaign))
                 .assertNext(response -> assertEquals(response.getActual().getIdCampaign(), campaign.getIdCampaign()))

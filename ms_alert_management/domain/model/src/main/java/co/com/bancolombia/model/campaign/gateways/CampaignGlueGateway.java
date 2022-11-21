@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 public interface CampaignGlueGateway {
     Mono<Campaign> createTrigger(Campaign campaign);
 
-    Mono<Campaign> startTrigger(Campaign campaign);
+    Mono<StatusResponse<Campaign>> startTrigger(StatusResponse<Campaign> response);
 
     Mono<Campaign> stopTrigger(Campaign campaign);
 

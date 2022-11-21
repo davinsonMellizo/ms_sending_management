@@ -6,7 +6,6 @@ import co.com.bancolombia.glue.config.model.GlueConnectionProperties;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
-import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.Schedule;
 import lombok.AllArgsConstructor;
@@ -29,7 +28,6 @@ public class GlueAdapter implements CampaignGlueGateway {
 
     private final GlueConnectionProperties properties;
     private final GlueOperations glueOperations;
-    private final LoggerBuilder logger;
 
     private static final String GLUE_DATABASE = "--glue_database";
     private static final String GLUE_DATABASE_TABLE = "--glue_database_table";
@@ -87,17 +85,18 @@ public class GlueAdapter implements CampaignGlueGateway {
     }
 
     @Override
-    public Mono<Campaign> startTrigger(Campaign campaign) {
-        return Flux.fromIterable(campaign.getSchedules())
+    public Mono<StatusResponse<Campaign>> startTrigger(StatusResponse<Campaign> response) {
+        return Flux.fromIterable(response.getActual().getSchedules())
                 .filter(schedule -> !ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()))
-                .doOnNext(e -> logger.info(
-                        String.format("HORARIO =>%s", this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), e.getId()))
-                ))
                 .flatMap(schedule -> this.glueOperations.startTrigger(
-                        this.getTriggerName(campaign.getIdCampaign(), campaign.getIdConsumer(), schedule.getId())
-                ))
+                        this.getTriggerName(
+                                response.getActual().getIdCampaign(),
+                                response.getActual().getIdConsumer(),
+                                schedule.getId()
+                        ))
+                )
                 .collectList()
-                .thenReturn(campaign);
+                .thenReturn(response);
     }
 
     @Override

@@ -5,7 +5,7 @@ import co.com.bancolombia.cronexpression.CronExpression;
 import co.com.bancolombia.glue.config.model.GlueConnectionProperties;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
-import co.com.bancolombia.model.log.LoggerBuilder;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.schedule.Schedule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,8 +39,6 @@ class GlueAdapterTest {
     @Mock
     private CronExpression cronExpression;
 
-    @Mock
-    private LoggerBuilder loggerBuilder;
     private static final String GLUE_DATABASE = "glue-database";
     private static final String GLUE_DATABASE_TABLE = "glue-database-table";
     private static final String BUCKET_SOURCE_PATH = "bucket-source-path";
@@ -104,9 +102,11 @@ class GlueAdapterTest {
     void startTriggerByScheduleSuccess() {
         when(glueOperations.startTrigger(anyString()))
                 .thenReturn(Mono.just(true));
-
-        StepVerifier.create(glueAdapter.startTrigger(campaign))
-                .assertNext(res -> assertEquals(res, campaign))
+        StepVerifier.create(glueAdapter.startTrigger(StatusResponse.<Campaign>builder()
+                        .before(campaign)
+                        .actual(campaign)
+                        .build()))
+                .assertNext(res -> assertEquals(res.getActual(), campaign))
                 .verifyComplete();
     }
 
@@ -114,7 +114,6 @@ class GlueAdapterTest {
     void stopTriggerByScheduleSuccess() {
         when(glueOperations.stopTrigger(anyString()))
                 .thenReturn(Mono.just(true));
-
         StepVerifier.create(glueAdapter.stopTrigger(campaign))
                 .assertNext(res -> assertEquals(res, campaign))
                 .verifyComplete();
