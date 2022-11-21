@@ -36,23 +36,25 @@ public class CampaignUseCase {
                 .flatMap(glueGateway::createTrigger);
     }
 
-
     public Mono<StatusResponse<Campaign>> updateCampaign(Campaign campaign) {
         return campaignGateway.updateCampaign(campaign)
                 .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
                 .flatMap(glueGateway::updateTrigger)
                 .doOnNext(c -> log.log(Level.INFO, String.format("CAMPAIGN => %s", c)))
-                .map(res -> {
+                .flatMap(res -> {
                     log.log(Level.INFO, "INICIANDO...");
                     if (!res.getActual().getState().equals(res.getBefore().getState())) {
-                        glueGateway.startTrigger(res.getActual())
-                                .doOnNext(e -> log.log(Level.INFO, String.format("INICIANDO... => %s", e)));
+                        log.log(Level.INFO, "START_TRIGGER...");
+                        return glueGateway.startTrigger(res.getActual())
+                                .doOnNext(e -> log.log(Level.INFO, String.format("TRIGGER... => %s", e)))
+                                .map(c -> res);
                     }
-                    return res.toBuilder()
-                            .before(res.getBefore().toBuilder().schedules(null).build())
-                            .actual(res.getActual().toBuilder().schedules(null).build())
-                            .build();
-                });
+                    return Mono.just(res);
+                })
+                .map(res -> res.toBuilder()
+                        .before(res.getBefore().toBuilder().schedules(null).build())
+                        .actual(res.getActual().toBuilder().schedules(null).build())
+                        .build());
     }
 
     public Mono<Map<String, String>> deleteCampaignById(Campaign campaign) {
