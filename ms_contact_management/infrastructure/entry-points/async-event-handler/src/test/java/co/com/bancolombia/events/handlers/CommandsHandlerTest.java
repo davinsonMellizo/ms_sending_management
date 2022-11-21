@@ -1,8 +1,8 @@
 package co.com.bancolombia.events.handlers;
 
+import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.events.commons.ValidatorBodyHandler;
-import co.com.bancolombia.events.mapper.EnrolIseriesMapper;
 import co.com.bancolombia.usecase.client.ClientUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +27,9 @@ public class CommandsHandlerTest {
     @Mock
     private ClientUseCase clientUseCase;
     @Mock
-    private ValidatorBodyHandler validatorBodyHandler;
+    private ValidatorHandler validatorBodyHandler;
     @Spy
-    private EnrolIseriesMapper mapper = Mappers.getMapper(EnrolIseriesMapper.class);
+    private EnrolMapper mapper = Mappers.getMapper(EnrolMapper.class);
 
 
     @BeforeEach
