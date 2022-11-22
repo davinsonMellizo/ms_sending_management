@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SendAlertUseCaseTest {
+class SendAlertUseCaseTest {
 
     @InjectMocks
     private SendAlertUseCase useCase;
@@ -52,7 +52,7 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianTest() {
+    void sendAlertMasivianTest() {
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
@@ -74,7 +74,7 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianErrorTest() {
+    void sendAlertMasivianErrorTest() {
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
@@ -92,7 +92,7 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertSesTest() {
+    void sendAlertSesTest() {
         alert.setProvider("TOD");
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
@@ -111,7 +111,7 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianPathAttachmentTest() {
+    void sendAlertMasivianPathAttachmentTest() {
         List<Attachment> attachmentList = new ArrayList<>();
         attachmentList.add(Attachment.builder().filename("test.pdf").type("Path").value("/path/to/file/test.pdf").build());
         alert.setAttachments(attachmentList);
@@ -137,7 +137,7 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianUrlAttachmentTest() {
+    void sendAlertMasivianUrlAttachmentTest() {
         List<Attachment> attachmentList = new ArrayList<>();
         attachmentList.add(Attachment.builder().filename("test.pdf").type("Url").value("http://url/test.pdf").build());
         alert.setAttachments(attachmentList);
@@ -162,7 +162,7 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertMasivianBase64AttachmentTest() {
+    void sendAlertMasivianBase64AttachmentTest() {
         List<Attachment> attachmentList = new ArrayList<>();
         attachmentList.add(Attachment.builder().filename("test.pdf").type("Base64").contentType("application/pdf").build());
         alert.setAttachments(attachmentList);

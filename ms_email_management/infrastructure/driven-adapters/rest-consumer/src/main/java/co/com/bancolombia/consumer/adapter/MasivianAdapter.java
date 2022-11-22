@@ -26,12 +26,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MasivianAdapter implements MasivianGateway {
 
-    private final static Integer STATUS_OK = 200;
-    private final static Integer STATUS_ERROR = 1;
-    private final static int CONSTANT = 3;
+    private static final Integer STATUS_OK = 200;
+    private static final Integer STATUS_ERROR = 1;
+    private static final int CONSTANT = 3;
     private final ConsumerProperties properties;
     private final RestClient<Mail, SuccessMasivianMAIL> clientMail;
-    private final RestClient<TokenMasivData,TokenMasivData> clientToken;
+    private final RestClient<TokenMasivData, TokenMasivData> clientToken;
     private final S3AsyncOperations s3AsyncOperations;
     @Value("${aws.s3.attachmentBucket}")
     private String attachmentBucket;
@@ -45,25 +45,27 @@ public class MasivianAdapter implements MasivianGateway {
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getDescription()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorMasivianMAIL)e.getData()).getDescription())
+                        .code(e.getHttpsStatus()).description(((ErrorMasivianMAIL) e.getData()).getDescription())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
-                            .description(e.getMessage())
-                            .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT)))
-                            .build()));
+                        .description(e.getMessage())
+                        .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT)))
+                        .build()));
     }
 
     @Override
     public Mono<Token> getToken(Account account) {
         String headerValue = account.getUsername().concat(":").concat(account.getPassword());
-        String headerValueEncode= Base64.getEncoder().encodeToString(headerValue.getBytes());
-        Map<String,String> headers = new HashMap<>();
-        headers.put("Authorization","Basic "+headerValueEncode);
+        String headerValueEncode = Base64.getEncoder().encodeToString(headerValue.getBytes());
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Basic " + headerValueEncode);
         return Mono.just(new TokenMasivData())
-                .map(requestTokenMasiv->{requestTokenMasiv.setHeaders(headers);
-                    return requestTokenMasiv;})
-                .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
-                        requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
+                .map(requestTokenMasiv -> {
+                    requestTokenMasiv.setHeaders(headers);
+                    return requestTokenMasiv;
+                })
+                .flatMap(requestTokenMasiv -> clientToken.post(properties.getResources().getEndpointMasivToken(),
+                        requestTokenMasiv, TokenMasivData.class, ErrorTokenMasivRequest.class))
                 .flatMap(TokenMasivData::toModel);
     }
 

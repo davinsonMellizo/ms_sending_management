@@ -1,6 +1,13 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.commons.constants.AttachmentType;
+import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Attachment;
+import co.com.bancolombia.model.message.Mail;
+import co.com.bancolombia.model.message.Recipient;
+import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.TemplateEmail;
+import co.com.bancolombia.model.message.TemplateMasivian;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
@@ -50,29 +57,22 @@ public class SendAlertUseCase {
     private Mono<Alert> validateAttachments(Alert alert) {
         return Mono.just(alert)
                 .map(alert1 -> {
-                    if (alert1.getAttachments().size() > 0) {
+                    if (!alert1.getAttachments().isEmpty()) {
                         List<Attachment> attachmentList = new ArrayList<>();
                         alert1.getAttachments().forEach(attachment -> {
                             switch (attachment.getType()) {
-                                case "Path":
-                                    generatePresignedUrl(attachment.getValue())
-                                            .subscribe(s -> attachmentList.add(Attachment.builder()
-                                                    .path(s)
-                                                    .filename(attachment.getFilename())
-                                                    .build()));
+                                case AttachmentType.PATH:
+                                    generatePresignedUrl(attachment.getValue()).subscribe(s -> attachmentList.add(
+                                            Attachment.builder().path(s).filename(attachment.getFilename()).build()));
                                     break;
-                                case "Url":
-                                    attachmentList.add(Attachment.builder()
-                                            .path(attachment.getValue())
-                                            .filename(attachment.getFilename())
-                                            .build());
+                                case AttachmentType.URL:
+                                    attachmentList.add(Attachment.builder().path(attachment.getValue())
+                                            .filename(attachment.getFilename()).build());
                                     break;
-                                case "Base64":
+                                case AttachmentType.BASE64:
                                     attachmentList.add(Attachment.builder()
                                             .path(String.format("data:%1$s;base64, <%2$s>", attachment.getContentType(),
-                                                    attachment.getValue()))
-                                            .filename(attachment.getFilename())
-                                            .build());
+                                                    attachment.getValue())).filename(attachment.getFilename()).build());
                                     break;
                                 default:
                                     break;
@@ -100,15 +100,13 @@ public class SendAlertUseCase {
                         .parameters(new ArrayList<>())
                         .nameToken(nameToken)
                         .build())
-                .flatMap(mail -> generatorTokenUseCase.getToken(mail))
-                .doOnNext(getHeaders -> {
-                    tokenTemp[0] = String.valueOf(getHeaders.getHeaders());
-                })
+                .flatMap(generatorTokenUseCase::getToken)
+                .doOnNext(getHeaders -> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response))
                 .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0], templateEmail))
-                .map(o -> (Response) o);
+                .map(Response.class::cast);
     }
 
     private Mono<Void> filterErrorMAS(Throwable error, Alert alert, String tokentemp, TemplateEmail templateEmail) {

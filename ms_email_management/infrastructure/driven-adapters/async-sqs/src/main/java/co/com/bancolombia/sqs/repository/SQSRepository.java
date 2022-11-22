@@ -1,6 +1,5 @@
 package co.com.bancolombia.sqs.repository;
 
-import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.sqs.config.SQSProperties;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SEND_LOG_S
 @RequiredArgsConstructor
 public class SQSRepository {
     private final SQSProperties properties;
-
     public final SqsAsyncClient client;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQSRepository.class.getName());

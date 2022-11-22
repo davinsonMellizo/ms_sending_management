@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class S3AsyncOperationsTest {
+class S3AsyncOperationsTest {
     @InjectMocks
     private S3AsyncOperations s3AsyncOperations;
     @Mock
@@ -49,7 +49,7 @@ public class S3AsyncOperationsTest {
             CompletableFuture.supplyAsync(() -> ResponseBytes.fromByteArray("test", "test".getBytes()).asInputStream());
 
     @Test
-    public void getFileAsStringTest() {
+    void getFileAsStringTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
         StepVerifier.create(s3AsyncOperations.getFileAsString(bucketName, ccdtKey))
@@ -57,7 +57,7 @@ public class S3AsyncOperationsTest {
     }
 
     @Test
-    public void getFileAsStringErrorTest() {
+    void getFileAsStringErrorTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(Mono.error(new Throwable("testError")).toFuture());
         StepVerifier.create(s3AsyncOperations.getFileAsString(bucketName, ccdtKey))
@@ -66,7 +66,7 @@ public class S3AsyncOperationsTest {
     }
 
     @Test
-    public void getFileAsInputStreamTest() {
+    void getFileAsInputStreamTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
         StepVerifier.create(s3AsyncOperations.getFileAsInputStream(bucketName, ccdtKey))
@@ -75,7 +75,7 @@ public class S3AsyncOperationsTest {
     }
 
     @Test
-    public void getFileAsInputStreamErrorTest() {
+    void getFileAsInputStreamErrorTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(Mono.error(new Throwable("testError")).toFuture());
         StepVerifier.create(s3AsyncOperations.getFileAsInputStream(bucketName, ccdtKey))
@@ -84,7 +84,7 @@ public class S3AsyncOperationsTest {
     }
 
     @Test
-    public void generatePresignedUrlTest() {
+    void generatePresignedUrlTest() {
         ReflectionTestUtils.setField(s3AsyncOperations, "duration", 60L);
         PresignedGetObjectRequest presigned = PresignedGetObjectRequest.builder()
                 .expiration(Instant.MIN)

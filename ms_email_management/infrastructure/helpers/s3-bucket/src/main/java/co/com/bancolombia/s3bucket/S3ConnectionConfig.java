@@ -48,7 +48,9 @@ public class S3ConnectionConfig {
                 .credentialsProvider(getProviderChain())
                 .asyncConfiguration(config -> config.advancedOption(FUTURE_COMPLETION_EXECUTOR, threadPoolExecutor()))
                 .region(s3ConnectionProperties.getRegion());
-        if (withEndpoint) s3AsyncClient.endpointOverride(URI.create(s3ConnectionProperties.getEndpoint()));
+        if (withEndpoint) {
+            s3AsyncClient.endpointOverride(URI.create(s3ConnectionProperties.getEndpoint()));
+        }
         return s3AsyncClient.build();
     }
 

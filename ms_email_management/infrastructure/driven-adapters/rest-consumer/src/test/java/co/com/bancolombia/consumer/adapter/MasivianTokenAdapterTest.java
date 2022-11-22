@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MasivianTokenAdapterTest {
+class MasivianTokenAdapterTest {
     @InjectMocks
     private MasivianAdapter masivianAdapter;
     @Mock
@@ -28,30 +28,32 @@ public class MasivianTokenAdapterTest {
     @Mock
     private RestClient<TokenMasivData, TokenMasivData> clientToken;
 
-    private Account account= new Account();
+    private Account account = new Account();
 
     @BeforeEach
     public void init() {
         String url = "localhost";
         when(properties.getResources())
-                .thenReturn(new ConsumerProperties.Resources(url,url));
+                .thenReturn(new ConsumerProperties.Resources(url, url));
 
         account.setPassword("passwordTest");
         account.setUsername("usernameTest");
     }
+
     @Test
-    public void getToken(){
-        when(clientToken.post(anyString(),any(),any(),any()))
+    void getToken() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(TokenMasivData.builder()
                         .accesToken("accessTokenTest").expiresIn(1234L).build()));
         StepVerifier
                 .create(masivianAdapter.getToken(account))
-                .assertNext(response->response.getAccessToken().equals("accessTokenTest"))
+                .assertNext(response -> response.getAccessToken().equals("accessTokenTest"))
                 .verifyComplete();
     }
+
     @Test
-    public  void getTokenErrorTest(){
-        when(clientToken.post(anyString(), any(), any(),any()))
+    void getTokenErrorTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier.create(masivianAdapter.getToken(account))
                 .expectError()

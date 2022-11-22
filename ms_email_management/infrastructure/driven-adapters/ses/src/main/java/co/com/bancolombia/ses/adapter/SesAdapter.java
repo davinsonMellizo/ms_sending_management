@@ -1,5 +1,6 @@
 package co.com.bancolombia.ses.adapter;
 
+import co.com.bancolombia.commons.constants.AttachmentType;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Attachment;
@@ -89,16 +90,16 @@ public class SesAdapter implements SesGateway {
     }
 
     public <T extends Iterable> T attachmentList(T item) {
-        return (item == null) ? (T) Collections.EMPTY_LIST : item;
+        return (item == null) ? (T) Collections.emptyList() : item;
     }
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws MalformedURLException, MessagingException {
         switch (attachment.getType()) {
-            case "Path":
+            case AttachmentType.PATH:
                 return retrieveFromPath(attachment.getValue());
-            case "Url":
+            case AttachmentType.URL:
                 return retrieveFromUrl(attachment.getValue());
-            case "Base64":
+            case AttachmentType.BASE64:
                 return retrieveFromBase64(attachment);
             default:
                 return new MimeBodyPart();
@@ -107,8 +108,7 @@ public class SesAdapter implements SesGateway {
 
     private MimeBodyPart retrieveFromPath(String urlString) throws MessagingException {
         InputStream attachment = s3AsyncOperations.getFileAsInputStream(attachmentBucket, urlString).block();
-        MimeBodyPart attachmentPart = new MimeBodyPart(attachment);
-        return attachmentPart;
+        return new MimeBodyPart(attachment);
     }
 
     private MimeBodyPart retrieveFromUrl(String urlString) throws MalformedURLException, MessagingException {
@@ -121,7 +121,6 @@ public class SesAdapter implements SesGateway {
     }
 
     private MimeBodyPart retrieveFromBase64(Attachment attachment) throws MessagingException {
-//        byte[] decodedBytes = Base64.getDecoder().decode(attachment.getValue());
         MimeBodyPart attachmentPart = new PreencodedMimeBodyPart("base64");
         attachmentPart.setContent(attachment.getValue(), attachment.getContentType());
         attachmentPart.setDisposition(Part.ATTACHMENT);

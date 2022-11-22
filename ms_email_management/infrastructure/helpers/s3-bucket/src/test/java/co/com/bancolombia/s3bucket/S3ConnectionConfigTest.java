@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class S3ConnectionConfigTest {
+class S3ConnectionConfigTest {
     @InjectMocks
     private S3ConnectionConfig s3ConnectionConfigMock;
 

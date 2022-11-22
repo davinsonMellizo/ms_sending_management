@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class EventsHandlerTest {
+class EventsHandlerTest {
 
     @InjectMocks
     private EventsHandler eventsHandler;
@@ -25,12 +25,12 @@ public class EventsHandlerTest {
     private SendAlertUseCase useCase;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void handleSendAlert() {
+    void handleSendAlert() {
         when(useCase.sendAlert(any())).thenReturn(Mono.empty());
         StepVerifier.create(eventsHandler.handleSendAlert(new DomainEvent<>("alert", "alert",
                 Alert.builder().build())))

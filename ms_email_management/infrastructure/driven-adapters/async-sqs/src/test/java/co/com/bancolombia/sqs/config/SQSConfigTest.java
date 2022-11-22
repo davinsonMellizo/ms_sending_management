@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class SQSConfigTes {
+class SQSConfigTest {
 
     @InjectMocks
     private  SQSConfig sqsConfig;
@@ -27,7 +27,7 @@ public class SQSConfigTes {
     }
 
     @Test
-    public void sqsConfigLocalTest(){
+    void sqsConfigLocalTest(){
         assertThat(sqsConfig.sqsConfig()).isNotNull();
     }
 }

@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
-public class RabbitMQConfigHelperTest {
+class RabbitMQConfigHelperTest {
     public static final String SECRET = "any-secret-dev";
 
 
@@ -34,13 +34,13 @@ public class RabbitMQConfigHelperTest {
     }
 
     @Test
-    public void connectionRabbitWhenSecretExistTest(){
+    void connectionRabbitWhenSecretExistTest() {
         when(secretsManager.getSecret(anyString(), any())).thenReturn(Mono.just(properties()));
         when(secretsNameStandard.secretForRabbitMQ()).thenReturn(Mono.just("name"));
         assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
     }
 
-    private RabbitMQConnectionProperties properties(){
+    private RabbitMQConnectionProperties properties() {
         RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
         properties.setHostname("any-host");
         properties.setUsername("this-is-for-test");

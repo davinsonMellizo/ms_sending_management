@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class RestConsumerConfigTest {
+class RestConsumerConfigTest {
     @InjectMocks
     private RestConsumerConfig restConsumerConfig;
     @Mock
@@ -51,17 +51,17 @@ public class RestConsumerConfigTest {
                     tcpClient = tcpClient.option(CONNECT_TIMEOUT_MILLIS, 3600);
                     return tcpClient;
                 }));
-        when(secretsManager.getSecret(anyString(),any()))
+        when(secretsManager.getSecret(anyString(), any()))
                 .thenReturn(Mono.just(PropertiesSsl.builder()
                         .keyStore("masivapp-com.jks")
                         .password("testPassword")
                         .build()));
         when(awsProperties.getNameSecretBucketSsl())
                 .thenReturn("testNameSecret");
-        when(s3AsyncOperations.getFileAsInputStream(anyString(),anyString()))
+        when(s3AsyncOperations.getFileAsInputStream(anyString(), anyString()))
                 .thenReturn(Mono.just(inputStream));
         when(awsProperties.getS3())
-                .thenReturn(new AwsProperties.S3("endpointTest","bucketTest"));
+                .thenReturn(new AwsProperties.S3("endpointTest", "bucketTest"));
 
     }
 

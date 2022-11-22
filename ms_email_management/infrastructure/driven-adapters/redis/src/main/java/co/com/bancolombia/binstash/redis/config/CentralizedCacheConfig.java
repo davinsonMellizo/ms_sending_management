@@ -3,7 +3,6 @@ package co.com.bancolombia.binstash.redis.config;
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.binstash.redis.CentralizedCacheFactory;
 import co.com.bancolombia.binstash.redis.client.RedisStash;
-import co.com.bancolombia.model.token.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

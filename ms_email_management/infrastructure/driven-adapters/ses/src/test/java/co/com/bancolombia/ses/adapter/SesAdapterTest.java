@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SesAdapterTest {
+class SesAdapterTest {
 
     @InjectMocks
     private SesAdapter sesAdapter;
@@ -36,7 +36,7 @@ public class SesAdapterTest {
     private S3AsyncOperations s3AsyncOperations;
 
     @Test
-    public void findTemplateEmailTest() {
+    void findTemplateEmailTest() {
         TemplateEmail templateEmail = TemplateEmail.builder()
                 .bodyHtml("html").subject("subject").build();
         Alert alert = Alert.builder()
@@ -50,7 +50,7 @@ public class SesAdapterTest {
     }
 
     @Test
-    public void pathTest() {
+    void pathTest() {
         ReflectionTestUtils.setField(sesAdapter, "attachmentBucket", "attachmentBucket");
         TemplateEmail templateEmail = TemplateEmail.builder().bodyHtml("html").subject("subject").build();
         List<Attachment> attachmentList = new ArrayList<>();
@@ -70,7 +70,7 @@ public class SesAdapterTest {
     }
 
     @Test
-    public void urlTest() {
+    void urlTest() {
         TemplateEmail templateEmail = TemplateEmail.builder().bodyHtml("html").subject("subject").build();
         List<Attachment> attachmentList = new ArrayList<>();
         attachmentList.add(Attachment.builder().type("Url").value("http://url/test.pdf").build());
@@ -85,7 +85,7 @@ public class SesAdapterTest {
     }
 
     @Test
-    public void base64Test() {
+    void base64Test() {
         TemplateEmail templateEmail = TemplateEmail.builder().bodyHtml("html").subject("subject").build();
         List<Attachment> attachmentList = new ArrayList<>();
         attachmentList.add(Attachment.builder()
@@ -103,7 +103,7 @@ public class SesAdapterTest {
     }
 
     @Test
-    public void defaultTest() {
+    void defaultTest() {
         TemplateEmail templateEmail = TemplateEmail.builder().bodyHtml("html").subject("subject").build();
         List<Attachment> attachmentList = new ArrayList<>();
         attachmentList.add(Attachment.builder().type("Typo").build());
