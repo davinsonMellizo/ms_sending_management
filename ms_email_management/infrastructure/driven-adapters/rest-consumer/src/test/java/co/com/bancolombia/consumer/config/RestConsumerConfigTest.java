@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer.config;
 
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.s3bucket.S3AsynOperations;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class RestConsumerConfigTest {
     @Mock
     private AwsProperties awsProperties;
     @Mock
-    private S3AsynOperations s3AsynOperations;
+    private S3AsyncOperations s3AsyncOperations;
     @Mock
     private LoggerBuilder loggerBuilder;
 
@@ -58,7 +58,7 @@ public class RestConsumerConfigTest {
                         .build()));
         when(awsProperties.getNameSecretBucketSsl())
                 .thenReturn("testNameSecret");
-        when(s3AsynOperations.getFileAsInputStream(anyString(),anyString()))
+        when(s3AsyncOperations.getFileAsInputStream(anyString(),anyString()))
                 .thenReturn(Mono.just(inputStream));
         when(awsProperties.getS3())
                 .thenReturn(new AwsProperties.S3("endpointTest","bucketTest"));

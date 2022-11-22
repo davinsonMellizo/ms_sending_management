@@ -10,4 +10,5 @@ public interface MasivianGateway {
     Mono<Response> sendMAIL(Mail mail);
     Mono<Token> getToken(Account account);
     Mono<Token> refreshToken(String requestTokenMasiv);
+    Mono<String> generatePresignedUrl(String objectKey);
 }

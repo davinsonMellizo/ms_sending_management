@@ -25,6 +25,8 @@ data:
   CACHE_PORT: "#{cache-port}#"
   EXPIRE_TIME_CACHE: "#{cache-time}#"
   S3-BUCKET: #{s3-bucket}#
+  S3-ATTACHMENT-BUCKET: #{s3-attachment-bucket}#
+  S3-SIGNATURE-DURATION-MINS: #{s3-signature-duration-minutes}#
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
 
 

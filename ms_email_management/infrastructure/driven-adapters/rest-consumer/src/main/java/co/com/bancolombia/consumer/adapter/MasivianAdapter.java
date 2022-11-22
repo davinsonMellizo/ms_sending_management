@@ -12,7 +12,9 @@ import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -30,6 +32,9 @@ public class MasivianAdapter implements MasivianGateway {
     private final ConsumerProperties properties;
     private final RestClient<Mail, SuccessMasivianMAIL> clientMail;
     private final RestClient<TokenMasivData,TokenMasivData> clientToken;
+    private final S3AsyncOperations s3AsyncOperations;
+    @Value("${aws.s3.attachmentBucket}")
+    private String attachmentBucket;
 
     @Override
     public Mono<Response> sendMAIL(Mail mail) {
@@ -65,6 +70,11 @@ public class MasivianAdapter implements MasivianGateway {
     @Override
     public Mono<Token> refreshToken(String requestTokenMasiv) {
         return null;
+    }
+
+    @Override
+    public Mono<String> generatePresignedUrl(String objectKey) {
+        return s3AsyncOperations.generatePresignedUrl(attachmentBucket, objectKey);
     }
 
 }

@@ -77,6 +77,8 @@ aws:
   s3:
     endpoint: http://localhost:4566
     bucket: ${S3-BUCKET}
+    attachmentBucket: ${S3-ATTACHMENT-BUCKET}
+    signatureDuration: ${S3-SIGNATURE-DURATION-MINS}
 stash:
   redis:
     expireTime: ${EXPIRE_TIME_CACHE}

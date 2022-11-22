@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -42,19 +43,18 @@ public class SendAlertUseCaseTest {
     public void init() {
         alert.setProvider("MAS");
         alert.setFrom("bancolombia@test.com.co");
-        alert.setDestination(new Alert.Destination("bancolombia@test.com.co","",""));
+        alert.setDestination(new Alert.Destination("bancolombia@test.com.co", "", ""));
         alert.setAttachments(new ArrayList<>());
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new Parameter("name","bancolombia",""));
+        parameters.add(new Parameter("name", "bancolombia", ""));
         alert.setTemplate(new Template(parameters, "Compra"));
         alert.setLogKey(UUID.randomUUID().toString());
-
     }
 
     @Test
-    public void sendAlertMasivianTest(){
+    public void sendAlertMasivianTest() {
         TemplateEmail template =
-                new TemplateEmail("subject","<div>Hola ${message}</div>","Hola ${name}");
+                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
         when(masivianGateway.sendMAIL(any()))
@@ -62,7 +62,7 @@ public class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), any(),anyString(), any()))
+        when(logUseCase.sendLog(any(), any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         when(generatorTokenUseCase.getToken(any()))
                 .thenReturn(Mono.just(new Mail()));
@@ -72,10 +72,11 @@ public class SendAlertUseCaseTest {
                 .create(useCase.sendAlert(alert))
                 .verifyComplete();
     }
+
     @Test
-    public void sendAlertMasivianErrorTest(){
+    public void sendAlertMasivianErrorTest() {
         TemplateEmail template =
-                new TemplateEmail("subject","<div>Hola ${message}</div>","Hola ${name}");
+                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
         when(generatorTokenUseCase.getToken(any()))
@@ -91,10 +92,10 @@ public class SendAlertUseCaseTest {
     }
 
     @Test
-    public void sendAlertSesTest(){
+    public void sendAlertSesTest() {
         alert.setProvider("TOD");
         TemplateEmail template =
-                new TemplateEmail("subject","<div>Hola ${message}</div>","Hola ${name}");
+                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
         when(sesGateway.sendEmail(any(), any()))
@@ -102,11 +103,86 @@ public class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), any(),anyString(), any()))
+        when(logUseCase.sendLog(any(), any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
                 .create(useCase.sendAlert(alert))
                 .verifyComplete();
     }
 
+    @Test
+    public void sendAlertMasivianPathAttachmentTest() {
+        List<Attachment> attachmentList = new ArrayList<>();
+        attachmentList.add(Attachment.builder().filename("test.pdf").type("Path").value("/path/to/file/test.pdf").build());
+        alert.setAttachments(attachmentList);
+        TemplateEmail template =
+                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
+        when(templateEmailGateway.findTemplateEmail(anyString()))
+                .thenReturn(Mono.just(template));
+        when(masivianGateway.generatePresignedUrl(anyString())).thenReturn(Mono.just("presignedUrl"));
+        when(masivianGateway.sendMAIL(any()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(logUseCase.sendLog(any(), any(), anyString(), any()))
+                .thenReturn(Mono.empty());
+        when(generatorTokenUseCase.getToken(any()))
+                .thenReturn(Mono.just(new Mail()));
+        when(generatorTokenUseCase.getNameToken(any()))
+                .thenReturn(Mono.just("NameToken"));
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .verifyComplete();
+    }
+
+    @Test
+    public void sendAlertMasivianUrlAttachmentTest() {
+        List<Attachment> attachmentList = new ArrayList<>();
+        attachmentList.add(Attachment.builder().filename("test.pdf").type("Url").value("http://url/test.pdf").build());
+        alert.setAttachments(attachmentList);
+        TemplateEmail template =
+                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
+        when(templateEmailGateway.findTemplateEmail(anyString()))
+                .thenReturn(Mono.just(template));
+        when(masivianGateway.sendMAIL(any()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(logUseCase.sendLog(any(), any(), anyString(), any()))
+                .thenReturn(Mono.empty());
+        when(generatorTokenUseCase.getToken(any()))
+                .thenReturn(Mono.just(new Mail()));
+        when(generatorTokenUseCase.getNameToken(any()))
+                .thenReturn(Mono.just("NameToken"));
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .verifyComplete();
+    }
+
+    @Test
+    public void sendAlertMasivianBase64AttachmentTest() {
+        List<Attachment> attachmentList = new ArrayList<>();
+        attachmentList.add(Attachment.builder().filename("test.pdf").type("Base64").contentType("application/pdf").build());
+        alert.setAttachments(attachmentList);
+        TemplateEmail template =
+                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
+        when(templateEmailGateway.findTemplateEmail(anyString()))
+                .thenReturn(Mono.just(template));
+        when(masivianGateway.sendMAIL(any()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(logUseCase.sendLog(any(), any(), anyString(), any()))
+                .thenReturn(Mono.empty());
+        when(generatorTokenUseCase.getToken(any()))
+                .thenReturn(Mono.just(new Mail()));
+        when(generatorTokenUseCase.getNameToken(any()))
+                .thenReturn(Mono.just("NameToken"));
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .verifyComplete();
+    }
 }
