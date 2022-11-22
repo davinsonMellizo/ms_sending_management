@@ -13,7 +13,8 @@ function() {
       urlCategory: '',
       urlPriority: '',
       urlConsumer: '',
-      urlCampaign: ''
+      urlCampaign: '',
+      urlSchedule: ''
   }
 
   config.urlAlert = envData.urlAlert;
@@ -23,6 +24,7 @@ function() {
   config.urlPriority = envData.urlPriority;
   config.urlConsumer = envData.urlConsumer;
   config.urlCampaign = envData.urlCampaign;
+  config.urlSchedule = envData.urlSchedule;
 
   return config
 

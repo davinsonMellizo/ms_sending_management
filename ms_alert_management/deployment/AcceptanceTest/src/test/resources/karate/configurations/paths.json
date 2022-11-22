@@ -5,5 +5,6 @@
   "urlCategory": "#{dns-service}#/alertas/api/v1/alert-management/category",
   "urlPriority": "#{dns-service}#/alertas/api/v1/alert-management/priority",
   "urlConsumer": "#{dns-service}#/alertas/api/v1/alert-management/consumer",
-  "urlCampaign": "#{dns-service}#/alertas/api/v1/alert-management/campaign"
+  "urlCampaign": "#{dns-service}#/alertas/api/v1/alert-management/campaign",
+  "urlSchedule": "#{dns-service}#/alertas/api/v1/alert-management/schedule"
 }

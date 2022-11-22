@@ -1,29 +1,32 @@
 {
   "idCampaign": '#(idCampaign)',
   "idConsumer": '#(idConsumer)',
-  "idProvider": "1",
-  "defaultTemplate": "template",
-  "idRemitter": 1,
-  "sourcePath": '#(sourcePath)',
-  "attachmentPath": "attachmentPath",
+  "provider": {
+    "idProvider": "INA",
+    "channelType": "PUSH"
+  },
+  "idRemitter": 2,
+  "defaultTemplate": "template_14",
+  "sourcePath": "sourcePath",
+  "attachment": false,
+  "attachmentPath": null,
+  "dataEnrichment": true,
   "creationUser": "lugomez",
-  "state": "ACTIVO",
+  "state": "1",
   "schedules": [
     {
-      "id": '#(schedule1_id)',
-      "scheduleType": "MENSUAL",
-      "startDate": "2022-03-08",
-      "startTime": "09:00:00.00",
-      "endDate": "2022-05-08",
-      "endTime": "16:40:00.00"
+      "scheduleType": "DAILY",
+      "startDate": "2022-10-07",
+      "startTime": "08:00:00.00",
+      "endDate": "2022-11-05",
+      "endTime": "08:00:00.00"
     },
     {
-      "id": '#(schedule2_id)',
-      "scheduleType": "SEMANAL",
-      "startDate": "2022-03-01",
-      "startTime": "07:23:00.00",
-      "endDate": "2022-03-29",
-      "endTime": "20:10:00.00"
+      "scheduleType": "HOURLY",
+      "startDate": "2022-10-31",
+      "startTime": "10:45:00.00",
+      "endDate": "2022-12-23",
+      "endTime": "10:45:00.00"
     }
   ]
 }
