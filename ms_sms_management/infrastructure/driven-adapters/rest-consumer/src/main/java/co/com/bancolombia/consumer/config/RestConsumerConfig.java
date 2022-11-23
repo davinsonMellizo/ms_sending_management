@@ -16,6 +16,7 @@ import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import reactor.util.annotation.Nullable;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManagerFactory;
@@ -111,6 +112,7 @@ public class RestConsumerConfig {
     @Bean(name = "INA")
     @Profile("local")
     @Autowired
+    @Nullable
     public WebClient webClientConfigInaLocal (final ConsumerProperties consumerProperties){
         return WebClient.builder()
                 .clientConnector(getClientHttpConnectorInsecure(consumerProperties.getTimeout()))
@@ -130,7 +132,7 @@ public class RestConsumerConfig {
 
     private ClientHttpConnector getClientHttpConnectorInsecure(int timeout) {
         try {
-            SslContext sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
+            var sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
                     .build();
 
             return new ReactorClientHttpConnector(HttpClient.create()
