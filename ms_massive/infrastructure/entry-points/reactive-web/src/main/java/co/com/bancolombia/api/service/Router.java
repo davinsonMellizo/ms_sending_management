@@ -20,7 +20,7 @@ public class Router extends MassiveDocumentationApi {
     @Bean
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route()
-                .POST(apiProperties.getSendCampaignOnDemand(), accept(APPLICATION_JSON), handler::send, sendCampaignOnDemand())
+                .POST(apiProperties.getSendCampaign(), accept(APPLICATION_JSON), handler::send, sendCampaignOnDemand())
                 .build();
     }
 }

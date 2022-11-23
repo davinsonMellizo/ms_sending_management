@@ -42,8 +42,13 @@ management:
         readiness: readiness
       exposure:
         include: health, liveness, readiness
-
-adapter:
+adapters:
+  entries:
+    reactive-web:
+      path-base: ${PATH_BASE}
+      send-campaign: ${PATH_SEND_CAMPAIGN}
   restconsumer:
     timeout: 5000
-    url: ${CAMPAIGN_URL}
+    url: ${REST_BASE_URL}
+    resources:
+      endpointCampaign: ${CAMPAIGN_URL}
