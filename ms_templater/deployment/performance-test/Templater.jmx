@@ -58,10 +58,6 @@
             <stringProp name="Header.value">{ &quot;device&quot;: &quot;iPhone/iPhone7,2&quot;,    &quot;os&quot;: &quot;iOS 12.4.9&quot;,    &quot;browser&quot;: &quot;Mozilla&quot;}</stringProp>
           </elementProp>
           <elementProp name="" elementType="Header">
-            <stringProp name="Header.name">Accept</stringProp>
-            <stringProp name="Header.value">*/*</stringProp>
-          </elementProp>
-          <elementProp name="" elementType="Header">
             <stringProp name="Header.name">platform-type</stringProp>
             <stringProp name="Header.value">web</stringProp>
           </elementProp>
