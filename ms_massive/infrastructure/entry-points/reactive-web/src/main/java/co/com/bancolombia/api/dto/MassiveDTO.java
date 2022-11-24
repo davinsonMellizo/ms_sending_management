@@ -17,16 +17,16 @@ import javax.validation.constraints.Size;
 @Builder(toBuilder = true)
 public class MassiveDTO {
 
-    @Size(min = 1, max = 50, message = "The field must be between {min} and {max} characters long")
-    @NotNull(message = "The field mustn't be null")
+    @Size(min = 1, max = 50, message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(message = "no debe ser nulo")
     private String idCampaign;
 
-    @Size(min = 1, max = 10, message = "The field must be between {min} and {max} characters long")
-    @NotNull(message = "The field mustn't be null")
+    @Size(min = 1, max = 10, message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(message = "no debe ser nulo")
     private String idConsumer;
 
-    @Min(value = 1, message = "The field must be greater than {value}")
-    @NotNull(message = "The field mustn't be null")
+    @Min(value = 1, message = "debe ser mayor que {value}")
+    @NotNull(message = "no debe ser nulo")
     private Integer numberOfRecords;
 
 

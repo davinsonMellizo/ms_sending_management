@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TechnicalExceptionEnum {
 
-    TECHNICAL_MISSING_PARAMETERS("TE001", "Missing Parameters"),
-    TECHNICAL_ERROR_REQUESTING_CAMPAIGN("TE002", "An error occurred while consulting the campaign"),
-    INTERNAL_SERVER_ERROR("302", "Internal server error");
+    TECHNICAL_MISSING_PARAMETERS("TE001", "Parametros faltantes"),
+    TECHNICAL_ERROR_REQUESTING_CAMPAIGN("TE002", "Ha ocurrido un error en la consulta de campana"),
+    INTERNAL_SERVER_ERROR("302", "Error interno del servidor");
 
     private final String code;
     private final String message;

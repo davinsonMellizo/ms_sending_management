@@ -17,7 +17,6 @@ public class MassiveUseCase {
     public Mono<Campaign> startTriggerOnDemand(Massive massive) {
 
         return campaignRepository.findCampaignById(massive)
-                //.doOnNext(campaign -> System.out.println("CAMPAIGN = " + campaign))
                 .flatMap(glueGateway::startTrigger)
                 .map(res -> res.toBuilder().build());
     }
