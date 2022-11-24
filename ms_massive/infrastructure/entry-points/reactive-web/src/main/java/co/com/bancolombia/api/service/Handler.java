@@ -25,7 +25,7 @@ public class Handler {
                 .switchIfEmpty(Mono.error(new TechnicalException(TECHNICAL_MISSING_PARAMETERS)))
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(MassiveDTO::toModel)
-                .flatMap(useCase::startTriggerOnDemand)
+                .flatMap(useCase::sendCampaign)
                 .flatMap(ResponseUtil::responseOk);
     }
 }

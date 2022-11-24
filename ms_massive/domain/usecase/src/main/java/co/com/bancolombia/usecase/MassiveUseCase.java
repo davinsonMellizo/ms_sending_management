@@ -14,10 +14,8 @@ public class MassiveUseCase {
 
     private final CampaignGlueGateway glueGateway;
 
-    public Mono<Campaign> startTriggerOnDemand(Massive massive) {
-
+    public Mono<Campaign> sendCampaign(Massive massive) {
         return campaignRepository.findCampaignById(massive)
-                .flatMap(glueGateway::startTrigger)
-                .map(res -> res.toBuilder().build());
+                .flatMap(glueGateway::startTrigger);
     }
 }
