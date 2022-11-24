@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase;
 
 import co.com.bancolombia.model.campaign.gateways.CampaignGateway;
+import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
 import co.com.bancolombia.model.massive.Massive;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -11,6 +12,8 @@ import java.util.Map;
 public class MassiveUseCase {
 
     private final CampaignGateway campaignRepository;
+
+    private final CampaignGlueGateway glueGateway;
 
     public Mono<Map<String, String>> startTriggerOnDemand(Massive massive) {
 
