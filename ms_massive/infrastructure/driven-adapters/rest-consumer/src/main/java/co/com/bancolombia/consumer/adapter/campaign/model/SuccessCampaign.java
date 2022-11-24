@@ -1,4 +1,4 @@
-package co.com.bancolombia.consumer.response;
+package co.com.bancolombia.consumer.adapter.campaign.model;
 
 import co.com.bancolombia.commons.enums.ScheduleType;
 import lombok.AllArgsConstructor;
@@ -41,7 +41,7 @@ public class SuccessCampaign {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class CampaignResponse {
+    public static class Data {
         private String idCampaign;
         private String idConsumer;
         private String provider;
@@ -57,15 +57,6 @@ public class SuccessCampaign {
         private LocalDateTime createdDate;
         private String modifiedUser;
         private LocalDateTime modifiedDate;
-
         private List<ScheduleResponse> schedules;
-    }
-
-    @lombok.Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder(toBuilder = true)
-    public static class Data {
-        private CampaignResponse campaignResponse;
     }
 }

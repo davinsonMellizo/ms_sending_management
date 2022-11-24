@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "adapters.restconsumer")
-public class RestProperties {
+public class RestConsumerProperties {
     private int timeout;
     private Resources resources;
 
