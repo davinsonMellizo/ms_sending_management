@@ -4,7 +4,6 @@ import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
-import co.com.bancolombia.model.response.StatusResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -21,17 +20,17 @@ public class GlueAdapter implements CampaignGlueGateway {
     }
 
     @Override
-    public Mono<StatusResponse<Campaign>> startTrigger(StatusResponse<Campaign> response) {
-        return Flux.fromIterable(response.getActual().getSchedules())
+    public Mono<Campaign> startTrigger(Campaign campaign) {
+        return Flux.fromIterable(campaign.getSchedules())
                 .filter(schedule -> ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()))
                 .flatMap(schedule -> this.glueOperations.startTrigger(
                         this.getTriggerName(
-                                response.getActual().getIdCampaign(),
-                                response.getActual().getIdConsumer(),
+                                campaign.getIdCampaign(),
+                                campaign.getIdConsumer(),
                                 schedule.getId()
                         ))
                 )
                 .collectList()
-                .thenReturn(response);
+                .thenReturn(campaign);
     }
 }
