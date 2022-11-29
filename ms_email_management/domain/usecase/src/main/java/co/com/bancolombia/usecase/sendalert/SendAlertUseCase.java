@@ -38,7 +38,6 @@ public class SendAlertUseCase {
 
     public Mono<Void> sendAlertToProviders(Alert alert, TemplateEmail templateEmail) {
         return validateAttachments(alert)
-                .log()
                 .flatMap(alert1 ->  sendEmailByMasivian(alert1, templateEmail))
                 .concatWith(sendEmailBySes(alert, templateEmail))
                 .thenEmpty(Mono.empty());
