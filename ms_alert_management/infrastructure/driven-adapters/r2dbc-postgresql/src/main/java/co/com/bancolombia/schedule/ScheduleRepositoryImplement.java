@@ -2,6 +2,7 @@ package co.com.bancolombia.schedule;
 
 import co.com.bancolombia.AdapterOperations;
 import co.com.bancolombia.campaign.data.CampaignMapper;
+import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.drivenadapters.TimeFactory;
@@ -11,6 +12,8 @@ import co.com.bancolombia.model.schedule.Schedule;
 import co.com.bancolombia.model.schedule.gateways.ScheduleGateway;
 import co.com.bancolombia.schedule.data.ScheduleData;
 import co.com.bancolombia.schedule.data.ScheduleMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -19,8 +22,7 @@ import reactor.util.function.Tuple2;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CAMPAIGN_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SCHEDULE_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_CAMPAIGN_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.SAVE_SCHEDULE_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CAMPAIGN_BY_ID_ERROR;
@@ -30,6 +32,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UPDATE_SCH
 @Repository
 public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, ScheduleData, Long, ScheduleRepository>
         implements ScheduleGateway {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleRepositoryImplement.class);
 
     @Autowired
     public ScheduleRepositoryImplement(ScheduleRepository repository, ScheduleMapper mapper) {
@@ -42,13 +45,32 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
     @Autowired
     private CampaignMapper campaignMapper;
 
-    @Override
     public Mono<Campaign> saveSchedule(Schedule schedule) {
+        return this.validateCampaignSchedulesOnDemand(schedule)
+                .filter(campaign -> campaign instanceof Campaign)
+                .flatMap(campaign ->
+                        Mono.just(campaign)
+                                .zipWith(this.save(schedule))
+                                .map(t -> t.getT1().toBuilder().schedules(List.of(t.getT2())).build())
+                );
+    }
+
+    private Mono<Campaign> validateCampaignSchedulesOnDemand(Schedule schedule) {
         return repository.findCampaignById(schedule.getIdCampaign(), schedule.getIdConsumer())
                 .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
                 .map(campaignMapper::toEntity)
-                .zipWith(this.save(schedule))
-                .map(t -> t.getT1().toBuilder().schedules(List.of(t.getT2())).build());
+                .flatMap(campaign -> repository.findSchedulesByTypeAndByCampaign(campaign.getIdCampaign(),
+                                campaign.getIdConsumer(),
+                                ScheduleType.ON_DEMAND)
+                        .count()
+                        .flatMap(i -> Mono.just(schedule)
+                                .filter(sh -> ScheduleType.ON_DEMAND.equals(sh.getScheduleType()))
+                                .flatMap(sh -> i == 0 ? Mono.just(campaign) :
+                                        Mono.error(new BusinessException(CAMPAIGN_WITH_SCHEDULE_ON_DEMAND))
+                                )
+                                .defaultIfEmpty(campaign)
+                        )
+                );
     }
 
     private Mono<Schedule> save(Schedule schedule) {

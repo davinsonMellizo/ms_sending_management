@@ -19,7 +19,8 @@ public enum BusinessErrorMessage {
     PRIORITY_NOT_FOUND("382", "Priority Not Found"),
     PROVIDER_SERVICE_NOT_FOUND("383", "Provider Service Not Found"),
     CAMPAIGN_NOT_FOUND("384", "Campana no encontrada"),
-    SCHEDULE_NOT_FOUND("384", "Horario no encontrado");
+    CAMPAIGN_WITH_SCHEDULE_ON_DEMAND ("385", "La camapana solo puede tener un horario bajo demanda"),
+    SCHEDULE_NOT_FOUND("386", "Horario no encontrado");
 
     private final String code;
     private final String message;
