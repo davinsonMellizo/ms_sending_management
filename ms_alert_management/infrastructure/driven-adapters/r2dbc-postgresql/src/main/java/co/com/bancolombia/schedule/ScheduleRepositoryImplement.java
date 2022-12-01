@@ -12,8 +12,6 @@ import co.com.bancolombia.model.schedule.Schedule;
 import co.com.bancolombia.model.schedule.gateways.ScheduleGateway;
 import co.com.bancolombia.schedule.data.ScheduleData;
 import co.com.bancolombia.schedule.data.ScheduleMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -32,8 +30,6 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.UPDATE_SCH
 @Repository
 public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, ScheduleData, Long, ScheduleRepository>
         implements ScheduleGateway {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleRepositoryImplement.class);
-
     @Autowired
     public ScheduleRepositoryImplement(ScheduleRepository repository, ScheduleMapper mapper) {
         super(repository, mapper::toData, mapper::toEntity);
@@ -46,34 +42,28 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
     private CampaignMapper campaignMapper;
 
     public Mono<Campaign> saveSchedule(Schedule schedule) {
-        return this.validateCampaignSchedulesOnDemand(schedule)
-                .filter(campaign -> campaign instanceof Campaign)
-                .flatMap(campaign ->
-                        Mono.just(campaign)
-                                .zipWith(this.save(schedule))
-                                .map(t -> t.getT1().toBuilder().schedules(List.of(t.getT2())).build())
-                );
-    }
-
-    private Mono<Campaign> validateCampaignSchedulesOnDemand(Schedule schedule) {
         return repository.findCampaignById(schedule.getIdCampaign(), schedule.getIdConsumer())
                 .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)))
                 .map(campaignMapper::toEntity)
-                .flatMap(campaign -> repository.findSchedulesByTypeAndByCampaign(campaign.getIdCampaign(),
-                                campaign.getIdConsumer(),
-                                ScheduleType.ON_DEMAND)
-                        .count()
-                        .flatMap(i -> Mono.just(schedule)
-                                .filter(sh -> ScheduleType.ON_DEMAND.equals(sh.getScheduleType()))
-                                .flatMap(sh -> i == 0 ? Mono.just(campaign) :
-                                        Mono.error(new BusinessException(CAMPAIGN_WITH_SCHEDULE_ON_DEMAND))
-                                )
-                                .defaultIfEmpty(campaign)
-                        )
-                );
+                .flatMap(c -> this.validateSchedulesOnDemandByCampaign(c, schedule))
+                .flatMap(c -> this.save(c, schedule));
     }
 
-    private Mono<Schedule> save(Schedule schedule) {
+    private Mono<Campaign> validateSchedulesOnDemandByCampaign(Campaign campaign, Schedule schedule) {
+        return Mono.just(schedule)
+                .filter(sch -> ScheduleType.ON_DEMAND.equals(sch.getScheduleType()))
+                .flatMap(sch -> repository.findSchedulesByTypeByCampaign(
+                                        campaign.getIdCampaign(), campaign.getIdConsumer(), ScheduleType.ON_DEMAND
+                                )
+                                .collectList()
+                                .filter(List::isEmpty)
+                                .map(scheduleData -> campaign)
+                                .switchIfEmpty(Mono.error(new BusinessException(CAMPAIGN_WITH_SCHEDULE_ON_DEMAND)))
+                )
+                .defaultIfEmpty(campaign);
+    }
+
+    private Mono<Campaign> save(Campaign campaign, Schedule schedule) {
         return Mono.just(schedule)
                 .map(this::convertToData)
                 .map(scheduleData -> scheduleData.toBuilder()
@@ -82,6 +72,7 @@ public class ScheduleRepositoryImplement extends AdapterOperations<Schedule, Sch
                         .build())
                 .flatMap(repository::save)
                 .map(this::convertToEntity)
+                .map(scheduleSave -> campaign.toBuilder().schedules(List.of(scheduleSave)).build())
                 .onErrorMap(e -> new TechnicalException(e, SAVE_SCHEDULE_ERROR));
     }
 

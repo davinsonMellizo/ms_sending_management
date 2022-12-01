@@ -22,5 +22,5 @@ public interface ScheduleRepository extends ReactiveCrudRepository<ScheduleData,
 
     @Query("SELECT id, id_campaign, id_consumer, schedule_type, start_date, start_time, end_date, end_time, " +
             "creation_user, created_date FROM schedule WHERE id_campaign= $1 AND id_consumer= $2 AND schedule_type= $3")
-    Flux<ScheduleData> findSchedulesByTypeAndByCampaign(String idCampaign, String idConsumer, ScheduleType scheduleType);
+    Flux<ScheduleData> findSchedulesByTypeByCampaign(String idCampaign, String idConsumer, ScheduleType scheduleType);
 }
