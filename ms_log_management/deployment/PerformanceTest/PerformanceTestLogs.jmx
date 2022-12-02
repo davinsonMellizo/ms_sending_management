@@ -90,12 +90,12 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="save_log_users" elementType="Argument">
             <stringProp name="Argument.name">save_log_users</stringProp>
-            <stringProp name="Argument.value">${__P(usersSave,300)}</stringProp>
+            <stringProp name="Argument.value">${__P(usersSave,200)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="save_log_duration" elementType="Argument">
             <stringProp name="Argument.name">save_log_duration</stringProp>
-            <stringProp name="Argument.value">${__P(durationSave,60)}</stringProp>
+            <stringProp name="Argument.value">${__P(durationSave,600)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="save_log_rampup" elementType="Argument">
@@ -105,12 +105,12 @@
           </elementProp>
           <elementProp name="find_logs_users" elementType="Argument">
             <stringProp name="Argument.name">find_logs_users</stringProp>
-            <stringProp name="Argument.value">${__P(usersFind,300)}</stringProp>
+            <stringProp name="Argument.value">${__P(usersFind,200)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="find_logs_duration" elementType="Argument">
             <stringProp name="Argument.name">find_logs_duration</stringProp>
-            <stringProp name="Argument.value">${__P(durationFind,60)}</stringProp>
+            <stringProp name="Argument.value">${__P(durationFind,600)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="find_logs_rampup" elementType="Argument">

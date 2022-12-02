@@ -36,7 +36,7 @@ public class PostgreSQLConnectionConfigHelper {
 
     @Bean
     public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value("${cloud.aws.rds.postgresql.schema}") String schema,
-                                                                 @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+                                                                       @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
         PostgresqlConnectionProperties properties =  postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)
@@ -70,6 +70,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(Option.valueOf("schema"), schema)
                 .build();
     }
+
 
 }
 

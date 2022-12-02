@@ -1,6 +1,6 @@
 ##Spring Configuration
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
     name: ms_log_management
@@ -34,7 +34,7 @@ cloud:
       postgresql:
         pool:
           initial: 10
-          max: 10
+          max: 15
         schema: schalerd
         hostRead: localhost
     secrets-manager:

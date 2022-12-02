@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import static io.r2dbc.pool.PoolingConnectionFactoryProvider.MAX_SIZE;
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
@@ -42,9 +43,7 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "disable")
                 .option(Option.valueOf("schema"), schema)
-
                 .build();
-
     }
 
     @Bean
@@ -52,7 +51,7 @@ public class PostgreSQLConnectionConfigHelper {
                                                                        @Value("${adapters.postgresql.hostRead}") String hostRead){
         PostgresqlConnectionProperties properties =  postgresProperties();
         logger.info("data secret rds:"+properties);
-        return ConnectionFactoryOptions.builder()
+       return ConnectionFactoryOptions.builder()
                 .option(DRIVER,"postgresql")
                 .option(HOST, hostRead)
                 .option(PORT, properties.getPort())
@@ -62,7 +61,6 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(Option.valueOf("sslmode"), "disable")
                 .option(Option.valueOf("schema"), schema)
                 .build();
-
     }
 
 }

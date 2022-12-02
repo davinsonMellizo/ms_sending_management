@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static co.com.bancolombia.events.config.EventNameConfig.SAVE_LOG_SEND_ALERT;
+import static co.com.bancolombia.events.config.EventNameConfig.SAVE_LOG_SEND_ALERT_DLQ;
 import static org.reactivecommons.async.api.HandlerRegistry.register;
 
 @Configuration
@@ -15,6 +16,7 @@ public class HandlerRegistryConfiguration {
     @Bean
     public HandlerRegistry handlerRegistry(CommandsHandler commands) {
         return register()
-                .handleCommand(SAVE_LOG_SEND_ALERT, commands::saveLog, Log.class);
+                .handleCommand(SAVE_LOG_SEND_ALERT, commands::saveLog, Log.class)
+                .handleCommand(SAVE_LOG_SEND_ALERT_DLQ, commands::saveLog, Log.class);
     }
 }
