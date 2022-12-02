@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-
 class CampaignRouterTest extends BaseIntegration {
 
     @MockBean
@@ -49,7 +48,7 @@ class CampaignRouterTest extends BaseIntegration {
     }
 
     @Test
-    void start() {
+    void campaignSuccess() {
         when(useCase.sendCampaign(any())).thenReturn(Mono.just(campaign));
         statusAssertionsWebClientPost(url, request)
                 .isOk()

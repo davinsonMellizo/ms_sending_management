@@ -7,6 +7,7 @@ import co.com.bancolombia.api.handlers.ValidatorHandler;
 import co.com.bancolombia.api.service.Handler;
 import co.com.bancolombia.api.service.Router;
 import co.com.bancolombia.commons.exception.BusinessException;
+import co.com.bancolombia.commons.exception.TechnicalException;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.usecase.MassiveUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,10 +18,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
+
+import static co.com.bancolombia.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_MISSING_PARAMETERS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static co.com.bancolombia.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_NOT_FOUND;
 
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
@@ -49,12 +52,27 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
 
 
     @Test
-    void startCampaignWithException() {
+    void startCampaignWithBusinessException() {
         when(useCase.sendCampaign(any())).thenReturn(Mono.error(new BusinessException(BUSINESS_CAMPAIGN_NOT_FOUND)));
         statusAssertionsWebClientPost(url, request)
                 .is5xxServerError();
         verify(useCase).sendCampaign(any());
     }
 
+    @Test
+    void startCampaignWithTechnicalException() {
+        when(useCase.sendCampaign(any())).thenReturn(Mono.error(new TechnicalException(TECHNICAL_MISSING_PARAMETERS)));
+        statusAssertionsWebClientPost(url, request)
+                .is5xxServerError();
+        verify(useCase).sendCampaign(any());
+    }
+
+    @Test
+    void startCampaignWithThrowableException() {
+        when(useCase.sendCampaign(any())).thenReturn(Mono.error(new RuntimeException("Error")));
+        statusAssertionsWebClientPost(url, request)
+                .is5xxServerError();
+        verify(useCase).sendCampaign(any());
+    }
 
 }
