@@ -18,11 +18,9 @@ public class TokenAdapter extends AdapterOperations<Secret, SecretData> implemen
     @Autowired
     private SecretsManager secretsManager;
 
-    public TokenAdapter(DynamoDbEnhancedAsyncClient client, @Value("${spring.profiles.active}") String profile) {
-        super(client, profile);
-    }
     public TokenAdapter(DynamoDbEnhancedAsyncClient client, final DynamoDBTablesProperties dynamoDBTablesProperties)  {
-        super(client, dynamoDBTablesProperties);}
+        super(client, dynamoDBTablesProperties);
+    }
 
 
     @Override

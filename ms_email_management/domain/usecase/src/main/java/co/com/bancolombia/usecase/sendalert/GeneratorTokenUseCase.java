@@ -5,6 +5,7 @@ import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.DynamoGateway;
+import co.com.bancolombia.model.token.Secret;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
 import lombok.RequiredArgsConstructor;

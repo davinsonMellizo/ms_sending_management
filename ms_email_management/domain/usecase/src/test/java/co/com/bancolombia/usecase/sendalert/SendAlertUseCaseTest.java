@@ -1,11 +1,6 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.Parameter;
-import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.message.Template;
-import co.com.bancolombia.model.message.TemplateEmail;
+import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
