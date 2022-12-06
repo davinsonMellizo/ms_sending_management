@@ -1,10 +1,8 @@
 package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
-import co.com.bancolombia.consumer.adapter.response.SuccessMasivianMAIL;
 import co.com.bancolombia.consumer.adapter.response.model.TokenMasivData;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
-import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.token.Account;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

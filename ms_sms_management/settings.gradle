@@ -20,8 +20,6 @@ include ':rest-consumer'
 project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
 include ':async-event-handler'
 project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
-include ':async-sqs'
-project(':async-sqs').projectDir = file('./infrastructure/driven-adapters/async-sqs')
 include ':redis'
 project(':redis').projectDir = file('./infrastructure/driven-adapters/redis')
 include ':dynamo-commons'
@@ -30,3 +28,5 @@ include ':dynamodb'
 project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
 include ':s3-bucket'
 project(':s3-bucket').projectDir = file('./infrastructure/helpers/s3-bucket')
+include ':async-event-bus'
+project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')

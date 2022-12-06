@@ -44,6 +44,8 @@ public class SesAdapter implements SesGateway {
     private final LoggerBuilder logger;
     @Value("${aws.s3.attachmentBucket}")
     private String attachmentBucket;
+    private final LoggerBuilder loggerBuilder;
+    private final int codigoResponse=200;
 
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
@@ -54,7 +56,6 @@ public class SesAdapter implements SesGateway {
             message.setFrom(new InternetAddress(alert.getFrom()));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(alert.getDestination().getToAddress()));
-
             MimeMultipart msg_body = new MimeMultipart("alternative");
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(templateEmail.getBodyHtml(), "text/html; charset=UTF-8");
@@ -78,9 +79,9 @@ public class SesAdapter implements SesGateway {
                 SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
                         .rawMessage(rawMessage).build();
 
-                //return Mono.just(Response.builder().code(202).description("response.getMessageId()").build());
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .map(response -> Response.builder().code(200).description("ses sendRawEmail").build());
+                        .map(response -> Response.builder().code(codigoResponse).description("ses sendRawEmail").build());
+
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
             }

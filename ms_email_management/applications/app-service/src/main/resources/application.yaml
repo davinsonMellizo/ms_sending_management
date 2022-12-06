@@ -14,7 +14,7 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
   profiles:
-    active: ${SPRING_PROFILE_ACTIVE}
+    active: ${SPRING_PROFILE_ACTIVE:local}
   webflux:
     base-path: ${PATH_BASE}
   logging:
@@ -51,7 +51,12 @@ management:
         readiness: "readiness"
 
 adapters:
-  dynamo-repository:
+  repositories:
+    tables:
+      namesmap:
+        secret-priority: ${TABLE_NAME_SECRET_PRIORITY}
+        template-email:  ${TABLE_NAME_TEMPLATE_EMAIL}
+  aws:
     region-aws: ${REGION_AWS}
     endpoint: http://localhost:4566
   async-sqs:

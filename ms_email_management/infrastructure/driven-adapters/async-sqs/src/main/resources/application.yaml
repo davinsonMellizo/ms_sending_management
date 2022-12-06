@@ -1,7 +1,0 @@
-
-adapters:
-  async-sqs:
-    url: http://localhost:4566/000000000000/logs-alert
-    timeout: 3000
-    pool-size: 2
-    region-aws: us-east-1

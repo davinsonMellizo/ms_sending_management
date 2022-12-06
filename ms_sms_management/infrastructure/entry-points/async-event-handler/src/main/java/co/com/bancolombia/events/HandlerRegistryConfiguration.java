@@ -6,6 +6,7 @@ import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 import static co.com.bancolombia.events.commons.EventNameConfig.SEND_ALERT;
 import static org.reactivecommons.async.api.HandlerRegistry.register;
 
@@ -17,4 +18,8 @@ public class HandlerRegistryConfiguration {
         return register()
                 .handleCommand(SEND_ALERT, commands::handleSendAlert, Alert.class);
     }
-}
+
+
+    }
+
+

@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class SuccessMasivianSMS {
-    private String deliveryToken;
+    private String statusCode;
+    private String statusMessage;
+    private String messageId;
 }

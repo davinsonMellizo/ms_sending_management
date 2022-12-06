@@ -2,7 +2,8 @@ package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
-import co.com.bancolombia.consumer.adapter.response.*;
+import co.com.bancolombia.consumer.adapter.response.ErrorInalambriaSMS;
+import co.com.bancolombia.consumer.adapter.response.SuccessInalambriaSMS;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.message.SMSInalambria;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,8 @@ import reactor.test.StepVerifier;
 
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

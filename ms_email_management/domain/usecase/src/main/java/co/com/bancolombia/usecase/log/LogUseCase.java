@@ -1,7 +1,7 @@
 package co.com.bancolombia.usecase.log;
 
+import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.log.Log;
-import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.TemplateEmail;
@@ -12,11 +12,11 @@ import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 
 @RequiredArgsConstructor
 public class LogUseCase {
-    private final LogGateway logGateway;
+    private final CommandGateway commandGateway;
     private static final int CODE_RESPONSE_200 =200;
 
     public <T> Mono<T> sendLog(Alert alert, TemplateEmail template, String medium, Response response) {
-        return logGateway.putLogToSQS(Log.builder()
+        return commandGateway.sendCommanLogEmail(Log.builder()
                 .logKey(alert.getLogKey())
                 .logType(SEND_230)
                 .medium(medium)

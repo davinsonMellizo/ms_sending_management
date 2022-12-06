@@ -28,7 +28,8 @@ data:
   S3-ATTACHMENT-BUCKET: #{s3-attachment-bucket}#
   S3-SIGNATURE-DURATION-MINS: "#{s3-signature-duration-minutes}#"
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
-
+  TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}#
+  TABLE_NAME_TEMPLATE_EMAIL: #{table-name-template-email}#
 
 
 

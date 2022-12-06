@@ -3,4 +3,5 @@ dependencies {
     implementation project(':usecase')
     implementation 'org.reactivecommons:async-commons-starter:1.0.0-beta5'
     implementation 'org.springframework:spring-context'
+    implementation group: 'org.springframework.amqp', name: 'spring-rabbit', version: '2.4.4'
 }
