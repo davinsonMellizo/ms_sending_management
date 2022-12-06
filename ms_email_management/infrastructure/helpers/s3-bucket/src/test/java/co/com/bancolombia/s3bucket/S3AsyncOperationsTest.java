@@ -85,7 +85,7 @@ class S3AsyncOperationsTest {
 
     @Test
     void generatePresignedUrlTest() {
-        ReflectionTestUtils.setField(s3AsyncOperations, "duration", 60L);
+        ReflectionTestUtils.setField(s3AsyncOperations, "duration", "60");
         PresignedGetObjectRequest presigned = PresignedGetObjectRequest.builder()
                 .expiration(Instant.MIN)
                 .isBrowserExecutable(true)
