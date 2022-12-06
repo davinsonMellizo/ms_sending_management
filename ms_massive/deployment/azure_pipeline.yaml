@@ -93,9 +93,6 @@ jobs:
           SourceFolder: $(projectName)/deployment
           Contents: |
             infrastructure/**
-            AcceptanceTest/**
-            PerformanceTest/**
-            sql_acceptance_test/**
           TargetFolder: $(Build.repository.LocalPath)/build/libs
 
       - task: CopyFiles@2
@@ -144,10 +141,3 @@ jobs:
           PathtoPublish: '$(Build.repository.LocalPath)/build/libs/infrastructure/eks'
           ArtifactName: eks-artifact
         condition: succeeded()
-
-#      - task: PublishBuildArtifacts@1
-#        displayName: 'Publish artifact: Karate'
-#        inputs:
-#          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/AcceptanceTest'
-#          ArtifactName: acceptance-test-artifact
-#        condition: succeeded()
