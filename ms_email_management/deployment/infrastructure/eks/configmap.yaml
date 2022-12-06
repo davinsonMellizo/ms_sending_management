@@ -11,8 +11,8 @@ metadata:
 data:
   SERVER_PORT: "#{service-port}#"
   APPLICATION_NAME: #{application-name}#
-  SPRING_PROFILE_ACTIVE:  #{spring-profile-active}#
-  LOG4J_LEVEL:  #{log-level}#
+  SPRING_PROFILE_ACTIVE: #{spring-profile-active}#
+  LOG4J_LEVEL: #{log-level}#
   CACHE_SECRETS_SIZE: "#{cache-secrets-size}#"
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
   PATH_BASE: "#{prefix}#/#{service}#"
@@ -26,7 +26,7 @@ data:
   EXPIRE_TIME_CACHE: "#{cache-time}#"
   S3-BUCKET: #{s3-bucket}#
   S3-ATTACHMENT-BUCKET: #{s3-attachment-bucket}#
-  S3-SIGNATURE-DURATION-MINS: #{s3-signature-duration-minutes}#
+  S3-SIGNATURE-DURATION-MINS: "#{s3-signature-duration-minutes}#"
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
 
 
