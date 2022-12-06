@@ -46,7 +46,6 @@ class CampaignAdapterTest {
         massive = Massive.builder()
                 .idCampaign("15")
                 .idConsumer("SVP")
-                .numberOfRecords(1)
                 .build();
         resources.setEndpointCampaign("/campaign");
         when(properties.getResources()).thenReturn(resources);

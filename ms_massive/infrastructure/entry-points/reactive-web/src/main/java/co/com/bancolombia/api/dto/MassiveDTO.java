@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,17 +24,11 @@ public class MassiveDTO {
     @NotNull(message = "no debe ser nulo")
     private String idConsumer;
 
-    @Min(value = 1, message = "debe ser mayor que {value}")
-    @NotNull(message = "no debe ser nulo")
-    private Integer numberOfRecords;
-
 
     public Mono<Massive> toModel() {
         return Mono.just(Massive.builder()
                 .idCampaign(this.idCampaign)
                 .idConsumer(this.idConsumer)
-                .numberOfRecords(this.numberOfRecords)
                 .build());
     }
-
 }
