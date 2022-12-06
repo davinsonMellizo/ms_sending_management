@@ -14,6 +14,7 @@ public class LogUseCase {
     private final CommandGateway commandGateway;
 
     public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, Response response) {
+        System.out.println(response.getDescription()+"aqi");
         return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())

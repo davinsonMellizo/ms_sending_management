@@ -63,5 +63,5 @@ d2b:
 
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
-app.async.maxRetries: 1
+app.async.maxRetries: 2
 

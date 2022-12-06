@@ -14,6 +14,8 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMobile;
