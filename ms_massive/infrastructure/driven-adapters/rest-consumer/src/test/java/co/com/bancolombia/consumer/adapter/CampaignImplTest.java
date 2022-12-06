@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CampaignAdapterTest {
+class CampaignImplTest {
     @Mock
     private RestConsumer restConsumer;
     @Mock
@@ -35,7 +35,7 @@ class CampaignAdapterTest {
     @Mock
     private RestConsumerProperties properties;
     @InjectMocks
-    private CampaignAdapter campaignAdapter;
+    private CampaignImpl campaignAdapter;
     @Spy
     private RestConsumerProperties.Resources resources = new RestConsumerProperties.Resources();
 
