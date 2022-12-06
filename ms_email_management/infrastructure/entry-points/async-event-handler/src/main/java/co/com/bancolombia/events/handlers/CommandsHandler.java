@@ -16,6 +16,6 @@ public class CommandsHandler {
 
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {
-        return Mono.just(command).thenEmpty(Mono.empty());
+        return useCase.sendAlert(command.getData());
     }
 }
