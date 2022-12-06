@@ -21,7 +21,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_
 
 @Repository
 @RequiredArgsConstructor
-public class CampaignAdapter implements CampaignGateway {
+public class CampaignImpl implements CampaignGateway {
     private final RestConsumerProperties properties;
     private final RestConsumer restConsumer;
     private final ICampaignMapper campaignMapper;
