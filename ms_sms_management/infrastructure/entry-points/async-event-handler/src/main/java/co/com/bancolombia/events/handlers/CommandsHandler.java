@@ -13,6 +13,6 @@ public class CommandsHandler {
     private final SendAlertUseCase useCase;
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {
-    return Mono.empty();
+    return Mono.just(command).thenEmpty(Mono.empty());
     }
 }
