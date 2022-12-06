@@ -15,8 +15,6 @@ public class HandlerRegistryConfiguration {
     @Bean
     public HandlerRegistry handlerRegistry(CommandsHandler commands) {
         return register()
-                .handleCommand(SAVE_LOG_SEND_ALERT, commands::saveLog, Log.class)
-
-                .listenEvent();
+                .handleCommand(SAVE_LOG_SEND_ALERT, commands::saveLog, Log.class);
     }
 }
