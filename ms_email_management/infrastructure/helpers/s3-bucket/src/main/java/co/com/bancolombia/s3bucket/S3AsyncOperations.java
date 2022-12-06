@@ -25,8 +25,8 @@ public class S3AsyncOperations {
 
     private final S3AsyncClient s3AsyncClient;
     private final S3Presigner s3Presigner;
-    @Value("${aws.s3.signatureDuration}")
-    private Long duration;
+    @Value("${aws.s3.signatureDuration:60}")
+    private String duration;
 
 
     public Mono<String> getFileAsString(String bucketName, String objectKey) {
@@ -65,7 +65,7 @@ public class S3AsyncOperations {
     public Mono<String> generatePresignedUrl(String bucketName, String objectKey) {
         return getRequest(bucketName, objectKey)
                 .map(getObjectRequest -> s3Presigner.presignGetObject(GetObjectPresignRequest.builder()
-                        .signatureDuration(Duration.ofMinutes(duration))
+                        .signatureDuration(Duration.ofMinutes(Long.parseLong(duration)))
                         .getObjectRequest(getObjectRequest)
                         .build()).url().toString());
     }
