@@ -51,14 +51,14 @@ class MassiveUseCaseTest {
                 .thenReturn(Mono.just(campaign));
 
         when(glueGateway.startTrigger(any()))
-                .thenReturn(Mono.just(campaign));
+                .thenReturn(Mono.just("tgr_15_SVP_41"));
 
         StepVerifier.create(useCase.sendCampaign(Massive.builder()
                         .idCampaign(campaign.getIdCampaign())
                         .idConsumer(campaign.getIdConsumer())
                         .build()))
 
-                .assertNext(response -> assertEquals(response.getIdCampaign(), campaign.getIdCampaign()))
+                .assertNext(response -> assertEquals(response.getTriggerName(), "tgr_15_SVP_41"))
                 .verifyComplete();
         verify(campaignGateway).findCampaignById(any());
     }

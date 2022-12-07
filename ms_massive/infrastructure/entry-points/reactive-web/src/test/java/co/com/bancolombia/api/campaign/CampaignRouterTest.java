@@ -7,6 +7,7 @@ import co.com.bancolombia.api.handlers.ValidatorHandler;
 import co.com.bancolombia.api.service.Handler;
 import co.com.bancolombia.api.service.Router;
 import co.com.bancolombia.model.campaign.Campaign;
+import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.MassiveUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +50,7 @@ class CampaignRouterTest extends BaseIntegration {
 
     @Test
     void campaignSuccess() {
-        when(useCase.sendCampaign(any())).thenReturn(Mono.just(campaign));
+        when(useCase.sendCampaign(any())).thenReturn(Mono.just(StatusResponse.builder().build()));
         statusAssertionsWebClientPost(url, request)
                 .isOk()
                 .expectBody(JsonNode.class)

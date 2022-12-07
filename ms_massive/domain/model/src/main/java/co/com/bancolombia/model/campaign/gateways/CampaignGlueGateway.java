@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface CampaignGlueGateway {
 
-    Mono<Campaign> startTrigger(Campaign response);
+    Mono<String> startTrigger(Campaign response);
 }

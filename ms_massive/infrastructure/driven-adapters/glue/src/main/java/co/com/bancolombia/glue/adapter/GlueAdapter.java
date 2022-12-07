@@ -23,19 +23,19 @@ public class GlueAdapter implements CampaignGlueGateway {
     }
 
     @Override
-    public Mono<Campaign> startTrigger(Campaign campaign) {
+    public Mono<String> startTrigger(Campaign campaign) {
         return Flux.fromIterable(campaign.getSchedules())
                 .filter(schedule -> ScheduleType.ON_DEMAND.equals(schedule.getScheduleType()))
                 .switchIfEmpty(Mono.defer(() ->
                         Mono.error(new BusinessException(BUSINESS_CAMPAIGN_WITHOUT_SCHEDULE_ON_DEMAND))))
-                .flatMap(schedule -> this.glueOperations.startTrigger(
-                        this.getTriggerName(
-                                campaign.getIdCampaign(),
-                                campaign.getIdConsumer(),
-                                schedule.getId()
-                        ))
-                )
-                .collectList()
-                .thenReturn(campaign);
+                .map(schedule -> this.getTriggerName(
+                        campaign.getIdCampaign(),
+                        campaign.getIdConsumer(),
+                        schedule.getId()))
+                .next()
+                .flatMap(triggerName -> this.glueOperations
+                        .startTrigger(triggerName)
+                        .thenReturn(triggerName)
+                );
     }
 }

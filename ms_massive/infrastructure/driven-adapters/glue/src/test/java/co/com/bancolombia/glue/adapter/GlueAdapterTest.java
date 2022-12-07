@@ -55,6 +55,7 @@ class GlueAdapterTest {
 
         schedule.setIdCampaign("1");
         schedule.setIdConsumer("ALM");
+        schedule.setId(45L);
         schedule.setScheduleType(ScheduleType.ON_DEMAND);
         schedule.setStartDate(DATE_NOW);
         schedule.setStartTime(TIME_NOW);
@@ -70,7 +71,7 @@ class GlueAdapterTest {
         when(glueOperations.startTrigger(anyString()))
                 .thenReturn(Mono.just(true));
         StepVerifier.create(glueAdapter.startTrigger(campaign))
-                .assertNext(res -> assertEquals(res, campaign))
+                .assertNext(res -> assertEquals(res, "tgr_1_ALM_45"))
                 .verifyComplete();
     }
 
