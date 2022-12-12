@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.handlers;
 
-import co.com.bancolombia.commons.exception.TechnicalException;
+import co.com.bancolombia.model.commons.exception.TechnicalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import javax.validation.Validator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_MISSING_PARAMETERS;
+import static co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum.TECHNICAL_MISSING_PARAMETERS;
 
 @Component
 @RequiredArgsConstructor

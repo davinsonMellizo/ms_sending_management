@@ -1,9 +1,9 @@
 package co.com.bancolombia.consumer.adapter;
 
-import co.com.bancolombia.commons.enums.BusinessExceptionEnum;
-import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
-import co.com.bancolombia.commons.exception.BusinessException;
-import co.com.bancolombia.commons.exception.TechnicalException;
+import co.com.bancolombia.model.commons.enums.BusinessExceptionEnum;
+import co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum;
+import co.com.bancolombia.model.commons.exception.BusinessException;
+import co.com.bancolombia.model.commons.exception.TechnicalException;
 import co.com.bancolombia.consumer.RestConsumer;
 import co.com.bancolombia.consumer.adapter.campaign.mapper.ICampaignMapper;
 import co.com.bancolombia.consumer.adapter.campaign.model.SuccessCampaign;

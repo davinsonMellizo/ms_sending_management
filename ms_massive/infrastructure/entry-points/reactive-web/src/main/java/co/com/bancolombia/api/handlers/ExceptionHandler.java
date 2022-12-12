@@ -1,8 +1,8 @@
 package co.com.bancolombia.api.handlers;
 
 import co.com.bancolombia.api.util.ResponseUtil;
-import co.com.bancolombia.commons.exception.BusinessException;
-import co.com.bancolombia.commons.exception.TechnicalException;
+import co.com.bancolombia.model.commons.exception.BusinessException;
+import co.com.bancolombia.model.commons.exception.TechnicalException;
 import co.com.bancolombia.model.error.Error;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
+import static co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum.INTERNAL_SERVER_ERROR;
 
 
 @Component

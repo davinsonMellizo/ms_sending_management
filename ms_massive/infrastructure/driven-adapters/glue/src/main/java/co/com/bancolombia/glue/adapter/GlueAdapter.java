@@ -1,7 +1,7 @@
 package co.com.bancolombia.glue.adapter;
 
-import co.com.bancolombia.commons.enums.ScheduleType;
-import co.com.bancolombia.commons.exception.BusinessException;
+import co.com.bancolombia.model.commons.enums.ScheduleType;
+import co.com.bancolombia.model.commons.exception.BusinessException;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.campaign.gateways.CampaignGlueGateway;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_WITHOUT_SCHEDULE_ON_DEMAND;
+import static co.com.bancolombia.model.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_WITHOUT_SCHEDULE_ON_DEMAND;
 
 @Repository
 @AllArgsConstructor

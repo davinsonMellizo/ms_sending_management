@@ -1,6 +1,6 @@
 package co.com.bancolombia.model.schedule;
 
-import co.com.bancolombia.commons.enums.ScheduleType;
+import co.com.bancolombia.model.commons.enums.ScheduleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -3,7 +3,7 @@ package co.com.bancolombia.api.service;
 import co.com.bancolombia.api.dto.MassiveDTO;
 import co.com.bancolombia.api.handlers.ValidatorHandler;
 import co.com.bancolombia.api.util.ResponseUtil;
-import co.com.bancolombia.commons.exception.TechnicalException;
+import co.com.bancolombia.model.commons.exception.TechnicalException;
 import co.com.bancolombia.usecase.MassiveUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_MISSING_PARAMETERS;
+import static co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum.TECHNICAL_MISSING_PARAMETERS;
 
 @Component
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package co.com.bancolombia.glue.adapter;
 
-import co.com.bancolombia.commons.enums.ScheduleType;
+import co.com.bancolombia.model.commons.enums.ScheduleType;
 import co.com.bancolombia.glue.operations.GlueOperations;
 import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.schedule.Schedule;

@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer.adapter;
 
-import co.com.bancolombia.commons.exception.BusinessException;
-import co.com.bancolombia.commons.exception.TechnicalException;
+import co.com.bancolombia.model.commons.exception.BusinessException;
+import co.com.bancolombia.model.commons.exception.TechnicalException;
 import co.com.bancolombia.consumer.RestConsumer;
 import co.com.bancolombia.consumer.adapter.campaign.mapper.ICampaignMapper;
 import co.com.bancolombia.consumer.adapter.campaign.model.ErrorCampaign;
@@ -16,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_ERROR_REQUESTING_CAMPAIGN;
+import static co.com.bancolombia.model.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_NOT_FOUND;
+import static co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum.TECHNICAL_ERROR_REQUESTING_CAMPAIGN;
 
 @Repository
 @RequiredArgsConstructor
