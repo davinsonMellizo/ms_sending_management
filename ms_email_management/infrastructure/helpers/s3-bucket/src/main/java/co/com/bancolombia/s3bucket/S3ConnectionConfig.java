@@ -55,7 +55,7 @@ public class S3ConnectionConfig {
     }
 
     @Bean
-    @Profile({"dev", "qa", "pdn"})
+    @Profile({"dev", "qa", "pdn", "local"})
     public S3Presigner s3Presigner() {
         return S3Presigner.builder()
                 .credentialsProvider(getProviderChain())

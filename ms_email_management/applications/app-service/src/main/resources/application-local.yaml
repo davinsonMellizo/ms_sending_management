@@ -76,10 +76,12 @@ adapters:
     endpoint: http://localhost:4566
 aws:
   region: us-east-1
-  nameSecretBucketSsl: bucket-masi-ssl
+  nameSecretBucketSsl: bucket-local-ssl
   s3:
     endpoint: http://localhost:4566
-    bucket: bucket-masi-ssl
+    bucket: bucketssl
+    attachmentBucket: bucket-adjuntos
+    signatureDuration: 60
 stash:
   redis:
     expireTime: 21000

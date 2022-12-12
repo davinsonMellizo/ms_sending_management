@@ -17,7 +17,7 @@ dependencies {
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
     runtimeOnly('org.springframework.boot:spring-boot-devtools')///
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.6.7'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
