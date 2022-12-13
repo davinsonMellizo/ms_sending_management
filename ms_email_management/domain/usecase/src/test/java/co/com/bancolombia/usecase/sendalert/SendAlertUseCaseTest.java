@@ -52,28 +52,6 @@ class SendAlertUseCaseTest {
     }
 
     @Test
-    void sendAlertMasivianTest() {
-        TemplateEmail template =
-                new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
-        when(templateEmailGateway.findTemplateEmail(anyString()))
-                .thenReturn(Mono.just(template));
-        when(masivianGateway.sendMAIL(any()))
-                .thenReturn(Mono.just(Response.builder()
-                        .code(200)
-                        .description("success")
-                        .build()));
-        when(logUseCase.sendLog(any(), any(), anyString(), any()))
-                .thenReturn(Mono.empty());
-        when(generatorTokenUseCase.getToken(any()))
-                .thenReturn(Mono.just(new Mail()));
-        when(generatorTokenUseCase.getNameToken(any()))
-                .thenReturn(Mono.just("NameToken"));
-        StepVerifier
-                .create(useCase.sendAlert(alert))
-                .verifyComplete();
-    }
-
-    @Test
     void sendAlertMasivianErrorTest() {
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");

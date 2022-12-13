@@ -55,33 +55,35 @@ public class SendAlertUseCase {
     }
 
     private Mono<Alert> validateAttachments(Alert alert) {
+        List<Attachment> attachmentList = new ArrayList<>();
         return Mono.just(alert)
+                .filter(alert1 -> !alert1.getAttachments().isEmpty())
                 .map(alert1 -> {
-                    if (!alert1.getAttachments().isEmpty()) {
-                        List<Attachment> attachmentList = new ArrayList<>();
-                        alert1.getAttachments().forEach(attachment -> {
-                            switch (attachment.getType()) {
-                                case AttachmentType.PATH:
-                                    generatePresignedUrl(attachment.getValue()).subscribe(s -> attachmentList.add(
-                                            Attachment.builder().path(s).filename(attachment.getFilename()).build()));
-                                    break;
-                                case AttachmentType.URL:
-                                    attachmentList.add(Attachment.builder().path(attachment.getValue())
-                                            .filename(attachment.getFilename()).build());
-                                    break;
-                                case AttachmentType.BASE64:
-                                    attachmentList.add(Attachment.builder()
-                                            .path(String.format("data:%1$s;base64, <%2$s>", attachment.getContentType(),
-                                                    attachment.getValue())).filename(attachment.getFilename()).build());
-                                    break;
-                                default:
-                                    break;
-                            }
-                        });
-                        alert1.toBuilder().attachments(attachmentList).build();
-                    }
+                    alert1.getAttachments().forEach(attachment -> {
+                        switch (attachment.getType()) {
+                            case AttachmentType.PATH:
+                                generatePresignedUrl(attachment.getValue()).subscribe(s -> attachmentList.add(
+                                        Attachment.builder().path(s).filename(attachment.getFilename()).build()));
+                                break;
+                            case AttachmentType.URL:
+                                attachmentList.add(Attachment.builder().path(attachment.getValue())
+                                        .filename(attachment.getFilename()).build());
+                                break;
+                            case AttachmentType.BASE64:
+                                attachmentList.add(Attachment.builder()
+                                        .path(String.format("data:%1$s;base64,%2$s", attachment.getContentType(),
+                                                attachment.getValue()))
+                                        .filename(attachment.getFilename())
+                                        .build());
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    alert1.setAttachments(attachmentList);
                     return alert1;
-                });
+                })
+                .defaultIfEmpty(alert);
     }
 
     public Mono<Response> sendEmailByMasivian(Alert alert, TemplateEmail templateEmail) {
