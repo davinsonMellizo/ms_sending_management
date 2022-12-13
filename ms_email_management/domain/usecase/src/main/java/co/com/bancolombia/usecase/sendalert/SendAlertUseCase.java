@@ -70,11 +70,9 @@ public class SendAlertUseCase {
                                         .filename(attachment.getFilename()).build());
                                 break;
                             case AttachmentType.BASE64:
-                                attachmentList.add(Attachment.builder()
-                                        .path(String.format("data:%1$s;base64,%2$s", attachment.getContentType(),
-                                                attachment.getValue()))
-                                        .filename(attachment.getFilename())
-                                        .build());
+                                attachmentList.add(Attachment.builder().path(String.format("data:%1$s;base64,%2$s",
+                                        attachment.getContentType(), attachment.getValue()))
+                                        .filename(attachment.getFilename()).build());
                                 break;
                             default:
                                 break;
