@@ -3,8 +3,10 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.SMSInalambria;
+import co.com.bancolombia.model.message.SMSInfobip;
 import co.com.bancolombia.model.message.SMSMasiv;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
+import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
@@ -22,6 +24,7 @@ public class GeneratorTokenUseCase implements Serializable {
     private final transient SecretGateway secretGateway;
     private final transient InalambriaGateway inalambriaGateway;
     private final transient MasivianGateway masivianGateway;
+    private final transient InfobipGateway infobipGateway;
 
     public Mono<SMSInalambria> getTokenINA(SMSInalambria smsInalambria, Alert alert) {
         return  token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
@@ -42,6 +45,16 @@ public class GeneratorTokenUseCase implements Serializable {
                 .map(headers-> setTokenMAS(smsMasiv,headers));
     }
 
+    public Mono<SMSInfobip> getTokenInf(SMSInfobip smsInfobip, Alert alert){
+        return token.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
+                .filter(lisToken->!lisToken.isEmpty())
+                .switchIfEmpty(getTokenByProviderInf(alert.getPriority().concat(alert.getProvider())))
+                .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
+                .map(tokens->tokens.get(0).toString())
+                .map(tokenInf->Map.of("Authorization","Bearer "+tokenInf))
+                .map(headers-> setTokenINF(smsInfobip,headers));
+    }
+
     public Mono<Void> deleteToken(String usedToken, Alert alert) {
         return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .flatMap(lisTokens->getArrayListArrayListFunction(usedToken,lisTokens))
@@ -58,6 +71,11 @@ public class GeneratorTokenUseCase implements Serializable {
         return smsMasiv;
     }
 
+    private SMSInfobip setTokenINF(SMSInfobip smsInfobip, Map<String,String> headers){
+        smsInfobip.setHeaders(headers);
+        return smsInfobip;
+    }
+
     private Mono<ArrayList> getTokenByProviderINA(String key) {
         return secretGateway.getSecretName(key)
                 .flatMap(inalambriaGateway::getToken)
@@ -67,6 +85,12 @@ public class GeneratorTokenUseCase implements Serializable {
     private Mono<ArrayList> getTokenByProviderMAS(String key){
         return secretGateway.getSecretName(key)
                 .flatMap(masivianGateway::getToken)
+                .flatMap(token->saveTokenCache(token,key));
+    }
+
+    private Mono<ArrayList> getTokenByProviderInf(String key){
+        return secretGateway.getSecretName(key)
+                .flatMap(infobipGateway::getToken)
                 .flatMap(token->saveTokenCache(token,key));
     }
 

@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	implementation project(':infobip')
     implementation project(':dynamodb')
     implementation project(':dynamo-commons')
     implementation project(':redis')

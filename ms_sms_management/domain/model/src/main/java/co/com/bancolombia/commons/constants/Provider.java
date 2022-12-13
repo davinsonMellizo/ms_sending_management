@@ -12,5 +12,6 @@ import lombok.RequiredArgsConstructor;
 public class Provider {
     public static final String INALAMBRIA = "INA";
     public static final String MASIVIAN = "MAS";
+    public static final String INFOBIP = "INF";
     public static final String CONTACTABILIDAD = "PUSH";
 }

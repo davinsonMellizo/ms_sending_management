@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework:spring-context'
+    implementation 'com.infobip:infobip-api-java-client:3.2.0'
+}

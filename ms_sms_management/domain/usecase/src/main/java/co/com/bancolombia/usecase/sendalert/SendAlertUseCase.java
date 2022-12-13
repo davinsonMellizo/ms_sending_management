@@ -1,31 +1,32 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.message.SMSInalambria;
-import co.com.bancolombia.model.message.SMSMasiv;
+import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
+import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SignalType;
-import java.util.logging.Level;
-import static co.com.bancolombia.commons.constants.Provider.INALAMBRIA;
-import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
+
+import static co.com.bancolombia.commons.constants.Provider.*;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
     private final InalambriaGateway inalambriaGateway;
     private final MasivianGateway masivianGateway;
+
+    private final InfobipGateway infobipGateway;
+
     private final LogUseCase logUseCase;
     private final GeneratorTokenUseCase generatorTokenUseCase;
     private static final  Integer CONSTANT = 23;
+    private static final String SENDER = "InfoSMS";
 
     public Mono<Void> sendAlert(Alert alert) {
         return sendSMSInalambria(alert)
                 .concatWith(sendSMSMasivian(alert))
+                .concatWith(sendSMSInfobip(alert))
                 .thenEmpty(Mono.empty());
     }
 
@@ -71,6 +72,44 @@ public class SendAlertUseCase {
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
                 .map(Response.class::cast);
     }
+
+    /*private Mono<Response> sendSMSInfobipSDK(Alert alert) {
+        var tokenTemp = new String[]{""};
+        return Mono.just(alert.getProvider())
+                .filter(provider -> provider.equalsIgnoreCase(INFOBIP))
+                .map(provider -> SMSInfobipSDK.builder()
+                        .from(SENDER)
+                        .to(alert.getTo())
+                        .text(alert.getMessage())
+                        .build())
+                .flatMap(vl->infobipGateway.sendSMSSDK(vl))
+                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
+                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
+                .map(Response.class::cast);
+    }*/
+
+    private Mono<Response> sendSMSInfobip(Alert alert) {
+        var tokenTemp = new String[]{""};
+        return Mono.just(alert.getProvider())
+                .filter(provider -> provider.equalsIgnoreCase(INFOBIP))
+                .map(provider -> SMSInfobip.builder()
+                        .message(SMSInfobip.Message.builder()
+                                .from(alert.getTo())
+                                .destination(SMSInfobip.Destination.builder().to(alert.getTo()).build())
+                                .text(alert.getMessage())
+                                .build())
+                        .build())
+                //Aqui se debe obtener el token
+                .flatMap(data->generatorTokenUseCase.getTokenInf(data,alert))
+                .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
+                .flatMap(infobipGateway::sendSMS)
+                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
+                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
+                .map(Response.class::cast);
+    }
+
     private Mono<Void> filterError(Throwable error, Alert alert, String tokentemp){
         return Mono.just(error)
                 .filter(catchError -> catchError.getMessage().contains("401"))
