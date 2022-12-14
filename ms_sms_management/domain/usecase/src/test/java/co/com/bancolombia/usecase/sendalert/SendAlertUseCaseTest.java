@@ -1,6 +1,10 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Parameter;
+import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.SMSInalambria;
+import co.com.bancolombia.model.message.SMSMasiv;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;

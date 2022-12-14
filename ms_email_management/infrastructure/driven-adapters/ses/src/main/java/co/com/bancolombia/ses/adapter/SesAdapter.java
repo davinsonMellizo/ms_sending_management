@@ -1,5 +1,7 @@
 package co.com.bancolombia.ses.adapter;
 
+
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.TemplateEmail;
@@ -29,8 +31,14 @@ public class SesAdapter implements SesGateway {
 
     private final SesAsyncClient client;
 
+    private final LoggerBuilder loggerBuilder;
+
+    private final int codigoResponse=200;
+
+
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
+
         Session session = Session.getDefaultInstance(new Properties());
         MimeMessage message = new MimeMessage(session);
         try {
@@ -38,7 +46,6 @@ public class SesAdapter implements SesGateway {
             message.setFrom(new InternetAddress(alert.getFrom()));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(alert.getDestination().getToAddress()));
-
             MimeMultipart msg_body = new MimeMultipart("alternative");
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(templateEmail.getBodyHtml(), "text/html; charset=UTF-8");
@@ -55,16 +62,13 @@ public class SesAdapter implements SesGateway {
                 SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
                         .rawMessage(rawMessage).build();
 
-                //return Mono.just(Response.builder().code(202).description("response.getMessageId()").build());
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .map(response -> Response.builder().code(200).description("ses sendRawEmail").build());
+                        .map(response -> Response.builder().code(codigoResponse).description("ses sendRawEmail").build());
 
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
-            }
-        } catch (MessagingException e) {
+            }} catch (MessagingException e) {
             return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
-
         }
     }
 }

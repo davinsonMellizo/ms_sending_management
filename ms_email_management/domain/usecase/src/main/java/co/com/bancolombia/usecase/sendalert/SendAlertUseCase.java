@@ -13,10 +13,8 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SignalType;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
 import static co.com.bancolombia.commons.constants.Provider.SES;

@@ -2,12 +2,13 @@ package co.com.bancolombia.model.message;
 
 import co.com.bancolombia.Request;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 import lombok.Setter;
-import lombok.Builder;
+
+import java.time.LocalDateTime;
 
 
 @NoArgsConstructor

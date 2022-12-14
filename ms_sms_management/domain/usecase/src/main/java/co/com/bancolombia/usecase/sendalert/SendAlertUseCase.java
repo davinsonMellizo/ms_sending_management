@@ -41,7 +41,6 @@ public class SendAlertUseCase {
                         .Type(1)
                         .build())
                 .flatMap(data-> generatorTokenUseCase.getTokenINA(data, alert))
-                //validar tokentemp
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(inalambriaGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
@@ -63,7 +62,6 @@ public class SendAlertUseCase {
                         .to(alert.getTo())
                         .isPremium(false).isFlash(false)
                         .build())
-                //Aqui se debe obtener el token
                 .flatMap(data->generatorTokenUseCase.getTokenMAS(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendSMS)

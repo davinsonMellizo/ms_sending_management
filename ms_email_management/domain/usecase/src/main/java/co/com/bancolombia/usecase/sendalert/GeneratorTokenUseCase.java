@@ -3,21 +3,16 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.TemplateEmail;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
-import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.DynamoGateway;
-import co.com.bancolombia.model.token.Secret;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SignalType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase {
@@ -27,6 +22,7 @@ public class GeneratorTokenUseCase {
     private final MasivianGateway masivianGateway;
 
     public Mono<Mail> getToken(Mail mail) {
+
         return  Mono.just(mail.getNameToken())
                 .flatMap(nameToken->token.get(nameToken, ArrayList.class))
                 .filter(lisToken->!lisToken.isEmpty())

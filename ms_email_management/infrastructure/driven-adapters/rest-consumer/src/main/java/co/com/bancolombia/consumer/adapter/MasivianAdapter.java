@@ -36,7 +36,6 @@ public class MasivianAdapter implements MasivianGateway {
         String endpoint = properties.getResources().getEndpointMasivianMail();
         return clientMail.post(endpoint, mail,
                 SuccessMasivianMAIL.class, ErrorMasivianMAIL.class)
-                //Mono.just(SuccessMasivianMAIL.builder().description("Success").build())
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getDescription()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()

@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = false)
 @Builder(toBuilder = true)
 public class SMSMasiv extends Request {
     private String to;

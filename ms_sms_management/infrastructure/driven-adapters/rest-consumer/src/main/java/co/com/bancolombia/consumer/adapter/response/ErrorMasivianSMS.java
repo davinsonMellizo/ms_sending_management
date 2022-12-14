@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorMasivianSMS{
-    private String code;
-    private String description;
+    private String statusCode;
+    private String statusMessage;
 }

@@ -26,6 +26,7 @@ public class SesAdapterTest {
 
     @Test
     public void findTemplateEmailTest() {
+
         TemplateEmail templateEmail = TemplateEmail.builder()
                 .bodyHtml("html").subject("subject").build();
         Alert alert = Alert.builder()

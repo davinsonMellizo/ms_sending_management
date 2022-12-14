@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-@ConfigurationProperties(prefix = "adapters.dynamo-repository")
+@ConfigurationProperties(prefix = "adapters.aws")
 public class Properties {
     private String regionAws;
     private String endpoint;

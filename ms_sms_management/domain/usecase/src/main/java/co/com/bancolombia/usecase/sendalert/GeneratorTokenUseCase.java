@@ -30,6 +30,7 @@ public class GeneratorTokenUseCase implements Serializable {
         return  token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderINA(alert.getPriority().concat(alert.getProvider())))
+                .log()
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenInalambria1 -> Map.of("Authorization","Bearer "+tokenInalambria1))

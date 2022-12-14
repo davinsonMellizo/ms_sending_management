@@ -2,10 +2,10 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	implementation project(':infobip')
+	implementation project(':async-event-bus')
     implementation project(':dynamodb')
     implementation project(':dynamo-commons')
     implementation project(':redis')
-    implementation project(':async-sqs')
 	implementation project(':rest-consumer')
     implementation project(':async-event-handler')
     implementation project(':rabbit-configurator')
