@@ -69,7 +69,7 @@ public class ClientUseCase {
         return clientRepository.findClientByIdentification(enrol.getClient())
                 .flatMap(this::validateClientStatus)
                 .flatMap(client -> updateClientAndContacts(enrol, client.toBuilder().voucher(voucher).build(), isSeries))
-                .flatMap(statusResponse -> getResponse(enrol.getClient().getVoucher(), SUCCESS_UPDATE))
+                .flatMap(statusResponse -> getResponse(voucher, SUCCESS_UPDATE))
                 .switchIfEmpty(createClientAndContacts(enrol, voucher, isSeries)
                         .then(getResponse(voucher, SUCCESS_ENROLL)));
 
