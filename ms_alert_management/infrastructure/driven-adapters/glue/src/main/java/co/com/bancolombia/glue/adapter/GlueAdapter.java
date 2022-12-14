@@ -34,6 +34,7 @@ public class GlueAdapter implements CampaignGlueGateway {
     private static final String SOURCE_MASSIVE_FILE = "--source_massive_file_path";
     private static final String BUCKET_DESTINATION_PATH = "--bucket_destination_path";
     private static final String DATA_ENRICHMENT = "--data_enrichment";
+    private static final String CONSUMER_ID = "--consumer_id";
 
     private String getTriggerName(String idCampaign, String idConsumer, Long idSchedule) {
         return String.format("tgr_%s_%s_%s", idCampaign, idConsumer, idSchedule);
@@ -61,11 +62,12 @@ public class GlueAdapter implements CampaignGlueGateway {
                 .arguments(Map.of(
                         GLUE_DATABASE, properties.getGlueDatabase(),
                         GLUE_DATABASE_TABLE, properties.getGlueDatabaseTable(),
-                        SOURCE_MASSIVE_FILE, String.format("%s/%s", properties.getBucketSourcePath(),
+                        SOURCE_MASSIVE_FILE, String.join("/", properties.getBucketSourcePath(),
                                 campaign.getSourcePath()),
-                        BUCKET_DESTINATION_PATH, String.format("%s/%s", properties.getBucketDestinationPath(),
+                        BUCKET_DESTINATION_PATH, String.join("/", properties.getBucketDestinationPath(),
                                 this.getBucketDestinationPath(campaign.getSourcePath())),
-                        DATA_ENRICHMENT, String.format("%s", campaign.isDataEnrichment())
+                        DATA_ENRICHMENT, campaign.getDataEnrichment().toString(),
+                        CONSUMER_ID, campaign.getIdConsumer()
                 ))
                 .build();
     }

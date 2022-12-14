@@ -72,7 +72,8 @@ class GlueAdapterTest {
         campaign.setSourcePath("source_path");
         campaign.setAttachment(true);
         campaign.setAttachmentPath("attachment_path");
-        campaign.setState("ACTIVO");
+        campaign.setDataEnrichment(true);
+        campaign.setState("1");
         campaign.setCreatedDate(NOW);
         campaign.setCreationUser("lugomez");
 

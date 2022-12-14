@@ -17,6 +17,7 @@ public class ResourcesTest {
         s3Properties.put("massivePrefix", "test");
         s3Properties.put("emailPrefix", "test/ChannelType=EMAIL");
         s3Properties.put("smsPrefix", "test/ChannelType=SMS");
+        s3Properties.put("pushPrefix", "test/ChannelType=PUSH");
 
         properties.put("region", "us-east-1");
         properties.put("endpoint", "http://localhost:4566");

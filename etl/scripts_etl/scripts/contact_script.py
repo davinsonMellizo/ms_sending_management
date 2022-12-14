@@ -8,7 +8,7 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
-from pyspark.sql.functions import col, when
+from pyspark.sql.functions import col, lit, when
 
 
 # Mensajes de error
@@ -31,8 +31,10 @@ CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 
 
 # Glue Context
-args = getResolvedOptions(sys.argv, ['JOB_NAME', 'glue_database', 'glue_database_table', 'data_enrichment',
-                                     'source_massive_file_path', 'bucket_destination_path'])
+args = getResolvedOptions(sys.argv, [
+    'JOB_NAME', 'glue_database', 'glue_database_table', 'data_enrichment',
+    'source_massive_file_path', 'bucket_destination_path', 'consumer_id'
+])
 
 glueContext = GlueContext(SparkContext())
 spark = glueContext.spark_session
@@ -45,12 +47,16 @@ glue_database_table = args['glue_database_table']
 data_enrichment = args['data_enrichment']
 source_massive_file_path = args['source_massive_file_path']
 bucket_destination_path = args['bucket_destination_path']
+consumer_id = args['consumer_id']
 
 
 # Leer archivo CSV con los datos a procesar
 massive_df = spark.read \
     .options(header=True, delimiter=';') \
     .csv(f's3://{source_massive_file_path}')
+
+# Agregar ID del consumidor
+massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id))
 
 print('MASSIVE_DF_COUNT:', massive_df.count())
 
@@ -99,7 +105,8 @@ if data_enrichment == 'true':
     massive_df = massive_df.withColumn('contact_medium',
                                        when(massive_df.ChannelType ==
                                             CHANNEL_EMAIL, CONTACT_MEDIUM_EMAIL)
-                                       .otherwise(CONTACT_MEDIUM_SMS))
+                                       .when(massive_df.ChannelType == CHANNEL_SMS, CONTACT_MEDIUM_SMS)
+                                       .otherwise(CONTACT_MEDIUM_PUSH))
 
     # Unir DataFrame a procesar con los datos de contacto
     massive_df = massive_df.join(
