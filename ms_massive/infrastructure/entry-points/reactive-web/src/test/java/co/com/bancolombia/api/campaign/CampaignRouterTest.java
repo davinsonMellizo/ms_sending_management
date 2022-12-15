@@ -6,7 +6,6 @@ import co.com.bancolombia.api.handlers.ExceptionHandler;
 import co.com.bancolombia.api.handlers.ValidatorHandler;
 import co.com.bancolombia.api.service.Handler;
 import co.com.bancolombia.api.service.Router;
-import co.com.bancolombia.model.campaign.Campaign;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.usecase.MassiveUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,15 +36,12 @@ class CampaignRouterTest extends BaseIntegration {
     @MockBean
     private MassiveUseCase useCase;
     private String request;
-    private final Campaign campaign = new Campaign();
     private String url;
 
     @BeforeEach
     void init() {
         url = properties.getSendCampaign();
         request = loadFileConfig("CampaignRequest.json", String.class);
-        campaign.setIdCampaign("15");
-        campaign.setIdConsumer("SVP");
     }
 
     @Test

@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.model.commons.enums.BusinessExceptionEnum.BUSINESS_CAMPAIGN_NOT_FOUND;
+import static co.com.bancolombia.model.commons.enums.BusinessExceptionEnum.*;
 import static co.com.bancolombia.model.commons.enums.TechnicalExceptionEnum.TECHNICAL_MISSING_PARAMETERS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -38,7 +38,6 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
     @MockBean
     private MassiveUseCase useCase;
     private String request;
-    private final Campaign campaign = new Campaign();
     private String url;
 
 
@@ -46,14 +45,31 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
     void init() {
         url = properties.getSendCampaign();
         request = loadFileConfig("CampaignRequest.json", String.class);
-        campaign.setIdCampaign("1");
-        campaign.setIdConsumer("SVP");
     }
 
 
     @Test
     void startCampaignWithBusinessException() {
-        when(useCase.sendCampaign(any())).thenReturn(Mono.error(new BusinessException(BUSINESS_CAMPAIGN_NOT_FOUND)));
+        when(useCase.sendCampaign(any()))
+                .thenReturn(Mono.error(new BusinessException(BUSINESS_CAMPAIGN_NOT_FOUND)));
+        statusAssertionsWebClientPost(url, request)
+                .is5xxServerError();
+        verify(useCase).sendCampaign(any());
+    }
+
+    @Test
+    void startCampaignWithoutOnDemanSchedule() {
+        when(useCase.sendCampaign(any()))
+                .thenReturn(Mono.error(new BusinessException(BUSINESS_CAMPAIGN_WITHOUT_SCHEDULE_ON_DEMAND)));
+        statusAssertionsWebClientPost(url, request)
+                .is5xxServerError();
+        verify(useCase).sendCampaign(any());
+    }
+
+    @Test
+    void startCampaignInActive() {
+        when(useCase.sendCampaign(any()))
+                .thenReturn(Mono.error(new BusinessException(BUSINESS_CAMPAIGN_IS_INACTIVE)));
         statusAssertionsWebClientPost(url, request)
                 .is5xxServerError();
         verify(useCase).sendCampaign(any());
@@ -61,7 +77,8 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
 
     @Test
     void startCampaignWithTechnicalException() {
-        when(useCase.sendCampaign(any())).thenReturn(Mono.error(new TechnicalException(TECHNICAL_MISSING_PARAMETERS)));
+        when(useCase.sendCampaign(any()))
+                .thenReturn(Mono.error(new TechnicalException(TECHNICAL_MISSING_PARAMETERS)));
         statusAssertionsWebClientPost(url, request)
                 .is5xxServerError();
         verify(useCase).sendCampaign(any());
@@ -69,7 +86,8 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
 
     @Test
     void startCampaignWithThrowableException() {
-        when(useCase.sendCampaign(any())).thenReturn(Mono.error(new RuntimeException("Error")));
+        when(useCase.sendCampaign(any()))
+                .thenReturn(Mono.error(new RuntimeException("Error")));
         statusAssertionsWebClientPost(url, request)
                 .is5xxServerError();
         verify(useCase).sendCampaign(any());
