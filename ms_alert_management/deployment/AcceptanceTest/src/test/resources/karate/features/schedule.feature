@@ -72,7 +72,7 @@ Feature: CRUD Schedule
     And match $.code == '301'
 
   Scenario: Successful case Find schedule by id
-    * def urlFindById = urlSchedule + "/1"
+    * def urlFindById = urlSchedule + "/133"
     Given url urlFindById
     When method GET
     Then status 200
@@ -95,7 +95,7 @@ Feature: CRUD Schedule
     And match $.code == '302'
 
   Scenario: Successful case Update campaign
-    * def urlFindById = urlSchedule + "/1"
+    * def urlFindById = urlSchedule + "/133"
     * set body.idCampaign = '1'
     * set body.idConsumer = 'SVP'
     * set body.scheduleType = 'WEEKLY'
