@@ -77,7 +77,7 @@ Feature: CRUD Schedule
     When method GET
     Then status 200
     And match $.data.id == 1
-    And match $.data.idCampaign == '1'
+    And match $.data.idCampaign == '133'
     And match $.data.idConsumer == 'SVP'
 
   Scenario: Error case Find schedule by id
@@ -103,7 +103,7 @@ Feature: CRUD Schedule
     And request body
     When method PUT
     Then status 200
-    And match $.data.actual.id == 1
+    And match $.data.actual.id == 133
     And match $.data.actual.scheduleType == 'WEEKLY'
 
   Scenario: Error case Update schedule
