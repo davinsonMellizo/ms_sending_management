@@ -141,3 +141,10 @@ jobs:
           PathtoPublish: '$(Build.repository.LocalPath)/build/libs/infrastructure/eks'
           ArtifactName: eks-artifact
         condition: succeeded()
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact: Karate'
+        inputs:
+          PathtoPublish: '$(Build.repository.LocalPath)/build/libs/AcceptanceTest'
+          ArtifactName: acceptance-test-artifact
+        condition: succeeded()
