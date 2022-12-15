@@ -14,10 +14,20 @@ dependencies {
     implementation project(':secrets-manager')
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     runtimeOnly ("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.11'
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.13'
 }
 
 task explodedJar(type: Copy) {
     with jar
     into "${buildDir}/exploded"
+}
+
+jar {
+    // To disable the *-plain.jar
+    enabled = false
+}
+
+bootJar {
+    // Sets output jar name
+    archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
 }

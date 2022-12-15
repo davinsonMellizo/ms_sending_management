@@ -149,3 +149,10 @@ Feature: CRUD Campaign
     When method PUT
     Then status 500
     And match $.code == '301'
+
+  Scenario: Successful case Delete campaign by id and consumer id with massive
+    Given request { idCampaign: '1', idConsumer: 'SVP' }
+    When method DELETE
+    Then status 200
+    And match $.data.idCampaign == '1'
+    And match $.data.idConsumer == 'SVP'
