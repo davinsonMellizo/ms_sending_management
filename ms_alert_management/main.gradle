@@ -13,7 +13,6 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_11
 
     dependencies {
-        implementation platform('software.amazon.awssdk:bom:2.18.38')
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
 
