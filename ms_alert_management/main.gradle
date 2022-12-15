@@ -13,11 +13,12 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_11
 
     dependencies {
+        implementation platform('software.amazon.awssdk:bom:2.18.38')
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
 
         testImplementation 'io.projectreactor:reactor-test'
-        testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -25,10 +26,8 @@ subprojects {
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    ext['log4j2.version'] = '2.17.1'
-
     configurations {
-        compile.exclude group: "org.apache.logging.log4j", module:"log4j-to-slf4j"
+        compile.exclude group: "org.apache.logging.log4j", module: "log4j-to-slf4j"
         compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
 
@@ -48,10 +47,10 @@ subprojects {
     jacocoTestReport {
         dependsOn test
         reports {
-            xml.enabled true
-            xml.destination file("${buildDir}/reports/jacoco.xml")
-            csv.enabled false
-            html.destination file("${buildDir}/reports/jacocoHtml")
+            xml.setRequired true
+            xml.setOutputLocation file("${buildDir}/reports/jacoco.xml")
+            csv.setRequired false
+            html.setOutputLocation file("${buildDir}/reports/jacocoHtml")
         }
     }
 
@@ -59,7 +58,7 @@ subprojects {
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDir = file("$buildDir/reports")
+    reportsDirectory = file("$buildDir/reports")
 }
 
 task jacocoMergedReport(type: JacocoReport) {
@@ -69,17 +68,19 @@ task jacocoMergedReport(type: JacocoReport) {
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
     executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled true
+        xml.setRequired true
+        csv.setRequired false
+        html.setRequired true
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
+
 tasks.named('wrapper') {
-    gradleVersion = '7.3.2'
+    gradleVersion = '7.6'
+    distributionUrl = "https://artifactory.apps.bancolombia.com/gradlew/gradle-7.6-bin.zip"
 }

@@ -77,6 +77,7 @@ public class CommandsHandler {
         return handleSendAlert(command.getData(), useCaseConsumer::updateConsumer, ConsumerDTO.class);
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends DTO<M>, M, R> Mono<Void> handleSendAlert(String data, Function<M, Mono<R>> use, Class<?> clazz) {
         var mapper = new ObjectMapper();
         try {
