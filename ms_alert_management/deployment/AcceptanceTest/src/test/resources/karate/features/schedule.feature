@@ -76,7 +76,7 @@ Feature: CRUD Schedule
     Given url urlFindById
     When method GET
     Then status 200
-    And match $.data.id == 1
+    And match $.data.id == 133
     And match $.data.idCampaign == '133'
     And match $.data.idConsumer == 'SVP'
 
