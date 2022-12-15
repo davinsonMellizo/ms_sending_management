@@ -17,5 +17,11 @@
       "value": "Davinson Mellizo"
     }
   ],
-  "attachments": [ ]
+  "attachments": [
+    {
+      "type":"Url",
+      "value": "https://drive.google.com/uc?id=1CZ6rnZ_0s6fXjQNTtrg0cYep8N3sIFFj&export=download",
+      "filename": "test.pdf"
+    }
+  ]
 }

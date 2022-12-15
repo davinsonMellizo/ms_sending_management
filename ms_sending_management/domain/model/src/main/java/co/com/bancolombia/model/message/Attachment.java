@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Attachment {
-    private String Path;
-    private String Filename;
-    private String Password;
-    private String Action;
+    private String type;
+    private String value;
+    private String filename;
+    private String contentType;
 }
