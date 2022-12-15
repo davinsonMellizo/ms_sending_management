@@ -7,15 +7,27 @@ Feature: CRUD Schedule
   Scenario: Successful case Save schedule
     * set body.idCampaign = '1'
     * set body.idConsumer = 'SVP'
+    * set body.scheduleType = 'DAILY'
     Given request body
     When method POST
     Then status 200
     And match $.data.idCampaign == '1'
     And match $.data.idConsumer == 'SVP'
 
+  Scenario: Successful case Save schedule with massive
+    * set body.idCampaign = '2'
+    * set body.idConsumer = 'SVP'
+    * set body.scheduleType = 'ON_DEMAND'
+    Given request body
+    When method POST
+    Then status 200
+    And match $.data.idCampaign == '2'
+    And match $.data.idConsumer == 'SVP'
+
   Scenario: Successful case Save schedule without endDate and endTime
     * set body.idCampaign = '1'
     * set body.idConsumer = 'SVP'
+    * set body.scheduleType = 'DAILY'
     * remove body.endDate
     * remove body.endTime
     Given request body
@@ -27,6 +39,7 @@ Feature: CRUD Schedule
   Scenario: Error case Save schedule with campaign that does not exist
     * set body.idCampaign = '0'
     * set body.idConsumer = 'SVP'
+    * set body.scheduleType = 'DAILY'
     Given request body
     When method POST
     Then status 500
@@ -36,6 +49,7 @@ Feature: CRUD Schedule
     * set body.idCampaign = '1'
     * set body.idConsumer = 'SVP'
     * set body.endDate = '2022-01-05'
+    * set body.scheduleType = 'DAILY'
     Given request body
     When method POST
     Then status 500
@@ -45,6 +59,7 @@ Feature: CRUD Schedule
     * set body.idCampaign = '1'
     * set body.idConsumer = 'SVP'
     * set body.endTime = '10:25:00.00'
+    * set body.scheduleType = 'DAILY'
     Given request body
     When method POST
     Then status 500
