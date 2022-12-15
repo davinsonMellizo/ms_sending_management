@@ -93,6 +93,7 @@ jobs:
           SourceFolder: $(projectName)/deployment
           Contents: |
             infrastructure/**
+            AcceptanceTest/**
           TargetFolder: $(Build.repository.LocalPath)/build/libs
 
       - task: CopyFiles@2
