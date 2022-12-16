@@ -1,5 +1,6 @@
 package co.com.bancolombia.model.message;
 
+
 import co.com.bancolombia.Request;
 import lombok.*;
 

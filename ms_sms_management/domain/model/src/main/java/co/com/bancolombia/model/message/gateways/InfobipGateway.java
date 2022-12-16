@@ -5,6 +5,7 @@ import co.com.bancolombia.model.message.SMSInfobip;
 import co.com.bancolombia.model.message.SMSInfobipSDK;
 import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.model.token.TokenInfobip;
 import reactor.core.publisher.Mono;
 
 public interface InfobipGateway {

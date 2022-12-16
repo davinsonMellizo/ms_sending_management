@@ -6,6 +6,7 @@ import co.com.bancolombia.model.message.SMSInfobipSDK;
 import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.model.token.TokenInfobip;
 import com.infobip.ApiClient;
 import com.infobip.ApiException;
 import com.infobip.api.SendSmsApi;
@@ -22,7 +23,7 @@ import java.util.Collections;
 
 @Repository
 @RequiredArgsConstructor
-public class InfobipAdapter implements InfobipGateway {
+public class InfobipAdapterSDK implements InfobipGateway {
 
     private static final Integer STATUS_OK = 200;
 

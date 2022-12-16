@@ -98,7 +98,6 @@ public class SendAlertUseCase {
                                 .text(alert.getMessage())
                                 .build())
                         .build())
-                //Aqui se debe obtener el token
                 .flatMap(data->generatorTokenUseCase.getTokenInf(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(infobipGateway::sendSMS)

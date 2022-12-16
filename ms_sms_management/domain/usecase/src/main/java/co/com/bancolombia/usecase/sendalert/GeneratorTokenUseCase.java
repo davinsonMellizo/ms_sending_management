@@ -10,6 +10,7 @@ import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.model.token.TokenInfobip;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -97,6 +98,13 @@ public class GeneratorTokenUseCase implements Serializable {
 
 
     private Mono<ArrayList> saveTokenCache(Token token, String key){
+        return this.token.get(key, ArrayList.class)
+                .map(listTokens->{listTokens.add(0,token.getAccessToken()); return listTokens;})
+                .switchIfEmpty(Mono.just(new ArrayList<>(List.of(token.getAccessToken()))))
+                .flatMap(listTokens-> this.token.save(key,listTokens));
+    }
+
+    private Mono<ArrayList> saveTokenCache(TokenInfobip token, String key){
         return this.token.get(key, ArrayList.class)
                 .map(listTokens->{listTokens.add(0,token.getAccessToken()); return listTokens;})
                 .switchIfEmpty(Mono.just(new ArrayList<>(List.of(token.getAccessToken()))))

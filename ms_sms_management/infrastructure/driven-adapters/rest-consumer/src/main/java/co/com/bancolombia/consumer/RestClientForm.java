@@ -1,14 +1,19 @@
 package co.com.bancolombia.consumer;
 
-import co.com.bancolombia.Request;
+
+import co.com.bancolombia.consumer.adapter.mapper.Request;
+import co.com.bancolombia.consumer.adapter.mapper.RequestMapper;
 import co.com.bancolombia.consumer.adapter.response.Error;
-import co.com.bancolombia.consumer.adapter.response.model.RequestForm;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,34 +24,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
-public class RestClientForm<T extends RequestForm,R> {
 
-    private final WebClient webClient;
+public class RestClientForm<T,R> {
+
     @Autowired
     @Qualifier("INA")
-    private final WebClient webClientConfigIna;
+    private final WebClient webClient;
     private final Log LOGGER= LogFactory.getLog(RestClientForm.class);
 
 
-    public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
-
-        if (route.contains("infobip.com/sms")) {
+    public <S> Mono<R> post(String route, MultiValueMap formData, Class<R> clazz, Class<S> clazzError) {
             return webClient.post()
                     .uri(route)
-                    .contentType(APPLICATION_JSON)
-                    .headers(head -> head.setAll(request.getHeaders()))
-                    .bodyValue(cleanHeader(request))
-                    .retrieve()
-                    //.onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
-                    .bodyToMono(clazz);
-        } else {
-            return webClient.post()
-                    .uri(route)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .contentType(APPLICATION_FORM_URLENCODED)
-                    .body(BodyInserters.fromFormData(request.getForms()))
+                    .body(BodyInserters.fromFormData(formData))
                     .retrieve()
                     .bodyToMono(clazz);
-        }
     }
 
     private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
@@ -54,7 +48,7 @@ public class RestClientForm<T extends RequestForm,R> {
                 .map(data -> new Error(clientResponse.statusCode().value(), data));
     }
 
-    private <T extends RequestForm> T cleanHeader(T request) {
+    private <T extends Request> T cleanHeader(T request) {
         request.setHeaders(null);
         return request;
     }
