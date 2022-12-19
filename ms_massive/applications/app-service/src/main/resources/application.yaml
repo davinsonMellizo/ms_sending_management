@@ -1,0 +1,54 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    encoding:
+      charset: 'UTF-8'
+      force: true
+
+springdoc:
+  version: 1.0
+
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: OFF
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: never
+      enabled: true
+      cache:
+        time-to-live: 10s
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness
+      exposure:
+        include: health, liveness, readiness
+adapters:
+  entries:
+    reactive-web:
+      path-base: ${PATH_BASE}
+      send-campaign: ${PATH_SEND_CAMPAIGN}
+  restconsumer:
+    timeout: 5000
+    url: ${REST_BASE_URL}
+    resources:
+      endpointCampaign: ${CAMPAIGN_URL}
