@@ -54,4 +54,13 @@ public class GlueOperations {
                         .build()
         )).map(response -> response.sdkHttpResponse().isSuccessful());
     }
+
+    public Mono<Boolean> deleteTrigger(String name) {
+        return Mono.fromFuture(client.deleteTrigger(
+                DeleteTriggerRequest
+                        .builder()
+                        .name(name)
+                        .build()
+        )).map(response -> response.sdkHttpResponse().isSuccessful());
+    }
 }

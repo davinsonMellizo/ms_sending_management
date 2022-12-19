@@ -130,4 +130,11 @@ public class GlueAdapter implements CampaignGlueGateway {
                 .collectList()
                 .thenReturn(response);
     }
+
+    @Override
+    public Mono<Boolean> deleteTrigger(String nameTrigger) {
+        return  this.glueOperations.deleteTrigger(nameTrigger);
+    }
+
+
 }
