@@ -72,7 +72,7 @@ public class CampaignDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("deleteTrigger").summary("Delete Trigger")
                 .description("Delete a Trigger by Name").tags(new String[]{TAG})
-                .parameter(createHeader(String.class, "nameTrigger", "Trigger identifier"))
+                .parameter(createHeader(String.class, "name", "Trigger identifier"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
