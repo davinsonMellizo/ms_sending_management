@@ -14,5 +14,4 @@ data:
   SPRING_PROFILE_ACTIVE:  #{spring-profile-active}#
   PATH_BASE: "#{prefix}#/#{service}#"
   PATH_SEND_CAMPAIGN: "#{path-send-campaign}#"
-  REST_BASE_URL: "#{rest-base-url}"
-  CAMPAIGN_URL: "#{campaign-url}"
+  CAMPAIGN_URL: #{campaign-url}

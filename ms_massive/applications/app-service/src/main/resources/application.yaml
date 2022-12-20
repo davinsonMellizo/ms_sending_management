@@ -49,6 +49,5 @@ adapters:
       send-campaign: ${PATH_SEND_CAMPAIGN}
   restconsumer:
     timeout: 5000
-    url: ${REST_BASE_URL}
     resources:
       endpointCampaign: ${CAMPAIGN_URL}

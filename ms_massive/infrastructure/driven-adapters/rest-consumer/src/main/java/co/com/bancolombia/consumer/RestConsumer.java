@@ -18,8 +18,7 @@ public class RestConsumer {
 
     public <S, E> Mono<S> get(String route, MultiValueMap<String, String> query, Class<S> success, Class<E> error) {
         return client.get()
-                .uri(uri -> uri.path(route)
-                        .queryParams(query).build())
+                .uri(route, uri -> uri.queryParams(query).build())
                 .retrieve()
                 .onStatus(HttpStatus::isError, res -> buildError(res, error))
                 .bodyToMono(success);
