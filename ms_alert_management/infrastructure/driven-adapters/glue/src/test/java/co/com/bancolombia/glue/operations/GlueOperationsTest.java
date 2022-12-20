@@ -29,6 +29,7 @@ class GlueOperationsTest {
     private CompletableFuture<StartTriggerResponse> completableFutureTriggerStart;
     private CompletableFuture<StopTriggerResponse> completableFutureTriggerStop;
     private CompletableFuture<UpdateTriggerResponse> completableFutureTriggerUpdate;
+    private CompletableFuture<DeleteTriggerResponse> completableFutureTriggerDelete;
     private static final String triggerName = "tgr_1_1_1";
 
 
@@ -59,10 +60,16 @@ class GlueOperationsTest {
                 .sdkHttpResponse(httpFullResponse)
                 .build();
 
+        DeleteTriggerResponse deleteTriggerResponse = (DeleteTriggerResponse) DeleteTriggerResponse
+                .builder()
+                .sdkHttpResponse(httpFullResponse)
+                .build();
+
         completableFutureTriggerCreate = CompletableFuture.completedFuture(createTriggerResponse);
         completableFutureTriggerStart = CompletableFuture.completedFuture(startTriggerResponse);
         completableFutureTriggerStop = CompletableFuture.completedFuture(stopTriggerResponse);
         completableFutureTriggerUpdate = CompletableFuture.completedFuture(updateTriggerResponse);
+        completableFutureTriggerDelete = CompletableFuture.completedFuture(deleteTriggerResponse);
     }
 
     @Test
@@ -120,6 +127,19 @@ class GlueOperationsTest {
 
         verify(glueAsyncClient, times(1))
                 .updateTrigger(any(UpdateTriggerRequest.class));
+    }
+    @Test
+    void deleteTrigger() {
+        when(glueAsyncClient.deleteTrigger(any(DeleteTriggerRequest.class)))
+                .thenReturn(completableFutureTriggerDelete);
+
+        glueOperations.deleteTrigger(triggerName)
+                .as(StepVerifier::create)
+                .expectNext(true)
+                .verifyComplete();
+
+        verify(glueAsyncClient, times(1))
+                .deleteTrigger(any(DeleteTriggerRequest.class));
     }
 
 }

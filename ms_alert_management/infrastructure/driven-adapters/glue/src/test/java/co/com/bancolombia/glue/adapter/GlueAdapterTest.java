@@ -52,6 +52,7 @@ class GlueAdapterTest {
     private static final LocalDate DATE_NOW = LocalDate.now();
     private static final LocalTime TIME_NOW = LocalTime.now();
 
+    private static final String TRIGGER_NAME = "tgr_1_SVP_134";
 
     @BeforeAll
     void init() {
@@ -120,4 +121,13 @@ class GlueAdapterTest {
                 .verifyComplete();
     }
 
+    @Test
+    void deleteTrigger() {
+        when(glueOperations.deleteTrigger(anyString()))
+                .thenReturn(Mono.just(true));
+
+        StepVerifier.create(glueAdapter.deleteTrigger(TRIGGER_NAME))
+                .assertNext(res -> assertEquals(TRIGGER_NAME, res))
+                .verifyComplete();
+    }
 }

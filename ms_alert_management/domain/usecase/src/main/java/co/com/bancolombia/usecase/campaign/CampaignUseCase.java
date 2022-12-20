@@ -58,6 +58,6 @@ public class CampaignUseCase {
 
     public Mono<Map<String, String>> deleteTrigger(String triggerName) {
         return glueGateway.deleteTrigger(triggerName)
-                .map( bool ->Map.of("name", triggerName));
+                .map( name ->Map.of("name", name));
     }
 }

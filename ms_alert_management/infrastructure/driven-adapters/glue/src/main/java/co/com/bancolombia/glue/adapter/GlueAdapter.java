@@ -132,8 +132,9 @@ public class GlueAdapter implements CampaignGlueGateway {
     }
 
     @Override
-    public Mono<Boolean> deleteTrigger(String nameTrigger) {
-        return  this.glueOperations.deleteTrigger(nameTrigger);
+    public Mono<String> deleteTrigger(String nameTrigger) {
+        return  this.glueOperations.deleteTrigger(nameTrigger)
+                .thenReturn(nameTrigger);
     }
 
 

@@ -13,5 +13,5 @@ public interface CampaignGlueGateway {
 
     Mono<StatusResponse<Campaign>> updateTrigger(StatusResponse<Campaign> response);
 
-    Mono<Boolean> deleteTrigger(String triggerName);
+    Mono<String> deleteTrigger(String triggerName);
 }
