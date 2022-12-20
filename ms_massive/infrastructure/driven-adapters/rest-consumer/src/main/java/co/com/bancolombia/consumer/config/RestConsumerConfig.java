@@ -13,20 +13,17 @@ import reactor.netty.http.client.HttpClient;
 
 import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
 public class RestConsumerConfig {
-
-    @Value("${adapters.restconsumer.url}")
-    private String url;
     @Value("${adapters.restconsumer.timeout}")
     private int timeout;
 
     @Bean
     public WebClient getWebClient() {
         return WebClient.builder()
-                .baseUrl(url)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .clientConnector(getClientHttpConnector())
                 .build();
     }
