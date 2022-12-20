@@ -3,20 +3,6 @@ Feature: CRUD and relations with category
   Background:
     * url urlCategory
 
-  Scenario: Successful case Find category by id
-    * def urlFind = urlCategory + "/0"
-    Given url urlFind
-    When method GET
-    Then status 200
-    And match $.id == 0
-
-  Scenario: Successful case Delete category by id
-    * def urlDelete = urlCategory + "/6"
-    Given url urlDelete
-    When method DELETE
-    Then status 200
-    And match response == "6"
-
   Scenario: Successful case Save category
     * def id = 5
     Given request read("../data/category.json")
@@ -24,12 +10,26 @@ Feature: CRUD and relations with category
     Then status 200
     And match $.id == 5
 
+  Scenario: Successful case Find category by id
+    * def urlFind = urlCategory + "/5"
+    Given url urlFind
+    When method GET
+    Then status 200
+    And match $.id == 5
+
   Scenario: Successful case Update category
-    * def id = 7
+    * def id = 5
     Given request read("../data/category.json")
     When method PUT
     Then status 200
-    And match $.actual.id == 7
+    And match $.actual.id == 5
+
+  Scenario: Successful case Delete category by id
+    * def urlDelete = urlCategory + "/5"
+    Given url urlDelete
+    When method DELETE
+    Then status 200
+    And match response == "5"
 
   Scenario: Error case Find category by id
     * def urlFind = urlCategory + "/8"
