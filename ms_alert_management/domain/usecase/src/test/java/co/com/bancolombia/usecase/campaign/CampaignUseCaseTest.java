@@ -36,6 +36,8 @@ class CampaignUseCaseTest {
 
     private final Campaign campaign = new Campaign();
 
+    private String  TRIGGER_NAME;
+
     @BeforeEach
     public void init() {
         campaign.setIdCampaign("1");
@@ -162,5 +164,16 @@ class CampaignUseCaseTest {
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
+    }
+
+    @Test
+    void deleteTrigger() {
+        TRIGGER_NAME = "tgr_1_SVP_134";
+        when(glueGateway.deleteTrigger(any()))
+                .thenReturn(Mono.just(TRIGGER_NAME));
+
+        StepVerifier.create(useCase.deleteTrigger(TRIGGER_NAME))
+                .expectNextCount(1)
+                .verifyComplete();
     }
 }

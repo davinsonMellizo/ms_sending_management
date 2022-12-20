@@ -16,6 +16,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class CampaignRouter extends CampaignDocumentationApi {
 
     private static final String ALL = "/all";
+    private static final String TRIGGER = "/trigger";
     private final ApiProperties apiProperties;
 
     @Bean
@@ -25,6 +26,7 @@ public class CampaignRouter extends CampaignDocumentationApi {
                 .and(route().PUT(url, accept(APPLICATION_JSON), handler::updateCampaign, update()).build())
                 .and(route().GET(url + ALL, accept(APPLICATION_JSON), handler::findAllCampaign, findAll()).build())
                 .and(route().GET(url, accept(APPLICATION_JSON), handler::findCampaign, find()).build())
-                .and(route().DELETE(url, accept(APPLICATION_JSON), handler::deleteCampaign, delete()).build());
+                .and(route().DELETE(url, accept(APPLICATION_JSON), handler::deleteCampaign, delete()).build())
+                .and(route().DELETE(url + TRIGGER, accept(APPLICATION_JSON), handler::deleteTrigger, deleteTrigger()).build());
     }
 }

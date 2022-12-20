@@ -67,6 +67,16 @@ public class CampaignDocumentationApi {
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
 
+
+    protected Consumer<Builder> deleteTrigger() {
+        return ops -> ops.tag(TAG)
+                .operationId("deleteTrigger").summary("Delete Trigger")
+                .description("Delete a Trigger by Name").tags(new String[]{TAG})
+                .parameter(createHeader(String.class, "name", "Trigger identifier"))
+                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(String.class))
+                .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
+    }
+
     private <T> org.springdoc.core.fn.builders.parameter.Builder createHeader(Class<T> clazz, String name, String description) {
         return parameterBuilder().in(PATH).implementation(clazz).required(true).name(name).description(description);
     }
