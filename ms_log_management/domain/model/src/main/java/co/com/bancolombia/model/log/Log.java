@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Log {
     private Integer id;
     private String logKey;
-    private Integer documentType;
+    private String documentType;
     private Long documentNumber;
     private String logType;
     private String medium;
