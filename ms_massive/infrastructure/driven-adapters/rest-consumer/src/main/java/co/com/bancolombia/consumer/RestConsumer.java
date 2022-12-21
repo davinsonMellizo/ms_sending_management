@@ -16,9 +16,9 @@ public class RestConsumer {
 
     private final WebClient client;
 
-    public <S, E> Mono<S> get(String route, MultiValueMap<String, String> query, Class<S> success, Class<E> error) {
+    public <S, E> Mono<S> get(String route, MultiValueMap<String, String> queryParams, Class<S> success, Class<E> error) {
         return client.get()
-                .uri(route, uri -> uri.queryParams(query).build())
+                .uri(uriBuilder -> uriBuilder.path(route).queryParams(queryParams).build())
                 .retrieve()
                 .onStatus(HttpStatus::isError, res -> buildError(res, error))
                 .bodyToMono(success);
