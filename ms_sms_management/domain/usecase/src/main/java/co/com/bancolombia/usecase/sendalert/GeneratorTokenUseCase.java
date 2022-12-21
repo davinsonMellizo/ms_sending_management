@@ -27,10 +27,9 @@ public class GeneratorTokenUseCase implements Serializable {
         return  token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderINA(alert.getPriority().concat(alert.getProvider())))
-                .log()
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
                 .map(tokens->tokens.get(0).toString())
-                .map(tokenInalambria1 -> Map.of("Authorization","Bearer "+tokenInalambria1))
+                .map(tokenInalambria1 -> Map.<String, Object>of("Authorization","Bearer "+tokenInalambria1))
                 .map(headers-> setTokenINA(smsInalambria, headers));
     }
     public Mono<SMSMasiv> getTokenMAS(SMSMasiv smsMasiv,Alert alert){
@@ -39,7 +38,7 @@ public class GeneratorTokenUseCase implements Serializable {
                 .switchIfEmpty(getTokenByProviderMAS(alert.getPriority().concat(alert.getProvider())))
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
                 .map(tokens->tokens.get(0).toString())
-                .map(tokenMas->Map.of("Authorization","Bearer "+tokenMas))
+                .map(tokenMas->Map.<String, Object>of("Authorization","Bearer "+tokenMas))
                 .map(headers-> setTokenMAS(smsMasiv,headers));
     }
 
@@ -50,11 +49,11 @@ public class GeneratorTokenUseCase implements Serializable {
                 .then(Mono.empty());
     }
 
-    private SMSInalambria setTokenINA(SMSInalambria smsInalambria, Map<String, String> headers) {
+    private SMSInalambria setTokenINA(SMSInalambria smsInalambria, Map<String, Object> headers) {
         smsInalambria.setHeaders(headers);
         return smsInalambria;
     }
-    private SMSMasiv setTokenMAS(SMSMasiv smsMasiv,Map<String,String> headers){
+    private SMSMasiv setTokenMAS(SMSMasiv smsMasiv,Map<String,Object> headers){
         smsMasiv.setHeaders(headers);
         return smsMasiv;
     }

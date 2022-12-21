@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -23,7 +25,7 @@ public class RestClient<T extends Request,R> {
         return webClient.post()
                 .uri(route)
                 .contentType(APPLICATION_JSON)
-                .headers(head -> head.setAll(request.getHeaders()))
+                .headers(head -> head.setAll((Map) request.getHeaders()))
                 .bodyValue(cleanHeader(request))
                 .retrieve()
                 //.onStatus(HttpStatus::isError, response -> replyError(response, clazzError))

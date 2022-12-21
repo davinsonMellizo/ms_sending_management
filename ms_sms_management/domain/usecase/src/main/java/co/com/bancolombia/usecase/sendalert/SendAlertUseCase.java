@@ -19,6 +19,7 @@ public class SendAlertUseCase {
     private final InalambriaGateway inalambriaGateway;
     private final MasivianGateway masivianGateway;
     private final LogUseCase logUseCase;
+
     private final GeneratorTokenUseCase generatorTokenUseCase;
     private static final  Integer CONSTANT = 23;
 
@@ -81,6 +82,8 @@ public class SendAlertUseCase {
                 .switchIfEmpty(sendSMSInalambria(alert))
                 .then(Mono.empty());
     }
+
+
 
 
 }

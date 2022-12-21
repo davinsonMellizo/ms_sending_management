@@ -31,6 +31,7 @@ public class SendAlertUseCase {
     private static final int CONSTANT =23;
 
     public Mono<Void> sendAlert(Alert alert) {
+        System.out.println("Alerta"+alert.getHeaders());
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));

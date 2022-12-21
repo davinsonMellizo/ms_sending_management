@@ -7,9 +7,9 @@ import java.util.Map;
 
 @Data
 public class Request implements Serializable {
-    private Map<String, String> headers;
+    private Map<String, Object> headers;
 
-    public Request headers(Map<String, String> headers) {
+    public Request headers(Map<String, Object> headers) {
         if (this.getHeaders() != null) {
             this.getHeaders().putAll(headers);
         } else {
