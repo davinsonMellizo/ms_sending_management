@@ -7,7 +7,7 @@ Feature: CRUD Schedule
   Scenario: Successful case Save schedule with massive
     * set body.idCampaign = '2'
     * set body.idConsumer = 'SVP'
-    * set body.scheduleType = 'ON_DEMAND'
+    * set body.scheduleType = 'WEEKLY'
     Given request body
     When method POST
     Then status 200
