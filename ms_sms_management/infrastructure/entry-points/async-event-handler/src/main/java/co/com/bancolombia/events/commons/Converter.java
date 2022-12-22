@@ -25,7 +25,7 @@ public abstract class  Converter {
         try {
             final CommandJson commandJson = objectMapper.readValue(message.getBody(), CommandJson.class);
             final T value = objectMapper.treeToValue(commandJson.getData(), valueClass);
-            Map<String ,Object> headers = addHeader(message.getProperties().getHeaders(),"retryNumber", maxRetries);
+            Map<String ,String> headers = (Map) addHeader(message.getProperties().getHeaders() ,"retryNumber", maxRetries);
             value.setHeaders(headers);
             return Mono.just(value);
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public abstract class  Converter {
         }
     }
 
-    private Map<String ,Object> addHeader(Map<String ,Object> headers, String key, Object value){
+    private Map<String ,Object> addHeader(Map<String ,Object> headers, String key, String value){
         if(headers==null ||headers.isEmpty()){
            headers= new HashMap<>();
         }

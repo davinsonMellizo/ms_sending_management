@@ -59,7 +59,7 @@ public class InalambriaAdapter implements InalambriaGateway {
     public Mono<Token> getToken(Account account) {
         String headerValue = account.getUsername().concat(":").concat(account.getPassword());
         var headerValueEncode= Base64.getEncoder().encodeToString(headerValue.getBytes());
-        Map<String,Object> headers = new HashMap<>();
+        Map<String,String> headers = new HashMap<>();
         headers.put("Authorization","Basic "+headerValueEncode);
         return Mono.just(RequestTokenInalambriaData.builder().grantType(GRAND_TYPE).build())
                 .map(requestTokenInalambria-> settingHeaders(headers, requestTokenInalambria))
@@ -70,7 +70,7 @@ public class InalambriaAdapter implements InalambriaGateway {
                 .flatMap(this::setExpiresIn);
     }
 
-    private RequestTokenInalambriaData settingHeaders(Map<String, Object> headers,
+    private RequestTokenInalambriaData settingHeaders(Map<String, String> headers,
                                                       RequestTokenInalambriaData requestTokenInalambria) {
         requestTokenInalambria.setHeaders(headers);
         return requestTokenInalambria;

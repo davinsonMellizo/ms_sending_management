@@ -8,11 +8,11 @@ import reactor.core.publisher.Mono;
 
 
 @UtilityClass
-public class ValidationLog {
+public class ValidationLogUtil {
 
 
 
-public static  Mono<Void> valideitorSendLog (Alert alert, String medium,  Response response, LogUseCase logUseCase){
+public static  Mono<Void> valideitorSendLog (Alert alert, String medium,  Response response,LogUseCase logUseCase){
     if (response.getCode()!= 200 ){
         if (alert.getHeaders().containsKey("Count")){
             if (alert.getHeaders().get("Count").equals(alert.getHeaders().get("retryNumber"))){
