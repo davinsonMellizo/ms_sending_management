@@ -51,7 +51,7 @@ public class MasivianAdapter implements MasivianGateway {
     public Mono<Token> getToken(Account account) {
         String headerValue = account.getUsername().concat(":").concat(account.getPassword());
         String headerValueEncode= Base64.getEncoder().encodeToString(headerValue.getBytes());
-        Map<String,Object> headers = new HashMap<>();
+        Map<String,String> headers = new HashMap<>();
         headers.put("Authorization","Basic "+headerValueEncode);
         return Mono.just(new TokenMasivData())
                 .map(requestTokenMasiv->{requestTokenMasiv.setHeaders(headers);

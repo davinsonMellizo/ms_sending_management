@@ -28,7 +28,7 @@ public class GeneratorTokenUseCase {
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProvider(mail.getFrom().split("@")[1].split(">")[0], mail.getNameToken()))
                 .map(tokens->tokens.get(0).toString())
-                .map(token1->Map.<String, Object>of("Authorization","Bearer "+token1))
+                .map(token1->Map.of("Authorization","Bearer "+token1))
                 .map(headers->setToken(mail,headers));
     }
     public Mono<String> getNameToken(Alert alert){
@@ -36,7 +36,7 @@ public class GeneratorTokenUseCase {
                 .map(nameToken-> nameToken.getSecretName());
     }
 
-    private Mail setToken(Mail mail, Map<String, Object> headers) {
+    private Mail setToken(Mail mail, Map<String, String> headers) {
         mail.setHeaders(headers);
         return mail;
     }

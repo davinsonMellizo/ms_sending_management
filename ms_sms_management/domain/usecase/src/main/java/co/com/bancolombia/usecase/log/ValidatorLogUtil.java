@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 
 @UtilityClass
-public class ValidationLogUtil {
+public class ValidatorLogUtil {
 
 
 

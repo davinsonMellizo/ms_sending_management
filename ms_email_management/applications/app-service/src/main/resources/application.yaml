@@ -28,7 +28,7 @@ spring:
 
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
-app.async.maxRetries: 0
+app.async.maxRetries: 1
 
 management:
   health:

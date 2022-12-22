@@ -13,9 +13,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Request implements Serializable {
-    private Map<String, Object> headers;
+    private Map<String, String> headers;
 
-    public Request headers(Map<String, Object> headers) {
+    public Request headers(Map<String, String> headers) {
         if (this.getHeaders() != null) {
             this.getHeaders().putAll(headers);
         } else {
