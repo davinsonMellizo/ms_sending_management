@@ -7,7 +7,7 @@ Feature: CRUD Schedule
   Scenario: Successful case Save schedule with massive
     * set body.idCampaign = '2'
     * set body.idConsumer = 'SVP'
-    * set body.scheduleType = 'DAILY'
+    * set body.scheduleType = 'ON_DEMAND'
     Given request body
     When method POST
     Then status 200
@@ -62,11 +62,11 @@ Feature: CRUD Schedule
     And match $.code == '301'
 
   Scenario: Successful case Find schedule by id
-    * def urlFindById = urlSchedule + "/1"
+    * def urlFindById = urlSchedule + "/3"
     Given url urlFindById
     When method GET
     Then status 200
-    And match $.data.id == 1
+    And match $.data.id == 3
     And match $.data.idConsumer == 'SVP'
 
   Scenario: Error case Find schedule by id
@@ -84,15 +84,15 @@ Feature: CRUD Schedule
     And match $.code == '302'
 
   Scenario: Successful case Update campaign
-    * def urlFindById = urlSchedule + "/2"
-    * set body.idCampaign = '4'
+    * def urlFindById = urlSchedule + "/3"
+    * set body.idCampaign = '2'
     * set body.idConsumer = 'SVP'
     * set body.scheduleType = 'WEEKLY'
     Given url urlFindById
     And request body
     When method PUT
     Then status 200
-    And match $.data.actual.id == 2
+    And match $.data.actual.id == 3
     And match $.data.actual.scheduleType == 'WEEKLY'
 
   Scenario: Error case Update schedule
