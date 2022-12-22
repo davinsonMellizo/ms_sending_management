@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "adapters.glue-etl")
+@ConfigurationProperties(prefix = "cloud.aws.glue-etl")
 public class GlueEtlProperties {
     private String jobName;
 }

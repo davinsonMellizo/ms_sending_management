@@ -45,6 +45,8 @@ cloud:
       endpoint: http://localhost:4566
     glue:
       region: us-east-1
+    glue-etl:
+      job-name: nu0154001-alertas-dev-job-find-logs
 
 
 management:
