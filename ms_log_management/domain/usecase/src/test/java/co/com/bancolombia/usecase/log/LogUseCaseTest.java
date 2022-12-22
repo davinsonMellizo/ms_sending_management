@@ -3,6 +3,7 @@ package co.com.bancolombia.usecase.log;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.QueryLog;
 import co.com.bancolombia.model.log.gateways.LogGateway;
+import co.com.bancolombia.model.log.gateways.RetrieveLogsGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,8 @@ public class LogUseCaseTest {
     private LogUseCase useCase;
     @Mock
     private LogGateway logGateway;
+    @Mock
+    private RetrieveLogsGateway retrieveLogsGateway;
     private final Log log = new Log();
 
     @Test
@@ -42,6 +45,8 @@ public class LogUseCaseTest {
     public void findLogHotTest() {
         when(logGateway.findLog(any()))
                 .thenReturn(Mono.just(List.of(log)));
+        when(retrieveLogsGateway.retrieveLogsS3(any()))
+                .thenReturn(Mono.just(""));
         QueryLog query = QueryLog.builder()
                 .referenceDate(LocalDateTime.now().minusDays(90))
                 .endDate(LocalDateTime.now())
@@ -55,6 +60,8 @@ public class LogUseCaseTest {
 
     @Test
     public void findLogColdTest() {
+        when(retrieveLogsGateway.retrieveLogsS3(any()))
+                .thenReturn(Mono.just(""));
         QueryLog query = QueryLog.builder()
                 .referenceDate(LocalDateTime.now().minusDays(90))
                 .endDate(LocalDateTime.now().minusDays(180))
