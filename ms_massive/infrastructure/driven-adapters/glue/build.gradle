@@ -2,5 +2,6 @@ dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'software.amazon.awssdk:glue:2.18.24'
+    implementation 'software.amazon.awssdk:sts'
+    implementation 'software.amazon.awssdk:glue'
 }
