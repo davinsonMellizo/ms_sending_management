@@ -113,25 +113,25 @@ Feature: CRUD Campaign
     And match $.code == '301'
 
   Scenario: Successful case Update campaign
-    * set body.idCampaign = '2'
+    * set body.idCampaign = '3'
     * set body.idConsumer = 'SVP'
     * set body.sourcePath = 'newSourcePath'
     * remove body.schedules
     Given request body
     When method PUT
     Then status 200
-    And match $.data.actual.idCampaign == '2'
+    And match $.data.actual.idCampaign == '3'
     And match $.data.actual.idConsumer == 'SVP'
     And match $.data.actual.sourcePath == 'newSourcePath'
 
   Scenario: Successful case Activate campaign
-    * set body.idCampaign = '1'
+    * set body.idCampaign = '2'
     * set body.idConsumer = 'SVP'
     * remove body.schedules
     Given request body
     When method PUT
     Then status 200
-    And match $.data.actual.idCampaign == '1'
+    And match $.data.actual.idCampaign == '2'
     And match $.data.actual.idConsumer == 'SVP'
     And match $.data.actual.state == '1'
 
@@ -149,10 +149,3 @@ Feature: CRUD Campaign
     When method PUT
     Then status 500
     And match $.code == '301'
-
-  Scenario: Successful case Delete campaign by id and consumer id with massive
-    Given request { idCampaign: '1', idConsumer: 'SVP' }
-    When method DELETE
-    Then status 200
-    And match $.data.idCampaign == '1'
-    And match $.data.idConsumer == 'SVP'
