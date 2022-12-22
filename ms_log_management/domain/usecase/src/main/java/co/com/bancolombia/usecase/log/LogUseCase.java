@@ -23,13 +23,13 @@ public class LogUseCase {
 
     public Mono<List<Log>> findLogsByDate(QueryLog queryLog){
         return differenceDate(queryLog)
-                .doOnNext(logs -> retrieveLogsS3(Filters.builder()
+                .filter(aBoolean -> aBoolean)
+                .map(logs -> retrieveLogsS3(Filters.builder()
                         .startDate(LocalDateTime.now().minusDays(5))
                         .endDate(LocalDateTime.now())
                         .consumer("ALM").provider("MAS").contact("32178521")
                         .documentNumber("106177595").documentType("1")
                         .build()))
-                .filter(aBoolean -> aBoolean)
                 .flatMap(aBoolean -> dataHot(queryLog));
     }
 
