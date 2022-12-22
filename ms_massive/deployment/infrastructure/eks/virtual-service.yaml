@@ -14,11 +14,11 @@ spec:
     istio: ingressgateway # use istio default controller
   servers:
     - port:
-        number: #{server-port-number}#
-        name: #{server-port-name}#
-        protocol: #{server-port-protocol}#
+        number: #{gateway-port}#
+        name: #{gateway-protocol-name}#
+        protocol: #{gateway-protocol}#
       hosts:
-        - #{gateway-host-smoke}#
+        - #{gateway-host}#
           #   tls:
           #     httpsRedirect: true
           # - port:
@@ -54,5 +54,5 @@ spec:
         - destination:
             host: #{name}#
             port:
-              number: #{server-port-number}#
+              number: #{gateway-port}#
       #websocketUpgrade: true #if websockets are required
