@@ -23,10 +23,11 @@ public class LogUseCase {
 
     public Mono<List<Log>> findLogsByDate(QueryLog queryLog){
         return retrieveLogsS3(Filters.builder()
-                        .startDate(LocalDateTime.now().minusDays(5))
-                        .endDate(LocalDateTime.now())
-                        .consumer("ALM").provider("MAS").contact("32178521")
-                        .documentNumber("106177595").documentType("1")
+                        .startDate(queryLog.getStartDate())
+                        .endDate(queryLog.getEndDate())
+                        .consumer(queryLog.getConsumer()).provider(queryLog.getProvider())
+                        .contact(queryLog.getContactValue())
+                        .documentNumber(queryLog.getDocumentNumber()).documentType(queryLog.getDocumentType())
                         .build())
                 .flatMap(unused -> dataHot(queryLog));
     }

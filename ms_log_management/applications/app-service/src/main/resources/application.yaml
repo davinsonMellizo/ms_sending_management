@@ -46,7 +46,7 @@ cloud:
     glue:
       region: us-east-1
     glue-etl:
-      job-name: nu0154001-alertas-dev-job-find-logs
+      job-name: ${JOB_NAME_FIND_LOG}
 
 
 management:

@@ -1,7 +1,7 @@
 package co.com.bancolombia.events;
 
+import co.com.bancolombia.events.DTO.FiltersDTO;
 import co.com.bancolombia.events.handlers.CommandsHandler;
-import co.com.bancolombia.model.log.Filters;
 import co.com.bancolombia.model.log.Log;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +18,6 @@ public class HandlerRegistryConfiguration {
     public HandlerRegistry handlerRegistry(CommandsHandler commands) {
         return register()
                 .handleCommand(SAVE_LOG_SEND_ALERT, commands::saveLog, Log.class)
-                .handleCommand(RETRIEVE_LOGS, commands::retrieveLogs, Filters.class);
+                .handleCommand(RETRIEVE_LOGS, commands::retrieveLogs, FiltersDTO.class);
     }
 }
