@@ -43,6 +43,9 @@ cloud:
       secret-rds: ${SECRET_RDS}
       secret-rabbit:  ${SECRET_RABBIT}
       endpoint: http://localhost:4566
+    glue:
+      region: us-east-1
+
 
 management:
   endpoints:

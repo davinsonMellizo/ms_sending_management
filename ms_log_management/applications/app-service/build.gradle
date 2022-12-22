@@ -3,6 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
+    implementation project(":glue-client")
     implementation project(':reactive-web')
     implementation project(':r2dbc-postgresql')
     implementation project(':async-event-handler')

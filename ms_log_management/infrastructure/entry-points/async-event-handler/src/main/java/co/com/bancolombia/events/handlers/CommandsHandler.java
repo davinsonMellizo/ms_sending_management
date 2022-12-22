@@ -1,5 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
+import co.com.bancolombia.model.log.Filters;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,9 @@ public class CommandsHandler {
 
     public Mono<Void> saveLog(Command<Log> command){
         return useCase.saveLog(command.getData());
+    }
+    public Mono<Void> retrieveLogs(Command<Filters> command){
+        return useCase.retrieveLogsS3(command.getData());
     }
 
 }

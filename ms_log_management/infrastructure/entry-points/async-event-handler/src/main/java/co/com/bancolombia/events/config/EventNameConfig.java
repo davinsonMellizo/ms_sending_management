@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 public class EventNameConfig {
 
     public static final String SAVE_LOG_SEND_ALERT = "save.log.send.alert";
+    public static final String RETRIEVE_LOGS = "retrieve.log.alert";
 
 }

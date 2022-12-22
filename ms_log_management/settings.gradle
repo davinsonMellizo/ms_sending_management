@@ -16,3 +16,5 @@ include ':rabbit-configurator'
 project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
 include ':async-event-handler'
 project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
+include ':glue-client'
+project(':glue-client').projectDir = file('./infrastructure/driven-adapters/glue-client')
