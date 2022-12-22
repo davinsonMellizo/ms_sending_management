@@ -29,7 +29,7 @@ public class ParamsUtil {
         return (value == null || value.isEmpty()) ? Optional.empty() : Optional.of(value);
     }
     private static Mono<LocalDateTime> ofEmptyDate(String value) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         return (value == null || value.isEmpty()) ? Mono.empty() : Mono.just(LocalDateTime.parse(value, formatter));
     }
 
