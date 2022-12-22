@@ -18,7 +18,8 @@ public class CommandsHandler {
         return useCase.saveLog(command.getData());
     }
     public Mono<Void> retrieveLogs(Command<Filters> command){
-        return useCase.retrieveLogsS3(command.getData());
+        return useCase.retrieveLogsS3(command.getData())
+                .thenEmpty(Mono.empty());
     }
 
 }

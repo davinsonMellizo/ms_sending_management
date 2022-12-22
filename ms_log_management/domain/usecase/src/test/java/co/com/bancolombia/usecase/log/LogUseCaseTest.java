@@ -58,18 +58,5 @@ public class LogUseCaseTest {
         verify(logGateway).findLog(query);
     }
 
-    @Test
-    public void findLogColdTest() {
-        when(retrieveLogsGateway.retrieveLogsS3(any()))
-                .thenReturn(Mono.just(""));
-        QueryLog query = QueryLog.builder()
-                .referenceDate(LocalDateTime.now().minusDays(90))
-                .endDate(LocalDateTime.now().minusDays(180))
-                .build();
-        StepVerifier
-                .create(useCase.findLogsByDate(query))
-                .expectNextCount(0)
-                .verifyComplete();
-    }
 
 }

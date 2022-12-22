@@ -22,28 +22,21 @@ public class LogUseCase {
     }
 
     public Mono<List<Log>> findLogsByDate(QueryLog queryLog){
-        return differenceDate(queryLog)
-                .filter(aBoolean -> aBoolean)
-                .map(logs -> retrieveLogsS3(Filters.builder()
+        return retrieveLogsS3(Filters.builder()
                         .startDate(LocalDateTime.now().minusDays(5))
                         .endDate(LocalDateTime.now())
                         .consumer("ALM").provider("MAS").contact("32178521")
                         .documentNumber("106177595").documentType("1")
-                        .build()))
-                .flatMap(aBoolean -> dataHot(queryLog));
+                        .build())
+                .flatMap(unused -> dataHot(queryLog));
     }
 
-    public Mono<Void> retrieveLogsS3(Filters filters){
-        return retrieveLogsGateway.retrieveLogsS3(filters)
-                .thenEmpty(Mono.empty());
+    public Mono<String> retrieveLogsS3(Filters filters){
+        return retrieveLogsGateway.retrieveLogsS3(filters);
     }
 
     private Mono<List<Log>> dataHot(QueryLog queryLog){
         return logGateway.findLog(queryLog);
     }
 
-    private Mono<Boolean> differenceDate(QueryLog queryLog){
-        return Mono.just(queryLog.getReferenceDate().toLocalDate())
-                .map(referenceDate->referenceDate.isBefore(queryLog.getEndDate().toLocalDate()));
-    }
 }
