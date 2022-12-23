@@ -2,21 +2,46 @@
 Script para completar los datos de contacto faltantes del usuario en el archivo CSV.
 """
 import sys
+from datetime import datetime
 from typing import List
 
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
+from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, lit, when
 
+# Glue Context
+args = getResolvedOptions(sys.argv, [
+    'JOB_NAME', 'source_massive_file_path', 'processed_file_path',
+    'consumer_id', 'data_enrichment'
+])
+
+glueContext = GlueContext(SparkContext())
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+
+# Job parameters
+data_enrichment: str = args['data_enrichment']
+source_massive_file_path: str = args['source_massive_file_path']
+processed_file_path: str = args['processed_file_path']
+consumer_id: str = args['consumer_id']
+
+# Glue
+GLUE_DATABASE: str = 'nu0154001-alertas-db'
+GLUE_DATABASE_TABLE: str = 'alertdcd_schalerd_contact'
+
+# Bucket paara almacenar archivos procesados
+BUCKET_TARGET: str = 'nu0154001-alertas-glue-processed-data'
 
 # Mensajes de error
 USER_ID_MSG_ERR: str = 'El número de documento no se encontro en la base de datos'
 EMAIL_MSG_ERR: str = 'El correo electrónico no se encontro en la base de datos'
 SMS_MSG_ERR: str = 'El número de celular no se encontro en la base de datos'
 
-# Channels type
+# Tipo de canales
 CHANNEL_SMS: str = 'SMS'
 CHANNEL_EMAIL: str = 'EMAIL'
 CHANNEL_PUSH: str = 'PUSH'
@@ -26,28 +51,34 @@ CONTACT_MEDIUM_SMS: str = '0'
 CONTACT_MEDIUM_EMAIL: str = '1'
 CONTACT_MEDIUM_PUSH: str = '2'
 
+# Número de filas a escribir por archivo
+CSV_ROWS_LIMIT: int = 6700
+
+# Fecha para agrupar los archivos procesados
+FOLDER_DATE = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
 # Columnas a seleccionar del DynamicFrame de contactos
 CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 
 
-# Glue Context
-args = getResolvedOptions(sys.argv, [
-    'JOB_NAME', 'glue_database', 'glue_database_table', 'data_enrichment',
-    'source_massive_file_path', 'bucket_destination_path', 'consumer_id'
-])
+# Funciones
+def get_coalesce(number_rows: int) -> int:
+    """Obtiene el número de particiones por archivo"""
+    if number_rows <= CSV_ROWS_LIMIT:
+        return 1
+    return round(number_rows / CSV_ROWS_LIMIT)
 
-glueContext = GlueContext(SparkContext())
-spark = glueContext.spark_session
-job = Job(glueContext)
-job.init(args['JOB_NAME'], args)
 
-# Job parameters
-glue_database = args['glue_database']
-glue_database_table = args['glue_database_table']
-data_enrichment = args['data_enrichment']
-source_massive_file_path = args['source_massive_file_path']
-bucket_destination_path = args['bucket_destination_path']
-consumer_id = args['consumer_id']
+def write_df(dataframe: DataFrame, channel_type: str) -> None:
+    """Escribe el DataFrame en un bucket de S3 en formato de archivo CSV"""
+    rows = dataframe.count()
+    if rows > 0:
+        dataframe.drop('ChannelType')\
+            .coalesce(get_coalesce(rows))\
+            .write \
+            .options(header=True, delimiter=';', quote='') \
+            .mode('append') \
+            .csv(f's3://{BUCKET_TARGET}/{channel_type}/{processed_file_path}/{FOLDER_DATE}')
 
 
 # Leer archivo CSV con los datos a procesar
@@ -65,8 +96,8 @@ if data_enrichment == 'true':
 
     # Obtener datos del Data Catalog
     contacts_dyf = glueContext.create_dynamic_frame.from_catalog(
-        database=glue_database,
-        table_name=glue_database_table
+        database=GLUE_DATABASE,
+        table_name=GLUE_DATABASE_TABLE
     )
 
     print('CONTACTS_DYF_COUNT:', contacts_dyf.count())
@@ -208,12 +239,16 @@ if data_enrichment == 'true':
         *CONTACTS_COLUMNS, 'contact_medium', 'UserIdNotFound'
     )
 
+
+# Obtener Dataframes por tipo de canal
+email_df = massive_df.filter(col('ChannelType') == CHANNEL_EMAIL)
+sms_df = massive_df.filter(col('ChannelType') == CHANNEL_SMS)
+push_df = massive_df.filter(col('ChannelType') == CHANNEL_PUSH)
+
 # Escribir DataFrame en bucket de S3 en formato de archivo CSV separados por tipo de canal
-massive_df.coalesce(1).write \
-    .options(header=True, delimiter=';', quote='') \
-    .partitionBy('ChannelType') \
-    .mode('append') \
-    .csv(f's3://{bucket_destination_path}')
+write_df(email_df, CHANNEL_EMAIL.lower())
+write_df(sms_df, CHANNEL_SMS.lower())
+write_df(push_df, CHANNEL_PUSH.lower())
 
 # Finalizar Job
 job.commit()
