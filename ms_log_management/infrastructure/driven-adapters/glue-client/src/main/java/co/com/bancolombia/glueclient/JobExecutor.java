@@ -43,7 +43,6 @@ public class JobExecutor implements RetrieveLogsGateway {
         }
 
         var startJobRunRequest = fillMandatoryArguments(filter, jobName);
-        System.out.println("datos ja"+startJobRunRequest.getArguments());
         return Mono.just(startJobRunRequest);
     }
 
