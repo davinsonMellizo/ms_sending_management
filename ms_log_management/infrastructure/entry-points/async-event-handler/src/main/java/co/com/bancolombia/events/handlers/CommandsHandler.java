@@ -19,7 +19,10 @@ public class CommandsHandler {
     }
     public Mono<Void> retrieveLogs(Command<FiltersDTO> command){
         return Mono.just(command.getData())
+                .doOnNext(filtersDTO -> System.out.println("datos"))
+                .log()
                 .flatMap(FiltersDTO::toModel)
+                .log()
                 .map(useCase::retrieveLogsS3)
                 .thenEmpty(Mono.empty());
     }

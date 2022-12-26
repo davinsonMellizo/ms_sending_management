@@ -34,7 +34,7 @@ public class ParamsUtil {
     }
 
     private static String getHeader(ServerRequest request, String header) {
-        return ofEmpty(request.headers().firstHeader(header)).orElse(" ");
+        return ofEmpty(request.headers().firstHeader(header)).orElse("");
     }
     private static  Mono<QueryLogDto> getHeaderDate(ServerRequest request, String header, QueryLogDto queryLogDto,
                                                     Integer daysHotData) {

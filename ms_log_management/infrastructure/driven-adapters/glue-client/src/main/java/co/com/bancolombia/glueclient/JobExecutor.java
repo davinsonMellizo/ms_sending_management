@@ -43,6 +43,7 @@ public class JobExecutor implements RetrieveLogsGateway {
         }
 
         var startJobRunRequest = fillMandatoryArguments(filter, jobName);
+        System.out.println("datos ja"+startJobRunRequest.getArguments());
         return Mono.just(startJobRunRequest);
     }
 
@@ -50,13 +51,13 @@ public class JobExecutor implements RetrieveLogsGateway {
         var startJobRunRequest = new StartJobRunRequest();
         startJobRunRequest.setJobName(jobName);
         startJobRunRequest.addArgumentsEntry("--transaction_identifier", filter.getTransactionIdentifier());
-        startJobRunRequest.addArgumentsEntry("--document_type", filter.getDocumentType());
-        startJobRunRequest.addArgumentsEntry("--document_number", filter.getDocumentNumber());
+        startJobRunRequest.addArgumentsEntry("--document_type", validateEmpty(filter.getDocumentType()));
+        startJobRunRequest.addArgumentsEntry("--document_number", validateEmpty(filter.getDocumentNumber()));
         startJobRunRequest.addArgumentsEntry("--start_date", filter.getStartDate().toString());
         startJobRunRequest.addArgumentsEntry("--end_date", filter.getEndDate().toString());
-        startJobRunRequest.addArgumentsEntry("--contact",  filter.getContact());
-        startJobRunRequest.addArgumentsEntry("--consumer", filter.getConsumer());
-        startJobRunRequest.addArgumentsEntry("--provider", filter.getProvider());
+        startJobRunRequest.addArgumentsEntry("--contact",  validateEmpty(filter.getContact()));
+        startJobRunRequest.addArgumentsEntry("--consumer", validateEmpty(filter.getConsumer()));
+        startJobRunRequest.addArgumentsEntry("--provider", validateEmpty(filter.getProvider()));
         return startJobRunRequest;
     }
 
@@ -75,5 +76,9 @@ public class JobExecutor implements RetrieveLogsGateway {
             return Optional.empty();
         }
         return Optional.of(message);
+    }
+
+    private String validateEmpty(String value){
+        return value.isEmpty()?" ": value;
     }
 }
