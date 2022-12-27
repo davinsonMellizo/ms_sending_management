@@ -45,7 +45,7 @@ public class SesAdapter implements SesGateway {
     @Value("${aws.s3.attachmentBucket}")
     private String attachmentBucket;
     private final LoggerBuilder loggerBuilder;
-    private final int codigoResponse=200;
+    private final int codigoResponse = 200;
 
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
@@ -63,6 +63,7 @@ public class SesAdapter implements SesGateway {
             msg_body.addBodyPart(htmlPart);
             attachmentList(alert.getAttachments()).forEach(attachment -> {
                 try {
+                    loggerBuilder.info(attachment);
                     msg_body.addBodyPart(retrieveAttachment(attachment));
                 } catch (MessagingException | MalformedURLException e) {
                     logger.error(e);
