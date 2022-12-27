@@ -61,9 +61,9 @@ public class SesAdapter implements SesGateway {
             htmlPart.setContent(templateEmail.getBodyHtml(), "text/html; charset=UTF-8");
 
             msg_body.addBodyPart(htmlPart);
-            attachmentList(alert.getAttachments()).forEach(attachment -> {
+            alert.setAttachments(alert.getAttachments() == null ? Collections.emptyList() : alert.getAttachments());
+            alert.getAttachments().forEach(attachment -> {
                 try {
-                    loggerBuilder.info(attachment);
                     msg_body.addBodyPart(retrieveAttachment(attachment));
                 } catch (MessagingException | MalformedURLException e) {
                     logger.error(e);
@@ -89,10 +89,6 @@ public class SesAdapter implements SesGateway {
         } catch (MessagingException e) {
             return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
         }
-    }
-
-    public <T extends Iterable> T attachmentList(T item) {
-        return (item == null) ? (T) Collections.emptyList() : item;
     }
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws MalformedURLException, MessagingException {
