@@ -97,7 +97,7 @@ public class SesAdapter implements SesGateway {
     }
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws MalformedURLException, MessagingException {
-        LOGGER.info("Attachment: " + attachment);
+        LOGGER.info("Attachment: {}", attachment);
         switch (attachment.getType()) {
             case AttachmentType.PATH:
                 return retrieveFromPath(attachment.getValue());
