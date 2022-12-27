@@ -9,12 +9,12 @@ function () {
             endpoint: 'http://localhost:4566',
             region: 'us-east-1',
             s3: {
-                bucketNameSource: 'nu0154001-alertas-dev-glue-scripts-data',
+                bucketNameSource: 'nu0154001-alertas-dev-glue-source-data',
                 bucketNameTarget: 'nu0154001-alertas-dev-glue-processed-data',
                 massivePrefix: 'test',
-                emailPrefix: 'test/ChannelType=EMAIL',
-                smsPrefix: 'test/ChannelType=SMS',
-                pushPrefix: 'test/ChannelType=PUSH'
+                emailPrefix: 'email/test/formato_masivos',
+                smsPrefix: 'sms/test/formato_masivos',
+                pushPrefix: 'push/test/formato_masivos'
             }
         },
     }
