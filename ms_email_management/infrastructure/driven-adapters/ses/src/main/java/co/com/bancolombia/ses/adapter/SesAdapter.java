@@ -66,6 +66,7 @@ public class SesAdapter implements SesGateway {
 
             msg_body.addBodyPart(htmlPart);
             alert.setAttachments(alert.getAttachments() == null ? Collections.emptyList() : alert.getAttachments());
+            LOGGER.info(alert.getAttachments());
             alert.getAttachments().forEach(attachment -> {
                 try {
                     msg_body.addBodyPart(retrieveAttachment(attachment));
@@ -96,7 +97,7 @@ public class SesAdapter implements SesGateway {
     }
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws MalformedURLException, MessagingException {
-        LOGGER.info(attachment.getType());
+        LOGGER.info("Attachment: " + attachment);
         switch (attachment.getType()) {
             case AttachmentType.PATH:
                 return retrieveFromPath(attachment.getValue());
