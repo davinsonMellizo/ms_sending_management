@@ -39,12 +39,8 @@ class GlueAdapterTest {
     @Mock
     private CronExpression cronExpression;
 
-    private static final String GLUE_DATABASE = "glue-database";
-    private static final String GLUE_DATABASE_TABLE = "glue-database-table";
-    private static final String BUCKET_SOURCE_PATH = "bucket-source-path";
-    private static final String BUCKET_DESTINATION_PATH = "bucket-destination-path";
+    private static final String GLUE_ENV = "dev";
     private static final String GLUE_JOB_NAME = "glue-job-name";
-    private static final String GLUE_CRAWLER_NAME = "glue-crawler-name";
 
     private final Campaign campaign = new Campaign();
     private final Schedule schedule = new Schedule();
@@ -57,12 +53,8 @@ class GlueAdapterTest {
     @BeforeAll
     void init() {
         MockitoAnnotations.openMocks(this);
-        when(glueConnectionProperties.getGlueDatabase()).thenReturn(GLUE_DATABASE);
-        when(glueConnectionProperties.getGlueDatabaseTable()).thenReturn(GLUE_DATABASE_TABLE);
-        when(glueConnectionProperties.getBucketSourcePath()).thenReturn(BUCKET_SOURCE_PATH);
-        when(glueConnectionProperties.getBucketDestinationPath()).thenReturn(BUCKET_DESTINATION_PATH);
+        when(glueConnectionProperties.getEnv()).thenReturn(GLUE_ENV);
         when(glueConnectionProperties.getJobName()).thenReturn(GLUE_JOB_NAME);
-        when(glueConnectionProperties.getCrawlerName()).thenReturn(GLUE_CRAWLER_NAME);
 
         campaign.setIdCampaign("1");
         campaign.setIdConsumer("ALM");

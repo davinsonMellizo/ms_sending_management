@@ -13,10 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "adapters.glue")
 public class GlueConnectionProperties {
-    private String glueDatabase;
-    private String glueDatabaseTable;
-    private String bucketSourcePath;
-    private String bucketDestinationPath;
+    private String env;
     private String jobName;
-    private String crawlerName;
 }

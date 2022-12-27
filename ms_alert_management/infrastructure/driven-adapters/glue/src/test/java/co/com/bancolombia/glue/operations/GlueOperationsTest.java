@@ -10,11 +10,26 @@ import reactor.test.StepVerifier;
 import software.amazon.awssdk.http.SdkHttpFullResponse;
 import software.amazon.awssdk.http.SdkHttpResponse;
 import software.amazon.awssdk.services.glue.GlueAsyncClient;
-import software.amazon.awssdk.services.glue.model.*;
+import software.amazon.awssdk.services.glue.model.Action;
+import software.amazon.awssdk.services.glue.model.CreateTriggerRequest;
+import software.amazon.awssdk.services.glue.model.CreateTriggerResponse;
+import software.amazon.awssdk.services.glue.model.DeleteTriggerRequest;
+import software.amazon.awssdk.services.glue.model.DeleteTriggerResponse;
+import software.amazon.awssdk.services.glue.model.StartTriggerRequest;
+import software.amazon.awssdk.services.glue.model.StartTriggerResponse;
+import software.amazon.awssdk.services.glue.model.StopTriggerRequest;
+import software.amazon.awssdk.services.glue.model.StopTriggerResponse;
+import software.amazon.awssdk.services.glue.model.TriggerType;
+import software.amazon.awssdk.services.glue.model.TriggerUpdate;
+import software.amazon.awssdk.services.glue.model.UpdateTriggerRequest;
+import software.amazon.awssdk.services.glue.model.UpdateTriggerResponse;
 
 import java.util.concurrent.CompletableFuture;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GlueOperationsTest {
@@ -128,6 +143,7 @@ class GlueOperationsTest {
         verify(glueAsyncClient, times(1))
                 .updateTrigger(any(UpdateTriggerRequest.class));
     }
+
     @Test
     void deleteTrigger() {
         when(glueAsyncClient.deleteTrigger(any(DeleteTriggerRequest.class)))

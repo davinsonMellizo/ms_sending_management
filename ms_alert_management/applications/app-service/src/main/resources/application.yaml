@@ -60,12 +60,8 @@ adapters:
     cache-time: ${CACHE_SECRETS_SECONDS}
     endpoint: http://localhost:4566
   glue:
-    glue-database: ${GLUE_DATABASE}
-    glue-database-table: ${GLUE_DATABASE_TABLE}
-    bucket-source-path: ${GLUE_BUCKET_SOURCE_PATH}
-    bucket-destination-path: ${GLUE_BUCKET_DESTINATION_PATH}
+    env: ${GLUE_ENV}
     job-name: ${GLUE_JOB_NAME}
-    crawler-name: ${GLUE_CRAWLER_NAME}
   entries:
     reactive-web:
       path-base: ${PATH_BASE}
