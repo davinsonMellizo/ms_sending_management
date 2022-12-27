@@ -2,7 +2,6 @@
 Script para completar los datos de contacto faltantes del usuario en el archivo CSV.
 """
 import sys
-from datetime import datetime
 from typing import List
 
 from awsglue.context import GlueContext
@@ -56,9 +55,6 @@ CONTACT_MEDIUM_PUSH: str = '2'
 # Número de filas a escribir por archivo
 CSV_ROWS_LIMIT: int = 6700
 
-# Fecha para agrupar los archivos procesados
-FOLDER_DATE = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-
 # Columnas a seleccionar del DynamicFrame de contactos
 CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 
@@ -80,7 +76,7 @@ def write_df(dataframe: DataFrame, channel_type: str) -> None:
             .write \
             .options(header=True, delimiter=';', quote='') \
             .mode('append') \
-            .csv(f's3://{BUCKET_TARGET}/{channel_type}/{processed_file_path}/{FOLDER_DATE}')
+            .csv(f's3://{BUCKET_TARGET}/{channel_type}/{processed_file_path}')
 
 
 # Leer archivo CSV con los datos a procesar
