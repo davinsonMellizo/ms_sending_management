@@ -35,7 +35,7 @@ GLUE_DATABASE: str = f'nu0154001-alertas-{env}-db'
 GLUE_DATABASE_TABLE: str = 'alertdcd_schalerd_contact'
 
 # Buckets
-BUCKET_SOURCE: str = f'nu0154001-alertas-{env}-glue-data'
+BUCKET_SOURCE: str = f'nu0154001-alertas-{env}-glue-scripts-data'
 BUCKET_TARGET: str = f'nu0154001-alertas-{env}-glue-processed-data'
 
 # Mensajes de error
