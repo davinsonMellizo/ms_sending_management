@@ -35,7 +35,7 @@ GLUE_DATABASE: str = f'nu0154001-alertas-{env}-db'
 GLUE_DATABASE_TABLE: str = 'alertdcd_schalerd_contact'
 
 # Buckets
-SOURCE_BUCKET: str = f'nu0154001-alertas-{env}-glue-data'
+BUCKET_SOURCE: str = f'nu0154001-alertas-{env}-glue-data'
 BUCKET_TARGET: str = f'nu0154001-alertas-{env}-glue-processed-data'
 
 # Mensajes de error
@@ -86,7 +86,7 @@ def write_df(dataframe: DataFrame, channel_type: str) -> None:
 # Leer archivo CSV con los datos a procesar
 massive_df = spark.read \
     .options(header=True, delimiter=';') \
-    .csv(f's3://{SOURCE_BUCKET}/{source_massive_file_path}')
+    .csv(f's3://{BUCKET_SOURCE}/{source_massive_file_path}')
 
 # Agregar ID del consumidor
 massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id))
