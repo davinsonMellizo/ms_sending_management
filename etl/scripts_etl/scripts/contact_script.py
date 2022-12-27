@@ -14,7 +14,7 @@ from pyspark.sql.functions import col, lit, when
 
 # Glue Context
 args = getResolvedOptions(sys.argv, [
-    'JOB_NAME', 'source_massive_file_path', 'processed_file_path',
+    'JOB_NAME', 'env', 'source_massive_file_path', 'processed_file_path',
     'consumer_id', 'data_enrichment'
 ])
 
@@ -24,17 +24,19 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # Job parameters
+env: str = args['env']
 data_enrichment: str = args['data_enrichment']
 source_massive_file_path: str = args['source_massive_file_path']
 processed_file_path: str = args['processed_file_path']
 consumer_id: str = args['consumer_id']
 
 # Glue
-GLUE_DATABASE: str = 'nu0154001-alertas-db'
+GLUE_DATABASE: str = f'nu0154001-alertas-{env}-db'
 GLUE_DATABASE_TABLE: str = 'alertdcd_schalerd_contact'
 
-# Bucket paara almacenar archivos procesados
-BUCKET_TARGET: str = 'nu0154001-alertas-glue-processed-data'
+# Buckets
+SOURCE_BUCKET: str = f'nu0154001-alertas-{env}-glue-data'
+BUCKET_TARGET: str = f'nu0154001-alertas-{env}-glue-processed-data'
 
 # Mensajes de error
 USER_ID_MSG_ERR: str = 'El número de documento no se encontro en la base de datos'
@@ -46,7 +48,7 @@ CHANNEL_SMS: str = 'SMS'
 CHANNEL_EMAIL: str = 'EMAIL'
 CHANNEL_PUSH: str = 'PUSH'
 
-# ID medio de contacto
+# ID canal de contacto
 CONTACT_MEDIUM_SMS: str = '0'
 CONTACT_MEDIUM_EMAIL: str = '1'
 CONTACT_MEDIUM_PUSH: str = '2'
@@ -84,7 +86,7 @@ def write_df(dataframe: DataFrame, channel_type: str) -> None:
 # Leer archivo CSV con los datos a procesar
 massive_df = spark.read \
     .options(header=True, delimiter=';') \
-    .csv(f's3://{source_massive_file_path}')
+    .csv(f's3://{SOURCE_BUCKET}/{source_massive_file_path}')
 
 # Agregar ID del consumidor
 massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id))
