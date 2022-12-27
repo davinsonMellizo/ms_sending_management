@@ -9,6 +9,8 @@ import co.com.bancolombia.model.message.TemplateEmail;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -46,6 +48,8 @@ public class SesAdapter implements SesGateway {
     private String attachmentBucket;
     private final LoggerBuilder loggerBuilder;
     private final int codigoResponse = 200;
+
+    private static final Logger LOGGER = LogManager.getLogger(SesAdapter.class);
 
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
@@ -92,7 +96,7 @@ public class SesAdapter implements SesGateway {
     }
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws MalformedURLException, MessagingException {
-        System.out.println(attachment.getType());
+        LOGGER.info(attachment.getType());
         switch (attachment.getType()) {
             case AttachmentType.PATH:
                 return retrieveFromPath(attachment.getValue());
@@ -106,13 +110,13 @@ public class SesAdapter implements SesGateway {
     }
 
     private MimeBodyPart retrieveFromPath(String urlString) throws MessagingException {
-        System.out.println("working on path");
+        LOGGER.info("working on path");
         InputStream attachment = s3AsyncOperations.getFileAsInputStream(attachmentBucket, urlString).block();
         return new MimeBodyPart(attachment);
     }
 
     private MimeBodyPart retrieveFromUrl(String urlString) throws MalformedURLException, MessagingException {
-        System.out.println("working on url");
+        LOGGER.info("working on url");
         MimeBodyPart attachmentPart = new MimeBodyPart();
         URL url = new URL(urlString);
         attachmentPart.setDataHandler(new DataHandler(url));
@@ -122,7 +126,7 @@ public class SesAdapter implements SesGateway {
     }
 
     private MimeBodyPart retrieveFromBase64(Attachment attachment) throws MessagingException {
-        System.out.println("working on base64");
+        LOGGER.info("working on base64");
         MimeBodyPart attachmentPart = new PreencodedMimeBodyPart("base64");
         attachmentPart.setContent(attachment.getValue(), attachment.getContentType());
         attachmentPart.setDisposition(Part.ATTACHMENT);
