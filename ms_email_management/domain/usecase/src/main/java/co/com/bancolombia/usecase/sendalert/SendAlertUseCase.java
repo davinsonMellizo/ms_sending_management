@@ -55,30 +55,24 @@ public class SendAlertUseCase {
     }
 
     private Mono<Alert> validateAttachments(Alert alert) {
-        List<Attachment> attachmentList = new ArrayList<>();
         return Mono.just(alert)
                 .filter(alert1 -> !alert1.getAttachments().isEmpty())
                 .map(alert1 -> {
                     alert1.getAttachments().forEach(attachment -> {
                         switch (attachment.getType()) {
                             case AttachmentType.PATH:
-                                generatePresignedUrl(attachment.getValue()).subscribe(s -> attachmentList.add(
-                                        Attachment.builder().path(s).filename(attachment.getFilename()).build()));
-                                break;
+                                generatePresignedUrl(attachment.getValue()).subscribe(s -> attachment.setPath(s));
                             case AttachmentType.URL:
-                                attachmentList.add(Attachment.builder().path(attachment.getValue())
-                                        .filename(attachment.getFilename()).build());
+                                attachment.setPath(attachment.getValue());
                                 break;
                             case AttachmentType.BASE64:
-                                attachmentList.add(Attachment.builder().path(String.format("data:%1$s;base64,%2$s",
-                                        attachment.getContentType(), attachment.getValue()))
-                                        .filename(attachment.getFilename()).build());
+                                attachment.setPath(String.format("data:%1$s;base64,%2$s",
+                                        attachment.getContentType(), attachment.getValue()));
                                 break;
                             default:
                                 break;
                         }
                     });
-                    alert1.setAttachments(attachmentList);
                     return alert1;
                 })
                 .defaultIfEmpty(alert);
