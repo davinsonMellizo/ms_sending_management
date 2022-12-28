@@ -10,7 +10,7 @@ from awsglue.job import Job
 from pyspark.sql.functions import col
 from awsglue.dynamicframe import DynamicFrame
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME', "bucket_source_path", "bucket_destination_path", "transaction_identifier", "document_type", 
+args = getResolvedOptions(sys.argv, ['JOB_NAME', "bucket_source_path", "bucket_destination_path", "document_type", 
                                      "document_number", "start_date", "end_date", "contact", "consumer", "provider"])
 
 sc = SparkContext()
@@ -21,7 +21,7 @@ job.init(args["JOB_NAME"], args)
 hadoopConf = spark.sparkContext._jsc.hadoopConfiguration()
 # Buckets
 bucketDestinationPath = args["bucket_destination_path"]
-bucketSourcePath = args["bucket_source_path"]
+bucketSourcePath = args["bucket_source_path"].split("/")[0]
 
 # Filters
 
@@ -35,10 +35,10 @@ provider = args["provider"]
 
 # configurations parameters
 
-formatDate = "%Y-%m-%d %H:%M:%S.%f"
+formatDate = "%Y-%m-%dT%H:%M:%S.%f"
 sourcePathRegex = "test/{date}/"
 sourcePaths =[]
-s3BucketSourcePath = "s3://"+bucketSourcePath.split("/")[0]+"/"
+s3BucketSourcePath = "s3://"+bucketSourcePath+"/"
 client = boto3.client('s3')
 
 def validateField(stringValue):
@@ -128,6 +128,7 @@ def createDynamicFrame():
             additional_options={
                 "excludeStorageClasses": ["GLACIER", "DEEP_ARCHIVE", "GLACIER_IR"]
             },
+            transformation_ctx="S3bucket_node1",
         )
         
         return S3bucket_node1
@@ -144,9 +145,9 @@ if df != None:
     print("pos")
     df = df.toDF()
     df = dynamicFilter(df)
-    print("pasa del filtro")
+    print("pasa del filtro", bucketDestinationPath)
     print(df.count())
-    df.coalesce(1).write.mode("overwrite").csv("s3://"+bucketDestinationPath)
+    df.coalesce(1).write.mode("overwrite").csv(f's3://{bucketDestinationPath}/test')
 
 job.commit()
 print("Proceso Terminado.")
