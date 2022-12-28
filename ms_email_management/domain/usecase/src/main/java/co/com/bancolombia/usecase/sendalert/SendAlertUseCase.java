@@ -2,7 +2,6 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.commons.constants.AttachmentType;
 import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Attachment;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Recipient;
 import co.com.bancolombia.model.message.Response;
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
 import static co.com.bancolombia.commons.constants.Provider.SES;
@@ -61,7 +59,8 @@ public class SendAlertUseCase {
                     alert1.getAttachments().forEach(attachment -> {
                         switch (attachment.getType()) {
                             case AttachmentType.PATH:
-                                generatePresignedUrl(attachment.getValue()).subscribe(s -> attachment.setPath(s));
+                                generatePresignedUrl(attachment.getValue()).subscribe(attachment::setPath);
+                                break;
                             case AttachmentType.URL:
                                 attachment.setPath(attachment.getValue());
                                 break;
