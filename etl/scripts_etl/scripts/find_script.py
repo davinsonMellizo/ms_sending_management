@@ -10,9 +10,9 @@ from awsglue.job import Job
 from pyspark.sql.functions import col
 from awsglue.dynamicframe import DynamicFrame
 
-"""args = getResolvedOptions(sys.argv, ['JOB_NAME', "bucket_source_path", "bucket_destination_path", "transaction_identifier", "document_type", 
-                                     "document_number", "start_date", "end_date", "contact", "consumer", "provider", "user_email"])"""
-args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+args = getResolvedOptions(sys.argv, ['JOB_NAME', "bucket_source_path", "bucket_destination_path", "document_type", 
+                                     "document_number", "start_date", "end_date", "contact", "consumer", "provider"])
+
 sc = SparkContext()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
@@ -20,13 +20,11 @@ job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 hadoopConf = spark.sparkContext._jsc.hadoopConfiguration()
 # Buckets
-"""bucketDestinationPath = args["bucket_destination_path"]
-bucketSourcePath = args["bucket_source_path"]"""
-bucketDestinationPath = "nu0154001-alertas-dev-glue-logs-alertas"
-bucketSourcePath = "nu0154001-alertas-dev-glue-logs-alertas"
+bucketDestinationPath = args["bucket_destination_path"]
+bucketSourcePath = args["bucket_source_path"].split("/")[0]
 
 # Filters
-"""
+
 documentType = args["document_type"]
 documentNumber = args["document_number"]
 startDateTime = args["start_date"]
@@ -34,18 +32,10 @@ endDateTime = args["end_date"]
 contact = args["contact"]
 consumer = args["consumer"]
 provider = args["provider"]
-userEmail = args["user_email"]"""
-documentType = ""
-documentNumber = ""
-startDateTime = "2022-06-12 00:00:00"
-endDateTime = "2022-12-12 23:59:59"
-contact = "davinson.mellizo@gmailcom"
-consumer = ""
-provider = "MAS"
-userEmail = "dmellizo"
+
 # configurations parameters
 
-formatDate = "%Y-%m-%d %H:%M:%S"
+formatDate = "%Y-%m-%dT%H:%M:%S.%f"
 sourcePathRegex = "test/{date}/"
 sourcePaths =[]
 s3BucketSourcePath = "s3://"+bucketSourcePath+"/"
@@ -123,8 +113,6 @@ def sourcePathBuild():
 def timeFilter(outFrame):
     if(outFrame.count() > 0):
         outFrame = outFrame.filter(lambda x: x.date_creation >= datetime.strptime(startDateTime,formatDate) and x.date_creation <= datetime.strptime(endDateTime,formatDate))
-    print("despues de tros")
-    print(outFrame.count())
     return outFrame
 
 def createDynamicFrame():
@@ -134,13 +122,13 @@ def createDynamicFrame():
             connection_type="s3",
             format="parquet",
             connection_options={
-                "paths": ['s3://nu0154001-alertas-dev-glue-logs-alertas/test/2022-11-12/'],
-                "recurse": True
-                #'groupFiles': 'inPartition'
+                "paths": sourcePaths,
+                "recurse": True,
             },
             additional_options={
                 "excludeStorageClasses": ["GLACIER", "DEEP_ARCHIVE", "GLACIER_IR"]
             },
+            transformation_ctx="S3bucket_node1",
         )
         
         return S3bucket_node1
@@ -157,9 +145,9 @@ if df != None:
     print("pos")
     df = df.toDF()
     df = dynamicFilter(df)
-    print("pasa del filtro")
+    print("pasa del filtro", bucketDestinationPath)
     print(df.count())
-    df.coalesce(1).write.mode("overwrite").csv("s3://"+bucketDestinationPath)
+    df.coalesce(1).write.mode("overwrite").csv(f's3://{bucketDestinationPath}/test')
 
 job.commit()
 print("Proceso Terminado.")
