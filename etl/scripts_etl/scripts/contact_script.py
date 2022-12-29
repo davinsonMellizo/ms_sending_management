@@ -86,8 +86,9 @@ massive_df = spark.read \
     .csv(f's3://{BUCKET_SOURCE}/{source_massive_file_path}')
 
 # Agregar ID del consumidor, proveedor y error
+provider_replace = provider.replace('"', '""')
 massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id)) \
-    .withColumn('Provider', lit(provider)) \
+    .withColumn('Provider', lit(f'"{provider_replace}"')) \
     .withColumn('Error', lit(None))
 
 print('MASSIVE_DF_COUNT:', massive_df.count())
