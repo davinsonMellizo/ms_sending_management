@@ -20,6 +20,8 @@ import software.amazon.awssdk.services.ses.model.RawMessage;
 import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -30,6 +32,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -119,10 +122,14 @@ public class SesAdapter implements SesGateway {
     private MimeBodyPart retrieveFromUrl(String urlString) throws MalformedURLException, MessagingException {
         LOGGER.info("working on url");
         MimeBodyPart attachmentPart = new MimeBodyPart();
-        URL url = new URL(urlString);
-        attachmentPart.setDataHandler(new DataHandler(url));
+        DataSource source = new FileDataSource(urlString);
+        attachmentPart.setDataHandler(new DataHandler(source));
         attachmentPart.setDisposition(Part.ATTACHMENT);
-        attachmentPart.setFileName(url.getFile());
+        attachmentPart.setFileName(source.getName());
+//        URL url = new URL(urlString);
+//        attachmentPart.setDataHandler(new DataHandler(url));
+//        attachmentPart.setDisposition(Part.ATTACHMENT);
+//        attachmentPart.setFileName(url.getFile());
         return attachmentPart;
     }
 
