@@ -32,10 +32,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Properties;
@@ -126,10 +124,6 @@ public class SesAdapter implements SesGateway {
         attachmentPart.setDataHandler(new DataHandler(source));
         attachmentPart.setDisposition(Part.ATTACHMENT);
         attachmentPart.setFileName(source.getName());
-//        URL url = new URL(urlString);
-//        attachmentPart.setDataHandler(new DataHandler(url));
-//        attachmentPart.setDisposition(Part.ATTACHMENT);
-//        attachmentPart.setFileName(url.getFile());
         return attachmentPart;
     }
 
