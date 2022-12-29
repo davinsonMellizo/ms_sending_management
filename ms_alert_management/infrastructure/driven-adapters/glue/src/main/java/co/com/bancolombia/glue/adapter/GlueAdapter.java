@@ -33,6 +33,7 @@ public class GlueAdapter implements CampaignGlueGateway {
     private static final String PROCESSED_FILE_PATH = "--processed_file_path";
     private static final String DATA_ENRICHMENT = "--data_enrichment";
     private static final String CONSUMER_ID = "--consumer_id";
+    private static final String PROVIDER = "--provider";
 
     private String getTriggerName(String idCampaign, String idConsumer, Long idSchedule) {
         return String.format("tgr_%s_%s_%s", idCampaign, idConsumer, idSchedule);
@@ -62,7 +63,8 @@ public class GlueAdapter implements CampaignGlueGateway {
                         SOURCE_MASSIVE_FILE, campaign.getSourcePath(),
                         PROCESSED_FILE_PATH, this.getProcessedFilePath(campaign.getSourcePath()),
                         DATA_ENRICHMENT, campaign.getDataEnrichment().toString(),
-                        CONSUMER_ID, campaign.getIdConsumer()
+                        CONSUMER_ID, campaign.getIdConsumer(),
+                        PROVIDER, campaign.getProvider()
                 ))
                 .build();
     }

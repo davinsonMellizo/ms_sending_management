@@ -14,7 +14,7 @@ from pyspark.sql.functions import col, lit, when
 # Glue Context
 args = getResolvedOptions(sys.argv, [
     'JOB_NAME', 'env', 'source_massive_file_path', 'processed_file_path',
-    'consumer_id', 'data_enrichment'
+    'consumer_id', 'data_enrichment', 'provider'
 ])
 
 glueContext = GlueContext(SparkContext())
@@ -28,6 +28,7 @@ data_enrichment: str = args['data_enrichment']
 source_massive_file_path: str = args['source_massive_file_path']
 processed_file_path: str = args['processed_file_path']
 consumer_id: str = args['consumer_id']
+provider: str = args['provider']
 
 # Glue
 GLUE_DATABASE: str = f'nu0154001-alertas-{env}-db'
@@ -71,8 +72,8 @@ def write_df(dataframe: DataFrame, channel_type: str) -> None:
     """Escribe el DataFrame en un bucket de S3 en formato de archivo CSV"""
     rows = dataframe.count()
     if rows > 0:
-        dataframe.drop('ChannelType')\
-            .coalesce(get_coalesce(rows))\
+        dataframe.drop('ChannelType') \
+            .coalesce(get_coalesce(rows)) \
             .write \
             .options(header=True, delimiter=';', quote='') \
             .mode('append') \
@@ -84,8 +85,10 @@ massive_df = spark.read \
     .options(header=True, delimiter=';') \
     .csv(f's3://{BUCKET_SOURCE}/{source_massive_file_path}')
 
-# Agregar ID del consumidor
-massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id))
+# Agregar ID del consumidor, proveedor y error
+massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id)) \
+    .withColumn('Provider', lit(provider)) \
+    .withColumn('Error', lit(None))
 
 print('MASSIVE_DF_COUNT:', massive_df.count())
 

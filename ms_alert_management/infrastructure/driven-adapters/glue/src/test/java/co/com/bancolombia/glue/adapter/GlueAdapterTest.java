@@ -58,7 +58,7 @@ class GlueAdapterTest {
 
         campaign.setIdCampaign("1");
         campaign.setIdConsumer("ALM");
-        campaign.setProvider("{\"idProvider\":\"INA\",\"channelType\":\"PUSH\"}");
+        campaign.setProvider("{\"idProvider\":\"INA\",\"channelType\":\"SMS\"}");
         campaign.setIdRemitter(0);
         campaign.setDefaultTemplate("template");
         campaign.setDescription("description");
