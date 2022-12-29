@@ -11,6 +11,7 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
 }
 
 task explodedJar(type: Copy) {

@@ -29,17 +29,16 @@ public class FiltersDTO {
     private LocalDateTime endDate;
 
     public Mono<Filters> toModel(){
-        return Mono.just(
-          Filters.builder()
-                  .transactionIdentifier(this.transactionIdentifier)
-                  .documentNumber(this.documentNumber)
-                  .documentType(this.documentType)
-                  .contact(this.contact)
-                  .provider(this.provider)
-                  .consumer(this.consumer)
-                  .startDate(this.startDate)
-                  .endDate(this.endDate)
-                  .build()
+        return Mono.just(Filters.builder()
+              .transactionIdentifier(this.transactionIdentifier)
+              .documentNumber(this.documentNumber)
+              .documentType(this.documentType)
+              .contact(this.contact)
+              .provider(this.provider)
+              .consumer(this.consumer)
+              .startDate(this.startDate)
+              .endDate(this.endDate)
+              .build()
         );
     }
 }
