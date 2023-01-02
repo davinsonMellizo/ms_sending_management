@@ -22,6 +22,7 @@ import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.activation.URLDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -34,6 +35,7 @@ import javax.mail.internet.PreencodedMimeBodyPart;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Properties;
@@ -44,7 +46,6 @@ public class SesAdapter implements SesGateway {
 
     private final SesAsyncClient client;
     private final S3AsyncOperations s3AsyncOperations;
-    private final LoggerBuilder logger;
     @Value("${aws.s3.attachmentBucket}")
     private String attachmentBucket;
     private final LoggerBuilder loggerBuilder;
@@ -64,15 +65,13 @@ public class SesAdapter implements SesGateway {
             MimeMultipart msg_body = new MimeMultipart("alternative");
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(templateEmail.getBodyHtml(), "text/html; charset=UTF-8");
-
             msg_body.addBodyPart(htmlPart);
             alert.setAttachments(alert.getAttachments() == null ? Collections.emptyList() : alert.getAttachments());
-            LOGGER.info(alert.getAttachments());
             alert.getAttachments().forEach(attachment -> {
                 try {
                     msg_body.addBodyPart(retrieveAttachment(attachment));
                 } catch (MessagingException | MalformedURLException e) {
-                    logger.error(e);
+                    LOGGER.error(e);
                 }
             });
             message.setContent(msg_body);
@@ -85,10 +84,8 @@ public class SesAdapter implements SesGateway {
                                 .wrap(outputStream.toByteArray()))).build();
                 SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
                         .rawMessage(rawMessage).build();
-
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
                         .map(response -> Response.builder().code(codigoResponse).description("ses sendRawEmail").build());
-
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
             }
@@ -117,11 +114,11 @@ public class SesAdapter implements SesGateway {
         return new MimeBodyPart(attachment);
     }
 
-    private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MessagingException {
+    private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MalformedURLException, MessagingException {
         LOGGER.info("working on url");
         MimeBodyPart attachmentPart = new MimeBodyPart();
-        DataSource source = new FileDataSource(attachment.getValue());
-        attachmentPart.setDataHandler(new DataHandler(source));
+        URL url = new URL(attachment.getValue());
+        attachmentPart.setDataHandler(new DataHandler(new URLDataSource(url)));
         attachmentPart.setFileName(attachment.getFilename());
         return attachmentPart;
     }
