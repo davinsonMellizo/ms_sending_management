@@ -103,7 +103,7 @@ public class SesAdapter implements SesGateway {
             case AttachmentType.PATH:
                 return retrieveFromPath(attachment.getValue());
             case AttachmentType.URL:
-                return retrieveFromUrl(attachment.getValue());
+                return retrieveFromUrl(attachment);
             case AttachmentType.BASE64:
                 return retrieveFromBase64(attachment);
             default:
@@ -117,13 +117,12 @@ public class SesAdapter implements SesGateway {
         return new MimeBodyPart(attachment);
     }
 
-    private MimeBodyPart retrieveFromUrl(String urlString) throws MalformedURLException, MessagingException {
+    private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MessagingException {
         LOGGER.info("working on url");
         MimeBodyPart attachmentPart = new MimeBodyPart();
-        DataSource source = new FileDataSource(urlString);
+        DataSource source = new FileDataSource(attachment.getValue());
         attachmentPart.setDataHandler(new DataHandler(source));
-        attachmentPart.setDisposition(Part.ATTACHMENT);
-        attachmentPart.setFileName(source.getName());
+        attachmentPart.setFileName(attachment.getFilename());
         return attachmentPart;
     }
 
