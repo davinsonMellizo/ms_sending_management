@@ -73,7 +73,7 @@ class SesAdapterTest {
     void urlTest() {
         TemplateEmail templateEmail = TemplateEmail.builder().bodyHtml("html").subject("subject").build();
         List<Attachment> attachmentList = new ArrayList<>();
-        attachmentList.add(Attachment.builder().type("Url").value("http://url/test.pdf").build());
+        attachmentList.add(Attachment.builder().type("Url").value("http://url/test.pdf").filename("test.pdf").build());
         Alert alert = Alert.builder()
                 .from("from")
                 .destination(Alert.Destination.builder().toAddress("address").build())
