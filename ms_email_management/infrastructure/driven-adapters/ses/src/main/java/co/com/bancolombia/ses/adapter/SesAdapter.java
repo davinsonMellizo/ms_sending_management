@@ -25,8 +25,6 @@ import software.amazon.awssdk.services.ses.model.RawMessage;
 import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.activation.URLDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -38,18 +36,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
-import javax.swing.text.html.parser.Parser;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ContentHandler;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Properties;
 
 @Component
@@ -82,7 +75,8 @@ public class SesAdapter implements SesGateway {
             alert.getAttachments().forEach(attachment -> {
                 try {
                     msg_body.addBodyPart(retrieveAttachment(attachment));
-                } catch (MessagingException | MagicException | MagicParseException | MagicMatchNotFoundException | IOException e) {
+                } catch (MessagingException | MagicException | MagicParseException |
+                        MagicMatchNotFoundException | IOException e) {
                     LOGGER.error(e);
                 }
             });
@@ -109,29 +103,33 @@ public class SesAdapter implements SesGateway {
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws IOException, MessagingException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
         LOGGER.info("Attachment: {}", attachment);
+        MimeBodyPart mimeBodyPart;
         switch (attachment.getType()) {
             case AttachmentType.PATH:
-                return retrieveFromPath(attachment);
+                mimeBodyPart = retrieveFromPath(attachment);
+                break;
             case AttachmentType.URL:
-                return retrieveFromUrl(attachment);
+                mimeBodyPart = retrieveFromUrl(attachment);
+                break;
             case AttachmentType.BASE64:
-                return retrieveFromBase64(attachment);
+                mimeBodyPart = retrieveFromBase64(attachment);
+                break;
             default:
-                return new MimeBodyPart();
+                mimeBodyPart = new MimeBodyPart();
+                break;
         }
+        return mimeBodyPart;
     }
 
     private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException, IOException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
         LOGGER.info("working on path");
         InputStream source = s3AsyncOperations.getFileAsInputStream(attachmentBucket, attachment.getValue()).block();
-        Magic parser = new Magic();
-        MagicMatch match = parser.getMagicMatch(source.readAllBytes());
+        MagicMatch match = Magic.getMagicMatch(source.readAllBytes());
         InternetHeaders fileHeaders = new InternetHeaders();
         fileHeaders.setHeader("Content-Type", match.getMimeType() + "; name=\"" + attachment.getFilename() + "\"");
         fileHeaders.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
-        MimeBodyPart attachmentPart = new MimeBodyPart(fileHeaders, source.readAllBytes());
-        return attachmentPart;
+        return new MimeBodyPart(fileHeaders, source.readAllBytes());
     }
 
     private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MalformedURLException, MessagingException {
