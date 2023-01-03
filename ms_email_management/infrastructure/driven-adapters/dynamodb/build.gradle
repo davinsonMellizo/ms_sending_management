@@ -3,6 +3,5 @@ dependencies {
     implementation project(':dynamo-commons')
     implementation project(':secrets-manager')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.17.102'
-    implementation group: 'software.amazon.awssdk', name: 'dynamodb-enhanced', version: '2.17.102'
+    implementation 'software.amazon.awssdk:dynamodb-enhanced'
 }
