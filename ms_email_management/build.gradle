@@ -1,8 +1,8 @@
 buildscript {
     ext {
-        cleanArchitectureVersion = '2.4.4'
-        springBootVersion = '2.7.3'
-        springCloudVersion = '2021.0.2'
+        cleanArchitectureVersion = '2.4.5'
+        springBootVersion = '2.7.7'
+        springCloudVersion = '2021.0.5'
         sonarVersion = '3.0'
         jacocoVersion = '0.8.8'
         lombokVersion = '1.18.24'
@@ -28,11 +28,6 @@ sonarqube {
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
-}
-
-wrapper {
-    gradleVersion = '7.5'
-    distributionUrl = "https://artifactory.apps.bancolombia.com/gradlew/gradle-7.5-bin.zip"
 }
 
 apply from: './main.gradle'

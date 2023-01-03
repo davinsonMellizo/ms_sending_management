@@ -48,18 +48,17 @@ subprojects {
     jacocoTestReport {
         dependsOn test
         reports {
-            xml.enabled true
-            xml.destination file("${buildDir}/reports/jacoco.xml")
-            csv.enabled false
-            html.destination file("${buildDir}/reports/jacocoHtml")
+            xml.setRequired true
+            xml.setOutputLocation file("${buildDir}/reports/jacoco.xml")
+            csv.setRequired false
+            html.setOutputLocation file("${buildDir}/reports/jacocoHtml")
         }
     }
-
 }
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDir = file("$buildDir/reports")
+    reportsDirectory = file("$buildDir/reports")
 }
 
 task jacocoMergedReport(type: JacocoReport) {
@@ -69,18 +68,19 @@ task jacocoMergedReport(type: JacocoReport) {
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
     executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled true
+        xml.setRequired true
+        csv.setRequired false
+        html.setRequired true
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
+
 tasks.named('wrapper') {
-    gradleVersion = '7.5'
-    distributionUrl="https://artifactory.apps.bancolombia.com/gradlew/gradle-7.5-bin.zip"
+    gradleVersion = '7.6'
+    distributionUrl = 'https://artifactory.apps.bancolombia.com/gradlew/gradle-7.6-bin.zip'
 }

@@ -6,7 +6,7 @@ import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
-import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
+import org.reactivecommons.async.rabbit.config.ConnectionFactoryProvider;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
