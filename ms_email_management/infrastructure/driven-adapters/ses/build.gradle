@@ -6,4 +6,5 @@ dependencies {
     implementation group: 'software.amazon.awssdk', name: 'sts', version: '2.17.102'
     implementation group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
     implementation group: 'software.amazon.awssdk', name: 'ses', version: '2.17.102'
+    implementation 'jmimemagic:jmimemagic:0.1.2'
 }
