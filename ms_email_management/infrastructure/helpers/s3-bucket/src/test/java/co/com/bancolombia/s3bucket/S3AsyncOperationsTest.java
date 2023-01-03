@@ -84,6 +84,24 @@ class S3AsyncOperationsTest {
     }
 
     @Test
+    void getFileAsByteTest() {
+        when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
+                .thenReturn(completableFuture);
+        StepVerifier.create(s3AsyncOperations.getFileAsByteArray(bucketName, ccdtKey))
+                .expectNextMatches(v -> Objects.nonNull(v))
+                .verifyComplete();
+    }
+
+    @Test
+    void getFileAsByteErrorTest() {
+        when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
+                .thenReturn(Mono.error(new Throwable("testError")).toFuture());
+        StepVerifier.create(s3AsyncOperations.getFileAsByteArray(bucketName, ccdtKey))
+                .expectError()
+                .verify();
+    }
+
+    @Test
     void generatePresignedUrlTest() {
         ReflectionTestUtils.setField(s3AsyncOperations, "duration", 60L);
         PresignedGetObjectRequest presigned = PresignedGetObjectRequest.builder()
