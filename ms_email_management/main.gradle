@@ -25,7 +25,7 @@ subprojects {
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    ext['log4j2.version'] = '2.17.1'
+    ext['log4j2.version'] = '2.19.0'
 
     configurations {
         compile.exclude group: "org.apache.logging.log4j", module:"log4j-to-slf4j"
