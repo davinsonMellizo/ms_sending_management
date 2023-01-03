@@ -14,8 +14,6 @@ import net.sf.jmimemagic.MagicException;
 import net.sf.jmimemagic.MagicMatch;
 import net.sf.jmimemagic.MagicMatchNotFoundException;
 import net.sf.jmimemagic.MagicParseException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -56,8 +54,6 @@ public class SesAdapter implements SesGateway {
     private final LoggerBuilder loggerBuilder;
     private final int codigoResponse = 200;
 
-    private static final Logger LOGGER = LogManager.getLogger(SesAdapter.class);
-
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
         Session session = Session.getDefaultInstance(new Properties());
@@ -77,7 +73,7 @@ public class SesAdapter implements SesGateway {
                     msg_body.addBodyPart(retrieveAttachment(attachment));
                 } catch (MessagingException | MagicException | MagicParseException |
                         MagicMatchNotFoundException | IOException e) {
-                    LOGGER.error(e);
+                    loggerBuilder.error(e);
                 }
             });
             message.setContent(msg_body);
@@ -102,7 +98,6 @@ public class SesAdapter implements SesGateway {
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws IOException, MessagingException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
-        LOGGER.info("Attachment: {}", attachment);
         MimeBodyPart mimeBodyPart;
         switch (attachment.getType()) {
             case AttachmentType.PATH:
@@ -123,7 +118,6 @@ public class SesAdapter implements SesGateway {
 
     private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException, IOException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
-        LOGGER.info("working on path");
         InputStream source = s3AsyncOperations.getFileAsInputStream(attachmentBucket, attachment.getValue()).block();
         MagicMatch match = Magic.getMagicMatch(source.readAllBytes());
         InternetHeaders fileHeaders = new InternetHeaders();
