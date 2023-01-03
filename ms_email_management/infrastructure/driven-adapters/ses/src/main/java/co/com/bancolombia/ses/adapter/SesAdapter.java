@@ -29,13 +29,13 @@ import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -109,14 +109,14 @@ public class SesAdapter implements SesGateway {
         }
     }
 
-    private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException, IOException,
+    private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
-        InputStream source = s3AsyncOperations.getFileAsInputStream(attachmentBucket, attachment.getValue()).block();
-        MagicMatch match = Magic.getMagicMatch(source.readAllBytes());
-        MimeBodyPart attachmentPart = new MimeBodyPart(source);
-        attachmentPart.setHeader("Content-Type", match.getMimeType() + "; name=\"" + attachment.getFilename() + "\"");
-        attachmentPart.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
-        return attachmentPart;
+        byte[] source = s3AsyncOperations.getFileAsByteArray(attachmentBucket, attachment.getValue()).block();
+        MagicMatch match = Magic.getMagicMatch(source);
+        InternetHeaders fileHeaders = new InternetHeaders();
+        fileHeaders.setHeader("Content-Type", match.getMimeType() + "; name=\"" + attachment.getFilename() + "\"");
+        fileHeaders.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
+        return new MimeBodyPart(fileHeaders, source);
     }
 
     private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MalformedURLException, MessagingException {

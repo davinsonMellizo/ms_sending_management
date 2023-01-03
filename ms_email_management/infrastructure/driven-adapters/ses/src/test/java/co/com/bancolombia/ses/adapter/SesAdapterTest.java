@@ -60,8 +60,8 @@ class SesAdapterTest {
                 .destination(Alert.Destination.builder().toAddress("address").build())
                 .attachments(attachmentList)
                 .build();
-        InputStream anyInputStream = new ByteArrayInputStream("test data".getBytes());
-        when(s3AsyncOperations.getFileAsInputStream(anyString(), anyString())).thenReturn(Mono.just(anyInputStream));
+        byte[] response = new byte[10];
+        when(s3AsyncOperations.getFileAsByteArray(anyString(), anyString())).thenReturn(Mono.just(response));
         when(client.sendRawEmail((SendRawEmailRequest) any()))
                 .thenReturn(new CompletableFuture<>());
         StepVerifier.create(sesAdapter.sendEmail(templateEmail, alert))

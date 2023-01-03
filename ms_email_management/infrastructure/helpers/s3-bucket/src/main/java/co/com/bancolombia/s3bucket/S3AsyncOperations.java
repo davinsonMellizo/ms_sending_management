@@ -55,6 +55,17 @@ public class S3AsyncOperations {
                 });
     }
 
+    public Mono<byte[]> getFileAsByteArray(String bucketName, String objectKey) {
+        return getRequest(bucketName, objectKey)
+                .flatMap(this::getFileAsBytes)
+                .map(response -> fromByteArray(response, response.asByteArray()))
+                .map(BytesWrapper::asByteArray)
+                .onErrorMap(error -> {
+                    String message = String.join(" ", bucketName, objectKey, error.getMessage());
+                    return new TechnicalException(message, TECHNICAL_S3_EXCEPTION);
+                });
+    }
+
     private Mono<GetObjectRequest> getRequest(String bucketName, String objectKey) {
         return Mono.just(GetObjectRequest.builder()
                 .bucket(bucketName)
