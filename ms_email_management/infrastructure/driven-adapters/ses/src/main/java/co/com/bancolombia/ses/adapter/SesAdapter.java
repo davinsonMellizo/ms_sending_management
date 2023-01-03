@@ -98,32 +98,26 @@ public class SesAdapter implements SesGateway {
 
     private MimeBodyPart retrieveAttachment(Attachment attachment) throws IOException, MessagingException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
-        MimeBodyPart mimeBodyPart;
         switch (attachment.getType()) {
             case AttachmentType.PATH:
-                mimeBodyPart = retrieveFromPath(attachment);
-                break;
+                return retrieveFromPath(attachment);
             case AttachmentType.URL:
-                mimeBodyPart = retrieveFromUrl(attachment);
-                break;
+                return retrieveFromUrl(attachment);
             case AttachmentType.BASE64:
-                mimeBodyPart = retrieveFromBase64(attachment);
-                break;
+                return retrieveFromBase64(attachment);
             default:
-                mimeBodyPart = new MimeBodyPart();
-                break;
+                return new MimeBodyPart();
         }
-        return mimeBodyPart;
     }
 
     private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException, IOException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
         InputStream source = s3AsyncOperations.getFileAsInputStream(attachmentBucket, attachment.getValue()).block();
         MagicMatch match = Magic.getMagicMatch(source.readAllBytes());
-        InternetHeaders fileHeaders = new InternetHeaders();
-        fileHeaders.setHeader("Content-Type", match.getMimeType() + "; name=\"" + attachment.getFilename() + "\"");
-        fileHeaders.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
-        return new MimeBodyPart(fileHeaders, source.readAllBytes());
+        MimeBodyPart attachmentPart = new MimeBodyPart(source);
+        attachmentPart.setHeader("Content-Type", match.getMimeType() + "; name=\"" + attachment.getFilename() + "\"");
+        attachmentPart.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
+        return attachmentPart;
     }
 
     private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MalformedURLException, MessagingException {
