@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class GeneratorTokenUseCase {
     private final ObjectCache<ArrayList> token;
     private final SecretGateway secretGateway;

@@ -8,8 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +24,7 @@ class S3ConnectionConfigTest {
 
 
     @Test
-    void s3AsyncClientTest() throws IOException {
+    void s3AsyncClientTest() {
         when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
         when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
         when(s3ConnectionProperties.getMaximumPoolSize()).thenReturn(50);
@@ -36,13 +34,12 @@ class S3ConnectionConfigTest {
     }
 
     @Test
-    void s3AsyncClientLocalTest() throws IOException {
+    void s3AsyncClientLocalTest() {
         when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
         when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
         when(s3ConnectionProperties.getMaximumPoolSize()).thenReturn(50);
         when(s3ConnectionProperties.getKeepAliveTime()).thenReturn(10);
         when(s3ConnectionProperties.getRegion()).thenReturn(Region.US_EAST_1);
-        when(s3ConnectionProperties.getEndpoint()).thenReturn("http://localhost:4566");
         assertThat(s3ConnectionConfigMock.s3AsyncClientLocal()).isNotNull();
     }
 
