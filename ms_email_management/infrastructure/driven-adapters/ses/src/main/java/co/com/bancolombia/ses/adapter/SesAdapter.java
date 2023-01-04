@@ -126,6 +126,7 @@ public class SesAdapter implements SesGateway {
         MimeBodyPart attachmentPart = new MimeBodyPart();
         URL url = new URL(attachment.getValue());
         attachmentPart.setDataHandler(new DataHandler(new URLDataSource(url)));
+        attachmentPart.setHeader("Content-Transfer-Encoding", "base64");
         attachmentPart.setDisposition(Part.ATTACHMENT);
         attachmentPart.setFileName(attachment.getFilename());
         return attachmentPart;
