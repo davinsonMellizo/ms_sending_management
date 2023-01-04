@@ -111,12 +111,10 @@ public class SesAdapter implements SesGateway {
         }
     }
 
-    private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException,
-            MagicParseException, MagicException, MagicMatchNotFoundException {
+    private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException, MagicParseException,
+            MagicException, MagicMatchNotFoundException {
         byte[] byteArray = s3AsyncOperations.getFileAsByteArray(attachmentBucket, attachment.getValue()).block();
         MagicMatch match = Magic.getMagicMatch(byteArray);
-        logger.info("matchType: ".concat(match.getType()));
-        logger.info("matchMimeType: ".concat(match.getMimeType()));
         MimeBodyPart attachmentPart = new MimeBodyPart();
         DataSource source = new ByteArrayDataSource(byteArray, match.getMimeType());
         attachmentPart.setDataHandler(new DataHandler(source));
@@ -128,6 +126,7 @@ public class SesAdapter implements SesGateway {
         MimeBodyPart attachmentPart = new MimeBodyPart();
         URL url = new URL(attachment.getValue());
         attachmentPart.setDataHandler(new DataHandler(new URLDataSource(url)));
+        attachmentPart.setDisposition(Part.ATTACHMENT);
         attachmentPart.setFileName(attachment.getFilename());
         return attachmentPart;
     }
