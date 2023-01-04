@@ -54,7 +54,7 @@ class SesAdapterTest {
         ReflectionTestUtils.setField(sesAdapter, "attachmentBucket", "attachmentBucket");
         TemplateEmail templateEmail = TemplateEmail.builder().bodyHtml("html").subject("subject").build();
         List<Attachment> attachmentList = new ArrayList<>();
-        attachmentList.add(Attachment.builder().type("Path").value("path/to/file/test.pdf").build());
+        attachmentList.add(Attachment.builder().type("Path").value("path/to/file/test.pdf").filename("test.pdf").build());
         Alert alert = Alert.builder()
                 .from("from")
                 .destination(Alert.Destination.builder().toAddress("address").build())

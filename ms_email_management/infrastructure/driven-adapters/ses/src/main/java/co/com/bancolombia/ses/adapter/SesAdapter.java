@@ -1,7 +1,6 @@
 package co.com.bancolombia.ses.adapter;
 
 import co.com.bancolombia.commons.constants.AttachmentType;
-import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Attachment;
 import co.com.bancolombia.model.message.Response;
@@ -14,6 +13,8 @@ import net.sf.jmimemagic.MagicException;
 import net.sf.jmimemagic.MagicMatch;
 import net.sf.jmimemagic.MagicMatchNotFoundException;
 import net.sf.jmimemagic.MagicParseException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -23,17 +24,18 @@ import software.amazon.awssdk.services.ses.model.RawMessage;
 import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.URLDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
+import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -50,8 +52,8 @@ public class SesAdapter implements SesGateway {
     private final S3AsyncOperations s3AsyncOperations;
     @Value("${aws.s3.attachmentBucket}")
     private String attachmentBucket;
-    private final LoggerBuilder loggerBuilder;
-    private final int codigoResponse = 200;
+    private static final int RESPONSE_CODE = 200;
+    private final Log logger = LogFactory.getLog(SesAdapter.class);
 
     @Override
     public Mono<Response> sendEmail(TemplateEmail templateEmail, Alert alert) {
@@ -62,20 +64,20 @@ public class SesAdapter implements SesGateway {
             message.setFrom(new InternetAddress(alert.getFrom()));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(alert.getDestination().getToAddress()));
-            MimeMultipart msg_body = new MimeMultipart("alternative");
+            MimeMultipart msgBody = new MimeMultipart("alternative");
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(templateEmail.getBodyHtml(), "text/html; charset=UTF-8");
-            msg_body.addBodyPart(htmlPart);
+            msgBody.addBodyPart(htmlPart);
             alert.setAttachments(alert.getAttachments() == null ? Collections.emptyList() : alert.getAttachments());
             alert.getAttachments().forEach(attachment -> {
                 try {
-                    msg_body.addBodyPart(retrieveAttachment(attachment));
+                    msgBody.addBodyPart(retrieveAttachment(attachment));
                 } catch (MessagingException | MagicException | MagicParseException |
                         MagicMatchNotFoundException | IOException e) {
-                    loggerBuilder.error(e);
+                    logger.error(e);
                 }
             });
-            message.setContent(msg_body);
+            message.setContent(msgBody);
 
             try {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -86,7 +88,7 @@ public class SesAdapter implements SesGateway {
                 SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
                         .rawMessage(rawMessage).build();
                 return Mono.just(client.sendRawEmail(rawEmailRequest))
-                        .map(response -> Response.builder().code(codigoResponse).description("ses sendRawEmail").build());
+                        .map(response -> Response.builder().code(RESPONSE_CODE).description("ses sendRawEmail").build());
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());
             }
@@ -111,12 +113,15 @@ public class SesAdapter implements SesGateway {
 
     private MimeBodyPart retrieveFromPath(Attachment attachment) throws MessagingException,
             MagicParseException, MagicException, MagicMatchNotFoundException {
-        byte[] source = s3AsyncOperations.getFileAsByteArray(attachmentBucket, attachment.getValue()).block();
-        MagicMatch match = Magic.getMagicMatch(source);
-        InternetHeaders fileHeaders = new InternetHeaders();
-        fileHeaders.setHeader("Content-Type", match.getMimeType() + "; name=\"" + attachment.getFilename() + "\"");
-        fileHeaders.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
-        return new MimeBodyPart(fileHeaders, source);
+        byte[] byteArray = s3AsyncOperations.getFileAsByteArray(attachmentBucket, attachment.getValue()).block();
+        MagicMatch match = Magic.getMagicMatch(byteArray);
+        logger.info("matchType: ".concat(match.getType()));
+        logger.info("matchMimeType: ".concat(match.getMimeType()));
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        DataSource source = new ByteArrayDataSource(byteArray, match.getMimeType());
+        attachmentPart.setDataHandler(new DataHandler(source));
+        attachmentPart.setFileName(attachment.getFilename());
+        return attachmentPart;
     }
 
     private MimeBodyPart retrieveFromUrl(Attachment attachment) throws MalformedURLException, MessagingException {
