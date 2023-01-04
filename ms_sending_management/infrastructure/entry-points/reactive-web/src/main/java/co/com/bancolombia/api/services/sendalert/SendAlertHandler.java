@@ -17,7 +17,6 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
 public class SendAlertHandler {
     private final ManagementAlertUseCase useCase;
 
-
     public Mono<ServerResponse> sendAlert(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(MessageDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))

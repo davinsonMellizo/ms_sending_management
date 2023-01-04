@@ -43,7 +43,9 @@ public class ManagementAlertUseCase {
                 .map(this::getValidations)
                 .onErrorResume(e-> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, new Response(1, INVALID_OPERATION)))
-                .flatMap(function -> function.apply(message.toBuilder().logKey(logKey).build()));
+                .flatMap(function -> function.apply(message.toBuilder().logKey(logKey).build()))
+                .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
+                        SEND_220, Response.builder().code(1).description(e.getMessage()).build()));
     }
 
 }

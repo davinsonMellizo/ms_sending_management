@@ -9,12 +9,22 @@ import reactor.core.publisher.Mono;
 public class Util {
 
     public Mono<Alert> replaceParameter(Alert alert, Message message) {
-        message.getParameters().forEach(parameter -> {
-            String text = alert.getMessage().replace("${" + parameter.getName() + "}", parameter.getValue());
-            alert.setMessage(text);
-        });
 
         return Mono.just(alert);
+    }
+
+    private Alert replaceString(Alert alert, Message message){
+        message.getParameters().forEach(parameter -> {
+            try {
+                String text = alert.getMessage().replace("${" + parameter.getName() + "}", parameter.getValue());
+                text = text.equals(alert.getMessage())?"":"";
+                alert.setMessage(text);
+            }catch (Exception e){
+                alert.setMessage("");
+            }
+
+        });
+        return alert;
     }
 
 }

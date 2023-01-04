@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.sendalert;
 
 
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
@@ -31,14 +32,15 @@ public class RouterProviderSMSUseCase {
         return Mono.just(message)
                 .filter(isValidMobile)
                 .switchIfEmpty(logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, INVALID_CONTACT)))
-                .flatMap(prefix -> routeAlertsSMS(message, alert));
+                .flatMap(prefix -> routeAlertsSMS(message, alert))
+                .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
     }
 
     public Mono<Response> routeAlertsSMS(Message message, Alert alert) {
         return providerGateway.findProviderById(alert.getIdProviderSms())
                 .zipWith(priorityGateway.findPriorityById(alert.getPriority()))
                 .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
-                .doOnError(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
+                .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
     }
 
     private Mono<Response> sendAlertToProviders(Alert alert, Message message, Provider provider, Priority priority) {
@@ -56,8 +58,7 @@ public class RouterProviderSMSUseCase {
                 .provider(provider.getId())
                 .url(message.getUrl())
                 .build())
-                .flatMap(commandGateway::sendCommandAlertSms)
-                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build());
+                .flatMap(commandGateway::sendCommandAlertSms);
     }
 
 

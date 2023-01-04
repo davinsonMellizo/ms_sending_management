@@ -46,9 +46,7 @@ public class SendAlertZeroUseCase {
                 .filter(alert -> !alert.getBasicKit())
                 .filter(alert -> alert.getNature().equals("MO"))
                 .flatMap(alert -> validateAmountUseCase.validateAmount(alert, message))
-                .switchIfEmpty(Mono.just(pAlert))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
-                        new Response(1, e.getBusinessErrorMessage().getMessage())));
+                .switchIfEmpty(Mono.just(pAlert));
     }
 
     private Flux<Void> routeAlert(Alert alert, Message message) {
@@ -70,9 +68,7 @@ public class SendAlertZeroUseCase {
         return alertTransactionGateway.findAllAlertTransaction(message)
                 .map(AlertTransaction::getIdAlert)
                 .flatMap(alertGateway::findAlertById)
-                .switchIfEmpty(logUseCase.sendLogError(message, SEND_220, new Response(1, ALERT_NOT_FOUND)))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
-                        new Response(1, e.getBusinessErrorMessage().getMessage())))
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
                 .flatMap(alert -> validateObligation(alert, message))
                 .flatMap(alert -> Util.replaceParameter(alert, message))
                 .flatMap(alert -> routeAlert(alert, message));
@@ -86,12 +82,8 @@ public class SendAlertZeroUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .flatMap(client -> consumerGateway.findConsumerById(message.getConsumer()))
                 .switchIfEmpty(Mono.error(new BusinessException(CONSUMER_NOT_FOUND)))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
-                        new Response(1, e.getBusinessErrorMessage().getMessage())))
                 .flatMap(consumer -> validateContactUseCase.validateDataContact(message, consumer))
                 .flatMapMany(this::validateAlerts)
-                .onErrorResume(TechnicalException.class, e -> logUseCase.sendLogError(message, SEND_220,
-                        new Response(1, e.getMessage())))
                 .then(Mono.empty());
     }
 }

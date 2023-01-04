@@ -4,6 +4,8 @@ import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;

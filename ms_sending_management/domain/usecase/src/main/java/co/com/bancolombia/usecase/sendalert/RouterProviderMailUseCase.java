@@ -32,10 +32,9 @@ public class RouterProviderMailUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(message1 -> getRemitter(alert, message))
                 .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))
-                .doOnError(e -> logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(1, e.getMessage())))
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        new Response(1, e.getBusinessErrorMessage().getMessage())));
+                .onErrorResume(e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
+                        new Response(1, e.getMessage())));
     }
 
     private Mono<Remitter> getRemitter(Alert alert, Message message){
@@ -48,6 +47,7 @@ public class RouterProviderMailUseCase {
     public Mono<Response> buildMail(Message message, Alert alert, Remitter remitter, Provider provider) {
         ArrayList<Recipient> recipients = new ArrayList<>();
         recipients.add(new Recipient(message.getMail()));
+
         return logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(0, "Success"))
                 .cast(Mail.class)
                 .concatWith(Mono.just(Mail.builder()
