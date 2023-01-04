@@ -9,7 +9,6 @@ import software.amazon.awssdk.core.BytesWrapper;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -26,7 +25,6 @@ public class S3AsyncOperations {
 
     private final S3AsyncClient s3AsyncClient;
     private final S3Presigner s3Presigner;
-    private final S3Client s3Client;
     @Value("${aws.s3.signatureDuration:60}")
     private Long duration;
 
@@ -46,10 +44,6 @@ public class S3AsyncOperations {
         return Mono.fromFuture(s3AsyncClient.getObject(request, AsyncResponseTransformer.toBytes()));
     }
 
-    private Mono<ResponseBytes> getFileAsBytesSync(GetObjectRequest request) {
-        return Mono.just(s3Client.getObjectAsBytes(request));
-    }
-
     public Mono<InputStream> getFileAsInputStream(String bucketName, String objectKey) {
         return getRequest(bucketName, objectKey)
                 .flatMap(this::getFileAsBytes)
@@ -63,7 +57,7 @@ public class S3AsyncOperations {
 
     public Mono<byte[]> getFileAsByteArray(String bucketName, String objectKey) {
         return getRequest(bucketName, objectKey)
-                .flatMap(this::getFileAsBytesSync)
+                .flatMap(this::getFileAsBytes)
                 .map(response -> fromByteArray(response, response.asByteArray()))
                 .map(BytesWrapper::asByteArray)
                 .onErrorMap(error -> {
