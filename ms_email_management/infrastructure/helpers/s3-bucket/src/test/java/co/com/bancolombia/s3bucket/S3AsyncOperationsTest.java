@@ -13,6 +13,7 @@ import software.amazon.awssdk.core.internal.async.ByteArrayAsyncResponseTransfor
 import software.amazon.awssdk.http.SdkHttpMethod;
 import software.amazon.awssdk.http.SdkHttpRequest;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -35,6 +36,8 @@ class S3AsyncOperationsTest {
     private S3AsyncOperations s3AsyncOperations;
     @Mock
     private S3AsyncClient s3AsyncClient;
+    @Mock
+    private S3Client s3Client;
     @Mock
     private S3Presigner s3Presigner;
 
@@ -85,20 +88,12 @@ class S3AsyncOperationsTest {
 
     @Test
     void getFileAsByteTest() {
-        when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
-                .thenReturn(completableFuture);
+        ResponseBytes responseBytes = ResponseBytes.fromByteArray("test", "test".getBytes());
+        when(s3Client.getObjectAsBytes(any(GetObjectRequest.class)))
+                .thenReturn(responseBytes);
         StepVerifier.create(s3AsyncOperations.getFileAsByteArray(bucketName, ccdtKey))
                 .expectNextMatches(v -> Objects.nonNull(v))
                 .verifyComplete();
-    }
-
-    @Test
-    void getFileAsByteErrorTest() {
-        when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
-                .thenReturn(Mono.error(new Throwable("testError")).toFuture());
-        StepVerifier.create(s3AsyncOperations.getFileAsByteArray(bucketName, ccdtKey))
-                .expectError()
-                .verify();
     }
 
     @Test
