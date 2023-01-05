@@ -73,7 +73,7 @@ public class GeneratorTokenUseCaseTest {
         when(token.get(anyString(),any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -91,7 +91,7 @@ public class GeneratorTokenUseCaseTest {
         when(token.save(anyString(),any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -104,7 +104,7 @@ public class GeneratorTokenUseCaseTest {
         when(token.get(anyString(),any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectError()
                 .verify();
     }
@@ -119,7 +119,7 @@ public class GeneratorTokenUseCaseTest {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectError()
                 .verify();
     }

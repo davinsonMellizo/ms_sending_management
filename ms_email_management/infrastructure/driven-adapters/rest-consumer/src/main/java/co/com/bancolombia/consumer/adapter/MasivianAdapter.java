@@ -58,7 +58,8 @@ public class MasivianAdapter implements MasivianGateway {
                     return requestTokenMasiv;})
                 .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
                         requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
-                .flatMap(TokenMasivData::toModel);
+                .flatMap(TokenMasivData::toModel)
+                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
     }
 
     @Override

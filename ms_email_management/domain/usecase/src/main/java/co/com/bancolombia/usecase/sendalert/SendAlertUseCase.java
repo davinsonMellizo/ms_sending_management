@@ -10,7 +10,9 @@ import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
+import lombok.experimental.UtilityClass;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -20,6 +22,7 @@ import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
 import static co.com.bancolombia.commons.constants.Provider.SES;
 import static co.com.bancolombia.commons.enums.TemplateType.SIMPLE;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.EMAIL;
+
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
@@ -31,8 +34,10 @@ public class SendAlertUseCase {
     private static final int CONSTANT =23;
 
     public Mono<Void> sendAlert(Alert alert) {
-        System.out.println("Alerta"+alert.getHeaders());
+
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
+                .switchIfEmpty(ValidationLogUtil.valideitorSendLog(alert,  EMAIL,  Response.builder().code(1)
+                        .description("Template does not exist").build(), logUseCase,null))
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));
     }
@@ -49,7 +54,7 @@ public class SendAlertUseCase {
                 .filter(provider -> provider.equalsIgnoreCase(SES))
                 .flatMap(provider ->  sesGateway.sendEmail(templateEmail, alert))
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response));
+                .flatMap(response -> ValidationLogUtil.valideitorSendLog(alert,  EMAIL, response, logUseCase,templateEmail));
     }
 
     private Mono<Alert> validateAttachments(Alert alert) {
@@ -72,11 +77,11 @@ public class SendAlertUseCase {
                         .parameters(new ArrayList<>())
                         .nameToken(nameToken)
                         .build())
-                .flatMap(mail->generatorTokenUseCase.getToken(mail))
+                .flatMap(mail->generatorTokenUseCase.getToken(mail,alert))
                 .doOnNext(getHeaders-> {tokenTemp[0] = String.valueOf(getHeaders.getHeaders()); })
                 .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response))
+                .flatMap(response -> ValidationLogUtil.valideitorSendLog(alert,  EMAIL, response, logUseCase,templateEmail))
                 .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0],templateEmail))
                 .map(o->(Response) o);
     }

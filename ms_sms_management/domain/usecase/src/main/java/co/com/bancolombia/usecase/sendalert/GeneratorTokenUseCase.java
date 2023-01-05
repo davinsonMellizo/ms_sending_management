@@ -2,12 +2,15 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.SMSInalambria;
 import co.com.bancolombia.model.message.SMSMasiv;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidatorLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -16,12 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
+
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase implements Serializable {
     private final transient ObjectCache<ArrayList> token;
     private final transient SecretGateway secretGateway;
     private final transient InalambriaGateway inalambriaGateway;
     private final transient MasivianGateway masivianGateway;
+    private final LogUseCase logUseCase;
 
     public Mono<SMSInalambria> getTokenINA(SMSInalambria smsInalambria, Alert alert) {
         return  token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
@@ -30,7 +36,10 @@ public class GeneratorTokenUseCase implements Serializable {
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenInalambria1 -> Map.of("Authorization","Bearer "+tokenInalambria1))
-                .map(headers-> setTokenINA(smsInalambria, headers));
+                .map(headers-> setTokenINA(smsInalambria, headers))
+                .onErrorResume(e -> ValidatorLogUtil.valideitorSendLog(alert,SMS, Response.builder().code(1)
+                        .description(e.getMessage()).build() ,logUseCase ))
+                ;
     }
     public Mono<SMSMasiv> getTokenMAS(SMSMasiv smsMasiv,Alert alert){
         return token.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
@@ -39,7 +48,9 @@ public class GeneratorTokenUseCase implements Serializable {
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenMas->Map.of("Authorization","Bearer "+tokenMas))
-                .map(headers-> setTokenMAS(smsMasiv,headers));
+                .map(headers-> setTokenMAS(smsMasiv,headers))
+                .onErrorResume(e -> ValidatorLogUtil.valideitorSendLog(alert,SMS, Response.builder().code(1)
+                        .description(e.getMessage()).build() ,logUseCase )) ;
     }
 
     public Mono<Void> deleteToken(String usedToken, Alert alert) {

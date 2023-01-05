@@ -69,8 +69,8 @@ public class SendAlertUseCaseTest {
                         .build()));
         when(logUseCase.sendLog(any(), any(),anyString(), any()))
                 .thenReturn(Mono.empty());
-        when(generatorTokenUseCase.getToken(any()))
-                .thenReturn(Mono.just(new Mail()));
+        when(generatorTokenUseCase.getToken(any(),alert)
+                .thenReturn(Mono.just(new Mail())));
         when(generatorTokenUseCase.getNameToken(any()))
                 .thenReturn(Mono.just("NameToken"));
         StepVerifier
@@ -83,7 +83,7 @@ public class SendAlertUseCaseTest {
                 new TemplateEmail("subject","<div>Hola ${message}</div>","Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
-        when(generatorTokenUseCase.getToken(any()))
+        when(generatorTokenUseCase.getToken(any(),alert))
                 .thenReturn(Mono.just(new Mail()));
         when(generatorTokenUseCase.getNameToken(any()))
                 .thenReturn(Mono.just("NameToken"));
