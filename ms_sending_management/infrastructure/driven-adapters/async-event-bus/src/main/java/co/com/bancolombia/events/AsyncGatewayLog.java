@@ -2,7 +2,7 @@ package co.com.bancolombia.events;
 
 import co.com.bancolombia.model.events.gateways.CommandGatewayLog;
 import co.com.bancolombia.model.log.Log;
-import co.com.bancolombia.rabbitmq.config.dual.DirectAsyncDualGateway;
+import co.com.bancolombia.rabbitmq.config.dual.sender.DirectAsyncDualGateway;
 import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;

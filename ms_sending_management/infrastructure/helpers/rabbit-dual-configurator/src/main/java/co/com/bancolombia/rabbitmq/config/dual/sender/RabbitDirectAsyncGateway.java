@@ -1,4 +1,4 @@
-package co.com.bancolombia.rabbitmq.config.dual;
+package co.com.bancolombia.rabbitmq.config.dual.sender;
 
 
 import org.reactivecommons.api.domain.Command;

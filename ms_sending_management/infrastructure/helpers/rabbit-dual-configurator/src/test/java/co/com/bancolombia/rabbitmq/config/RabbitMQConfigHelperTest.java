@@ -1,7 +1,7 @@
 package co.com.bancolombia.rabbitmq.config;
 
 import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
-import co.com.bancolombia.rabbitmq.config.dual.RabbitMQDualConfigHelper;
+import co.com.bancolombia.rabbitmq.config.dual.sender.RabbitMQDualConfigHelper;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
