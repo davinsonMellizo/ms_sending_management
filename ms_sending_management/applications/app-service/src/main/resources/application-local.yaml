@@ -60,6 +60,7 @@ adapters:
     secret-rabbit: alertas-local-secretrabbit-CNX
     secret-rds-read: alertas-local-secretrds-CNX
     secret-rds: alertas-local-secretrds-CNX
+    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
@@ -67,3 +68,8 @@ adapters:
     reactive-web:
       path-base: /api/v1/sending-management
       send: /send
+
+d2b:
+  aws:
+    secrets-manager:
+      endpoint: http://localhost:4566

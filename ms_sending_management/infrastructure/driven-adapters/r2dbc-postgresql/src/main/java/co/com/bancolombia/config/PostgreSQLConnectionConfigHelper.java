@@ -1,33 +1,28 @@
 package co.com.bancolombia.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import io.r2dbc.spi.ConnectionFactoryOptions;
 import io.r2dbc.spi.Option;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
-import static io.r2dbc.pool.PoolingConnectionFactoryProvider.MAX_SIZE;
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @RequiredArgsConstructor
 public class PostgreSQLConnectionConfigHelper {
 
-    private final SecretsManager secretsManager;
-    private final SecretsNameStandard secretsNameStandard;
+    private final SyncSecretVault secretsManager;
     private final LoggerBuilder logger;
+    @Value("${adapters.secrets-manager.secret-rds}")
+    private String secretName;
 
 
     private PostgresqlConnectionProperties postgresProperties() {
-        return secretsNameStandard.secretForPostgres()
-                .flatMap(secretName -> secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class))
-                .block();
+        return secretsManager.getSecret(secretName, PostgresqlConnectionProperties.class);
     }
 
     @Bean

@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.log;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
+import co.com.bancolombia.model.events.gateways.CommandGatewayLog;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
@@ -11,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class LogUseCase {
-    private final CommandGateway commandGateway;
+    private final CommandGatewayLog commandGateway;
 
     public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, Response response) {
         return commandGateway.sendCommandLogAlert(Log.builder()

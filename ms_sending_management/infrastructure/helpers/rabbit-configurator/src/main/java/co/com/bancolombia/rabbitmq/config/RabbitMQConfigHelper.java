@@ -1,14 +1,12 @@
 package co.com.bancolombia.rabbitmq.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
-import co.com.bancolombia.secretsmanager.SecretsManager;
-import co.com.bancolombia.secretsmanager.SecretsNameStandard;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,16 +21,15 @@ import java.security.NoSuchAlgorithmException;
 @RequiredArgsConstructor
 public class RabbitMQConfigHelper{
     private final LoggerBuilder logger;
-    private final SecretsManager secretsManager;
-    private final SecretsNameStandard secretsNameStandard;
+    private final SyncSecretVault secretsManager;
     private static final String TLS = "TLSv1.2";
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider";
+    @Value("${adapters.secrets-manager.secret-rabbit}")
+    private String secretName;
 
 
     private RabbitMQConnectionProperties rabbitProperties() {
-        return secretsNameStandard.secretForRabbitMQ()
-                .flatMap(secretName -> secretsManager.getSecret(secretName, RabbitMQConnectionProperties.class))
-                .block();
+        return secretsManager.getSecret(secretName, RabbitMQConnectionProperties.class);
     }
 
     @Primary
@@ -40,6 +37,7 @@ public class RabbitMQConfigHelper{
     @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
+
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();
 
@@ -63,4 +61,5 @@ public class RabbitMQConfigHelper{
             logger.info(String.format(FAIL_MSG, e));
         }
     }
+
 }
