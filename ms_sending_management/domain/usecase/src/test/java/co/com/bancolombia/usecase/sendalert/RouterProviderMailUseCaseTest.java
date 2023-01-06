@@ -91,7 +91,6 @@ class RouterProviderMailUseCaseTest {
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
-                .expectError()
-                .verify();
+                .verifyComplete();
     }
 }

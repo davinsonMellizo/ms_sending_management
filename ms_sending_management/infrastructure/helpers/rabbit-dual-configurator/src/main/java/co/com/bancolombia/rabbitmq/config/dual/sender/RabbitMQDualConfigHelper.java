@@ -37,10 +37,11 @@ import static co.com.bancolombia.rabbitmq.config.dual.commons.Utils.createConnec
 @RequiredArgsConstructor
 public class RabbitMQDualConfigHelper {
     private final LoggerBuilder logger;
-    private static final String SENDER_TYPE = "sender";
     private final BrokerConfigProps props;
     private final SyncSecretVault secretsManager;
+
     private static final String TLS = "TLSv1.2";
+    private static final String SENDER_TYPE = "sender";
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider";
 
     @Value("${spring.application.name}")
@@ -55,7 +56,7 @@ public class RabbitMQDualConfigHelper {
                                                              ConnectionFactory factory,
                                                              MessageConverter converter){
         final ConnectionFactoryProvider provider = () -> factory;
-        SenderOptions senderOptions =  reactiveCommonsSenderOptions(provider,rabbitProperties);
+        SenderOptions senderOptions =  reactiveCommonsSenderOptions(provider, rabbitProperties);
         ReactiveMessageSender sender = messageSender(converter, brokerConfigProps, senderOptions);
 
         return new RabbitDirectAsyncGateway(config, router, sender, props.getDirectMessagesExchangeName(), converter);

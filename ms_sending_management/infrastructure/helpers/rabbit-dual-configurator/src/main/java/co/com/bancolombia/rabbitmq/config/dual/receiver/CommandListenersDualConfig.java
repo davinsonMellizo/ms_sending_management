@@ -28,9 +28,10 @@ import static co.com.bancolombia.rabbitmq.config.dual.commons.Utils.createConnec
 @Configuration
 @RequiredArgsConstructor
 public class CommandListenersDualConfig {
-    private final LoggerBuilder logger;
     private static final String LISTENER_TYPE = "listener";
     private final AsyncProps asyncProps;
+    private final LoggerBuilder logger;
+
     @Value("${spring.application.name}")
     private String appName;
 
@@ -51,8 +52,7 @@ public class CommandListenersDualConfig {
         return commandListener;
     }
 
-
-    public ReactiveMessageListener messageListenerDual(ConnectionFactory factory) {
+    private ReactiveMessageListener messageListenerDual(ConnectionFactory factory) {
         ConnectionFactoryProvider provider = () -> factory;
         final Mono<Connection> connection =
                 createConnectionMono(provider.getConnectionFactory(), appName, LISTENER_TYPE, logger);
@@ -64,6 +64,5 @@ public class CommandListenersDualConfig {
                 asyncProps.getFlux().getMaxConcurrency(),
                 asyncProps.getPrefetchCount());
     }
-
 
 }

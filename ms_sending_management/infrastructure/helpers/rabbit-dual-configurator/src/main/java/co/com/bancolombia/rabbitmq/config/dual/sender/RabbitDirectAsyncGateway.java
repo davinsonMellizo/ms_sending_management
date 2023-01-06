@@ -28,7 +28,8 @@ public class RabbitDirectAsyncGateway implements DirectAsyncDualGateway {
     private final boolean persistentQueries;
     private final Duration replyTimeout;
 
-    public RabbitDirectAsyncGateway(BrokerConfig config, ReactiveReplyRouter router, ReactiveMessageSender sender, String exchange, MessageConverter converter) {
+    public RabbitDirectAsyncGateway(BrokerConfig config, ReactiveReplyRouter router, ReactiveMessageSender sender,
+                                    String exchange, MessageConverter converter) {
         this.config = config;
         this.router = router;
         this.sender = sender;

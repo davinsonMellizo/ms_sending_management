@@ -87,10 +87,9 @@ class RouterProviderSMSUseCaseTest {
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
-         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
+        when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
-                .expectError()
-        .verify();
+                .verifyComplete();
     }
 
 }

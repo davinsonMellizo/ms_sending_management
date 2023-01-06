@@ -1,7 +1,6 @@
 package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alerttransaction.AlertTransaction;
@@ -10,7 +9,6 @@ import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
@@ -24,7 +22,6 @@ import java.util.function.BiFunction;
 import static co.com.bancolombia.commons.constants.Medium.MAIL;
 import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 
 @RequiredArgsConstructor
@@ -38,7 +35,6 @@ public class SendAlertZeroUseCase {
     private final ConsumerGateway consumerGateway;
     private final ClientGateway clientGateway;
     private final AlertGateway alertGateway;
-    private final LogUseCase logUseCase;
 
     private Flux<Alert> validateObligation(Alert pAlert, Message message) {
         return Flux.just(pAlert)

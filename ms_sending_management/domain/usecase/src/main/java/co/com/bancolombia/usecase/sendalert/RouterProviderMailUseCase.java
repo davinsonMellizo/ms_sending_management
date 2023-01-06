@@ -57,8 +57,6 @@ public class RouterProviderMailUseCase {
                         .destination(new Mail.Destination(message.getMail(), "", ""))
                         .attachments(message.getAttachments())
                         .template(new Template(message.getParameters(), alert.getTemplateName())).build())).next()
-                .flatMap(commandGateway::sendCommandAlertEmail)
-                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLogMAIL(message, alert, SEND_220, response));
+                .flatMap(commandGateway::sendCommandAlertEmail);
     }
 }

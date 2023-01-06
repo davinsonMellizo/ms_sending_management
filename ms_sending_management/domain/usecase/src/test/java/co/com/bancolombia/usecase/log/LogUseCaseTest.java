@@ -1,9 +1,8 @@
 package co.com.bancolombia.usecase.log;
 
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.events.gateways.CommandGateway;
+import co.com.bancolombia.model.events.gateways.CommandGatewayLog;
 import co.com.bancolombia.model.log.Log;
-import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,7 @@ class LogUseCaseTest {
     @InjectMocks
     private LogUseCase logUseCase;
     @Mock
-    private CommandGateway logGateway;
+    private CommandGatewayLog logGateway;
     private Message message = new Message();
     private Response response = new Response();
     private Alert alert = new Alert();
