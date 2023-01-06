@@ -1,8 +1,6 @@
 package co.com.bancolombia.event;
 
-import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.events.ReactiveDirectAsyncGateway;
-import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Sms;
@@ -32,9 +30,6 @@ class ReactiveEventsGatewayTest {
     @Mock
     private LoggerBuilder loggerBuilder;
 
-    private static final String template = "{ \"name\" : \"prueba\"}";
-    private static final String transactionString = "{\"listener\" : \"id2\",\"template\" : \"message to send\",\"target\": \"ms_contact_management\",\"queue\": \"send.update.client\" }";
-
     @BeforeEach
     public void init() {
         when(directAsyncGateway.sendCommand(any(), anyString())).thenReturn(Mono.empty());
@@ -42,14 +37,10 @@ class ReactiveEventsGatewayTest {
     }
 
     @Test
-    void sendEventLogTest() {
-        /*StepVerifier.create(reactiveDirectAsyncGateway.sendCommandLogAlert(new Log())).verifyComplete();*/
-    }
-
-    @Test
     void sendEventSMSTest() {
         StepVerifier.create(reactiveDirectAsyncGateway.sendCommandAlertSms(new Sms())).verifyComplete();
     }
+
     @Test
     void sendEventEMAILTest() {
         StepVerifier.create(reactiveDirectAsyncGateway.sendCommandAlertEmail(new Mail())).verifyComplete();
