@@ -8,12 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reactivecommons.async.impl.DiscardNotifier;
-import org.reactivecommons.async.impl.HandlerResolver;
-import org.reactivecommons.async.impl.config.props.AsyncProps;
-import org.reactivecommons.async.impl.converters.MessageConverter;
-import org.reactivecommons.async.impl.ext.CustomErrorReporter;
-import org.reactivecommons.async.impl.listeners.ApplicationCommandListener;
+import org.reactivecommons.async.commons.DiscardNotifier;
+import org.reactivecommons.async.commons.converters.MessageConverter;
+import org.reactivecommons.async.commons.ext.CustomReporter;
+import org.reactivecommons.async.rabbit.HandlerResolver;
+import org.reactivecommons.async.rabbit.config.props.AsyncProps;
+import org.reactivecommons.async.rabbit.listeners.ApplicationCommandListener;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import java.lang.reflect.Field;
 
@@ -30,7 +30,7 @@ class CommandListenersDualConfigTest {
     private final HandlerResolver handlerResolver = mock(HandlerResolver.class);
     private final MessageConverter messageConverter = mock(MessageConverter.class);
     private final DiscardNotifier discardNotifier = mock(DiscardNotifier.class);
-    private final CustomErrorReporter customReporter = mock(CustomErrorReporter.class);
+    private final CustomReporter customReporter = mock(CustomReporter.class);
 
     @BeforeEach
     public void init() throws NoSuchFieldException, IllegalAccessException {

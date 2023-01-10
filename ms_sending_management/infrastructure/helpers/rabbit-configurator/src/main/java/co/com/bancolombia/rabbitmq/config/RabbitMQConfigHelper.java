@@ -5,12 +5,11 @@ import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
-import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
+import org.reactivecommons.async.rabbit.config.ConnectionFactoryProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 import javax.net.ssl.SSLContext;
@@ -32,7 +31,6 @@ public class RabbitMQConfigHelper{
         return secretsManager.getSecret(secretName, RabbitMQConnectionProperties.class);
     }
 
-    @Primary
     @Bean
     @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){

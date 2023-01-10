@@ -6,14 +6,14 @@ import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
-import org.reactivecommons.async.impl.communications.ReactiveMessageSender;
-import org.reactivecommons.async.impl.communications.TopologyCreator;
-import org.reactivecommons.async.impl.config.BrokerConfig;
-import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
-import org.reactivecommons.async.impl.config.RabbitProperties;
-import org.reactivecommons.async.impl.config.props.BrokerConfigProps;
-import org.reactivecommons.async.impl.converters.MessageConverter;
-import org.reactivecommons.async.impl.reply.ReactiveReplyRouter;
+import org.reactivecommons.async.commons.config.BrokerConfig;
+import org.reactivecommons.async.commons.converters.MessageConverter;
+import org.reactivecommons.async.commons.reply.ReactiveReplyRouter;
+import org.reactivecommons.async.rabbit.communications.ReactiveMessageSender;
+import org.reactivecommons.async.rabbit.communications.TopologyCreator;
+import org.reactivecommons.async.rabbit.config.ConnectionFactoryProvider;
+import org.reactivecommons.async.rabbit.config.RabbitProperties;
+import org.reactivecommons.async.rabbit.config.props.BrokerConfigProps;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
@@ -51,10 +51,10 @@ public class RabbitMQDualConfigHelper {
 
     @Bean("rabbitDirectAsyncGatewayDual")
     public RabbitDirectAsyncGateway rabbitDirectAsyncGatewayDual(BrokerConfig config, ReactiveReplyRouter router,
-                                                             BrokerConfigProps brokerConfigProps,
-                                                             RabbitProperties rabbitProperties,
-                                                             ConnectionFactory factory,
-                                                             MessageConverter converter){
+                                                                 BrokerConfigProps brokerConfigProps,
+                                                                 RabbitProperties rabbitProperties,
+                                                                 ConnectionFactory factory,
+                                                                 MessageConverter converter){
         final ConnectionFactoryProvider provider = () -> factory;
         SenderOptions senderOptions =  reactiveCommonsSenderOptions(provider, rabbitProperties);
         ReactiveMessageSender sender = messageSender(converter, brokerConfigProps, senderOptions);

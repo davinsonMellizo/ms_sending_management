@@ -1,7 +1,5 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.operations.*;
@@ -23,10 +21,6 @@ class ManagementAlertUseCaseTest {
     private ManagementAlertUseCase managementAlertUseCase;
     @Mock
     private LogUseCase logUseCase;
-    @Mock
-    private AlertGateway alertGateway;
-    @Mock
-    private CommandGateway commandGateway;
     @Mock
     private SendAlertZeroUseCase sendAlertZeroUseCase;
     @Mock

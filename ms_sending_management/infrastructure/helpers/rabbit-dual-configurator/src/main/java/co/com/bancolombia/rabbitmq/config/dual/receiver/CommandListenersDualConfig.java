@@ -4,15 +4,15 @@ import co.com.bancolombia.model.log.LoggerBuilder;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
-import org.reactivecommons.async.impl.DiscardNotifier;
-import org.reactivecommons.async.impl.HandlerResolver;
-import org.reactivecommons.async.impl.communications.ReactiveMessageListener;
-import org.reactivecommons.async.impl.communications.TopologyCreator;
-import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
-import org.reactivecommons.async.impl.config.props.AsyncProps;
-import org.reactivecommons.async.impl.converters.MessageConverter;
-import org.reactivecommons.async.impl.ext.CustomErrorReporter;
-import org.reactivecommons.async.impl.listeners.ApplicationCommandListener;
+import org.reactivecommons.async.commons.DiscardNotifier;
+import org.reactivecommons.async.commons.converters.MessageConverter;
+import org.reactivecommons.async.commons.ext.CustomReporter;
+import org.reactivecommons.async.rabbit.HandlerResolver;
+import org.reactivecommons.async.rabbit.communications.ReactiveMessageListener;
+import org.reactivecommons.async.rabbit.communications.TopologyCreator;
+import org.reactivecommons.async.rabbit.config.ConnectionFactoryProvider;
+import org.reactivecommons.async.rabbit.config.props.AsyncProps;
+import org.reactivecommons.async.rabbit.listeners.ApplicationCommandListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class CommandListenersDualConfig {
                                                                  ConnectionFactory factory,
                                                                  DiscardNotifier discardNotifier,
                                                                  HandlerResolver resolver,
-                                                                 CustomErrorReporter errorReporter) {
+                                                                 CustomReporter errorReporter) {
 
         ReactiveMessageListener listener = messageListenerDual(factory);
         ApplicationCommandListener commandListener = new ApplicationCommandListener(listener, appName, resolver,

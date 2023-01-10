@@ -33,7 +33,6 @@ class ReactiveEventsGatewayTest {
     @BeforeEach
     public void init() {
         when(directAsyncGateway.sendCommand(any(), anyString())).thenReturn(Mono.empty());
-
     }
 
     @Test

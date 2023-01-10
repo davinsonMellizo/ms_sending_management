@@ -6,7 +6,6 @@ dependencies {
     implementation project(':usecase')
     implementation project(':reactive-web')
     implementation project(':rest-consumer')
-    implementation project(':async-event-handler')
     implementation project(':async-event-bus')
     implementation project(':r2dbc-postgresql')
     implementation project(':rabbit-configurator')
