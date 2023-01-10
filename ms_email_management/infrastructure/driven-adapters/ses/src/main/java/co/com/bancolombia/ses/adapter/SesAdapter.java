@@ -19,9 +19,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.core.SdkBytes;
-import software.amazon.awssdk.services.ses.SesAsyncClient;
-import software.amazon.awssdk.services.ses.model.RawMessage;
-import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
+import software.amazon.awssdk.services.sesv2.SesV2AsyncClient;
+import software.amazon.awssdk.services.sesv2.model.EmailContent;
+import software.amazon.awssdk.services.sesv2.model.RawMessage;
+import software.amazon.awssdk.services.sesv2.model.SendEmailRequest;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -48,7 +49,7 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class SesAdapter implements SesGateway {
 
-    private final SesAsyncClient client;
+    private final SesV2AsyncClient client;
     private final S3AsyncOperations s3AsyncOperations;
     @Value("${aws.s3.attachmentBucket}")
     private String attachmentBucket;
@@ -85,9 +86,10 @@ public class SesAdapter implements SesGateway {
                 RawMessage rawMessage = RawMessage.builder()
                         .data(SdkBytes.fromByteBuffer(ByteBuffer
                                 .wrap(outputStream.toByteArray()))).build();
-                SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
-                        .rawMessage(rawMessage).build();
-                return Mono.just(client.sendRawEmail(rawEmailRequest))
+                SendEmailRequest emailRequest = SendEmailRequest.builder()
+                        .content(EmailContent.builder().raw(rawMessage).build())
+                        .build();
+                return Mono.just(client.sendEmail(emailRequest))
                         .map(response -> Response.builder().code(RESPONSE_CODE).description("ses sendRawEmail").build());
             } catch (Exception e) {
                 return Mono.just(Response.builder().code(1).description(e.getMessage()).build());

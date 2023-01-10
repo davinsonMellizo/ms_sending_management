@@ -12,11 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import software.amazon.awssdk.services.ses.SesAsyncClient;
-import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
+import software.amazon.awssdk.services.sesv2.SesV2AsyncClient;
+import software.amazon.awssdk.services.sesv2.model.SendEmailRequest;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -31,7 +29,7 @@ class SesAdapterTest {
     @InjectMocks
     private SesAdapter sesAdapter;
     @Mock
-    private SesAsyncClient client;
+    private SesV2AsyncClient client;
     @Mock
     private S3AsyncOperations s3AsyncOperations;
 
@@ -42,7 +40,7 @@ class SesAdapterTest {
         Alert alert = Alert.builder()
                 .from("from").destination(Alert.Destination.builder().toAddress("address").build())
                 .build();
-        when(client.sendRawEmail((SendRawEmailRequest) any()))
+        when(client.sendEmail((SendEmailRequest) any()))
                 .thenReturn(new CompletableFuture<>());
         StepVerifier.create(sesAdapter.sendEmail(templateEmail, alert))
                 .expectNextCount(1)
@@ -62,7 +60,7 @@ class SesAdapterTest {
                 .build();
         byte[] response = new byte[10];
         when(s3AsyncOperations.getFileAsByteArray(anyString(), anyString())).thenReturn(Mono.just(response));
-        when(client.sendRawEmail((SendRawEmailRequest) any()))
+        when(client.sendEmail((SendEmailRequest) any()))
                 .thenReturn(new CompletableFuture<>());
         StepVerifier.create(sesAdapter.sendEmail(templateEmail, alert))
                 .expectNextCount(1)
@@ -95,7 +93,7 @@ class SesAdapterTest {
                 .destination(Alert.Destination.builder().toAddress("address").build())
                 .attachments(attachmentList)
                 .build();
-        when(client.sendRawEmail((SendRawEmailRequest) any()))
+        when(client.sendEmail((SendEmailRequest) any()))
                 .thenReturn(new CompletableFuture<>());
         StepVerifier.create(sesAdapter.sendEmail(templateEmail, alert))
                 .expectNextCount(1)
