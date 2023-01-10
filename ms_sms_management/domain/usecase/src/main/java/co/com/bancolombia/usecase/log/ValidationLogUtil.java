@@ -6,12 +6,11 @@ import co.com.bancolombia.model.message.Response;
 import lombok.experimental.UtilityClass;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.function.Predicate;
 
 
 @UtilityClass
-public class ValidatorLogUtil {
+public class ValidationLogUtil {
     private static final int CODE_RESPONSE_200 = 200;
     private static final int CODE_RESPONSE_202 = 202;
 

@@ -28,7 +28,6 @@ public class GeneratorTokenUseCase {
     private final LogUseCase logUseCase;
 
     public Mono<Mail> getToken(Mail mail, Alert alert) {
-
         return  Mono.just(mail.getNameToken())
                 .flatMap(nameToken->token.get(nameToken, ArrayList.class))
                 .filter(lisToken->!lisToken.isEmpty())

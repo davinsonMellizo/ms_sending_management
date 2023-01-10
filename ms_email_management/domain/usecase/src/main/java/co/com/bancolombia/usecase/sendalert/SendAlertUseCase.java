@@ -34,7 +34,6 @@ public class SendAlertUseCase {
     private static final int CONSTANT =23;
 
     public Mono<Void> sendAlert(Alert alert) {
-
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
                 .switchIfEmpty(ValidationLogUtil.valideitorSendLog(alert,  EMAIL,  Response.builder().code(1)
                         .description("Template does not exist").build(), logUseCase,null))
@@ -77,7 +76,7 @@ public class SendAlertUseCase {
                         .parameters(new ArrayList<>())
                         .nameToken(nameToken)
                         .build())
-                .flatMap(mail->generatorTokenUseCase.getToken(mail,alert))
+                .flatMap(mail-> generatorTokenUseCase.getToken(mail,alert))
                 .doOnNext(getHeaders-> {tokenTemp[0] = String.valueOf(getHeaders.getHeaders()); })
                 .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())

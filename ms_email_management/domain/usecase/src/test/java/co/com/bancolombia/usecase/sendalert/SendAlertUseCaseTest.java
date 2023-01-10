@@ -1,5 +1,6 @@
 package co.com.bancolombia.usecase.sendalert;
 
+import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Parameter;
@@ -9,6 +10,8 @@ import co.com.bancolombia.model.message.TemplateEmail;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
+import co.com.bancolombia.model.token.DynamoGateway;
+import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class SendAlertUseCaseTest {
 
     @InjectMocks
-    private SendAlertUseCase useCase;
+    private SendAlertUseCase useCase ;
     @Mock
     private TemplateEmailGateway templateEmailGateway;
     @Mock
@@ -40,6 +43,12 @@ public class SendAlertUseCaseTest {
     @Mock
     private SesGateway sesGateway;
     @Mock
+    ObjectCache<ArrayList> objectCache;
+    @Mock
+    DynamoGateway dynamoGateway;
+    @Mock
+    SecretGateway secretGateway;
+   @Mock
     private GeneratorTokenUseCase generatorTokenUseCase;
     private Alert alert = new Alert();
 
@@ -60,8 +69,11 @@ public class SendAlertUseCaseTest {
     public void sendAlertMasivianTest(){
         TemplateEmail template =
                 new TemplateEmail("subject","<div>Hola ${message}</div>","Hola ${name}");
+
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
+        when(generatorTokenUseCase.getNameToken(any()))
+                .thenReturn(Mono.just("NameToken"));
         when(masivianGateway.sendMAIL(any()))
                 .thenReturn(Mono.just(Response.builder()
                         .code(200)
@@ -69,10 +81,8 @@ public class SendAlertUseCaseTest {
                         .build()));
         when(logUseCase.sendLog(any(), any(),anyString(), any()))
                 .thenReturn(Mono.empty());
-        when(generatorTokenUseCase.getToken(any(),alert)
-                .thenReturn(Mono.just(new Mail())));
-        when(generatorTokenUseCase.getNameToken(any()))
-                .thenReturn(Mono.just("NameToken"));
+        when(generatorTokenUseCase.getToken(any(),any()))
+                .thenReturn(Mono.just(new Mail()));
         StepVerifier
                 .create(useCase.sendAlert(alert))
                 .verifyComplete();
@@ -83,7 +93,7 @@ public class SendAlertUseCaseTest {
                 new TemplateEmail("subject","<div>Hola ${message}</div>","Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
-        when(generatorTokenUseCase.getToken(any(),alert))
+        when(generatorTokenUseCase.getToken(any(),any()))
                 .thenReturn(Mono.just(new Mail()));
         when(generatorTokenUseCase.getNameToken(any()))
                 .thenReturn(Mono.just("NameToken"));
