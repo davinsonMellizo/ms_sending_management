@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class DocumentRepositoryImplWithExceptionTest {
+class DocumentRepositoryImplWithExceptionTest {
 
     @InjectMocks
     private DocumentRepositoryImplement documentRepositoryImplement;
@@ -30,7 +30,7 @@ public class DocumentRepositoryImplWithExceptionTest {
 
 
     @Test
-    public void findStateByNameWithException() {
+    void findStateByNameWithException() {
         when(repository.getDocument(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         documentRepositoryImplement.getDocument("CC")

@@ -23,7 +23,6 @@ import reactor.rabbitmq.ChannelPool;
 import reactor.rabbitmq.ChannelPoolFactory;
 import reactor.rabbitmq.ChannelPoolOptions;
 import reactor.rabbitmq.RabbitFlux;
-import reactor.rabbitmq.Sender;
 import reactor.rabbitmq.SenderOptions;
 import reactor.rabbitmq.Utils;
 
@@ -56,7 +55,7 @@ public class RabbitMQDualConfigHelper {
                                                                  ConnectionFactory factory,
                                                                  MessageConverter converter){
         final ConnectionFactoryProvider provider = () -> factory;
-        SenderOptions senderOptions =  reactiveCommonsSenderOptions(provider, rabbitProperties);
+        SenderOptions senderOptions =  buildSenderOptions(provider, rabbitProperties);
         ReactiveMessageSender sender = messageSender(converter, brokerConfigProps, senderOptions);
 
         return new RabbitDirectAsyncGateway(config, router, sender, props.getDirectMessagesExchangeName(), converter);
@@ -69,8 +68,8 @@ public class RabbitMQDualConfigHelper {
     @Bean
     public ConnectionFactory connectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
-        final ConnectionFactory factory = new ConnectionFactory();
-        PropertyMapper map = PropertyMapper.get();
+        final var factory = new ConnectionFactory();
+        var map = PropertyMapper.get();
 
         map.from(properties::getPort).to(factory::setPort);
         map.from(properties::getHostname).whenNonNull().to(factory::setHost);
@@ -83,30 +82,33 @@ public class RabbitMQDualConfigHelper {
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            SSLContext c = SSLContext.getInstance(TLS);
-            c.init(null, null, null);
+            var context = SSLContext.getInstance(TLS);
+            context.init(null, null, null);
 
-            factory.useSslProtocol(c);
+            factory.useSslProtocol(context);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }
     }
 
-    public ReactiveMessageSender messageSender(MessageConverter converter, BrokerConfigProps brokerConfigProps, SenderOptions senderOptions) {
-        final Sender sender = RabbitFlux.createSender(senderOptions);
-        return new ReactiveMessageSender(sender, brokerConfigProps.getAppName(), converter, new TopologyCreator(sender));
+    public ReactiveMessageSender messageSender(MessageConverter converter, BrokerConfigProps brokerConfigProps,
+                                               SenderOptions senderOptions) {
+
+        final var sender = RabbitFlux.createSender(senderOptions);
+        TopologyCreator topologyCreator = new TopologyCreator(sender);
+        return new ReactiveMessageSender(sender, brokerConfigProps.getAppName(), converter, topologyCreator);
     }
 
-    public SenderOptions reactiveCommonsSenderOptions(ConnectionFactoryProvider provider, RabbitProperties rabbitProperties) {
+    public SenderOptions buildSenderOptions(ConnectionFactoryProvider provider, RabbitProperties rabbitProperties) {
         final Mono<Connection> senderConnection =
                 createConnectionMono(provider.getConnectionFactory(), appName, SENDER_TYPE, logger);
-        final ChannelPoolOptions channelPoolOptions = new ChannelPoolOptions();
-        final PropertyMapper map = PropertyMapper.get();
+        final var channelPoolOptions = new ChannelPoolOptions();
+        final var map = PropertyMapper.get();
 
         map.from(rabbitProperties.getCache().getChannel()::getSize).whenNonNull()
                 .to(channelPoolOptions::maxCacheSize);
 
-        final ChannelPool channelPool = ChannelPoolFactory.createChannelPool(
+        final var channelPool = ChannelPoolFactory.createChannelPool(
                 senderConnection,
                 channelPoolOptions
         );

@@ -1,12 +1,13 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
 import co.com.bancolombia.model.message.Message;
+import lombok.experimental.UtilityClass;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-
-public abstract class ValidateData {
+@UtilityClass
+public class ValidateData {
 
     private static final String PATTERN = "^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
 

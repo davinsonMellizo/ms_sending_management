@@ -75,7 +75,8 @@ public class SendAlertZeroUseCase {
 
     public Mono<Void> indicatorZero(Message message) {
         return Mono.just(message)
-                .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(), message.getDocumentType()))
+                .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(),
+                        message.getDocumentType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
                 .filter(client -> client.getIdState() == ACTIVE)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))

@@ -39,7 +39,7 @@ public class RestClient<T extends Request,R> {
                 .bodyToMono(clazz);
     }
 
-    private <T extends Request> T cleanHeader(T request){
+    private T cleanHeader(T request){
         request.setHeaders(null);
         return request;
     }

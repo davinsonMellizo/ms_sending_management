@@ -44,9 +44,10 @@ public class CommandListenersDualConfig {
                                                                  CustomReporter errorReporter) {
 
         ReactiveMessageListener listener = messageListenerDual(factory);
-        ApplicationCommandListener commandListener = new ApplicationCommandListener(listener, appName, resolver,
-                asyncProps.getDirect().getExchange(), converter, asyncProps.getWithDLQRetry(), asyncProps.getMaxRetries(),
-                asyncProps.getRetryDelay(), asyncProps.getDirect().getMaxLengthBytes(), discardNotifier, errorReporter);
+        var commandListener = new ApplicationCommandListener
+                (listener, appName, resolver, asyncProps.getDirect().getExchange(), converter,
+                asyncProps.getWithDLQRetry(),asyncProps.getMaxRetries(), asyncProps.getRetryDelay(),
+                asyncProps.getDirect().getMaxLengthBytes(), discardNotifier, errorReporter);
 
         commandListener.startListener();
         return commandListener;
@@ -56,8 +57,8 @@ public class CommandListenersDualConfig {
         ConnectionFactoryProvider provider = () -> factory;
         final Mono<Connection> connection =
                 createConnectionMono(provider.getConnectionFactory(), appName, LISTENER_TYPE, logger);
-        final Receiver receiver = RabbitFlux.createReceiver(new ReceiverOptions().connectionMono(connection));
-        final Sender sender = RabbitFlux.createSender(new SenderOptions().connectionMono(connection));
+        final var receiver = RabbitFlux.createReceiver(new ReceiverOptions().connectionMono(connection));
+        final var sender = RabbitFlux.createSender(new SenderOptions().connectionMono(connection));
 
         return new ReactiveMessageListener(receiver,
                 new TopologyCreator(sender),

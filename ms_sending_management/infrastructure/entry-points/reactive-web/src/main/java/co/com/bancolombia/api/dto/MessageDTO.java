@@ -21,7 +21,7 @@ public class MessageDTO {
     private Integer documentType;
     private Long documentNumber;
     @Builder.Default
-    private ArrayList preferences= new ArrayList<>();
+    private ArrayList<String> preferences= new ArrayList<>();
     private String consumer;
     private String alert;
     private String transactionCode;
@@ -37,7 +37,7 @@ public class MessageDTO {
     @Builder.Default
     private List<Parameter> parameters = new ArrayList<>();
     @Builder.Default
-    private ArrayList<Attachment> attachments = new ArrayList<>();;
+    private ArrayList<Attachment> attachments = new ArrayList<>();
     private String remitter;
     private Integer priority;
 

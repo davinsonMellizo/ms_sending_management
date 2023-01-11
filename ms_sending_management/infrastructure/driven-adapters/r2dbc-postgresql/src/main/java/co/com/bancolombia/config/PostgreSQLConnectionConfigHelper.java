@@ -20,8 +20,11 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.USER;
 @RequiredArgsConstructor
 public class PostgreSQLConnectionConfigHelper {
 
-    private final SyncSecretVault secretsManager;
     private final LoggerBuilder logger;
+    private final SyncSecretVault secretsManager;
+    private static final String schemaName = "${adapters.postgresql.schema}";
+    private static final String hostName = "${adapters.postgresql.hostRead}";
+
     @Value("${adapters.secrets-manager.secret-rds}")
     private String secretName;
 
@@ -31,7 +34,7 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value("${adapters.postgresql.schema}") String schema){
+    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value(schemaName) String schema){
         PostgresqlConnectionProperties properties =  postgresProperties();
         logger.info("data secret rds:"+properties);
         return ConnectionFactoryOptions.builder()
@@ -47,11 +50,10 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value("${adapters.postgresql.schema}") String schema,
-                                                                       @Value("${adapters.postgresql.hostRead}") String hostRead){
+    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value(schemaName) String schema,
+                                                                       @Value(hostName) String hostRead){
         PostgresqlConnectionProperties properties =  postgresProperties();
-        logger.info("data secret rds:"+properties);
-       return ConnectionFactoryOptions.builder()
+        return ConnectionFactoryOptions.builder()
                 .option(DRIVER,"postgresql")
                 .option(HOST, hostRead)
                 .option(PORT, properties.getPort())

@@ -46,7 +46,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
     }
 
     private Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
-        Throwable throwable = getError(request);
+        var throwable = getError(request);
 
         return Mono.just(request)
                 .map(this::getError)

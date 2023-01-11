@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Error extends RuntimeException{
-    private Integer httpsStatus;
+    private int httpsStatus;
     private Object data;
+
 }

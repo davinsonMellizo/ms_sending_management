@@ -18,7 +18,7 @@ public class ValidateAmountUseCase {
     private final AlertClientGateway alertClientGateway;
 
     private Mono<AlertClient> restartAccumulated(AlertClient pAlertClient) {
-        LocalDate now = LocalDate.now();
+        var now = LocalDate.now();
         return Mono.just(pAlertClient)
                 .map(alertClient -> alertClient.getTransactionDate().toLocalDate())
                 .filter(dateTransaction -> !dateTransaction.equals(now))

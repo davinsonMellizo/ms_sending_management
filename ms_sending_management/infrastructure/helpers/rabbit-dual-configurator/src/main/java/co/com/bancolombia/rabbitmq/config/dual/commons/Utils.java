@@ -11,15 +11,14 @@ import java.time.Duration;
 
 @UtilityClass
 public class Utils {
-
+    private static final Integer backoffDuration = 300;
+    private static final Integer maxBackoffDuration = 3000;
     public static Mono<Connection> createConnectionMono(ConnectionFactory factory, String connectionPrefix,
                                                         String connectionType, LoggerBuilder logger) {
         return Mono.fromCallable(() -> factory.newConnection(connectionPrefix + " " + connectionType))
-                .doOnError(err ->
-                        logger.error(err)
-                )
-                .retryWhen(Retry.backoff(Long.MAX_VALUE, Duration.ofMillis(300))
-                        .maxBackoff(Duration.ofMillis(3000)))
+                .doOnError(logger::error)
+                .retryWhen(Retry.backoff(Long.MAX_VALUE, Duration.ofMillis(backoffDuration))
+                        .maxBackoff(Duration.ofMillis(maxBackoffDuration)))
                 .cache();
     }
 }

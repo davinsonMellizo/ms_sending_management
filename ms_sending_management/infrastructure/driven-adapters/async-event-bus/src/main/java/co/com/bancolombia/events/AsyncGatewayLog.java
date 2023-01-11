@@ -20,7 +20,7 @@ public class AsyncGatewayLog implements CommandGatewayLog {
 
     @Override
     public Mono<Log> sendCommandLogAlert(Log log) {
-        Command command = new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
+        var command = new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
         return gateway.sendCommand(command, TARGET_NAME_LOG)
                 .then(Mono.empty());
     }

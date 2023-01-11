@@ -24,18 +24,20 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class PostgreSQLWAdapterConfig {
 
+    private static final Integer maxIdleTime = 1000;
     @Value("${adapters.postgresql.pool.initial}")
     private Integer initialSize;
 
     @Value("${adapters.postgresql.pool.max}")
     private Integer maxSize;
 
+
     @Bean("Writer")
     public ConnectionPool initializer(@Qualifier("buildConnectionWriterConfiguration")
                                           final ConnectionFactoryOptions pool) {
         var connectionFactory = ConnectionFactories.get(pool);
         ConnectionPoolConfiguration configuration = ConnectionPoolConfiguration.builder(connectionFactory)
-                .maxIdleTime(Duration.ofMillis(1000))
+                .maxIdleTime(Duration.ofMillis(maxIdleTime))
                 .maxSize(maxSize)
                 .initialSize(initialSize)
                 .build();

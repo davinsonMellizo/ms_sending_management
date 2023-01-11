@@ -41,26 +41,30 @@ public class RabbitDirectAsyncGateway implements DirectAsyncDualGateway {
     }
 
     public <T> Mono<Void> sendCommand(Command<T> command, String targetName) {
-        return this.sender.sendWithConfirm(command, this.exchange, targetName, Collections.emptyMap(), this.persistentCommands);
+        Map<String, Object> headers = Collections.emptyMap();
+        return this.sender.sendWithConfirm(command, this.exchange, targetName, headers, this.persistentCommands);
     }
 
     public <T> Flux<OutboundMessageResult> sendCommands(Flux<Command<T>> commands, String targetName) {
-        return this.sender.sendWithConfirmBatch(commands, this.exchange, targetName, Collections.emptyMap(), this.persistentCommands);
+        Map<String, Object> headers = Collections.emptyMap();
+        return this.sender.sendWithConfirmBatch(commands, this.exchange, targetName, headers, this.persistentCommands);
     }
 
     public <T, R> Mono<R> requestReply(AsyncQuery<T> query, String targetName, Class<R> type) {
-        String correlationID = UUID.randomUUID().toString().replaceAll("-", "");
+        String correlationID = UUID.randomUUID().toString().replace("-", "");
         Mono<R> replyHolder = this.router.register(correlationID)
-                .timeout(this.replyTimeout).flatMap((s) -> Mono.fromCallable(() -> this.converter.readValue(s, type)));
-        Map<String, Object> headers = new HashMap();
+                .timeout(this.replyTimeout).flatMap(s -> Mono.fromCallable(() -> this.converter.readValue(s, type)));
+        Map<String, Object> headers = new HashMap<>();
         headers.put("x-reply_id", this.config.getRoutingKey());
         headers.put("x-serveQuery-id", query.getResource());
         headers.put("x-correlation-id", correlationID);
-        return this.sender.sendNoConfirm(query, this.exchange, targetName + ".query", headers, this.persistentQueries).then(replyHolder);
+        String routingKey = targetName + ".query";
+        return this.sender
+                .sendNoConfirm(query, this.exchange, routingKey, headers, this.persistentQueries).then(replyHolder);
     }
 
     public <T> Mono<Void> reply(T response, From from) {
-        HashMap<String, Object> headers = new HashMap();
+        HashMap<String, Object> headers = new HashMap<>();
         headers.put("x-correlation-id", from.getCorrelationID());
         if (response == null) {
             headers.put("x-empty-completion", Boolean.TRUE.toString());
