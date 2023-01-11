@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("category")
-public class CategoryData implements Persistable<Integer> {
+public class CategoryData {
     @Id
     private Integer id;
     private String name;
@@ -26,9 +26,4 @@ public class CategoryData implements Persistable<Integer> {
     @Transient
     private Boolean isNew;
 
-    @Override
-    @Transient
-    public boolean isNew() {
-        return this.isNew;
-    }
 }

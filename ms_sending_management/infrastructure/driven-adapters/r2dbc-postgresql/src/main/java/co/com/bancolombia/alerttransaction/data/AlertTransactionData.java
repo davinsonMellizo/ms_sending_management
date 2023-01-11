@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("alert_transaction")
-public class AlertTransactionData implements Persistable<String> {
+public class AlertTransactionData{
 
     private String idAlert;
     private String idConsumer;
@@ -28,9 +28,4 @@ public class AlertTransactionData implements Persistable<String> {
     @Transient
     private String id;
 
-    @Override
-    @Transient
-    public boolean isNew() {
-        return this.id == null;
-    }
 }
