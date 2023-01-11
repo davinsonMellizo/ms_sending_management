@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivecommons.async.commons.DiscardNotifier;
 import org.reactivecommons.async.commons.converters.MessageConverter;
@@ -14,7 +15,6 @@ import org.reactivecommons.async.commons.ext.CustomReporter;
 import org.reactivecommons.async.rabbit.HandlerResolver;
 import org.reactivecommons.async.rabbit.config.props.AsyncProps;
 import org.reactivecommons.async.rabbit.listeners.ApplicationCommandListener;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.lang.reflect.Field;
 
@@ -22,10 +22,10 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class CommandListenersDualConfigTest {
-    @MockBean
+    @Mock
     private LoggerBuilder logger;
     private final AsyncProps props = new AsyncProps();
-    private CommandListenersDualConfig config = new CommandListenersDualConfig(props, logger);
+    private CommandListenersDualConfig config;
 
     private final ConnectionFactory factory = mock(ConnectionFactory.class);
     private final HandlerResolver handlerResolver = mock(HandlerResolver.class);
@@ -35,6 +35,7 @@ class CommandListenersDualConfigTest {
 
     @BeforeEach
     public void init() throws NoSuchFieldException, IllegalAccessException {
+        config = new CommandListenersDualConfig(props, logger);
         final Field appName = CommandListenersDualConfig.class.getDeclaredField("appName");
         appName.setAccessible(true);
         appName.set(config, "queue");
