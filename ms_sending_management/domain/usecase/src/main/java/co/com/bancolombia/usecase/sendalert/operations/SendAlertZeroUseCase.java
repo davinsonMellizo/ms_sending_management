@@ -22,7 +22,10 @@ import java.util.function.BiFunction;
 import static co.com.bancolombia.commons.constants.Medium.MAIL;
 import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
 
 @RequiredArgsConstructor
 public class SendAlertZeroUseCase {

@@ -31,6 +31,6 @@ public class AlertTransactionData implements Persistable<String> {
     @Override
     @Transient
     public boolean isNew() {
-        return this.id == null ? true : false;
+        return this.id == null;
     }
 }

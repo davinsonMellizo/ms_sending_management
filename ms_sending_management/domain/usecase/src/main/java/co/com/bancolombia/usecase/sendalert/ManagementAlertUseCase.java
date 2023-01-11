@@ -1,9 +1,14 @@
 package co.com.bancolombia.usecase.sendalert;
 
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.sendalert.operations.*;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertFiveUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertOneUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertThreeUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertTwoUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertZeroUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -41,8 +46,7 @@ public class ManagementAlertUseCase {
         String logKey = LocalDate.now().toString()+UUID.randomUUID().toString().substring(16);
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
-                .onErrorResume(e-> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
-                        SEND_220, new Response(1, INVALID_OPERATION)))
+                .onErrorMap(e-> new BusinessException(INVALID_OPERATION))
                 .flatMap(function -> function.apply(message.toBuilder().logKey(logKey).build()))
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()));

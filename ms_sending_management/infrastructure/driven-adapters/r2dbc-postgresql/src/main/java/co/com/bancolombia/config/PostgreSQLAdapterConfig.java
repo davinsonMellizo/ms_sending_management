@@ -3,7 +3,6 @@ package co.com.bancolombia.config;
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;
 import io.r2dbc.spi.ConnectionFactories;
-import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +37,7 @@ public class PostgreSQLAdapterConfig{
     @Bean("Reader")
     public ConnectionPool initializer(@Qualifier("buildConnectionReaderConfiguration")
                                           final ConnectionFactoryOptions pool) {
-        ConnectionFactory connectionFactory = ConnectionFactories.get(pool);
+        var connectionFactory = ConnectionFactories.get(pool);
         ConnectionPoolConfiguration configuration = ConnectionPoolConfiguration.builder(connectionFactory)
                 .maxIdleTime(Duration.ofMillis(1000))
                 .maxSize(maxSize)
@@ -51,7 +50,7 @@ public class PostgreSQLAdapterConfig{
     @Bean
     public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader")ConnectionPool connectionPool) {
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionPool);
+        var databaseClient = DatabaseClient.create(connectionPool);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
     }
 

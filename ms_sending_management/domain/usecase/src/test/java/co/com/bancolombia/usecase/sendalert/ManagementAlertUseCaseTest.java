@@ -2,7 +2,11 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.sendalert.operations.*;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertFiveUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertOneUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertThreeUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertTwoUseCase;
+import co.com.bancolombia.usecase.sendalert.operations.SendAlertZeroUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

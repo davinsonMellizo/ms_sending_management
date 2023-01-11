@@ -18,7 +18,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_TRANSACTION_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailOrMobile;
 
 @RequiredArgsConstructor

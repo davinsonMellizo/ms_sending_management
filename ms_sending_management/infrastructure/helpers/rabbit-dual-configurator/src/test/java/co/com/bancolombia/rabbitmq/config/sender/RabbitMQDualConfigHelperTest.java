@@ -2,7 +2,6 @@ package co.com.bancolombia.rabbitmq.config.sender;
 
 import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.rabbitmq.config.dual.receiver.CommandListenersDualConfig;
 import co.com.bancolombia.rabbitmq.config.dual.sender.RabbitDirectAsyncGateway;
 import co.com.bancolombia.rabbitmq.config.dual.sender.RabbitMQDualConfigHelper;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
@@ -18,7 +17,6 @@ import org.reactivecommons.async.commons.reply.ReactiveReplyRouter;
 import org.reactivecommons.async.rabbit.config.RabbitProperties;
 import org.reactivecommons.async.rabbit.config.props.BrokerConfigProps;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Field;
 

@@ -16,7 +16,10 @@ import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INACTIVE_ALERT;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACTS;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormat;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormatOrMobile;
 

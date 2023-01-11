@@ -16,7 +16,7 @@ public class Message {
     private Integer operation;
     private Integer documentType;
     private Long documentNumber;
-    private ArrayList preferences;
+    private ArrayList<String> preferences;
     private String consumer;
     private String alert;
     private String transactionCode;
@@ -37,9 +37,5 @@ public class Message {
     private List<Parameter> parameters;
     private ArrayList<Attachment> attachments;
 
-    public Message setParameters(List<Parameter> parameters){
-        this.parameters = parameters;
-        return this;
-    }
 
 }

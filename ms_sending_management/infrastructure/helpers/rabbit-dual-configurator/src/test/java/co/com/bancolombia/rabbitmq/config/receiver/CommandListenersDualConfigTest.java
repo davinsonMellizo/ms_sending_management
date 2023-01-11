@@ -15,6 +15,7 @@ import org.reactivecommons.async.rabbit.HandlerResolver;
 import org.reactivecommons.async.rabbit.config.props.AsyncProps;
 import org.reactivecommons.async.rabbit.listeners.ApplicationCommandListener;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
 import java.lang.reflect.Field;
 
 import static org.mockito.Mockito.mock;

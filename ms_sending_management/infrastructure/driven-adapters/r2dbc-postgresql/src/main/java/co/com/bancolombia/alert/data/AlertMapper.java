@@ -2,7 +2,6 @@ package co.com.bancolombia.alert.data;
 
 import co.com.bancolombia.model.alert.Alert;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AlertMapper {
