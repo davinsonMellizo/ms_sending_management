@@ -33,7 +33,7 @@ public abstract class  Converter {
         }
     }
 
-    protected Map<String ,Object> addHeader(Map<String ,Object> headers, String key, Object value){
+    private Map<String ,Object> addHeader(Map<String ,Object> headers, String key, Object value){
         if(headers==null ||headers.isEmpty()){
             headers= new HashMap<>();
         }
