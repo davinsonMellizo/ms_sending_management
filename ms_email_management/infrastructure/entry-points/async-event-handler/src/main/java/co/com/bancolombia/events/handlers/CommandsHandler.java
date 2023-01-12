@@ -16,6 +16,7 @@ public class CommandsHandler {
     private final Log LOGGER = LogFactory.getLog(EventsHandler.class);
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {
+        LOGGER.info("intento de envio command");
         return useCase.sendAlert(command.getData());
     }
 }
