@@ -12,7 +12,6 @@ import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
-import lombok.experimental.UtilityClass;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

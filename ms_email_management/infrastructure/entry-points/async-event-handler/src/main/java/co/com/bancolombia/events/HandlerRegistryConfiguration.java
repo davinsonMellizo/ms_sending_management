@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static co.com.bancolombia.events.commons.EventNameConfig.SEND_ALERT;
-import static co.com.bancolombia.events.commons.EventNameConfig.SEND_ALERT_RETRY;
 import static org.reactivecommons.async.api.HandlerRegistry.register;
 
 @Configuration
@@ -20,6 +19,6 @@ public class HandlerRegistryConfiguration {
 
         return register()
                 .handleCommand(SEND_ALERT, commands::handleSendAlert, Message.class);
-                //.listenEvent(SEND_ALERT_RETRY, events::handleSendAlert, Alert.class);
+
     }
 }
