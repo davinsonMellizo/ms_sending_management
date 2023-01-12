@@ -35,7 +35,7 @@ public class GeneratorTokenUseCase {
                 .map(tokens->tokens.get(0).toString())
                 .map(token1->Map.of("Authorization","Bearer "+token1))
                 .map(headers->setToken(mail,headers))
-                .onErrorResume(e -> ValidationLogUtil.valideitorSendLog(alert,  EMAIL,  Response.builder().code(1)
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert,  EMAIL,  Response.builder().code(1)
                         .description(e.getMessage()).build(), logUseCase,null));
     }
     public Mono<String> getNameToken(Alert alert){
