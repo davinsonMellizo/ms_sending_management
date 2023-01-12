@@ -19,7 +19,6 @@ import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
-import reactor.rabbitmq.ChannelPool;
 import reactor.rabbitmq.ChannelPoolFactory;
 import reactor.rabbitmq.ChannelPoolOptions;
 import reactor.rabbitmq.RabbitFlux;
@@ -55,7 +54,7 @@ public class RabbitMQDualConfigHelper {
                                                                  ConnectionFactory factory,
                                                                  MessageConverter converter){
         final ConnectionFactoryProvider provider = () -> factory;
-        SenderOptions senderOptions =  buildSenderOptions(provider, rabbitProperties);
+        var senderOptions =  buildSenderOptions(provider, rabbitProperties);
         ReactiveMessageSender sender = messageSender(converter, brokerConfigProps, senderOptions);
 
         return new RabbitDirectAsyncGateway(config, router, sender, props.getDirectMessagesExchangeName(), converter);
@@ -95,7 +94,7 @@ public class RabbitMQDualConfigHelper {
                                                SenderOptions senderOptions) {
 
         final var sender = RabbitFlux.createSender(senderOptions);
-        TopologyCreator topologyCreator = new TopologyCreator(sender);
+        var topologyCreator = new TopologyCreator(sender);
         return new ReactiveMessageSender(sender, brokerConfigProps.getAppName(), converter, topologyCreator);
     }
 

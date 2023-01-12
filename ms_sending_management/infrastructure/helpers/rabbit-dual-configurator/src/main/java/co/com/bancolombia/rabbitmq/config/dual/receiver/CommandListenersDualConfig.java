@@ -18,9 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
 import reactor.rabbitmq.RabbitFlux;
-import reactor.rabbitmq.Receiver;
 import reactor.rabbitmq.ReceiverOptions;
-import reactor.rabbitmq.Sender;
 import reactor.rabbitmq.SenderOptions;
 
 import static co.com.bancolombia.rabbitmq.config.dual.commons.Utils.createConnectionMono;

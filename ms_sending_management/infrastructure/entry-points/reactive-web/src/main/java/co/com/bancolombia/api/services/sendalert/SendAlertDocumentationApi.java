@@ -17,7 +17,7 @@ public class SendAlertDocumentationApi {
 
     protected Consumer<Builder> send() {
         return ops -> ops.tag(TAG)
-                .operationId("SendAlert").summary("Send Alert")
+                .operationId("SendAlert").summary(TAG)
                 .description("Service to Send Alert").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().required(true).implementation(Message.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))

@@ -34,7 +34,6 @@ public class RabbitMQConfigHelper{
 
     @Bean
     @Primary
-    @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
 
@@ -46,7 +45,6 @@ public class RabbitMQConfigHelper{
         map.from(properties::getUsername).whenNonNull().to(factory::setUsername);
         map.from(properties::getPassword).whenNonNull().to(factory::setPassword);
         map.from(properties::isSsl).whenTrue().as(isSsl -> factory).to(this::configureSsl);
-        map.from(false).whenTrue().as(isSsl -> factory).to(this::configureSsl);
 
         return () -> factory;
     }

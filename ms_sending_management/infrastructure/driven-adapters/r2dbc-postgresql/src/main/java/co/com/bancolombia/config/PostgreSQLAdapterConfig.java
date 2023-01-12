@@ -27,7 +27,7 @@ import java.time.Duration;
         })
 @RequiredArgsConstructor
 public class PostgreSQLAdapterConfig{
-    private static final Integer maxIdleTime = 1000;
+    private static final Integer MAX_IDLE_TIME = 1000;
 
     @Value("${adapters.postgresql.pool.initial}")
     private Integer initialSize;
@@ -40,7 +40,7 @@ public class PostgreSQLAdapterConfig{
                                           final ConnectionFactoryOptions pool) {
         var connectionFactory = ConnectionFactories.get(pool);
         ConnectionPoolConfiguration configuration = ConnectionPoolConfiguration.builder(connectionFactory)
-                .maxIdleTime(Duration.ofMillis(maxIdleTime))
+                .maxIdleTime(Duration.ofMillis(MAX_IDLE_TIME))
                 .maxSize(maxSize)
                 .initialSize(initialSize)
                 .build();

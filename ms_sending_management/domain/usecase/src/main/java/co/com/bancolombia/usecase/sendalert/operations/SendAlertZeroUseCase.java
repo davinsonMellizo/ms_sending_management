@@ -19,6 +19,8 @@ import reactor.core.publisher.Mono;
 
 import java.util.function.BiFunction;
 
+import static co.com.bancolombia.commons.constants.Constants.MONETARY;
+import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.constants.Medium.MAIL;
 import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
@@ -43,14 +45,14 @@ public class SendAlertZeroUseCase {
         return Flux.just(pAlert)
                 .filter(alert -> !alert.getObligatory())
                 .filter(alert -> !alert.getBasicKit())
-                .filter(alert -> alert.getNature().equals("MO"))
+                .filter(alert -> alert.getNature().equals(MONETARY))
                 .flatMap(alert -> validateAmountUseCase.validateAmount(alert, message))
                 .switchIfEmpty(Mono.just(pAlert));
     }
 
     private Flux<Void> routeAlert(Alert alert, Message message) {
         return Mono.just(message)
-                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase("Si"))
+                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase(SI))
                 .flatMap(message1 -> sendAlert(message1, alert, SMS, routerProviderPushUseCase::sendPush))
                 .switchIfEmpty(sendAlert(message, alert, SMS, routerProviderSMSUseCase::routeAlertsSMS))
                 .concatWith(sendAlert(message, alert, MAIL, routerProviderMailUseCase::routeAlertMail))

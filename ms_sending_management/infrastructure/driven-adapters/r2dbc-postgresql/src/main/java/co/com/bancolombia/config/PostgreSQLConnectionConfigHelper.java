@@ -22,8 +22,8 @@ public class PostgreSQLConnectionConfigHelper {
 
     private final LoggerBuilder logger;
     private final SyncSecretVault secretsManager;
-    private static final String schemaName = "${adapters.postgresql.schema}";
-    private static final String hostName = "${adapters.postgresql.hostRead}";
+    private static final String SCHEMA_NAME = "${adapters.postgresql.schema}";
+    private static final String HOST_NAME = "${adapters.postgresql.hostRead}";
 
     @Value("${adapters.secrets-manager.secret-rds}")
     private String secretName;
@@ -34,7 +34,7 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value(schemaName) String schema){
+    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value(SCHEMA_NAME) String schema){
         PostgresqlConnectionProperties properties =  postgresProperties();
         logger.info("data secret rds:"+properties);
         return ConnectionFactoryOptions.builder()
@@ -50,8 +50,8 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value(schemaName) String schema,
-                                                                       @Value(hostName) String hostRead){
+    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value(SCHEMA_NAME) String schema,
+                                                                       @Value(HOST_NAME) String hostRead){
         PostgresqlConnectionProperties properties =  postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(DRIVER,"postgresql")

@@ -14,6 +14,7 @@ import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
@@ -42,7 +43,7 @@ public class SendAlertFiveUseCase {
 
     private Mono<Void> routeAlert(Alert alert, Message message) {
         return Mono.just(message)
-                .filter(message1 -> alert.getPush().equalsIgnoreCase("SI"))
+                .filter(message1 -> alert.getPush().equalsIgnoreCase(SI))
                 .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.validateMobile(message, alert))
                 .concatWith(validateMail(message, alert))
