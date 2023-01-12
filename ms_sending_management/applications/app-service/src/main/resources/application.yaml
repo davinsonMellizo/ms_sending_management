@@ -64,8 +64,8 @@ adapters:
     resources:
       endpointPush: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/push
   secrets-manager:
-    secret-rabbit-dual: ${SECRET-RABBIT-DUAL}
-    secret-rabbit: ${SECRET-RABBIT}
+    secret-rabbit-dual: ${SECRET_RABBIT_DUAL}
+    secret-rabbit: ${SECRET_RABBIT}
     secret-rds-read: ${SECRET-RDS-READ}
     secret-rds: ${SECRET-RDS}
     cache-size: ${CACHE_SECRETS_SIZE}
