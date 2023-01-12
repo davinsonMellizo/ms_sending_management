@@ -4,9 +4,9 @@ import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Sms;
-import co.com.bancolombia.rabbitmq.config.dual.sender.DirectAsyncDualGateway;
 import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.Command;
+import org.reactivecommons.async.api.DirectAsyncGateway;
 import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;
 import reactor.core.publisher.Mono;
 
@@ -20,7 +20,7 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     public static final String SEND_ALERT_EMAIL = "send.alert.email";
     public static final String SEND_ALERT_SMS = "send.alert.sms";
 
-    private final DirectAsyncDualGateway gateway;
+    private final DirectAsyncGateway gateway;
 
     @Override
     public Mono<Response> sendCommandAlertSms(Sms sms) {
