@@ -1,4 +1,4 @@
-package co.com.bancolombia.dynamo;
+package co.com.bancolombia.dynamo.config;
 
 
 

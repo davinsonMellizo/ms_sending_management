@@ -10,7 +10,7 @@ import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
 import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.log.ValidatorLogUtil;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -37,7 +37,7 @@ public class GeneratorTokenUseCase implements Serializable {
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenInalambria1 -> Map.of("Authorization","Bearer "+tokenInalambria1))
                 .map(headers-> setTokenINA(smsInalambria, headers))
-                .onErrorResume(e -> ValidatorLogUtil.valideitorSendLog(alert,SMS, Response.builder().code(1)
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert,SMS, Response.builder().code(1)
                         .description(e.getMessage()).build() ,logUseCase ))
                 ;
     }
@@ -49,7 +49,7 @@ public class GeneratorTokenUseCase implements Serializable {
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenMas->Map.of("Authorization","Bearer "+tokenMas))
                 .map(headers-> setTokenMAS(smsMasiv,headers))
-                .onErrorResume(e -> ValidatorLogUtil.valideitorSendLog(alert,SMS, Response.builder().code(1)
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert,SMS, Response.builder().code(1)
                         .description(e.getMessage()).build() ,logUseCase )) ;
     }
 

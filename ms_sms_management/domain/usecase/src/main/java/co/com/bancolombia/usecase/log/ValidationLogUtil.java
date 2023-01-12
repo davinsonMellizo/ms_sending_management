@@ -20,7 +20,7 @@ public class ValidationLogUtil {
     public static final Predicate<Response> validateCodeResponse = response ->
             ((response.getCode()!= CODE_RESPONSE_200) && (response.getCode()!= CODE_RESPONSE_202));
 
-public static  <T> Mono<T> valideitorSendLog (Alert pAlert, String medium,  Response response,LogUseCase logUseCase){
+public static  <T> Mono<T> validSendLog (Alert pAlert, String medium,  Response response,LogUseCase logUseCase){
     return Mono.just(pAlert)
             .filter(alert-> response.getCode()== CODE_RESPONSE_200 || isValidCount.test(alert))
             .flatMap(res->logUseCase.sendLog(pAlert,medium,response))
