@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 public class CommandsHandler {
 
     private final SendAlertUseCase useCase;
-
+    private final Log LOGGER = LogFactory.getLog(EventsHandler.class);
 
     public Mono<Void> handleSendAlert(Command<Alert> command) {
         return useCase.sendAlert(command.getData());
