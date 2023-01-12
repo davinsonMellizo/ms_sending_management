@@ -43,7 +43,7 @@ public class ManagementAlertUseCase {
     }
 
     public Mono<Void> alertSendingManager(Message message) {
-        int sizeLogKey = 16;
+        var sizeLogKey = 16;
         String logKey = LocalDate.now().toString()+UUID.randomUUID().toString().substring(sizeLogKey);
         return Mono.just(message.getOperation())
                 .map(this::getValidations)
