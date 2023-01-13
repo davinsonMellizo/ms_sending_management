@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import reactor.core.publisher.Mono;
 
 import java.util.Base64;
@@ -67,7 +69,8 @@ public class InalambriaAdapter implements InalambriaGateway {
                                 .getEndpointInalambriaToken(), requestTokenInalambria1,
                         TokenInalambriaData.class, ErrorTokenRefreshInalambria.class))
                 .flatMap(TokenInalambriaData::toModel)
-                .flatMap(this::setExpiresIn);
+                .flatMap(this::setExpiresIn)
+                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
     }
 
     private RequestTokenInalambriaData settingHeaders(Map<String, String> headers,

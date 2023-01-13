@@ -11,6 +11,7 @@ import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -33,6 +34,8 @@ public class SendAlertUseCase {
 
     public Mono<Void> sendAlert(Alert alert) {
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
+                .switchIfEmpty(ValidationLogUtil.validSendLog(alert,  EMAIL,  Response.builder().code(1)
+                        .description("Template does not exist").build(), logUseCase,null))
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));
     }
@@ -49,7 +52,7 @@ public class SendAlertUseCase {
                 .filter(provider -> provider.equalsIgnoreCase(SES))
                 .flatMap(provider -> sesGateway.sendEmail(templateEmail, alert))
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response));
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert,  EMAIL, response, logUseCase,templateEmail));
     }
 
     private Mono<Alert> validateAttachments(Alert alert) {
@@ -93,13 +96,13 @@ public class SendAlertUseCase {
                         .parameters(new ArrayList<>())
                         .nameToken(nameToken)
                         .build())
-                .flatMap(generatorTokenUseCase::getToken)
-                .doOnNext(getHeaders -> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
+                .flatMap(mail-> generatorTokenUseCase.getToken(mail,alert))
+                .doOnNext(getHeaders-> {tokenTemp[0] = String.valueOf(getHeaders.getHeaders()); })
                 .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, templateEmail, EMAIL, response))
-                .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0], templateEmail))
-                .map(Response.class::cast);
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert,  EMAIL, response, logUseCase,templateEmail))
+                .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0],templateEmail))
+                .map(o->(Response) o);
     }
 
     private Mono<Void> filterErrorMAS(Throwable error, Alert alert, String tokentemp, TemplateEmail templateEmail) {

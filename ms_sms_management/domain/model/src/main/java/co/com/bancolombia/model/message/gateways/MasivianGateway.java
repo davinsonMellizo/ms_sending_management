@@ -10,5 +10,5 @@ public interface MasivianGateway {
 
     Mono<Response> sendSMS(SMSMasiv smsMasiv);
     Mono<Token> getToken(Account account);
-    //Mono<Token> postMasivProviderToken();//esta interfaz debe recibir el token
+
 }

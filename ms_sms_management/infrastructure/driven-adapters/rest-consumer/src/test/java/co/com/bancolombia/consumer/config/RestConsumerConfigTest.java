@@ -77,6 +77,11 @@ class RestConsumerConfigTest {
     void configINATest() throws SSLException {
         assertThat(restConsumerConfig.webClientConfigIna(new ConsumerProperties(3600, null))).isNotNull();
     }
+
+    @Test
+    void configLocalINATest() throws SSLException {
+        assertThat(restConsumerConfig.webClientConfigInaLocal(new ConsumerProperties(3600, null))).isNotNull();
+    }
     @org.junit.Test(expected = SSLException.class)
     public void configINAErrorTest() throws SSLException {
 

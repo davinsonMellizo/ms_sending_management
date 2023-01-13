@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -26,11 +28,12 @@ public class RestClient<T extends Request,R> {
     private final Log LOGGER= LogFactory.getLog(RestClient.class);
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
+
         if (route.contains("masivapp.com")) {
             return webClient.post()
                     .uri(route)
                     .contentType(APPLICATION_JSON)
-                    .headers(head -> head.setAll(request.getHeaders()))
+                    .headers(head -> head.setAll( (Map) request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
                     .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
@@ -38,7 +41,7 @@ public class RestClient<T extends Request,R> {
         } else {
             return webClientConfigIna.post().uri(route)
                     .contentType(APPLICATION_JSON)
-                    .headers(head -> head.setAll(request.getHeaders()))
+                    .headers(head -> head.setAll((Map) request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
                     .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))

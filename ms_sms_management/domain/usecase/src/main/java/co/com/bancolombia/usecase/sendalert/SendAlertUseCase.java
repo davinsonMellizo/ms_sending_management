@@ -7,6 +7,7 @@ import co.com.bancolombia.model.message.SMSMasiv;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -42,10 +43,9 @@ public class SendAlertUseCase {
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(inalambriaGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, SMS, response, logUseCase))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
-                .map(Response.class::cast)
-                ;
+                .map(Response.class::cast);
     }
 
     private Mono<Response> sendSMSMasivian(Alert alert) {
@@ -64,7 +64,7 @@ public class SendAlertUseCase {
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, SMS, response, logUseCase))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
                 .map(Response.class::cast);
     }
@@ -81,6 +81,8 @@ public class SendAlertUseCase {
                 .switchIfEmpty(sendSMSInalambria(alert))
                 .then(Mono.empty());
     }
+
+
 
 
 }

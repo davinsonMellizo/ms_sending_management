@@ -37,9 +37,15 @@ class DynamoConfigTest {
         assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
-   /* @Test
+   @Test
     public void dynamoConfigEnhancedTest(){
         assertThat(dynamoConfig.clientEnhanced(dynamoDbAsyncClient)).isNotNull();
-    }*/
+    }
+    @Test
+    void dynnamoConfigClientLocalTest(){
+        when(properties.getEndpoint()).thenReturn("http://localhost:4566");
+        when(properties.getRegionAws()).thenReturn("us-east-1");
+        assertThat(dynamoConfig.clientLocal()).isNotNull();
+    }
 
 }

@@ -59,13 +59,12 @@ public class MasivianAdapter implements MasivianGateway {
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Basic " + headerValueEncode);
         return Mono.just(new TokenMasivData())
-                .map(requestTokenMasiv -> {
-                    requestTokenMasiv.setHeaders(headers);
-                    return requestTokenMasiv;
-                })
-                .flatMap(requestTokenMasiv -> clientToken.post(properties.getResources().getEndpointMasivToken(),
-                        requestTokenMasiv, TokenMasivData.class, ErrorTokenMasivRequest.class))
-                .flatMap(TokenMasivData::toModel);
+                .map(requestTokenMasiv->{requestTokenMasiv.setHeaders(headers);
+                    return requestTokenMasiv;})
+                .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
+                        requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
+                .flatMap(TokenMasivData::toModel)
+                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
     }
 
     @Override
