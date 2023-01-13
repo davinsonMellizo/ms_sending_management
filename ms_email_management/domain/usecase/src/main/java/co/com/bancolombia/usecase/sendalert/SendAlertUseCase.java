@@ -34,8 +34,8 @@ public class SendAlertUseCase {
 
     public Mono<Void> sendAlert(Alert alert) {
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
-                .switchIfEmpty(ValidationLogUtil.validSendLog(alert,  EMAIL,  Response.builder().code(1)
-                        .description("Template does not exist").build(), logUseCase,null))
+                .switchIfEmpty(ValidationLogUtil.validSendLog(alert, EMAIL, Response.builder().code(1)
+                        .description("Template does not exist").build(), logUseCase, null))
                 .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));
     }
@@ -52,7 +52,7 @@ public class SendAlertUseCase {
                 .filter(provider -> provider.equalsIgnoreCase(SES))
                 .flatMap(provider -> sesGateway.sendEmail(templateEmail, alert))
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> ValidationLogUtil.validSendLog(alert,  EMAIL, response, logUseCase,templateEmail));
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, EMAIL, response, logUseCase, templateEmail));
     }
 
     private Mono<Alert> validateAttachments(Alert alert) {
@@ -96,13 +96,15 @@ public class SendAlertUseCase {
                         .parameters(new ArrayList<>())
                         .nameToken(nameToken)
                         .build())
-                .flatMap(mail-> generatorTokenUseCase.getToken(mail,alert))
-                .doOnNext(getHeaders-> {tokenTemp[0] = String.valueOf(getHeaders.getHeaders()); })
+                .flatMap(mail -> generatorTokenUseCase.getToken(mail, alert))
+                .doOnNext(getHeaders -> {
+                    tokenTemp[0] = String.valueOf(getHeaders.getHeaders());
+                })
                 .flatMap(masivianGateway::sendMAIL)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> ValidationLogUtil.validSendLog(alert,  EMAIL, response, logUseCase,templateEmail))
-                .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0],templateEmail))
-                .map(o->(Response) o);
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, EMAIL, response, logUseCase, templateEmail))
+                .onErrorResume(error -> filterErrorMAS(error, alert, tokenTemp[0], templateEmail))
+                .map(o -> (Response) o);
     }
 
     private Mono<Void> filterErrorMAS(Throwable error, Alert alert, String tokentemp, TemplateEmail templateEmail) {

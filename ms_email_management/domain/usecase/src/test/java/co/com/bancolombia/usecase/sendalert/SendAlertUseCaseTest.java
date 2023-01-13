@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Attachment;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Response;
@@ -49,7 +50,7 @@ class SendAlertUseCaseTest {
     DynamoGateway dynamoGateway;
     @Mock
     SecretGateway secretGateway;
-   @Mock
+    @Mock
     private GeneratorTokenUseCase generatorTokenUseCase;
     private Alert alert = new Alert();
 
@@ -71,7 +72,7 @@ class SendAlertUseCaseTest {
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
-        when(generatorTokenUseCase.getToken(any()))
+        when(generatorTokenUseCase.getToken(any(), any()))
                 .thenReturn(Mono.just(new Mail()));
         when(generatorTokenUseCase.getNameToken(any()))
                 .thenReturn(Mono.just("NameToken"));
@@ -121,7 +122,7 @@ class SendAlertUseCaseTest {
                         .build()));
         when(logUseCase.sendLog(any(), any(), anyString(), any()))
                 .thenReturn(Mono.empty());
-        when(generatorTokenUseCase.getToken(any(),any()))
+        when(generatorTokenUseCase.getToken(any(), any()))
                 .thenReturn(Mono.just(new Mail()));
         StepVerifier
                 .create(useCase.sendAlert(alert))
@@ -137,7 +138,6 @@ class SendAlertUseCaseTest {
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
         when(templateEmailGateway.findTemplateEmail(anyString()))
                 .thenReturn(Mono.just(template));
-        when(generatorTokenUseCase.getToken(any(),any()))
         when(masivianGateway.sendMAIL(any()))
                 .thenReturn(Mono.just(Response.builder()
                         .code(200)
@@ -145,7 +145,7 @@ class SendAlertUseCaseTest {
                         .build()));
         when(logUseCase.sendLog(any(), any(), anyString(), any()))
                 .thenReturn(Mono.empty());
-        when(generatorTokenUseCase.getToken(any()))
+        when(generatorTokenUseCase.getToken(any(), any()))
                 .thenReturn(Mono.just(new Mail()));
         when(generatorTokenUseCase.getNameToken(any()))
                 .thenReturn(Mono.just("NameToken"));
@@ -170,7 +170,7 @@ class SendAlertUseCaseTest {
                         .build()));
         when(logUseCase.sendLog(any(), any(), anyString(), any()))
                 .thenReturn(Mono.empty());
-        when(generatorTokenUseCase.getToken(any()))
+        when(generatorTokenUseCase.getToken(any(), any()))
                 .thenReturn(Mono.just(new Mail()));
         when(generatorTokenUseCase.getNameToken(any()))
                 .thenReturn(Mono.just("NameToken"));

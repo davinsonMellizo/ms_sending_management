@@ -6,10 +6,10 @@ import lombok.Data;
 import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.api.domain.DomainEvent;
 import org.reactivecommons.async.api.AsyncQuery;
-import org.reactivecommons.async.impl.RabbitMessage;
-import org.reactivecommons.async.impl.communications.Message;
-import org.reactivecommons.async.impl.converters.MessageConverter;
-import org.reactivecommons.async.impl.exceptions.MessageConversionException;
+import org.reactivecommons.async.commons.communications.Message;
+import org.reactivecommons.async.commons.converters.MessageConverter;
+import org.reactivecommons.async.commons.exceptions.MessageConversionException;
+import org.reactivecommons.async.rabbit.RabbitMessage;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
