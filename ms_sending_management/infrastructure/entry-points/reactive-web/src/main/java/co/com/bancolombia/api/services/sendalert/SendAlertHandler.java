@@ -18,6 +18,7 @@ public class SendAlertHandler {
     private final ManagementAlertUseCase useCase;
 
     public Mono<ServerResponse> sendAlert(ServerRequest serverRequest) {
+
         return serverRequest.bodyToMono(MessageDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .flatMap(MessageDTO::toModel)

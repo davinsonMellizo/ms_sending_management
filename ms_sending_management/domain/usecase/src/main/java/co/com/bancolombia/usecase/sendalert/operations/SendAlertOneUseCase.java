@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
 
 @RequiredArgsConstructor
 public class SendAlertOneUseCase {
@@ -30,10 +31,17 @@ public class SendAlertOneUseCase {
                 .thenEmpty(Mono.empty());
     }
 
-    public Mono<Void> sendAlertIndicatorOne(Message message) {
+    private Mono<Alert> createAlert(Message message){
         return alertGateway.findAlertById("GNR")
-                .switchIfEmpty(Mono.error(new BusinessException(ALERT_CLIENT_NOT_FOUND)))
-                .flatMap(alert -> Util.replaceParameter(alert, message))
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
+                .map(alert -> alert.toBuilder()
+                        .message(message.getParameters().get(0).getValue())
+                        .templateName(message.getTemplate())
+                        .build());
+    }
+
+    public Mono<Void> sendAlertIndicatorOne(Message message) {
+        return createAlert(message)
                 .flatMap(alert -> routeAlerts(message, alert));
     }
 

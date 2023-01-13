@@ -162,7 +162,6 @@ public class ClientUseCase {
                         .flatMap(contact -> contactUseCase.updateContactRequest(contact, client.getVoucher()))
                         .doOnNext(response -> enrolBefore.getContactData().add(response.getActual()))
                         .doOnNext(response -> enrolActual.getContactData().add(response.getBefore()))
-                        .collectList()
                         .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate,isISeries)));
     }
 

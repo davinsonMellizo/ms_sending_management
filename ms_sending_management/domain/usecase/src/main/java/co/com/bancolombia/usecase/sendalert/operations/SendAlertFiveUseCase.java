@@ -60,11 +60,7 @@ public class SendAlertFiveUseCase {
                 .filter(alert -> alert.getIdState() == ACTIVE)
                 .switchIfEmpty(Mono.error(new BusinessException(INACTIVE_ALERT)))
                 .flatMap(alert -> Util.replaceParameter(alert, message))
-                .flatMap(alert -> routeAlert(alert, message))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(message, SEND_220,
-                        new Response(1, e.getBusinessErrorMessage().getMessage())))
-                .onErrorResume(TechnicalException.class, e -> logUseCase.sendLogError(message, SEND_220,
-                        new Response(1, e.getMessage())));
+                .flatMap(alert -> routeAlert(alert, message));
     }
 
 }
