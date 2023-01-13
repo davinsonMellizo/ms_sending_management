@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.reactivecommons.api.domain.Command;
+import org.reactivecommons.async.impl.communications.Message;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -26,10 +27,10 @@ class CommandsHandlerTest {
     }
 
    /* @Test
-    public void handleSendAlert() {
+   public void handleSendAlert() {
         when(useCase.sendAlert(any())).thenReturn(Mono.empty());
-        StepVerifier.create(commandsHandler.handleSendAlert(new Command<Alert>("alert", "alert",
-                Alert.builder().build())))
+        StepVerifier.create(commandsHandler.handleSendAlert(new Command<Message>("alert", "alert",
+                Message.class))
                 .verifyComplete();
     }*/
 }
