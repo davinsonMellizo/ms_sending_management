@@ -73,9 +73,9 @@ local.properties
 ### Intellij+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-deployment/**/output.xml
-deployment/**/report.html
-deployment/**/log.html
+**/deployment/**/output.xml
+**/deployment/**/report.html
+**/deployment/**/log.html
 
 # User-specific stuff
 .idea/**/workspace.xml
