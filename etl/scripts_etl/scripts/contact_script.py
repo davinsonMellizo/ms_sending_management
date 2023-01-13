@@ -41,9 +41,9 @@ BUCKET_SOURCE: str = f'nu0154001-alertas-{env}-glue-source-data'
 BUCKET_TARGET: str = f'nu0154001-alertas-{env}-glue-processed-data'
 
 # Mensajes de error
-USER_ID_MSG_ERR: str = 'El número de documento no se encontro en la base de datos'
-EMAIL_MSG_ERR: str = 'El correo electrónico no se encontro en la base de datos'
-SMS_MSG_ERR: str = 'El número de celular no se encontro en la base de datos'
+USER_ID_MSG_ERR: str = 'El numero de documento no se encontro en la base de datos'
+EMAIL_MSG_ERR: str = 'El correo electronico no se encontro en la base de datos'
+SMS_MSG_ERR: str = 'El numero de celular no se encontro en la base de datos'
 
 # Tipo de canales
 CHANNEL_SMS: str = 'SMS'
@@ -65,7 +65,7 @@ CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 # Funciones
 def df_complete_data(data: Dict[str, Any]) -> DataFrame:
     """
-    Completa los datos de email y numero de celular.
+    Completa los datos de email y número de celular.
 
     Recibe un dicionario con las siguientes llaves:
         dataframe: DataFrame
