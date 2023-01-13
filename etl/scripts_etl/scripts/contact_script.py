@@ -63,29 +63,19 @@ CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 
 
 # Funciones
-def df_complete_data(data: Dict[str, Any]) -> DataFrame:
-    """
-    Completa los datos de email y número de celular.
-
-    Recibe un dicionario con las siguientes llaves:
-        dataframe: DataFrame
-        channel: str
-        inverted_contact_medium: str
-        error_msg: str
-        is_push: bool = False
-        delete_columns: bool = True
-    """
-    df_new: DataFrame = data['dataframe']
-
-    if df_new.count() > 0:
+def complete_data(
+    dataframe: DataFrame, channel: str, inverted_contact_medium: str, error_msg: str
+) -> DataFrame:
+    """Completa los datos de email y numero de celular."""
+    df_new = dataframe
+    if dataframe.count() > 0:
         # Asignar mensaje de error si el email o el número de celular no existen en la DB
-        if not data['is_push']:
-            df_new = df_new.withColumn('Error',
-                                       when((df_new.UserIdNotFound.isNull()) &
-                                            (df_new.id_contact_medium.isNull()), data['error_msg'])
-                                       .otherwise(df_new.Error))
+        df_new = df_new.withColumn('Error',
+                                   when((df_new.UserIdNotFound.isNull()) &
+                                        (df_new.id_contact_medium.isNull()), error_msg)
+                                   .otherwise(df_new.Error))
 
-        if data['channel'] == CHANNEL_EMAIL:
+        if channel == CHANNEL_EMAIL:
             # Asignar el email
             df_new = df_new.withColumn('Email',
                                        when((df_new.Email.isNull()),
@@ -105,7 +95,7 @@ def df_complete_data(data: Dict[str, Any]) -> DataFrame:
 
         # Invertir el ID del tipo de canal a SMS
         df_new = df_new.withColumn(
-            'contact_medium', lit(data['inverted_contact_medium']))
+            'contact_medium', lit(inverted_contact_medium))
 
         # Unir DataFrame a procesar con los datos de contacto
         df_new = df_new.join(
@@ -116,7 +106,7 @@ def df_complete_data(data: Dict[str, Any]) -> DataFrame:
         # Eliminar las filas donde todos los valores sean null
         df_new = df_new.dropna(subset='ChannelType')
 
-        if data['channel'] == CHANNEL_EMAIL:
+        if channel == CHANNEL_EMAIL:
             # Asignar el número de celular
             df_new = df_new.withColumn('Phone',
                                        when((df_new.Phone.isNull()),
@@ -130,10 +120,9 @@ def df_complete_data(data: Dict[str, Any]) -> DataFrame:
                                        .otherwise(df_new.Email))
 
         # Eliminar columnas
-        if data['delete_columns']:
-            df_new = df_new.drop(
-                *CONTACTS_COLUMNS, 'contact_medium'
-            )
+        df_new = df_new.drop(
+            *CONTACTS_COLUMNS, 'contact_medium'
+        )
 
     return df_new
 
@@ -244,26 +233,18 @@ if data_enrichment == 'true':
     )
 
     # Completar datos
-    email_df = df_complete_data(
-        data={
-            'dataframe': email_df,
-            'channel': CHANNEL_EMAIL,
-            'inverted_contact_medium': CONTACT_MEDIUM_SMS,
-            'error_msg': EMAIL_MSG_ERR,
-            'is_push': False,
-            'delete_columns': True
-        }
+    email_df = complete_data(
+        dataframe=email_df,
+        channel=CHANNEL_EMAIL,
+        inverted_contact_medium=CONTACT_MEDIUM_SMS,
+        error_msg=EMAIL_MSG_ERR
     )
 
-    sms_df = df_complete_data(
-        data={
-            'dataframe': sms_df,
-            'channel': CHANNEL_SMS,
-            'inverted_contact_medium': CONTACT_MEDIUM_EMAIL,
-            'error_msg': SMS_MSG_ERR,
-            'is_push': False,
-            'delete_columns': True
-        }
+    sms_df = complete_data(
+        dataframe=sms_df,
+        channel=CHANNEL_SMS,
+        inverted_contact_medium=CONTACT_MEDIUM_EMAIL,
+        error_msg=SMS_MSG_ERR
     )
 
 # Escribir DataFrame en bucket de S3 en formato de archivo CSV separados por tipo de canal
