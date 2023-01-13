@@ -2,7 +2,7 @@
 Script para completar los datos de contacto faltantes del usuario en el archivo CSV.
 """
 import sys
-from typing import List
+from typing import Any, Dict, List
 
 from awsglue.context import GlueContext
 from awsglue.job import Job
@@ -10,6 +10,8 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, lit, when
+from pyspark.sql.types import StringType
+
 
 # Glue Context
 args = getResolvedOptions(sys.argv, [
@@ -61,6 +63,81 @@ CONTACTS_COLUMNS: List[str] = ['document_number', 'id_contact_medium', 'value']
 
 
 # Funciones
+def df_complete_data(data: Dict[str, Any]) -> DataFrame:
+    """
+    Completa los datos de email y numero de celular.
+
+    Recibe un dicionario con las siguientes llaves:
+        dataframe: DataFrame
+        channel: str
+        inverted_contact_medium: str
+        error_msg: str
+        is_push: bool = False
+        delete_columns: bool = True
+    """
+    df_new: DataFrame = data['dataframe']
+
+    if df_new.count() > 0:
+        # Asignar mensaje de error si el email o el número de celular no existen en la DB
+        if not data['is_push']:
+            df_new = df_new.withColumn('Error',
+                                       when((df_new.UserIdNotFound.isNull()) &
+                                            (df_new.id_contact_medium.isNull()), data['error_msg'])
+                                       .otherwise(df_new.Error))
+
+        if data['channel'] == CHANNEL_EMAIL:
+            # Asignar el email
+            df_new = df_new.withColumn('Email',
+                                       when((df_new.Email.isNull()),
+                                            df_new.value)
+                                       .otherwise(df_new.Email))
+        else:
+            # Asignar el número de celular
+            df_new = df_new.withColumn('Phone',
+                                       when((df_new.Phone.isNull()),
+                                            df_new.value)
+                                       .otherwise(df_new.Phone))
+
+        # Eliminar columnas
+        df_new = df_new.drop(
+            *CONTACTS_COLUMNS, 'contact_medium', 'UserIdNotFound'
+        )
+
+        # Invertir el ID del tipo de canal a SMS
+        df_new = df_new.withColumn(
+            'contact_medium', lit(data['inverted_contact_medium']))
+
+        # Unir DataFrame a procesar con los datos de contacto
+        df_new = df_new.join(
+            contacts_df, (df_new.UserId == contacts_df.document_number) &
+            (df_new.contact_medium == contacts_df.id_contact_medium), 'full'
+        )
+
+        # Eliminar las filas donde todos los valores sean null
+        df_new = df_new.dropna(subset='ChannelType')
+
+        if data['channel'] == CHANNEL_EMAIL:
+            # Asignar el número de celular
+            df_new = df_new.withColumn('Phone',
+                                       when((df_new.Phone.isNull()),
+                                            df_new.value)
+                                       .otherwise(df_new.Phone))
+        else:
+            # Asignar el email
+            df_new = df_new.withColumn('Email',
+                                       when((df_new.Email.isNull()),
+                                            df_new.value)
+                                       .otherwise(df_new.Email))
+
+        # Eliminar columnas
+        if data['delete_columns']:
+            df_new = df_new.drop(
+                *CONTACTS_COLUMNS, 'contact_medium'
+            )
+
+    return df_new
+
+
 def get_coalesce(number_rows: int) -> int:
     """Obtiene el número de particiones por archivo"""
     if number_rows <= CSV_ROWS_LIMIT:
@@ -89,9 +166,12 @@ massive_df = spark.read \
 provider_replace = provider.replace('"', '""')
 massive_df = massive_df.withColumn('ConsumerId', lit(consumer_id)) \
     .withColumn('Provider', lit(f'"{provider_replace}"')) \
-    .withColumn('Error', lit(None))
+    .withColumn('Error', lit(None).cast(StringType()))
 
-print('MASSIVE_DF_COUNT:', massive_df.count())
+# Obtener Dataframes por tipo de canal
+email_df = massive_df.filter(col('ChannelType') == CHANNEL_EMAIL)
+sms_df = massive_df.filter(col('ChannelType') == CHANNEL_SMS)
+push_df = massive_df.filter(col('ChannelType') == CHANNEL_PUSH)
 
 # Verificar si es necesario enriquecer los datos
 if data_enrichment == 'true':
@@ -101,8 +181,6 @@ if data_enrichment == 'true':
         database=GLUE_DATABASE,
         table_name=GLUE_DATABASE_TABLE
     )
-
-    print('CONTACTS_DYF_COUNT:', contacts_dyf.count())
 
     # Obtener los datos actuales de contactos
     contacts_dyf = contacts_dyf.filter(
@@ -118,8 +196,6 @@ if data_enrichment == 'true':
         ('id_contact_medium', 'short', 'id_contact_medium', 'string'),
         ('value', 'string', 'value', 'string')
     ])
-
-    print('EMAIL_AND_SMS_CONTACTS_DYF_COUNT', contacts_dyf.count())
 
     # Convertir DynamicFrame a Apache DataFrame
     contacts_df = contacts_dyf.toDF()
@@ -159,93 +235,36 @@ if data_enrichment == 'true':
                                             massive_df.UserIdNotFound, USER_ID_MSG_ERR)
                                        .otherwise(massive_df.Error))
 
-    # Asignar mensaje de error si el email no existe en la DB
-    massive_df = massive_df.withColumn('Error',
-                                       when((massive_df.ChannelType == CHANNEL_EMAIL) &
-                                            (massive_df.UserIdNotFound.isNull()) &
-                                            (massive_df.id_contact_medium.isNull()), EMAIL_MSG_ERR)
-                                       .otherwise(massive_df.Error))
-
-    # Asignar mensaje de error si el número de celular no existe en la DB
-    massive_df = massive_df.withColumn('Error',
-                                       when((massive_df.ChannelType == CHANNEL_SMS) &
-                                            (massive_df.UserIdNotFound.isNull()) &
-                                            (massive_df.id_contact_medium.isNull()), SMS_MSG_ERR)
-                                       .otherwise(massive_df.Error))
-
-    # Asignar el email
-    massive_df = massive_df.withColumn('Email',
-                                       when((massive_df.ChannelType == CHANNEL_EMAIL) &
-                                            (massive_df.id_contact_medium == CONTACT_MEDIUM_EMAIL), massive_df.value)
-                                       .otherwise(massive_df.Email))
-
-    # Asignar el número de celular
-    massive_df = massive_df.withColumn('Phone',
-                                       when((massive_df.ChannelType == CHANNEL_SMS) &
-                                            (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS), massive_df.value)
-                                       .otherwise(massive_df.Phone))
-
-    # Invertir el ID del tipo de canal
-    massive_df = massive_df.withColumn('contact_medium',
-                                       when(massive_df.ChannelType ==
-                                            CHANNEL_EMAIL, CONTACT_MEDIUM_SMS)
-                                       .otherwise(CONTACT_MEDIUM_EMAIL))
-
-    # Seleccionar campos del DataFrame de contacto
-    contacts_df = massive_df.select(*CONTACTS_COLUMNS).dropna()
-
-    # Eliminar columnas de contacto
-    massive_df = massive_df.drop(*CONTACTS_COLUMNS)
-
-    # Unir DataFrame a procesar con los datos de contacto
-    massive_df = massive_df.join(
-        contacts_df, (massive_df.UserId == contacts_df.document_number) &
-        (massive_df.contact_medium == contacts_df.id_contact_medium), 'full'
-    )
-
-    # Si el canal es EMAIL asignar el número de celular
-    massive_df = massive_df.withColumn('Phone',
-                                       when((massive_df.ChannelType == CHANNEL_EMAIL) &
-                                            (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS), massive_df.value)
-                                       .otherwise(massive_df.Phone))
-
-    # Si el canal es SMS o PUSH asignar el email
-    massive_df = massive_df.withColumn('Email',
-                                       when(((massive_df.ChannelType == CHANNEL_SMS) |
-                                             (massive_df.ChannelType == CHANNEL_PUSH))
-                                            & (massive_df.id_contact_medium == CONTACT_MEDIUM_EMAIL),
-                                            massive_df.value)
-                                       .otherwise(massive_df.Email))
-
-    # Invertir el ID del tipo de canal PUSH
-    massive_df = massive_df.withColumn('contact_medium',
-                                       when(massive_df.ChannelType == CHANNEL_PUSH, CONTACT_MEDIUM_SMS))
-
-    # Eliminar columnas del DataFrame de contacto
-    massive_df = massive_df.drop(*CONTACTS_COLUMNS)
-
-    # Unir DataFrame a procesar con los datos de contacto
-    massive_df = massive_df.join(
-        contacts_df, (massive_df.UserId == contacts_df.document_number) &
-        (massive_df.contact_medium == contacts_df.id_contact_medium), 'full'
-    ).dropna(subset='ChannelType')
-
-    # Si el canal es PUSH asignar el número de celular
-    massive_df = massive_df.withColumn('Phone',
-                                       when((massive_df.ChannelType == CHANNEL_PUSH)
-                                            & (massive_df.id_contact_medium == CONTACT_MEDIUM_SMS),
-                                            massive_df.value)
-                                       .otherwise(massive_df.Phone))
-
-    massive_df = massive_df.drop(
+    # Actualizar Dataframes por tipo de canal
+    email_df = massive_df.filter(col('ChannelType') == CHANNEL_EMAIL)
+    sms_df = massive_df.filter(col('ChannelType') == CHANNEL_SMS)
+    push_df = massive_df.filter(col('ChannelType') == CHANNEL_PUSH)
+    push_df = push_df.drop(
         *CONTACTS_COLUMNS, 'contact_medium', 'UserIdNotFound'
     )
 
+    # Completar datos
+    email_df = df_complete_data(
+        data={
+            'dataframe': email_df,
+            'channel': CHANNEL_EMAIL,
+            'inverted_contact_medium': CONTACT_MEDIUM_SMS,
+            'error_msg': EMAIL_MSG_ERR,
+            'is_push': False,
+            'delete_columns': True
+        }
+    )
 
-# Obtener Dataframes por tipo de canal
-email_df = massive_df.filter(col('ChannelType') == CHANNEL_EMAIL)
-sms_df = massive_df.filter(col('ChannelType') == CHANNEL_SMS)
-push_df = massive_df.filter(col('ChannelType') == CHANNEL_PUSH)
+    sms_df = df_complete_data(
+        data={
+            'dataframe': sms_df,
+            'channel': CHANNEL_SMS,
+            'inverted_contact_medium': CONTACT_MEDIUM_EMAIL,
+            'error_msg': SMS_MSG_ERR,
+            'is_push': False,
+            'delete_columns': True
+        }
+    )
 
 # Escribir DataFrame en bucket de S3 en formato de archivo CSV separados por tipo de canal
 write_df(email_df, CHANNEL_EMAIL.lower())
