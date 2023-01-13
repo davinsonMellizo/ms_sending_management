@@ -35,7 +35,6 @@ public class RabbitMQConfigHelper{
 
     @Primary
     @Bean
-    @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
         final ConnectionFactory factory = new ConnectionFactory();
@@ -53,10 +52,10 @@ public class RabbitMQConfigHelper{
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            SSLContext c = SSLContext.getInstance(TLS);
-            c.init(null, null, null);
+            SSLContext context = SSLContext.getInstance(TLS);
+            context.init(null, null, null);
 
-            factory.useSslProtocol(c);
+            factory.useSslProtocol(context);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }

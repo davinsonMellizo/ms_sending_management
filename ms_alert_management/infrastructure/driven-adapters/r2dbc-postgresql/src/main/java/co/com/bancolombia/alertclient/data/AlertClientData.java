@@ -42,6 +42,6 @@ public class AlertClientData implements Persistable<String> {
 
     @Override
     public boolean isNew() {
-        return this.id == null ? true : false;
+        return this.id == null;
     }
 }
