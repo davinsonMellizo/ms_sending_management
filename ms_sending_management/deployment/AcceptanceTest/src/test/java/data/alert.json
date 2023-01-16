@@ -1,6 +1,6 @@
 
 {
-  "operation": '#(operation)',
+  "operation": "#(operation)",
   "documentType": 0,
   "documentNumber": 2000100000,
   "consumer": "SVP",
