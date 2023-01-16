@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.reactivecommons.api.domain.Command;
-import org.reactivecommons.async.impl.communications.Message;
+import org.reactivecommons.async.commons.communications.Message;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
