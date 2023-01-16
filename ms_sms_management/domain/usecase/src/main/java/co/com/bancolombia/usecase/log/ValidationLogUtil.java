@@ -14,15 +14,15 @@ public class ValidationLogUtil {
     private static final int CODE_RESPONSE_200 = 200;
     private static final int CODE_RESPONSE_202 = 202;
 
-    public static final Predicate<Alert> isValidCount = alert ->
+    private static final Predicate<Alert> isValidCount = alert ->
             (alert.getHeaders().containsKey("x-death")) && ((Object)alert.getHeaders().get("x-death")).toString()
                     .contains("count="+alert.getHeaders().get("retryNumber"));
-    public static final Predicate<Response> validateCodeResponse = response ->
+    private static final Predicate<Response> validateCodeResponse = response ->
             ((response.getCode()!= CODE_RESPONSE_200) && (response.getCode()!= CODE_RESPONSE_202));
 
 public static  <T> Mono<T> validSendLog (Alert pAlert, String medium,  Response response,LogUseCase logUseCase){
     return Mono.just(pAlert)
-            .filter(alert-> response.getCode()== CODE_RESPONSE_200 || isValidCount.test(alert))
+            .filter(alert-> response.getCode()== CODE_RESPONSE_200 || isValidCount.test(pAlert))
             .flatMap(res->logUseCase.sendLog(pAlert,medium,response))
             .cast(Response.class)
             .switchIfEmpty(Mono.just(response))
