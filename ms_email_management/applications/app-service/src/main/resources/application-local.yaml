@@ -1,0 +1,89 @@
+server:
+  port: 8081
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+spring:
+  application:
+    name: ms_email_management
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  webflux:
+    base-path: /api/v1/sms-management
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: false
+  output:
+    ansi:
+      enabled: ALWAYS
+
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 1
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+adapters:
+  repositories:
+    tables:
+      namesmap:
+        secret-priority: secret-priority
+        template-email:  template-email
+  aws:
+    region-aws: us-east-1
+    endpoint: http://localhost:4566
+  async-sqs:
+    url: http://localhost:4566/000000000000/logs-alert
+    timeout: 3000
+    pool-size: 2
+    region-aws: us-east-1
+  rest-client:
+    timeout: 1000
+    resources:
+      endpointMasivianMail: https://api.masiv.masivian.com/email/v1/delivery
+      #endpointMasivianMail: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
+      endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
+      endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
+  secrets-manager:
+    secret-rabbit: alertas-local-secretrabbit-CNX
+    cache-size: 300
+    cache-time: 2
+    endpoint: http://localhost:4566
+aws:
+  region: us-east-1
+  nameSecretBucketSsl: bucket-masi-ssl
+  s3:
+    endpoint: http://localhost:4566
+    bucket: bucket-masi-ssl
+    attachmentBucket: bucket-adjuntos
+    signatureDuration: 60
+stash:
+  redis:
+    expireTime: 21000
+    host: localhost
+    port: 6379

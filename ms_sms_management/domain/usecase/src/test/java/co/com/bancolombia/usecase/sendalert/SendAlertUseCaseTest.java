@@ -1,6 +1,10 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Parameter;
+import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.SMSInalambria;
+import co.com.bancolombia.model.message.SMSMasiv;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
@@ -43,23 +47,23 @@ class SendAlertUseCaseTest {
         alert.setUrl("URl");
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new Parameter("name","bancolombia",""));
+        parameters.add(new Parameter("name", "bancolombia", ""));
         alert.setMessage("text to send");
         alert.setLogKey(UUID.randomUUID().toString());
 
     }
 
     @Test
-    void sendAlertMasivianTest(){
-        when(generatorTokenUseCase.getTokenMAS(any(),any()))
+    void sendAlertMasivianTest() {
+        when(generatorTokenUseCase.getTokenMAS(any(), any()))
                 .thenReturn(Mono.just(SMSMasiv.builder().customData("test").isFlash(false)
                         .isLongmessage(false).isPremium(false).text("textTest").to("123456789").build()));
-         when(masivianGateway.sendSMS(any()))
+        when(masivianGateway.sendSMS(any()))
                 .thenReturn(Mono.just(Response.builder()
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(),anyString(), any()))
+        when(logUseCase.sendLog(any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
                 .create(useCase.sendAlert(alert))
@@ -67,9 +71,9 @@ class SendAlertUseCaseTest {
     }
 
     @Test
-    void sendAlertInalambriaTest(){
+    void sendAlertInalambriaTest() {
         alert.setProvider("INA");
-        when(generatorTokenUseCase.getTokenINA(any(),any()))
+        when(generatorTokenUseCase.getTokenINA(any(), any()))
                 .thenReturn(Mono.just(SMSInalambria.builder().DateMessage(LocalDateTime.now())
                         .Devices("DevicesTest").FlashSMS(123).HasMore(1234).MessageData("MessageDataTest")
                         .MessagePattern("MessagePatternTest").MessageText("MessageTextTest").TemplateId(12345)
@@ -79,7 +83,7 @@ class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(),anyString(), any()))
+        when(logUseCase.sendLog(any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
                 .create(useCase.sendAlert(alert))
@@ -87,8 +91,8 @@ class SendAlertUseCaseTest {
     }
 
     @Test
-    void sendAlertMasivianError401Test(){
-        when(generatorTokenUseCase.getTokenMAS(any(),any()))
+    void sendAlertMasivianError401Test() {
+        when(generatorTokenUseCase.getTokenMAS(any(), any()))
                 .thenReturn(Mono.just(SMSMasiv.builder().customData("test").isFlash(false)
                         .isLongmessage(false).isPremium(false).text("textTest").to("123456789").build()));
         when(masivianGateway.sendSMS(any()))
@@ -100,9 +104,9 @@ class SendAlertUseCaseTest {
     }
 
     @Test
-    void sendAlertInalambriaError401Test(){
+    void sendAlertInalambriaError401Test() {
         alert.setProvider("INA");
-        when(generatorTokenUseCase.getTokenINA(any(),any()))
+        when(generatorTokenUseCase.getTokenINA(any(), any()))
                 .thenReturn(Mono.just(SMSInalambria.builder().DateMessage(LocalDateTime.now())
                         .Devices("DevicesTest").FlashSMS(123).HasMore(1234).MessageData("MessageDAtaTes")
                         .MessagePattern("MessagePatternTest").MessageText("MessageTextTest").TemplateId(12345)
@@ -114,10 +118,11 @@ class SendAlertUseCaseTest {
                 .expectError()
                 .verify();
     }
+
     @Test
-    void sendAlertInalambriaError500Test(){
+    void sendAlertInalambriaError500Test() {
         alert.setProvider("INA");
-        when(generatorTokenUseCase.getTokenINA(any(),any()))
+        when(generatorTokenUseCase.getTokenINA(any(), any()))
                 .thenReturn(Mono.just(SMSInalambria.builder().DateMessage(LocalDateTime.now())
                         .Devices("DevicesTest").FlashSMS(123).HasMore(1234).MessageData("MessageDAtaTes")
                         .MessagePattern("MessagePatternTest").MessageText("MessageTextTest").TemplateId(12345)

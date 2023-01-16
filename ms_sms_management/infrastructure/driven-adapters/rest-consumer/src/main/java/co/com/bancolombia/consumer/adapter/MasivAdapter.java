@@ -33,13 +33,12 @@ public class MasivAdapter implements MasivianGateway {
 
     @Override
     public Mono<Response> sendSMS(SMSMasiv smsMasiv) {
-
         return clientSms.post(properties.getResources().getEndpointMasivSms(), smsMasiv,
                 SuccessMasivianSMS.class, ErrorMasivianSMS.class)
                 .map(response -> Response.builder().code(STATUS_OK)
-                        .description(response.getDeliveryToken()).build())
+                        .description(response.getStatusMessage()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorMasivianSMS)e.getData()).getDescription())
+                        .code(e.getHttpsStatus()).description(((ErrorMasivianSMS)e.getData()).getStatusMessage())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
                         .code(Integer.parseInt(e.getMessage().substring(0,CONSTANT))).description(e.getMessage())
@@ -56,7 +55,8 @@ public class MasivAdapter implements MasivianGateway {
                 .map(requestTokenMasiv-> settingHeaders(headers, requestTokenMasiv))
                 .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
                         requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
-                .flatMap(TokenMasivData::toModel);
+                .flatMap(TokenMasivData::toModel)
+                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
 
     }
 

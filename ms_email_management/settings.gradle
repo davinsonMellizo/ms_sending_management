@@ -24,9 +24,9 @@ include ':dynamodb'
 project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
 include ':ses'
 project(':ses').projectDir = file('./infrastructure/driven-adapters/ses')
-include ':async-sqs'
-project(':async-sqs').projectDir = file('./infrastructure/driven-adapters/async-sqs')
 include ':redis'
 project(':redis').projectDir = file('./infrastructure/driven-adapters/redis')
 include ':s3-bucket'
 project(':s3-bucket').projectDir = file('./infrastructure/helpers/s3-bucket')
+include ':async-event-bus'
+project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')

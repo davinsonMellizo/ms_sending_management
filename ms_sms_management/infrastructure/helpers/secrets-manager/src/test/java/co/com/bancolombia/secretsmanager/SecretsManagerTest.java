@@ -23,10 +23,8 @@ class SecretsManagerTest {
 
     @InjectMocks
     private SecretsManager secretsManager;
-
     @Mock
     private AWSSecretManagerConnectorAsync secretsConnector;
-
     @Mock
     private LoggerBuilder loggerBuilder;
 
@@ -52,7 +50,7 @@ class SecretsManagerTest {
                 .thenReturn(Mono.error(new RuntimeException("error")));
         StepVerifier.create(secretsManager.getSecret(SECRET, ClassTest.class))
                 .expectErrorMatches(e -> e instanceof TechnicalException)
-        .verify();
+                .verify();
     }
 
     @Data

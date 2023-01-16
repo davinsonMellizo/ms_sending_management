@@ -1,0 +1,86 @@
+server:
+  port: 8085
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+spring:
+  application:
+    name: ms_sms_management
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  webflux:
+    base-path: /api/v1/sms-management
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: false
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 1
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+adapters:
+  repositories:
+    tables:
+      namesmap:
+        secret-priority: secret-priority
+  async-sqs:
+    url: http://localhost:4566/000000000000/logs-alert
+    timeout: 3000
+    pool-size: 2
+    region-aws: us-east-1
+  dynamo-repository:
+    region-aws: us-east-1
+    endpoint: http://localhost:4566
+  rest-client:
+    timeout: 1000
+    resources:
+      #endpointMasivSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-sms
+      endpointMasivSms: https://api-sms.masivapp.com/send-message
+      endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
+      endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
+      #endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
+      endpointInalambriaSms: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/mtmessage
+      endpointInalambriaToken: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/token/
+      #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
+  secrets-manager:
+    secret-rabbit: alertas-local-secretrabbit-CNX
+    #secret-inalambria: ${SECRET-INALAMBRIA}
+    cache-size: 300
+    cache-time: 2
+    endpoint: http://localhost:4566
+aws:
+  region: us-east-1
+  nameSecretBucketSsl: bucket-masi-ssl
+  s3:
+    endpoint: http://localhost:4566
+    bucket: bucket-masi-ssl
+stash:
+  redis:
+    expireTime: 21000
+    host: localhost
+    port: 6379
