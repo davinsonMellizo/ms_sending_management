@@ -45,8 +45,6 @@ public class LogUseCaseTest {
     public void findLogHotTest() {
         when(logGateway.findLog(any()))
                 .thenReturn(Mono.just(List.of(log)));
-        when(retrieveLogsGateway.retrieveLogsS3(any()))
-                .thenReturn(Mono.just(""));
         QueryLog query = QueryLog.builder()
                 .referenceDate(LocalDateTime.now().minusDays(90))
                 .endDate(LocalDateTime.now())
