@@ -1,0 +1,11 @@
+{
+  "id": '#(id)',
+  "idCampaign": '#(idCampaign)',
+  "idConsumer": '#(idConsumer)',
+  "scheduleType": '#(scheduleType)',
+  "startDate": "2022-10-06",
+  "startTime": "14:30:00.00",
+  "endDate": "2022-12-20",
+  "endTime": "14:30:00.00",
+  "creationUser": "lugomez"
+}

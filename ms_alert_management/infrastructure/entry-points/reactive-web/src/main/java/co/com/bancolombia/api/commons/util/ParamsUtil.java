@@ -14,8 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.constants.Header.*;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.HEADER_MISSING_ERROR;
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.INVALID_HEADER_ERROR;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.*;
 
 @UtilityClass
 public class ParamsUtil {
@@ -24,15 +23,21 @@ public class ParamsUtil {
     public static final String ID_ALERT = "id-alert";
     public static final String ID_TRANSACTION = "id-transaction";
     public static final String ID_CONSUMER = "id-consumer";
+    public static final String TRIGGER_NAME  = "name";
     public static final String ID_CAMPAIGN = "id-campaign";
 
-    private static Mono<String> ofEmpty(String value) {
+    private static Mono<String> ofEmptyHeaders(String value) {
         return (value == null || value.isEmpty()) ?
                 Mono.error(new TechnicalException(HEADER_MISSING_ERROR)) : Mono.just(value);
     }
 
+    private static Mono<String> ofEmptyParams(String value) {
+        return (value == null || value.isEmpty()) ?
+                Mono.error(new TechnicalException(PARAM_MISSING_ERROR)) : Mono.just(value);
+    }
+
     public static Mono<String> getId(ServerRequest request) {
-        return ofEmpty(request.pathVariable(ID));
+        return ofEmptyHeaders(request.pathVariable(ID));
     }
 
     public static Mono<AlertTransactionDTO> getRelationAlert(ServerRequest request) {
@@ -44,8 +49,8 @@ public class ParamsUtil {
     }
 
     public static Mono<AlertClientDTO> getRelationClient(ServerRequest request) {
-        return ofEmpty(request.headers().firstHeader(DOCUMENT_NUMBER))
-                .zipWith(ofEmpty(request.headers().firstHeader(DOCUMENT_TYPE)))
+        return ofEmptyHeaders(request.headers().firstHeader(DOCUMENT_NUMBER))
+                .zipWith(ofEmptyHeaders(request.headers().firstHeader(DOCUMENT_TYPE)))
                 .filter(ParamsUtil::validateHeaders)
                 .map(headers -> AlertClientDTO.builder()
                         .idAlert(request.headers().firstHeader(ID_ALERT))
@@ -62,10 +67,12 @@ public class ParamsUtil {
     }
 
     public static Mono<CampaignDTO> getCampaignParams(ServerRequest request) {
-        return Mono.just(CampaignDTO.builder()
-                .idCampaign(request.queryParams().getFirst(ID_CAMPAIGN))
-                .idConsumer(request.queryParams().getFirst(ID_CONSUMER))
-                .build());
+        return ofEmptyParams(request.queryParams().getFirst(ID_CAMPAIGN))
+                .zipWith(ofEmptyParams(request.queryParams().getFirst(ID_CONSUMER)))
+                .map(params -> CampaignDTO.builder()
+                        .idCampaign(params.getT1())
+                        .idConsumer(params.getT2())
+                        .build());
     }
 
     public Map<String, String> setHeaders(ServerRequest serverRequest) {
@@ -90,4 +97,7 @@ public class ParamsUtil {
 
     }
 
+    public static Mono<String> getTriggerParams(ServerRequest request) {
+        return ofEmptyParams(request.queryParams().getFirst(TRIGGER_NAME));
+    }
 }

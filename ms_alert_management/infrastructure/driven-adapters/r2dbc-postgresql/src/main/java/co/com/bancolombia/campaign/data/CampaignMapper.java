@@ -12,7 +12,6 @@ public interface CampaignMapper {
     @Mapping(target = "provider", qualifiedByName = "jsonToString")
     Campaign toEntity(CampaignData campaignData);
 
-    @Mapping(target = "isNew", ignore = true)
     @Mapping(target = "provider", qualifiedByName = "stringToJson")
     CampaignData toData(Campaign campaign);
 

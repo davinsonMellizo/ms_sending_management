@@ -66,8 +66,7 @@ class RemitterUseCaseTest {
                 .thenReturn(Mono.just(remitter));
         StepVerifier
                 .create(useCase.saveRemitter(remitter))
-                .assertNext(response -> response
-                        .getId().equals(remitter.getId()))
+                .assertNext(response -> assertEquals(response.getId(), remitter.getId()))
                 .verifyComplete();
         verify(remitterGateway).saveRemitter(any());
     }
@@ -78,9 +77,7 @@ class RemitterUseCaseTest {
                 .thenReturn(Mono.just(StatusResponse.<Remitter>builder().actual(remitter).before(remitter).build()));
         StepVerifier
                 .create(useCase.updateRemitter(remitter))
-                .assertNext(response -> response
-                        .getActual().getId()
-                        .equals(remitter.getId()))
+                .assertNext(response -> assertEquals(response.getActual().getId(), remitter.getId()))
                 .verifyComplete();
         verify(remitterGateway).updateRemitter(any());
     }

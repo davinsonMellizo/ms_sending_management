@@ -1,22 +1,7 @@
-@Ignore
 Feature: CRUD and relations with priority
 
   Background:
     * url urlPriority
-
-  Scenario: Successful case Find priority by id
-    * def urlFind = urlPriority + "/0"
-    Given url urlFind
-    When method GET
-    Then status 200
-    And match $.id == 0
-
-  Scenario: Successful case Delete priority by id
-    * def urlDelete = urlPriority + "/2"
-    Given url urlDelete
-    When method DELETE
-    Then status 200
-    And match response == '2'
 
   Scenario: Successful case Save priority
     * def id = 3
@@ -26,13 +11,27 @@ Feature: CRUD and relations with priority
     Then status 200
     And match $.id == 3
 
+  Scenario: Successful case Find priority by id
+    * def urlFind = urlPriority + "/3"
+    Given url urlFind
+    When method GET
+    Then status 200
+    And match $.id == 3
+
   Scenario: Successful case Update priority
-    * def id = 4
+    * def id = 3
     * def code = 4
     Given request read("../data/priority.json")
     When method PUT
     Then status 200
-    And match $.actual.id == 4
+    And match $.actual.id == 3
+
+  Scenario: Successful case Delete priority by id
+    * def urlDelete = urlPriority + "/3"
+    Given url urlDelete
+    When method DELETE
+    Then status 200
+    And match response == '3'
 
   Scenario: Error case Find priority by id
     * def urlFind = urlPriority + "/8"

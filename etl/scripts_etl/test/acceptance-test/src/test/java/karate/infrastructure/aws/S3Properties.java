@@ -15,6 +15,7 @@ public class S3Properties {
     String massivePrefix;
     String emailPrefix;
     String smsPrefix;
+    String pushPrefix;
 
     public static S3Properties fromMap(Map<String, Object> properties) {
         return S3Properties.builder()
@@ -23,6 +24,7 @@ public class S3Properties {
                 .massivePrefix((String) properties.get("massivePrefix"))
                 .emailPrefix((String) properties.get("emailPrefix"))
                 .smsPrefix((String) properties.get("smsPrefix"))
+                .pushPrefix((String) properties.get("pushPrefix"))
                 .build();
     }
 

@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -52,8 +53,7 @@ class AlertUseCaseTest {
                 .thenReturn(Mono.just(alert));
         StepVerifier
                 .create(useCase.saveAlertRequest(alert))
-                .assertNext(response -> response
-                        .getId().equals(alert.getId()))
+                .assertNext(response -> assertEquals(response.getId(), alert.getId()))
                 .verifyComplete();
         verify(alertGateway).saveAlert(any());
     }
@@ -64,9 +64,7 @@ class AlertUseCaseTest {
                 .thenReturn(Mono.just(StatusResponse.<Alert>builder().actual(alert).before(alert).build()));
         StepVerifier
                 .create(useCase.updateAlertRequest(alert))
-                .assertNext(response -> response
-                        .getActual().getId()
-                        .equals(alert.getId()))
+                .assertNext(response -> assertEquals(response.getActual().getId(), alert.getId()))
                 .verifyComplete();
         verify(alertGateway).updateAlert(any());
     }

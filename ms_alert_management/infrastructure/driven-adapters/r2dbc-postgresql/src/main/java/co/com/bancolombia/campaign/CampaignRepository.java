@@ -14,6 +14,18 @@ public interface CampaignRepository extends ReactiveCrudRepository<CampaignData,
             "data_enrichment FROM campaign WHERE id_campaign = $1 AND id_consumer = $2")
     Mono<CampaignData> findCampaign(String idCampaign, String idConsumer);
 
+    @Query("UPDATE campaign SET id_campaign=:#{#campaign.idCampaign}, id_consumer=:#{#campaign.idConsumer}, " +
+            "provider=:#{#campaign.provider}::JSON, id_remitter=:#{#campaign.idRemitter}, " +
+            "default_template=:#{#campaign.defaultTemplate}, description=:#{#campaign.description}, " +
+            "source_path=:#{#campaign.sourcePath}, attachment=:#{#campaign.attachment}, " +
+            "attachment_path=:#{#campaign.attachmentPath}, state=:#{#campaign.state}, " +
+            "creation_user=:#{#campaign.creationUser}, created_date=:#{#campaign.createdDate}, " +
+            "modified_user=:#{#campaign.modifiedUser}, modified_date=:#{#campaign.modifiedDate}, " +
+            "data_enrichment=:#{#campaign.dataEnrichment} " +
+            "WHERE id_campaign=:#{#campaign.idCampaign} AND id_consumer=:#{#campaign.idConsumer} " +
+            "RETURNING *")
+    Mono<CampaignData> updateCampaign(@Param("campaign") Campaign campaign);
+
     @Query("UPDATE campaign SET state='0', modified_user=:#{#campaign.modifiedUser}, " +
             "modified_date=CURRENT_TIMESTAMP WHERE id_campaign=:#{#campaign.idCampaign} " +
             "AND id_consumer=:#{#campaign.idConsumer}")

@@ -3,5 +3,6 @@
   "bucketNameTarget": "#{bucket-processed-data}#",
   "massivePrefix": "#{massive-prefix}#",
   "emailPrefix": "#{email-prefix}#",
-  "smsPrefix": "#{sms-prefix}#"
+  "smsPrefix": "#{sms-prefix}#",
+  "pushPrefix": "#{push-prefix}#"
 }

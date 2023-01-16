@@ -18,7 +18,7 @@ spec:
         name: #{config-protocol-name}#
         protocol: #{config-protocol}#
       hosts:
-          - #{gateway-host}#
+        - #{gateway-host}#
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -48,3 +48,4 @@ spec:
             port:
               number: #{config-port}#
       #websocketUpgrade: true #if websockets are required
+

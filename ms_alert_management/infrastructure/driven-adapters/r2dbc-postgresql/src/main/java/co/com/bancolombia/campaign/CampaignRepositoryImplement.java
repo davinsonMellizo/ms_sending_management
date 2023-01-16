@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.DELETE_CAMPAIGN_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_ALL_CAMPAIGN_ERROR;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.FIND_CAMPAIGN_BY_ID_ERROR;
@@ -56,7 +58,6 @@ public class CampaignRepositoryImplement
         return Mono.just(campaign)
                 .map(this::convertToData)
                 .map(campaignData -> campaignData.toBuilder()
-                        .isNew(true)
                         .createdDate(timeFactory.now())
                         .modifiedUser(null)
                         .build())
@@ -78,24 +79,26 @@ public class CampaignRepositoryImplement
 
     private Mono<StatusResponse<Campaign>> update(StatusResponse<Campaign> response) {
         return Mono.just(response.getActual())
-                .map(this::convertToData)
                 .map(data -> data.toBuilder()
-                        .isNew(false)
                         .createdDate(response.getBefore().getCreatedDate())
                         .creationUser(response.getBefore().getCreationUser())
                         .state(data.getState() != null ? data.getState() : response.getBefore().getState())
                         .modifiedDate(timeFactory.now())
                         .build())
-                .flatMap(repository::save)
+                .flatMap(repository::updateCampaign)
                 .map(this::convertToEntity)
-                .map(actual -> response.toBuilder().actual(actual).description("Actualizacion exitosa").build())
+                .map(campaignActual -> response.toBuilder().actual(
+                        campaignActual.toBuilder().schedules(response.getBefore().getSchedules()).build()
+                ).description("Actualizacion exitosa").build())
                 .onErrorMap(e -> new TechnicalException(e, UPDATE_CAMPAIGN_ERROR));
     }
 
     @Override
-    public Mono<String> deleteCampaignById(Campaign campaign) {
+    public Mono<Map<String, String>> deleteCampaignById(Campaign campaign) {
         return repository.deleteCampaign(campaign)
                 .onErrorMap(e -> new TechnicalException(e, DELETE_CAMPAIGN_ERROR))
-                .thenReturn(campaign.getIdCampaign());
+                .thenReturn(
+                        Map.of("idCampaign", campaign.getIdCampaign(), "idConsumer", campaign.getIdConsumer())
+                );
     }
 }

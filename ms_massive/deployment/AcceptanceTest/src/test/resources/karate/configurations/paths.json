@@ -1,0 +1,3 @@
+{
+  "urlSendCampaign": "#{dns-service}#/alertas/api/v1/massive/send-campaign"
+}

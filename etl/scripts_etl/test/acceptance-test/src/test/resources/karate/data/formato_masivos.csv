@@ -1,12 +1,15 @@
-ChannelType;TypeId;UserId;PhoneIndicator;Phone;Email;Attachment;Template;Data;Url;Message;Error
-EMAIL;1;1061772353;+57;;;"{""path"":""www.google.com"",""filename"":""cupon""}";99999;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.google.com;El usuario solo tiene email, phone queda vacio;
-SMS;1;1061772353;;;;"{""path"":""www.facebook.com"",""filename"":""macd""}";100000;"{""C1"":""6.000"",""C0"":""20/20/1999""}";www.facebook.com;El usuario no tiene teléfono, pero se debe completar el email. Error=si;
-EMAIL;1;7181152811;;;example@gmail.com;"{""path"":""www.google.com"",""filename"":""cupon""}";100001;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.amazon.com;El usuario solo tiene email, no tiene teléfono;
-SMS;1;7181152811;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";100002;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;Se debe completar el campo email, no tiene teléfono. Error=si;
-EMAIL;1;7869841694;+57;3184596465;;"{""path"":""www.google.com"",""filename"":""cupon""}";100003;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.twitter.com;Se debe completar el campo email;
-SMS;1;7869841694;+57;;carlos@hotmail.com;"{""path"":""www.facebook.com"",""filename"":""macd""}";100004;"{""C1"":""6.000"",""C0"":""20/20/1999""}";;Se debe completar el campo phone;
-EMAIL;1;2671994195;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";100003;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.instagram.com;Se debe completar el campo email y phone;
-SMS;1;2671994195;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";100004;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;Se debe completar el campo email y phone;
-EMAIL;1;5828702685;+57;3217285685;;"{""path"":""www.google.com"",""filename"":""cupon""}";100005;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;El usuario no tiene email. Error=si;
-EMAIL;1;8165296469;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";100006;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.bc.com;La CC no existe;
-SMS;1;6945874168;;;;"{""path"":""www.facebook.com"",""filename"":""macd""}";100007;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;La CC no existe;
+ChannelType;TypeId;UserId;PhoneIndicator;Phone;Email;Attachment;Application;Template;Data;Url;Message
+EMAIL;CC;1061772353;+57;;;"{""path"":""www.google.com"",""filename"":""cupon""}";;99999;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.google.com;El usuario solo tiene email, phone queda vacio
+SMS;CC;1061772353;;;;"{""path"":""www.facebook.com"",""filename"":""macd""}";;100000;"{""C1"":""6.000"",""C0"":""20/20/1999""}";www.facebook.com;El usuario no tiene teléfono, pero se debe completar el email. Error=si
+EMAIL;CC;7181152811;;;example@gmail.com;"{""path"":""www.google.com"",""filename"":""cupon""}";;100001;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.amazon.com;El usuario solo tiene email, no tiene teléfono
+SMS;CC;7181152811;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";;100002;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;Se debe completar el campo email, no tiene teléfono. Error=si
+EMAIL;CC;7869841694;+57;3184596465;;"{""path"":""www.google.com"",""filename"":""cupon""}";;100003;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.twitter.com;Se debe completar el campo email
+SMS;CC;7869841694;+57;;carlos@hotmail.com;"{""path"":""www.facebook.com"",""filename"":""macd""}";;100004;"{""C1"":""6.000"",""C0"":""20/20/1999""}";;Se debe completar el campo phone
+EMAIL;CC;2671994195;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";;100003;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.instagram.com;Se debe completar el campo email y phone
+SMS;CC;2671994195;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";;100004;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;Se debe completar el campo email y phone
+EMAIL;CC;5828702685;+57;3217285685;;"{""path"":""www.google.com"",""filename"":""cupon""}";;100005;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;El usuario no tiene email. Error=si
+EMAIL;CC;8165296469;;;;"{""path"":""www.google.com"",""filename"":""cupon""}";;100006;"{""C1"":""5.000"",""C0"":""20/20/1998""}";www.bc.com;La CC no existe
+SMS;CC;6945874168;;;;"{""path"":""www.facebook.com"",""filename"":""macd""}";;100007;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;La CC no existe
+PUSH;CC;2671994195;;;;;APPPERSONAS;100008;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;Se debe completar el campo email y phone
+PUSH;CC;7181152811;;;;;APPPERSONAS;100009;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;Se debe completar el campo email, no tiene teléfono.
+PUSH;CC;3495037530;;;;;APPPERSONAS;100009;"{""C1"":""5.000"",""C0"":""20/20/1998""}";;La CC no existe

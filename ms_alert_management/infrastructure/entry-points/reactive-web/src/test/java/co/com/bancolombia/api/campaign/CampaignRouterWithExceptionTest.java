@@ -18,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CAMPAIGN_NOT_FOUND;
@@ -46,13 +45,14 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
     private String request;
     private final Campaign campaign = new Campaign();
     private String url;
-    private final static String ALL = "/all";
 
 
     @BeforeEach
     void init() {
         url = properties.getCampaign();
         request = loadFileConfig("CampaignRequest.json", String.class);
+        campaign.setIdCampaign("1");
+        campaign.setIdConsumer("SVP");
     }
 
     @Test
@@ -66,8 +66,14 @@ class CampaignRouterWithExceptionTest extends BaseIntegration {
     @Test
     void findCampaignByIdWithException() {
         when(useCase.findCampaignById(any())).thenReturn(Mono.error(new BusinessException(CAMPAIGN_NOT_FOUND)));
-        final WebTestClient.ResponseSpec spec = webTestClient.get().uri(url).exchange();
-        spec.expectStatus().is5xxServerError();
+        webTestClient.get().uri(uriBuilder -> uriBuilder
+                        .path(url)
+                        .queryParam("id-campaign", campaign.getIdCampaign())
+                        .queryParam("id-consumer", campaign.getIdConsumer())
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is5xxServerError();
         verify(useCase).findCampaignById(any());
     }
 

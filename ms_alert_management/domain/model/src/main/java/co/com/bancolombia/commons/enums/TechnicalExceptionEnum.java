@@ -43,19 +43,20 @@ public enum TechnicalExceptionEnum {
     SAVE_CATEGORY_ERROR("DST0034", "An error occurred while save a category"),
     UPDATE_CATEGORY_ERROR("DST0035", "An error occurred while update a category"),
     DELETE_CATEGORY_ERROR("DST0036", "An error occurred while delete a category"),
-    FIND_ALL_CAMPAIGN_ERROR("DST0042", "An error occurred while found all campaign"),
-    FIND_CAMPAIGN_BY_ID_ERROR("DST0043", "An error occurred while found a campaign"),
-    SAVE_CAMPAIGN_ERROR("DST0044", "An error occurred while save a campaign"),
-    UPDATE_CAMPAIGN_ERROR("DST0045", "An error occurred while update a campaign"),
-    DELETE_CAMPAIGN_ERROR("DST0046", "An error occurred while delete a campaign"),
-    SAVE_SCHEDULE_ERROR("DST0047", "An error occurred while save a schedule"),
-    UPDATE_SCHEDULE_ERROR("DST0048", "An error occurred while update a schedule"),
-    FIND_SCHEDULE_BY_ID_ERROR("DST0049", "An error occurred while found a schedule"),
+    FIND_ALL_CAMPAIGN_ERROR("DST0042", "Ocurrio un error al encontrar todas las campanas"),
+    FIND_CAMPAIGN_BY_ID_ERROR("DST0043", "Ocurrio un error al encontrar la campana"),
+    SAVE_CAMPAIGN_ERROR("DST0044", "Ocurrio un error al guardar la campana"),
+    UPDATE_CAMPAIGN_ERROR("DST0045", "Ocurrio un error al actualizar la campana"),
+    DELETE_CAMPAIGN_ERROR("DST0046", "Ocurrio un error al eliminar la campana"),
+    SAVE_SCHEDULE_ERROR("DST0047", "Ocurrio un error al guardar el horario"),
+    UPDATE_SCHEDULE_ERROR("DST0048", "Ocurrio un error al actualizar el horario"),
+    FIND_SCHEDULE_BY_ID_ERROR("DST0049", "Ocurrio un error al encontrar el horario"),
     SECRET_EXCEPTION("302", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("302", "Internal server error"),
     BODY_MISSING_ERROR("301", "Missing parameters per body"),
     INVALID_HEADER_ERROR("301", "Invalid headers"),
-    HEADER_MISSING_ERROR("301", "Missing parameters per header");
+    HEADER_MISSING_ERROR("301", "Missing parameters per header"),
+    PARAM_MISSING_ERROR("301", "Missing parameters");
 
     private final String code;
     private final String message;

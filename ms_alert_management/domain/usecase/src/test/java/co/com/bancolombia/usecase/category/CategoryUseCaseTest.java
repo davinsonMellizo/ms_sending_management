@@ -65,8 +65,7 @@ class CategoryUseCaseTest {
                 .thenReturn(Mono.just(category));
         StepVerifier
                 .create(useCase.saveCategory(category))
-                .assertNext(response -> response
-                        .getId().equals(category.getId()))
+                .assertNext(response -> assertEquals(response.getId(), category.getId()))
                 .verifyComplete();
         verify(categoryGateway).saveCategory(any());
     }
@@ -78,9 +77,7 @@ class CategoryUseCaseTest {
                         .actual(category).before(category).build()));
         StepVerifier
                 .create(useCase.updateCategory(category))
-                .assertNext(response -> response
-                        .getActual().getId()
-                        .equals(category.getId()))
+                .assertNext(response -> assertEquals(response.getActual().getId(), category.getId()))
                 .verifyComplete();
         verify(categoryGateway).updateCategory(any());
     }

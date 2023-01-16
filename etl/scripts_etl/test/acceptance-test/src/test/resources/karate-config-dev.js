@@ -14,7 +14,8 @@ function () {
                 bucketNameTarget: envData.bucketNameTarget,
                 massivePrefix: envData.massivePrefix,
                 emailPrefix: envData.emailPrefix,
-                smsPrefix: envData.smsPrefix
+                smsPrefix: envData.smsPrefix,
+                pushPrefix: envData.pushPrefix
             }
         },
     }

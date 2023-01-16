@@ -1,6 +1,6 @@
 Feature: Generate central repository Acceptance test
 
-  Scenario: Validate number of processed EMAIL and SMS records
+  Scenario: Validate number of processed EMAIL, SMS and Push records
     * def csvValidateFields =
     """
     function fn() {

@@ -68,16 +68,16 @@ class CampaignRepositoryImplExceptionTest {
         campaign.setCreatedDate(NOW);
         campaign.setCreationUser("lugomez");
 
-        schedule.setIdCampaign("1");
-        schedule.setIdConsumer("ALM");
+        schedule.setIdCampaign(campaign.getIdCampaign());
+        schedule.setIdConsumer(campaign.getIdConsumer());
         schedule.setScheduleType(ScheduleType.DAILY);
         schedule.setStartDate(DATE_NOW);
         schedule.setStartTime(TIME_NOW);
 
         campaign.setSchedules(List.of(schedule));
 
-        campaignData.setIdCampaign("1");
-        campaignData.setIdConsumer("ALM");
+        campaignData.setIdCampaign(campaign.getIdCampaign());
+        campaignData.setIdConsumer(campaign.getIdConsumer());
     }
 
     @Test

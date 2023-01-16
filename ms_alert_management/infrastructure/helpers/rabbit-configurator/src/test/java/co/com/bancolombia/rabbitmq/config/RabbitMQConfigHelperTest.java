@@ -17,8 +17,6 @@ import static org.mockito.Mockito.when;
 
 
 class RabbitMQConfigHelperTest {
-    public static final String SECRET = "any-secret-dev";
-
 
     @Mock
     private SecretsManager secretsManager;
@@ -30,7 +28,7 @@ class RabbitMQConfigHelperTest {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

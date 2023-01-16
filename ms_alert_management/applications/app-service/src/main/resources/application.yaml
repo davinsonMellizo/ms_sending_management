@@ -59,6 +59,9 @@ adapters:
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}
     endpoint: http://localhost:4566
+  glue:
+    env: ${GLUE_ENV}
+    job-name: ${GLUE_JOB_NAME}
   entries:
     reactive-web:
       path-base: ${PATH_BASE}

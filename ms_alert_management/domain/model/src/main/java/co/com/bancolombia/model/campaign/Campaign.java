@@ -26,7 +26,7 @@ public class Campaign {
     private String sourcePath;
     private boolean attachment;
     private String attachmentPath;
-    private boolean dataEnrichment;
+    private Boolean dataEnrichment;
     private String state;
     private String creationUser;
     private LocalDateTime createdDate;

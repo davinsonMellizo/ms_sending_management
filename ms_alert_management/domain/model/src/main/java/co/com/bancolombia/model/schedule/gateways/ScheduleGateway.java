@@ -8,15 +8,13 @@ import reactor.core.publisher.Mono;
 
 public interface ScheduleGateway {
 
-    Mono<Schedule> saveSchedule(Schedule schedule);
+    Mono<Campaign> saveSchedule(Schedule schedule);
 
-    Mono<StatusResponse<Schedule>> updateSchedule(Schedule schedule, Long id);
+    Mono<StatusResponse<Campaign>> updateSchedule(Schedule schedule, Long id);
 
     Mono<Schedule> findScheduleById(Long id);
 
     Mono<Campaign> saveSchedulesByCampaign(Campaign campaign);
-
-    Mono<Campaign> updateSchedulesByCampaign(Campaign campaign);
 
     Mono<Campaign> findSchedulesByCampaign(Campaign campaign);
 

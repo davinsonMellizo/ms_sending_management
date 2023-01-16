@@ -11,6 +11,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.endpoints.Endpoint;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
@@ -22,6 +23,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -34,7 +36,15 @@ public class S3Client {
     public S3Client(AwsProperties awsProperties) {
         S3ClientBuilder s3ClientBuilder = software.amazon.awssdk.services.s3.S3Client.builder();
         if (awsProperties.hasEndpoint()) {
-            s3ClientBuilder = s3ClientBuilder.endpointOverride(URI.create(awsProperties.getEndpoint()));
+            s3ClientBuilder = s3ClientBuilder.endpointProvider(endpointParams ->
+                    CompletableFuture.completedFuture(Endpoint
+                            .builder()
+                            .url(URI.create(
+                                    String.join("/", awsProperties.getEndpoint(), endpointParams.bucket())
+                            ))
+                            .build()
+                    )
+            );
         }
         awsS3Client = s3ClientBuilder.build();
         s3Properties = awsProperties.getS3();
@@ -70,8 +80,7 @@ public class S3Client {
                     String fileName = "massive-file";
                     try (FileOutputStream fos = new FileOutputStream(fileName)) {
                         fos.write(bytes);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (Exception ignored) {
                     }
                     return fileName;
                 }).orElse(null);
@@ -119,6 +128,9 @@ public class S3Client {
         Multimap<String, Map<String, Object>> smsCsvProcess = getRecordsFromBucket(
                 s3Properties.getBucketNameTarget(), s3Properties.getSmsPrefix());
 
+        Multimap<String, Map<String, Object>> pushCsvProcess = getRecordsFromBucket(
+                s3Properties.getBucketNameTarget(), s3Properties.getPushPrefix());
+
         long channelTypeEmailCount = massiveCsv.get("DATA").stream()
                 .filter(stringObjectMap -> stringObjectMap.get("ChannelType").equals("EMAIL"))
                 .count();
@@ -127,6 +139,31 @@ public class S3Client {
                 .filter(stringObjectMap -> stringObjectMap.get("ChannelType").equals("SMS"))
                 .count();
 
-        return channelTypeEmailCount == emailCsvProcess.size() && channelTypeSmsCount == smsCsvProcess.size();
+        long channelTypePushCount = massiveCsv.get("DATA").stream()
+                .filter(stringObjectMap -> stringObjectMap.get("ChannelType").equals("PUSH"))
+                .count();
+
+        boolean validateRecordsCount = (channelTypeEmailCount == emailCsvProcess.size()) &&
+                (channelTypeSmsCount == smsCsvProcess.size()) &&
+                (channelTypePushCount == pushCsvProcess.size());
+
+        // Validate Consumer ID
+        long emailConsumerIdCount = emailCsvProcess.get("DATA").stream()
+                .filter(stringObjectMap -> stringObjectMap.get("ConsumerId").equals("SVP"))
+                .count();
+
+        long smsConsumerIdCount = smsCsvProcess.get("DATA").stream()
+                .filter(stringObjectMap -> stringObjectMap.get("ConsumerId").equals("SVP"))
+                .count();
+
+        long pushConsumerIdCount = pushCsvProcess.get("DATA").stream()
+                .filter(stringObjectMap -> stringObjectMap.get("ConsumerId").equals("SVP"))
+                .count();
+
+        boolean validateConsumerId = (emailConsumerIdCount == emailCsvProcess.size()) &&
+                (smsConsumerIdCount == smsCsvProcess.size()) &&
+                (pushConsumerIdCount == pushCsvProcess.size());
+
+        return validateRecordsCount && validateConsumerId;
     }
 }

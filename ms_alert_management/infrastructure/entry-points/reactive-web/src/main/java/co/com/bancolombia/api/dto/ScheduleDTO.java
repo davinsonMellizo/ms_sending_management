@@ -1,8 +1,7 @@
 package co.com.bancolombia.api.dto;
 
+import co.com.bancolombia.api.commons.validators.constraints.DateGreaterThan;
 import co.com.bancolombia.api.commons.validators.constraints.FieldsValueMatch;
-import co.com.bancolombia.api.commons.validators.groups.OnCreate;
-import co.com.bancolombia.api.commons.validators.groups.OnUpdate;
 import co.com.bancolombia.commons.enums.ScheduleType;
 import co.com.bancolombia.model.schedule.Schedule;
 import lombok.AllArgsConstructor;
@@ -23,35 +22,40 @@ import java.time.LocalTime;
 @FieldsValueMatch(
         field = "startTime",
         fieldMatch = "endTime",
-        message = "startTime and endTime fields values don't match"
+        message = "startTime y endTime no coinciden los valores"
+)
+@DateGreaterThan(
+        startDate = "startDate",
+        endDate = "endDate",
+        message = "startDate debe ser posterior a endDate"
 )
 public class ScheduleDTO extends DTO<Schedule> {
 
-    @Size(min = 1, max = 50, message = "{constraint.size}")
-    @NotNull(message = "{constraint.not_null}")
+    @Size(min = 1, max = 50, message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(message = "no debe ser nulo")
     private String idCampaign;
 
-    @Size(min = 1, max = 10, message = "{constraint.size}")
-    @NotNull(message = "{constraint.not_null}")
+    @Size(min = 1, max = 10, message = "debe tener entre {min} y {max} caracteres de longitud")
+    @NotNull(message = "no debe ser nulo")
     private String idConsumer;
 
-    @NotNull(message = "{constraint.not_null}")
+    @NotNull(message = "no debe ser nulo")
     private ScheduleType scheduleType;
 
-    @NotNull(message = "{constraint.not_null}")
+    @NotNull(message = "no debe ser nulo")
     private LocalDate startDate;
 
-    @NotNull(message = "{constraint.not_null}")
+    @NotNull(message = "no debe ser nulo")
     private LocalTime startTime;
 
     private LocalDate endDate;
 
     private LocalTime endTime;
 
-    @Size(min = 1, max = 20, message = "{constraint.size}")
+    @Size(min = 1, max = 20, message = "debe tener entre {min} y {max} caracteres de longitud")
     private String creationUser;
 
-    @Size(min = 1, max = 20, message = "{constraint.size}")
+    @Size(min = 1, max = 20, message = "debe tener entre {min} y {max} caracteres de longitud")
     private String modifiedUser;
 
     public Mono<Schedule> toModel() {
