@@ -18,16 +18,14 @@ public class DynamoAdapter extends AdapterOperations<Secret, SecretData> impleme
     @Autowired
     private SecretsManager secretsManager;
 
-    public DynamoAdapter(final DynamoDbEnhancedAsyncClient client, final DynamoDBTablesProperties dynamoDBTablesProperties) {
-        super(client,dynamoDBTablesProperties);
+    public DynamoAdapter(final DynamoDbEnhancedAsyncClient client,
+                         final DynamoDBTablesProperties dynamoDBTablesProperties) {
+        super(client, dynamoDBTablesProperties);
     }
 
     @Override
-    public Mono<Account> getSecretName(String priorityProvider){
+    public Mono<Account> getSecretName(String priorityProvider) {
         return findById(priorityProvider)
                 .flatMap(secret -> secretsManager.getSecret(secret.getSecretName(), Account.class));
-
-
     }
-
 }

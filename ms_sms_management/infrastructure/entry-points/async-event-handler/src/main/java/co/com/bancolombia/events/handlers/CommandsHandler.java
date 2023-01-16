@@ -19,11 +19,8 @@ public class CommandsHandler extends Converter {
         this.useCase = useCase;
     }
 
-
     public Mono<Void> handleSendAlert(Command<Message> command) {
-        return   converterMessage(command.getData(),Alert.class)
-                 .flatMap(useCase::sendAlert);
+        return converterMessage(command.getData(), Alert.class)
+                .flatMap(useCase::sendAlert);
     }
-
-
 }

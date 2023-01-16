@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 public class JacksonMessageConverter implements MessageConverter {
     private static final String ENCODING = Charset.defaultCharset().name();
     private static final String CONTENT_TYPE = "application/json";
+    private static final String FAILED_MESSAGE = "Failed to convert Message content";
 
     private final ObjectMapper objectMapper;
 
@@ -34,7 +35,7 @@ public class JacksonMessageConverter implements MessageConverter {
             final T value = objectMapper.treeToValue(asyncQueryJson.getQueryData(), bodyClass);
             return new AsyncQuery<>(asyncQueryJson.getResource(), value);
         } catch (IOException e) {
-            throw new MessageConversionException("Failed to convert Message content", e);
+            throw new MessageConversionException(FAILED_MESSAGE, e);
         }
     }
 
@@ -45,7 +46,7 @@ public class JacksonMessageConverter implements MessageConverter {
             final T value = objectMapper.treeToValue(domainEventJson.getData(), bodyClass);
             return new DomainEvent<>(domainEventJson.getName(), domainEventJson.getEventId(), value);
         } catch (IOException e) {
-            throw new MessageConversionException("Failed to convert Message content", e);
+            throw new MessageConversionException(FAILED_MESSAGE, e);
         }
     }
 
@@ -56,7 +57,7 @@ public class JacksonMessageConverter implements MessageConverter {
             return new Command<>(commandJson.getName(), commandJson.getCommandId(), (T) message);
 
         } catch (IOException e) {
-            throw new MessageConversionException("Failed to convert Message content", e);
+            throw new MessageConversionException(FAILED_MESSAGE, e);
         }
     }
 
@@ -65,7 +66,7 @@ public class JacksonMessageConverter implements MessageConverter {
         try {
             return objectMapper.readValue(message.getBody(), valueClass);
         } catch (IOException e) {
-            throw new MessageConversionException("Failed to convert Message content", e);
+            throw new MessageConversionException(FAILED_MESSAGE, e);
         }
     }
 
@@ -73,21 +74,21 @@ public class JacksonMessageConverter implements MessageConverter {
     @SuppressWarnings("unchecked")
     public <T> Command<T> readCommandStructure(Message message) {
         final CommandJson commandJson = readValue(message, CommandJson.class);
-        return new Command<>(commandJson.getName(), commandJson.getCommandId(), (T)commandJson.getData());
+        return new Command<>(commandJson.getName(), commandJson.getCommandId(), (T) commandJson.getData());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> DomainEvent<T> readDomainEventStructure(Message message) {
         final DomainEventJson eventJson = readValue(message, DomainEventJson.class);
-        return new DomainEvent<>(eventJson.getName(), eventJson.getEventId(), (T)eventJson.getData());
+        return new DomainEvent<>(eventJson.getName(), eventJson.getEventId(), (T) eventJson.getData());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> AsyncQuery<T> readAsyncQueryStructure(Message message) {
         final AsyncQueryJson asyncQueryJson = readValue(message, AsyncQueryJson.class);
-        return new AsyncQuery<>(asyncQueryJson.getResource(), (T)asyncQueryJson.getQueryData());
+        return new AsyncQuery<>(asyncQueryJson.getResource(), (T) asyncQueryJson.getQueryData());
     }
 
     @Override
@@ -96,9 +97,8 @@ public class JacksonMessageConverter implements MessageConverter {
         try {
             String jsonString = this.objectMapper.writeValueAsString(object);
             bytes = jsonString.getBytes(ENCODING);
-        }
-        catch (IOException e) {
-            throw new MessageConversionException("Failed to convert Message content", e);
+        } catch (IOException e) {
+            throw new MessageConversionException(FAILED_MESSAGE, e);
         }
         RabbitMessage.RabbitMessageProperties props = new RabbitMessage.RabbitMessageProperties();
         props.setContentType(CONTENT_TYPE);

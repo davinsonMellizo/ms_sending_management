@@ -7,15 +7,14 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class DynamoDBTablesPopretiesTest {
+class DynamoDBTablesPopretiesTest {
     private final DynamoDBTablesProperties properties = new DynamoDBTablesProperties();
 
     public static final Map<String, String> names = Map.of("key", "table-name");
 
     @Test
-    void secretsConnectionProperties(){
+    void secretsConnectionProperties() {
         properties.setNamesmap(names);
-
         assertNotNull(properties);
         assertEquals(names, properties.getNamesmap());
     }

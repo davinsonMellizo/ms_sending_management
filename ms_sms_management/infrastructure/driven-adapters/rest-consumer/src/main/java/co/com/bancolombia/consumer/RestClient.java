@@ -19,13 +19,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
-public class RestClient<T extends Request,R> {
+public class RestClient<T extends Request, R> {
 
     private final WebClient webClient;
     @Autowired
     @Qualifier("INA")
     private final WebClient webClientConfigIna;
-    private final Log LOGGER= LogFactory.getLog(RestClient.class);
+    private final Log LOGGER = LogFactory.getLog(RestClient.class);
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
 
@@ -33,7 +33,7 @@ public class RestClient<T extends Request,R> {
             return webClient.post()
                     .uri(route)
                     .contentType(APPLICATION_JSON)
-                    .headers(head -> head.setAll( (Map) request.getHeaders()))
+                    .headers(head -> head.setAll((Map) request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
                     .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
@@ -49,10 +49,10 @@ public class RestClient<T extends Request,R> {
         }
     }
 
-    private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
+    private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError) {
         return clientResponse.bodyToMono(clazzError)
                 .map(data -> new Error(clientResponse.statusCode().value(), data));
-}
+    }
 
     private <T extends Request> T cleanHeader(T request) {
         request.setHeaders(null);
