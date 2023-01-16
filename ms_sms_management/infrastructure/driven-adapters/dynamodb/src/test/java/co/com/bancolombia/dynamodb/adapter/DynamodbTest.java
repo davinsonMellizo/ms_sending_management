@@ -30,15 +30,16 @@ class DynamodbTest {
     private DynamoDbAsyncTable<SecretData> secretDataDynamoDbAsyncTable;
 
     @BeforeEach
-    public void init (){
+    public void init() {
         MockitoAnnotations.openMocks(this);
         when(dbEnhancedAsyncClient.table(any(), any(BeanTableSchema.class))).thenReturn(secretDataDynamoDbAsyncTable);
-        dynamoAdapter = new DynamoAdapter(dbEnhancedAsyncClient, dynamoDBTablesProperties );
+        dynamoAdapter = new DynamoAdapter(dbEnhancedAsyncClient, dynamoDBTablesProperties);
 
     }
+
     @Test
-    void dynamoAdapter (){
-        assertThat (dynamoAdapter).isNotNull();
+    void dynamoAdapter() {
+        assertThat(dynamoAdapter).isNotNull();
     }
 
 

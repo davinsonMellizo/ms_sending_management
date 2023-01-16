@@ -31,14 +31,14 @@ class MasivianAdapterTest {
     private RestClient<SMSMasiv, SuccessMasivianSMS> client;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         String url = "localhost";
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url,url,url));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url));
     }
 
     @Test
-    void sendSmsMasivianSuccessTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsMasivianSuccessTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(SuccessMasivianSMS.builder().statusMessage("Message acepted for delivery")
                         .build()));
         StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
@@ -47,8 +47,8 @@ class MasivianAdapterTest {
     }
 
     @Test
-    void sendSmsErrorMasivianTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsErrorMasivianTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
                         .data(new ErrorMasivianSMS("error", "error authentication"))
@@ -59,8 +59,8 @@ class MasivianAdapterTest {
     }
 
     @Test
-    void sendSmsErrorWebClientTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsErrorWebClientTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
         StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
                 .assertNext(response -> response.getDescription().contains("123"))

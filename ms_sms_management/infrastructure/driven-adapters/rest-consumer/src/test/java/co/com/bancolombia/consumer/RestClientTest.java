@@ -19,7 +19,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 
 
-
 class RestClientTest {
 
     private MockWebServer mockServer;
@@ -33,15 +32,15 @@ class RestClientTest {
         SMSMasiv = new SMSMasiv();
         restClient = new RestClient(WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
-                .build(),WebClient.builder()
+                .build(), WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
                 .build());
         mockServer.url(getBaseUrl(mockServer.getPort()));
-        SMSMasiv.setHeaders(Map.of("Authorization","TokenTest"));
+        SMSMasiv.setHeaders(Map.of("Authorization", "TokenTest"));
 
     }
 
-    public static String getBaseUrl(int port){
+    public static String getBaseUrl(int port) {
         return String.format(HOST, port);
     }
 
@@ -54,7 +53,7 @@ class RestClientTest {
     void givenPostThenSuccess() {
         mockServer.enqueue(mockResponseSuccess());
         StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), SMSMasiv,
-                        SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+                SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -63,15 +62,16 @@ class RestClientTest {
     void givenPostThenError() {
         mockServer.enqueue(mockResponseError());
         StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), SMSMasiv,
-                        SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+                SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectError()
                 .verify();
     }
+
     @Test
-    void givenPostThenSuccesWtihmasivapp(){
+    void givenPostThenSuccesWtihmasivapp() {
         mockServer.enqueue(mockResponseSuccess());
         StepVerifier.create(restClient.post("masivapp.com/test", SMSMasiv,
-                        SuccessMasivianSMS.class, ErrorMasivianSMS.class))
+                SuccessMasivianSMS.class, ErrorMasivianSMS.class))
                 .expectNextCount(1)
                 .verifyComplete();
     }

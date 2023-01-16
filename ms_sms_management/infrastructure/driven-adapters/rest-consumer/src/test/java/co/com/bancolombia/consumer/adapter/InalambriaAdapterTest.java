@@ -35,16 +35,16 @@ class InalambriaAdapterTest {
     private SMSInalambria sms;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         String url = "localhost";
         when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url));
         sms = new SMSInalambria();
-        sms.setHeaders(Map.of("header","test"));
+        sms.setHeaders(Map.of("header", "test"));
     }
 
     @Test
-    void sendSmsInalambriaSuccessTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsInalambriaSuccessTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(SuccessInalambriaSMS.builder()
                         .messageText("success")
                         .build()));
@@ -55,11 +55,11 @@ class InalambriaAdapterTest {
     }
 
     @Test
-    void sendSmsErrorInalambriaTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsErrorInalambriaTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
-                        .data(new ErrorInalambriaSMS("error authentication",400,123L))
+                        .data(new ErrorInalambriaSMS("error authentication", 400, 123L))
                         .build()));
 
         StepVerifier.create(inalambriaAdapter.sendSMS(sms))
@@ -68,8 +68,8 @@ class InalambriaAdapterTest {
     }
 
     @Test
-    void sendSmsErrorWebClientTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsErrorWebClientTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
         StepVerifier
                 .create(inalambriaAdapter.sendSMS(new SMSInalambria()))

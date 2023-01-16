@@ -22,7 +22,7 @@ class S3ConnectionConfigTest {
     private S3ConnectionProperties s3ConnectionProperties;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
         when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
         when(s3ConnectionProperties.getMaximumPoolSize()).thenReturn(50);
@@ -38,6 +38,6 @@ class S3ConnectionConfigTest {
     @Test
     void s3AsyncClientLocalTest() throws IOException {
         when(s3ConnectionProperties.getEndpoint()).thenReturn("http://localhost:4566");
-        Assert.notNull(s3ConnectionConfigMock.s3AsyncClientLocal( ));
+        Assert.notNull(s3ConnectionConfigMock.s3AsyncClientLocal());
     }
 }
