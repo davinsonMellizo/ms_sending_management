@@ -93,6 +93,11 @@ class JobExecutorTest {
                 .startDate(LocalDateTime.now().minusDays(1))
                 .endDate(LocalDateTime.now())
                 .transactionIdentifier("request_id")
+                .documentType("")
+                .documentNumber("")
+                .consumer("")
+                .contact("")
+                .provider("")
                 .build();
     }
 

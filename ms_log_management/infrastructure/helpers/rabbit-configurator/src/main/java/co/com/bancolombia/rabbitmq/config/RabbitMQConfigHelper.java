@@ -33,16 +33,9 @@ public class RabbitMQConfigHelper{
     }
 
     @Primary
-    //@Profile({"dev","qa","pdn"})
     @Bean
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
-        /*RabbitMQConnectionProperties properties = rabbitProperties();*/
-        RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
-        properties.setSsl(false);
-        properties.setHostname("localhost");
-        properties.setPassword("guest");
-        properties.setUsername("guest");
-        properties.setPort(5673);
+        RabbitMQConnectionProperties properties = rabbitProperties();
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();
 
