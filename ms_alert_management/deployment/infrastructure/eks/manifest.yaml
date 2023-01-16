@@ -14,9 +14,10 @@ spec:
     app: #{project-name}#
     pod: #{name}#-pod
   ports:
-    - name: #{gateway-protocol-name}#
+    - name: #{config-protocol-name}#
       targetPort: #{container-port}#
-      port: #{gateway-port}#
+      port: #{config-port}#
+
 ---
 apiVersion: apps/v1
 kind: Deployment

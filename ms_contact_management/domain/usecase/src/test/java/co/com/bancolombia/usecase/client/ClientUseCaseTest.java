@@ -176,6 +176,8 @@ public class ClientUseCaseTest {
     public void updateClient() {
         when(contactUseCase.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
         when(contactUseCase.validateMail(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
@@ -205,6 +207,8 @@ public class ClientUseCaseTest {
 
     @Test
     public void updateClientMono() {
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
         when(contactUseCase.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(contactUseCase.validateMail(any()))

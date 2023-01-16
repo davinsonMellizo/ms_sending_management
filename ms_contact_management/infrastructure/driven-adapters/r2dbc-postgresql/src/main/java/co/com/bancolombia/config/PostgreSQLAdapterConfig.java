@@ -24,6 +24,7 @@ public class PostgreSQLAdapterConfig{
     public ConnectionFactory initializer(@Qualifier("buildConnectionWriterConfiguration")
                                              final ConnectionFactoryOptions options) {
         return ConnectionFactories.get(options);
+
     }
 
     @Bean

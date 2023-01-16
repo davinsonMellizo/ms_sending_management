@@ -26,7 +26,7 @@ public class AlertClientRepositoryImplement
 
     @Autowired
     public AlertClientRepositoryImplement(AlertClientRepository repository, AlertClientMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
 

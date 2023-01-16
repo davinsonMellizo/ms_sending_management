@@ -25,9 +25,8 @@ public class CommandsHandler {
 
     private final LoggerBuilder logger;
     private final ClientUseCase useCase;
-    private final EnrolMapper enrolMapper;
-    private final ValidatorHandler validatorHandler;
-
+    private final EnrolMapper enrolIseriesMapper;
+    private final ValidatorHandler validatorBodyHandler;
 
     public Mono<Void> saveClient(Command<String> command){
         return handleSendAlert(command.getData(), useCase::saveClientRequest);
@@ -42,8 +41,8 @@ public class CommandsHandler {
             Object mstCode = mapper.readValue(data, EnrolDTO.class);
             return Mono.just((EnrolDTO)mstCode)
                     .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                    .doOnNext(validatorHandler::validateObject)
-                    .map(enrolMapper::toEntity)
+                    .doOnNext(validatorBodyHandler::validateObject)
+                    .map(enrolIseriesMapper::toEntity)
                     .map(m  -> (M)m)
                     .flatMap(m ->  use.apply(m, Boolean.TRUE, getVoucher()))
                     .onErrorResume(BusinessException.class, e -> Mono.empty())

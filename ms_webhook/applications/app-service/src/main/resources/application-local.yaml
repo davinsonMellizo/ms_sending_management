@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+
+spring:
+  application:
+    name: ms_webhook
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  webflux:
+    base-path: /api/v1/webhook
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: false
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+adapters:
+  entries:
+    reactive-web:
+      eventRegister: /event-register

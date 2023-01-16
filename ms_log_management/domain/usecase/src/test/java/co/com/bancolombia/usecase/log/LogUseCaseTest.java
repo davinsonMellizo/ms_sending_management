@@ -1,7 +1,9 @@
 package co.com.bancolombia.usecase.log;
 
 import co.com.bancolombia.model.log.Log;
+import co.com.bancolombia.model.log.QueryLog;
 import co.com.bancolombia.model.log.gateways.LogGateway;
+import co.com.bancolombia.model.log.gateways.RetrieveLogsGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -22,6 +27,8 @@ public class LogUseCaseTest {
     private LogUseCase useCase;
     @Mock
     private LogGateway logGateway;
+    @Mock
+    private RetrieveLogsGateway retrieveLogsGateway;
     private final Log log = new Log();
 
     @Test
@@ -34,5 +41,20 @@ public class LogUseCaseTest {
                 .verifyComplete();
         verify(logGateway).saveLog(log);
     }
+    @Test
+    public void findLogHotTest() {
+        when(logGateway.findLog(any()))
+                .thenReturn(Mono.just(List.of(log)));
+        QueryLog query = QueryLog.builder()
+                .referenceDate(LocalDateTime.now().minusDays(90))
+                .endDate(LocalDateTime.now())
+                .build();
+        StepVerifier
+                .create(useCase.findLogsByDate(query))
+                .expectNextCount(1)
+                .verifyComplete();
+        verify(logGateway).findLog(query);
+    }
+
 
 }

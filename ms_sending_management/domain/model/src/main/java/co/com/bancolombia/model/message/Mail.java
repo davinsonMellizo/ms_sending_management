@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -18,14 +19,13 @@ public class Mail extends Request {
     private Destination destination;
     private List<Attachment> attachments;
     private Template template;
-    private Message message;
     private String logKey;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder(toBuilder = true)
-    public static class Destination{
+    public static class Destination implements Serializable {
         private String toAddress;
         private String ccAddress;
         private String bccAddress;
@@ -35,7 +35,7 @@ public class Mail extends Request {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder(toBuilder = true)
-    public static class Message{
+    public static class Message implements Serializable{
         private String subject;
         private String body;
     }

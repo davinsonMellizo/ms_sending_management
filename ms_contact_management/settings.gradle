@@ -1,3 +1,10 @@
+pluginManagement {
+    repositories {
+        maven {
+            url = 'https://artifactory.apps.bancolombia.com/maven-bancolombia/'
+        }
+    }
+}
 rootProject.name = 'ms_contact_management'
 
 include ':app-service'

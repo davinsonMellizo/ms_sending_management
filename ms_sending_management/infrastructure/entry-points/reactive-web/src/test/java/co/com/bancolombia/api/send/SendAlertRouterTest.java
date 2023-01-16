@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
         ApiProperties.class,
         ExceptionHandler.class
 })
-public class SendAlertRouterTest extends BaseIntegration {
+class SendAlertRouterTest extends BaseIntegration {
 
     @MockBean
     private ManagementAlertUseCase useCase;

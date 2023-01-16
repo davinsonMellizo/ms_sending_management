@@ -24,7 +24,7 @@ public class RemitterRepositoryImplement
 
     @Autowired
     public RemitterRepositoryImplement(RemitterRepository repository, RemitterMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override

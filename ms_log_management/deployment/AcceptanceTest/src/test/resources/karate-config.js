@@ -2,23 +2,16 @@ function() {
 
   karate.configure('connectTimeout', 500000);
   karate.configure('readTimeout', 500000);
+  karate.configure ('ssl', true);
 
 
   var envData = read('../configurations/paths.json');
 
   var config = {
-      urlAlert: '',
-      urlRemitter: '',
-      urlService: '',
-      urlProvider: '',
-      urlConsumer: ''
+      urlLog: ''
   }
 
-  config.urlAlert = envData.urlAlert;
-  config.urlRemitter = envData.urlRemitter;
-  config.urlService = envData.urlService;
-  config.urlProvider = envData.urlProvider;
-  config.urlConsumer = envData.urlConsumer;
+  config.urlLog = envData.urlLog;
   return config
 
 }

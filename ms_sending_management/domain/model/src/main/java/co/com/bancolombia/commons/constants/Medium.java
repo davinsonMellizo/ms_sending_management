@@ -1,11 +1,8 @@
 package co.com.bancolombia.commons.constants;
 
+import lombok.experimental.UtilityClass;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
+@UtilityClass
 public class Medium {
     public static final String SMS = "SMS";
     public static final String MAIL = "MAIL";

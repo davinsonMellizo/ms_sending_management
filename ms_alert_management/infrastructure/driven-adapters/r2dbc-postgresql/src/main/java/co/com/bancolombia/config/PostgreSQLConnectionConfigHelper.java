@@ -1,6 +1,5 @@
 package co.com.bancolombia.config;
 
-import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import io.r2dbc.spi.ConnectionFactoryOptions;
@@ -19,7 +18,6 @@ public class PostgreSQLConnectionConfigHelper {
 
     private final SecretsManager secretsManager;
     private final SecretsNameStandard secretsNameStandard;
-    private final LoggerBuilder logger;
 
 
     private PostgresqlConnectionProperties postgresProperties() {
@@ -44,7 +42,6 @@ public class PostgreSQLConnectionConfigHelper {
                 .option(Option.valueOf("sslmode"), "verify-full")
                 .option(Option.valueOf("schema"), schema)
                 .build();
-
     }
 }
 

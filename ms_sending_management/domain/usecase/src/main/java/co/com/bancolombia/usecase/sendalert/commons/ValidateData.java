@@ -1,32 +1,32 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
 import co.com.bancolombia.model.message.Message;
+import lombok.experimental.UtilityClass;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+@UtilityClass
+public class ValidateData {
 
-public abstract class ValidateData {
-
-    private static final String PATTERN = "^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
+    private static final String PATTERN = "^\\w+([.-_+]?\\w+)*@((\\w+)[.])+(\\w+){2,6}$";
 
     public static final Predicate<Message> isValidMailOrMobile = message ->
-            isNotNull(message.getMail()) || isNotNull(message.getPhone());
+            isNotEmpty(message.getMail()) || isNotEmpty(message.getPhone());
 
-    public static final Predicate<Message> isValidMobile = message -> isNotNull(message.getPhone());
+    public static final Predicate<Message> isValidMobile = message -> isNotEmpty(message.getPhone());
 
     public static final Predicate<Message> isValidMailFormat = message ->
-            isNotNull(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
+            isNotEmpty(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
 
-    public static final Predicate<Message> isValidMail = message -> isNotNull(message.getMail());
+    public static final Predicate<Message> isValidMail = message -> isNotEmpty(message.getMail());
 
     public static final Predicate<Message> isValidMailFormatOrMobile = message ->
-            isNotNull(message.getPhone())
-                    || (isNotNull(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
+            isNotEmpty(message.getPhone())
+                    || (isNotEmpty(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
 
-    public static boolean isNotNull(String str) {
-        return Objects.nonNull(str) || !str.isEmpty();
+    public static boolean isNotEmpty(String str) {
+        return !str.isEmpty();
     }
 
 }

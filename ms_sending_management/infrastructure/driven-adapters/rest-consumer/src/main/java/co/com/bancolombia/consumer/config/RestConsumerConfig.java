@@ -7,7 +7,8 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
-import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
+import java.time.Duration;
+
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -16,11 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class RestConsumerConfig {
 
     private ClientHttpConnector clientHttpConnector(int timeout) {
-        return new ReactorClientHttpConnector(HttpClient.create()
-                .tcpConfiguration(tcpClient -> {
-                    tcpClient = tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout);
-                    return tcpClient;
-                }));
+        return new ReactorClientHttpConnector(HttpClient.create().responseTimeout(Duration.ofMillis(timeout)));
     }
 
     @Bean

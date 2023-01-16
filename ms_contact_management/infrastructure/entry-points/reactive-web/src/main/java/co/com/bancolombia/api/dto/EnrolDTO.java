@@ -21,4 +21,5 @@ public class EnrolDTO {
     private @Valid ClientDTO client;
 
     private List<@Valid ContactDTO> contactData;
+
 }

@@ -1,0 +1,70 @@
+##Spring Configuration
+server:
+  port: 8081
+spring:
+  application:
+    name: ms_log_management
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  webflux:
+    base-path: /alertas/api/v1/log-management
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: false
+
+springdoc:
+  version: 1
+
+adapters:
+  days-hot-data: 90
+  entries:
+    reactive-web:
+      log: /log
+
+cloud:
+  aws:
+    region: us-east-1
+    stack:
+      auto: false
+    rds:
+      postgresql:
+        pool:
+          initial: 10
+          max: 15
+        schema: schalerd
+        hostRead: localhost
+    secrets-manager:
+      secret-rds: alertas-local-secretrds-CNX
+      secret-rabbit: alertas-local-secretrabbit-CNX
+      endpoint: http://localhost:4566
+    glue:
+      region: us-east-1
+      endpoint: http://localhost:4566
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, liveness, readiness
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness
+  endpoint:
+    health:
+      show-details: never
+
+d2b:
+  aws:
+    secrets-manager:
+      endpoint: "http://localhost:4566"
+
+app.async.withDLQRetry: true
+app.async.retryDelay: 1000
+app.async.maxRetries: 2
+

@@ -70,6 +70,7 @@ public class ContactUseCaseTest {
         contact.setValue("321795845");
         contact.setStateContact("Active");
         contact.setId(1);
+        contact.setContactWayName("SMS");
 
         client.setDocumentNumber(1061772353L);
         client.setDocumentType("0");
@@ -84,19 +85,16 @@ public class ContactUseCaseTest {
     @Test
     public void findAllContactByClient() {
         when(contactGateway.contactsByClient(any()))
-                .thenReturn(Flux.just(contact));
+                .thenReturn(Mono.just(List.of(contact)));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
-        when(consumerGateway.findConsumerById(anyString()))
-                .thenReturn(Mono.just(consumer));
-        when(contactGateway.contactsByClientAndSegment(any(), anyString()))
-                .thenReturn(Flux.just(contact));
         StepVerifier
-                .create(useCase.findContactsByClient(client, "sss"))
+                .create(useCase.findContactsByClient(client, ""))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(contactGateway).contactsByClient(client);
     }
+
 
     @Test
     public void saveContact() {

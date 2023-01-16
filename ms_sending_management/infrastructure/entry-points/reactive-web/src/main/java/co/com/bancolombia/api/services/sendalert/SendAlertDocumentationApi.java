@@ -11,15 +11,15 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class SendAlertDocumentationApi {
 
-    private final static String TAG = "Send Alert";
-    private final static String ERROR = "Error";
-    private final static String SUCCESSFUL = "successful";
+    private static final String TAG = "Send Alert";
+    private static final String ERROR = "Error";
+    private static final String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> send() {
         return ops -> ops.tag(TAG)
-                .operationId("SendAlert").summary("Send Alert")
-                .description("Send Alert").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Message to send").required(true).implementation(Message.class))
+                .operationId("SendAlert").summary(TAG)
+                .description("Service to Send Alert").tags(new String[]{TAG})
+                .requestBody(requestBodyBuilder().required(true).implementation(Message.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }

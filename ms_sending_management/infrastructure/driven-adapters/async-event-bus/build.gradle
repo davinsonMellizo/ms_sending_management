@@ -1,5 +1,7 @@
 dependencies {
     implementation project(':model')
+    implementation project(':log')
+    implementation project(':rabbit-dual-configurator')
     implementation 'org.reactivecommons:async-commons-starter:1.0.0-beta1'
     implementation 'org.springframework:spring-context:5.3.18'
 }

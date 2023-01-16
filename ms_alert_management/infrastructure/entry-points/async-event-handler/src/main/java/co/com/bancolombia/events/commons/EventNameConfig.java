@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventNameConfig {
     public static final String SEND_CREATE_PROVIDER = "send.create.provider";
-
     public static final String SEND_UPDATE_PROVIDER = "send.update.provider";
     public static final String SEND_CREATE_REMITTER = "send.create.remitter";
     public static final String SEND_UPDATE_REMITTER = "send.update.remitter";

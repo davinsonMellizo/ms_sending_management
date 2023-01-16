@@ -46,7 +46,7 @@ cloud:
         pool:
           initial: 10
           max: 10
-        schema: schalertd
+        schema: schalerd
         hostRead: localhost
 management:
   health:
@@ -75,6 +75,6 @@ app.async.maxRetries: 1
 d2b:
   aws:
     secrets-manager:
-      endpoint: "http://localhost:4566"
+      endpoint: http://localhost:4566
   secrets:
-    apic: "nu0154001-alertas-local-dev-iseries-retrieve"
+    apic: nu0154001-alertas-local-iseries-retrieve-information
