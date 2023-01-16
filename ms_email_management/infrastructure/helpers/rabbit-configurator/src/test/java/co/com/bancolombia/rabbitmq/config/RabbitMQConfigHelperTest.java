@@ -16,15 +16,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
-public class RabbitMQConfigHelperTest {
+class RabbitMQConfigHelperTest {
     public static final String SECRET = "any-secret-dev";
-
-
     @Mock
     private SecretsManager secretsManager;
     @Mock
     private SecretsNameStandard secretsNameStandard;
-
     @InjectMocks
     private RabbitMQConfigHelper rabbitMQConfigHelper;
 
@@ -34,14 +31,33 @@ public class RabbitMQConfigHelperTest {
     }
 
     @Test
-    public void connectionRabbitWhenSecretExistTest(){
+    void connectionRabbitWhenSecretExistTest() {
         when(secretsManager.getSecret(anyString(), any())).thenReturn(Mono.just(properties()));
         when(secretsNameStandard.secretForRabbitMQ()).thenReturn(Mono.just("name"));
         assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
     }
 
-    private RabbitMQConnectionProperties properties(){
+    @Test
+    void connectionRabbitWhenSecretExistSSLTest() {
+        when(secretsManager.getSecret(anyString(), any())).thenReturn(Mono.just(propertiesSSL()));
+        when(secretsNameStandard.secretForRabbitMQ()).thenReturn(Mono.just("name"));
+        assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
+    }
+
+    private RabbitMQConnectionProperties properties() {
         RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
+        properties.setSsl(false);
+        properties.setHostname("any-host");
+        properties.setUsername("this-is-for-test");
+        properties.setPassword("this-is-for-test");
+        properties.setVirtualhost("/");
+        properties.setPort(8080);
+        return properties;
+    }
+
+    private RabbitMQConnectionProperties propertiesSSL() {
+        RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
+        properties.setSsl(true);
         properties.setHostname("any-host");
         properties.setUsername("this-is-for-test");
         properties.setPassword("this-is-for-test");

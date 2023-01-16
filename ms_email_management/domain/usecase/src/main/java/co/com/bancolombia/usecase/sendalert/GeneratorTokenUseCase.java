@@ -3,41 +3,46 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.TemplateEmail;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
-import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.DynamoGateway;
 import co.com.bancolombia.model.token.Secret;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SignalType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+
+import static co.com.bancolombia.usecase.sendalert.commons.Medium.EMAIL;
 
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class GeneratorTokenUseCase {
     private final ObjectCache<ArrayList> token;
     private final SecretGateway secretGateway;
     private final DynamoGateway dynamoGateway;
     private final MasivianGateway masivianGateway;
+    private final LogUseCase logUseCase;
 
-    public Mono<Mail> getToken(Mail mail) {
+    public Mono<Mail> getToken(Mail mail, Alert alert) {
         return  Mono.just(mail.getNameToken())
                 .flatMap(nameToken->token.get(nameToken, ArrayList.class))
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProvider(mail.getFrom().split("@")[1].split(">")[0], mail.getNameToken()))
                 .map(tokens->tokens.get(0).toString())
                 .map(token1->Map.of("Authorization","Bearer "+token1))
-                .map(headers->setToken(mail,headers));
+                .map(headers->setToken(mail,headers))
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert,  EMAIL,  Response.builder().code(1)
+                        .description(e.getMessage()).build(), logUseCase,null));
     }
     public Mono<String> getNameToken(Alert alert){
         return dynamoGateway.getTokenName(alert.getFrom().split("@")[1].split(">")[0])
-                .map(nameToken-> nameToken.getSecretName());
+                .map(Secret::getSecretName);
     }
 
     private Mail setToken(Mail mail, Map<String, String> headers) {

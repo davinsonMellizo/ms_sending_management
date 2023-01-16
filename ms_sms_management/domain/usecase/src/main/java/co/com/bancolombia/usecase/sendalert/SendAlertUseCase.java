@@ -7,10 +7,10 @@ import co.com.bancolombia.model.message.SMSMasiv;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SignalType;
-import java.util.logging.Level;
+
 import static co.com.bancolombia.commons.constants.Provider.INALAMBRIA;
 import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
@@ -40,14 +40,12 @@ public class SendAlertUseCase {
                         .Type(1)
                         .build())
                 .flatMap(data-> generatorTokenUseCase.getTokenINA(data, alert))
-                //validar tokentemp
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(inalambriaGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, SMS, response, logUseCase))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
-                .map(Response.class::cast)
-                ;
+                .map(Response.class::cast);
     }
 
     private Mono<Response> sendSMSMasivian(Alert alert) {
@@ -62,12 +60,11 @@ public class SendAlertUseCase {
                         .to(alert.getTo())
                         .isPremium(false).isFlash(false)
                         .build())
-                //Aqui se debe obtener el token
                 .flatMap(data->generatorTokenUseCase.getTokenMAS(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, SMS, response, logUseCase))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
                 .map(Response.class::cast);
     }
@@ -84,6 +81,8 @@ public class SendAlertUseCase {
                 .switchIfEmpty(sendSMSInalambria(alert))
                 .then(Mono.empty());
     }
+
+
 
 
 }

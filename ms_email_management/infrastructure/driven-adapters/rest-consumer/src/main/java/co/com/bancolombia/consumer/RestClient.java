@@ -5,13 +5,11 @@ import co.com.bancolombia.consumer.adapter.response.Error;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -27,7 +25,7 @@ public class RestClient<T extends Request,R> {
         return webClient.post()
                 .uri(route)
                 .contentType(APPLICATION_JSON)
-                .headers(head -> head.setAll(request.getHeaders()))
+                .headers(head -> head.setAll((Map) request.getHeaders()))
                 .bodyValue(cleanHeader(request))
                 .retrieve()
                 //.onStatus(HttpStatus::isError, response -> replyError(response, clazzError))

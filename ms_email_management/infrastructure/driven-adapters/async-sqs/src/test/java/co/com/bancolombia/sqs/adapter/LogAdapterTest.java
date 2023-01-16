@@ -13,7 +13,7 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class LogAdapterTest {
+class LogAdapterTest {
     @InjectMocks
     private LogAdapter logAdapter;
     @Mock
@@ -26,7 +26,7 @@ public class LogAdapterTest {
     }
 
     @Test
-    public void sendLogTest(){
+    void sendLogTest(){
         StepVerifier.create(logAdapter.putLogToSQS(new Log()))
                 .expectNextCount(1)
                 .verifyComplete();

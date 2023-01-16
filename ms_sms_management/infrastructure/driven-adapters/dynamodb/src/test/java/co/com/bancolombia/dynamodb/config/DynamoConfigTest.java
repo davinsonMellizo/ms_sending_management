@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -28,24 +27,25 @@ class DynamoConfigTest {
     }
 
     @Test
-    void dynamoConfigLocalTest(){
+    void dynamoConfigLocalTest() {
         when(properties.getEndpoint()).thenReturn("http://localhost:4566");
         when(properties.getRegionAws()).thenReturn("us-east-1");
         assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
     @Test
-    void dynamoConfigTest(){
+    void dynamoConfigTest() {
         assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
 
     @Test
-    void dynamoConfigEnhancedTest(){
+    void dynamoConfigEnhancedTest() {
         assertThat(dynamoConfig.clientEnhanced(dynamoDbAsyncClient)).isNotNull();
     }
+
     @Test
-    void dynnamoConfigClientLocalTest(){
+    void dynnamoConfigClientLocalTest() {
         when(properties.getEndpoint()).thenReturn("http://localhost:4566");
         when(properties.getRegionAws()).thenReturn("us-east-1");
         assertThat(dynamoConfig.clientLocal()).isNotNull();

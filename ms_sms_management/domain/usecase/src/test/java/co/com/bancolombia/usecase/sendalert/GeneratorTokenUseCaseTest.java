@@ -16,11 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.jmx.export.notification.ModelMBeanNotificationPublisher;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
 import java.util.ArrayList;
 import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -58,151 +59,156 @@ class GeneratorTokenUseCaseTest {
         tokens.add("tokenTest");
 
     }
+
     @Test
-    void getTokenInaWhitTokenCacheTest(){
+    void getTokenInaWhitTokenCacheTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.just(tokens));
 
         StepVerifier
-                .create(genUseCase.getTokenINA(smsIna,alert))
+                .create(genUseCase.getTokenINA(smsIna, alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
+
     @Test
-    void getTokenMasWhitTokenCacheTest(){
+    void getTokenMasWhitTokenCacheTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
         alert.setProvider("MAS");
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getTokenMAS(smsMas,alert))
+                .create(genUseCase.getTokenMAS(smsMas, alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    void getTokenInaWhitOutTokenCacheTest(){
+    void getTokenInaWhitOutTokenCacheTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.empty());
         when(inalambriaGateway.getToken(any())).thenReturn(Mono.just(Token.builder()
                 .accessToken("accessTokenTest").tokenType("tokenType").refreshToken("refreshToken")
                 .expiresIn(12345L).build()));
-        when(token.save(anyString(),any()))
+        when(token.save(anyString(), any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getTokenINA(smsIna,alert))
+                .create(genUseCase.getTokenINA(smsIna, alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
+
     @Test
-    void getTokenMasWhitOutTokenCacheTest(){
+    void getTokenMasWhitOutTokenCacheTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
         alert.setProvider("MAS");
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.empty());
         when(masivianGateway.getToken(any())).thenReturn(Mono.just(Token.builder()
                 .accessToken("accessToken").tokenType("tokenType").refreshToken("refreshToken")
                 .expiresIn(12345L).build()));
-        when(token.save(anyString(),any()))
+        when(token.save(anyString(), any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getTokenMAS(smsMas,alert))
+                .create(genUseCase.getTokenMAS(smsMas, alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
+
     @Test
     void getTokenInaWhitTokenCacheErrorTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getTokenINA(smsIna,alert))
+                .create(genUseCase.getTokenINA(smsIna, alert))
                 .expectError()
                 .verify();
     }
 
     @Test
-    void getTokenMasWhitTokenCacheErrorTest(){
+    void getTokenMasWhitTokenCacheErrorTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
         alert.setProvider("MAS");
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getTokenMAS(smsMas,alert))
+                .create(genUseCase.getTokenMAS(smsMas, alert))
                 .expectError()
                 .verify();
     }
 
     @Test
-    void getTokenInaWhitOutTokenCacheErrorTest(){
+    void getTokenInaWhitOutTokenCacheErrorTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.empty());
         when(inalambriaGateway.getToken(any())).thenReturn(Mono.just(Token.builder()
                 .accessToken("accessToken").tokenType("tokenType").refreshToken("refreshToken")
                 .expiresIn(12345L).build()));
-        when(token.save(anyString(),any()))
+        when(token.save(anyString(), any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getTokenINA(smsIna,alert))
+                .create(genUseCase.getTokenINA(smsIna, alert))
                 .expectError()
                 .verify();
     }
+
     @Test
-    void getTokenMasWhitOutTokenCacheErrorTest(){
+    void getTokenMasWhitOutTokenCacheErrorTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .password("passwordTest").username("usernameTest")
                         .build()));
         alert.setProvider("MAS");
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.empty());
         when(masivianGateway.getToken(any())).thenReturn(Mono.just(Token.builder()
                 .accessToken("accessToken").tokenType("tokenType").refreshToken("refreshToken")
                 .expiresIn(12345L).build()));
-        when(token.save(anyString(),any()))
+        when(token.save(anyString(), any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getTokenMAS(smsMas,alert))
+                .create(genUseCase.getTokenMAS(smsMas, alert))
                 .expectError()
                 .verify();
     }
 
     @Test
     void deleteTokenTest() {
-        when(token.get(anyString(),any()))
+        when(token.get(anyString(), any()))
                 .thenReturn(Mono.just(tokens));
-        when(token.save(anyString(),any()))
+        when(token.save(anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
-                .create(genUseCase.deleteToken(tokens.get(0),alert))
+                .create(genUseCase.deleteToken(tokens.get(0), alert))
                 .verifyComplete();
     }
 }

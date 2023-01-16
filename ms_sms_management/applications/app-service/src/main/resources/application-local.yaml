@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8085
   servlet:
     encoding:
       charset: UTF-8
@@ -14,7 +14,7 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
   webflux:
-    base-path: /api/vi/sms-management
+    base-path: /api/v1/sms-management
   logging:
     level:
       root: INFO
@@ -23,7 +23,6 @@ spring:
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
-
 management:
   health:
     probes:
@@ -45,10 +44,14 @@ management:
         readiness: "readiness"
 
 adapters:
+  repositories:
+    tables:
+      namesmap:
+        secret-priority: secret-priority
   async-sqs:
     url: http://localhost:4566/000000000000/logs-alert
-    timeout: 21000
-    pool-size: 10
+    timeout: 3000
+    pool-size: 2
     region-aws: us-east-1
   dynamo-repository:
     region-aws: us-east-1
@@ -60,23 +63,24 @@ adapters:
       endpointMasivSms: https://api-sms.masivapp.com/send-message
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
-      endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
-      #endpointInalambriaSms: https://restcert.inalambria.com/mtmessage
-      #endpointInalambriaToken: https://restcert.inalambria.com/token/
-      endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
+      #endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
+      endpointInalambriaSms: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/mtmessage
+      endpointInalambriaToken: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/token/
+      #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
+    #secret-inalambria: ${SECRET-INALAMBRIA}
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
 aws:
   region: us-east-1
-  nameSecretBucketSsl: bucket-local-ssl
+  nameSecretBucketSsl: bucket-masi-ssl
   s3:
     endpoint: http://localhost:4566
-    bucket: bucketssl
+    bucket: bucket-masi-ssl
 stash:
   redis:
-    expireTime: 300
+    expireTime: 21000
     host: localhost
     port: 6379

@@ -1,27 +1,32 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    implementation project(':async-event-bus')
     implementation project(':redis')
-    implementation project(':async-sqs')
     implementation project(':ses')
-	implementation project(':dynamodb')
-	implementation project(':rest-consumer')
+    implementation project(':dynamodb')
+    implementation project(':rest-consumer')
     implementation project(':async-event-handler')
     implementation project(':log')
     implementation project(':dynamo-commons')
     implementation project(':rabbit-configurator')
     implementation project(':secrets-manager')
     implementation project(':s3-bucket')
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'//
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')///
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.5.9'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.6.14'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 task explodedJar(type: Copy) {
     with jar
     into "${buildDir}/exploded"
+}
+
+jar {
+    // To disable the *-plain.jar
+    enabled = false
 }

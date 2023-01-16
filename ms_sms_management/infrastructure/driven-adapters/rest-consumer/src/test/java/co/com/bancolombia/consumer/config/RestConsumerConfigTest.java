@@ -30,7 +30,7 @@ class RestConsumerConfigTest {
 
     @InjectMocks
     private RestConsumerConfig restConsumerConfig;
-    
+
     @Mock
     private SecretsManager secretsManager;
     @Mock
@@ -46,7 +46,6 @@ class RestConsumerConfigTest {
             = new ByteArrayInputStream("test".getBytes(StandardCharsets.UTF_8));
 
 
-
     @BeforeEach
     public void init() {
 
@@ -56,34 +55,40 @@ class RestConsumerConfigTest {
                     tcpClient = tcpClient.option(CONNECT_TIMEOUT_MILLIS, 3600);
                     return tcpClient;
                 }));
-        when(secretsManager.getSecret(anyString(),any()))
+        when(secretsManager.getSecret(anyString(), any()))
                 .thenReturn(Mono.just(PropertiesSsl.builder()
                         .keyStore("masivapp-com.jks")
                         .password("testPassword")
                         .build()));
         when(awsProperties.getNameSecretBucketSsl())
                 .thenReturn("testNameSecret");
-        when(s3AsynOperations.getFileAsInputStream(anyString(),anyString()))
+        when(s3AsynOperations.getFileAsInputStream(anyString(), anyString()))
                 .thenReturn(Mono.just(inputStream));
         when(awsProperties.getS3())
-                .thenReturn(new AwsProperties.S3("endpointTest","bucketTest"));
+                .thenReturn(new AwsProperties.S3("endpointTest", "bucketTest"));
     }
 
     @Test
-    void ConfigMASTest()  {
+    void ConfigMASTest() {
         assertThat(restConsumerConfig.webClientConfig(new ConsumerProperties(3600, null))).isNotNull();
     }
+
     @Test
     void configINATest() throws SSLException {
         assertThat(restConsumerConfig.webClientConfigIna(new ConsumerProperties(3600, null))).isNotNull();
     }
+
+    @Test
+    void configLocalINATest() throws SSLException {
+        assertThat(restConsumerConfig.webClientConfigInaLocal(new ConsumerProperties(3600, null))).isNotNull();
+    }
+
     @org.junit.Test(expected = SSLException.class)
     public void configINAErrorTest() throws SSLException {
 
-        SSLException e =new SSLException("TEst");
+        SSLException e = new SSLException("TEst");
         restConsumerConfig.webClientConfigIna(new ConsumerProperties(3600, null));
         doThrow(e).when(sslContext);
-
 
 
     }

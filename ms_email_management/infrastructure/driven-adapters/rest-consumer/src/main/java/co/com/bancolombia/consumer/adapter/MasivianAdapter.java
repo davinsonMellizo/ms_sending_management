@@ -12,7 +12,9 @@ import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.Token;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -24,47 +26,55 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MasivianAdapter implements MasivianGateway {
 
-    private final static Integer STATUS_OK = 200;
-    private final static Integer STATUS_ERROR = 1;
-    private final static int CONSTANT = 3;
+    private static final Integer STATUS_OK = 200;
+    private static final Integer STATUS_ERROR = 1;
+    private static final int CONSTANT = 3;
     private final ConsumerProperties properties;
     private final RestClient<Mail, SuccessMasivianMAIL> clientMail;
-    private final RestClient<TokenMasivData,TokenMasivData> clientToken;
+    private final RestClient<TokenMasivData, TokenMasivData> clientToken;
+    private final S3AsyncOperations s3AsyncOperations;
+    @Value("${aws.s3.attachmentBucket}")
+    private String attachmentBucket;
 
     @Override
     public Mono<Response> sendMAIL(Mail mail) {
         String endpoint = properties.getResources().getEndpointMasivianMail();
         return clientMail.post(endpoint, mail,
                 SuccessMasivianMAIL.class, ErrorMasivianMAIL.class)
-                //Mono.just(SuccessMasivianMAIL.builder().description("Success").build())
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getDescription()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorMasivianMAIL)e.getData()).getDescription())
+                        .code(e.getHttpsStatus()).description(((ErrorMasivianMAIL) e.getData()).getDescription())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
-                            .description(e.getMessage())
-                            .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT)))
-                            .build()));
+                        .description(e.getMessage())
+                        .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT)))
+                        .build()));
     }
 
     @Override
     public Mono<Token> getToken(Account account) {
         String headerValue = account.getUsername().concat(":").concat(account.getPassword());
-        String headerValueEncode= Base64.getEncoder().encodeToString(headerValue.getBytes());
-        Map<String,String> headers = new HashMap<>();
-        headers.put("Authorization","Basic "+headerValueEncode);
+        String headerValueEncode = Base64.getEncoder().encodeToString(headerValue.getBytes());
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Basic " + headerValueEncode);
         return Mono.just(new TokenMasivData())
                 .map(requestTokenMasiv->{requestTokenMasiv.setHeaders(headers);
                     return requestTokenMasiv;})
                 .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
                         requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
-                .flatMap(TokenMasivData::toModel);
+                .flatMap(TokenMasivData::toModel)
+                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
     }
 
     @Override
     public Mono<Token> refreshToken(String requestTokenMasiv) {
         return null;
+    }
+
+    @Override
+    public Mono<String> generatePresignedUrl(String objectKey) {
+        return s3AsyncOperations.generatePresignedUrl(attachmentBucket, objectKey);
     }
 
 }
