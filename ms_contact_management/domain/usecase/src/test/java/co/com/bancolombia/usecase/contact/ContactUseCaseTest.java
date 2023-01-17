@@ -68,7 +68,7 @@ public class ContactUseCaseTest {
     @BeforeEach
     public void init() {
         contact.setContactWay("1");
-        contact.setSegment("0");
+        contact.setSegment("GNR");
         contact.setDocumentNumber(1061772353L);
         contact.setDocumentType("0");
         contact.setValue("321795845");
@@ -116,6 +116,37 @@ public class ContactUseCaseTest {
                 .expectNextCount(1)
                 .verifyComplete();
         verify(contactGateway).contactsByClient(client);
+    }
+
+    @Test
+    public void findAllContactIseriesdWithoutChanel() {
+        when(documentGateway.getDocument(any()))
+                .thenReturn(Mono.just(document));
+        when(clientGateway.retrieveAlertInformation(any()))
+                .thenReturn(Mono.just(ResponseContacts.builder().contacts(List.of(contact)).build()));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.empty());
+        StepVerifier
+                .create(useCase.findContactsByClient(client, ""))
+                .expectNextCount(1)
+                .verifyComplete();
+        verify(clientGateway).retrieveAlertInformation(any());
+    }
+
+    @Test
+    public void findAllContactIseriesWithChanel() {
+        when(clientGateway.retrieveAlertInformation(any()))
+                .thenReturn(Mono.just(ResponseContacts.builder().contacts(List.of(contact)).build()));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.empty());
+        when(documentGateway.getDocument(any()))
+                .thenReturn(Mono.just(document));
+        StepVerifier
+                .create(useCase.findContactsByClient(client, "GNR"))
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
 
