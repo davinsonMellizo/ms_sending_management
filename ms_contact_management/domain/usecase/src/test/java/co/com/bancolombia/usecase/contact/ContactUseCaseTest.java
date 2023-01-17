@@ -3,10 +3,12 @@ package co.com.bancolombia.usecase.contact;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
+import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
 import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.contactmedium.ContactMedium;
 import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
@@ -52,6 +54,8 @@ public class ContactUseCaseTest {
     private ConsumerGateway consumerGateway;
     @Mock
     private NewnessUseCase newnessUseCase;
+    @Mock
+    private ClientGateway clientGateway;
 
     private final State state = new State(0, "Active");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
@@ -83,13 +87,32 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void findAllContactByClient() {
+    public void findAllContactCloudWithoutChanel() {
         when(contactGateway.contactsByClient(any()))
                 .thenReturn(Mono.just(List.of(contact)));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         StepVerifier
                 .create(useCase.findContactsByClient(client, ""))
+                .expectNextCount(1)
+                .verifyComplete();
+        verify(contactGateway).contactsByClient(client);
+    }
+
+    @Test
+    public void findAllContactCloudWithChanel() {
+        when(contactGateway.contactsByClient(any()))
+                .thenReturn(Mono.just(List.of(contact)));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(contactGateway.contactsByClientAndSegment(any(), anyString()))
+                .thenReturn(Mono.just(List.of(contact)));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+        when(documentGateway.getDocument(any()))
+                .thenReturn(Mono.just(document));
+        StepVerifier
+                .create(useCase.findContactsByClient(client, "GNR"))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(contactGateway).contactsByClient(client);

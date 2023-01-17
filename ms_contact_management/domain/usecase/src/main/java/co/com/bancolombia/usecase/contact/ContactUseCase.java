@@ -21,14 +21,12 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CONTACT;
-import static co.com.bancolombia.commons.constants.Transaction.DELETE_CONTACT_PREVIOUS;
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
@@ -68,7 +66,7 @@ public class ContactUseCase {
     private Mono<ResponseContacts> findContactsCloud(Client pClient, String pConsumerCode){
         return Mono.just(pConsumerCode)
                 .filter(consumerCode -> !consumerCode.isEmpty())
-                .flatMap(consumerCode -> findConsumer(consumerCode))
+                .flatMap(this::findConsumer)
                 .flatMap(consumer -> findClientByChanelCloud(pClient, consumer.getSegment()))
                 .switchIfEmpty(findClientWithoutChanelCloud(pClient));
     }
@@ -76,10 +74,11 @@ public class ContactUseCase {
     private Mono<ResponseContacts> findClientsIseries(Client pClient, String pConsumerCode){
         return Mono.just(pConsumerCode)
                 .filter(consumerCode -> !consumerCode.isEmpty())
-                .flatMap(consumerCode -> findConsumer(consumerCode))
+                .flatMap(this::findConsumer)
                 .flatMap(consumer -> findClientByChanelIseries(pClient, consumer.getSegment()))
                 .switchIfEmpty(findClientWithoutChanelIseries(pClient))
-                .onErrorMap(e-> e.getMessage().equals(CLIENT_NOT_FOUND_PER_CHANNEL) ,e-> new BusinessException(CLIENT_NOT_FOUND))
+                .onErrorMap(e-> e.getMessage().equals(CLIENT_NOT_FOUND_PER_CHANNEL.getMessage()),
+                        e-> new BusinessException(CLIENT_NOT_FOUND))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
