@@ -14,7 +14,7 @@ spec:
     app: #{project-name}#
     pod: #{name}#-pod
   ports:
-    - name: #{gateway-port}#
+    - name: #{gateway-protocol-name}#
       targetPort: #{container-port}#
       port: #{gateway-port}#
 ---
