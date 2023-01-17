@@ -89,3 +89,10 @@ stash:
     expireTime: ${EXPIRE_TIME_CACHE}
     host: ${CACHE}
     port: ${CACHE_PORT}
+entrypoint:
+  sqs:
+    endpoint: ${ENDPOINT-SQS}
+    queueUrl: ${QUEUE-URL}
+    waitTimeSeconds: ${WAIT-TIME-SECONDS}
+    maxNumberOfMessages: ${MAX-NUMBER-MESSAGES}
+    numberOfThreads: ${THREADS}
