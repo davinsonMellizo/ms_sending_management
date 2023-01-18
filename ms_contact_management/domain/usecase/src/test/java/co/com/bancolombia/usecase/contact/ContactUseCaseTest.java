@@ -118,6 +118,7 @@ class ContactUseCaseTest {
         verify(contactGateway).contactsByClient(client);
     }
 
+
     @Test
     void findAllContactIseriesdWithoutChanel() {
         when(documentGateway.getDocument(any()))

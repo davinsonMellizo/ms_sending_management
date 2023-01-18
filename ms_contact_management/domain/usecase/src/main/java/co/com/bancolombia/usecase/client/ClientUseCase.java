@@ -21,6 +21,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CLIENT;

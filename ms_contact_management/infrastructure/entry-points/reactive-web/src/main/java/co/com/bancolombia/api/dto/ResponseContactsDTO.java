@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.model.contact.ResponseContacts;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

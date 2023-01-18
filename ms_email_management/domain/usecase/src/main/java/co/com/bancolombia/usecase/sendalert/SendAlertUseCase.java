@@ -1,12 +1,7 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.commons.constants.AttachmentType;
-import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Mail;
-import co.com.bancolombia.model.message.Recipient;
-import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.message.TemplateEmail;
-import co.com.bancolombia.model.message.TemplateMasivian;
+import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
@@ -31,6 +26,12 @@ public class SendAlertUseCase {
     private final LogUseCase logUseCase;
     private final GeneratorTokenUseCase generatorTokenUseCase;
     private static final int CONSTANT = 23;
+
+    public Mono<SqsFileMessage> getTemplate(SqsFileMessage messageMono) {
+        //TO-PROCESS
+        return Mono.just(messageMono);
+    }
+
 
     public Mono<Void> sendAlert(Alert alert) {
         return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
