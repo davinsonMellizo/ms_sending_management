@@ -30,7 +30,7 @@ public class StateRepositoryImplWithExceptionTest {
 
 
     @Test
-    public void findStateByNameWithException() {
+    void findStateByNameWithException() {
         when(repository.findState(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         stateRepositoryImplement.findState("Active")

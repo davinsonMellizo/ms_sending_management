@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class IClientRepositoryImplExceptionTest {
+class IClientRepositoryImplExceptionTest {
 
     @InjectMocks
     private ClientRepositoryImplement repositoryImpl;
@@ -56,7 +56,7 @@ public class IClientRepositoryImplExceptionTest {
 
 
     @Test
-    public void findClientByDocument() {
+    void findClientByDocument() {
         when(repositoryReader.findClientByIdentification(any(), any()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findClientByIdentification(client)
@@ -66,7 +66,7 @@ public class IClientRepositoryImplExceptionTest {
     }
 
     @Test
-    public void updateContact() {
+    void updateContact() {
         when(timeFactory.now()).thenReturn(NOW);
         when(repository.save(any()))
                 .thenReturn(Mono.error(RuntimeException::new));

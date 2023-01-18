@@ -28,16 +28,7 @@ import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CONTACT;
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND_PER_CHANNEL;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACTS_EMPTY;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.DOCUMENT_TYPE_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_EMAIL;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_ENVIRONMENT;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_PHONE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
 
@@ -220,7 +211,7 @@ public class ContactUseCase {
     private Mono<Contact> validateCountryCode(Contact contact){
         return Mono.just(contact)
                 .filter(contact1 -> contact1.getContactWayName().equals(SMS))
-                .filter(contact1 -> !contact1.getValue().substring(0,1).equals("+"))
+                .filter(contact1 -> !"+".equals(contact1.getValue().substring(0,1)))
                 .map(contact1 -> contact1.toBuilder().value("+57"+contact.getValue()).build())
                 .switchIfEmpty(Mono.just(contact));
     }

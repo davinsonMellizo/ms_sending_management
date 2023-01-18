@@ -35,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ContactUseCaseTest {
+class ContactUseCaseTest {
 
     @InjectMocks
     private ContactUseCase useCase;
@@ -87,7 +87,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void findAllContactCloudWithoutChanel() {
+    void findAllContactCloudWithoutChanel() {
         when(contactGateway.contactsByClient(any()))
                 .thenReturn(Mono.just(List.of(contact)));
         when(clientRepository.findClientByIdentification(any()))
@@ -100,7 +100,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void findAllContactCloudWithChanel() {
+    void findAllContactCloudWithChanel() {
         when(contactGateway.contactsByClient(any()))
                 .thenReturn(Mono.just(List.of(contact)));
         when(consumerGateway.findConsumerById(anyString()))
@@ -119,7 +119,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void findAllContactIseriesdWithoutChanel() {
+    void findAllContactIseriesdWithoutChanel() {
         when(documentGateway.getDocument(any()))
                 .thenReturn(Mono.just(document));
         when(clientGateway.retrieveAlertInformation(any()))
@@ -134,7 +134,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void findAllContactIseriesWithChanel() {
+    void findAllContactIseriesWithChanel() {
         when(clientGateway.retrieveAlertInformation(any()))
                 .thenReturn(Mono.just(ResponseContacts.builder().contacts(List.of(contact)).build()));
         when(consumerGateway.findConsumerById(anyString()))
@@ -151,7 +151,7 @@ public class ContactUseCaseTest {
 
 
     @Test
-    public void saveContact() {
+    void saveContact() {
         when(newnessUseCase.saveNewness((Contact) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
@@ -166,7 +166,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void updateContact() {
+    void updateContact() {
         contact.setPrevious(false);
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
@@ -193,7 +193,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void updateContactWithExistent() {
+    void updateContactWithExistent() {
         contact.setPrevious(false);
         when(newnessUseCase.saveNewness((Contact) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(contact));
@@ -223,7 +223,7 @@ public class ContactUseCaseTest {
 
 
     @Test
-    public void validateContacts() {
+    void validateContacts() {
         enrol.setContactData(List.of(contact));
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
@@ -241,7 +241,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validatePhone() {
+    void validatePhone() {
         contact.setContactWay("SMS");
         contact.setValue("3207288544");
         enrol.setContactData(List.of(contact));
@@ -254,7 +254,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validateMail() {
+    void validateMail() {
         contact.setContactWay("MAIL");
         contact.setValue("mail@mail.com");
         contact.setEnvironmentType("Personal");
@@ -268,7 +268,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validatePhoneException() {
+    void validatePhoneException() {
         contact.setContactWay("SMS");
         contact.setValue("1235");
         enrol.setContactData(List.of(contact));
@@ -279,7 +279,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validateMailException() {
+    void validateMailException() {
         contact.setContactWay("MAIL");
         contact.setValue("zzzzz");
         contact.setEnvironmentType("Personal");

@@ -32,7 +32,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @ContextConfiguration(classes = {
         ConsumerProperties.class
 })
-public class RestConsumerTest {
+class RestConsumerTest {
     private MockWebServer mockServer;
     private RestConsumer restClient;
     private final ResponseClient client = new ResponseClient();
@@ -58,7 +58,7 @@ public class RestConsumerTest {
     }
 
     @Test
-    public void post(){
+    void post(){
         mockServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
                 .addHeader(CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)

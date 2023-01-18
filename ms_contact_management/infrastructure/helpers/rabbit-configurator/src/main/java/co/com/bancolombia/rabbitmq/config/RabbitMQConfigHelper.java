@@ -14,11 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.File;
-import java.io.FileInputStream;
 import java.security.KeyManagementException;
-import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
@@ -41,8 +37,8 @@ public class RabbitMQConfigHelper{
     @Bean
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
-        final ConnectionFactory factory = new ConnectionFactory();
-        PropertyMapper map = PropertyMapper.get();
+        final var factory = new ConnectionFactory();
+        var map = PropertyMapper.get();
 
         map.from(properties::getHostname).whenNonNull().to(factory::setHost);
         map.from(properties::getPort).to(factory::setPort);
@@ -55,7 +51,7 @@ public class RabbitMQConfigHelper{
 
     private void configureSsl(ConnectionFactory factory)  {
         try {
-            SSLContext c = SSLContext.getInstance(TLS);
+            var c = SSLContext.getInstance(TLS);
             c.init(null, null, null);
 
             factory.useSslProtocol(c);

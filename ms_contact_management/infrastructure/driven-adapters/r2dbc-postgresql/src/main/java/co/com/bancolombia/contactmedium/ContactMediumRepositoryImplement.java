@@ -13,7 +13,8 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class ContactMediumRepositoryImplement
-        extends AdapterOperations<ContactMedium, ContactMediumData, String, ContactMediumRepository, ContactMediumRepository>
+        extends AdapterOperations<ContactMedium, ContactMediumData,
+        String, ContactMediumRepository, ContactMediumRepository>
         implements ContactMediumGateway {
 
 
