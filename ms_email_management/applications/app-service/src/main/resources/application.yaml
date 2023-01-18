@@ -91,7 +91,6 @@ stash:
     port: ${CACHE_PORT}
 entrypoint:
   sqs:
-    endpoint: ${ENDPOINT-SQS}
     queueUrl: ${QUEUE-URL}
     waitTimeSeconds: ${WAIT-TIME-SECONDS}
     maxNumberOfMessages: ${MAX-NUMBER-MESSAGES}
