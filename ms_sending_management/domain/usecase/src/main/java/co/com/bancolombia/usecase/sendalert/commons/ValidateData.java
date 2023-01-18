@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class ValidateData {
 
-    private static final String PATTERN = "^((\\w+[-._+&]?)+\\w+)+@(\\w+[.])+\\w{2,6}$";
+    private static final String PATTERN = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
 
     public static final Predicate<Message> isValidMailOrMobile = message ->
             isNotEmpty(message.getMail()) || isNotEmpty(message.getPhone());

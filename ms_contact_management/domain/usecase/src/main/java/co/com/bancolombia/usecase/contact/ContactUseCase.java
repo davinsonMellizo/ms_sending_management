@@ -226,7 +226,7 @@ public class ContactUseCase {
     }
 
     public Mono<Enrol> validateMail(Enrol enrol) {
-        final var pattern = "^\\w++([-._+&]\\w++)*+@[a-zA-Z]++([.][a-zA-Z]++)++$";
+        final var pattern = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
         return Flux.fromIterable(enrol.getContactData())
                 .filter(cnt -> MAIL.equals(cnt.getContactWay()))
                 .flatMap(this::validateEnvironment)
