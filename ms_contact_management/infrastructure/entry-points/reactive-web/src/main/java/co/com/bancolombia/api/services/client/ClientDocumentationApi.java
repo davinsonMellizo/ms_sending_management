@@ -17,18 +17,19 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class ClientDocumentationApi {
 
-    private final String TAG = "Clients";
-    private final String ERROR = "Error";
-    private final String SUCCESSFUL = "successful";
-    private final String STATUS_500 = "500";
-    private final String STATUS_200 = "200";
-    private final String CONSUMER_CODE_DES = "Consumer Code";
+    private static final String TAG = "Clients";
+    private static final String ERROR = "Error";
+    private static final String SUCCESSFUL = "successful";
+    private static final String STATUS_500 = "500";
+    private static final String STATUS_200 = "200";
+    private static final String CONSUMER_CODE_DES = "Consumer Code";
 
     protected Consumer<Builder> save() {
         return ops -> ops.tag(TAG)
                 .operationId("SaveClient").summary("Save Client")
                 .description("save a Client").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().description("Client to create").required(true).implementation(EnrolDTO.class))
+                .requestBody(requestBodyBuilder().description("Client to create").required(true)
+                        .implementation(EnrolDTO.class))
                 .response(responseBuilder().responseCode(STATUS_200).description(SUCCESSFUL)
                         .implementation(ResponseUpdateClient.class))
                 .response(responseBuilder().responseCode(STATUS_500).description(ERROR)

@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.client;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
+import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.dto.IdentificationDTO;
@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ClientRouterTest extends BaseIntegrationTest {
+public class ClientRouterTest extends BaseIntegration {
 
     @MockBean
     private ClientUseCase useCase;
@@ -76,7 +76,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void inactivateClient() {
+    void inactivateClient() {
         when(useCase.inactivateClient(any())).thenReturn(Mono.just(responseUpdateClient));
         final WebTestClient.ResponseSpec spec = webTestClient.put().uri(properties.getClient() + "/inactive")
                 .bodyValue(IdentificationDTO.builder().documentNumber(1L).documentType("CC").build())
@@ -86,7 +86,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void saveClient() {
+    void saveClient() {
         when(useCase.saveClientRequest(any(), anyBoolean(), anyString())).thenReturn(Mono.just(responseUpdateClient));
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         statusAssertionsWebClientPost(properties.getClient(),
@@ -98,7 +98,7 @@ public class ClientRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void deleteClient() {
+    void deleteClient() {
         when(useCase.deleteClient(anyLong(), anyLong())).thenReturn(Mono.just(1));
         WebTestClient.ResponseSpec spec = webTestClient.delete().uri(properties.getClient() + "/delete-range")
                 .header("document-number-init", "1061772353")
@@ -106,16 +106,6 @@ public class ClientRouterTest extends BaseIntegrationTest {
                 .exchange();
         spec.expectStatus().isOk();
         verify(useCase).deleteClient(anyLong(), anyLong());
-    }
-
-    @Test
-    public void updateClient() {
-        /*when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
-        when(useCase.updateClient(any())).thenReturn(Mono.just(responseUpdateClient));
-        statusAssertionsWebClientPut(properties.getClient(),
-                request)
-                .isOk();
-        verify(useCase).updateClient(any());*/
     }
 
 }

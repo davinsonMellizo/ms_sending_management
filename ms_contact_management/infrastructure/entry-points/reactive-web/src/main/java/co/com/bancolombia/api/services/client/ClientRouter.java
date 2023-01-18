@@ -16,8 +16,8 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class ClientRouter extends ClientDocumentationApi {
     private final ApiProperties apiProperties;
-    private final static String INACTIVE = "/inactive";
-    private final static String DELETE = "/delete-range";
+    private static final String INACTIVE = "/inactive";
+    private static final String DELETE = "/delete-range";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionClient(ClientHandler clientHandler) {

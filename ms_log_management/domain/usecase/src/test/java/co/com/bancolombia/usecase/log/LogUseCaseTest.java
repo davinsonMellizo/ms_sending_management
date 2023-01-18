@@ -41,6 +41,7 @@ public class LogUseCaseTest {
                 .verifyComplete();
         verify(logGateway).saveLog(log);
     }
+
     @Test
     public void findLogHotTest() {
         when(logGateway.findLog(any()))

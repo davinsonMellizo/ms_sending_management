@@ -72,7 +72,7 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<Client> inactivateClient(Client client) {
-        return Mono.just(client.toBuilder().idState(client.getIdState() == ACTIVE.getType() ?
+        return Mono.just(client.toBuilder().idState(client.getIdState().equals(ACTIVE.getType()) ?
                                 INACTIVE.getType() : ACTIVE.getType())
                         .modifiedDate(timeFactory.now()).build())
                 .flatMap(this::save)

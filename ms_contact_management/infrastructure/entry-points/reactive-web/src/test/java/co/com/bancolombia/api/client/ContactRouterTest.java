@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.client;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
+import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.mapper.EnrolMapper;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ContactRouterTest extends BaseIntegrationTest {
+public class ContactRouterTest extends BaseIntegration {
 
     @MockBean
     private ContactUseCase contactUseCase;
@@ -62,7 +62,7 @@ public class ContactRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void findAllContactsByClient() {
+    void findAllContactsByClient() {
         when(contactUseCase.findContactsByClient(any(), anyString())).thenReturn(Mono.just(ResponseContacts.<Contact>builder()
                 .contacts(List.of(contact))
                 .documentNumber(contact.getDocumentNumber())

@@ -15,5 +15,4 @@ public class Parameter implements Serializable {
     private String Name;
     private String Value;
     private String Type;
-
 }

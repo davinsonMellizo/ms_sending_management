@@ -15,7 +15,7 @@ public class DocumentRepositoryImplTest {
     private DocumentRepositoryImplement documentRepositoryImplement;
 
     @Test
-    public void findStateByName() {
+    void findStateByName() {
         StepVerifier.create(documentRepositoryImplement.getDocument("CC"))
                 .expectNextCount(1)
                 .verifyComplete();

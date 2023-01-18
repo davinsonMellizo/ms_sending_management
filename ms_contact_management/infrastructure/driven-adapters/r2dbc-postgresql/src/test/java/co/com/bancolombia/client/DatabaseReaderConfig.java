@@ -28,7 +28,7 @@ public class DatabaseReaderConfig {
     @Bean
     public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader")ConnectionFactory connectionFactory) {
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
+        var databaseClient = DatabaseClient.create(connectionFactory);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
     }
 
