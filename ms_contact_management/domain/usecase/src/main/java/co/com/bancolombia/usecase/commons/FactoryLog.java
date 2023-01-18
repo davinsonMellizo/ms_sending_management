@@ -15,7 +15,7 @@ public class FactoryLog {
         return Mono.just(Newness.builder()
                 .transactionDescription(transaction)
                 .channelTransaction(client.getEnrollmentOrigin())
-                .active(client.getIdState() == ACTIVE.getType() ? Boolean.TRUE : Boolean.FALSE)
+                .active(client.getIdState() == ACTIVE.getType())
                 .userCreation(client.getCreationUser())
                 .documentType(Integer.parseInt(client.getDocumentType()))
                 .documentNumber(client.getDocumentNumber())
