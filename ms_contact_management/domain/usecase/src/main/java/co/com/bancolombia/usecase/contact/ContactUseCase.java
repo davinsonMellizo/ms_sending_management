@@ -55,7 +55,7 @@ public class ContactUseCase {
     public Mono<ResponseContacts> findContactsByClient(Client pClient, String consumerCode) {
         return clientRepository.findClientByIdentification(pClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .filter(client -> client.getIdState() == ACTIVE.getType())
+                .filter(client -> client.getIdState().equals(ACTIVE.getType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .map(client -> client.toBuilder().documentType(pClient.getDocumentType()).build())
                 .flatMap(client -> findContactsCloud(client, consumerCode))
@@ -120,7 +120,7 @@ public class ContactUseCase {
                         .delegate(client.getDelegate())
                         .preference(client.getPreference())
                         .keyMdm(client.getKeyMdm())
-                        .status(client.getIdState() == ACTIVE.getType() ? ACTIVE.getValue(): INACTIVE.getValue())
+                        .status(client.getIdState().equals( ACTIVE.getType()) ? ACTIVE.getValue(): INACTIVE.getValue())
                         .creationUser(client.getCreationUser())
                         .createdDate(client.getCreatedDate())
                         .modifiedDate(client.getModifiedDate())
@@ -131,7 +131,7 @@ public class ContactUseCase {
     private Mono<ResponseContacts> filterContactsByConsumer(ResponseContacts responseContacts, String segment){
         return  Mono.just(responseContacts.getContacts())
                 .filter(contacts -> !contacts.isEmpty())
-                .flatMapMany(contacts -> Flux.fromIterable(contacts))
+                .flatMapMany(Flux::fromIterable)
                 .filter(contact -> contact.getSegment().equals(segment))
                 .collectList()
                 .filter(contacts -> !contacts.isEmpty())

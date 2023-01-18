@@ -35,7 +35,6 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_CHAN
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_ENROLL;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SUCCESS_UPDATE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.USER_NOT_VALID_SSAL_TEL;
-import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
 import static co.com.bancolombia.usecase.commons.BridgeContact.*;
 

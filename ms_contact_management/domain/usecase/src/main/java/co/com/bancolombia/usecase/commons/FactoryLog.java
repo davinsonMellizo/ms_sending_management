@@ -15,7 +15,7 @@ public class FactoryLog {
         return Mono.just(Newness.builder()
                 .transactionDescription(transaction)
                 .channelTransaction(client.getEnrollmentOrigin())
-                .active(client.getIdState() == ACTIVE.getType())
+                .active(client.getIdState().equals(ACTIVE.getType()))
                 .userCreation(client.getCreationUser())
                 .documentType(Integer.parseInt(client.getDocumentType()))
                 .documentNumber(client.getDocumentNumber())
@@ -31,8 +31,7 @@ public class FactoryLog {
                 .documentNumber(contact.getDocumentNumber())
                 .contact(contact.getValue())
                 .transactionDescription(transaction)
-                .active(Integer.parseInt(contact.getStateContact()) ==
-                        ACTIVE.getType() ? Boolean.TRUE : Boolean.FALSE)
+                .active(((Integer)Integer.parseInt(contact.getStateContact())).equals(ACTIVE.getType()))
                 .responseCode(Response.SUCCESS_120.getCode())
                 .responseDescription(Response.SUCCESS_120.getDescription())
                 .voucher(Long.valueOf(voucher))
