@@ -28,7 +28,7 @@ public class SendAlertUseCase {
     private static final int CONSTANT = 23;
 
     public Mono<SqsFileMessage> getTemplate(SqsFileMessage messageMono) {
-        //TO-PROCESS
+        System.out.println("id " + messageMono.getBucketName());
         return Mono.just(messageMono);
     }
 
