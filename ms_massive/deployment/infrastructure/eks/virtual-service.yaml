@@ -1,0 +1,58 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: #{app-gateway-smoke}#
+  namespace: #{namespace}#
+  labels:
+    app.bancolombia.com.co/env: #{env}#
+    app.bancolombia.com.co/cost-center: #{cost-center}#
+    app.bancolombia.com.co/application-code: #{application-code}#
+    app.bancolombia.com.co/project: #{project-name}#
+    app.bancolombia.com.co/pmo: #{pmo}#
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: #{gateway-port}#
+        name: #{gateway-protocol-name}#
+        protocol: #{gateway-protocol}#
+      hosts:
+        - #{gateway-host}#
+          #   tls:
+          #     httpsRedirect: true
+          # - port:
+          #     number: 443
+          #     name: https
+          #     protocol: HTTP
+          #   hosts:
+        #   - "#{gateway-host}#"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: #{name}#-vs-5
+  namespace: #{namespace}#
+  labels:
+    app.bancolombia.com.co/env: #{env}#
+    app.bancolombia.com.co/cost-center: #{cost-center}#
+    app.bancolombia.com.co/application-code: #{application-code}#
+    app.bancolombia.com.co/project: #{project-name}#
+    app.bancolombia.com.co/pmo: #{pmo}#
+spec:
+  hosts:
+    - #{gateway-host-smoke}#
+  gateways:
+    - #{app-gateway-smoke}#
+  http:
+    - match:
+        - uri:
+            prefix: /#{project-name}##{prefix}#/#{service}#
+      rewrite:
+        uri: "#{prefix}#/#{service}#"
+      route:
+        - destination:
+            host: #{name}#
+            port:
+              number: #{gateway-port}#
+      #websocketUpgrade: true #if websockets are required

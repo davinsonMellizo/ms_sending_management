@@ -27,7 +27,7 @@ public class CommandsHandlerTest {
     @Mock
     private ClientUseCase clientUseCase;
     @Mock
-    private ValidatorHandler validatorHandler;
+    private ValidatorHandler validatorBodyHandler;
     @Spy
     private EnrolMapper mapper = Mappers.getMapper(EnrolMapper.class);
 

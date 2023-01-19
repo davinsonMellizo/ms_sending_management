@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 import static org.mockito.Mockito.when;
 import static reactor.core.publisher.Mono.just;
 
-public class SecretsManagerTest {
+class SecretsManagerTest {
 
     public static final String SECRET = "any-secret-dev";
 
@@ -36,7 +36,7 @@ public class SecretsManagerTest {
     }
 
     @Test
-    public void getSecretWhenExistSecretThenReturnObject() {
+    void getSecretWhenExistSecretThenReturnObject() {
         when(secretsConnector.getSecret(SECRET, ClassTest.class))
                 .thenReturn(just(ClassTest.builder()
                         .host("localhost")
@@ -47,7 +47,7 @@ public class SecretsManagerTest {
     }
 
     @Test
-    public void getSecretWhenExistSecretThenReturnError() {
+    void getSecretWhenExistSecretThenReturnError() {
         when(secretsConnector.getSecret(SECRET, ClassTest.class))
                 .thenReturn(Mono.error(new RuntimeException("error")));
         StepVerifier.create(secretsManager.getSecret(SECRET, ClassTest.class))

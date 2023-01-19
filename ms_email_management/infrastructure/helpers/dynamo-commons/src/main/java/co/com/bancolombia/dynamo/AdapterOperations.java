@@ -20,6 +20,7 @@ public class AdapterOperations<E, D> {
     private Class<D> dataClass;
     private final ModelMapper mapper;
 
+    @SuppressWarnings("unchecked")
     public AdapterOperations(final DynamoDbEnhancedAsyncClient client, DynamoDBTablesProperties dynamoDBTablesProperties) {
         ParameterizedType params = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.entityClass = (Class<E>) params.getActualTypeArguments()[0];

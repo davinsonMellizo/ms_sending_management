@@ -39,12 +39,8 @@ class GlueAdapterTest {
     @Mock
     private CronExpression cronExpression;
 
-    private static final String GLUE_DATABASE = "glue-database";
-    private static final String GLUE_DATABASE_TABLE = "glue-database-table";
-    private static final String BUCKET_SOURCE_PATH = "bucket-source-path";
-    private static final String BUCKET_DESTINATION_PATH = "bucket-destination-path";
+    private static final String GLUE_ENV = "dev";
     private static final String GLUE_JOB_NAME = "glue-job-name";
-    private static final String GLUE_CRAWLER_NAME = "glue-crawler-name";
 
     private final Campaign campaign = new Campaign();
     private final Schedule schedule = new Schedule();
@@ -52,27 +48,25 @@ class GlueAdapterTest {
     private static final LocalDate DATE_NOW = LocalDate.now();
     private static final LocalTime TIME_NOW = LocalTime.now();
 
+    private static final String TRIGGER_NAME = "tgr_1_SVP_134";
 
     @BeforeAll
     void init() {
         MockitoAnnotations.openMocks(this);
-        when(glueConnectionProperties.getGlueDatabase()).thenReturn(GLUE_DATABASE);
-        when(glueConnectionProperties.getGlueDatabaseTable()).thenReturn(GLUE_DATABASE_TABLE);
-        when(glueConnectionProperties.getBucketSourcePath()).thenReturn(BUCKET_SOURCE_PATH);
-        when(glueConnectionProperties.getBucketDestinationPath()).thenReturn(BUCKET_DESTINATION_PATH);
+        when(glueConnectionProperties.getEnv()).thenReturn(GLUE_ENV);
         when(glueConnectionProperties.getJobName()).thenReturn(GLUE_JOB_NAME);
-        when(glueConnectionProperties.getCrawlerName()).thenReturn(GLUE_CRAWLER_NAME);
 
         campaign.setIdCampaign("1");
         campaign.setIdConsumer("ALM");
-        campaign.setProvider("{\"idProvider\":\"INA\",\"channelType\":\"PUSH\"}");
+        campaign.setProvider("{\"idProvider\":\"INA\",\"channelType\":\"SMS\"}");
         campaign.setIdRemitter(0);
         campaign.setDefaultTemplate("template");
         campaign.setDescription("description");
         campaign.setSourcePath("source_path");
         campaign.setAttachment(true);
         campaign.setAttachmentPath("attachment_path");
-        campaign.setState("ACTIVO");
+        campaign.setDataEnrichment(true);
+        campaign.setState("1");
         campaign.setCreatedDate(NOW);
         campaign.setCreationUser("lugomez");
 
@@ -119,4 +113,13 @@ class GlueAdapterTest {
                 .verifyComplete();
     }
 
+    @Test
+    void deleteTrigger() {
+        when(glueOperations.deleteTrigger(anyString()))
+                .thenReturn(Mono.just(true));
+
+        StepVerifier.create(glueAdapter.deleteTrigger(TRIGGER_NAME))
+                .assertNext(res -> assertEquals(TRIGGER_NAME, res))
+                .verifyComplete();
+    }
 }

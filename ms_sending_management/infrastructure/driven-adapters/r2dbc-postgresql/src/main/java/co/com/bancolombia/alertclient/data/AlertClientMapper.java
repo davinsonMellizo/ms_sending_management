@@ -13,6 +13,4 @@ public interface AlertClientMapper {
     @Mapping(target = "creationUser", defaultValue = "")
     AlertClient toEntity(AlertClientData alertClientData);
 
-    @Mapping(target = "id", ignore = true)
-    AlertClientData toData(AlertClient alertClient);
 }

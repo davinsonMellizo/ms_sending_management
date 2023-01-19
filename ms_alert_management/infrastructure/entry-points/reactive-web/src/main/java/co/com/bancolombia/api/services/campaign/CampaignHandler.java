@@ -68,4 +68,11 @@ public class CampaignHandler {
                 .map(campaign -> ResponseDTO.success(campaign, serverRequest))
                 .flatMap(ResponseDTO::responseOk);
     }
+
+    public Mono<ServerResponse> deleteTrigger(ServerRequest serverRequest) {
+        return ParamsUtil.getTriggerParams(serverRequest)
+                .flatMap(useCase::deleteTrigger)
+                .map(campaigns -> ResponseDTO.success(campaigns, serverRequest))
+                .flatMap(ResponseDTO::responseOk);
+    }
 }

@@ -21,6 +21,7 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     private final DirectAsyncGateway gateway;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Mono<Log> sendCommanLogEmail(Log log) {
         Command command= new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
         return gateway.sendCommand(command,TARGET_NAME_LOG)

@@ -48,12 +48,12 @@ public class RestConsumerConfig {
 
         try {
             var propertiesSsl = secretManager
-                    .getSecret(awsProperties.getNameSecretBucketSsl(),PropertiesSsl.class).block();
+                    .getSecret(awsProperties.getNameSecretBucketSsl(), PropertiesSsl.class).block();
 
             assert propertiesSsl != null;
 
             InputStream cert = s3AsynOperations
-                    .getFileAsInputStream(awsProperties.getS3().getBucket() ,propertiesSsl.getKeyStore()).block();
+                    .getFileAsInputStream(awsProperties.getS3().getBucket(), propertiesSsl.getKeyStore()).block();
             truststore = KeyStore.getInstance(KeyStore.getDefaultType());
             truststore.load(cert, propertiesSsl.getPassword().toCharArray());
             var trustManagerFactory = TrustManagerFactory.getInstance(TLS);
@@ -64,7 +64,7 @@ public class RestConsumerConfig {
             return new ReactorClientHttpConnector(HttpClient.create()
                     .secure(t -> t.sslContext(sslContext))
                     .tcpConfiguration(tcpClient -> tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout)));
-        } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | IOException e){
+        } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | IOException e) {
             logger.error(e);
         }
         return null;
@@ -113,7 +113,7 @@ public class RestConsumerConfig {
     @Profile("local")
     @Autowired
     @Nullable
-    public WebClient webClientConfigInaLocal (final ConsumerProperties consumerProperties){
+    public WebClient webClientConfigInaLocal(final ConsumerProperties consumerProperties) {
         return WebClient.builder()
                 .clientConnector(getClientHttpConnectorInsecure(consumerProperties.getTimeout()))
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)

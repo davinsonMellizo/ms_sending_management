@@ -37,14 +37,14 @@ public class IClientRepositoryImplTest {
 
 
     @Test
-    public void findClientByDocument() {
+    void findClientByDocument() {
         StepVerifier.create(clientRepositoryImplement.findClientByIdentification(client))
                 .consumeNextWith(client -> assertEquals(1061772353, client.getDocumentNumber()))
                 .verifyComplete();
     }
 
     @Test
-    public void inactivateClient() {
+    void inactivateClient() {
         client.setId(0);
         StepVerifier.create(clientRepositoryImplement.inactivateClient(client))
                 .consumeNextWith(client -> assertEquals(1061772353, client.getDocumentNumber()))
@@ -52,7 +52,7 @@ public class IClientRepositoryImplTest {
     }
 
     @Test
-    public void saveClient() {
+    void saveClient() {
         client.setDocumentNumber(123456789L);
         clientRepositoryImplement.saveClient(client)
                 .subscribe(contactSaved -> StepVerifier
@@ -62,7 +62,7 @@ public class IClientRepositoryImplTest {
     }
 
     @Test
-    public void updateClient() {
+    void updateClient() {
         client.setId(0);
         StepVerifier.create(clientRepositoryImplement.updateClient(StatusResponse.<Client>builder()
                 .before(client).actual(client)

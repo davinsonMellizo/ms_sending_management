@@ -23,7 +23,7 @@ public class RouterProviderPushUseCase {
     private final DocumentGateway documentGateway;
 
     public Mono<Response> sendPush(Message message, Alert alert) {
-        Map headers = new HashMap();
+        Map<String, String> headers = new HashMap<>();
         headers.put("message-id",message.getLogKey());
         return logUseCase.sendLogPush(message, alert, SEND_220, new Response(0, "Success"))
                 .flatMap(response -> documentGateway.getDocument(message.getDocumentType().toString()))

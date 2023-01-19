@@ -16,13 +16,15 @@ public class Message {
     private Integer operation;
     private Integer documentType;
     private Long documentNumber;
-    private ArrayList preferences;
+    private ArrayList<String> preferences;
     private String consumer;
     private String alert;
     private String transactionCode;
     private Long amount;
     private String url;
     private String template;
+    private String remitter;
+    private Integer priority;
     private String logKey;
 
     private String phone;
@@ -35,9 +37,5 @@ public class Message {
     private List<Parameter> parameters;
     private ArrayList<Attachment> attachments;
 
-    public Message setParameters(List<Parameter> parameters){
-        this.parameters = parameters;
-        return this;
-    }
 
 }

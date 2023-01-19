@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
+import static co.com.bancolombia.commons.enums.Header.CONSUMER;
 import static co.com.bancolombia.commons.enums.Header.CONSUMER_CODE;
 import static co.com.bancolombia.commons.enums.Header.DOCUMENT_NUMBER;
 import static co.com.bancolombia.commons.enums.Header.DOCUMENT_TYPE;
@@ -34,7 +35,7 @@ public class ParamsUtil {
     }
 
     public String getConsumer(ServerRequest request) {
-        return getHeader(request, CONSUMER_CODE);
+        return getHeader(request, CONSUMER);
     }
 
 }

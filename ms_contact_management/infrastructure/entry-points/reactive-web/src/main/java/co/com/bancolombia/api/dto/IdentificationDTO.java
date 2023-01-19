@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 public class IdentificationDTO {
 
     @NotNull(message = "{constraint.not_null}")
-    @Size(min = 1, max = 4, message = "{constraint.size}")
+    @Size(min = 1, max = 15, message = "{constraint.size}")
     private String documentType;
     @Max(value = 999999999999999L, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")

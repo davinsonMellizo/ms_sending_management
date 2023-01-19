@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MasivianAdapterTest {
+class MasivianAdapterTest {
 
     @InjectMocks
     private MasivianAdapter masivianAdapter;
@@ -39,7 +39,7 @@ public class MasivianAdapterTest {
     }
 
     @Test
-    public void sendMAILSuccessTest(){
+    void sendMAILSuccessTest(){
         when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.just(SuccessMasivianMAIL.builder()
                         .description("success")
@@ -50,7 +50,7 @@ public class MasivianAdapterTest {
     }
 
     @Test
-    public void sendMAILErrorProviderTest(){
+    void sendMAILErrorProviderTest(){
         when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
@@ -62,7 +62,7 @@ public class MasivianAdapterTest {
     }
 
     @Test
-    public void sendMAILErrorWebClientTest(){
+    void sendMAILErrorWebClientTest(){
         when(client.post(anyString(), any(), any(),any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
         StepVerifier.create(masivianAdapter.sendMAIL(new Mail()))

@@ -30,7 +30,7 @@ public class ConsumerRepositoryImplWithExceptionTest {
 
 
     @Test
-    public void findConsumerByNameWithException() {
+    void findConsumerByNameWithException() {
         when(repository.findById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         consumerRepositoryImplement.findConsumerById("CC")

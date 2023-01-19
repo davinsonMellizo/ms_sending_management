@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.ses.SesAsyncClient;
+import software.amazon.awssdk.services.sesv2.SesV2AsyncClient;
 
 import java.net.URI;
 
@@ -17,14 +17,13 @@ public class SesConfig {
 
     private static final Region region = Region.US_EAST_1;
     private final LoggerBuilder logger;
-
     private final PropertiesSES propertiesSES;
 
     @Bean
     @Profile({"dev", "qa", "pdn"})
-    public SesAsyncClient sesClientConfig() {
+    public SesV2AsyncClient sesClientConfig() {
         try {
-            return SesAsyncClient.builder()
+            return SesV2AsyncClient.builder()
                     .region(region)
                     .build();
 
@@ -35,17 +34,12 @@ public class SesConfig {
         return null;
     }
 
-
-
     @Bean
     @Profile({"local"})
-    public SesAsyncClient clientLocalSes(){
-        return SesAsyncClient.builder()
+    public SesV2AsyncClient clientLocalSes(){
+        return SesV2AsyncClient.builder()
                 .region(region)
                 .endpointOverride(URI.create(propertiesSES.getEndpoint()))
                 .build();
     }
-
-
-
 }

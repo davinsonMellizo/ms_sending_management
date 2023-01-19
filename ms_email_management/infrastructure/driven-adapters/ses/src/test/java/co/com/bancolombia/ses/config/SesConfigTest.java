@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SesConfigTest {
+class SesConfigTest {
 
     @InjectMocks
     private SesConfig sesConfig;
@@ -18,7 +18,7 @@ public class SesConfigTest {
     }
 
     @Test
-    public void sesConfigTest() {
+    void sesConfigTest() {
         assertThat(sesConfig.sesClientConfig()).isNotNull();
     }
 }

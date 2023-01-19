@@ -16,7 +16,7 @@ public class ConsumerRepositoryImplTest {
     private ConsumerRepositoryImplement consumerRepositoryImplement;
 
     @Test
-    public void findStateByName() {
+    void findStateByName() {
         StepVerifier.create(consumerRepositoryImplement.findConsumerById("ALM"))
                 .expectNextCount(1)
                 .verifyComplete();

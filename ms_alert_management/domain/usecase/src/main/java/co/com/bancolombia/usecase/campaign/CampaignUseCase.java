@@ -55,4 +55,9 @@ public class CampaignUseCase {
                 .flatMap(glueGateway::stopTrigger)
                 .flatMap(campaignGateway::deleteCampaignById);
     }
+
+    public Mono<Map<String, String>> deleteTrigger(String triggerName) {
+        return glueGateway.deleteTrigger(triggerName)
+                .map( name ->Map.of("name", name));
+    }
 }

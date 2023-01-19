@@ -5,10 +5,12 @@ import co.com.bancolombia.model.contact.Contact;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface ContactGateway {
-    Flux<Contact> contactsByClient(Client client);
+import java.util.List;
 
-    Flux<Contact> contactsByClientAndSegment(Client client, String segment);
+public interface ContactGateway {
+    Mono<List<Contact>> contactsByClient(Client client);
+
+    Mono<List<Contact>> contactsByClientAndSegment(Client client, String segment);
 
     Flux<Contact> findContactsByClientSegmentAndMedium(Contact contact);
 

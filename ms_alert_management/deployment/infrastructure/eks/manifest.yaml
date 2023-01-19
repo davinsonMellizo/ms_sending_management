@@ -14,9 +14,10 @@ spec:
     app: #{project-name}#
     pod: #{name}#-pod
   ports:
-    - name: http
+    - name: #{config-protocol-name}#
       targetPort: #{container-port}#
-      port: 80
+      port: #{config-port}#
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -43,6 +44,8 @@ spec:
         version: #{version}#
     spec:
       serviceAccountName: #{service-account-name}#
+      securityContext:
+        fsGroup: 65534
       containers:
         - name: #{name}#-container
           image: #{image}#
@@ -55,6 +58,8 @@ spec:
               cpu: "#{cpu-limits}#m"
           ports:
             - containerPort: #{container-port}#
+          securityContext:
+            allowPrivilegeEscalation: false
           envFrom:
             - configMapRef:
                 name: #{name}#-configmap
@@ -86,8 +91,6 @@ spec:
             timeoutSeconds: 1
             successThreshold: 1
             failureThreshold: #{health-failure}#
-      securityContext:
-        fsGroup: 65534
 
 ---
 apiVersion: autoscaling/v1

@@ -24,12 +24,13 @@ public class PostgreSQLAdapterConfig{
     public ConnectionFactory initializer(@Qualifier("buildConnectionWriterConfiguration")
                                              final ConnectionFactoryOptions options) {
         return ConnectionFactories.get(options);
+
     }
 
     @Bean
     public R2dbcEntityOperations writerR2dbcEntityOperations(@Qualifier("Writer")ConnectionFactory connectionFactory) {
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
+        var databaseClient = DatabaseClient.create(connectionFactory);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
 
     }

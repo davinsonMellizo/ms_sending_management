@@ -29,7 +29,10 @@ import reactor.test.StepVerifier;
 import java.util.ArrayList;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.AMOUNT_NOT_EXCEEDED;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -94,7 +97,6 @@ class SendAlertZeroUseCaseTest {
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
                 .build()));
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         when(validateAmountUseCase.validateAmount(any(), any())).thenReturn(Mono.just(alert));
         when(validateContactUseCase.validateDataContact(any(), any())).thenReturn(Mono.just(message));
         when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(Consumer.builder().build()));
@@ -120,9 +122,8 @@ class SendAlertZeroUseCaseTest {
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
                 .build()));
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
-        when(validateAmountUseCase.validateAmount(any(), any())).thenReturn(Mono.just(alert));
         when(validateContactUseCase.validateDataContact(any(), any())).thenReturn(Mono.just(message));
+        when(validateAmountUseCase.validateAmount(any(), any())).thenReturn(Mono.empty());
         when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(Consumer.builder().build()));
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
         when(routerProviderSMSUseCase.routeAlertsSMS(any(), any())).thenReturn(Mono.empty());
@@ -146,7 +147,6 @@ class SendAlertZeroUseCaseTest {
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
                 .build()));
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         when(validateAmountUseCase.validateAmount(any(), any()))
                 .thenReturn(Mono.error(new BusinessException(AMOUNT_NOT_EXCEEDED)));
         when(validateContactUseCase.validateDataContact(any(), any())).thenReturn(Mono.just(message));
@@ -155,7 +155,7 @@ class SendAlertZeroUseCaseTest {
         when(alertTransactionGateway.findAllAlertTransaction((Message) any()))
                 .thenReturn(Flux.just(AlertTransaction.builder().idAlert("AFI").build()));
         StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
-                .verifyComplete();
+                .expectError().verify();
     }
 
     @Test
@@ -171,10 +171,10 @@ class SendAlertZeroUseCaseTest {
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(1)
                 .build()));
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.empty());
         StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
 
     @Test
@@ -182,17 +182,15 @@ class SendAlertZeroUseCaseTest {
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(Client.builder()
                 .idState(0)
                 .build()));
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
-                .verifyComplete();
+                .expectError().verify();
     }
 
     @Test
     void errorClientNotFountTest(){
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.empty());
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         StepVerifier.create(sendAlertZeroUseCase.indicatorZero(message))
-                .verifyComplete();
+                .expectError().verify();
     }
 
 

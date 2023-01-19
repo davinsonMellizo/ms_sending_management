@@ -33,7 +33,7 @@ public class InalambriaAdapter implements InalambriaGateway {
     private static final Integer STATUS_OK = 200;
     private static final Integer STATUS_ERROR = 1;
     private final ConsumerProperties properties;
-    private final RestClient<SMSInalambria , SuccessInalambriaSMS> client;
+    private final RestClient<SMSInalambria, SuccessInalambriaSMS> client;
     private final RestClient<RequestTokenInalambriaData, TokenInalambriaData> clientToken;
     private static final Integer CONSTANT = 3;
     private static final Integer CONSTANT2 = 1000;
@@ -47,27 +47,28 @@ public class InalambriaAdapter implements InalambriaGateway {
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getMessageText()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                            .token(sms.getHeaders().toString())
-                            .code(e.getHttpsStatus()).description(((ErrorInalambriaSMS)e.getData()).getMessageText())
-                            .build()))
-                .onErrorResume(e ->Mono.just(Response.builder()
-                            .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT))).description(e.getMessage())
-                            .build()));
+                        .token(sms.getHeaders().toString())
+                        .code(e.getHttpsStatus()).description(((ErrorInalambriaSMS) e.getData()).getMessageText())
+                        .build()))
+                .onErrorResume(e -> Mono.just(Response.builder()
+                        .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT))).description(e.getMessage())
+                        .build()));
     }
 
     @Override
     public Mono<Token> getToken(Account account) {
         String headerValue = account.getUsername().concat(":").concat(account.getPassword());
-        var headerValueEncode= Base64.getEncoder().encodeToString(headerValue.getBytes());
-        Map<String,String> headers = new HashMap<>();
-        headers.put("Authorization","Basic "+headerValueEncode);
+        var headerValueEncode = Base64.getEncoder().encodeToString(headerValue.getBytes());
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Basic " + headerValueEncode);
         return Mono.just(RequestTokenInalambriaData.builder().grantType(GRAND_TYPE).build())
-                .map(requestTokenInalambria-> settingHeaders(headers, requestTokenInalambria))
+                .map(requestTokenInalambria -> settingHeaders(headers, requestTokenInalambria))
                 .flatMap(requestTokenInalambria1 -> clientToken.post(properties.getResources()
                                 .getEndpointInalambriaToken(), requestTokenInalambria1,
                         TokenInalambriaData.class, ErrorTokenRefreshInalambria.class))
                 .flatMap(TokenInalambriaData::toModel)
-                .flatMap(this::setExpiresIn);
+                .flatMap(this::setExpiresIn)
+                .onErrorResume(e -> Mono.error(new RuntimeException(e.getMessage())));
     }
 
     private RequestTokenInalambriaData settingHeaders(Map<String, String> headers,
@@ -78,17 +79,17 @@ public class InalambriaAdapter implements InalambriaGateway {
 
     private Mono<Token> setExpiresIn(Token token) {
         return Mono.just(token.getExpiresIn())
-                .map(expiresIn->(expiresIn*CONSTANT2)+System.currentTimeMillis())
-                .map(expiresIn ->token.toBuilder()
+                .map(expiresIn -> (expiresIn * CONSTANT2) + System.currentTimeMillis())
+                .map(expiresIn -> token.toBuilder()
                         .expiresIn(expiresIn).build());
     }
 
     @Override
     public Mono<Token> refreshToken(RequestTokenInalambria refreshTokenInalambria) {
         return Mono.just(RequestTokenInalambriaData.builder().build().toData(refreshTokenInalambria))
-                .flatMap(requestTokenInalambriaData ->clientToken.post(properties.getResources()
+                .flatMap(requestTokenInalambriaData -> clientToken.post(properties.getResources()
                                 .getEndpointInalambriaRefreshToken(), requestTokenInalambriaData,
-                        TokenInalambriaData.class, ErrorTokenRefreshInalambria.class) )
+                        TokenInalambriaData.class, ErrorTokenRefreshInalambria.class))
                 .flatMap(TokenInalambriaData::toModel)
                 .onErrorResume(error -> Mono.empty());
     }

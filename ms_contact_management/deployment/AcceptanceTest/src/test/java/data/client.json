@@ -10,24 +10,24 @@
     "traceability": {
       "consumerCode": '#(consumer)',
       "creationUser": "usuario"
-    }
-  },
-  "contactData": [
-    {
-      "contactChannel": "PUSH",
-      "dataValue": "valuepush",
-      "status": "Inactivo"
     },
-    {
-      "contactChannel": "MAIL",
-      "dataValue": "mail@mail.com",
-      "environmentType": "Laboral",
-      "status": "Activo"
-    },
-    {
-      "contactChannel": "SMS",
-      "dataValue": "3207288543",
-      "status": "Activo"
-    }
-  ]
+    "contactData": [
+      {
+        "contactChannel": "PUSH",
+        "dataValue": "valuepush",
+        "status": "Inactivo"
+      },
+      {
+        "contactChannel": "MAIL",
+        "dataValue": "mail@mail.com",
+        "environmentType": "Laboral",
+        "status": "Activo"
+      },
+      {
+        "contactChannel": "SMS",
+        "dataValue": "3207288543",
+        "status": "Activo"
+      }
+    ]
+  }
 }

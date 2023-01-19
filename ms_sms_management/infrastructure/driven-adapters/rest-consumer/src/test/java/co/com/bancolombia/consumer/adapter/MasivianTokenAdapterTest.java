@@ -25,35 +25,36 @@ class MasivianTokenAdapterTest {
     private MasivAdapter masivAdapter;
 
     @Mock
-    private RestClient<TokenMasivData,TokenMasivData> clientToken;
+    private RestClient<TokenMasivData, TokenMasivData> clientToken;
     @Mock
     private ConsumerProperties properties;
 
-    private Account account= new Account();
+    private Account account = new Account();
 
     @BeforeEach
     public void init() {
         String url = "localhost";
         when(properties.getResources())
-                .thenReturn(new ConsumerProperties.Resources(url,url,url,url,url,url));
+                .thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url));
 
         account.setPassword("passwordTest");
         account.setUsername("usernameTest");
     }
 
     @Test
-    void getTokenTest (){
-        when(clientToken.post(anyString(),any(),any(),any()))
+    void getTokenTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(TokenMasivData.builder()
                         .accesToken("accessTokenTest").expiresIn(1234L).build()));
-            StepVerifier
-                    .create(masivAdapter.getToken(account))
-                    .assertNext(response->response.getAccessToken().equals("accessTokenTest"))
-                    .verifyComplete();
+        StepVerifier
+                .create(masivAdapter.getToken(account))
+                .assertNext(response -> response.getAccessToken().equals("accessTokenTest"))
+                .verifyComplete();
     }
+
     @Test
-    void getTokenErrorTest (){
-        when(clientToken.post(anyString(), any(), any(),any()))
+    void getTokenErrorTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
                         .data(new ErrorTokenRefreshInalambria())

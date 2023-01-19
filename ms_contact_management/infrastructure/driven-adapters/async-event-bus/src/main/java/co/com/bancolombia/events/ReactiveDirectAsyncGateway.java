@@ -38,7 +38,7 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     }
 
     private Map<String, String> getValuesToSend(Bridge bridge) {
-        ObjectMapper mapper = new ObjectMapper();
+        var mapper = new ObjectMapper();
         Map<String, String> map = mapper.convertValue(bridge, Map.class);
         return map.entrySet()
                 .stream()

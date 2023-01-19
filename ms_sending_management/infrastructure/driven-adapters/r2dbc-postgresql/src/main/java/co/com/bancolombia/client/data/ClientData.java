@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -16,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("client")
-public class ClientData implements Persistable<Integer> {
+public class ClientData {
     @Id
     private Integer id;
     private Long documentNumber;
@@ -28,9 +26,4 @@ public class ClientData implements Persistable<Integer> {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    @Override
-    @Transient
-    public boolean isNew() {
-        return true;
-    }
 }

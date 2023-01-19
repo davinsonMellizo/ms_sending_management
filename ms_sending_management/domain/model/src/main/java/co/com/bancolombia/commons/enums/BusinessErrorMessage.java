@@ -12,6 +12,7 @@ public enum BusinessErrorMessage {
     AMOUNT_NOT_EXCEEDED("373", "The client does not exceed the amount to send an alert"),
     INVALID_CONTACT("372", "Invalid Contact"),
     INVALID_OPERATION("372", "Invalid Operation"),
+    INVALID_PARAMETER("372", "Invalid Parameter"),
     INVALID_CONTACTS("016", "Invalid Contacts"),
     ALERT_NOT_FOUND("120", "Alert Not Found"),
     INACTIVE_ALERT("120", "Inactive Alert"),

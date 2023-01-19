@@ -6,7 +6,7 @@ import co.com.bancolombia.secretsmanager.SecretsManager;
 import co.com.bancolombia.secretsmanager.SecretsNameStandard;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
-import org.reactivecommons.async.impl.config.ConnectionFactoryProvider;
+import org.reactivecommons.async.rabbit.config.ConnectionFactoryProvider;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,6 @@ public class RabbitMQConfigHelper{
 
     @Primary
     @Bean
-    @Profile({"dev","qa","pdn"})
     public ConnectionFactoryProvider getConnectionFactoryProvider(){
         RabbitMQConnectionProperties properties = rabbitProperties();
         final ConnectionFactory factory = new ConnectionFactory();
@@ -53,12 +52,12 @@ public class RabbitMQConfigHelper{
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            SSLContext c = SSLContext.getInstance(TLS);
-            c.init(null, null, null);
+            SSLContext context = SSLContext.getInstance(TLS);
+            context.init(null, null, null);
 
-            factory.useSslProtocol(c);
+            factory.useSslProtocol(context);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            logger.info(String.format(FAIL_MSG, e));
+            logger.info(String.format("%s: %s", FAIL_MSG, e));
         }
     }
 }

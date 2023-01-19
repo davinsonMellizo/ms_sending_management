@@ -8,9 +8,13 @@ project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ":log"
 project(':log').projectDir = file('./infrastructure/helpers/log')
-include ":secrets-manager"
-project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
-include ':async-sqs'
-project(':async-sqs').projectDir = file('./infrastructure/entry-points/async-sqs')
 include ':r2dbc-postgresql'
 project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
+include ':reactive-web'
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':rabbit-configurator'
+project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
+include ':async-event-handler'
+project(':async-event-handler').projectDir = file('./infrastructure/entry-points/async-event-handler')
+include ':glue-client'
+project(':glue-client').projectDir = file('./infrastructure/driven-adapters/glue-client')

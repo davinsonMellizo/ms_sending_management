@@ -32,16 +32,20 @@ class S3AsynOperationsTest {
 
 
     private static final CompletableFuture<InputStream> completableFutureInputStream
-            = CompletableFuture.supplyAsync(() -> ResponseBytes.fromByteArray("test", "test".getBytes()).asInputStream());
+            =
+            CompletableFuture.supplyAsync(() -> ResponseBytes
+                    .fromByteArray("test", "test".getBytes()).asInputStream());
+
     @Test
-    void getFileAsStringTest(){
+    void getFileAsStringTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
         StepVerifier.create(s3AsynOperations.getFileAsString(bucketName, ccdtKey))
                 .expectNext("test").verifyComplete();
     }
+
     @Test
-    void getFileAsStringErrorTest(){
+    void getFileAsStringErrorTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(Mono.error(new Throwable("testError")).toFuture());
         StepVerifier.create(s3AsynOperations.getFileAsString(bucketName, ccdtKey))
@@ -50,15 +54,16 @@ class S3AsynOperationsTest {
     }
 
     @Test
-    void getFileAsInputStreamTest(){
+    void getFileAsInputStreamTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
         StepVerifier.create(s3AsynOperations.getFileAsInputStream(bucketName, ccdtKey))
-                .expectNextMatches( v -> Objects.nonNull(v))
+                .expectNextMatches(v -> Objects.nonNull(v))
                 .verifyComplete();
     }
+
     @Test
-    void getFileAsInputStreamErrorTest(){
+    void getFileAsInputStreamErrorTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(Mono.error(new Throwable("testError")).toFuture());
         StepVerifier.create(s3AsynOperations.getFileAsInputStream(bucketName, ccdtKey))

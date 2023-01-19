@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("priority")
-public class PriorityData implements Persistable<Integer> {
+public class PriorityData {
     @Id
     private Integer id;
     private Integer code;
@@ -28,9 +27,4 @@ public class PriorityData implements Persistable<Integer> {
     @Transient
     private Boolean isNew;
 
-    @Override
-    @Transient
-    public boolean isNew() {
-        return this.isNew;
-    }
 }

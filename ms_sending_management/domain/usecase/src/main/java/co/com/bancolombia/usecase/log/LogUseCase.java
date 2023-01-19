@@ -1,8 +1,8 @@
 package co.com.bancolombia.usecase.log;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.events.gateways.CommandGatewayLog;
 import co.com.bancolombia.model.log.Log;
-import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +10,10 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class LogUseCase {
-    private final LogGateway logGateway;
+    private final CommandGatewayLog commandGateway;
 
     public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, Response response) {
-        return logGateway.putLogToSQS(Log.builder()
+        return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
@@ -36,7 +36,7 @@ public class LogUseCase {
     }
 
     public Mono<Response> sendLogPush(Message message, Alert alert, String logType, Response response) {
-        return logGateway.putLogToSQS(Log.builder()
+        return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
@@ -58,7 +58,7 @@ public class LogUseCase {
     }
 
     public <T> Mono<T>  sendLogMAIL(Message message, Alert alert, String logType, Response response) {
-        return logGateway.putLogToSQS(Log.builder()
+        return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())
@@ -80,7 +80,7 @@ public class LogUseCase {
     }
 
     public <T> Mono<T> sendLogError(Message message, String logType, Response response) {
-        return logGateway.putLogToSQS(Log.builder()
+        return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
                 .documentNumber(message.getDocumentNumber())

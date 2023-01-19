@@ -31,10 +31,10 @@ class InalambriaTokenAdapterTest {
     @Mock
     private ConsumerProperties properties;
 
-    private Account account= new Account();
+    private Account account = new Account();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         String url = "localhost";
         when(properties.getResources())
                 .thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url));
@@ -44,28 +44,30 @@ class InalambriaTokenAdapterTest {
     }
 
     @Test
-    void getTokenTest(){
-        when(clientToken.post(anyString(), any(), any(),any()))
+    void getTokenTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(TokenInalambriaData.builder()
                         .accessToken("accesTokenTest").expiresIn(12345L).build()));
         StepVerifier
                 .create(inalambriaAdapter.getToken(account))
-                .assertNext(response->response.getAccessToken().equals("accesTokenTest"))
+                .assertNext(response -> response.getAccessToken().equals("accesTokenTest"))
                 .verifyComplete();
     }
+
     @Test
-    void refreshTokenTest(){
-        when(clientToken.post(anyString(), any(), any(),any()))
+    void refreshTokenTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(TokenInalambriaData.builder()
                         .accessToken("accesTokenTest").expiresIn(12345L).build()));
         StepVerifier
                 .create(inalambriaAdapter.refreshToken(new RequestTokenInalambria()))
-                .assertNext(response->response.getAccessToken().equals("accesTokenTest"))
+                .assertNext(response -> response.getAccessToken().equals("accesTokenTest"))
                 .verifyComplete();
     }
+
     @Test
-    void refreshTokenErrorTest(){
-        when(clientToken.post(anyString(), any(), any(),any()))
+    void refreshTokenErrorTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
                         .data(new ErrorTokenRefreshInalambria())
@@ -78,8 +80,8 @@ class InalambriaTokenAdapterTest {
     }
 
     @Test
-    void getTokenErrorTest(){
-        when(clientToken.post(anyString(), any(), any(),any()))
+    void getTokenErrorTest() {
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
                         .data(new ErrorTokenRefreshInalambria())

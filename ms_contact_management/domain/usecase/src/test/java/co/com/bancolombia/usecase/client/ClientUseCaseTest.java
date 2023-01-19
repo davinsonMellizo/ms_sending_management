@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ClientUseCaseTest {
+class ClientUseCaseTest {
 
     @InjectMocks
     private ClientUseCase useCase;
@@ -98,7 +98,7 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void inactivateClient() {
+    void inactivateClient() {
         when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.findClientByIdentification(any()))
@@ -115,7 +115,7 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void inactivateClientWithClientInactive(){
+    void inactivateClientWithClientInactive(){
         client.setIdState(0);
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
@@ -125,7 +125,7 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void findClientByDocument() {
+    void findClientByDocument() {
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         StepVerifier
@@ -136,7 +136,7 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void saveClient() {
+    void saveClient() {
         when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(clientRepository.saveClient(any()))
@@ -173,9 +173,11 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void updateClient() {
+    void updateClient() {
         when(contactUseCase.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
         when(contactUseCase.validateMail(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
@@ -204,7 +206,9 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void updateClientMono() {
+    void updateClientMono() {
+        when(stateGateway.findState(any()))
+                .thenReturn(Mono.just(state));
         when(contactUseCase.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(contactUseCase.validateMail(any()))
@@ -235,7 +239,7 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void findClientByDocumentWithException() {
+    void findClientByDocumentWithException() {
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.empty());
         useCase.findClientByIdentification(client)
@@ -245,7 +249,7 @@ public class ClientUseCaseTest {
     }
 
     @Test
-    public void deleteClient() {
+    void deleteClient() {
         when(clientRepository.deleteClient(anyLong(), anyLong()))
                 .thenReturn(Mono.just(1));
         StepVerifier
@@ -255,14 +259,4 @@ public class ClientUseCaseTest {
         verify(clientRepository).deleteClient(anyLong(), anyLong());
     }
 
-   /* @Test
-    public void updateContactWithException() {
-        when(clientRepository.findClientByIdentification(any()))
-                .thenReturn(Mono.empty());
-        useCase.updateClient(Enrol.builder().client(client)
-                        .contacts(List.of(contact)).build(), client)
-                .as(StepVerifier::create)
-                .expectError(BusinessException.class)
-                .verify();
-    }*/
 }

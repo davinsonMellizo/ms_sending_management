@@ -13,26 +13,26 @@ public class LoggerBuilderTest {
     private LoggerBuilder loggerBuilder = new LoggerBuilder(CHANNEL);
 
     @Test
-    public void givenErrorWhenValuesThenSuccessTest() {
+    void givenErrorWhenValuesThenSuccessTest() {
         assertThatCode(() -> loggerBuilder.error(new Throwable(DATA), TRANSACTION_ID, CHANNEL, SERVICE))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    public void errorTest() {
+    void errorTest() {
         assertThatCode(() -> loggerBuilder.error(new Throwable(DATA)))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    public void givenInfoWhenValuesThenSuccessTest() {
+    void givenInfoWhenValuesThenSuccessTest() {
         assertThatCode(() -> loggerBuilder.info(DATA, TRANSACTION_ID, CHANNEL, SERVICE))
                 .doesNotThrowAnyException();
 
     }
 
     @Test
-    public void givenInfoWhenIsMessageThenSuccessTest() {
+    void givenInfoWhenIsMessageThenSuccessTest() {
         assertThatCode(() -> loggerBuilder.info(DATA))
                 .doesNotThrowAnyException();
     }

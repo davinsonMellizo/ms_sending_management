@@ -3,10 +3,12 @@ package co.com.bancolombia.usecase.contact;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.Enrol;
+import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
 import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
+import co.com.bancolombia.model.contact.ResponseContacts;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.contactmedium.ContactMedium;
 import co.com.bancolombia.model.contactmedium.gateways.ContactMediumGateway;
@@ -33,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ContactUseCaseTest {
+class ContactUseCaseTest {
 
     @InjectMocks
     private ContactUseCase useCase;
@@ -52,6 +54,8 @@ public class ContactUseCaseTest {
     private ConsumerGateway consumerGateway;
     @Mock
     private NewnessUseCase newnessUseCase;
+    @Mock
+    private ClientGateway clientGateway;
 
     private final State state = new State(0, "Active");
     private final ContactMedium medium = new ContactMedium(1, "Mail");
@@ -64,12 +68,13 @@ public class ContactUseCaseTest {
     @BeforeEach
     public void init() {
         contact.setContactWay("1");
-        contact.setSegment("0");
+        contact.setSegment("GNR");
         contact.setDocumentNumber(1061772353L);
         contact.setDocumentType("0");
         contact.setValue("321795845");
         contact.setStateContact("Active");
         contact.setId(1);
+        contact.setContactWayName("SMS");
 
         client.setDocumentNumber(1061772353L);
         client.setDocumentType("0");
@@ -82,24 +87,72 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void findAllContactByClient() {
+    void findAllContactCloudWithoutChanel() {
         when(contactGateway.contactsByClient(any()))
-                .thenReturn(Flux.just(contact));
+                .thenReturn(Mono.just(List.of(contact)));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
-        when(consumerGateway.findConsumerById(anyString()))
-                .thenReturn(Mono.just(consumer));
-        when(contactGateway.contactsByClientAndSegment(any(), anyString()))
-                .thenReturn(Flux.just(contact));
         StepVerifier
-                .create(useCase.findContactsByClient(client, "sss"))
+                .create(useCase.findContactsByClient(client, ""))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(contactGateway).contactsByClient(client);
     }
 
     @Test
-    public void saveContact() {
+    void findAllContactCloudWithChanel() {
+        when(contactGateway.contactsByClient(any()))
+                .thenReturn(Mono.just(List.of(contact)));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(contactGateway.contactsByClientAndSegment(any(), anyString()))
+                .thenReturn(Mono.just(List.of(contact)));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.just(client));
+        when(documentGateway.getDocument(any()))
+                .thenReturn(Mono.just(document));
+        StepVerifier
+                .create(useCase.findContactsByClient(client, "GNR"))
+                .expectNextCount(1)
+                .verifyComplete();
+        verify(contactGateway).contactsByClient(client);
+    }
+
+
+    @Test
+    void findAllContactIseriesdWithoutChanel() {
+        when(documentGateway.getDocument(any()))
+                .thenReturn(Mono.just(document));
+        when(clientGateway.retrieveAlertInformation(any()))
+                .thenReturn(Mono.just(ResponseContacts.builder().contacts(List.of(contact)).build()));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.empty());
+        StepVerifier
+                .create(useCase.findContactsByClient(client, ""))
+                .expectNextCount(1)
+                .verifyComplete();
+        verify(clientGateway).retrieveAlertInformation(any());
+    }
+
+    @Test
+    void findAllContactIseriesWithChanel() {
+        when(clientGateway.retrieveAlertInformation(any()))
+                .thenReturn(Mono.just(ResponseContacts.builder().contacts(List.of(contact)).build()));
+        when(consumerGateway.findConsumerById(anyString()))
+                .thenReturn(Mono.just(consumer));
+        when(clientRepository.findClientByIdentification(any()))
+                .thenReturn(Mono.empty());
+        when(documentGateway.getDocument(any()))
+                .thenReturn(Mono.just(document));
+        StepVerifier
+                .create(useCase.findContactsByClient(client, "GNR"))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+
+    @Test
+    void saveContact() {
         when(newnessUseCase.saveNewness((Contact) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(contact));
         when(contactGateway.saveContact(any()))
@@ -114,7 +167,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void updateContact() {
+    void updateContact() {
         contact.setPrevious(false);
         when(contactGateway.saveContact(any()))
                 .thenReturn(Mono.just(contact));
@@ -141,7 +194,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void updateContactWithExistent() {
+    void updateContactWithExistent() {
         contact.setPrevious(false);
         when(newnessUseCase.saveNewness((Contact) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(contact));
@@ -171,7 +224,7 @@ public class ContactUseCaseTest {
 
 
     @Test
-    public void validateContacts() {
+    void validateContacts() {
         enrol.setContactData(List.of(contact));
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
@@ -189,7 +242,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validatePhone() {
+    void validatePhone() {
         contact.setContactWay("SMS");
         contact.setValue("3207288544");
         enrol.setContactData(List.of(contact));
@@ -202,7 +255,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validateMail() {
+    void validateMail() {
         contact.setContactWay("MAIL");
         contact.setValue("mail@mail.com");
         contact.setEnvironmentType("Personal");
@@ -216,7 +269,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validatePhoneException() {
+    void validatePhoneException() {
         contact.setContactWay("SMS");
         contact.setValue("1235");
         enrol.setContactData(List.of(contact));
@@ -227,7 +280,7 @@ public class ContactUseCaseTest {
     }
 
     @Test
-    public void validateMailException() {
+    void validateMailException() {
         contact.setContactWay("MAIL");
         contact.setValue("zzzzz");
         contact.setEnvironmentType("Personal");

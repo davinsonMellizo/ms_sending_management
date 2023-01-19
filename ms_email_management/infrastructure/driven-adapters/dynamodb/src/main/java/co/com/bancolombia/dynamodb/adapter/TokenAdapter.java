@@ -19,14 +19,15 @@ public class TokenAdapter extends AdapterOperations<Secret, SecretData> implemen
     private SecretsManager secretsManager;
 
     public TokenAdapter(DynamoDbEnhancedAsyncClient client, final DynamoDBTablesProperties dynamoDBTablesProperties)  {
-        super(client, dynamoDBTablesProperties);}
+        super(client, dynamoDBTablesProperties);
+    }
 
 
     @Override
     public Mono<Account> getSecretName(String priorityProvider) {
         return findById(priorityProvider)
                 .switchIfEmpty(Mono.error(new Throwable("Not secret Name in dynamodb")))
-                .flatMap(secret->secretsManager.getSecret(secret.getSecretName(),Account.class));
+                .flatMap(secret -> secretsManager.getSecret(secret.getSecretName(), Account.class));
     }
 
     @Override

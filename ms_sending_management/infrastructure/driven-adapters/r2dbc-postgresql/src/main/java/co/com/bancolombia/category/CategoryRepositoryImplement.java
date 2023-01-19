@@ -18,7 +18,7 @@ public class CategoryRepositoryImplement extends AdapterOperations<Category, Cat
 
     @Autowired
     public CategoryRepositoryImplement(CategoryRepository repository, CategoryMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override

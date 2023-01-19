@@ -1,0 +1,49 @@
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+springdoc:
+  version: 1
+
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE:local}
+  webflux:
+    base-path: ${PATH_BASE}
+  logging:
+    level:
+      root: ${LOG4J_LEVEL}
+      reactor:
+        netty: false
+
+management:
+  health:
+    probes:
+      enabled: true
+  endpoint:
+    health:
+      show-details: "never"
+      enabled: true
+      cache:
+        time-to-live: "10s"
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: "/"
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+adapters:
+  entries:
+    reactive-web:
+      eventRegister: ${EVENT_REGISTER}

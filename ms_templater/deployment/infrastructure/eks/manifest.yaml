@@ -14,9 +14,9 @@ spec:
     app: #{project-name}#
     pod: #{name}#-pod
   ports:
-    - name: http
+    - name: #{gateway-protocol-name}#
       targetPort: #{container-port}#
-      port: 80
+      port: #{gateway-port}#
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -65,7 +65,7 @@ spec:
           startupProbe:
             httpGet:
               path: #{prefix}#/#{service}#/health/readiness
-              scheme: HTTP
+              scheme: #{gateway-protocol}#
               port: #{container-port}#
             periodSeconds: #{health-startup-period}#
             timeoutSeconds: 1
@@ -74,7 +74,7 @@ spec:
           livenessProbe:
             httpGet:
               path: #{prefix}#/#{service}#/health/liveness
-              scheme: HTTP
+              scheme: #{gateway-protocol}#
               port: #{container-port}#
             periodSeconds: #{health-liveness-period}#
             timeoutSeconds: 1
@@ -83,7 +83,7 @@ spec:
           readinessProbe:
             httpGet:
               path: #{prefix}#/#{service}#/health/readiness
-              scheme: HTTP
+              scheme: #{gateway-protocol}#
               port: #{container-port}#
             initialDelaySeconds: 0
             periodSeconds: #{health-readiness-period}#

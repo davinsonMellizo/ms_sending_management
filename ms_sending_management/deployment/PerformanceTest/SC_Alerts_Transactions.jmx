@@ -86,19 +86,6 @@
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Gestor de Cabecera HTTP" enabled="true">
-        <collectionProp name="HeaderManager.headers">
-          <elementProp name="" elementType="Header">
-            <stringProp name="Header.name">Content-Type</stringProp>
-            <stringProp name="Header.value">application/json</stringProp>
-          </elementProp>
-          <elementProp name="" elementType="Header">
-            <stringProp name="Header.name">Host</stringProp>
-            <stringProp name="Header.value">canales-digitales-ext-qa.apps.ambientesbc.com</stringProp>
-          </elementProp>
-        </collectionProp>
-      </HeaderManager>
-      <hashTree/>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="VariablesUsedInTest" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="send_alert_users" elementType="Argument">
@@ -124,7 +111,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SC_send_alert" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SC_send_alert" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Controlador Bucle" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -168,6 +155,9 @@
     &quot;phone&quot;: &quot;3215058449&quot;,&#xd;
     &quot;phoneIndicator&quot;: &quot;+57&quot;,&#xd;
     &quot;mail&quot;: &quot;davinson.mellizo@gmailcom&quot;,&#xd;
+    &quot;template&quot;: &quot;compra&quot;,&#xd;
+    &quot;priority&quot;: &quot;18&quot;,&#xd;
+    &quot;remitter&quot;: &quot;davinson@pepe.com&quot;,&#xd;
     &quot;parameters&quot;:[&#xd;
         {&#xd;
             &quot;name&quot;: &quot;Nombre&quot;,&#xd;
@@ -196,6 +186,93 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SC_send_alert" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Controlador Bucle" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${send_alert_users}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${send_alert_rampup}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${send_alert_duration}</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_send_alert" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;operation&quot;: 1,&#xd;
+    &quot;documentType&quot;: 0,&#xd;
+    &quot;documentNumber&quot;: 2000000000,&#xd;
+    &quot;preferences&quot;:[&quot;SMS&quot;, &quot;MAIL&quot;],&#xd;
+    &quot;alert&quot;: &quot;120&quot;, &#xd;
+    &quot;consumer&quot;: &quot;SVP&quot;,&#xd;
+    &quot;transactionCode&quot;: &quot;1000&quot;, &#xd;
+    &quot;amount&quot;: 6000, &#xd;
+    &quot;phone&quot;: &quot;3215058449&quot;, &#xd;
+    &quot;phoneIndicator&quot;: &quot;+57&quot;, &#xd;
+    &quot;mail&quot;: &quot;davinson.mellizo@gmailcom&quot;,&#xd;
+    &quot;template&quot;: &quot;compra&quot;,&#xd;
+    &quot;priority&quot;: &quot;18&quot;,&#xd;
+    &quot;remitter&quot;: &quot;davinson@pepe.com&quot;,&#xd;
+    &quot;url&quot;: &quot;www.google.com&quot;, &#xd;
+    &quot;parameters&quot;:[&#xd;
+        {&#xd;
+            &quot;name&quot;: &quot;name&quot;,&#xd;
+            &quot;value&quot;: &quot;Jorge&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;attachments&quot;: [ ]&#xd;
+&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">canales-digitales-int-qa.apps.ambientesbc.com</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">alertas/api/v1/sending-management/send</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Accept</stringProp>
+                <stringProp name="Header.value">*/*</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Accept-Encoding</stringProp>
+                <stringProp name="Header.value">gzip, deflate, br</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Connection</stringProp>
+                <stringProp name="Header.value">keep-alive</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
       </hashTree>
       <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="Thread Group Sending" enabled="false">
         <elementProp name="ThreadGroup.main_controller" elementType="com.blazemeter.jmeter.control.VirtualUserController"/>

@@ -9,7 +9,6 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -40,7 +39,7 @@ public class RestClient<T extends Request,R> {
                 .bodyToMono(clazz);
     }
 
-    private <T extends Request> T cleanHeader(T request){
+    private T cleanHeader(T request){
         request.setHeaders(null);
         return request;
     }

@@ -1,0 +1,27 @@
+##Spring Configuration
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+springdoc:
+  version: 1
+
+spring:
+  application:
+    name: ms_webhook
+  devtools:
+    add-properties: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: local
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: OFF
+
+

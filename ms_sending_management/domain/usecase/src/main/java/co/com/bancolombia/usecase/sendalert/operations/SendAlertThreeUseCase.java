@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.Constants.SI;
+import static co.com.bancolombia.commons.constants.Constants.TRX_580;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
@@ -34,7 +36,7 @@ public class SendAlertThreeUseCase {
 
     private Flux<Alert> validateTransaction(Alert alert, Message pMessage) {
         return Flux.just(pMessage)
-                .filter(message ->  message.getTransactionCode().equals("580"))
+                .filter(message ->  message.getTransactionCode().equals(TRX_580))
                 .flatMap(message -> validateAmountUseCase.validateAmount(alert, message))
                 .switchIfEmpty(Mono.just(alert))
                 .onErrorResume(BusinessException.class, e -> logUseCase.sendLogError(pMessage, SEND_220,
@@ -43,7 +45,7 @@ public class SendAlertThreeUseCase {
 
     private Flux<Void> routeAlert(Alert alert, Message message) {
         return Mono.just(message)
-                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase("Si"))
+                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase(SI))
                 .flatMap(message1 -> routerProviderPushUseCase.sendPush(message1, alert))
                 .switchIfEmpty(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .thenMany(Flux.empty());

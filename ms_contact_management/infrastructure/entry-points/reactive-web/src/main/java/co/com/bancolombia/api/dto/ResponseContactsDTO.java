@@ -1,12 +1,16 @@
 package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.model.contact.ResponseContacts;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +52,16 @@ class ResponseCustomerDTO {
 
     private ClientIdentificationDTO identification;
     private ResponseTraceabilityDTO traceability;
+    @NotNull(message = "{constraint.not_null}")
+    @Size(min = 1, max = 10, message = "{constraint.size}")
+    @Schema(allowableValues = {"Activo", "Inactivo"})
     private String status;
+    @NotNull(message = "{constraint.not_null}")
+    @Size(min = 0, max = 20, message = "{constraint.size}")
+    @Schema(allowableValues = {"Activo", "Inactivo"})
     private String mdmKey;
     private Integer preference;
+    @Schema(allowableValues = {"true", "false"})
     private Boolean delegate;
 }
 
@@ -61,6 +72,7 @@ class ResponseCustomerDTO {
 class ResponseTraceabilityDTO {
 
     private String enrollmentOrigin;
+    @Size(max = 20, message = "{constraint.size}")
     private String creationUser;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

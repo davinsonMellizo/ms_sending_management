@@ -1,7 +1,7 @@
 package co.com.bancolombia.consumer.config;
 
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.s3bucket.S3AsynOperations;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import co.com.bancolombia.secretsmanager.SecretsManager;
 import io.netty.handler.ssl.SslContextBuilder;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class RestConsumerConfig {
     private static final String TLS = "TLSv1.2";
 
     private final SecretsManager secretManager;
-    private final S3AsynOperations s3AsynOperations;
+    private final S3AsyncOperations s3AsyncOperations;
     private final AwsProperties awsProperties;
     private final LoggerBuilder logger;
 
@@ -40,12 +40,12 @@ public class RestConsumerConfig {
         KeyStore truststore = null;
         try {
             var propertiesSsl = secretManager
-                    .getSecret(awsProperties.getNameSecretBucketSsl(),PropertiesSsl.class).block();
+                    .getSecret(awsProperties.getNameSecretBucketSsl(), PropertiesSsl.class).block();
 
             assert propertiesSsl != null;
 
-            InputStream cert = s3AsynOperations
-                    .getFileAsInputStream(awsProperties.getS3().getBucket() ,propertiesSsl.getKeyStore()).block();
+            InputStream cert = s3AsyncOperations
+                    .getFileAsInputStream(awsProperties.getS3().getBucket(), propertiesSsl.getKeyStore()).block();
             truststore = KeyStore.getInstance(KeyStore.getDefaultType());
             truststore.load(cert, propertiesSsl.getPassword().toCharArray());
             var trustManagerFactory = TrustManagerFactory.getInstance(TLS);
@@ -56,7 +56,7 @@ public class RestConsumerConfig {
             return new ReactorClientHttpConnector(HttpClient.create()
                     .secure(t -> t.sslContext(sslContext))
                     .tcpConfiguration(tcpClient -> tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout)));
-        } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | IOException e){
+        } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | IOException e) {
             logger.error(e);
         }
 

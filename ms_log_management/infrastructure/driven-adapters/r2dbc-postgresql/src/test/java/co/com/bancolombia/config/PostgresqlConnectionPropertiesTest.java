@@ -1,6 +1,5 @@
 package co.com.bancolombia.config;
 
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,5 +32,4 @@ public class PostgresqlConnectionPropertiesTest {
         assertEquals(password, properties.getPassword());
         assertEquals(port, properties.getPort());
     }
-
 }

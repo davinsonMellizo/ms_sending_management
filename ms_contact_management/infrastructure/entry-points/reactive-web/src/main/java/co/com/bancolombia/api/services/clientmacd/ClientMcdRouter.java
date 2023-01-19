@@ -16,7 +16,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class ClientMcdRouter extends ClientMcdDocumentationApi {
     private final ApiProperties apiProperties;
-    private final static String MCD = "-macd";
+    private static final String MCD = "-macd";
 
     @Bean
     public RouterFunction<ServerResponse> routerFunctionClientMcd(ClientMcdHandler clientMcdHandler) {

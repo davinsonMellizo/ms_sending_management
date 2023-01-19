@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class ContactRepositoryImplWithExceptionTest {
+class ContactRepositoryImplWithExceptionTest {
 
     private final Client client = new Client();
     private final Contact contact = new Contact();
@@ -50,7 +50,7 @@ public class ContactRepositoryImplWithExceptionTest {
     }
 
     @Test
-    public void findAllContactsByClient() {
+    void findAllContactsByClient() {
         when(repositoryReader.findAllContactsByClient(any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
         repositoryImpl.contactsByClient(client)
@@ -60,7 +60,7 @@ public class ContactRepositoryImplWithExceptionTest {
     }
 
     @Test
-    public void findIdContact() {
+    void findIdContact() {
         when(repositoryReader.findContact(any(), any(), any(), any()))
                 .thenReturn(Flux.error(RuntimeException::new));
         contact.setContactWay("SMS");

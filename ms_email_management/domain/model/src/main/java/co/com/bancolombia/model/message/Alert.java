@@ -1,5 +1,6 @@
 package co.com.bancolombia.model.message;
 
+import co.com.bancolombia.Request;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Alert {
+public class Alert extends Request {
     private String provider;
     private String from;
     private Destination destination;

@@ -34,7 +34,7 @@ aws:
   region: us-east-1
   s3:
     endpoint: http://localhost:4566
-    bucket: bucketssl
+    bucket: bucket-config-functional
     request-config-mq-key: nu0154001_config_resource_mq.json
     config-listener-mq-key: nu0154001_config_listener_mq_local.json
   secrets-manager:

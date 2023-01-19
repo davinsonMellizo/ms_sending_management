@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class Attachment {
     private String type;
     private String value;
+    private String filename;
+    private String contentType;
+    private String path;
 }

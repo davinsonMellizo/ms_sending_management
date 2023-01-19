@@ -23,6 +23,7 @@ public class ParamsUtil {
     public static final String ID_ALERT = "id-alert";
     public static final String ID_TRANSACTION = "id-transaction";
     public static final String ID_CONSUMER = "id-consumer";
+    public static final String TRIGGER_NAME  = "name";
     public static final String ID_CAMPAIGN = "id-campaign";
 
     private static Mono<String> ofEmptyHeaders(String value) {
@@ -96,4 +97,7 @@ public class ParamsUtil {
 
     }
 
+    public static Mono<String> getTriggerParams(ServerRequest request) {
+        return ofEmptyParams(request.queryParams().getFirst(TRIGGER_NAME));
+    }
 }

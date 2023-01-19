@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class MessageDTO {
     private Integer documentType;
     private Long documentNumber;
     @Builder.Default
-    private ArrayList preferences= new ArrayList<>();
+    private ArrayList<String> preferences= new ArrayList<>();
     private String consumer;
     private String alert;
     private String transactionCode;
@@ -37,7 +38,9 @@ public class MessageDTO {
     @Builder.Default
     private List<Parameter> parameters = new ArrayList<>();
     @Builder.Default
-    private ArrayList<Attachment> attachments = new ArrayList<>();;
+    private ArrayList<Attachment> attachments = new ArrayList<>();
+    private String remitter;
+    private Integer priority;
 
     public Mono<Message> toModel(){
         return Mono.just(Message.builder()
@@ -55,6 +58,8 @@ public class MessageDTO {
                 .mail(this.mail)
                 .parameters(this.parameters)
                 .attachments(this.attachments)
+                .remitter(this.remitter)
+                .priority(this.priority)
                 .build());
     }
 }

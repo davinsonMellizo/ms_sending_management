@@ -9,13 +9,13 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class DocumentRepositoryImplTest {
+class DocumentRepositoryImplTest {
 
     @Autowired
     private DocumentRepositoryImplement documentRepositoryImplement;
 
     @Test
-    public void findStateByName() {
+    void findStateByName() {
         StepVerifier.create(documentRepositoryImplement.getDocument("CC"))
                 .expectNextCount(1)
                 .verifyComplete();

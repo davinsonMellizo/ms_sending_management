@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-glue', version: '1.11.960'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-sts', version: '1.11.960'
+}

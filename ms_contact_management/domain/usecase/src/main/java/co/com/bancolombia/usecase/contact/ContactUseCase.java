@@ -27,11 +27,13 @@ import java.util.regex.Pattern;
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CONTACT;
-import static co.com.bancolombia.commons.constants.Transaction.DELETE_CONTACT_PREVIOUS;
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND_PER_CHANNEL;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACTS_EMPTY;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.DOCUMENT_TYPE_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_EMAIL;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_ENVIRONMENT;
@@ -53,26 +55,64 @@ public class ContactUseCase {
     public Mono<ResponseContacts> findContactsByClient(Client pClient, String consumerCode) {
         return clientRepository.findClientByIdentification(pClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .filter(client -> client.getIdState() == ACTIVE.getType())
+                .filter(client -> client.getIdState().equals(ACTIVE.getType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .map(client -> client.toBuilder().documentType(pClient.getDocumentType()).build())
-                .flatMap(client -> findAllContacts(client, consumerCode))
+                .flatMap(client -> findContactsCloud(client, consumerCode))
                 .onErrorResume(e -> e.getMessage().equals(CLIENT_NOT_FOUND.getMessage()),
-                        e-> documentGateway.getDocument(pClient.getDocumentType())
-                                .flatMap(document -> clientGateway.retrieveAlertInformation(pClient.toBuilder()
-                                .documentType(document.getCode())
-                                .build())))
+                        e-> findClientsIseries(pClient,consumerCode));
+    }
+
+    private Mono<ResponseContacts> findContactsCloud(Client pClient, String pConsumerCode){
+        return Mono.just(pConsumerCode)
+                .filter(consumerCode -> !consumerCode.isEmpty())
+                .flatMap(this::findConsumer)
+                .flatMap(consumer -> findClientByChanelCloud(pClient, consumer.getSegment()))
+                .switchIfEmpty(findClientWithoutChanelCloud(pClient));
+    }
+
+    private Mono<ResponseContacts> findClientsIseries(Client pClient, String pConsumerCode){
+        return Mono.just(pConsumerCode)
+                .filter(consumerCode -> !consumerCode.isEmpty())
+                .flatMap(this::findConsumer)
+                .flatMap(consumer -> findClientByChanelIseries(pClient, consumer.getSegment()))
+                .switchIfEmpty(findClientWithoutChanelIseries(pClient))
+                .onErrorMap(e-> e.getMessage().equals(CLIENT_NOT_FOUND_PER_CHANNEL.getMessage()),
+                        e-> new BusinessException(CLIENT_NOT_FOUND))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
-    private Mono<ResponseContacts> findAllContacts(Client client, String consumerCode) {
-        return Mono.just(consumerCode)
-                .filter(consumerFilter -> !consumerFilter.isEmpty())
-                .flatMap(consumerGateway::findConsumerById)
-                .flatMapMany(consumer -> contactGateway.contactsByClientAndSegment(client, consumer.getSegment()))
-                .switchIfEmpty(contactGateway.contactsByClient(client))
-                .collectList()
-                .map(contacts -> ResponseContacts.<Contact>builder()
+    private Mono<ResponseContacts> findClientByChanelCloud(Client client, String segment){
+        return contactGateway.contactsByClientAndSegment(client, segment)
+                .filter(contacts -> !contacts.isEmpty())
+                .flatMap(contacts -> buildResponse(client,contacts))
+                .switchIfEmpty(findClientByChanelIseries(client,segment))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
+
+    }
+    private Mono<ResponseContacts> findClientByChanelIseries(Client client, String segment){
+        return documentGateway.getDocument(client.getDocumentType())
+                .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
+                .flatMap(document ->clientGateway.retrieveAlertInformation(client.toBuilder()
+                        .documentType(document.getCode()).build()))
+                .flatMap(contacts -> filterContactsByConsumer(contacts, segment));
+    }
+
+    private Mono<ResponseContacts> findClientWithoutChanelCloud(Client client){
+        return contactGateway.contactsByClient(client)
+                .flatMap(contacts -> buildResponse(client,contacts));
+    }
+    private Mono<ResponseContacts> findClientWithoutChanelIseries(Client client){
+        return documentGateway.getDocument(client.getDocumentType())
+                .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
+                .flatMap(document ->clientGateway.retrieveAlertInformation(client.toBuilder()
+                                .documentType(document.getCode())
+                                .build()));
+    }
+
+    private Mono<ResponseContacts> buildResponse(Client client, List<Contact> contacts){
+        return Mono.just(
+                ResponseContacts.<Contact>builder()
                         .contacts(contacts)
                         .documentNumber(client.getDocumentNumber())
                         .documentType(client.getDocumentType())
@@ -80,15 +120,35 @@ public class ContactUseCase {
                         .delegate(client.getDelegate())
                         .preference(client.getPreference())
                         .keyMdm(client.getKeyMdm())
-                        .status(client.getIdState() == ACTIVE.getType() ? ACTIVE.getValue(): INACTIVE.getValue())
+                        .status(client.getIdState().equals( ACTIVE.getType()) ? ACTIVE.getValue(): INACTIVE.getValue())
                         .creationUser(client.getCreationUser())
                         .createdDate(client.getCreatedDate())
                         .modifiedDate(client.getModifiedDate())
-                        .build());
+                        .build()
+        );
+    }
+
+    private Mono<ResponseContacts> filterContactsByConsumer(ResponseContacts responseContacts, String segment){
+        return  Mono.just(responseContacts.getContacts())
+                .filter(contacts -> !contacts.isEmpty())
+                .flatMapMany(Flux::fromIterable)
+                .filter(contact -> contact.getSegment().equals(segment))
+                .collectList()
+                .filter(contacts -> !contacts.isEmpty())
+                .map(contacts -> responseContacts.toBuilder().contacts(contacts).build())
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
+    }
+
+
+    private Mono<Consumer> findConsumer(String consumerCode){
+        return Mono.just(consumerCode)
+                .flatMap(consumerGateway::findConsumerById)
+                .switchIfEmpty(Mono.error(new BusinessException(CONSUMER_NOT_FOUND)));
     }
 
     public Mono<Contact> saveContact(Contact pContact, String voucher) {
         return Mono.just(pContact)
+                .flatMap(this::validateCountryCode)
                 .flatMap(contactGateway::saveContact)
                 .flatMap(contact -> newnessUseCase.saveNewness(contact, CREATE_CONTACT, voucher));
     }
@@ -112,50 +172,61 @@ public class ContactUseCase {
     public Mono<StatusResponse<Contact>> updateValueContact(List<Contact> contacts,
                                                             Contact newContact, String voucher) {
         return Flux.fromIterable(contacts)
-                .filter(Contact::getPrevious)
-                .flatMap(contact -> deletePrevious(contact, contacts, voucher))
-                .switchIfEmpty(Flux.fromIterable(contacts)).next()
-                .map(contact -> contact.toBuilder().previous(true).build())
-                .flatMap(contactGateway::updateContact)
-                .zipWhen(contact -> saveCopyPrevious(contact, newContact, voucher))
-                .map(response -> StatusResponse.<Contact>builder()
-                        .before(response.getT1()).actual(response.getT2()).build());
+                .filter(contact -> !contact.getPrevious()).next()
+                .map(current -> StatusResponse.<Contact>builder().actual(current).build())
+                .flatMap(response -> updateCurrentContact(response, newContact, voucher))
+                .flatMap(response -> updatePrevious(response, contacts, voucher));
     }
 
-    private Flux<Contact> deletePrevious(Contact pContact, List<Contact> contacts, String voucher) {
-        return contactGateway.deleteContact(pContact)
-                .flatMap(contact -> newnessUseCase.saveNewness(contact, DELETE_CONTACT_PREVIOUS, voucher))
-                .map(idContact -> contacts)
-                .flatMapMany(Flux::fromIterable)
-                .filter(contact1 -> !contact1.getPrevious());
-    }
-
-    private Mono<Contact> saveCopyPrevious(Contact pContact, Contact newContact, String voucher) {
+    private Mono<StatusResponse<Contact>> updateCurrentContact(StatusResponse<Contact> response, Contact newContact,
+                                                               String voucher) {
         return stateGateway.findState(newContact.getStateContact())
-                .onErrorMap(e -> new BusinessException(INVALID_DATA))
-                .map(state -> newContact.toBuilder().stateContact(Integer.toString(state.getId()))
-                        .contactWay(pContact.getContactWay())
-                        .documentType(pContact.getDocumentType())
-                        .segment(pContact.getSegment())
-                        .previous(false)
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_DATA)))
+                .zipWith(validateCountryCode(newContact))
+                .map(data -> response.getActual().toBuilder().value(data.getT2().getValue())
+                        .stateContact(data.getT1().getId().toString())
+                        .environmentType(data.getT2().getEnvironmentType())
                         .build())
-                .flatMap(contactGateway::saveContact)
-                .flatMap(contact -> newnessUseCase.saveNewness(contact, UPDATE_CONTACT, voucher));
+                .flatMap(contactGateway::updateContact)
+                .doOnNext(contactResponse -> newnessUseCase.saveNewness(response.getActual(), UPDATE_CONTACT, voucher))
+                .map(contact -> response.toBuilder().before(response.getActual()).actual(contact).build());
+
+    }
+
+    private Mono<StatusResponse<Contact>> updatePrevious(StatusResponse<Contact> response, List<Contact> contacts,
+                                                         String voucher) {
+        return Flux.fromIterable(contacts)
+                .filter(Contact::getPrevious).next()
+                .doOnNext(previous -> newnessUseCase.saveNewness(previous, UPDATE_CONTACT, voucher))
+                .map(contactPrevious -> contactPrevious.toBuilder().value(response.getBefore().getValue())
+                        .idState(response.getBefore().getIdState())
+                        .environmentType(response.getBefore().getEnvironmentType())
+                        .build())
+                .flatMap(contactGateway::updateContact)
+                .switchIfEmpty(contactGateway.saveContact(contacts.get(0).toBuilder().id(null).previous(true).build()))
+                .thenReturn(response);
     }
 
     public Mono<Enrol> validatePhone(Enrol enrol) {
         return Flux.fromIterable(enrol.getContactData())
                 .filter(cnt -> SMS.equals(cnt.getContactWay()) )
-                .filter(cnt -> !(cnt.getValue().chars().allMatch(Character::isDigit)
-                        && cnt.getValue().length() >= 10))
+                .filter(cnt -> cnt.getValue().length() < 10)
                 .next()
                 .flatMap(contact -> Mono.error(new BusinessException(INVALID_PHONE)))
                 .map(contact -> enrol)
                 .switchIfEmpty(Mono.just(enrol));
     }
 
+    private Mono<Contact> validateCountryCode(Contact contact){
+        return Mono.just(contact)
+                .filter(contact1 -> contact1.getContactWayName().equals(SMS))
+                .filter(contact1 -> !"+".equals(contact1.getValue().substring(0,1)))
+                .map(contact1 -> contact1.toBuilder().value("+57"+contact.getValue()).build())
+                .switchIfEmpty(Mono.just(contact));
+    }
+
     public Mono<Enrol> validateMail(Enrol enrol) {
-        final var pattern = "^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
+        final var pattern = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
         return Flux.fromIterable(enrol.getContactData())
                 .filter(cnt -> MAIL.equals(cnt.getContactWay()))
                 .flatMap(this::validateEnvironment)

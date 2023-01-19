@@ -1,5 +1,8 @@
 package co.com.bancolombia.commons.constants;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class ContactWay {
 
     public static final String SMS = "SMS";

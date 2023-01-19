@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
@@ -14,7 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("consumer")
-public class ConsumerData implements Persistable<String> {
+public class ConsumerData {
 
     @Id
     private String id;
@@ -24,9 +23,4 @@ public class ConsumerData implements Persistable<String> {
     @Transient
     private Boolean isNew;
 
-    @Override
-    @Transient
-    public boolean isNew() {
-        return this.isNew;
-    }
 }

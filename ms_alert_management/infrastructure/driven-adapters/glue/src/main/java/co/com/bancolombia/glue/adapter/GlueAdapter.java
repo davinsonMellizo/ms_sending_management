@@ -28,12 +28,12 @@ public class GlueAdapter implements CampaignGlueGateway {
 
     private final GlueConnectionProperties properties;
     private final GlueOperations glueOperations;
-
-    private static final String GLUE_DATABASE = "--glue_database";
-    private static final String GLUE_DATABASE_TABLE = "--glue_database_table";
+    private static final String ENV = "--env";
     private static final String SOURCE_MASSIVE_FILE = "--source_massive_file_path";
-    private static final String BUCKET_DESTINATION_PATH = "--bucket_destination_path";
+    private static final String PROCESSED_FILE_PATH = "--processed_file_path";
     private static final String DATA_ENRICHMENT = "--data_enrichment";
+    private static final String CONSUMER_ID = "--consumer_id";
+    private static final String PROVIDER = "--provider";
 
     private String getTriggerName(String idCampaign, String idConsumer, Long idSchedule) {
         return String.format("tgr_%s_%s_%s", idCampaign, idConsumer, idSchedule);
@@ -50,8 +50,8 @@ public class GlueAdapter implements CampaignGlueGateway {
         ) : null;
     }
 
-    private String getBucketDestinationPath(String sourcePath) {
-        return sourcePath.replaceAll("(?i).csv", "/");
+    private String getProcessedFilePath(String sourcePath) {
+        return sourcePath.replaceAll("(?i).csv", "");
     }
 
     private Action getTriggerAction(Campaign campaign) {
@@ -59,13 +59,12 @@ public class GlueAdapter implements CampaignGlueGateway {
                 .builder()
                 .jobName(properties.getJobName())
                 .arguments(Map.of(
-                        GLUE_DATABASE, properties.getGlueDatabase(),
-                        GLUE_DATABASE_TABLE, properties.getGlueDatabaseTable(),
-                        SOURCE_MASSIVE_FILE, String.format("%s/%s", properties.getBucketSourcePath(),
-                                campaign.getSourcePath()),
-                        BUCKET_DESTINATION_PATH, String.format("%s/%s", properties.getBucketDestinationPath(),
-                                this.getBucketDestinationPath(campaign.getSourcePath())),
-                        DATA_ENRICHMENT, String.format("%s", campaign.isDataEnrichment())
+                        ENV, properties.getEnv(),
+                        SOURCE_MASSIVE_FILE, campaign.getSourcePath(),
+                        PROCESSED_FILE_PATH, this.getProcessedFilePath(campaign.getSourcePath()),
+                        DATA_ENRICHMENT, campaign.getDataEnrichment().toString(),
+                        CONSUMER_ID, campaign.getIdConsumer(),
+                        PROVIDER, campaign.getProvider()
                 ))
                 .build();
     }
@@ -128,4 +127,12 @@ public class GlueAdapter implements CampaignGlueGateway {
                 .collectList()
                 .thenReturn(response);
     }
+
+    @Override
+    public Mono<String> deleteTrigger(String nameTrigger) {
+        return this.glueOperations.deleteTrigger(nameTrigger)
+                .thenReturn(nameTrigger);
+    }
+
+
 }

@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.binstash.api.ObjectCache;
 import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.SMSInalambria;
 import co.com.bancolombia.model.message.SMSInfobip;
 import co.com.bancolombia.model.message.SMSMasiv;
@@ -11,6 +12,8 @@ import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
 import co.com.bancolombia.model.token.TokenInfobip;
+import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
+
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase implements Serializable {
     private final transient ObjectCache<ArrayList> token;
@@ -26,25 +31,31 @@ public class GeneratorTokenUseCase implements Serializable {
     private final transient InalambriaGateway inalambriaGateway;
     private final transient MasivianGateway masivianGateway;
     private final transient InfobipGateway infobipGateway;
+    private final LogUseCase logUseCase;
 
     public Mono<SMSInalambria> getTokenINA(SMSInalambria smsInalambria, Alert alert) {
-        return  token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
-                .filter(lisToken->!lisToken.isEmpty())
+        return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
+                .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderINA(alert.getPriority().concat(alert.getProvider())))
-                .log()
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
-                .map(tokens->tokens.get(0).toString())
-                .map(tokenInalambria1 -> Map.of("Authorization","Bearer "+tokenInalambria1))
-                .map(headers-> setTokenINA(smsInalambria, headers));
+                .map(tokens -> tokens.get(0).toString())
+                .map(tokenInalambria1 -> Map.of("Authorization", "Bearer " + tokenInalambria1))
+                .map(headers -> setTokenINA(smsInalambria, headers))
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert, SMS, Response.builder().code(1)
+                        .description(e.getMessage()).build(), logUseCase))
+                ;
     }
-    public Mono<SMSMasiv> getTokenMAS(SMSMasiv smsMasiv,Alert alert){
-        return token.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
-                .filter(lisToken->!lisToken.isEmpty())
+
+    public Mono<SMSMasiv> getTokenMAS(SMSMasiv smsMasiv, Alert alert) {
+        return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
+                .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderMAS(alert.getPriority().concat(alert.getProvider())))
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
-                .map(tokens->tokens.get(0).toString())
-                .map(tokenMas->Map.of("Authorization","Bearer "+tokenMas))
-                .map(headers-> setTokenMAS(smsMasiv,headers));
+                .map(tokens -> tokens.get(0).toString())
+                .map(tokenMas -> Map.of("Authorization", "Bearer " + tokenMas))
+                .map(headers -> setTokenMAS(smsMasiv, headers))
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert, SMS, Response.builder().code(1)
+                        .description(e.getMessage()).build(), logUseCase));
     }
 
     public Mono<SMSInfobip> getTokenInf(SMSInfobip smsInfobip, Alert alert){
@@ -59,8 +70,8 @@ public class GeneratorTokenUseCase implements Serializable {
 
     public Mono<Void> deleteToken(String usedToken, Alert alert) {
         return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
-                .flatMap(lisTokens->getArrayListArrayListFunction(usedToken,lisTokens))
-                .flatMap(data->token.save(alert.getPriority().concat(alert.getProvider()),data))
+                .flatMap(lisTokens -> getArrayListArrayListFunction(usedToken, lisTokens))
+                .flatMap(data -> token.save(alert.getPriority().concat(alert.getProvider()), data))
                 .then(Mono.empty());
     }
 
@@ -68,7 +79,8 @@ public class GeneratorTokenUseCase implements Serializable {
         smsInalambria.setHeaders(headers);
         return smsInalambria;
     }
-    private SMSMasiv setTokenMAS(SMSMasiv smsMasiv,Map<String,String> headers){
+
+    private SMSMasiv setTokenMAS(SMSMasiv smsMasiv, Map<String, String> headers) {
         smsMasiv.setHeaders(headers);
         return smsMasiv;
     }
@@ -81,13 +93,13 @@ public class GeneratorTokenUseCase implements Serializable {
     private Mono<ArrayList> getTokenByProviderINA(String key) {
         return secretGateway.getSecretName(key)
                 .flatMap(inalambriaGateway::getToken)
-                .flatMap(token ->saveTokenCache(token,key));
+                .flatMap(token -> saveTokenCache(token, key));
     }
 
-    private Mono<ArrayList> getTokenByProviderMAS(String key){
+    private Mono<ArrayList> getTokenByProviderMAS(String key) {
         return secretGateway.getSecretName(key)
                 .flatMap(masivianGateway::getToken)
-                .flatMap(token->saveTokenCache(token,key));
+                .flatMap(token -> saveTokenCache(token, key));
     }
 
     private Mono<ArrayList> getTokenByProviderInf(String key){
@@ -97,19 +109,16 @@ public class GeneratorTokenUseCase implements Serializable {
     }
 
 
-    private Mono<ArrayList> saveTokenCache(Token token, String key){
+    private Mono<ArrayList> saveTokenCache(Token token, String key) {
         return this.token.get(key, ArrayList.class)
-                .map(listTokens->{listTokens.add(0,token.getAccessToken()); return listTokens;})
+                .map(listTokens -> {
+                    listTokens.add(0, token.getAccessToken());
+                    return listTokens;
+                })
                 .switchIfEmpty(Mono.just(new ArrayList<>(List.of(token.getAccessToken()))))
-                .flatMap(listTokens-> this.token.save(key,listTokens));
+                .flatMap(listTokens -> this.token.save(key, listTokens));
     }
 
-    private Mono<ArrayList> saveTokenCache(TokenInfobip token, String key){
-        return this.token.get(key, ArrayList.class)
-                .map(listTokens->{listTokens.add(0,token.getAccessToken()); return listTokens;})
-                .switchIfEmpty(Mono.just(new ArrayList<>(List.of(token.getAccessToken()))))
-                .flatMap(listTokens-> this.token.save(key,listTokens));
-    }
     private Mono<ArrayList> getArrayListArrayListFunction(String token, ArrayList array) {
         return Mono.just(array.indexOf(token))
                 .map(index -> array.remove(token))

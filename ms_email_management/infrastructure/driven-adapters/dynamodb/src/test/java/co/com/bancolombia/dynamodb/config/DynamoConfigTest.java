@@ -10,7 +10,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class DynamoConfigTest {
+class DynamoConfigTest {
 
     @InjectMocks
     private DynamoConfig dynamoConfig;
@@ -26,20 +26,26 @@ public class DynamoConfigTest {
     }
 
     @Test
-    public void dynamoConfigLocalTest(){
+    void dynamoConfigLocalTest() {
         when(properties.getEndpoint()).thenReturn("http://localhost:4566");
         when(properties.getRegionAws()).thenReturn("us-east-1");
         assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
     @Test
-    public void dynamoConfigTest(){
+    void dynamoConfigTest() {
         assertThat(dynamoConfig.dynamodbConfig()).isNotNull();
     }
 
-   /* @Test
+   @Test
     public void dynamoConfigEnhancedTest(){
         assertThat(dynamoConfig.clientEnhanced(dynamoDbAsyncClient)).isNotNull();
-    }*/
+    }
+    @Test
+    void dynnamoConfigClientLocalTest(){
+        when(properties.getEndpoint()).thenReturn("http://localhost:4566");
+        when(properties.getRegionAws()).thenReturn("us-east-1");
+        assertThat(dynamoConfig.clientLocal()).isNotNull();
+    }
 
 }

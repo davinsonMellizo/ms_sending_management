@@ -19,7 +19,7 @@ public class ProviderRepositoryImplement
 
     @Autowired
     public ProviderRepositoryImplement(ProviderRepository repository, ProviderMapper mapper) {
-        super(repository, mapper::toData, mapper::toEntity);
+        super(repository, null, mapper::toEntity);
     }
 
     @Override

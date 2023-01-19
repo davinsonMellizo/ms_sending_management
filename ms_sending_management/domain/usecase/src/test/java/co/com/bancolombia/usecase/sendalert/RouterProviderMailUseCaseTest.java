@@ -14,14 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +52,9 @@ class RouterProviderMailUseCaseTest {
         message.setPhone("32158967");
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
+        message.setRemitter("bancolombia@bancolombia.com.co");
+        message.setPriority(2);
+        message.setTemplate("compra");
         message.setAttachments(new ArrayList<>());
         ArrayList<Parameter> parameters = new ArrayList<>();
         Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
@@ -71,7 +74,6 @@ class RouterProviderMailUseCaseTest {
                 .build();
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(remitterGateway.findRemitterById(anyInt())).thenReturn(Mono.just(remitter));
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .verifyComplete();
@@ -79,7 +81,6 @@ class RouterProviderMailUseCaseTest {
 
     @Test
     void routeAlertMailErrorTest(){
-        Remitter remitter = Remitter.builder().mail("bancolombia@com.co").build();
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
@@ -88,10 +89,8 @@ class RouterProviderMailUseCaseTest {
                 .build();
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(remitterGateway.findRemitterById(anyInt())).thenReturn(Mono.just(remitter));
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
-                .expectError()
-                .verify();
+                .verifyComplete();
     }
 }

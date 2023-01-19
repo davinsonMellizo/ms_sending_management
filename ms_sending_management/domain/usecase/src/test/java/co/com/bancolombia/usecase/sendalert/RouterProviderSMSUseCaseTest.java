@@ -20,7 +20,9 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -87,10 +89,9 @@ class RouterProviderSMSUseCaseTest {
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
-         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
+        when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
-                .expectError()
-        .verify();
+                .verifyComplete();
     }
 
 }

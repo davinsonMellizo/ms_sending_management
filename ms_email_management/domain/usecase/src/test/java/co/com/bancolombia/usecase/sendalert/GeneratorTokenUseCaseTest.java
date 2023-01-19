@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GeneratorTokenUseCaseTest {
+class GeneratorTokenUseCaseTest {
     @InjectMocks
     private GeneratorTokenUseCase genUseCase;
     @Mock
@@ -55,7 +55,7 @@ public class GeneratorTokenUseCaseTest {
     }
 
     @Test
-    public void getNameTokenTest() {
+    void getNameTokenTest() {
         when(dynamoGateway.getTokenName(anyString()))
                 .thenReturn(Mono.just(Secret.builder().secretName("NameTokenTest").build()));
         StepVerifier
@@ -65,7 +65,7 @@ public class GeneratorTokenUseCaseTest {
     }
 
     @Test
-    public void getTokenWhitTokenCacheTest(){
+    void getTokenWhitTokenCacheTest(){
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .username("usernameTest").password("passwordTest")
@@ -73,12 +73,12 @@ public class GeneratorTokenUseCaseTest {
         when(token.get(anyString(),any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
     @Test
-    public void getTokenWhitOutTokenCacheTest(){
+    void getTokenWhitOutTokenCacheTest(){
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .username("usernameTest").password("passwordTest")
@@ -91,12 +91,12 @@ public class GeneratorTokenUseCaseTest {
         when(token.save(anyString(),any()))
                 .thenReturn(Mono.just(tokens));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }
     @Test
-    public void getTokenWhitTokenCacheErrorTest(){
+    void getTokenWhitTokenCacheErrorTest(){
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .username("usernameTest").password("passwordTest")
@@ -104,12 +104,12 @@ public class GeneratorTokenUseCaseTest {
         when(token.get(anyString(),any()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectError()
                 .verify();
     }
     @Test
-    public void getTokenWhitOutTokenCacheErrorTest(){
+    void getTokenWhitOutTokenCacheErrorTest(){
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
                         .username("usernameTest").password("passwordTest")
@@ -119,13 +119,13 @@ public class GeneratorTokenUseCaseTest {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
-                .create(genUseCase.getToken(mail))
+                .create(genUseCase.getToken(mail,alert))
                 .expectError()
                 .verify();
     }
 
     @Test
-    public void deleteTokenTest() {
+    void deleteTokenTest() {
         when(dynamoGateway.getTokenName(anyString()))
                 .thenReturn(Mono.just(Secret.builder().secretName("NameTokenTest").build()));
         when(token.get(anyString(),any()))
@@ -135,6 +135,5 @@ public class GeneratorTokenUseCaseTest {
         StepVerifier
                 .create(genUseCase.deleteToken("tokenTestForDeleted",alert))
                 .verifyComplete();
-
     }
 }

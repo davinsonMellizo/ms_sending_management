@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -20,7 +22,7 @@ public class RetrieveRequest extends Request {
 @AllArgsConstructor
 @Data
 @Builder(toBuilder = true)
-class DataRequest {
+class DataRequest implements Serializable {
     private CustomerIdentification customerIdentification;
 }
 
@@ -28,7 +30,7 @@ class DataRequest {
 @AllArgsConstructor
 @Data
 @Builder(toBuilder = true)
-class CustomerIdentification {
+class CustomerIdentification implements Serializable{
     private String documentType;
     private String documentNumber;
 }

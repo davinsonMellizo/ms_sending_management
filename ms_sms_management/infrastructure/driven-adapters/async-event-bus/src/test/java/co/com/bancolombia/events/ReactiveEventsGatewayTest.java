@@ -16,22 +16,19 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ReactiveEventsGatewayTest {
-
+class ReactiveEventsGatewayTest {
     @InjectMocks
     private ReactiveDirectAsyncGateway reactiveDirectAsyncGateway;
-
     @Mock
     private DirectAsyncGateway directAsyncGateway;
 
     @BeforeEach
-    public void init(){
-        when(directAsyncGateway.sendCommand( any(), anyString())).thenReturn(Mono.empty());
+    public void init() {
+        when(directAsyncGateway.sendCommand(any(), anyString())).thenReturn(Mono.empty());
     }
 
     @Test
-    void senEventLogTest(){
+    void senEventLogTest() {
         StepVerifier.create(reactiveDirectAsyncGateway.sendCommanLogSms(new Log())).verifyComplete();
     }
-
 }

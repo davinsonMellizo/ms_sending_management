@@ -50,12 +50,16 @@ class CampaignRouterTest extends BaseIntegration {
     private String url;
     private final static String ALL = "/all";
 
+    private static final String TRIGGER = "/trigger";
+    private String TRIGGER_NAME;
+
     @BeforeEach
     void init() {
         url = properties.getCampaign();
         request = loadFileConfig("CampaignRequest.json", String.class);
         campaign.setIdCampaign("1");
         campaign.setIdConsumer("SVP");
+        TRIGGER_NAME = "tgr_1_SVP_134";
     }
 
     @Test
@@ -114,5 +118,23 @@ class CampaignRouterTest extends BaseIntegration {
                 .expectBody(JsonNode.class)
                 .returnResult();
         verify(useCase).deleteCampaignById(any());
+    }
+
+    @Test
+    void deleteTrigger() {
+        when(useCase.deleteTrigger(any()))
+                .thenReturn(Mono.just(
+                        Map.of("name", TRIGGER_NAME)
+                ));
+
+        webTestClient.delete().uri(uriBuilder -> uriBuilder
+                        .path(url + TRIGGER)
+                        .queryParam("name", TRIGGER_NAME)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        verify(useCase).deleteTrigger(any());
     }
 }

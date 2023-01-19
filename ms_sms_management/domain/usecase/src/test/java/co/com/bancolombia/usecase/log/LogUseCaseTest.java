@@ -30,7 +30,7 @@ class LogUseCaseTest {
     private Response response = new Response();
 
     @BeforeEach
-    public void init (){
+    public void init() {
         alert.setLogKey(UUID.randomUUID().toString());
         alert.setProvider("INA");
         alert.setTo("number");
@@ -41,21 +41,22 @@ class LogUseCaseTest {
     }
 
     @Test
-    void putLogTest(){
+    void putLogTest() {
         StepVerifier.create(logUseCase.sendLog(alert, "", response))
                 .expectError();
     }
+
     @Test
-    void putLogTestWithCode200(){
+    void putLogTestWithCode200() {
         response.setCode(200);
         StepVerifier.create(logUseCase.sendLog(alert, "", response))
                 .verifyComplete();
     }
+
     @Test
-    void putLogTestWithCode202(){
+    void putLogTestWithCode202() {
         response.setCode(202);
         StepVerifier.create(logUseCase.sendLog(alert, "", response))
                 .verifyComplete();
     }
-
 }

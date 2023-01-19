@@ -20,7 +20,8 @@ public class AdapterOperations<E, D> {
     private Class<D> dataClass;
     private final ModelMapper mapper;
 
-    public AdapterOperations(final DynamoDbEnhancedAsyncClient client, DynamoDBTablesProperties dynamoDBTablesProperties) {
+    public AdapterOperations(final DynamoDbEnhancedAsyncClient client,
+                             DynamoDBTablesProperties dynamoDBTablesProperties) {
         ParameterizedType params = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.entityClass = (Class<E>) params.getActualTypeArguments()[0];
         this.dataClass = (Class<D>) params.getActualTypeArguments()[1];
@@ -30,7 +31,7 @@ public class AdapterOperations<E, D> {
         this.table = client.table(tableName, TableSchema.fromBean(dataClass));
     }
 
-    protected Mono<E> findById(String partitionKey){
+    protected Mono<E> findById(String partitionKey) {
         return fromFuture(table.getItem(buildKey(partitionKey)))
                 .map(this::toEntity);
     }
@@ -38,11 +39,11 @@ public class AdapterOperations<E, D> {
 
     private Key buildKey(String partitionKey) {
         return Key.builder()
-            .partitionValue(partitionKey)
-            .build();
+                .partitionValue(partitionKey)
+                .build();
     }
 
-    private E toEntity(D data){
+    private E toEntity(D data) {
         return (data != null) ? mapper.map(data, entityClass) : null;
     }
 
