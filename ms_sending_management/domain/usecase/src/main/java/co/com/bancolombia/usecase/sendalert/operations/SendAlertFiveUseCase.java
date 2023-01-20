@@ -1,12 +1,10 @@
 package co.com.bancolombia.usecase.sendalert.operations;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.RouterProviderSMSUseCase;
@@ -16,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INACTIVE_ALERT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
@@ -30,15 +27,12 @@ public class SendAlertFiveUseCase {
     private final RouterProviderMailUseCase routerProviderMailUseCase;
     private final RouterProviderSMSUseCase routerProviderSMSUseCase;
     private final AlertGateway alertGateway;
-    private final LogUseCase logUseCase;
 
     private Mono<Response> validateMail(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMailFormat)
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
-                .flatMap(messageValid -> routerProviderMailUseCase.routeAlertMail(messageValid, alert))
-                .onErrorResume(BusinessException.class, e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                       new Response(1, e.getBusinessErrorMessage().getMessage())));
+                .flatMap(messageValid -> routerProviderMailUseCase.routeAlertMail(messageValid, alert));
     }
 
     private Mono<Void> routeAlert(Alert alert, Message message) {

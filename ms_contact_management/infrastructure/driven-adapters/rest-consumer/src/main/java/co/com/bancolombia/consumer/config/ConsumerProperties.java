@@ -21,5 +21,6 @@ public class ConsumerProperties {
     @NoArgsConstructor
     public static class Resources {
         private String retrieveInfo;
+        private String sendAlert;
     }
 }

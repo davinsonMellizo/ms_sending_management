@@ -11,7 +11,9 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -36,7 +38,7 @@ public class MessageDTO {
     @Builder.Default
     private String mail = "";
     @Builder.Default
-    private List<Parameter> parameters = new ArrayList<>();
+    private Map<String, String> parameters = new HashMap<>();
     @Builder.Default
     private ArrayList<Attachment> attachments = new ArrayList<>();
     private String remitter;

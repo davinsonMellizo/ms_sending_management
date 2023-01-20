@@ -58,6 +58,7 @@ public class SendAlertZeroUseCase {
                 .concatWith(sendAlert(message, alert, MAIL, routerProviderMailUseCase::routeAlertMail))
                 .thenMany(Flux.empty());
     }
+
     private Mono<Response> sendAlert(Message message, Alert alert, String medium,
                                      BiFunction<Message, Alert, Mono<Response>> function ){
         return Mono.just(function)

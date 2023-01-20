@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -18,9 +20,11 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class RestConsumer<T extends Request,R> {
+public class RestConsumerInternal<T extends Request,R> {
 
-    private final WebClient webClient;
+    @Autowired
+    @Qualifier("internal")
+    private WebClient webClient;
     private final ObjectMapper  mapper = new ObjectMapper();
     private final LoggerBuilder loggerBuilder;
 

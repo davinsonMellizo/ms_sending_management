@@ -22,6 +22,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -60,9 +62,8 @@ class SendAlertTwoUseCaseTest {
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
-        parameters.add(parameter);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
         message.setParameters(parameters);
     }
 

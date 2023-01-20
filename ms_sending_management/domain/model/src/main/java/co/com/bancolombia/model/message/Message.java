@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class Message {
 
     private Boolean push;
 
-    private List<Parameter> parameters;
+    private Map<String, String> parameters;
     private ArrayList<Attachment> attachments;
 
 

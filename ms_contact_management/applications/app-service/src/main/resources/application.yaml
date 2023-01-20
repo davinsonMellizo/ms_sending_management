@@ -41,6 +41,7 @@ adapters:
     timeout: 1000
     resources:
       retrieveInfo: "${RETRIEVE}"
+      sendAlert: "${SEND_ALERT_URL}"
 
 cloud:
   aws:

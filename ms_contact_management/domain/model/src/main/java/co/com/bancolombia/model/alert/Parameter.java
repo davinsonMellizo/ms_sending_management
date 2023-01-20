@@ -1,4 +1,4 @@
-package co.com.bancolombia.model.message;
+package co.com.bancolombia.model.alert;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,4 @@ import java.io.Serializable;
 public class Parameter implements Serializable {
     private String Name;
     private String Value;
-    private String Type;
 }

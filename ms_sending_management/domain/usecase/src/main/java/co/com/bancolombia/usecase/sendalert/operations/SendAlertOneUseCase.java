@@ -35,7 +35,7 @@ public class SendAlertOneUseCase {
         return alertGateway.findAlertById("GNR")
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
                 .map(alert -> alert.toBuilder()
-                        .message(message.getParameters().get(0).getValue())
+                        .message(message.getParameters().get("mensaje"))
                         .templateName(message.getTemplate())
                         .build());
     }

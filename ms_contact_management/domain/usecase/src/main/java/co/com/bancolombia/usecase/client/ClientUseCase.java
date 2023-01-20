@@ -16,6 +16,7 @@ import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
+import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,13 +43,14 @@ import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
 @RequiredArgsConstructor
 public class ClientUseCase {
 
-    private final ClientRepository clientRepository;
-    private final DocumentGateway documentGateway;
     private final StateGateway stateGateway;
     private final ContactUseCase contactUseCase;
     private final NewnessUseCase newnessUseCase;
     private final CommandGateway commandGateway;
     private final ConsumerGateway consumerGateway;
+    private final DocumentGateway documentGateway;
+    private final ClientRepository clientRepository;
+    private final SendAlertUseCase sendAlertUseCase;
 
     public Mono<Client> findClientByIdentification(Client client) {
         return clientRepository.findClientByIdentification(client)
@@ -100,8 +102,8 @@ public class ClientUseCase {
                 .flatMapMany(Flux::fromIterable)
                 .flatMap(contact -> contactUseCase.saveContact(contact, voucher))
                 .doOnNext(response -> responseCreate.getActual().getContactData().add(response))
-                .last()
-                .then(sendCreateToIseries(enrol, voucher, responseCreate, isIseries));
+                .then(sendCreateToIseries(enrol, voucher, responseCreate, isIseries))
+                .then(sendAlertUseCase.sendAlertCreate(enrol, responseCreate, isIseries));
     }
 
     private Mono<Enrol> validateDataClient(Enrol enrol) {
@@ -141,7 +143,7 @@ public class ClientUseCase {
                         .flatMap(statusResponse -> getResponse(voucher, SUCCESS_ENROLL))));
     }
 
-    public Mono<StatusResponse<Enrol>> updateClientAndContacts(Enrol enrol, Client client, boolean isISeries) {
+    public Mono<StatusResponse<Enrol>> updateClientAndContacts(Enrol enrol, Client client, boolean isIseries) {
         var enrolActual = Enrol.builder().contactData(new ArrayList<>()).build();
         var enrolBefore = Enrol.builder().contactData(new ArrayList<>()).build();
         StatusResponse<Enrol> responseUpdate = new StatusResponse<>(SUCCESS_ENROLL.getCode(), enrolActual, enrolBefore);
@@ -162,7 +164,9 @@ public class ClientUseCase {
                         .flatMap(contact -> contactUseCase.updateContactRequest(contact, client.getVoucher()))
                         .doOnNext(response -> enrolBefore.getContactData().add(response.getActual()))
                         .doOnNext(response -> enrolActual.getContactData().add(response.getBefore()))
-                        .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate, isISeries)));
+                        .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate, isIseries)))
+                        .flatMap(response ->  sendAlertUseCase.sendAlertUpdate(enrol, responseUpdate, isIseries));
+
     }
 
     public Mono<StatusResponse<Client>> updateClient(Client client, Enrol enrol) {

@@ -27,6 +27,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.AMOUNT_NOT_EXCEEDED;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,9 +80,8 @@ class SendAlertZeroUseCaseTest {
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
         message.setPreferences(new ArrayList<>());
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
-        parameters.add(parameter);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
         message.setParameters(parameters);
     }
 

@@ -90,6 +90,7 @@ public class ContactUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
 
     }
+
     private Mono<ResponseContacts> findClientByChanelIseries(Client client, String segment){
         return documentGateway.getDocument(client.getDocumentType())
                 .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
@@ -189,7 +190,9 @@ public class ContactUseCase {
                         .build())
                 .flatMap(contactGateway::updateContact)
                 .doOnNext(contactResponse -> newnessUseCase.saveNewness(response.getActual(), UPDATE_CONTACT, voucher))
-                .map(contact -> response.toBuilder().before(response.getActual()).actual(contact).build());
+                .map(contact -> response.toBuilder()
+                        .before(response.getActual().toBuilder().contactWayName(newContact.getContactWayName()).build())
+                        .actual(contact).build());
 
     }
 
