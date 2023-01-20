@@ -1,7 +1,7 @@
 {
   "customerDocumentType": "1",
-  "customerDocumentNumber": '#(document)',
-  "transactionCode": '#(transaction)',
+  "customerDocumentNumber": "#(document)",
+  "transactionCode": "#(transaction)",
   "channel": "BLP",
-  "amount": '#(amount)'
+  "amount": "#(amount)"
 }

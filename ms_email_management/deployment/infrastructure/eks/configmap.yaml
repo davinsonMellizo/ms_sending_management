@@ -30,6 +30,10 @@ data:
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
   TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}#
   TABLE_NAME_TEMPLATE_EMAIL: #{table-name-template-email}#
+  QUEUE-URL: "#{queue-url}#"
+  WAIT-TIME-SECONDS: "#{wait-time-seconds}#"
+  MAX-NUMBER-MESSAGES: "#{max-number-messages}#"
+  THREADS: "#{threads}#"
 
 
 
