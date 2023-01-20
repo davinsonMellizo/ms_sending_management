@@ -3,12 +3,12 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.routers.RouterProviderSMSUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,7 +75,7 @@ class RouterProviderSMSUseCaseTest {
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
-        StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
+        StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
     }
 
@@ -91,7 +91,7 @@ class RouterProviderSMSUseCaseTest {
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
-        StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
+        StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
     }
 

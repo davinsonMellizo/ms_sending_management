@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert;
+package co.com.bancolombia.usecase.sendalert.routers;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
+import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 
@@ -25,7 +26,12 @@ public class RouterProviderPushUseCase {
     public Mono<Response> sendPush(Message message, Alert alert) {
         Map<String, String> headers = new HashMap<>();
         headers.put("message-id",message.getLogKey());
-        return logUseCase.sendLogPush(message, alert, SEND_220, new Response(0, "Success"))
+        return Mono.just(message)
+                .filter(message1 -> message.getPush() && alert.getPush().equals(SI))
+                .filter(message1 -> message1.getPreferences().contains("PUSH") || message1.getPreferences().contains("SMS") ||
+                        message1.getPreferences().isEmpty())
+                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase(SI) )
+                .flatMap(message1 -> logUseCase.sendLogPush(message, alert, SEND_220, new Response(0, "Success")))
                 .flatMap(response -> documentGateway.getDocument(message.getDocumentType().toString()))
                 .map(document -> Push.builder()
                         .applicationCode("PERSONAS")

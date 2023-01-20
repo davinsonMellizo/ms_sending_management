@@ -7,7 +7,7 @@ import co.com.bancolombia.api.services.sendalert.SendAlertHandler;
 import co.com.bancolombia.api.services.sendalert.SendAlertRouter;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.usecase.sendalert.ManagementAlertUseCase;
+import co.com.bancolombia.usecase.sendalert.SendingUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 class SendAlertRouterWithExceptionTest extends BaseIntegration {
 
     @MockBean
-    private ManagementAlertUseCase useCase;
+    private SendingUseCase useCase;
 
     @MockBean
     private LoggerBuilder loggerBuilder;

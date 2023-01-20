@@ -6,7 +6,7 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.services.sendalert.SendAlertHandler;
 import co.com.bancolombia.api.services.sendalert.SendAlertRouter;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.usecase.sendalert.ManagementAlertUseCase;
+import co.com.bancolombia.usecase.sendalert.SendingUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 class SendAlertRouterTest extends BaseIntegration {
 
     @MockBean
-    private ManagementAlertUseCase useCase;
+    private SendingUseCase useCase;
 
     @MockBean
     private LoggerBuilder loggerBuilder;

@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert;
+package co.com.bancolombia.usecase.sendalert.routers;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
@@ -32,6 +32,8 @@ public class RouterProviderMailUseCase {
     public Mono<Response> routeAlertMail(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMail)
+                .filter(message1 -> (message1.getPreferences().contains("MAIL") && message1.getDocumentNumber() != null)
+                                || (message1.getDocumentNumber() == null && message1.getDocumentType() == null))
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(message1 -> getRemitter(alert, message))
                 .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))

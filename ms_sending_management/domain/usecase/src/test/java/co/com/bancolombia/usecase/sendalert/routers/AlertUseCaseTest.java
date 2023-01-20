@@ -1,10 +1,10 @@
-package co.com.bancolombia.usecase.sendalert.operations;
+package co.com.bancolombia.usecase.sendalert.routers;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
+import co.com.bancolombia.usecase.sendalert.AlertUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +23,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ValidateAmountUseCaseTest {
+class AlertUseCaseTest {
     @InjectMocks
-    private ValidateAmountUseCase validateAmountUseCase;
+    private AlertUseCase alertUseCase;
     @Mock
     private AlertClientGateway alertClientGateway;
 
@@ -65,7 +65,7 @@ class ValidateAmountUseCaseTest {
                 .build();
         when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
         when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
-        StepVerifier.create(validateAmountUseCase.validateAmount(alert, message))
+        StepVerifier.create(alertUseCase.validateAmount(alert, message))
                 .expectError()
                 .verify();
     }
@@ -84,7 +84,7 @@ class ValidateAmountUseCaseTest {
                 .build();
         when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
         when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
-        StepVerifier.create(validateAmountUseCase.validateAmount(alert, message))
+        StepVerifier.create(alertUseCase.validateAmount(alert, message))
                 .expectNextCount(1)
                 .verifyComplete();
     }

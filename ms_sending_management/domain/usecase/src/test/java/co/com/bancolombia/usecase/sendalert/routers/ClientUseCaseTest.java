@@ -1,11 +1,10 @@
-package co.com.bancolombia.usecase.sendalert.operations;
+package co.com.bancolombia.usecase.sendalert.routers;
 
-import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.ClientUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,9 +24,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ValidateContactUseCaseTest {
+class ClientUseCaseTest {
     @InjectMocks
-    private ValidateContactUseCase validateContactUseCase;
+    private ClientUseCase clientUseCase;
     @Mock
     private ContactGateway contactGateway;
     @Mock
@@ -63,7 +62,7 @@ class ValidateContactUseCaseTest {
         Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false).build();
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
 
-        StepVerifier.create(validateContactUseCase.validateDataContact(message, Consumer.builder().segment("").build()))
+        StepVerifier.create(clientUseCase.validateDataContact(message))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -72,7 +71,7 @@ class ValidateContactUseCaseTest {
     void validateContactsErrorTest(){
         when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.empty());
-        StepVerifier.create(validateContactUseCase.validateDataContact(message, Consumer.builder().segment("").build()))
+        StepVerifier.create(clientUseCase.validateDataContact(message))
                 .verifyComplete();
     }
 

@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.sendalert;
+package co.com.bancolombia.usecase.sendalert.routers;
 
 
 import co.com.bancolombia.model.alert.Alert;
@@ -14,6 +14,7 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMobile;
@@ -25,16 +26,13 @@ public class RouterProviderSMSUseCase {
     private final CommandGateway commandGateway;
     private final LogUseCase logUseCase;
 
-    public Mono<Response> validateMobile(Message message, Alert alert) {
+    public Mono<Response> routeAlertsSMS(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMobile)
                 .switchIfEmpty(logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, INVALID_CONTACT)))
-                .flatMap(prefix -> routeAlertsSMS(message, alert))
-                .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
-    }
-
-    public Mono<Response> routeAlertsSMS(Message message, Alert alert) {
-        return providerGateway.findProviderById(alert.getIdProviderSms())
+                .filter(message1 -> !message.getPush() || !alert.getPush().equals(SI))
+                .filter(message1 -> message1.getPreferences().contains("SMS") || message1.getPreferences().isEmpty())
+                .flatMap(prefix -> providerGateway.findProviderById(alert.getIdProviderSms()))
                 .zipWith(priorityGateway.findPriorityById(alert.getPriority()))
                 .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
@@ -57,6 +55,5 @@ public class RouterProviderSMSUseCase {
                 .build())
                 .flatMap(commandGateway::sendCommandAlertSms);
     }
-
 
 }
