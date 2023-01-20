@@ -46,7 +46,7 @@ Feature: CRUD and relations with category
     And match $.code == '381'
 
   Scenario: Error case Delete category by id
-    * def urlDelete = urlCategory + "/10"
+    * def urlDelete = urlCategory + "/100000"
     Given url urlDelete
     When method DELETE
     Then status 500
