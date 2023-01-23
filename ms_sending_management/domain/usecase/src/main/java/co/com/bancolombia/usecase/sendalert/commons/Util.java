@@ -1,10 +1,8 @@
 package co.com.bancolombia.usecase.sendalert.commons;
 
-import co.com.bancolombia.commons.enums.BusinessErrorMessage;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
 import lombok.experimental.UtilityClass;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

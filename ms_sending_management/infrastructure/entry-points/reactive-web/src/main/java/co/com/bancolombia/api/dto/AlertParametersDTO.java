@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class DataDTO {
+public class AlertParametersDTO {
 
     @Builder.Default
     private String consumer = "";

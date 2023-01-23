@@ -16,17 +16,17 @@ public class AlertDTO {
     private Boolean retrieveInformation;
     private ClientDTO client;
     private MessageDTO message;
-    private DataDTO data;
+    private AlertParametersDTO alertParameters;
 
     public Mono<Message> toModel(){
         return Mono.just(Message.builder()
                 .documentNumber(client.getIdentification().getDocumentNumber())
                 .documentType(client.getIdentification().getDocumentType())
                 .preferences(message.getPreferences())
-                .consumer(data.getConsumer())
-                .alert(data.getAlert())
-                .transactionCode(data.getTransactionCode())
-                .amount(data.getAmount())
+                .consumer(alertParameters.getConsumer())
+                .alert(alertParameters.getAlert())
+                .transactionCode(alertParameters.getTransactionCode())
+                .amount(alertParameters.getAmount())
                 .url(message.getSms().getUrl())
                 .phone(message.getSms().getPhone())
                 .phoneIndicator(message.getSms().getPhoneIndicator())

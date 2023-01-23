@@ -26,7 +26,7 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CONSUMER_NOT_FOUND)))
                 .flatMapMany(consumer -> contactGateway.findAllContactsByClient(message.toBuilder()
                         .consumer(consumer.getSegment()).build()))
-                .filter(contact -> contact.getIdState() == ACTIVE)
+                .filter(contact -> contact.getIdState().equals(ACTIVE))
                 .filter(contact -> !contact.getPrevious())
                 .collectMap(Contact::getContactMedium)
                 .filter(contacts -> !contacts.isEmpty())
