@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.sendalert.routers;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.message.Message;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +30,8 @@ class AlertUseCaseTest {
     private AlertUseCase alertUseCase;
     @Mock
     private AlertClientGateway alertClientGateway;
+    @Mock
+    private AlertGateway alertGateway;
 
     private Message message = new Message();
 
@@ -85,6 +89,38 @@ class AlertUseCaseTest {
         when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
         when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
         StepVerifier.create(alertUseCase.validateAmount(alert, message))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void getAlertTest(){
+        Alert alert = Alert.builder()
+                .id("AFI")
+                .push("SI")
+                .idProviderMail("TOD")
+                .idRemitter(0)
+                .build();
+        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
+        StepVerifier.create(alertUseCase.getAlert(message))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void getAlertGnrTest(){
+        Alert alert = Alert.builder()
+                .id("AFI")
+                .push("SI")
+                .idProviderMail("TOD")
+                .idRemitter(0)
+                .build();
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("mensaje", "bancolombia");
+        message.setParameters(parameters);
+        message.setAlert("");
+        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
+        StepVerifier.create(alertUseCase.getAlert(message))
                 .expectNextCount(1)
                 .verifyComplete();
     }

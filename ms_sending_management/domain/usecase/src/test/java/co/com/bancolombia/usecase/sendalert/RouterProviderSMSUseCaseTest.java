@@ -35,7 +35,11 @@ class RouterProviderSMSUseCaseTest {
     @Mock
     private PriorityGateway priorityGateway;
     @Mock
+    private ProviderGateway providerGateway;
+    @Mock
     private LogUseCase logUseCase;
+    @Mock
+    private CommandGateway commandGateway;
 
     private Message message = new Message();
 
@@ -56,6 +60,7 @@ class RouterProviderSMSUseCaseTest {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         message.setParameters(parameters);
+        message.setPreferences(new ArrayList<>());
     }
 
 
@@ -63,11 +68,16 @@ class RouterProviderSMSUseCaseTest {
     void routeAlertSmsTest(){
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
-                .push("SI")
+                .push("NO")
                 .idProviderSms("0")
                 .priority(0)
                 .build();
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
+        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
+        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
+        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
+
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
     }

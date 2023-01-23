@@ -11,19 +11,10 @@ public class ValidateData {
 
     private static final String PATTERN = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
 
-    public static final Predicate<Message> isValidMailOrMobile = message ->
-            isNotEmpty(message.getMail()) || isNotEmpty(message.getPhone());
-
     public static final Predicate<Message> isValidMobile = message -> isNotEmpty(message.getPhone());
 
     public static final Predicate<Message> isValidMailFormat = message ->
             isNotEmpty(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches();
-
-    public static final Predicate<Message> isValidMail = message -> isNotEmpty(message.getMail());
-
-    public static final Predicate<Message> isValidMailFormatOrMobile = message ->
-            isNotEmpty(message.getPhone())
-                    || (isNotEmpty(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches());
 
     public static boolean isNotEmpty(String str) {
         return !str.isEmpty();

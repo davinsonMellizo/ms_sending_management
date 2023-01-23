@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -61,6 +62,7 @@ class RouterProviderMailUseCaseTest {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         message.setParameters(parameters);
+        message.setPreferences(new ArrayList<>());
     }
 
 
@@ -75,6 +77,9 @@ class RouterProviderMailUseCaseTest {
                 .build();
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
+        when(remitterGateway.findRemitterById(anyInt())).thenReturn(Mono.just(remitter));
+        when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
+
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .verifyComplete();
     }
