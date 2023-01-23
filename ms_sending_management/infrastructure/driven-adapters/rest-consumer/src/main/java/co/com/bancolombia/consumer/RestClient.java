@@ -30,15 +30,6 @@ public class RestClient<T extends Request,R> {
                 .bodyToMono(clazz);
     }
 
-    public Mono<R> get(String route, T request, Class<R> clazz) {
-        Map<String,String> header = request.getHeaders();
-        return webClient.get()
-                .uri(route)
-                .headers(head -> head.setAll(header))
-                .retrieve()
-                .bodyToMono(clazz);
-    }
-
     private T cleanHeader(T request){
         request.setHeaders(null);
         return request;
