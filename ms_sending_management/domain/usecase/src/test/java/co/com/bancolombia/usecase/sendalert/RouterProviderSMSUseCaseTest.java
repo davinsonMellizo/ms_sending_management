@@ -41,7 +41,7 @@ class RouterProviderSMSUseCaseTest {
 
     @BeforeEach
     public void init(){
-        message.setOperation(1);
+        message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
         message.setConsumer("SVP");
@@ -67,7 +67,6 @@ class RouterProviderSMSUseCaseTest {
                 .idProviderSms("0")
                 .priority(0)
                 .build();
-        when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
@@ -81,7 +80,6 @@ class RouterProviderSMSUseCaseTest {
                 .idProviderSms("0")
                 .priority(0)
                 .build();
-        when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();

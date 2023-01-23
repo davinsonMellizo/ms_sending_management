@@ -41,7 +41,7 @@ class RouterProviderPushUseCaseTest {
 
     @BeforeEach
     public void init(){
-        message.setOperation(1);
+        message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
         message.setConsumer("SVP");
@@ -49,6 +49,7 @@ class RouterProviderPushUseCaseTest {
         message.setTransactionCode("580");
         message.setAmount(60000L);
         message.setUrl("");
+        message.setApplicationCode("PERSONAS");
         message.setPhone("32158967");
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
