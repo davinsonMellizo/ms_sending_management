@@ -33,11 +33,7 @@ class RouterProviderSMSUseCaseTest {
     private RouterProviderSMSUseCase routerProviderSMSUseCase;
 
     @Mock
-    private ProviderGateway providerGateway;
-    @Mock
     private PriorityGateway priorityGateway;
-    @Mock
-    private CommandGateway commandGateway;
     @Mock
     private LogUseCase logUseCase;
 
@@ -71,9 +67,7 @@ class RouterProviderSMSUseCaseTest {
                 .idProviderSms("0")
                 .priority(0)
                 .build();
-        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
@@ -87,9 +81,7 @@ class RouterProviderSMSUseCaseTest {
                 .idProviderSms("0")
                 .priority(0)
                 .build();
-        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();

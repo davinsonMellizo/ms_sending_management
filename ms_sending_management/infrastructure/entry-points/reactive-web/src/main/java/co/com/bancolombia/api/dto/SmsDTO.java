@@ -9,7 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ClientDTO {
+public class SmsDTO {
+
     @Builder.Default
-    private IdentificationDTO identification = new IdentificationDTO();
+    private String phone = "";
+    @Builder.Default
+    private String phoneIndicator = "";
+    @Builder.Default
+    private String url = "";
+    private Integer priority;
 }

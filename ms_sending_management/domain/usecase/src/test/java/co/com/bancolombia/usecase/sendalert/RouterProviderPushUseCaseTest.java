@@ -19,6 +19,7 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -53,6 +54,10 @@ class RouterProviderPushUseCaseTest {
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
         message.setLogKey("testKey");
+        message.setPush(true);
+        ArrayList<String> preferences = new ArrayList<>();
+        preferences.add("SMS");
+        message.setPreferences(preferences);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         message.setParameters(parameters);

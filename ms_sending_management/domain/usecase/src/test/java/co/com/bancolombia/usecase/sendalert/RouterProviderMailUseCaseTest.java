@@ -73,7 +73,6 @@ class RouterProviderMailUseCaseTest {
                 .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
-        when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
@@ -88,7 +87,6 @@ class RouterProviderMailUseCaseTest {
                 .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
-        when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))

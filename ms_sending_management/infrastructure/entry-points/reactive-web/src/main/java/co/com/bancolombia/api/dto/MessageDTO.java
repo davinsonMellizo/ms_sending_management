@@ -1,6 +1,5 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.model.message.Attachment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,17 +14,18 @@ import java.util.Map;
 @Builder(toBuilder = true)
 public class MessageDTO {
     @Builder.Default
-    private ArrayList<String> preferences= new ArrayList<>();
+    private String category = "";
     @Builder.Default
-    private String url = "";
+    private ArrayList<String> preferences= new ArrayList<>();
     @Builder.Default
     private Map<String, String> parameters = new HashMap<>();
     @Builder.Default
-    private ArrayList<Attachment> attachments = new ArrayList<>();
-    @Builder.Default
-    private String remitter = "";
-    private Integer priority;
-    @Builder.Default
     private String template = "";
+    @Builder.Default
+    private SmsDTO sms = new SmsDTO();
+    @Builder.Default
+    private MailDTO mail = new MailDTO();
+    @Builder.Default
+    private PushDTO push = new PushDTO();
 
 }

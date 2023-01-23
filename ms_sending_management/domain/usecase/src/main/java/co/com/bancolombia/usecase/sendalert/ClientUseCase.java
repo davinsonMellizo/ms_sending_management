@@ -44,6 +44,7 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
                 .filter(client -> client.getIdState().equals(ACTIVE))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
-                .thenReturn(message);
+                .map(client -> message)
+                .flatMap(this::validateDataContact);
     }
 }

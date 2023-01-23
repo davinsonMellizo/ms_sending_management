@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ClientDTO {
+public class PushDTO {
+
     @Builder.Default
-    private IdentificationDTO identification = new IdentificationDTO();
+    private String applicationCode = "";
 }

@@ -1,5 +1,9 @@
 package co.com.bancolombia.usecase.sendalert.routers;
 
+import co.com.bancolombia.model.client.Client;
+import co.com.bancolombia.model.client.gateways.ClientGateway;
+import co.com.bancolombia.model.consumer.Consumer;
+import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
@@ -20,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -30,9 +36,13 @@ class ClientUseCaseTest {
     @Mock
     private ContactGateway contactGateway;
     @Mock
-    private LogUseCase logUseCase;
+    private ClientGateway clientGateway;
+    @Mock
+    private ConsumerGateway consumerGateway;
 
+    private Client client;
     private Message message = new Message();
+    private Consumer consumer = new Consumer("", "", "Personas");
 
     @BeforeEach
     public void init(){
@@ -52,6 +62,10 @@ class ClientUseCaseTest {
         parameters.put("name", "bancolombia");
         message.setParameters(parameters);
 
+        client = Client.builder()
+                .idState(1)
+                .build();
+
     }
 
 
@@ -60,6 +74,7 @@ class ClientUseCaseTest {
         Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false).build();
         Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false).build();
         Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false).build();
+        when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
 
         StepVerifier.create(clientUseCase.validateDataContact(message))
@@ -68,11 +83,25 @@ class ClientUseCaseTest {
     }
 
     @Test
+    void validateClientTest(){
+        Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false).build();
+        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false).build();
+        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false).build();
+        when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(client));
+        when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
+        when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
+
+        StepVerifier.create(clientUseCase.validateClient(message))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
     void validateContactsErrorTest(){
-        when(logUseCase.sendLogError(any(), anyString(), any())).thenReturn(Mono.empty());
+        when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.empty());
         StepVerifier.create(clientUseCase.validateDataContact(message))
-                .verifyComplete();
+                .expectError().verify();
     }
 
 }

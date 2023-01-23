@@ -82,7 +82,6 @@ public class SendingUseCase {
         return Mono.just(message)
                 .filter(message1 -> message1.getDocumentNumber() != null && message1.getDocumentType() != null )
                 .flatMap(clientUseCase::validateClient)
-                .flatMap(clientUseCase::validateDataContact)
                 .switchIfEmpty(validateData(message))
                 .flatMapMany(this::validateAlerts)
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),

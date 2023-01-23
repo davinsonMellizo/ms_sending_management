@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class AlertDTO {
+    private Boolean retrieveInformation;
     private ClientDTO client;
     private MessageDTO message;
     private DataDTO data;
@@ -26,14 +27,14 @@ public class AlertDTO {
                 .alert(data.getAlert())
                 .transactionCode(data.getTransactionCode())
                 .amount(data.getAmount())
-                .url(message.getUrl())
-                .phone(client.getContacts().getPhone())
-                .phoneIndicator(client.getContacts().getPhoneIndicator())
-                .mail(client.getContacts().getMail())
+                .url(message.getSms().getUrl())
+                .phone(message.getSms().getPhone())
+                .phoneIndicator(message.getSms().getPhoneIndicator())
+                .mail(message.getMail().getAddress())
                 .parameters(message.getParameters())
-                .attachments(message.getAttachments())
-                .remitter(message.getRemitter())
-                .priority(message.getPriority())
+                .attachments(message.getMail().getAttachments())
+                .remitter(message.getMail().getRemitter())
+                .priority(message.getSms().getPriority())
                 .build());
     }
 }
