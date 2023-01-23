@@ -28,7 +28,5 @@ include ':dynamodb'
 project(':dynamodb').projectDir = file('./infrastructure/driven-adapters/dynamodb')
 include ':s3-bucket'
 project(':s3-bucket').projectDir = file('./infrastructure/helpers/s3-bucket')
-include ':infobip'
-project(':infobip').projectDir = file('./infrastructure/driven-adapters/infobip')
 include ':async-event-bus'
 project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')

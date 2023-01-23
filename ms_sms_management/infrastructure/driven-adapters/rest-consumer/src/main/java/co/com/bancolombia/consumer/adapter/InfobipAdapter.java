@@ -2,21 +2,17 @@ package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.RestClientForm;
-import co.com.bancolombia.consumer.adapter.mapper.RequestMapper;
 import co.com.bancolombia.consumer.adapter.response.*;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import co.com.bancolombia.consumer.adapter.response.model.TokenInfobipData;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.SMSInfobip;
-import co.com.bancolombia.model.message.SMSInfobipSDK;
 import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.Token;
-import co.com.bancolombia.model.token.TokenInfobip;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
@@ -35,8 +31,6 @@ public class InfobipAdapter implements InfobipGateway {
     private final ConsumerProperties properties;
     private static final Integer CONSTANT = 3;
 
-    @Autowired
-    private final RequestMapper mapper;
 
     @Override
     public Mono<Response> sendSMS(SMSInfobip smsInfobip) {
@@ -61,12 +55,7 @@ public class InfobipAdapter implements InfobipGateway {
         return Mono.just(new TokenInfobipData())
                 .flatMap(requestTokenInfo->clientToken.post(properties.getResources().getEndpointInfobipToken(),
                         formData,TokenInfobipData.class,null))
-                .flatMap(TokenInfobipData::toModel);
-    }
-
-
-    @Override
-    public Mono<Response> sendSMSSDK(SMSInfobipSDK smsInfobip) {
-        return null;
+                .flatMap(TokenInfobipData::toModel)
+                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
     }
 }

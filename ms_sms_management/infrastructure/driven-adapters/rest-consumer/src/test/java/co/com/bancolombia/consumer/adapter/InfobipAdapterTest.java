@@ -2,10 +2,11 @@ package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
-import co.com.bancolombia.consumer.adapter.response.ErrorMasivianSMS;
-import co.com.bancolombia.consumer.adapter.response.SuccessMasivianSMS;
+import co.com.bancolombia.consumer.adapter.response.ErrorInalambriaSMS;
+import co.com.bancolombia.consumer.adapter.response.SuccessInalambriaSMS;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
-import co.com.bancolombia.model.message.SMSMasiv;
+import co.com.bancolombia.model.message.SMSInalambria;
+import co.com.bancolombia.model.message.SMSInfobip;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,45 +16,54 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.Map;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MasivianAdapterTest {
+class InfobipAdapterTest {
 
     @InjectMocks
-    private MasivAdapter masivianAdapter;
+    private InfobipAdapter infobipAdapter;
 
     @Mock
     private ConsumerProperties properties;
     @Mock
-    private RestClient<SMSMasiv, SuccessMasivianSMS> client;
+    private RestClient<SMSInalambria, SuccessInalambriaSMS> client;
+    @Mock
+    private SMSInfobip sms;
 
     @BeforeEach
     public void init() {
         String url = "localhost";
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url, url));
+        //when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url));
+        sms = new SMSInfobip();
+        sms.setHeaders(Map.of("header", "test"));
     }
 
     @Test
-    void sendSmsMasivianSuccessTest() {
+    void sendSmsInalambriaSuccessTest() {
         when(client.post(anyString(), any(), any(), any()))
-                .thenReturn(Mono.just(SuccessMasivianSMS.builder().statusMessage("Message acepted for delivery")
+                .thenReturn(Mono.just(SuccessInalambriaSMS.builder()
+                        .messageText("success")
                         .build()));
-        StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
+        StepVerifier
+                .create(infobipAdapter.sendSMS(new SMSInfobip()))
                 .assertNext(response -> response.getDescription().equals("success"))
                 .verifyComplete();
     }
 
     @Test
-    void sendSmsErrorMasivianTest() {
+    void sendSmsErrorInalambriaTest() {
         when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
-                        .data(new ErrorMasivianSMS("error", "error authentication"))
+                        .data(new ErrorInalambriaSMS("error authentication", 400, 123L))
                         .build()));
-        StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
+
+        StepVerifier.create(infobipAdapter.sendSMS(sms))
                 .assertNext(response -> response.getDescription().equals("error authentication"))
                 .verifyComplete();
     }
@@ -62,8 +72,9 @@ class MasivianAdapterTest {
     void sendSmsErrorWebClientTest() {
         when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
-        StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
-                .assertNext(response -> response.getDescription().contains("123"))
+        StepVerifier
+                .create(infobipAdapter.sendSMS(new SMSInfobip()))
+                .assertNext(response -> response.getDescription().equals(123))
                 .verifyComplete();
     }
 

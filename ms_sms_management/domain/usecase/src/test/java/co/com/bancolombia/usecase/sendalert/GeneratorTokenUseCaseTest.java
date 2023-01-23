@@ -1,11 +1,9 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.binstash.api.ObjectCache;
-import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Parameter;
-import co.com.bancolombia.model.message.SMSInalambria;
-import co.com.bancolombia.model.message.SMSMasiv;
+import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
+import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.Account;
 import co.com.bancolombia.model.token.SecretGateway;
@@ -39,10 +37,14 @@ class GeneratorTokenUseCaseTest {
     private InalambriaGateway inalambriaGateway;
     @Mock
     private MasivianGateway masivianGateway;
+    @Mock
+    private InfobipGateway infobipGateway;
 
     private Alert alert = new Alert();
     private SMSInalambria smsIna = new SMSInalambria();
     private SMSMasiv smsMas = new SMSMasiv();
+
+    private SMSInfobip smsInf = new SMSInfobip();
     private ArrayList<String> tokens = new ArrayList<>();
 
     @BeforeEach
@@ -91,6 +93,21 @@ class GeneratorTokenUseCaseTest {
     }
 
     @Test
+    void getTokenInfWhitTokenCacheTest() {
+        when(secretGateway.getSecretName(anyString()))
+                .thenReturn(Mono.just(Account.builder()
+                        .password("passwordTest").username("usernameTest")
+                        .build()));
+        alert.setProvider("INF");
+        when(token.get(anyString(), any()))
+                .thenReturn(Mono.just(tokens));
+        StepVerifier
+                .create(genUseCase.getTokenInf(smsInf, alert))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
     void getTokenInaWhitOutTokenCacheTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
@@ -130,6 +147,26 @@ class GeneratorTokenUseCaseTest {
     }
 
     @Test
+    void getTokenInfWhitOutTokenCacheTest() {
+        when(secretGateway.getSecretName(anyString()))
+                .thenReturn(Mono.just(Account.builder()
+                        .password("passwordTest").username("usernameTest")
+                        .build()));
+        alert.setProvider("INF");
+        when(token.get(anyString(), any()))
+                .thenReturn(Mono.empty());
+        when(infobipGateway.getToken(any())).thenReturn(Mono.just(Token.builder()
+                .accessToken("accessToken").tokenType("tokenType").refreshToken("refreshToken")
+                .expiresIn(12345L).build()));
+        when(token.save(anyString(), any()))
+                .thenReturn(Mono.just(tokens));
+        StepVerifier
+                .create(genUseCase.getTokenInf(smsInf, alert))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
     void getTokenInaWhitTokenCacheErrorTest() {
         when(secretGateway.getSecretName(anyString()))
                 .thenReturn(Mono.just(Account.builder()
@@ -161,6 +198,24 @@ class GeneratorTokenUseCaseTest {
                 .expectError()
                 .verify();
     }
+
+    @Test
+    void getTokenInfWhitTokenCacheErrorTest() {
+        when(secretGateway.getSecretName(anyString()))
+                .thenReturn(Mono.just(Account.builder()
+                        .password("passwordTest").username("usernameTest")
+                        .build()));
+        alert.setProvider("INF");
+        when(token.get(anyString(), any()))
+                .thenReturn(Mono.error(new Throwable("error")));
+        when(secretGateway.getSecretName(anyString()))
+                .thenReturn(Mono.error(new Throwable("error")));
+        StepVerifier
+                .create(genUseCase.getTokenInf(smsInf, alert))
+                .expectError()
+                .verify();
+    }
+
 
     @Test
     void getTokenInaWhitOutTokenCacheErrorTest() {
@@ -197,6 +252,26 @@ class GeneratorTokenUseCaseTest {
                 .thenReturn(Mono.error(new Throwable("error")));
         StepVerifier
                 .create(genUseCase.getTokenMAS(smsMas, alert))
+                .expectError()
+                .verify();
+    }
+
+    @Test
+    void getTokenInfWhitOutTokenCacheErrorTest() {
+        when(secretGateway.getSecretName(anyString()))
+                .thenReturn(Mono.just(Account.builder()
+                        .password("passwordTest").username("usernameTest")
+                        .build()));
+        alert.setProvider("INF");
+        when(token.get(anyString(), any()))
+                .thenReturn(Mono.empty());
+        when(infobipGateway.getToken(any())).thenReturn(Mono.just(Token.builder()
+                .accessToken("accessToken").tokenType("tokenType").refreshToken("refreshToken")
+                .expiresIn(12345L).build()));
+        when(token.save(anyString(), any()))
+                .thenReturn(Mono.error(new Throwable("error")));
+        StepVerifier
+                .create(genUseCase.getTokenInf(smsInf, alert))
                 .expectError()
                 .verify();
     }

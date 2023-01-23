@@ -11,7 +11,6 @@ import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
-import co.com.bancolombia.model.token.TokenInfobip;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +64,9 @@ public class GeneratorTokenUseCase implements Serializable {
                 .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenInf->Map.of("Authorization","Bearer "+tokenInf))
-                .map(headers-> setTokenINF(smsInfobip,headers));
+                .map(headers-> setTokenINF(smsInfobip,headers))
+                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert, SMS, Response.builder().code(1)
+                        .description(e.getMessage()).build(), logUseCase));
     }
 
     public Mono<Void> deleteToken(String usedToken, Alert alert) {

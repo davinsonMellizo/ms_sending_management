@@ -71,22 +71,6 @@ public class SendAlertUseCase {
                 .map(Response.class::cast);
     }
 
-    /*private Mono<Response> sendSMSInfobipSDK(Alert alert) {
-        var tokenTemp = new String[]{""};
-        return Mono.just(alert.getProvider())
-                .filter(provider -> provider.equalsIgnoreCase(INFOBIP))
-                .map(provider -> SMSInfobipSDK.builder()
-                        .from(SENDER)
-                        .to(alert.getTo())
-                        .text(alert.getMessage())
-                        .build())
-                .flatMap(vl->infobipGateway.sendSMSSDK(vl))
-                .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
-                .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
-                .map(Response.class::cast);
-    }*/
-
     private Mono<Response> sendSMSInfobip(Alert alert) {
         var tokenTemp = new String[]{""};
         return Mono.just(alert.getProvider())
@@ -102,7 +86,7 @@ public class SendAlertUseCase {
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(infobipGateway::sendSMS)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
-                .flatMap(response -> logUseCase.sendLog(alert, SMS, response))
+                .flatMap(response -> ValidationLogUtil.validSendLog(alert, SMS, response, logUseCase))
                 .onErrorResume(error -> filterError(error, alert, tokenTemp[0]))
                 .map(Response.class::cast);
     }
