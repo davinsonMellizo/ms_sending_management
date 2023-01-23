@@ -1,9 +1,44 @@
 {
-  "operation": "0",
-  "documentType":"0",
-  "documentNumber":"0",
-  "consumer":"j",
-  "alert":"j",
-  "transactionCode":"j",
-  "amount": 0
+  "retrieveInformation": true,
+  "client":{
+    "identifications":{
+      "documentType": 1,
+      "documentNumber": 2000000000
+    }
+  },
+  "message":{
+    "category": "Transacciones",
+    "preferences":["SMS", "MAIL", "PUSH"],
+    "template": "",
+    "parameters":{
+      "Nombre": "Davinson Mellizo"
+    },
+    "mail": {
+      "address": "davinson.mellizo@gmailcom",
+      "remitter": "davinson@bancolombia.com.co",
+      "attachments": [
+        {
+          "type": "",
+          "value": "",
+          "fileName": "",
+          "contentType": ""
+        }
+      ]
+    },
+    "sms": {
+      "phone": "3217937584",
+      "phoneIndicator": "+57",
+      "priority": "1",
+      "url": ""
+    },
+    "push":{
+      "applicationCode": "PERSONAS"
+    }
+  },
+  "data":{
+    "alert": "120",
+    "consumer": "SVP",
+    "transactionCode": "1000",
+    "amount": 6000
+  }
 }
