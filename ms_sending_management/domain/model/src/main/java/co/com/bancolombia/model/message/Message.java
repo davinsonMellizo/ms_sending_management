@@ -14,7 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Message {
-    private Integer operation;
+    private Boolean retrieveInformation;
     private Integer documentType;
     private Long documentNumber;
     private ArrayList<String> preferences;
@@ -26,6 +26,7 @@ public class Message {
     private String template;
     private String remitter;
     private Integer priority;
+    private String applicationCode;
     private String logKey;
 
     private String phone;

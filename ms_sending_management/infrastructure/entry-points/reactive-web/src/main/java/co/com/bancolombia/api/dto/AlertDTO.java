@@ -35,6 +35,7 @@ public class AlertDTO {
                 .attachments(message.getMail().getAttachments())
                 .remitter(message.getMail().getRemitter())
                 .priority(message.getSms().getPriority())
+                .retrieveInformation(retrieveInformation)
                 .build());
     }
 }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMail;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormat;
 
 @RequiredArgsConstructor
 public class RouterProviderMailUseCase {
@@ -31,9 +31,8 @@ public class RouterProviderMailUseCase {
 
     public Mono<Response> routeAlertMail(Message message, Alert alert) {
         return Mono.just(message)
-                .filter(isValidMail)
-                .filter(message1 -> (message1.getPreferences().contains("MAIL") && message1.getDocumentNumber() != null)
-                                || (message1.getDocumentNumber() == null && message1.getDocumentType() == null))
+                .filter(isValidMailFormat)
+                .filter(message1 -> message1.getPreferences().contains("MAIL") || message1.getPreferences().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
                 .flatMap(message1 -> getRemitter(alert, message))
                 .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))
@@ -43,8 +42,8 @@ public class RouterProviderMailUseCase {
     }
 
     private Mono<Remitter> getRemitter(Alert alert, Message message){
-        return Mono.just(message.getRemitter())
-                .filter(remitter -> remitter.isEmpty() || (message.getOperation() !=1))
+        return Mono.just(message)
+                .filter(Message::getRetrieveInformation)
                 .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
                 .switchIfEmpty(Mono.just(Remitter.builder().mail(message.getRemitter()).build()));
     }

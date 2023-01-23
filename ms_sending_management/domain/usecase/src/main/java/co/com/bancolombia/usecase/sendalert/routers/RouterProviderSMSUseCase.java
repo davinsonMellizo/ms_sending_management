@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.sendalert.routers;
 
 
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
@@ -14,7 +15,8 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import static co.com.bancolombia.commons.constants.Constants.SI;
+import static co.com.bancolombia.commons.constants.Constants.PUSH_SMS;
+import static co.com.bancolombia.commons.constants.Constants.NO;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMobile;
@@ -29,9 +31,10 @@ public class RouterProviderSMSUseCase {
     public Mono<Response> routeAlertsSMS(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMobile)
-                .switchIfEmpty(logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, INVALID_CONTACT)))
-                .filter(message1 -> !message.getPush() || !alert.getPush().equals(SI))
-                .filter(message1 -> message1.getPreferences().contains("SMS") || message1.getPreferences().isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
+                .filter(message1 -> alert.getPush().equals(NO) || alert.getPush().equals(PUSH_SMS))
+                .filter(message1 ->  !message1.getRetrieveInformation() || message1.getPreferences().contains("SMS") ||
+                        message1.getPreferences().isEmpty())
                 .flatMap(prefix -> providerGateway.findProviderById(alert.getIdProviderSms()))
                 .zipWith(priorityGateway.findPriorityById(alert.getPriority()))
                 .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))

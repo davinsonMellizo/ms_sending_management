@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
+import static co.com.bancolombia.commons.constants.Constants.PUSH_SMS;
 import static co.com.bancolombia.commons.constants.Constants.SI;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
@@ -27,14 +28,14 @@ public class RouterProviderPushUseCase {
         Map<String, String> headers = new HashMap<>();
         headers.put("message-id",message.getLogKey());
         return Mono.just(message)
-                .filter(message1 -> message.getPush() && alert.getPush().equals(SI))
-                .filter(message1 -> message1.getPreferences().contains("PUSH") || message1.getPreferences().contains("SMS") ||
-                        message1.getPreferences().isEmpty())
-                .filter(message1 -> message1.getPush() && alert.getPush().equalsIgnoreCase(SI) )
+                .filter(message1 -> message1.getPreferences().contains("SMS") || message1.getPreferences().isEmpty())
+                .filter(message1 -> alert.getPush().equals(SI) || alert.getPush().equals(PUSH_SMS))
+                .flatMap(this::validatePush)
+                .filter(Message::getPush)
                 .flatMap(message1 -> logUseCase.sendLogPush(message, alert, SEND_220, new Response(0, "Success")))
                 .flatMap(response -> documentGateway.getDocument(message.getDocumentType().toString()))
                 .map(document -> Push.builder()
-                        .applicationCode("PERSONAS")
+                        .applicationCode(message.getApplicationCode())
                         .categoryId(alert.getIdCategory().toString())
                         .consumerId("AYN")
                         .customerDocumentNumber(message.getDocumentNumber().toString())
@@ -45,5 +46,13 @@ public class RouterProviderPushUseCase {
                 .flatMap(pushGateway::sendPush)
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> logUseCase.sendLogPush(message, alert, SEND_230, response));
+    }
+
+    private Mono<Message> validatePush(Message message){
+        return Mono.just(message)
+                .filter(Message::getRetrieveInformation)
+                .switchIfEmpty(Mono.just(Message.builder()
+                        .push(!message.getApplicationCode().isEmpty())
+                        .build()));
     }
 }

@@ -21,7 +21,6 @@ import static co.com.bancolombia.commons.constants.Constants.TRX_580;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
-import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormatOrMobile;
 
 @RequiredArgsConstructor
 public class SendingUseCase {
@@ -70,19 +69,13 @@ public class SendingUseCase {
 
     }
 
-    private Mono<Message> validateData(Message message){
-        return Mono.just(message)
-                .filter(isValidMailFormatOrMobile)
-                .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)));
-    }
-
     public Mono<Void> alertSendingManager(Message message) {
         var sizeLogKey = 16;
         String logKey = LocalDate.now().toString()+UUID.randomUUID().toString().substring(sizeLogKey);
         return Mono.just(message)
-                .filter(message1 -> message1.getDocumentNumber() != null && message1.getDocumentType() != null )
+                .filter(Message::getRetrieveInformation)
                 .flatMap(clientUseCase::validateClient)
-                .switchIfEmpty(validateData(message))
+                .switchIfEmpty(Mono.just(message))
                 .flatMapMany(this::validateAlerts)
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))
