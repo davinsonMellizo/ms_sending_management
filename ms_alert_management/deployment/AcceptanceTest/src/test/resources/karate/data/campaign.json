@@ -1,6 +1,6 @@
 {
-  "idCampaign": '#(idCampaign)',
-  "idConsumer": '#(idConsumer)',
+  "idCampaign": "#(idCampaign)",
+  "idConsumer": "#(idConsumer)",
   "provider": {
     "idProvider": "INA",
     "channelType": "PUSH"

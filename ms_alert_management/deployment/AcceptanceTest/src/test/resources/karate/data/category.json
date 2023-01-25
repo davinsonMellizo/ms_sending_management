@@ -1,5 +1,5 @@
 {
-  "id": '#(id)',
+  "id": "#(id)",
   "name": "CATEGORY TEST",
   "creationUser": "user"
 }
