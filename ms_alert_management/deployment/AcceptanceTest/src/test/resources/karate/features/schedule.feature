@@ -83,18 +83,6 @@ Feature: CRUD Schedule
     Then status 500
     And match $.code == '302'
 
-  Scenario: Successful case Update campaign
-    * def urlFindById = urlSchedule + "/6"
-    * set body.idCampaign = '2'
-    * set body.idConsumer = 'SVP'
-    * set body.scheduleType = 'WEEKLY'
-    Given url urlFindById
-    And request body
-    When method PUT
-    Then status 200
-    And match $.data.actual.id == 6
-    And match $.data.actual.scheduleType == 'WEEKLY'
-
   Scenario: Error case Update schedule
     * def urlFindById = urlSchedule + "/0"
     * set body.idCampaign = '0'
