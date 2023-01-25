@@ -37,7 +37,7 @@ class LogUseCaseTest {
         response.setCode(1);
         response.setDescription("description");
         templateEmail.setBodyText("text");
-        when(commandGateway.sendCommanLogSms(any())).thenReturn(Mono.just(new Log()));
+        when(commandGateway.sendCommandLogSms(any())).thenReturn(Mono.just(new Log()));
     }
 
     @Test

@@ -69,6 +69,7 @@ adapters:
       #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
+    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
     #secret-inalambria: ${SECRET-INALAMBRIA}
     cache-size: 300
     cache-time: 2
@@ -84,3 +85,7 @@ stash:
     expireTime: 21000
     host: localhost
     port: 6379
+d2b:
+  aws:
+    secrets-manager:
+      endpoint: http://localhost:4566

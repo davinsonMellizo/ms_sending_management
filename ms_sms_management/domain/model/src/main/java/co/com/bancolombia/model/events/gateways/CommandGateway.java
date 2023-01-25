@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface CommandGateway {
 
-    Mono<Log> sendCommanLogSms(Log log);
+    Mono<Log> sendCommandLogSms(Log log);
 }

@@ -1,8 +1,8 @@
 package co.com.bancolombia.consumer.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.s3bucket.S3AsynOperations;
-import co.com.bancolombia.secretsmanager.SecretsManager;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -37,7 +37,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class RestConsumerConfig {
     private static final String TLS = "TLSv1.2";
 
-    private final SecretsManager secretManager;
+    private final  SyncSecretVault secretsManager;
     private final S3AsynOperations s3AsynOperations;
     private final AwsProperties awsProperties;
     private final LoggerBuilder logger;
@@ -47,8 +47,8 @@ public class RestConsumerConfig {
         KeyStore truststore = null;
 
         try {
-            var propertiesSsl = secretManager
-                    .getSecret(awsProperties.getNameSecretBucketSsl(), PropertiesSsl.class).block();
+            var propertiesSsl = secretsManager
+                    .getSecret(awsProperties.getNameSecretBucketSsl(), PropertiesSsl.class);
 
             assert propertiesSsl != null;
 

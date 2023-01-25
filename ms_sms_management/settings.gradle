@@ -8,10 +8,12 @@ project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ":log"
 project(':log').projectDir = file('./infrastructure/helpers/log')
-include ":secrets-manager"
-project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
+//include ":secrets-manager"
+//project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
 include ':rabbit-configurator'
 project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
+include ':rabbit-dual-configurator'
+project(':rabbit-dual-configurator').projectDir = file('./infrastructure/helpers/rabbit-dual-configurator')
 include ":commons"
 project(':commons').projectDir = file('./infrastructure/helpers/commons')
 include ':async-event-handler'
