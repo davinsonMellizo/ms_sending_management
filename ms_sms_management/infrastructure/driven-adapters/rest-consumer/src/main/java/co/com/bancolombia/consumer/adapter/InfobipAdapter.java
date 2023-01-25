@@ -37,9 +37,9 @@ public class InfobipAdapter implements InfobipGateway {
         return clientSms.post(properties.getResources().getEndpointInfobipSMS(), smsInfobip,
                         SuccessInfobipSMS.class,null)
                 .map(response -> Response.builder().code(STATUS_OK)
-                        .description(response.getDeliveryToken()).build())
+                        .messages(response.getMessages()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorMasivianSMS)e.getData()).getStatusMessage())
+                        .code(e.getHttpsStatus()).description(((ErrorInfobipSMS)e.getData()).getRequestError().getServiceException().getText())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
                         .code(Integer.parseInt(e.getMessage().substring(0,CONSTANT))).description(e.getMessage())

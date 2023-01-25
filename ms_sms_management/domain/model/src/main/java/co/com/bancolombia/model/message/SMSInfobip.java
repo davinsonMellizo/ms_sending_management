@@ -33,4 +33,43 @@ public class SMSInfobip extends Request {
     public static class Destination{
         private String to;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder(toBuilder = true)
+    public static class Response{
+        private String messageId;
+        private Status status;
+        private String to;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder(toBuilder = true)
+    public static class Status {
+        private String description;
+        private String groupId;
+        private String groupName;
+        private String id;
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder(toBuilder = true)
+    public static class RequestError{
+        private ServiceException serviceException;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder(toBuilder = true)
+    public static class ServiceException{
+        private String messageId;
+        private String text;
+    }
 }

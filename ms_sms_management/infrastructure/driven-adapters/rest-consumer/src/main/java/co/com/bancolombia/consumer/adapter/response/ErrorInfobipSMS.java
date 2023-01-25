@@ -8,7 +8,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
-public class SuccessInfobipSMS {
-    private List<SMSInfobip.Response> messages;
+public class ErrorInfobipSMS {
+
+    private SMSInfobip.RequestError requestError;
+
+
 }

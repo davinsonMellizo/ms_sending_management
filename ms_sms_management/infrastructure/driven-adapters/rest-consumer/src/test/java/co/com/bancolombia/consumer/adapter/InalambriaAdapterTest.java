@@ -37,7 +37,7 @@ class InalambriaAdapterTest {
     @BeforeEach
     public void init() {
         String url = "localhost";
-        //when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url, url));
         sms = new SMSInalambria();
         sms.setHeaders(Map.of("header", "test"));
     }
