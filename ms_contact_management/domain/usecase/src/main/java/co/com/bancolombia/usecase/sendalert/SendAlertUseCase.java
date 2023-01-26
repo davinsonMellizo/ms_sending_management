@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static co.com.bancolombia.commons.constants.AlertParameters.ALERT;
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.PUSH;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
@@ -97,7 +98,7 @@ public class SendAlertUseCase {
                                 .push(Push.builder().applicationCode(getValuePush(contacts, PUSH)).build())
                                 .build())
                         .alertParameters(AlertParameters.builder()
-                                .alert("60")
+                                .alert(ALERT)
                                 .consumer(enrol.getClient().getConsumerCode())
                                 .build())
                         .build())

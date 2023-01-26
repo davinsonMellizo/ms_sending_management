@@ -72,6 +72,7 @@ class RouterProviderMailUseCaseTest {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
+                .templateName("template")
                 .idProviderMail("TOD")
                 .idRemitter(0)
                 .build();
