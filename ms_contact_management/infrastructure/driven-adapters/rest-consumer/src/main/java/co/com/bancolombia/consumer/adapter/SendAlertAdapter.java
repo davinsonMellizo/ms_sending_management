@@ -1,6 +1,5 @@
 package co.com.bancolombia.consumer.adapter;
 
-import co.com.bancolombia.consumer.RestConsumer;
 import co.com.bancolombia.consumer.RestConsumerInternal;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.alert.Alert;

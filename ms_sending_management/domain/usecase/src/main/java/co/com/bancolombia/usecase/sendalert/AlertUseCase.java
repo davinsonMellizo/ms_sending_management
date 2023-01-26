@@ -14,10 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_TRANSACTION_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.AMOUNT_NOT_EXCEEDED;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 
 @RequiredArgsConstructor
 public class AlertUseCase {
@@ -63,7 +60,10 @@ public class AlertUseCase {
     private Mono<Alert> buildAlertGeneral(Message message){
         return alertGateway.findAlertById("GNR")
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
+                .filter(alert -> message.getParameters().containsKey("mensaje"))
+                .switchIfEmpty(Mono.error(new BusinessException(MESSAGE_NOT_FOUND)))
                 .map(alert -> alert.toBuilder()
+                        .priority(null)
                         .message(message.getParameters().get("mensaje"))
                         .templateName(message.getTemplate())
                         .build());

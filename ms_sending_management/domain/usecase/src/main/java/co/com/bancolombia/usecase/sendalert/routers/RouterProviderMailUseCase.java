@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_REMITTER;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.TEMPLATE_INVALID;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMailFormat;
 
 @RequiredArgsConstructor
@@ -32,8 +34,10 @@ public class RouterProviderMailUseCase {
     public Mono<Response> routeAlertMail(Message message, Alert alert) {
         return Mono.just(message)
                 .filter(isValidMailFormat)
-                .filter(message1 -> message1.getPreferences().contains("MAIL") || message1.getPreferences().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
+                .filter(message1 -> !alert.getTemplateName().isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(TEMPLATE_INVALID)))
+                .filter(message1 -> message1.getPreferences().contains("MAIL") || message1.getPreferences().isEmpty())
                 .flatMap(message1 -> getRemitter(alert, message))
                 .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
@@ -43,9 +47,11 @@ public class RouterProviderMailUseCase {
 
     private Mono<Remitter> getRemitter(Alert alert, Message message){
         return Mono.just(message)
-                .filter(Message::getRetrieveInformation)
+                .filter(message1 -> !message1.getAlert().isEmpty() || !message.getTransactionCode().isEmpty())
                 .flatMap(message1 -> remitterGateway.findRemitterById(alert.getIdRemitter()))
-                .switchIfEmpty(Mono.just(Remitter.builder().mail(message.getRemitter()).build()));
+                .switchIfEmpty(Mono.just(Remitter.builder().mail(message.getRemitter()).build()))
+                .filter(remitter -> !remitter.getMail().isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_REMITTER)));
     }
 
     public Mono<Response> buildMail(Message message, Alert alert, Remitter remitter, Provider provider) {

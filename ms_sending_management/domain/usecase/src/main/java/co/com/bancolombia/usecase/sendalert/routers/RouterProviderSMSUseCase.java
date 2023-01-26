@@ -15,10 +15,13 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 import static co.com.bancolombia.commons.constants.Constants.PUSH_SMS;
 import static co.com.bancolombia.commons.constants.Constants.NO;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.PRIORITY_INVALID;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMobile;
 
 @RequiredArgsConstructor
@@ -36,9 +39,18 @@ public class RouterProviderSMSUseCase {
                 .filter(message1 ->  !message1.getRetrieveInformation() || message1.getPreferences().contains("SMS") ||
                         message1.getPreferences().isEmpty())
                 .flatMap(prefix -> providerGateway.findProviderById(alert.getIdProviderSms()))
-                .zipWith(priorityGateway.findPriorityById(alert.getPriority()))
+                .zipWith(getPriority(message, alert))
                 .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
+    }
+
+    private Mono<Priority> getPriority(Message message, Alert alert){
+        return Mono.just(alert)
+                .filter(alert1 -> Objects.isNull(alert1.getPriority()))
+                .map(priority -> Priority.builder().code(message.getPriority()).build())
+                .switchIfEmpty(priorityGateway.findPriorityById(alert.getPriority()))
+                .filter(priority -> Objects.nonNull(priority.getCode()))
+                .switchIfEmpty(Mono.error(new BusinessException(PRIORITY_INVALID)));
     }
 
     private Mono<Response> sendAlertToProviders(Alert alert, Message message, Provider provider, Priority priority) {
@@ -50,7 +62,7 @@ public class RouterProviderSMSUseCase {
     private Mono<Response> sendSMS(Message message, Alert alert, Provider provider) {
         return Mono.just(Sms.builder()
                 .logKey(message.getLogKey())
-                .priority(message.getPriority() != null? message.getPriority(): alert.getPriority())
+                .priority(alert.getPriority())
                 .to(message.getPhoneIndicator() + message.getPhone())
                 .message(alert.getMessage())
                 .provider(provider.getId())

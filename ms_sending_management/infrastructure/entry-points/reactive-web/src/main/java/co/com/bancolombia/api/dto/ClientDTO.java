@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ClientDTO {
     @Builder.Default
-    private IdentificationDTO identification = new IdentificationDTO();
+    private @Valid IdentificationDTO identification = new IdentificationDTO();
 }

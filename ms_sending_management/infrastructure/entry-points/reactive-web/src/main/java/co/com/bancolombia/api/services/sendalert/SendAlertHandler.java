@@ -1,5 +1,6 @@
 package co.com.bancolombia.api.services.sendalert;
 
+import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.api.dto.AlertDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
@@ -16,11 +17,13 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
 @RequiredArgsConstructor
 public class SendAlertHandler {
     private final SendingUseCase useCase;
+    private final ValidatorHandler validatorHandler;
 
     public Mono<ServerResponse> sendAlert(ServerRequest serverRequest) {
 
         return serverRequest.bodyToMono(AlertDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertDTO::toModel)
                 .flatMap(useCase::alertSendingManager)
                 .flatMap(ResponseUtil::responseOk);

@@ -1,11 +1,15 @@
 package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.model.message.Message;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 @Data
@@ -13,10 +17,13 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class AlertDTO {
+    @NotNull(message = "{constraint.not_null}")
+    @Schema(allowableValues = {"true", "false"})
     private Boolean retrieveInformation;
-    private ClientDTO client;
-    private MessageDTO message;
-    private AlertParametersDTO alertParameters;
+    @Builder.Default
+    private @Valid ClientDTO client = new ClientDTO();
+    private @Valid MessageDTO message;
+    private @Valid AlertParametersDTO alertParameters;
 
     public Mono<Message> toModel(){
         return Mono.just(Message.builder()
@@ -36,6 +43,8 @@ public class AlertDTO {
                 .remitter(message.getMail().getRemitter())
                 .priority(message.getSms().getPriority())
                 .retrieveInformation(retrieveInformation)
+                .applicationCode(message.getPush().getApplicationCode())
+                .template(message.getMail().getTemplate())
                 .build());
     }
 }

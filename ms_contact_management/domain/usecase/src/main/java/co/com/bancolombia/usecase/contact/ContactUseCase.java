@@ -186,13 +186,14 @@ public class ContactUseCase {
                 .zipWith(validateCountryCode(newContact))
                 .map(data -> response.getActual().toBuilder().value(data.getT2().getValue())
                         .stateContact(data.getT1().getId().toString())
+                        .contactWayName(newContact.getContactWay())
                         .environmentType(data.getT2().getEnvironmentType())
                         .build())
                 .flatMap(contactGateway::updateContact)
                 .doOnNext(contactResponse -> newnessUseCase.saveNewness(response.getActual(), UPDATE_CONTACT, voucher))
                 .map(contact -> response.toBuilder()
                         .before(response.getActual().toBuilder().contactWayName(newContact.getContactWayName()).build())
-                        .actual(contact).build());
+                        .actual(contact.toBuilder().contactWay(newContact.getContactWay()).build()).build());
 
     }
 

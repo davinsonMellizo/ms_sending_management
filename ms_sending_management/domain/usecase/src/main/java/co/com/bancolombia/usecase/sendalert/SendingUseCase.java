@@ -41,8 +41,7 @@ public class SendingUseCase {
     }
 
     private Flux<Void> routeAlert(Alert alert, Message message) {
-        return Mono.just(message)
-                .flatMap(message1 -> routerProviderPushUseCase.sendPush(message, alert))
+        return routerProviderPushUseCase.sendPush(message, alert)
                 .concatWith(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .concatWith(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .thenMany(Flux.empty());
@@ -66,7 +65,6 @@ public class SendingUseCase {
                 .filter(message1 -> message1.getParameters().containsKey("mensaje"))
                 .map(message1 -> alert.toBuilder().message(message1.getParameters().get("mensaje")).build())
                 .switchIfEmpty(Util.replaceParameter(alert, message));
-
     }
 
     public Mono<Void> alertSendingManager(Message message) {
@@ -76,6 +74,7 @@ public class SendingUseCase {
                 .filter(Message::getRetrieveInformation)
                 .flatMap(clientUseCase::validateClient)
                 .switchIfEmpty(Mono.just(message))
+                .map(message1 -> message1.toBuilder().logKey(logKey).build())
                 .flatMapMany(this::validateAlerts)
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))
