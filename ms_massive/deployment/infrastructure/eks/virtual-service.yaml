@@ -18,15 +18,8 @@ spec:
         name: #{gateway-protocol-name}#
         protocol: #{gateway-protocol}#
       hosts:
-        - #{gateway-host}#
-          #   tls:
-          #     httpsRedirect: true
-          # - port:
-          #     number: 443
-          #     name: https
-          #     protocol: HTTP
-          #   hosts:
-        #   - "#{gateway-host}#"
+        - #{gateway-host-smoke}#
+        
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
