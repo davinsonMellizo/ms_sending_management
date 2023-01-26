@@ -69,6 +69,8 @@ adapters:
       endpointInalambriaSms: ${ENDPOINT_INALAMBRIA_SMS}
       endpointInalambriaToken: ${ENDPOINT_INALAMBRIA_TOKEN}
       #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
+      endpointInfobipSMS: ${ENDPOINT_INFOBIP_SMS}
+      endpointInfobipToken: ${ENDPOINT_INFOBIP_TOKEN}
   secrets-manager:
     secret-rabbit: ${SECRET-RABBIT}
     #secret-inalambria: ${SECRET-INALAMBRIA}
