@@ -31,6 +31,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.constants.AlertParameters.ALERT;
+import static co.com.bancolombia.commons.constants.AlertParameters.CHANNEL;
+import static co.com.bancolombia.commons.constants.AlertParameters.DATE;
+import static co.com.bancolombia.commons.constants.AlertParameters.HOUR;
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.PUSH;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
@@ -76,14 +79,14 @@ public class SendAlertUseCase {
                 .flatMap(contacts -> sendAlertToSending(enrol, contacts));
     }
 
-    public Mono<Enrol> sendAlertToSending(Enrol enrol, List<Contact> contacts){
+    private Mono<Enrol> sendAlertToSending(Enrol enrol, List<Contact> contacts){
         LocalDate date = LocalDate.now();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Date hour = new Date();
         var parameters = new HashMap<String, String>();
-        parameters.put("canal", enrol.getClient().getConsumerCode());
-        parameters.put("hora", dateFormat.format(hour));
-        parameters.put("fecha", date.toString());
+        parameters.put(CHANNEL, enrol.getClient().getConsumerCode());
+        parameters.put(HOUR, dateFormat.format(hour));
+        parameters.put(DATE, date.toString());
         return getPreferences(contacts)
                 .map(preferences -> Alert.builder()
                         .retrieveInformation(false)
