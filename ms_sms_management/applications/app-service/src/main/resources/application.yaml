@@ -71,6 +71,7 @@ adapters:
       #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
   secrets-manager:
     secret-rabbit: ${SECRET-RABBIT}
+    secret-rabbit-dual: ${SECRET_RABBIT_DUAL}
     #secret-inalambria: ${SECRET-INALAMBRIA}
     cache-size: ${CACHE_SECRETS_SIZE}
     cache-time: ${CACHE_SECRETS_SECONDS}

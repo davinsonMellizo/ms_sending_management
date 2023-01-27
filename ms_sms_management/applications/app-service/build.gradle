@@ -8,6 +8,7 @@ dependencies {
 	implementation project(':rest-consumer')
     implementation project(':async-event-handler')
     implementation project(':rabbit-configurator')
+    implementation project(':rabbit-dual-configurator')
     implementation project(':s3-bucket')
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation project(':model')

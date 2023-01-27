@@ -21,6 +21,7 @@ data:
   SQS_TIMEOUT: "#{sqs-timeout}#"
   SQS_POOL_SIZE: "#{sqs-pool-size}#"
   SECRET-RABBIT: "#{secret-rabbit}#"
+  SECRET_RABBIT_DUAL: #{secret-rabbit-dual}#
   CACHE: #{cache-host}#
   CACHE_PORT: "#{cache-port}#"
   EXPIRE_TIME_CACHE: "#{cache-time}#"

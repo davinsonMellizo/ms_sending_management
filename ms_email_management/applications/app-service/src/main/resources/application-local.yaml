@@ -71,6 +71,7 @@ adapters:
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
+    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
@@ -94,3 +95,7 @@ entrypoint:
     waitTimeSeconds: 20
     maxNumberOfMessages: 10
     numberOfThreads: 1
+d2b:
+  aws:
+    secrets-manager:
+      endpoint: http://localhost:4566

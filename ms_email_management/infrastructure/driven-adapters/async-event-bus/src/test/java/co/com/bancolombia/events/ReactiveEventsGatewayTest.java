@@ -1,6 +1,7 @@
 package co.com.bancolombia.events;
 
 import co.com.bancolombia.model.log.Log;
+import co.com.bancolombia.rabbitmq.config.dual.sender.DirectAsyncDualGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,7 @@ public class ReactiveEventsGatewayTest {
     private ReactiveDirectAsyncGateway reactiveDirectAsyncGateway;
 
     @Mock
-    private DirectAsyncGateway directAsyncGateway;
+    private DirectAsyncDualGateway directAsyncGateway;
 
    @BeforeEach
     public void init(){

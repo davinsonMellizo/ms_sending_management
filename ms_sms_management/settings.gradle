@@ -8,8 +8,6 @@ project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ":log"
 project(':log').projectDir = file('./infrastructure/helpers/log')
-//include ":secrets-manager"
-//project(':secrets-manager').projectDir = file('./infrastructure/helpers/secrets-manager')
 include ':rabbit-configurator'
 project(':rabbit-configurator').projectDir = file('./infrastructure/helpers/rabbit-configurator')
 include ':rabbit-dual-configurator'
