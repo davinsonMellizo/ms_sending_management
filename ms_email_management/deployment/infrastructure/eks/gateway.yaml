@@ -15,8 +15,8 @@ spec:
     istio: ingressgateway # use istio default controller
   servers:
     - port:
-        number: #{gateway-port}#
-        name: #{gateway-protocol-name}#
+        number: #{config-port}#
+        name: #{config-protocol-name}#
         protocol: #{gateway-protocol}#
       hosts:
           - #{gateway-host}#
