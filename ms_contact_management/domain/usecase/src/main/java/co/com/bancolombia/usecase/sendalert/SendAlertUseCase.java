@@ -23,11 +23,9 @@ import reactor.core.publisher.Mono;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static co.com.bancolombia.commons.constants.AlertParameters.ALERT;
@@ -80,9 +78,9 @@ public class SendAlertUseCase {
     }
 
     private Mono<Enrol> sendAlertToSending(Enrol enrol, List<Contact> contacts){
-        LocalDate date = LocalDate.now();
+        var date = LocalDate.now();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        Date hour = new Date();
+        var hour = new Date();
         var parameters = new HashMap<String, String>();
         parameters.put(CHANNEL, enrol.getClient().getConsumerCode());
         parameters.put(HOUR, dateFormat.format(hour));

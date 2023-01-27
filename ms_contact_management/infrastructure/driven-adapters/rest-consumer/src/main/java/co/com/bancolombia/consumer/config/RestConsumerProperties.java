@@ -2,7 +2,6 @@ package co.com.bancolombia.consumer.config;
 
 import co.com.bancolombia.d2b.webclient.D2BWebClientFactory;
 import co.com.bancolombia.d2b.webclient.model.WebClientRequest;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ClientHttpConnector;

@@ -6,7 +6,7 @@ import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ApicCredsInjectorAutoConfigTest {
+class ApicCredsInjectorAutoConfigTest {
     private ApicCredsInjectorAutoConfig apicCredsInjectorAutoConfig;
     @Mock
     private AsyncSecretVault asyncSecretVault;

@@ -12,7 +12,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class RestConsumerPropertiesTest {
+class RestConsumerPropertiesTest {
     private RestConsumerProperties config;
     private D2BWebClientFactory d2BWebClientFactory;
     private ExchangeFilterFunction exchangeFilterFunction;

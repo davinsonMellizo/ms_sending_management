@@ -2,7 +2,6 @@ package co.com.bancolombia.model.alert;
 
 import co.com.bancolombia.model.Request;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

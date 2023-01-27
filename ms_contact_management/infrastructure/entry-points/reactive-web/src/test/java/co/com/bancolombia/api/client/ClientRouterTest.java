@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ClientRouterTest extends BaseIntegration {
+class ClientRouterTest extends BaseIntegration {
 
     @MockBean
     private ClientUseCase useCase;

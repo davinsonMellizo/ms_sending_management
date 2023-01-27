@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ConsumerRepositoryImplWithExceptionTest {
+class ConsumerRepositoryImplWithExceptionTest {
 
     @InjectMocks
     private ConsumerRepositoryImplement consumerRepositoryImplement;

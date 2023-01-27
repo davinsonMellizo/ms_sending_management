@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class NewnessRepositoryImplTest {
+class NewnessRepositoryImplTest {
 
     @Autowired
     private NewnessRepositoryImplement repositoryImplement;

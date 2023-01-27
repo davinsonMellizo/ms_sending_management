@@ -22,6 +22,7 @@ public class AlertDTO {
     private Boolean retrieveInformation;
     @Builder.Default
     private @Valid ClientDTO client = new ClientDTO();
+    @NotNull(message = "{constraint.not_null}")
     private @Valid MessageDTO message;
     private @Valid AlertParametersDTO alertParameters;
 

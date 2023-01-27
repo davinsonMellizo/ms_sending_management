@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class CommandsHandlerTest {
+class CommandsHandlerTest {
     @InjectMocks
     private CommandsHandler commandsHandler;
     @Mock
