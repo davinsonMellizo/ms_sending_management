@@ -47,5 +47,5 @@ spec:
         - destination:
             host: #{name}#
             port:
-              number: #{gateway-port}#
+              number: #{config-port}#
       #websocketUpgrade: true #if websockets are required
