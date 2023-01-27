@@ -165,7 +165,9 @@ public class ClientUseCase {
                         .doOnNext(response -> enrolBefore.getContactData().add(response.getActual()))
                         .doOnNext(response -> enrolActual.getContactData().add(response.getBefore()))
                         .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate, isIseries)))
-                        .flatMap(response ->  sendAlertUseCase.sendAlertUpdate(enrol, responseUpdate, isIseries));
+                .doOnNext(statusResponse -> System.out.println("primero"+statusResponse))
+                        .flatMap(response ->  sendAlertUseCase.sendAlertUpdate(enrol, responseUpdate, isIseries))
+                .doOnNext(statusResponse -> System.out.println("segun"+statusResponse));
 
     }
 

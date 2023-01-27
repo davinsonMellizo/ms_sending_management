@@ -20,6 +20,7 @@ import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
+import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -64,6 +66,8 @@ class ClientUseCaseTest {
     private ConsumerGateway consumerGateway;
     @Mock
     private CommandGateway commandGateway;
+    @Mock
+    private SendAlertUseCase sendAlertUseCase;
 
     private final Client client = new Client();
     private final ResponseUpdateClient response = new ResponseUpdateClient();
@@ -164,6 +168,8 @@ class ClientUseCaseTest {
                 .thenReturn(Mono.just(document));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
+        when(sendAlertUseCase.sendAlertCreate(any(), any(), anyBoolean()))
+                .thenReturn(Mono.just(new StatusResponse<>()));
         StepVerifier
                 .create(useCase.saveClientRequest(Enrol.builder().client(client)
                         .contactData(List.of(contact)).build(), false, "1123333"))
@@ -196,11 +202,11 @@ class ClientUseCaseTest {
         when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
+        when(sendAlertUseCase.sendAlertUpdate(any(), any(), anyBoolean()))
+                .thenReturn(Mono.just(new StatusResponse<>()));
         StepVerifier
                 .create(useCase.updateClientMcd(Enrol.builder().contactData(List.of(contact)).client(client).build()))
-                .assertNext(response -> response
-                        .getActual().getClient().getDocumentNumber()
-                        .equals(client.getDocumentNumber()))
+                .expectNextCount(1)
                 .verifyComplete();
         verify(clientRepository).updateClient(any());
     }
@@ -229,6 +235,8 @@ class ClientUseCaseTest {
         when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
+        when(sendAlertUseCase.sendAlertUpdate(any(), any(), anyBoolean()))
+                .thenReturn(Mono.just(new StatusResponse<>()));
         StepVerifier
                 .create(useCase.updateClientRequest(Enrol.builder().contactData(List.of(contact))
                         .client(client).build(), false, "123456"))
