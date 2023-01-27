@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Configuration
 public class RestConsumerProperties {
 
-    @Bean(name = "api-connect")
+    @Bean(name = "webClient")
     public WebClient webClientConfig(D2BWebClientFactory d2bWebClientFactory,
                                      ExchangeFilterFunction apicCredentialsExchangeFunction) {
         var header = new HashMap<String, String>();
@@ -39,7 +39,7 @@ public class RestConsumerProperties {
         return new ReactorClientHttpConnector(HttpClient.create().responseTimeout(Duration.ofMillis(timeout)));
     }
 
-    @Bean(name = "internal")
+    @Bean(name = "webClientInternal")
     public WebClient webClientConfigInternal(ConsumerProperties consumerProperties) {
         return WebClient.builder()
                 .clientConnector(clientHttpConnector(consumerProperties.getTimeout()))

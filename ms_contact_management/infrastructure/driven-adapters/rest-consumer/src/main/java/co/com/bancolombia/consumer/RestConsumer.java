@@ -22,9 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RestConsumer<T extends Request,R> {
 
-    @Autowired
-    @Qualifier("api-connect")
-    private WebClient webClient;
+    private final WebClient webClient;
     private final ObjectMapper  mapper = new ObjectMapper();
     private final LoggerBuilder loggerBuilder;
 

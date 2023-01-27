@@ -49,6 +49,7 @@ public class SendAlertUseCase {
         return Mono.just(enrol)
                 .filter(enrol1 -> !isIseries)
                 .flatMap(parameters -> sendAlertToSending(enrol, response.getActual().getContactData()))
+                .onErrorResume(throwable -> Mono.just((enrol)))
                 .then(Mono.just(response));
     }
 
@@ -62,6 +63,7 @@ public class SendAlertUseCase {
                 .flatMap(segment -> contactGateway.contactsByClientAndSegment(enrol.getClient(), segment))
                 .flatMap(contacts ->  sendAlertToSending(enrol, contacts))
                 .concatWith(validateBefore(enrol, response))
+                .onErrorResume(throwable -> Mono.just((enrol)))
                 .then(Mono.just(response));
     }
 

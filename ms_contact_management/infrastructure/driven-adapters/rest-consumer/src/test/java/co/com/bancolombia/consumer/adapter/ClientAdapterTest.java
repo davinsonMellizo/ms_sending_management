@@ -49,7 +49,7 @@ class ClientAdapterTest {
 
     @Test
     void retrieveAlertInformationTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost", "localhost"));
         client.setDocumentType("CC");
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
@@ -61,7 +61,7 @@ class ClientAdapterTest {
     }
     @Test
     void retrieveErrorCertTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost", "localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());
@@ -71,7 +71,7 @@ class ClientAdapterTest {
     }
     @Test
     void retrieveErrorNotFountCertTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost", "localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());
@@ -81,7 +81,7 @@ class ClientAdapterTest {
     }
     @Test
     void retrieveErrorUnauthorizedTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost", "localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());
@@ -91,7 +91,7 @@ class ClientAdapterTest {
     }
     @Test
     void retrieveErrorAnyTest() throws JsonProcessingException {
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost"));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources("localhost", "localhost"));
         String data = "{ \"data\": { \"alertIndicators\": [ { \"alertType\": \"ALE\", \"customerMobileNumber\": \"3772056958\", \"customerEmail\": \"CARLOSPOSADA@BANCOLOMBIA.COM.CO\", \"pushActive\": \"0\"} ] } }";
         Response response= mapper.readValue(data, Response.class);
         response.getData().getAlertIndicators().get(0).setLastDataModificationDate(LocalDate.now());

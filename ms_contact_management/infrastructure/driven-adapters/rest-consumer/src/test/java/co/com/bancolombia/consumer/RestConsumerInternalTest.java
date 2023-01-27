@@ -32,9 +32,9 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @ContextConfiguration(classes = {
         ConsumerProperties.class,
 })
-class RestConsumerTest {
+class RestConsumerInternalTest {
     private MockWebServer mockServer;
-    private RestConsumer restConsumer;
+    private RestConsumerInternal restConsumer;
     private final ResponseClient client = new ResponseClient();
     @Mock
     private LoggerBuilder loggerBuilder;
@@ -46,7 +46,7 @@ class RestConsumerTest {
     public void setUp() {
         client.setResponse(true);
         mockServer = new MockWebServer();
-        restConsumer = new RestConsumer(WebClient.builder()
+        restConsumer = new RestConsumerInternal(WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
                 .build(), loggerBuilder);
         mockServer.url(getBaseUrl(mockServer.getPort()));
