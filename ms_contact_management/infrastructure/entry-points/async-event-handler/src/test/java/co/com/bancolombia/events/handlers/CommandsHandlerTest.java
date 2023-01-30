@@ -39,21 +39,21 @@ class CommandsHandlerTest {
 
     @Test
     void handleSendSaveClient() {
-        when(clientUseCase.saveClientRequest(any(), anyBoolean(), anyString())).thenReturn(Mono.empty());
+        when(clientUseCase.saveClient(any(), anyBoolean(), anyString(), anyBoolean())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.saveClient(new Command<>("alert", "alert",
                 "{}")))
                 .verifyComplete();
     }
     @Test
     void handleSendUpdateClient() {
-        when(clientUseCase.updateClientRequest(any(), anyBoolean(), anyString())).thenReturn(Mono.empty());
+        when(clientUseCase.updateClient(any(), anyBoolean(), anyString(), anyBoolean())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.updateClient(new Command<>("alert", "alert",
                 "{}")))
                 .verifyComplete();
     }
     @Test
     void handleSendUpdateClientError() {
-        when(clientUseCase.updateClientRequest(any(), anyBoolean(), anyString()))
+        when(clientUseCase.updateClient(any(), anyBoolean(), anyString(), anyBoolean()))
                 .thenReturn(Mono.error(new TechnicalException(BODY_MISSING_ERROR)));
         StepVerifier.create(commandsHandler.updateClient(new Command<>("alert", "alert",
                 "{}")))

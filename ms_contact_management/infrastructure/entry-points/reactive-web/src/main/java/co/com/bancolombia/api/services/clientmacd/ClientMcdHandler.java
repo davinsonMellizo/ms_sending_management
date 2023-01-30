@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.services.clientmacd;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.commons.parameters.Parameters;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.api.dto.EnrolDTO;
 import co.com.bancolombia.api.mapper.EnrolMapper;
@@ -20,13 +21,14 @@ public class ClientMcdHandler {
     private final ClientUseCase clientUseCase;
     private final ValidatorHandler validatorHandler;
     private final EnrolMapper enrolMapper;
+    private final Parameters parameters;
 
     public Mono<ServerResponse> updateClientMcd(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(EnrolDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .map(enrolMapper::toEntity)
-                .flatMap(clientUseCase::updateClientMcd)
+                .flatMap(enrol ->  clientUseCase.updateClientMcd(enrol, parameters.getSynchronizeIsiries()))
                 .flatMap(ResponseUtil::responseOk);
     }
 

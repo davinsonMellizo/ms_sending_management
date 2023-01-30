@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,19 +46,10 @@ public class SendAlertUseCase {
     private final ContactGateway contactGateway;
     private final ConsumerGateway consumerGateway;
 
-
-    public Mono<StatusResponse<Enrol>> sendAlertCreate(Enrol enrol, StatusResponse<Enrol> response, boolean isIseries){
-        return Mono.just(enrol)
-                .filter(enrol1 -> !isIseries)
-                .flatMap(parameters -> sendAlertToSending(enrol, response.getActual().getContactData()))
-                .onErrorResume(throwable -> Mono.just((enrol)))
-                .then(Mono.just(response));
-    }
-
-    public Mono<StatusResponse<Enrol>> sendAlertUpdate(Enrol enrol, StatusResponse<Enrol> response, boolean isIseries){
+    public Mono<StatusResponse<Enrol>> sendAlerts(Enrol enrol, StatusResponse<Enrol> response, boolean sendAlert){
         return Mono.just(enrol.getContactData())
                 .filter(contacts -> !contacts.isEmpty())
-                .filter(contacts -> !isIseries)
+                .filter(contacts -> !sendAlert)
                 .map(contacts -> enrol.getClient().getConsumerCode())
                 .flatMap(consumerGateway::findConsumerById)
                 .map(Consumer::getSegment)
@@ -69,7 +61,9 @@ public class SendAlertUseCase {
     }
 
     private Mono<Enrol> validateBefore(Enrol enrol, StatusResponse<Enrol> response){
-        return Flux.fromIterable(response.getBefore().getContactData())
+        return Mono.just(response.getBefore().getContactData())
+                .filter(contacts -> !contacts.isEmpty())
+                .flatMapMany(Flux::fromIterable)
                 .filter(contact -> !getName(contact).equals(PUSH))
                 .filter(contact -> !getValue(response.getActual().getContactData(), getName(contact)).equals(contact.getValue()))
                 .collectList()

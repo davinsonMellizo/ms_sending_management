@@ -73,6 +73,10 @@ app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
 
+app:
+  parameters:
+    synchronizeIsiries: false
+
 d2b:
   aws:
     secrets-manager:

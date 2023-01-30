@@ -24,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,14 +67,14 @@ class ClientMcdRouterTest extends BaseIntegration {
     @Test
     void updateClient() {
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
-        when(useCase.updateClientMcd(any())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
+        when(useCase.updateClientMcd(any(), anyBoolean())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
                 .actual(Enrol.builder().client(client).build()).before(Enrol.builder().client(client).build()).build()));
         statusAssertionsWebClientPut(properties.getClient() + "-macd",
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).updateClientMcd(any());
+        verify(useCase).updateClientMcd(any(), anyBoolean());
     }
 
 }

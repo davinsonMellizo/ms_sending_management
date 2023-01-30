@@ -168,11 +168,11 @@ class ClientUseCaseTest {
                 .thenReturn(Mono.just(document));
         when(consumerGateway.findConsumerById(anyString()))
                 .thenReturn(Mono.just(consumer));
-        when(sendAlertUseCase.sendAlertCreate(any(), any(), anyBoolean()))
+        when(sendAlertUseCase.sendAlerts(any(), any(), anyBoolean()))
                 .thenReturn(Mono.just(new StatusResponse<>()));
         StepVerifier
-                .create(useCase.saveClientRequest(Enrol.builder().client(client)
-                        .contactData(List.of(contact)).build(), false, "1123333"))
+                .create(useCase.saveClient(Enrol.builder().client(client)
+                        .contactData(List.of(contact)).build(), false, "1123333", false))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(clientRepository).saveClient(any());
@@ -202,10 +202,10 @@ class ClientUseCaseTest {
         when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
-        when(sendAlertUseCase.sendAlertUpdate(any(), any(), anyBoolean()))
+        when(sendAlertUseCase.sendAlerts(any(), any(), anyBoolean()))
                 .thenReturn(Mono.just(new StatusResponse<>()));
         StepVerifier
-                .create(useCase.updateClientMcd(Enrol.builder().contactData(List.of(contact)).client(client).build()))
+                .create(useCase.updateClientMcd(Enrol.builder().contactData(List.of(contact)).client(client).build(), true))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(clientRepository).updateClient(any());
@@ -235,11 +235,11 @@ class ClientUseCaseTest {
         when(newnessUseCase.saveNewness((Client) any(), anyString(), anyString()))
                 .thenReturn(Mono.just(client));
         when(commandGateway.sendCommandUpdate(any())).thenReturn(Mono.empty());
-        when(sendAlertUseCase.sendAlertUpdate(any(), any(), anyBoolean()))
+        when(sendAlertUseCase.sendAlerts(any(), any(), anyBoolean()))
                 .thenReturn(Mono.just(new StatusResponse<>()));
         StepVerifier
-                .create(useCase.updateClientRequest(Enrol.builder().contactData(List.of(contact))
-                        .client(client).build(), false, "123456"))
+                .create(useCase.updateClient(Enrol.builder().contactData(List.of(contact))
+                        .client(client).build(), false, "123456", false))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(clientRepository).updateClient(any());

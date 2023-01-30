@@ -8,10 +8,7 @@ import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
-import co.com.bancolombia.model.newness.Newness;
-import co.com.bancolombia.model.newness.gateways.NewnessRepository;
 import co.com.bancolombia.model.response.StatusResponse;
-import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,18 +52,6 @@ class SendAlertUseCaseTest {
     }
 
     @Test
-    void sendAlertCreate(){
-        when(alertGateway.sendAlert(any()))
-                .thenReturn(Mono.just(new Alert()));
-        StatusResponse<Enrol> response = new StatusResponse<>();
-        response.setActual(new Enrol(client, List.of(contact)));
-        StepVerifier
-                .create(useCase.sendAlertCreate(new Enrol(client, List.of(contact)), response, false))
-                .expectNextCount(1)
-                .verifyComplete();
-    }
-
-    @Test
     void sendAlertUpdate(){
         when(alertGateway.sendAlert(any()))
                 .thenReturn(Mono.just(new Alert()));
@@ -78,7 +63,7 @@ class SendAlertUseCaseTest {
         response.setActual(new Enrol(client, List.of(contact)));
         response.setBefore(new Enrol(client, List.of(contact)));
         StepVerifier
-                .create(useCase.sendAlertUpdate(new Enrol(client, List.of(contact)), response, false))
+                .create(useCase.sendAlerts(new Enrol(client, List.of(contact)), response, false))
                 .expectNextCount(1)
                 .verifyComplete();
     }
