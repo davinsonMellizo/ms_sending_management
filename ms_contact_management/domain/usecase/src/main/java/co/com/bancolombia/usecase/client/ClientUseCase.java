@@ -165,8 +165,8 @@ public class ClientUseCase {
                         .map(contact -> contact.toBuilder()
                                 .documentType(responseClient.getBefore().getDocumentType()).build())
                         .flatMap(contact -> contactUseCase.updateContactRequest(contact, client.getVoucher()))
-                        .doOnNext(response -> enrolBefore.getContactData().add(response.getActual()))
-                        .doOnNext(response -> enrolActual.getContactData().add(response.getBefore())))
+                        .doOnNext(response -> enrolActual.getContactData().add(response.getBefore()))
+                        .doOnNext(response -> enrolBefore.getContactData().add(response.getActual())))
                 .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate, isIseries, sendAlert));
     }
 
@@ -216,7 +216,6 @@ public class ClientUseCase {
                 .flatMap(consumer -> documentGateway.getDocument(enrol.getClient().getDocumentType()))
                 .map(document -> getMapToSendToBridgeMQ(enrol, voucher, document));
     }
-
 
     private Mono<StatusResponse<Client>> buildRequestToUpdateClient(Client before, Client actual) {
         return documentGateway.getDocument(actual.getDocumentType())

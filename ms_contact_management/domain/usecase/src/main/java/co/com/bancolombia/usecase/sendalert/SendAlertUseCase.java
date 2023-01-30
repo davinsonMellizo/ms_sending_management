@@ -50,14 +50,16 @@ public class SendAlertUseCase {
         return Mono.just(enrol.getContactData())
                 .filter(contacts -> !contacts.isEmpty())
                 .filter(contacts -> !sendAlert)
+                .doOnNext(contacts -> enrol.setClient(enrol.getClient().toBuilder()
+                        .documentType(response.getActual().getClient().getDocumentType()).build()))
                 .map(contacts -> enrol.getClient().getConsumerCode())
                 .flatMap(consumerGateway::findConsumerById)
                 .map(Consumer::getSegment)
                 .flatMap(segment -> contactGateway.contactsByClientAndSegment(enrol.getClient(), segment))
                 .flatMap(contacts ->  sendAlertToSending(enrol, contacts))
                 .concatWith(validateBefore(enrol, response))
-                .onErrorResume(throwable -> Mono.just((enrol)))
-                .then(Mono.just(response));
+                .onErrorResume(throwable -> Mono.empty())
+                .then(Mono.empty());
     }
 
     private Mono<Enrol> validateBefore(Enrol enrol, StatusResponse<Enrol> response){
@@ -97,6 +99,7 @@ public class SendAlertUseCase {
                                 .consumer(enrol.getClient().getConsumerCode()).build())
                         .build())
                 .flatMap(alertGateway::sendAlert)
+                .onErrorResume(throwable -> Mono.empty())
                 .thenReturn(enrol);
     }
 
