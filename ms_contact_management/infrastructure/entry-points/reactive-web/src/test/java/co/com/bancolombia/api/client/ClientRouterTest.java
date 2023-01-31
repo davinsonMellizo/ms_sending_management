@@ -4,6 +4,7 @@ import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.commons.parameters.Parameters;
 import co.com.bancolombia.api.dto.IdentificationDTO;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.api.services.client.ClientHandler;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
+        Parameters.class,
         ClientRouter.class,
         ClientHandler.class,
         ApiProperties.class,

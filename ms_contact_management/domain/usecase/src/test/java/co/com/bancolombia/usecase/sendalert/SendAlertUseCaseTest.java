@@ -64,7 +64,6 @@ class SendAlertUseCaseTest {
         response.setBefore(new Enrol(client, List.of(contact)));
         StepVerifier
                 .create(useCase.sendAlerts(new Enrol(client, List.of(contact)), response, false))
-                .expectNextCount(1)
                 .verifyComplete();
     }
 

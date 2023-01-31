@@ -4,6 +4,7 @@ import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.commons.parameters.Parameters;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.api.services.clientmacd.ClientMcdHandler;
 import co.com.bancolombia.api.services.clientmacd.ClientMcdRouter;
@@ -34,6 +35,7 @@ import static org.mockito.Mockito.when;
         ClientMcdRouter.class,
         ClientMcdHandler.class,
         ApiProperties.class,
+        Parameters.class,
         ValidatorHandler.class,
         ExceptionHandler.class
 })
