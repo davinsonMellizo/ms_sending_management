@@ -28,5 +28,6 @@ data:
   SECRET-RETRIEVE: #{secret-retrieve}#
   CHANGEIT: #{changeit}#
   SEND_ALERT_URL: #{send-alert-url}#
+  SYNCHRONIZE_ISIRIES: #{synchronize-iseries}#
 
 
