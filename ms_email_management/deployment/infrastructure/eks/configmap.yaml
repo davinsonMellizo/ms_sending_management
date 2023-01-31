@@ -20,6 +20,7 @@ data:
   SQS_URL: #{sqs-url}#
   SQS_TIMEOUT: "#{sqs-timeout}#"
   SQS_POOL_SIZE: "#{sqs-pool-size}#"
+  ENDPOINT-SQS: "#{endpoint-sqs}#"
   SECRET-RABBIT: "#{secret-rabbit}#"
   SECRET_RABBIT_DUAL: #{secret-rabbit-dual}#
   CACHE: #{cache-host}#

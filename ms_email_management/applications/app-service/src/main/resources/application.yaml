@@ -92,8 +92,8 @@ stash:
     port: ${CACHE_PORT}
 entrypoint:
   sqs:
-    endpoint: http://localhost:4566
     queueUrl: "${QUEUE-URL}"
+    endpoint: "${ENDPOINT-SQS}"
     waitTimeSeconds: "${WAIT-TIME-SECONDS}"
     maxNumberOfMessages: "${MAX-NUMBER-MESSAGES}"
     numberOfThreads: "${THREADS}"
