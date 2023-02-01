@@ -38,7 +38,7 @@ public class RestConsumer<T extends Request,R> {
     private String cleanHeader(T request){
         request.setHeaders(null);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String data = "";
+        var data = "";
         try {
             data = mapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {

@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ApicAuthFilterFunctionTest {
+class ApicAuthFilterFunctionTest {
 
 
     @InjectMocks

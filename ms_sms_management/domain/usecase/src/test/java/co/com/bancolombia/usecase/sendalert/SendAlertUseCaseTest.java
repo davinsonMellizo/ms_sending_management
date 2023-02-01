@@ -1,11 +1,8 @@
 package co.com.bancolombia.usecase.sendalert;
 
-import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Parameter;
-import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.message.SMSInalambria;
-import co.com.bancolombia.model.message.SMSMasiv;
+import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
+import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +16,7 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +36,9 @@ class SendAlertUseCaseTest {
     private GeneratorTokenUseCase generatorTokenUseCase;
     @Mock
     private InalambriaGateway inalambriaGateway;
+
+    @Mock
+    private InfobipGateway infobipGateway;
 
     private Alert alert = new Alert();
 
@@ -91,6 +92,27 @@ class SendAlertUseCaseTest {
     }
 
     @Test
+    void sendAlertInfobipTest() {
+        alert.setProvider("INF");
+        when(generatorTokenUseCase.getTokenInf(any(), any()))
+                .thenReturn(Mono.just(SMSInfobip.builder()
+                        .messages(Arrays.asList(SMSInfobip.Message.builder()
+                                .from("text")
+                                .destinations(Arrays.asList(SMSInfobip.Destination.builder().to("1234").build()))
+                                        .text("hi world").build())).build()));
+        when(infobipGateway.sendSMS(any()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(logUseCase.sendLog(any(), anyString(), any()))
+                .thenReturn(Mono.empty());
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .verifyComplete();
+    }
+
+    @Test
     void sendAlertMasivianError401Test() {
         when(generatorTokenUseCase.getTokenMAS(any(), any()))
                 .thenReturn(Mono.just(SMSMasiv.builder().customData("test").isFlash(false)
@@ -129,6 +151,23 @@ class SendAlertUseCaseTest {
                         .TransactionNumber(2).Type(1).Url("UrlTest").build()));
         when(inalambriaGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("500 error")));
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .expectError()
+                .verify();
+    }
+
+    @Test
+    void sendAlertInfobipError401Test() {
+        alert.setProvider("INF");
+        when(generatorTokenUseCase.getTokenInf(any(), any()))
+                .thenReturn(Mono.just(SMSInfobip.builder()
+                        .messages(Arrays.asList(SMSInfobip.Message.builder()
+                                .from("text")
+                                .destinations(Arrays.asList(SMSInfobip.Destination.builder().to("1234").build()))
+                                .text("hi world").build())).build()));
+        when(infobipGateway.sendSMS(any()))
+                .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
                 .create(useCase.sendAlert(alert))
                 .expectError()

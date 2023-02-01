@@ -89,7 +89,6 @@ spec:
       securityContext:
         fsGroup: 65534
 
-
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler

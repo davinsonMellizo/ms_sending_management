@@ -21,14 +21,12 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CONTACT;
-import static co.com.bancolombia.commons.constants.Transaction.DELETE_CONTACT_PREVIOUS;
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
@@ -57,7 +55,7 @@ public class ContactUseCase {
     public Mono<ResponseContacts> findContactsByClient(Client pClient, String consumerCode) {
         return clientRepository.findClientByIdentification(pClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
-                .filter(client -> client.getIdState() == ACTIVE.getType())
+                .filter(client -> client.getIdState().equals(ACTIVE.getType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .map(client -> client.toBuilder().documentType(pClient.getDocumentType()).build())
                 .flatMap(client -> findContactsCloud(client, consumerCode))
@@ -68,7 +66,7 @@ public class ContactUseCase {
     private Mono<ResponseContacts> findContactsCloud(Client pClient, String pConsumerCode){
         return Mono.just(pConsumerCode)
                 .filter(consumerCode -> !consumerCode.isEmpty())
-                .flatMap(consumerCode -> findConsumer(consumerCode))
+                .flatMap(this::findConsumer)
                 .flatMap(consumer -> findClientByChanelCloud(pClient, consumer.getSegment()))
                 .switchIfEmpty(findClientWithoutChanelCloud(pClient));
     }
@@ -76,10 +74,11 @@ public class ContactUseCase {
     private Mono<ResponseContacts> findClientsIseries(Client pClient, String pConsumerCode){
         return Mono.just(pConsumerCode)
                 .filter(consumerCode -> !consumerCode.isEmpty())
-                .flatMap(consumerCode -> findConsumer(consumerCode))
+                .flatMap(this::findConsumer)
                 .flatMap(consumer -> findClientByChanelIseries(pClient, consumer.getSegment()))
                 .switchIfEmpty(findClientWithoutChanelIseries(pClient))
-                .onErrorMap(e-> e.getMessage().equals(CLIENT_NOT_FOUND_PER_CHANNEL) ,e-> new BusinessException(CLIENT_NOT_FOUND))
+                .onErrorMap(e-> e.getMessage().equals(CLIENT_NOT_FOUND_PER_CHANNEL.getMessage()),
+                        e-> new BusinessException(CLIENT_NOT_FOUND))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)));
     }
 
@@ -121,7 +120,7 @@ public class ContactUseCase {
                         .delegate(client.getDelegate())
                         .preference(client.getPreference())
                         .keyMdm(client.getKeyMdm())
-                        .status(client.getIdState() == ACTIVE.getType() ? ACTIVE.getValue(): INACTIVE.getValue())
+                        .status(client.getIdState().equals( ACTIVE.getType()) ? ACTIVE.getValue(): INACTIVE.getValue())
                         .creationUser(client.getCreationUser())
                         .createdDate(client.getCreatedDate())
                         .modifiedDate(client.getModifiedDate())
@@ -132,7 +131,7 @@ public class ContactUseCase {
     private Mono<ResponseContacts> filterContactsByConsumer(ResponseContacts responseContacts, String segment){
         return  Mono.just(responseContacts.getContacts())
                 .filter(contacts -> !contacts.isEmpty())
-                .flatMapMany(contacts -> Flux.fromIterable(contacts))
+                .flatMapMany(Flux::fromIterable)
                 .filter(contact -> contact.getSegment().equals(segment))
                 .collectList()
                 .filter(contacts -> !contacts.isEmpty())
@@ -221,13 +220,13 @@ public class ContactUseCase {
     private Mono<Contact> validateCountryCode(Contact contact){
         return Mono.just(contact)
                 .filter(contact1 -> contact1.getContactWayName().equals(SMS))
-                .filter(contact1 -> !contact1.getValue().substring(0,1).equals("+"))
+                .filter(contact1 -> !"+".equals(contact1.getValue().substring(0,1)))
                 .map(contact1 -> contact1.toBuilder().value("+57"+contact.getValue()).build())
                 .switchIfEmpty(Mono.just(contact));
     }
 
     public Mono<Enrol> validateMail(Enrol enrol) {
-        final var pattern = "^(([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+)+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
+        final var pattern = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
         return Flux.fromIterable(enrol.getContactData())
                 .filter(cnt -> MAIL.equals(cnt.getContactWay()))
                 .flatMap(this::validateEnvironment)

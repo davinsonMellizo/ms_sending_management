@@ -8,4 +8,6 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.8.0'
     testImplementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.5.0'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 }

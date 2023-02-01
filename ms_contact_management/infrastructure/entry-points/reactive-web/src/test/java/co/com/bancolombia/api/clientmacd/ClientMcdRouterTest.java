@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.clientmacd;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
+import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.mapper.EnrolMapper;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ClientMcdRouterTest extends BaseIntegrationTest {
+public class ClientMcdRouterTest extends BaseIntegration {
 
     @MockBean
     private ClientUseCase useCase;
@@ -64,7 +64,7 @@ public class ClientMcdRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateClient() {
+    void updateClient() {
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         when(useCase.updateClientMcd(any())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
                 .actual(Enrol.builder().client(client).build()).before(Enrol.builder().client(client).build()).build()));

@@ -30,3 +30,5 @@ data:
   TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}#
   ENDPOINT_INALAMBRIA_SMS: #{endpoint-inalambria-sms}#
   ENDPOINT_INALAMBRIA_TOKEN: #{endpoint-inalambria-token}#
+  ENDPOINT_INFOBIP_SMS: #{endpoint-infobip-sms}#
+  ENDPOINT_INFOBIP_TOKEN: #{endpoint-infobip-token}#

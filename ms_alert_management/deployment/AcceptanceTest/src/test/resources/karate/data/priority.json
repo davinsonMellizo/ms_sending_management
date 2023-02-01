@@ -1,6 +1,6 @@
 {
-  "id": '#(id)',
-  "code": '#(code)',
+  "id": "#(id)",
+  "code": "#(code)",
   "description": "prioridad 2 Ina",
   "idProvider": "INA",
   "creationUser": "Davinson"

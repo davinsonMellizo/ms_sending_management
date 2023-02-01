@@ -7,7 +7,6 @@ import co.com.bancolombia.model.token.Token;
 import reactor.core.publisher.Mono;
 
 public interface MasivianGateway {
-
     Mono<Response> sendSMS(SMSMasiv smsMasiv);
     Mono<Token> getToken(Account account);
 

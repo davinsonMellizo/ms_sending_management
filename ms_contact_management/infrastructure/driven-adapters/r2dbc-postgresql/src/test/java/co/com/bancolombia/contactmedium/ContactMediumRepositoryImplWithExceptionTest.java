@@ -29,7 +29,7 @@ public class ContactMediumRepositoryImplWithExceptionTest {
     private ContactMediumMapper mapper = Mappers.getMapper(ContactMediumMapper.class);
 
     @Test
-    public void findContactMediumByCodeWithException() {
+    void findContactMediumByCodeWithException() {
         when(repository.findById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImplement.findContactMediumByCode("SMS")

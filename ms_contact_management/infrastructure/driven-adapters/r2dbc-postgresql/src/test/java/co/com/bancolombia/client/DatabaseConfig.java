@@ -30,7 +30,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     @Bean
     public R2dbcEntityOperations writerR2dbcEntityOperations(@Qualifier("Writer") final ConnectionFactory connectionFactory) {
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
+        var databaseClient = DatabaseClient.create(connectionFactory);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
     }
 

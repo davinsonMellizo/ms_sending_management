@@ -18,7 +18,7 @@ public class NewnessRepositoryImplTest {
     private NewnessRepositoryImplement repositoryImplement;
 
     @Test
-    public void saveNewness() {
+    void saveNewness() {
         Newness newness = new Newness();
         newness.setDocumentNumber(11111L);
         newness.setDocumentType(1);

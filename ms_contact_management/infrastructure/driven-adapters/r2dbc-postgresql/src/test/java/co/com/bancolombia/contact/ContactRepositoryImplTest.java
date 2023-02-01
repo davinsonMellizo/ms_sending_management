@@ -42,14 +42,14 @@ public class ContactRepositoryImplTest {
     }
 
     @Test
-    public void findAllContactsByClient() {
+    void findAllContactsByClient() {
         StepVerifier.create(contactRepositoryImplement.contactsByClient(client))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    public void findIdContact() {
+    void findIdContact() {
         contact.setContactWay("SMS");
         contact.setSegment("ALM");
         StepVerifier.create(contactRepositoryImplement.findContactsByClientSegmentAndMedium(contact))
@@ -58,7 +58,7 @@ public class ContactRepositoryImplTest {
     }
 
     @Test
-    public void updateContact() {
+    void updateContact() {
         contact.setContactWay("0");
         contact.setSegment("ALM");
         contact.setValue("3216931596");
@@ -68,7 +68,7 @@ public class ContactRepositoryImplTest {
     }
 
     @Test
-    public void saveContact() {
+    void saveContact() {
         contactRepositoryImplement.saveContact(contact)
                 .subscribe(contactSaved -> StepVerifier
                         .create(contactRepositoryImplement.findContactsByClientSegmentAndMedium(contactSaved))
@@ -77,7 +77,7 @@ public class ContactRepositoryImplTest {
     }
 
     @Test
-    public void deleteContact() {
+    void deleteContact() {
         contact.setContactWay("SMS");
         contact.setSegment("ALM");
         contactRepositoryImplement.findContactsByClientSegmentAndMedium(contact)

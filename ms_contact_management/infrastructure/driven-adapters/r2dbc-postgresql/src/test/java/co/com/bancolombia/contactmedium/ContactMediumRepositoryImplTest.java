@@ -16,7 +16,7 @@ public class ContactMediumRepositoryImplTest {
     private ContactMediumRepositoryImplement repositoryImplement;
 
     @Test
-    public void findContactMediumByCode() {
+    void findContactMediumByCode() {
         StepVerifier.create(repositoryImplement.findContactMediumByCode("SMS"))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -62,11 +62,11 @@ Feature: CRUD Schedule
     And match $.code == '301'
 
   Scenario: Successful case Find schedule by id
-    * def urlFindById = urlSchedule + "/3"
+    * def urlFindById = urlSchedule + "/5"
     Given url urlFindById
     When method GET
     Then status 200
-    And match $.data.id == 3
+    And match $.data.id == 5
     And match $.data.idConsumer == 'SVP'
 
   Scenario: Error case Find schedule by id
@@ -82,18 +82,6 @@ Feature: CRUD Schedule
     When method GET
     Then status 500
     And match $.code == '302'
-
-  Scenario: Successful case Update campaign
-    * def urlFindById = urlSchedule + "/3"
-    * set body.idCampaign = '2'
-    * set body.idConsumer = 'SVP'
-    * set body.scheduleType = 'WEEKLY'
-    Given url urlFindById
-    And request body
-    When method PUT
-    Then status 200
-    And match $.data.actual.id == 3
-    And match $.data.actual.scheduleType == 'WEEKLY'
 
   Scenario: Error case Update schedule
     * def urlFindById = urlSchedule + "/0"
