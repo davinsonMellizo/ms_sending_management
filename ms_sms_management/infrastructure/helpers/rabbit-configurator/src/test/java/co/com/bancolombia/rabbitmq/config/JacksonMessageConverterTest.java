@@ -81,8 +81,6 @@ class JacksonMessageConverterTest {
                 .isInstanceOf(MessageConversionException.class);
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> trunk
+
+

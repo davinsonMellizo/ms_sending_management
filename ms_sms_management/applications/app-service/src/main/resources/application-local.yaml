@@ -59,14 +59,11 @@ adapters:
   rest-client:
     timeout: 1000
     resources:
-      #endpointMasivSms: https://41d02b94-ca83-4363-a277-0ae84020c323.mock.pstmn.io/masivian-sms
       endpointMasivSms: https://api-sms.masivapp.com/send-message
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
-      #endpointInalambriaSms: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
       endpointInalambriaSms: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/mtmessage
       endpointInalambriaToken: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/token/
-      #endpointInalambriaToken: https://82c08f5f-ac8a-4208-990f-25eeeeb89ca3.mock.pstmn.io
       endpointInfobipSMS: https://ejl2nq.api.infobip.com/sms/2/text/advanced
       endpointInfobipToken: https://ejl2nq.api.infobip.com/auth/1/oauth2/token
   secrets-manager:

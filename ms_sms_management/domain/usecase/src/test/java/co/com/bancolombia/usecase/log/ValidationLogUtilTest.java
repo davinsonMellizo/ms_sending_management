@@ -50,8 +50,4 @@ class ValidationLogUtilTest {
 
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> trunk
