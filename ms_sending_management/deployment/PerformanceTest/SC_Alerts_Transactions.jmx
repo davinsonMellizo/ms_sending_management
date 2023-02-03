@@ -108,6 +108,11 @@
             <stringProp name="Argument.value">${__P(dataSendAlert,DT_request_sending.csv)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="retrieveInformation" elementType="Argument">
+            <stringProp name="Argument.name">retrieveInformation</stringProp>
+            <stringProp name="Argument.value">${__P(retrieveInformation,true)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -208,7 +213,7 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;retrieveInformation&quot;: false,&#xd;
+    &quot;retrieveInformation&quot;: ${retrieveInformation},&#xd;
     &quot;client&quot;:{&#xd;
         &quot;identification&quot;:{&#xd;
         	&quot;documentType&quot;: 0,&#xd;
@@ -216,6 +221,8 @@
         }&#xd;
     },&#xd;
     &quot;message&quot;:{&#xd;
+    	   &quot;template&quot;: &quot;compra&quot;,&#xd;
+    	   &quot;priority&quot;: 1,&#xd;
         &quot;parameters&quot;:{&#xd;
             &quot;nombre&quot;: &quot;Davinson&quot;&#xd;
         },&#xd;
