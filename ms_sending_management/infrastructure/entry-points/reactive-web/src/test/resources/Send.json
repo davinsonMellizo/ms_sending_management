@@ -1,9 +1,28 @@
 {
-  "operation": "0",
-  "documentType":"0",
-  "documentNumber":"0",
-  "consumer":"j",
-  "alert":"j",
-  "transactionCode":"j",
-  "amount": 0
+  "retrieveInformation": false,
+  "client":{
+    "identification":{
+      "documentType": 1
+    }
+  },
+  "message":{
+    "parameters":{
+      "canal": "SVP",
+      "fecha": "2023-01-22",
+      "hora": "08:52:23"
+    },
+    "mail": {
+      "address": "davinson.mellizo@gmailcom"
+    },
+    "sms": {
+      "phone": "3217937584"
+    },
+    "push":{
+      "applicationCode": ""
+    }
+  },
+  "alertParameters":{
+    "alert": "60",
+    "consumer": "SVP"
+  }
 }

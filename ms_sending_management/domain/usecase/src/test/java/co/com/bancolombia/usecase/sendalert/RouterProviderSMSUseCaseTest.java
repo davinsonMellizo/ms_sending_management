@@ -3,12 +3,12 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.routers.RouterProviderSMSUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +19,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,19 +33,19 @@ class RouterProviderSMSUseCaseTest {
     private RouterProviderSMSUseCase routerProviderSMSUseCase;
 
     @Mock
-    private ProviderGateway providerGateway;
-    @Mock
     private PriorityGateway priorityGateway;
     @Mock
-    private CommandGateway commandGateway;
+    private ProviderGateway providerGateway;
     @Mock
     private LogUseCase logUseCase;
+    @Mock
+    private CommandGateway commandGateway;
 
     private Message message = new Message();
 
     @BeforeEach
     public void init(){
-        message.setOperation(1);
+        message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
         message.setConsumer("SVP");
@@ -55,10 +57,10 @@ class RouterProviderSMSUseCaseTest {
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
-        parameters.add(parameter);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
         message.setParameters(parameters);
+        message.setPreferences(new ArrayList<>());
     }
 
 
@@ -66,15 +68,17 @@ class RouterProviderSMSUseCaseTest {
     void routeAlertSmsTest(){
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
-                .push("SI")
+                .push("NO")
                 .idProviderSms("0")
                 .priority(0)
                 .build();
-        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
-        when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
-        StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
+        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
+        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
+        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
+
+        StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
     }
 
@@ -86,11 +90,8 @@ class RouterProviderSMSUseCaseTest {
                 .idProviderSms("0")
                 .priority(0)
                 .build();
-        when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.error(new Throwable("error")));
-        when(logUseCase.sendLogSMS(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
-        StepVerifier.create(routerProviderSMSUseCase.validateMobile(message, alert))
+        StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .verifyComplete();
     }
 

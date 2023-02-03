@@ -1,21 +1,26 @@
-package co.com.bancolombia.usecase.sendalert.operations;
+package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
+import co.com.bancolombia.model.alerttransaction.AlertTransaction;
+import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.AMOUNT_NOT_EXCEEDED;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 
 @RequiredArgsConstructor
-public class ValidateAmountUseCase {
+public class AlertUseCase {
+    private final AlertGateway alertGateway;
     private final AlertClientGateway alertClientGateway;
+    private final AlertTransactionGateway alertTransactionGateway;
 
     private Mono<AlertClient> restartAccumulated(AlertClient pAlertClient) {
         var now = LocalDate.now();
@@ -41,5 +46,34 @@ public class ValidateAmountUseCase {
                         alertClient.getAccumulatedOperations() >= alertClient.getNumberOperations())
                 .map(alertClient -> alert)
                 .switchIfEmpty(Mono.error(new BusinessException(AMOUNT_NOT_EXCEEDED)));
+    }
+
+    public Flux<Alert> getAlertsByTransactions(Message message) {
+        return Mono.just(message)
+                .flatMapMany(alertTransactionGateway::findAllAlertTransaction)
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_TRANSACTION_NOT_FOUND)))
+                .map(AlertTransaction::getIdAlert)
+                .flatMap(alertGateway::findAlertById)
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
+    }
+
+    private Mono<Alert> buildAlertGeneral(Message message){
+        return alertGateway.findAlertById("GNR")
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)))
+                .filter(alert -> message.getParameters().containsKey("mensaje"))
+                .switchIfEmpty(Mono.error(new BusinessException(MESSAGE_NOT_FOUND)))
+                .map(alert -> alert.toBuilder()
+                        .priority(null)
+                        .message(message.getParameters().get("mensaje"))
+                        .templateName(message.getTemplate())
+                        .build());
+    }
+
+    public Mono<Alert> getAlert(Message message) {
+        return Mono.just(message)
+                .filter(message1 -> message1.getAlert().isEmpty())
+                .flatMap(this::buildAlertGeneral)
+                .switchIfEmpty(alertGateway.findAlertById(message.getAlert()))
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
     }
 }

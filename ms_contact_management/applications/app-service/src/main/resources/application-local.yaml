@@ -14,7 +14,7 @@ spring:
   jackson:
     default-property-inclusion: "NON_NULL"
   webflux:
-    base-path: /api/v1/contact-management
+    base-path: /alertas/api/v1/contact-management
   logging:
     level:
       root: INFO
@@ -38,6 +38,7 @@ adapters:
     timeout: 1000
     resources:
       retrieveInfo: https://gw-distribucion-digital-dev.apps.ambientesbc.lab/private-bancolombia/development/v1/business-support/document-management/document-services/customers/actions/retrieve/information
+      sendAlert: localhost:8081/alertas/api/v1/sending-management/send
 
 cloud:
   aws:
@@ -71,6 +72,10 @@ management:
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
+
+app:
+  parameters:
+    synchronizeIsiries: true
 
 d2b:
   aws:

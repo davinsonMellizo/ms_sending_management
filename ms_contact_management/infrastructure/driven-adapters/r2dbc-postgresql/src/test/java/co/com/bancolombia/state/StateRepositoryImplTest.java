@@ -10,7 +10,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class StateRepositoryImplTest {
+class StateRepositoryImplTest {
 
     @Autowired
     private StateRepositoryImplement stateRepositoryImplement;

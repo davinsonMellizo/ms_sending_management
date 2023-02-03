@@ -10,7 +10,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ConsumerRepositoryImplTest {
+class ConsumerRepositoryImplTest {
 
     @Autowired
     private ConsumerRepositoryImplement consumerRepositoryImplement;

@@ -1,10 +1,11 @@
-package co.com.bancolombia.usecase.sendalert.operations;
+package co.com.bancolombia.usecase.sendalert.routers;
 
 import co.com.bancolombia.model.alert.Alert;
+import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
+import co.com.bancolombia.usecase.sendalert.AlertUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,22 +17,27 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ValidateAmountUseCaseTest {
+class AlertUseCaseTest {
     @InjectMocks
-    private ValidateAmountUseCase validateAmountUseCase;
+    private AlertUseCase alertUseCase;
     @Mock
     private AlertClientGateway alertClientGateway;
+    @Mock
+    private AlertGateway alertGateway;
 
     private Message message = new Message();
 
     @BeforeEach
     public void init(){
-        message.setOperation(1);
+        message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
         message.setConsumer("SVP");
@@ -43,9 +49,8 @@ class ValidateAmountUseCaseTest {
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
-        parameters.add(parameter);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
         message.setParameters(parameters);
     }
 
@@ -64,7 +69,7 @@ class ValidateAmountUseCaseTest {
                 .build();
         when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
         when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
-        StepVerifier.create(validateAmountUseCase.validateAmount(alert, message))
+        StepVerifier.create(alertUseCase.validateAmount(alert, message))
                 .expectError()
                 .verify();
     }
@@ -83,7 +88,39 @@ class ValidateAmountUseCaseTest {
                 .build();
         when(alertClientGateway.findAlertClient(any())).thenReturn(Mono.just(alertClient));
         when(alertClientGateway.accumulate(any())).thenReturn(Mono.just(alertClient));
-        StepVerifier.create(validateAmountUseCase.validateAmount(alert, message))
+        StepVerifier.create(alertUseCase.validateAmount(alert, message))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void getAlertTest(){
+        Alert alert = Alert.builder()
+                .id("AFI")
+                .push("SI")
+                .idProviderMail("TOD")
+                .idRemitter(0)
+                .build();
+        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
+        StepVerifier.create(alertUseCase.getAlert(message))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void getAlertGnrTest(){
+        Alert alert = Alert.builder()
+                .id("AFI")
+                .push("SI")
+                .idProviderMail("TOD")
+                .idRemitter(0)
+                .build();
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("mensaje", "bancolombia");
+        message.setParameters(parameters);
+        message.setAlert("");
+        when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
+        StepVerifier.create(alertUseCase.getAlert(message))
                 .expectNextCount(1)
                 .verifyComplete();
     }

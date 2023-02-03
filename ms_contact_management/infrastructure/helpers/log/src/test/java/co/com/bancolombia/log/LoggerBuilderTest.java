@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-public class LoggerBuilderTest {
+class LoggerBuilderTest {
 
     private static final String TRANSACTION_ID = "asdfghj-asdfghj-asdfghj";
     private static final String CHANNEL = "Any";

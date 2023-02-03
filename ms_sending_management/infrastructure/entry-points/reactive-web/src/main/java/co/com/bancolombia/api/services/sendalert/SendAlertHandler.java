@@ -1,9 +1,10 @@
 package co.com.bancolombia.api.services.sendalert;
 
+import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
-import co.com.bancolombia.api.dto.MessageDTO;
+import co.com.bancolombia.api.dto.AlertDTO;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.usecase.sendalert.ManagementAlertUseCase;
+import co.com.bancolombia.usecase.sendalert.SendingUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,13 +16,15 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSI
 @Component
 @RequiredArgsConstructor
 public class SendAlertHandler {
-    private final ManagementAlertUseCase useCase;
+    private final SendingUseCase useCase;
+    private final ValidatorHandler validatorHandler;
 
     public Mono<ServerResponse> sendAlert(ServerRequest serverRequest) {
 
-        return serverRequest.bodyToMono(MessageDTO.class)
+        return serverRequest.bodyToMono(AlertDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
-                .flatMap(MessageDTO::toModel)
+                .doOnNext(validatorHandler::validateObject)
+                .flatMap(AlertDTO::toModel)
                 .flatMap(useCase::alertSendingManager)
                 .flatMap(ResponseUtil::responseOk);
     }

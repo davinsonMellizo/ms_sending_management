@@ -80,6 +80,7 @@ class RabbitMQDualConfigHelperTest {
         properties.setPassword("this-is-for-test");
         properties.setVirtualhost("/");
         properties.setPort(8080);
+        properties.setSsl(true);
         return properties;
     }
 }

@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ContactMediumRepositoryImplWithExceptionTest {
+class ContactMediumRepositoryImplWithExceptionTest {
 
     @InjectMocks
     private ContactMediumRepositoryImplement repositoryImplement;

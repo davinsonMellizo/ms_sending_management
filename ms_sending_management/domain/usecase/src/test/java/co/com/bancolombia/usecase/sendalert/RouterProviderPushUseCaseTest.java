@@ -4,10 +4,10 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.gateways.PushGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.routers.RouterProviderPushUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +18,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -38,7 +40,7 @@ class RouterProviderPushUseCaseTest {
 
     @BeforeEach
     public void init(){
-        message.setOperation(1);
+        message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
         message.setConsumer("SVP");
@@ -46,14 +48,18 @@ class RouterProviderPushUseCaseTest {
         message.setTransactionCode("580");
         message.setAmount(60000L);
         message.setUrl("");
+        message.setApplicationCode("PERSONAS");
         message.setPhone("32158967");
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
         message.setLogKey("testKey");
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
-        parameters.add(parameter);
+        message.setPush(true);
+        ArrayList<String> preferences = new ArrayList<>();
+        preferences.add("SMS");
+        message.setPreferences(preferences);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
         message.setParameters(parameters);
     }
 

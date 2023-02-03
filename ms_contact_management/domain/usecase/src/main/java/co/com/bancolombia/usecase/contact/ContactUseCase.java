@@ -28,16 +28,7 @@ import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
 import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CONTACT;
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND_PER_CHANNEL;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONTACTS_EMPTY;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.DOCUMENT_TYPE_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_DATA;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_EMAIL;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_ENVIRONMENT;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_PHONE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
 
@@ -90,6 +81,7 @@ public class ContactUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND_PER_CHANNEL)));
 
     }
+
     private Mono<ResponseContacts> findClientByChanelIseries(Client client, String segment){
         return documentGateway.getDocument(client.getDocumentType())
                 .switchIfEmpty(Mono.error(new BusinessException(DOCUMENT_TYPE_NOT_FOUND)))
@@ -185,11 +177,14 @@ public class ContactUseCase {
                 .zipWith(validateCountryCode(newContact))
                 .map(data -> response.getActual().toBuilder().value(data.getT2().getValue())
                         .stateContact(data.getT1().getId().toString())
+                        .contactWayName(newContact.getContactWay())
                         .environmentType(data.getT2().getEnvironmentType())
                         .build())
                 .flatMap(contactGateway::updateContact)
                 .doOnNext(contactResponse -> newnessUseCase.saveNewness(response.getActual(), UPDATE_CONTACT, voucher))
-                .map(contact -> response.toBuilder().before(response.getActual()).actual(contact).build());
+                .map(contact -> response.toBuilder()
+                        .before(response.getActual().toBuilder().contactWayName(newContact.getContactWayName()).build())
+                        .actual(contact.toBuilder().contactWay(newContact.getContactWay()).build()).build());
 
     }
 

@@ -29,7 +29,6 @@ public class LogUseCase {
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .priority(alert.getPriority())
                 .build())
                 .then(Mono.empty());
@@ -52,7 +51,6 @@ public class LogUseCase {
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .build())
                 .then(Mono.just(response));
     }
@@ -74,7 +72,6 @@ public class LogUseCase {
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .build())
                 .then(Mono.empty());
     }
@@ -88,7 +85,6 @@ public class LogUseCase {
                 .logType(logType)
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .build())
                 .then(Mono.empty());
     }

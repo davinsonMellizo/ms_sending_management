@@ -30,11 +30,11 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        ConsumerProperties.class
+        ConsumerProperties.class,
 })
 class RestConsumerTest {
     private MockWebServer mockServer;
-    private RestConsumer restClient;
+    private RestConsumer restConsumer;
     private final ResponseClient client = new ResponseClient();
     @Mock
     private LoggerBuilder loggerBuilder;
@@ -46,7 +46,7 @@ class RestConsumerTest {
     public void setUp() {
         client.setResponse(true);
         mockServer = new MockWebServer();
-        restClient = new RestConsumer(WebClient.builder()
+        restConsumer = new RestConsumer(WebClient.builder()
                 .baseUrl(getBaseUrl(mockServer.getPort()))
                 .build(), loggerBuilder);
         mockServer.url(getBaseUrl(mockServer.getPort()));
@@ -66,7 +66,7 @@ class RestConsumerTest {
 
         HashMap headers = new HashMap();
         Request request = Request.builder().headers(headers).build();
-        StepVerifier.create(restClient.post(getBaseUrl(mockServer.getPort()), request,
+        StepVerifier.create(restConsumer.post(getBaseUrl(mockServer.getPort()), request,
                 ResponseClient.class, Error.class))
                 .expectNextMatches(response -> ((ResponseClient) response).getResponse()==true)
                 .verifyComplete();

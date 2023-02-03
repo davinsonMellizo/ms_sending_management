@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   servlet:
     encoding:
       charset: UTF-8
@@ -60,7 +60,7 @@ adapters:
     secret-rabbit: alertas-local-secretrabbit-CNX
     secret-rds-read: alertas-local-secretrds-CNX
     secret-rds: alertas-local-secretrds-CNX
-    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
+    secret-rabbit-dual: alertas-local-secretrabbit-dual-CNX
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
