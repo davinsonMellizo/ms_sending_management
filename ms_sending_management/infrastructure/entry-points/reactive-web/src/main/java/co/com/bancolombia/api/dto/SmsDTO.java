@@ -28,9 +28,5 @@ public class SmsDTO {
     @Size(max = 500, message = "{constraint.size}")
     @Schema(description = "url que se adjunta al mensaje de texto")
     private String url = "";
-    @Schema(description = "Obligatorio para envío de sms cuando no se envía, " +
-            "Alerta o Consumidor y código de transacción", allowableValues = {"1","2","3", "4", "5"})
-    @Max(value = 5, message = "{constraint.max}")
-    @Min(value = 1, message = "{constraint.min}")
-    private Integer priority;
+
 }

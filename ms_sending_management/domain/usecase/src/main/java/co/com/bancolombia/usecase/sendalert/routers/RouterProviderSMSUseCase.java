@@ -63,10 +63,12 @@ public class RouterProviderSMSUseCase {
         return Mono.just(Sms.builder()
                 .logKey(message.getLogKey())
                 .priority(alert.getPriority())
-                .to(message.getPhoneIndicator() + message.getPhone())
+
+                .to(Sms.To.builder().phoneNumber(message.getPhone())
+                        .phoneIndicator(message.getPhoneIndicator()).build())
                 .message(alert.getMessage())
                 .provider(provider.getId())
-                .url(message.getUrl())
+                .urlForShortening(message.getUrl())
                 .build())
                 .flatMap(commandGateway::sendCommandAlertSms);
     }

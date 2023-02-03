@@ -25,11 +25,7 @@ public class MailDTO {
     @Schema(description = "Obligatorio para envío de correo cuando no se envía, " +
             "Alerta o Consumidor y código de transacción")
     private String remitter = "";
-    @Builder.Default
-    @Size(max = 100, message = "{constraint.size}")
-    @Schema(description = "Obligatorio para envío de correo cuando no se envía, " +
-            "Alerta o Consumidor y código de transacción")
-    private String template = "";
+
     @Builder.Default
     private ArrayList<Attachment> attachments = new ArrayList<>();
 }

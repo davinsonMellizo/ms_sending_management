@@ -26,6 +26,7 @@ public class Message {
     private String remitter;
     private Integer priority;
     private String applicationCode;
+    private String category;
     private String logKey;
 
     private String phone;

@@ -24,10 +24,12 @@ public class AlertDTO {
     private @Valid ClientDTO client = new ClientDTO();
     @NotNull(message = "{constraint.not_null}")
     private @Valid MessageDTO message;
-    private @Valid AlertParametersDTO alertParameters;
+    @Builder.Default
+    private @Valid AlertParametersDTO alertParameters = new AlertParametersDTO();
 
     public Mono<Message> toModel(){
         return Mono.just(Message.builder()
+                .category(message.getCategory())
                 .documentNumber(client.getIdentification().getDocumentNumber())
                 .documentType(client.getIdentification().getDocumentType())
                 .preferences(message.getPreferences())
@@ -42,10 +44,10 @@ public class AlertDTO {
                 .parameters(message.getParameters())
                 .attachments(message.getMail().getAttachments())
                 .remitter(message.getMail().getRemitter())
-                .priority(message.getSms().getPriority())
+                .priority(message.getPriority())
                 .retrieveInformation(retrieveInformation)
                 .applicationCode(message.getPush().getApplicationCode())
-                .template(message.getMail().getTemplate())
+                .template(message.getTemplate())
                 .build());
     }
 }

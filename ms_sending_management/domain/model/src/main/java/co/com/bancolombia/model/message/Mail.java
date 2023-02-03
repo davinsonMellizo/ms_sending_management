@@ -15,6 +15,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class Mail extends Request {
     private String provider;
+    private Integer priority;
+    private String category;
     private String from;
     private Destination destination;
     private List<Attachment> attachments;

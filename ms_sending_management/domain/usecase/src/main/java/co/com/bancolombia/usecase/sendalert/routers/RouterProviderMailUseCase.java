@@ -63,6 +63,8 @@ public class RouterProviderMailUseCase {
                         .logKey(message.getLogKey())
                         .provider(provider.getId())
                         .from(remitter.getMail())
+                        .category(message.getCategory())
+                        .category(message.getCategory())
                         .destination(new Mail.Destination(message.getMail(), "", ""))
                         .attachments(message.getAttachments())
                         .template(new Template(message.getParameters(), alert.getTemplateName())).build())).next()
