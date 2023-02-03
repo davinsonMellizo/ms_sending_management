@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 public class ValidateData {
 
     private static final String PATTERN = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
-
     public static final Predicate<Message> isValidMobile = message -> isNotEmpty(message.getPhone());
 
     public static final Predicate<Message> isValidMailFormat = message ->

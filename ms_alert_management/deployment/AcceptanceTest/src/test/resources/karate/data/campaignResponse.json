@@ -1,4 +1,4 @@
 {
-  "idCampaign": '#string',
-  "idConsumer": '#string'
+  "idCampaign": "#string",
+  "idConsumer": "#string"
 }
