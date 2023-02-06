@@ -28,5 +28,6 @@ data:
   REGION_AWS: #{aws-region}#
   SECRET_RABBIT: #{secret-rabbit}#
   SECRET_RABBIT_DUAL: #{secret-rabbit-dual}#
+  SEND_PUSH: #{send-push}#
 
 
