@@ -216,15 +216,15 @@
     &quot;retrieveInformation&quot;: ${retrieveInformation},&#xd;
     &quot;client&quot;:{&#xd;
         &quot;identification&quot;:{&#xd;
-        	&quot;documentType&quot;: 0,&#xd;
-		&quot;documentNumber&quot;: 2000000000&#xd;
+        	&quot;documentType&quot;: 1,&#xd;
+		&quot;documentNumber&quot;: ${document_number}&#xd;
         }&#xd;
     },&#xd;
     &quot;message&quot;:{&#xd;
     	   &quot;template&quot;: &quot;compra&quot;,&#xd;
     	   &quot;priority&quot;: 1,&#xd;
         &quot;parameters&quot;:{&#xd;
-            &quot;nombre&quot;: &quot;Davinson&quot;&#xd;
+            &quot;mensaje&quot;: &quot;Su transaccion fue exitosa&quot;&#xd;
         },&#xd;
         &quot;mail&quot;: {&#xd;
             &quot;address&quot;: &quot;davinson.mellizo@gmailcom&quot;&#xd;
@@ -237,6 +237,9 @@
         }&#xd;
     },&#xd;
     &quot;alertParameters&quot;:{&#xd;
+    	&quot;consumer&quot;: &quot;SVP&quot;,&#xd;
+    	&quot;transactionCode&quot;: &quot;${transaction}&quot;,&#xd;
+    	&quot;amount&quot;: 50000000&#xd;
     }&#xd;
     &#xd;
 }</stringProp>
@@ -281,6 +284,18 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Dt_Request_send_alert" enabled="true">
+          <stringProp name="delimiter">;</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="filename">${send_alert_data}</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="variableNames">document_number,alert,transaction,operation</stringProp>
+        </CSVDataSet>
+        <hashTree/>
       </hashTree>
       <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="Thread Group Sending" enabled="false">
         <elementProp name="ThreadGroup.main_controller" elementType="com.blazemeter.jmeter.control.VirtualUserController"/>

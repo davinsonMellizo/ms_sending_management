@@ -23,7 +23,7 @@ public enum BusinessErrorMessage {
     ALERT_TRANSACTION_NOT_FOUND("374", "Alert Transaction Not Found"),
     ALERT_CLIENT_NOT_FOUND("378", "Alert Client Not Found"),
     CONSUMER_NOT_FOUND("380", "Consumer Not Found"),
-    PRIORITY_INVALID("381", "Consumer Not Found");
+    PRIORITY_INVALID("381", "Priority Invalid");
 
     private final String code;
     private final String message;
