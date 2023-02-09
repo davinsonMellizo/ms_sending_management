@@ -28,7 +28,7 @@ public class ClientRepositoryImplement
 
     @Override
     public Mono<Client> findClientByIdentification(Long documentNumber, Integer documentType) {
-        return repository.findClientByIdentification(documentNumber, Integer.toString(documentType))
+        return repository.findClientByIdentification(documentNumber, documentType)
                 .map(this::convertToEntity)
                 .onErrorMap(e -> new TechnicalException(e, FIND_CLIENT_ERROR));
     }
