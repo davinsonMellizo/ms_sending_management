@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static co.com.bancolombia.commons.constants.Constants.MONETARY;
@@ -40,14 +41,14 @@ public class SendingUseCase {
                 .switchIfEmpty(Mono.just(pAlert));
     }
 
-    private Flux<Void> routeAlert(Alert alert, Message message) {
-        return routerProviderPushUseCase.sendPush(message, alert)
-                .concatWith(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
-                .concatWith(routerProviderMailUseCase.routeAlertMail(message, alert))
-                .thenMany(Flux.empty());
+    private Mono<Alert> routeAlert(Alert alert, Message message) {
+        return Mono.zip(routerProviderPushUseCase.sendPush(message, alert),
+                (routerProviderSMSUseCase.routeAlertsSMS(message, alert)),
+                (routerProviderMailUseCase.routeAlertMail(message, alert)))
+                .thenReturn(alert);
     }
 
-    private Flux<Void> validateAlerts(Message message) {
+    private Mono<List<Alert>> validateAlerts(Message message) {
         return Mono.just(message)
                 .filter(message1 -> !message1.getTransactionCode().isEmpty())
                 .filter(message1 -> !message1.getConsumer().isEmpty())
@@ -57,7 +58,7 @@ public class SendingUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(INACTIVE_ALERT)))
                 .flatMap(alert -> validateObligation(alert, message))
                 .flatMap(alert -> buildMessageSms(alert, message))
-                .flatMap(alert -> routeAlert(alert, message));
+                .collectList();
     }
 
     private Mono<Alert> buildMessageSms(Alert alert, Message message){
@@ -67,15 +68,19 @@ public class SendingUseCase {
                 .switchIfEmpty(Util.replaceParameter(alert, message));
     }
 
+    private Mono<Void> sendAlerts(Message message, List<Alert> alerts){
+        return Flux.fromIterable(alerts)
+                .flatMap(alert -> routeAlert(alert, message))
+                .then(Mono.empty());
+    }
+
     public Mono<Void> alertSendingManager(Message message) {
         var sizeLogKey = 16;
-        String logKey = LocalDate.now().toString()+UUID.randomUUID().toString().substring(sizeLogKey);
-        return Mono.just(message)
-                .filter(Message::getRetrieveInformation)
-                .flatMap(clientUseCase::validateClient)
-                .switchIfEmpty(Mono.just(message))
-                .map(message1 -> message1.toBuilder().logKey(logKey).build())
-                .flatMapMany(this::validateAlerts)
+        String logKey = LocalDate.now()+UUID.randomUUID().toString().substring(sizeLogKey);
+        message.setLogKey(logKey);
+        return clientUseCase.validateClientInformation(message)
+                .zipWith(validateAlerts(message))
+                .flatMap(data -> sendAlerts(data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))
                 .then(Mono.empty());

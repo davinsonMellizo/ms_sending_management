@@ -36,7 +36,6 @@ public class ClientUseCase {
                         .mail(contacts.get("MAIL") != null ? contacts.get("MAIL").getValue() : "").build())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)));
     }
-
     public Mono<Message> validateClient(Message message){
         return Mono.just(message)
                 .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(),
@@ -46,5 +45,11 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .map(client -> message)
                 .flatMap(this::validateDataContact);
+    }
+    public Mono<Message> validateClientInformation(Message message){
+        return Mono.just(message)
+                .filter(Message::getRetrieveInformation)
+                .flatMap(this::validateClient)
+                .switchIfEmpty(Mono.just(message));
     }
 }

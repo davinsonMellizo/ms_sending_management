@@ -90,17 +90,17 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="send_alert_users" elementType="Argument">
             <stringProp name="Argument.name">send_alert_users</stringProp>
-            <stringProp name="Argument.value">${__P(users,300)}</stringProp>
+            <stringProp name="Argument.value">${__P(users,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_duration" elementType="Argument">
             <stringProp name="Argument.name">send_alert_duration</stringProp>
-            <stringProp name="Argument.value">${__P(duration,60)}</stringProp>
+            <stringProp name="Argument.value">${__P(duration,300)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_rampup" elementType="Argument">
             <stringProp name="Argument.name">send_alert_rampup</stringProp>
-            <stringProp name="Argument.value">${__P(rampup,60)}</stringProp>
+            <stringProp name="Argument.value">${__P(rampup,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_data" elementType="Argument">
@@ -110,7 +110,7 @@
           </elementProp>
           <elementProp name="retrieveInformation" elementType="Argument">
             <stringProp name="Argument.name">retrieveInformation</stringProp>
-            <stringProp name="Argument.value">${__P(retrieveInformation,true)}</stringProp>
+            <stringProp name="Argument.value">${__P(retrieveInformation,false)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
