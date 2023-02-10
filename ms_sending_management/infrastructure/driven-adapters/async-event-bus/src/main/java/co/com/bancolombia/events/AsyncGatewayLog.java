@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;
 import reactor.core.publisher.Mono;
-
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -19,8 +18,8 @@ public class AsyncGatewayLog implements CommandGatewayLog {
     private final DirectAsyncDualGateway gateway;
 
     @Override
-    public Mono<Log> sendCommandLogAlert(Log log) {
-        var command = new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
+    public Mono<Log> sendCommandLogAlert(Log logs) {
+        var command = new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), logs);
         return gateway.sendCommand(command, TARGET_NAME_LOG)
                 .then(Mono.empty());
     }

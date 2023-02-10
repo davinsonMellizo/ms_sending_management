@@ -44,8 +44,8 @@ class SendAlertUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alert.setTo("3215982557");
-        alert.setUrl("URl");
+        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
+        alert.setUrlForShortening("URl");
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", "bancolombia", ""));
