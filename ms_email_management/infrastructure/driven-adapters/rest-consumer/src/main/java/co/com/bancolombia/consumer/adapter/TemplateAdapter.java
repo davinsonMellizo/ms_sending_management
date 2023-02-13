@@ -20,7 +20,7 @@ public class TemplateAdapter implements TemplateGateway {
 
     private final ConsumerProperties properties;
     private final RestClient<Alert, SuccessTemplate> client;
-    private final String ID_TEMPLATE = "idTemplate";
+    private static final String ID_TEMPLATE = "idTemplate";
 
     @Override
     public Mono<TemplateEmail> findTemplateEmail(Alert pAlert) {

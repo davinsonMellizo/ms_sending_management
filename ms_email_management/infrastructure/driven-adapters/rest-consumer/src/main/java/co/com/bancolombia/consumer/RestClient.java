@@ -3,11 +3,8 @@ package co.com.bancolombia.consumer;
 import co.com.bancolombia.Request;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -15,7 +12,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+
 import java.util.Map;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_RESTCLIENT_ERROR;
@@ -26,7 +23,6 @@ import static org.springframework.http.MediaType.*;
 public class RestClient<T extends Request,R> {
 
     private final WebClient webClient;
-    private final Log LOGGER = LogFactory.getLog(RestClient.class);
 
     public <S> Mono<R> post(String route, T request, Class<R> clazz, Class<S> clazzError) {
         return webClient.post()

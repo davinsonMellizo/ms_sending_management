@@ -4,7 +4,6 @@ import co.com.bancolombia.commons.constants.AttachmentType;
 import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
-import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
 import co.com.bancolombia.model.message.gateways.TemplateGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.log.ValidationLogUtil;

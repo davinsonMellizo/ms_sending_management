@@ -5,6 +5,7 @@ import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.SuccessTemplate;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.message.Template;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,9 @@ public class TemplateAdapterTest {
 
     private SuccessTemplate.Dat dat= new SuccessTemplate.Dat();
     private Alert alert = new Alert();
+
+    private Message message =new Message();
+
 
     @BeforeEach
     public void init(){
@@ -77,6 +81,18 @@ public class TemplateAdapterTest {
                 .create(templateAdapter.findTemplateEmail(alert))
                 .expectError()
                 .verify();
+    }
+
+    @Test
+    void findTemplateEmailNullTest (){
+        message.setBody("HTML");
+        message.setSubject("EMAIL");
+        alert.setMessage(message);
+
+        StepVerifier
+                .create(templateAdapter.findTemplateEmail(alert))
+                .verifyComplete();
+
     }
 
 }

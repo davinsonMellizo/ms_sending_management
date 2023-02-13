@@ -2,7 +2,6 @@ package co.com.bancolombia.usecase.sendalert.commons;
 
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.TemplateEmail;
-import co.com.bancolombia.model.message.gateways.TemplateGateway;
 import lombok.experimental.UtilityClass;
 import reactor.core.publisher.Mono;
 
