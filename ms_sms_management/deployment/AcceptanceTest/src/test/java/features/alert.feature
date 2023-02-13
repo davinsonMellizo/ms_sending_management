@@ -17,5 +17,5 @@ Feature: Send Alert
 
   Scenario: Error case send alert, missing parameter per body
     Given request {}
-    When method PUT
+    When method POST
     Then status 500
