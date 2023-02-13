@@ -33,7 +33,7 @@ class LogUseCaseTest {
     public void init() {
         alert.setLogKey(UUID.randomUUID().toString());
         alert.setProvider("INA");
-        alert.setTo("number");
+        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
         response.setCode(1);
         response.setDescription("description");
         templateEmail.setBodyText("text");

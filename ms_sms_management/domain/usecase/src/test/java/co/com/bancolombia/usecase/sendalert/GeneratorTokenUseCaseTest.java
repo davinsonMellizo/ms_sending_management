@@ -49,8 +49,8 @@ class GeneratorTokenUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alert.setTo("3136392246");
-        alert.setUrl("");
+        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
+        alert.setUrlForShortening("");
         alert.setProvider("INA");
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", "bancolombia", ""));

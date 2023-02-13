@@ -33,10 +33,8 @@ class ValidationLogUtilTest {
         response.setDescription("description");
         alert.setLogKey(UUID.randomUUID().toString());
         alert.setProvider("INA");
-        alert.setTo("number");
+        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
         alert.setHeaders(headers);
-
-
     }
 
     @Test

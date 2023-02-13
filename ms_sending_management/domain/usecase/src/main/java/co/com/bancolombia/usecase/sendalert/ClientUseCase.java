@@ -37,7 +37,6 @@ public class ClientUseCase {
                         .push(contacts.get("PUSH") != null)
                         .mail(contacts.get("MAIL") != null ? contacts.get("MAIL").getValue() : "").build())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)));
-
     }
     public Mono<Client> validateClient(Message message){
         return Mono.just(message)
