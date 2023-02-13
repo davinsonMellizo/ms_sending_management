@@ -1,11 +1,6 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.alerttransaction.AlertTransaction;
-import co.com.bancolombia.model.client.Client;
-import co.com.bancolombia.model.client.gateways.ClientGateway;
-import co.com.bancolombia.model.consumer.Consumer;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderMailUseCase;
@@ -26,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,7 +80,7 @@ class SendingUseCaseTest {
         when(alertUseCase.validateAmount(any(), any())).thenReturn(Mono.empty());
         when(alertUseCase.getAlert(any())).thenReturn(Mono.just(alert));
         when(alertUseCase.getAlertsByTransactions(any())).thenReturn(Flux.just(alert));
-        when(clientUseCase.validateClient(any())).thenReturn(Mono.just(message));
+        when(clientUseCase.validateClientInformation(any())).thenReturn(Mono.just(message));
         StepVerifier.create(sendingUseCase.alertSendingManager(message))
                 .verifyComplete();
     }

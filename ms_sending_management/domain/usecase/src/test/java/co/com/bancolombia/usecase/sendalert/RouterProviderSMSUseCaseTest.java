@@ -79,6 +79,7 @@ class RouterProviderSMSUseCaseTest {
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -92,6 +93,7 @@ class RouterProviderSMSUseCaseTest {
                 .build();
         when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

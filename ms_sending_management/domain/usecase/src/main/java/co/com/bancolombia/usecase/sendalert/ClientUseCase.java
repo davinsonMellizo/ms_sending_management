@@ -8,6 +8,7 @@ import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
@@ -36,7 +37,6 @@ public class ClientUseCase {
                         .mail(contacts.get("MAIL") != null ? contacts.get("MAIL").getValue() : "").build())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)));
     }
-
     public Mono<Message> validateClient(Message message){
         return Mono.just(message)
                 .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(),
@@ -46,5 +46,13 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .map(client -> message)
                 .flatMap(this::validateDataContact);
+    }
+    public Mono<Message> validateClientInformation(Message message){
+        return Mono.just(message)
+                .filter(Message::getRetrieveInformation)
+                .flatMap(this::validateClient)
+                .zipWith(validateDataContact(message))
+                .map(Tuple2::getT2)
+                .switchIfEmpty(Mono.just(message));
     }
 }

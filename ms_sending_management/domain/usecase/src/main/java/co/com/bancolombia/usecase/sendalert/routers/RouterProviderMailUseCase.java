@@ -15,6 +15,7 @@ import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.ArrayList;
 
@@ -40,9 +41,11 @@ public class RouterProviderMailUseCase {
                 .filter(message1 -> message1.getPreferences().contains("MAIL") || message1.getPreferences().isEmpty())
                 .flatMap(message1 -> getRemitter(alert, message))
                 .zipWith(providerGateway.findProviderById(alert.getIdProviderMail()))
+                .doOnNext(message1 -> logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(0, "Success")))
                 .flatMap(data -> buildMail(message, alert, data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
-                        new Response(1, e.getMessage())));
+                        new Response(1, e.getMessage())))
+                .switchIfEmpty(Mono.just(new Response()));
     }
 
     private Mono<Remitter> getRemitter(Alert alert, Message message){
@@ -57,9 +60,7 @@ public class RouterProviderMailUseCase {
     public Mono<Response> buildMail(Message message, Alert alert, Remitter remitter, Provider provider) {
         ArrayList<Recipient> recipients = new ArrayList<>();
         recipients.add(new Recipient(message.getMail()));
-        return logUseCase.sendLogMAIL(message, alert, SEND_220, new Response(0, "Success"))
-                .cast(Mail.class)
-                .concatWith(Mono.just(Mail.builder()
+        return Mono.just(Mail.builder()
                         .logKey(message.getLogKey())
                         .provider(provider.getId())
                         .from(remitter.getMail())
@@ -67,7 +68,8 @@ public class RouterProviderMailUseCase {
                         .category(message.getCategory())
                         .destination(new Mail.Destination(message.getMail(), "", ""))
                         .attachments(message.getAttachments())
-                        .template(new Template(message.getParameters(), alert.getTemplateName())).build())).next()
-                .flatMap(commandGateway::sendCommandAlertEmail);
+                        .template(new Template(message.getParameters(), alert.getTemplateName())).build())
+                .flatMap(commandGateway::sendCommandAlertEmail)
+                .then(Mono.empty());
     }
 }

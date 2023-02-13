@@ -7,7 +7,6 @@ import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.ClientUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +90,7 @@ class ClientUseCaseTest {
         when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
 
-        StepVerifier.create(clientUseCase.validateClient(message))
+        StepVerifier.create(clientUseCase.validateClientInformation(message))
                 .expectNextCount(1)
                 .verifyComplete();
     }

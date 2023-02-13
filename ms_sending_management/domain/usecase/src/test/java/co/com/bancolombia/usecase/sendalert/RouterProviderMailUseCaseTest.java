@@ -82,6 +82,7 @@ class RouterProviderMailUseCaseTest {
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -96,6 +97,7 @@ class RouterProviderMailUseCaseTest {
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
         when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 }

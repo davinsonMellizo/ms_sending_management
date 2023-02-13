@@ -58,6 +58,7 @@ class LogUseCaseTest {
     @Test
     void putLogSmsErrorTest(){
         StepVerifier.create(logUseCase.sendLogSMS(message, alert, "", response))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

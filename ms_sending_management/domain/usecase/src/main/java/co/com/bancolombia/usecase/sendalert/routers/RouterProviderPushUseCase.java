@@ -37,7 +37,7 @@ public class RouterProviderPushUseCase {
                 .flatMap(this::validatePush)
                 .flatMap(this::validateClient)
                 .filter(Message::getPush)
-                .flatMap(message1 -> logUseCase.sendLogPush(message, alert, SEND_220, new Response(0, "Success")))
+                .doOnNext(message1 -> logUseCase.sendLogPush(message, alert, SEND_220, new Response(0, "Success")))
                 .flatMap(response -> documentGateway.getDocument(message.getDocumentType().toString()))
                 .map(document -> Push.builder()
                         .applicationCode(message.getApplicationCode())
@@ -50,7 +50,8 @@ public class RouterProviderPushUseCase {
                 .doOnNext(push -> push.setHeaders(headers))
                 .flatMap(pushGateway::sendPush)
                 .onErrorResume(e -> Mono.just(Response.builder().code(1).description(e.toString()).build()))
-                .flatMap(response -> logUseCase.sendLogPush(message, alert, SEND_230, response));
+                .flatMap(response -> logUseCase.sendLogPush(message, alert, SEND_230, response))
+                .switchIfEmpty(Mono.just(new Response()));
     }
 
     private Mono<Message> validatePush(Message message){

@@ -14,6 +14,7 @@ import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.Objects;
 
@@ -41,7 +42,8 @@ public class RouterProviderSMSUseCase {
                 .flatMap(prefix -> providerGateway.findProviderById(alert.getIdProviderSms()))
                 .zipWith(getPriority(message, alert))
                 .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
-                .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())));
+                .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())))
+                .switchIfEmpty(Mono.just(new Response()));
     }
 
     private Mono<Priority> getPriority(Message message, Alert alert){
@@ -55,22 +57,22 @@ public class RouterProviderSMSUseCase {
 
     private Mono<Response> sendAlertToProviders(Alert alert, Message message, Provider provider, Priority priority) {
         return logUseCase.sendLogSMS(message, alert, SEND_220, new Response(0, "Success"))
-                .cast(Response.class)
-                .concatWith(sendSMS(message, alert.toBuilder().priority(priority.getCode()).build(), provider)).next();
+                .zipWith(sendSMS(message, alert.toBuilder().priority(priority.getCode()).build(), provider))
+                .map(Tuple2::getT1);
     }
 
-    private Mono<Response> sendSMS(Message message, Alert alert, Provider provider) {
+    private Mono<Message> sendSMS(Message message, Alert alert, Provider provider) {
         return Mono.just(Sms.builder()
                 .logKey(message.getLogKey())
                 .priority(alert.getPriority())
-
                 .to(Sms.To.builder().phoneNumber(message.getPhone())
                         .phoneIndicator(message.getPhoneIndicator()).build())
                 .message(alert.getMessage())
                 .provider(provider.getId())
                 .urlForShortening(message.getUrl())
                 .build())
-                .flatMap(commandGateway::sendCommandAlertSms);
+                .flatMap(commandGateway::sendCommandAlertSms)
+                .thenReturn(message);
     }
 
 }
