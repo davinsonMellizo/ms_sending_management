@@ -5,6 +5,7 @@ import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
+import co.com.bancolombia.model.message.gateways.TemplateGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import co.com.bancolombia.usecase.sendalert.commons.Util;
@@ -15,12 +16,13 @@ import java.util.ArrayList;
 
 import static co.com.bancolombia.commons.constants.Provider.MASIVIAN;
 import static co.com.bancolombia.commons.constants.Provider.SES;
+import static co.com.bancolombia.commons.constants.Provider.TOD;
 import static co.com.bancolombia.commons.enums.TemplateType.SIMPLE;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.EMAIL;
 
 @RequiredArgsConstructor
 public class SendAlertUseCase {
-    private final TemplateEmailGateway templateEmailGateway;
+    private final TemplateGateway templateGateway;
     private final MasivianGateway masivianGateway;
     private final SesGateway sesGateway;
     private final LogUseCase logUseCase;
@@ -33,11 +35,10 @@ public class SendAlertUseCase {
 
 
     public Mono<Void> sendAlert(Alert alert) {
-        return templateEmailGateway.findTemplateEmail(alert.getTemplate().getName())
-                .switchIfEmpty(ValidationLogUtil.validSendLog(alert, EMAIL, Response.builder().code(1)
-                        .description("Template does not exist").build(), logUseCase, null))
-                .flatMap(templateEmail -> Util.replaceParameter(alert, templateEmail))
-                .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail));
+        return  Util.validTemplate(alert)
+                .concatWith(templateGateway.findTemplateEmail(alert))
+                .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail))
+                .thenEmpty(Mono.empty());
     }
 
     public Mono<Void> sendAlertToProviders(Alert alert, TemplateEmail templateEmail) {
@@ -49,7 +50,7 @@ public class SendAlertUseCase {
 
     private Mono<Response> sendEmailBySes(Alert alert, TemplateEmail templateEmail) {
         return Mono.just(alert.getProvider())
-                .filter(provider -> provider.equalsIgnoreCase(SES))
+                .filter(provider -> provider.equalsIgnoreCase(SES) || provider.equalsIgnoreCase(TOD))
                 .flatMap(provider -> sesGateway.sendEmail(templateEmail, alert))
                 .doOnError(e -> Response.builder().code(1).description(e.getMessage()).build())
                 .flatMap(response -> ValidationLogUtil.validSendLog(alert, EMAIL, response, logUseCase, templateEmail));
