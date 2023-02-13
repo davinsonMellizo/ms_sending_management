@@ -49,9 +49,9 @@ public class ClientUseCase {
     public Mono<Message> validateClientInformation(Message message){
         return Mono.just(message)
                 .filter(Message::getRetrieveInformation)
-                .flatMap(this::validateClient)
-                .zipWith(validateDataContact(message))
-                .map(Tuple2::getT2)
+                .flatMap(this::validateDataContact)
+                .zipWith(validateClient(message))
+                .map(Tuple2::getT1)
                 .switchIfEmpty(Mono.just(message));
     }
 }
