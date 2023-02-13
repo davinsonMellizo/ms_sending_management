@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,8 +79,7 @@ public class SendingUseCase {
         var sizeLogKey = 16;
         String logKey = LocalDate.now()+UUID.randomUUID().toString().substring(sizeLogKey);
         message.setLogKey(logKey);
-        return clientUseCase.validateClientInformation(message)
-                .zipWith(validateAlerts(message))
+        return Mono.zip(clientUseCase.validateClientInformation(message), validateAlerts(message))
                 .flatMap(data -> sendAlerts(data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))

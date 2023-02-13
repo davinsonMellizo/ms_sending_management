@@ -1,6 +1,7 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
+import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
 import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
@@ -36,16 +37,15 @@ public class ClientUseCase {
                         .push(contacts.get("PUSH") != null)
                         .mail(contacts.get("MAIL") != null ? contacts.get("MAIL").getValue() : "").build())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACTS)));
+
     }
-    public Mono<Message> validateClient(Message message){
+    public Mono<Client> validateClient(Message message){
         return Mono.just(message)
                 .flatMap(message1 -> clientGateway.findClientByIdentification(message.getDocumentNumber(),
                         message.getDocumentType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
                 .filter(client -> client.getIdState().equals(ACTIVE))
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
-                .map(client -> message)
-                .flatMap(this::validateDataContact);
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)));
     }
     public Mono<Message> validateClientInformation(Message message){
         return Mono.just(message)

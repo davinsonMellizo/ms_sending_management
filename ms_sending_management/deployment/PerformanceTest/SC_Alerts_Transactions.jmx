@@ -90,7 +90,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="send_alert_users" elementType="Argument">
             <stringProp name="Argument.name">send_alert_users</stringProp>
-            <stringProp name="Argument.value">${__P(users,1)}</stringProp>
+            <stringProp name="Argument.value">${__P(users,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_duration" elementType="Argument">
@@ -110,7 +110,7 @@
           </elementProp>
           <elementProp name="retrieveInformation" elementType="Argument">
             <stringProp name="Argument.name">retrieveInformation</stringProp>
-            <stringProp name="Argument.value">${__P(retrieveInformation,false)}</stringProp>
+            <stringProp name="Argument.value">${__P(retrieveInformation,true)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -247,9 +247,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">canales-digitales-int-qa.apps.ambientesbc.com</stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">8081</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">alertas/api/v1/sending-management/send</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
