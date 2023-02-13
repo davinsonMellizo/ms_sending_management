@@ -3,7 +3,6 @@ Feature: Send Alert
   Background:
     * url urlSend
     * def body = read("../data/alert.json")
-    * configure ssl = true
 
   Scenario: Successful case send alert
     Given request body
