@@ -70,10 +70,15 @@ class ClientUseCaseTest {
 
     @Test
     void validateContactsTest(){
-        Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false).build();
-        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false).build();
-        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false).build();
-        when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
+        Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false)
+                .stateClient(1)
+                .build();
+        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false)
+                .stateClient(1)
+                .build();
+        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false)
+                .stateClient(1)
+                .build();
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
 
         StepVerifier.create(clientUseCase.validateDataContact(message))
@@ -83,11 +88,16 @@ class ClientUseCaseTest {
 
     @Test
     void validateClientTest(){
-        Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false).build();
-        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false).build();
-        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false).build();
+        Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false)
+                .stateClient(1)
+                .build();
+        Contact contactPush = Contact.builder().contactMedium("PUSH").value("").idState(1).previous(false)
+                .stateClient(1)
+                .build();
+        Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false)
+                .stateClient(1)
+                .build();
         when(clientGateway.findClientByIdentification(anyLong(), anyInt())).thenReturn(Mono.just(client));
-        when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
 
         StepVerifier.create(clientUseCase.validateClientInformation(message))
@@ -97,7 +107,6 @@ class ClientUseCaseTest {
 
     @Test
     void validateContactsErrorTest(){
-        when(consumerGateway.findConsumerById(anyString())).thenReturn(Mono.just(consumer));
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.empty());
         StepVerifier.create(clientUseCase.validateDataContact(message))
                 .expectError().verify();
