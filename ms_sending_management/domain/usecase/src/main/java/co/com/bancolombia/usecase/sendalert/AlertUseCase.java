@@ -5,8 +5,6 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
 import co.com.bancolombia.model.alertclient.AlertClient;
 import co.com.bancolombia.model.alertclient.gateways.AlertClientGateway;
-import co.com.bancolombia.model.alerttransaction.AlertTransaction;
-import co.com.bancolombia.model.alerttransaction.gateways.AlertTransactionGateway;
 import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -20,7 +18,6 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 public class AlertUseCase {
     private final AlertGateway alertGateway;
     private final AlertClientGateway alertClientGateway;
-    private final AlertTransactionGateway alertTransactionGateway;
 
     private Mono<AlertClient> restartAccumulated(AlertClient pAlertClient) {
         var now = LocalDate.now();
@@ -50,11 +47,8 @@ public class AlertUseCase {
 
     public Flux<Alert> getAlertsByTransactions(Message message) {
         return Mono.just(message)
-                .flatMapMany(alertTransactionGateway::findAllAlertTransaction)
-                .switchIfEmpty(Mono.error(new BusinessException(ALERT_TRANSACTION_NOT_FOUND)))
-                .map(AlertTransaction::getIdAlert)
-                .flatMap(alertGateway::findAlertById)
-                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
+                .flatMapMany(alertGateway::findAlertByTrx)
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_TRANSACTION_NOT_FOUND)));
     }
 
     private Mono<Alert> buildAlertGeneral(Message message){

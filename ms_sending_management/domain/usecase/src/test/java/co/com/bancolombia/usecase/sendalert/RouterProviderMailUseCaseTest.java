@@ -73,12 +73,10 @@ class RouterProviderMailUseCaseTest {
         Alert alert = Alert.builder()
                 .push("SI")
                 .templateName("template")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("davinson@bancolombia.com.co")
                 .build();
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
-        when(remitterGateway.findRemitterById(anyInt())).thenReturn(Mono.just(remitter));
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
@@ -91,11 +89,10 @@ class RouterProviderMailUseCaseTest {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("bancolombia@bancolombia.com.co")
                 .build();
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -60,8 +60,8 @@ class AlertUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("bancolombia@bancolombia.com.co")
                 .build();
         AlertClient alertClient = AlertClient.builder()
                 .transactionDate(LocalDateTime.now()).accumulatedAmount(0L).accumulatedOperations(0)
@@ -79,8 +79,8 @@ class AlertUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("bancolombia@bancolombia.com.co")
                 .build();
         AlertClient alertClient = AlertClient.builder()
                 .transactionDate(LocalDateTime.now()).accumulatedAmount(60000L).accumulatedOperations(0)
@@ -98,8 +98,8 @@ class AlertUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("bancolombia@bancolombia.com.co")
                 .build();
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));
         StepVerifier.create(alertUseCase.getAlert(message))
@@ -112,8 +112,8 @@ class AlertUseCaseTest {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("bancolombia@bancolombia.com.co")
                 .build();
         Map<String, String> parameters = new HashMap<>();
         parameters.put("mensaje", "bancolombia");
