@@ -35,6 +35,7 @@ public class SendAlertUseCase {
 
     public Mono<Void> sendAlert(Alert alert) {
         return  Util.validTemplate(alert)
+                .log()
                 .concatWith(templateGateway.findTemplateEmail(alert))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail))
                 .thenEmpty(Mono.empty());
