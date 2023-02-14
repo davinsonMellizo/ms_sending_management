@@ -11,6 +11,7 @@ import co.com.bancolombia.model.message.TemplateEmail;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.message.gateways.SesGateway;
 import co.com.bancolombia.model.message.gateways.TemplateEmailGateway;
+import co.com.bancolombia.model.message.gateways.TemplateGateway;
 import co.com.bancolombia.model.token.DynamoGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
@@ -24,7 +25,9 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,7 +40,7 @@ class SendAlertUseCaseTest {
     @InjectMocks
     private SendAlertUseCase useCase;
     @Mock
-    private TemplateEmailGateway templateEmailGateway;
+    private TemplateGateway templateEmailGateway;
     @Mock
     private LogUseCase logUseCase;
     @Mock
@@ -60,9 +63,9 @@ class SendAlertUseCaseTest {
         alert.setFrom("bancolombia@test.com.co");
         alert.setDestination(new Alert.Destination("bancolombia@test.com.co", "", ""));
         alert.setAttachments(new ArrayList<>());
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new Parameter("name", "bancolombia", ""));
-        alert.setTemplate(new Template(parameters, "Compra"));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
+        alert.setTemplate(new Template( parameters, "Compra"));
         alert.setLogKey(UUID.randomUUID().toString());
     }
 
@@ -70,7 +73,7 @@ class SendAlertUseCaseTest {
     void sendAlertMasivianErrorTest() {
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
-        when(templateEmailGateway.findTemplateEmail(anyString()))
+        when(templateEmailGateway.findTemplateEmail(any()))
                 .thenReturn(Mono.just(template));
         when(generatorTokenUseCase.getToken(any(), any()))
                 .thenReturn(Mono.just(new Mail()));
@@ -89,7 +92,7 @@ class SendAlertUseCaseTest {
         alert.setProvider("TOD");
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
-        when(templateEmailGateway.findTemplateEmail(anyString()))
+        when(templateEmailGateway.findTemplateEmail(any()))
                 .thenReturn(Mono.just(template));
         when(sesGateway.sendEmail(any(), any()))
                 .thenReturn(Mono.just(Response.builder()
@@ -110,7 +113,7 @@ class SendAlertUseCaseTest {
         alert.setAttachments(attachmentList);
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
-        when(templateEmailGateway.findTemplateEmail(anyString()))
+        when(templateEmailGateway.findTemplateEmail(any()))
                 .thenReturn(Mono.just(template));
         when(masivianGateway.generatePresignedUrl(anyString())).thenReturn(Mono.just("presignedUrl"));
         when(generatorTokenUseCase.getNameToken(any()))
@@ -136,7 +139,7 @@ class SendAlertUseCaseTest {
         alert.setAttachments(attachmentList);
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
-        when(templateEmailGateway.findTemplateEmail(anyString()))
+        when(templateEmailGateway.findTemplateEmail(any()))
                 .thenReturn(Mono.just(template));
         when(masivianGateway.sendMAIL(any()))
                 .thenReturn(Mono.just(Response.builder()
@@ -161,7 +164,7 @@ class SendAlertUseCaseTest {
         alert.setAttachments(attachmentList);
         TemplateEmail template =
                 new TemplateEmail("subject", "<div>Hola ${message}</div>", "Hola ${name}");
-        when(templateEmailGateway.findTemplateEmail(anyString()))
+        when(templateEmailGateway.findTemplateEmail(any()))
                 .thenReturn(Mono.just(template));
         when(masivianGateway.sendMAIL(any()))
                 .thenReturn(Mono.just(Response.builder()

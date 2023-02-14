@@ -16,7 +16,7 @@ public class LogUseCase {
     private static final int CODE_RESPONSE_202 = 202;
 
     public <T> Mono<T> sendLog(Alert alert, String medium, Response response) {
-        return commandGateway.sendCommanLogSms(Log.builder()
+        return commandGateway.sendCommandLogSms(Log.builder()
                 .logKey(alert.getLogKey())
                 .logType(SEND_230)
                 .medium(medium)

@@ -11,7 +11,6 @@ import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvide
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
-import software.amazon.awssdk.endpoints.Endpoint;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
@@ -19,7 +18,6 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.utils.ThreadFactoryBuilder;
 
 import java.net.URI;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -51,14 +49,15 @@ public class S3ConnectionConfig {
                 .asyncConfiguration(config -> config.advancedOption(FUTURE_COMPLETION_EXECUTOR, threadPoolExecutor()))
                 .region(s3ConnectionProperties.getRegion());
         if (withEndpoint) {
-            s3AsyncClient.endpointProvider(endpointParams ->
+            /*s3AsyncClient.endpointProvider(endpointParams ->
                     CompletableFuture.completedFuture(Endpoint
                             .builder()
                             .url(URI.create(String.join("/", s3ConnectionProperties.getEndpoint(),
                                     endpointParams.bucket())))
                             .build()
                     )
-            );
+            );*/
+             s3AsyncClient.endpointOverride(URI.create(String.join("/", s3ConnectionProperties.getEndpoint())));
         }
         return s3AsyncClient.build();
     }

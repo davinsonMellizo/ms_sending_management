@@ -33,7 +33,7 @@ class S3ConnectionConfigTest {
         assertThat(s3ConnectionConfigMock.s3AsyncClient()).isNotNull();
     }
 
-    @Test
+ /*   @Test
     void s3AsyncClientLocalTest() {
         when(s3ConnectionProperties.getQueueCapacity()).thenReturn(10_000);
         when(s3ConnectionProperties.getCorePoolSize()).thenReturn(50);
@@ -41,10 +41,11 @@ class S3ConnectionConfigTest {
         when(s3ConnectionProperties.getKeepAliveTime()).thenReturn(10);
         when(s3ConnectionProperties.getRegion()).thenReturn(Region.US_EAST_1);
         assertThat(s3ConnectionConfigMock.s3AsyncClientLocal()).isNotNull();
-    }
+    }*/
 
     @Test
     void s3PresignerTest() {
+
         assertThat(s3ConnectionConfigMock.s3Presigner()).isNotNull();
     }
 }

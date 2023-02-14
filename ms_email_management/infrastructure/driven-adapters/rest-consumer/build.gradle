@@ -1,8 +1,8 @@
 dependencies {
     implementation project(':log')
     implementation project(':model')
-    implementation project(':secrets-manager')
     implementation project(':s3-bucket')
+    implementation 'co.com.bancolombia.d2b:secrets:1.0.4'
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.modelmapper:modelmapper:2.3.8'

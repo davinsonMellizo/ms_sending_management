@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':log')
-    implementation project(':secrets-manager')
+    implementation 'co.com.bancolombia.d2b:secrets:1.0.4'
     implementation 'org.springframework:spring-context'
     implementation 'org.reactivecommons:async-commons-rabbit-starter:1.0.5'
     implementation "org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}"

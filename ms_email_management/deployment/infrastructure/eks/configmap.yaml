@@ -17,10 +17,8 @@ data:
   CACHE_SECRETS_SECONDS: "#{cache-secrets-seconds}#"
   PATH_BASE: "#{prefix}#/#{service}#"
   REGION_AWS: #{region-aws}#
-  SQS_URL: #{sqs-url}#
-  SQS_TIMEOUT: "#{sqs-timeout}#"
-  SQS_POOL_SIZE: "#{sqs-pool-size}#"
   SECRET-RABBIT: "#{secret-rabbit}#"
+  SECRET_RABBIT_DUAL: #{secret-rabbit-dual}#
   CACHE: #{cache-host}#
   CACHE_PORT: "#{cache-port}#"
   EXPIRE_TIME_CACHE: "#{cache-time}#"
@@ -30,10 +28,12 @@ data:
   NAME-SECRET-BUCKET-SSL: #{secret-bucket}#
   TABLE_NAME_SECRET_PRIORITY: #{table-name-secret-priority}#
   TABLE_NAME_TEMPLATE_EMAIL: #{table-name-template-email}#
-  QUEUE-URL: "#{queue-url}#"
   WAIT-TIME-SECONDS: "#{wait-time-seconds}#"
   MAX-NUMBER-MESSAGES: "#{max-number-messages}#"
   THREADS: "#{threads}#"
+  QUEUE-URL: "#{queue-url}#"
+  ENDPOINT-SQS: "#{endpoint-sqs}#"
+  ENDPOINT_TEMPLATE: "#{endpoint-template}#"
 
 
 

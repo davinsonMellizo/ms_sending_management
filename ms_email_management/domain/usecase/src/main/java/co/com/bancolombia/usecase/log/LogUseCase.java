@@ -17,15 +17,16 @@ public class LogUseCase {
 
     public <T> Mono<T> sendLog(Alert alert, TemplateEmail template, String medium, Response response) {
         return commandGateway.sendCommanLogEmail(Log.builder()
-                .logKey(alert.getLogKey())
-                .logType(SEND_230)
-                .medium(medium)
-                .contact(alert.getDestination().getToAddress())
-                .provider(alert.getProvider())
-                .responseCode(response.getCode())
-                .responseDescription(response.getDescription())
-                .build())
-                .filter(log -> response.getCode()!= CODE_RESPONSE_200)
+                        .logKey(alert.getLogKey())
+                        .logType(SEND_230)
+                        .medium(medium)
+                        .contact(alert.getDestination().getToAddress())
+                        .provider(alert.getProvider())
+                        .responseCode(response.getCode())
+                        .responseDescription(response.getDescription())
+                        .template(template.getBodyHtml())
+                        .build())
+                .filter(log -> response.getCode() != CODE_RESPONSE_200)
                 .flatMap(log -> Mono.error(new Throwable(response.getCode().toString())));
     }
 }

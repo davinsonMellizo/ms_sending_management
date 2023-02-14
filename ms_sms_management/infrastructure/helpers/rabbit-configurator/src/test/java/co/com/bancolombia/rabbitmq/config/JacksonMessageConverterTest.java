@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reactivecommons.async.impl.RabbitMessage;
-import org.reactivecommons.async.impl.communications.Message;
-import org.reactivecommons.async.impl.exceptions.MessageConversionException;
+import org.reactivecommons.async.rabbit.RabbitMessage;
+import org.reactivecommons.async.commons.communications.Message;
+import org.reactivecommons.async.commons.exceptions.MessageConversionException;
 
 
 import static org.assertj.core.api.Assertions.*;
@@ -82,3 +82,5 @@ class JacksonMessageConverterTest {
     }
 
 }
+
+
