@@ -1,21 +1,28 @@
-
 {
-  "operation": "#(operation)",
-  "documentType": 0,
-  "documentNumber": 2000100000,
-  "consumer": "SVP",
-  "alert": "120",
-  "transactionCode": "1000",
-  "amount": 60,
-  "url": "www.google.com",
-  "phone": "3215058449",
-  "phoneIndicator": "+57",
-  "mail": "davinson.mellizo@gmailcom",
-  "parameters":[
-    {
-      "name": "nombre",
-      "value": "Davinson Mellizo"
+  "retrieveInformation": false,
+  "client":{
+    "identification":{
+      "documentType": 0,
+      "documentNumber": 2000100000
     }
-  ],
-  "attachments": [ ]
+  },
+  "message":{
+    "parameters":{
+      "Nombre": "User"
+    },
+    "mail": {
+      "address": "user@bancolombia.com.co"
+    },
+    "sms": {
+      "phone": "3172550373",
+      "phoneIndicator": "57"
+    },
+    "push":{
+      "applicationCode": ""
+    }
+  },
+  "alertParameters":{
+    "alert": "200",
+    "consumer": "SVP"
+  }
 }
