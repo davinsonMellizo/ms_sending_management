@@ -77,7 +77,7 @@ public class SendingUseCase {
         var sizeLogKey = 16;
         String logKey = LocalDate.now()+UUID.randomUUID().toString().substring(sizeLogKey);
         message.setLogKey(logKey);
-        return Mono.zip(clientUseCase.validateClientInformation(message), validateAlerts(message))
+        return Mono.zip(clientUseCase.validateDataContact(message), validateAlerts(message))
                 .flatMap(data -> sendAlerts(data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))

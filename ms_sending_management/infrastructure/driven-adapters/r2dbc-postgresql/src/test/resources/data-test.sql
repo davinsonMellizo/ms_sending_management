@@ -54,8 +54,8 @@ VALUES(1, 1061772353, 0, 'KEY', 'ALM', 0, 'Kevin', '2021-02-16 10:10:25-05', '20
 
 INSERT INTO contact
 (id_contact_medium, document_number, id_document_type, segment, value, id_state, created_date, modified_date, previous)
-VALUES( 1, 1061772353, 0, 'ALM', 'dmellizo@bancolombia.com.co', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05', false),
-( 0, 1061772353, 0, 'ALM', '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05', false);
+VALUES( 1, 1061772353, 0, '123aaa', 'dmellizo@bancolombia.com.co', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05', false),
+( 0, 1061772353, 0, '123aaa', '1061772353', 0, '2021-02-16 10:10:25-05', '2021-02-16 10:10:25-05', false);
 
 INSERT INTO consumer
 (id, description, segment)

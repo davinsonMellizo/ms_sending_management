@@ -196,4 +196,12 @@ INNER JOIN remitter r ON r.id = a.id_remitter
 INNER JOIN priority p ON p.id = a.priority
 INNER JOIN provider ps ON ps.id = a.id_provider_sms
 INNER JOIN provider pm ON pm.id = a.id_provider_mail
-order by t.id_transaction, t.id_consumer, a.id
+order by t.id_transaction, t.id_consumer, a.id;
+
+create view IF NOT EXISTS contact_view as
+select c.*, cm.code as contact_medium, cl.id_state as state_client, cs.id as consumer
+from contact c
+inner join contact_medium cm on c.id_contact_medium = cm.id
+inner join consumer cs on c.segment = cs.segment
+inner join client cl on c.document_number = cl.document_number and c.id_document_type = cl.id_document_type
+order by c.id_document_type, document_number;
