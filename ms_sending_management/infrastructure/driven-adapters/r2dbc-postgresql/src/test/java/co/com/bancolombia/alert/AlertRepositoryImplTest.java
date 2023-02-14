@@ -24,24 +24,17 @@ class AlertRepositoryImplTest {
     @BeforeEach
     public void init() {
         alert.setId("HGD");
-        alert.setIdProviderMail("FGH");
-        alert.setIdProviderSms("FGH");
-        alert.setIdRemitter(0);
+        alert.setProviderMail("FGH");
+        alert.setProviderSms("FGH");
+        alert.setRemitter("bancolombia@bancolombia.com.co");
         alert.setTemplateName("Compra");
         alert.setIdState(0);
-        alert.setIdCategory(1);
-        alert.setAttentionLine("3215684");
-        alert.setCreatedDate(LocalDateTime.now());
-        alert.setCreationUser("UserName");
-        alert.setVisibleChannel(true);
         alert.setObligatory(true);
-        alert.setSubjectMail("sub");
         alert.setBasicKit(true);
         alert.setPriority(1);
         alert.setNature("NM");
         alert.setPush("SI");
         alert.setMessage("message");
-        alert.setDescription("alert");
 
     }
 

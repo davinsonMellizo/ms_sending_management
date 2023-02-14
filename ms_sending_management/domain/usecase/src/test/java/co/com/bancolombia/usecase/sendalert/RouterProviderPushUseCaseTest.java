@@ -68,9 +68,9 @@ class RouterProviderPushUseCaseTest {
     void routeAlertPushTest(){
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderSms("ALM")
-                .priority(0)
+                .providerSms("ALM")
                 .idCategory(1)
+                .priority(0)
                 .build();
         when(pushGateway.sendPush(any())).thenReturn(Mono.just(Response.builder()
                 .description("success").code(200)

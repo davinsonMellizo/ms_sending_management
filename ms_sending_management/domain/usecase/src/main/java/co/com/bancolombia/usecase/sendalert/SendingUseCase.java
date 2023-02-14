@@ -32,7 +32,6 @@ public class SendingUseCase {
     private final RouterProviderPushUseCase routerProviderPushUseCase;
     private final RouterProviderMailUseCase routerProviderMailUseCase;
 
-
     private Flux<Alert> validateObligation(Alert pAlert, Message message) {
         return Flux.just(pAlert)
                 .filter(alert -> (!alert.getObligatory() && !alert.getBasicKit()) || message.getTransactionCode().equals(TRX_580))
