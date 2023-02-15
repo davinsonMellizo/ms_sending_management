@@ -16,7 +16,7 @@ spec:
   ports:
     - name: #{config-protocol-name}#
       targetPort: #{container-port}#
-      port: #{config-portt}#
+      port: #{config-port}#
 ---
 apiVersion: apps/v1
 kind: Deployment
