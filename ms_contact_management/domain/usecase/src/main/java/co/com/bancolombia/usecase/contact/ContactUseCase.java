@@ -181,7 +181,7 @@ public class ContactUseCase {
                         .environmentType(data.getT2().getEnvironmentType())
                         .build())
                 .flatMap(contactGateway::updateContact)
-                .doOnNext(contactResponse -> newnessUseCase.saveNewness(response.getActual(), UPDATE_CONTACT, voucher))
+                .flatMap(contactResponse -> newnessUseCase.saveNewness(contactResponse, UPDATE_CONTACT, voucher))
                 .map(contact -> response.toBuilder()
                         .before(response.getActual().toBuilder().contactWayName(newContact.getContactWayName()).build())
                         .actual(contact.toBuilder().contactWay(newContact.getContactWay()).build()).build());
@@ -192,12 +192,12 @@ public class ContactUseCase {
                                                          String voucher) {
         return Flux.fromIterable(contacts)
                 .filter(Contact::getPrevious).next()
-                .doOnNext(previous -> newnessUseCase.saveNewness(previous, UPDATE_CONTACT, voucher))
                 .map(contactPrevious -> contactPrevious.toBuilder().value(response.getBefore().getValue())
                         .idState(response.getBefore().getIdState())
                         .environmentType(response.getBefore().getEnvironmentType())
                         .build())
                 .flatMap(contactGateway::updateContact)
+                .flatMap(previous -> newnessUseCase.saveNewness(previous, UPDATE_CONTACT, voucher))
                 .switchIfEmpty(contactGateway.saveContact(contacts.get(0).toBuilder().id(null).previous(true).build()))
                 .thenReturn(response);
     }

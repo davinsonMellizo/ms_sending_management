@@ -32,4 +32,5 @@ public enum TechnicalExceptionEnum {
     private final String code;
     private final String message;
 
+
 }

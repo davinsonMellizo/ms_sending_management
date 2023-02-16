@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.services.clientmacd;
 
 import co.com.bancolombia.api.dto.EnrolDTO;
-import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.api.commons.handlers.Error;
 import co.com.bancolombia.model.response.StatusResponse;
 import org.springdoc.core.fn.builders.operation.Builder;
 

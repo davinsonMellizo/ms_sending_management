@@ -5,7 +5,6 @@ import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.log.LoggerBuilder;
-import co.com.bancolombia.model.error.Error;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
