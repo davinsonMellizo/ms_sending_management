@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.reactivecommons.async.impl.communications.Message;
-import org.reactivecommons.async.impl.exceptions.MessageConversionException;
+import org.reactivecommons.async.commons.communications.Message;
+import org.reactivecommons.async.commons.exceptions.MessageConversionException;
 import org.springframework.beans.factory.annotation.Value;
 import reactor.core.publisher.Mono;
 

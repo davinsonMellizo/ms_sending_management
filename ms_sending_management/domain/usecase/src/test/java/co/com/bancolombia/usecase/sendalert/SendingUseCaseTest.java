@@ -80,7 +80,7 @@ class SendingUseCaseTest {
         when(alertUseCase.validateAmount(any(), any())).thenReturn(Mono.empty());
         when(alertUseCase.getAlert(any())).thenReturn(Mono.just(alert));
         when(alertUseCase.getAlertsByTransactions(any())).thenReturn(Flux.just(alert));
-        when(clientUseCase.validateClientInformation(any())).thenReturn(Mono.just(message));
+        when(clientUseCase.validateDataContact(any())).thenReturn(Mono.just(message));
         StepVerifier.create(sendingUseCase.alertSendingManager(message))
                 .verifyComplete();
     }

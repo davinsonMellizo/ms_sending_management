@@ -3,7 +3,6 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientGateway;
-import co.com.bancolombia.model.consumer.gateways.ConsumerGateway;
 import co.com.bancolombia.model.contact.Contact;
 import co.com.bancolombia.model.contact.gateways.ContactGateway;
 import co.com.bancolombia.model.message.Message;
@@ -14,20 +13,18 @@ import reactor.util.function.Tuple2;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CONSUMER_NOT_FOUND;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACTS;
 
 @RequiredArgsConstructor
 public class ClientUseCase {
     private final ClientGateway clientGateway;
     private final ContactGateway contactGateway;
-    private final ConsumerGateway consumerGateway;
 
     public Mono<Message> validateDataContact(Message message) {
-        return consumerGateway.findConsumerById(message.getConsumer())
-                .switchIfEmpty(Mono.error(new BusinessException(CONSUMER_NOT_FOUND)))
-                .flatMapMany(consumer -> contactGateway.findAllContactsByClient(message.toBuilder()
-                        .consumer(consumer.getSegment()).build()))
+        return contactGateway.findAllContactsByClient(message)
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
+                .filter(contact -> contact.getStateClient().equals(ACTIVE))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .filter(contact -> contact.getIdState().equals(ACTIVE))
                 .filter(contact -> !contact.getPrevious())
                 .collectMap(Contact::getContactMedium)

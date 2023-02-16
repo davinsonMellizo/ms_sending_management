@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':model')
-    implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    implementation group: 'software.amazon.awssdk', name: 'dynamodb-enhanced', version: "${awssdkVersion}"
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }

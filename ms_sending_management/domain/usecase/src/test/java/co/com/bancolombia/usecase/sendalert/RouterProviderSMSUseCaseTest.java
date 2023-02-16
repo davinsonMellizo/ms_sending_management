@@ -69,11 +69,9 @@ class RouterProviderSMSUseCaseTest {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("NO")
-                .idProviderSms("0")
+                .providerSms("MAS")
                 .priority(0)
                 .build();
-        when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
@@ -88,10 +86,9 @@ class RouterProviderSMSUseCaseTest {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderSms("0")
+                .providerSms("0")
                 .priority(0)
                 .build();
-        when(priorityGateway.findPriorityById(anyInt())).thenReturn(Mono.just(Priority.builder().code(1).build()));
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

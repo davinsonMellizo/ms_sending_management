@@ -1,7 +1,9 @@
 package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.adapter.response.ErrorMasivianMAIL;
+import co.com.bancolombia.consumer.adapter.response.ErrorTemplate;
 import co.com.bancolombia.consumer.adapter.response.SuccessMasivianMAIL;
+import co.com.bancolombia.consumer.adapter.response.SuccessTemplate;
 import co.com.bancolombia.model.message.Mail;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -9,10 +11,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -34,7 +39,6 @@ class RestClientTest {
         mockServer.url(getBaseUrl(mockServer.getPort()));
 
         mail.setHeaders(Map.of("Authorization", "TokenTest"));
-
     }
 
     public static String getBaseUrl(int port) {

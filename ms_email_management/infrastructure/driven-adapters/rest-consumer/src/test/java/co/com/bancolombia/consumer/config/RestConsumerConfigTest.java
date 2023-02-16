@@ -1,8 +1,8 @@
 package co.com.bancolombia.consumer.config;
 
+import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.s3bucket.S3AsyncOperations;
-import co.com.bancolombia.secretsmanager.SecretsManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ class RestConsumerConfigTest {
     @InjectMocks
     private RestConsumerConfig restConsumerConfig;
     @Mock
-    private SecretsManager secretsManager;
+    private SyncSecretVault secretsManager;
     @Mock
     private AwsProperties awsProperties;
     @Mock
@@ -52,10 +52,10 @@ class RestConsumerConfigTest {
                     return tcpClient;
                 }));
         when(secretsManager.getSecret(anyString(), any()))
-                .thenReturn(Mono.just(PropertiesSsl.builder()
+                .thenReturn(PropertiesSsl.builder()
                         .keyStore("masivapp-com.jks")
                         .password("testPassword")
-                        .build()));
+                        .build());
         when(awsProperties.getNameSecretBucketSsl())
                 .thenReturn("testNameSecret");
         when(s3AsyncOperations.getFileAsInputStream(anyString(), anyString()))

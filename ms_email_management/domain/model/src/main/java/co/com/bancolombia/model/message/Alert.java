@@ -13,12 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Alert extends Request {
+    private String priority;
     private String provider;
     private String from;
     private Destination destination;
     private List<Attachment> attachments;
     private Template template;
+    private Message message;
+    private String category;
     private String logKey;
+
 
     @Data
     @AllArgsConstructor

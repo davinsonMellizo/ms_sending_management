@@ -8,8 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,24 +17,21 @@ public class AlertData{
 
     @Id
     private String id;
-    private String templateName;
-    private String idProviderMail;
-    private String idProviderSms;
-    private Integer idRemitter;
-    private Integer idState;
+    private String idTransaction;
+    private String idConsumer;
     private Integer idCategory;
-    private Integer priority;
     private String description;
+    private String providerMail;
+    private String providerSms;
+    private String templateName;
+    private String remitter;
+    private Integer idState;
+    private Integer priority;
     private String nature;
     private String message;
-    private String subjectMail;
-    private String attentionLine;
     private String push;
     private Boolean obligatory;
     private Boolean basicKit;
-    private Boolean visibleChannel;
-    private String creationUser;
-    private LocalDateTime createdDate;
 
     @Transient
     private Boolean isNew;

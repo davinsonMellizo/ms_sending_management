@@ -1,7 +1,6 @@
 package co.com.bancolombia.usecase.log;
 
-import co.com.bancolombia.commons.constants.Header;
-import co.com.bancolombia.model.log.Log;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

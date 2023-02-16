@@ -8,11 +8,10 @@ import reactor.core.publisher.Flux;
 
 public interface ContactRepository extends ReactiveCrudRepository<ContactData, Integer> {
 
-    @Query("select c.* , m.code as contact_medium " +
-            "from contact c " +
-            "inner join contact_medium m on c.id_contact_medium = m.id " +
+    @Query("select c.* " +
+            "from contact_view c " +
             "where c.document_number::int8 = :documentNumber and c.id_document_type::int2 = :documentType " +
-            "and c.segment = :consumer")
+            "and c.consumer = :consumer")
     Flux<ContactData> findAllContactsByClient(@Param("documentNumber") Long documentNumber,
                                               @Param("documentType") Integer documentType,
                                               @Param("consumer") String consumer);

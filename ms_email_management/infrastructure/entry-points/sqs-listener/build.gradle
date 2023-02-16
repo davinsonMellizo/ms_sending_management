@@ -2,7 +2,7 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot'
-    implementation 'software.amazon.awssdk:sqs'
+    implementation group: 'software.amazon.awssdk', name: 'sqs', version: "${awssdkVersion}"
     implementation 'org.apache.logging.log4j:log4j-api'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 }

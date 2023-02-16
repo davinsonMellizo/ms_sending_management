@@ -2,6 +2,7 @@ dependencies {
     implementation project(':log')
     implementation project(':model')
     implementation 'org.springframework:spring-context'
-    implementation 'software.amazon.awssdk:s3'
+    implementation group: 'software.amazon.awssdk', name: 's3', version: "${awssdkVersion}"
+    implementation group: 'software.amazon.awssdk', name: 'sts', version: "${awssdkVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 }

@@ -5,7 +5,7 @@ import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.reactivecommons.api.domain.Command;
-import org.reactivecommons.async.impl.communications.Message;
+import org.reactivecommons.async.commons.communications.Message;
 import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners;
 import reactor.core.publisher.Mono;
 

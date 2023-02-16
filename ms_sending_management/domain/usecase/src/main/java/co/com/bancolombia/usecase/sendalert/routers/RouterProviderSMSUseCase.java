@@ -9,8 +9,6 @@ import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Sms;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
-import co.com.bancolombia.model.provider.Provider;
-import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -27,7 +25,6 @@ import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidM
 
 @RequiredArgsConstructor
 public class RouterProviderSMSUseCase {
-    private final ProviderGateway providerGateway;
     private final PriorityGateway priorityGateway;
     private final CommandGateway commandGateway;
     private final LogUseCase logUseCase;
@@ -39,9 +36,7 @@ public class RouterProviderSMSUseCase {
                 .filter(message1 -> alert.getPush().equals(NO) || alert.getPush().equals(PUSH_SMS))
                 .filter(message1 ->  !message1.getRetrieveInformation() || message1.getPreferences().contains("SMS") ||
                         message1.getPreferences().isEmpty())
-                .flatMap(prefix -> providerGateway.findProviderById(alert.getIdProviderSms()))
-                .zipWith(getPriority(message, alert))
-                .flatMap(data -> sendAlertToProviders(alert, message, data.getT1(), data.getT2()))
+                .flatMap(message1 -> sendAlertToProviders(alert, message))
                 .onErrorResume(e -> logUseCase.sendLogSMS(message, alert, SEND_220, new Response(1, e.getMessage())))
                 .switchIfEmpty(Mono.just(new Response()));
     }
@@ -55,20 +50,20 @@ public class RouterProviderSMSUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(PRIORITY_INVALID)));
     }
 
-    private Mono<Response> sendAlertToProviders(Alert alert, Message message, Provider provider, Priority priority) {
+    private Mono<Response> sendAlertToProviders(Alert alert, Message message) {
         return logUseCase.sendLogSMS(message, alert, SEND_220, new Response(0, "Success"))
-                .zipWith(sendSMS(message, alert.toBuilder().priority(priority.getCode()).build(), provider))
+                .zipWith(sendSMS(message, alert))
                 .map(Tuple2::getT1);
     }
 
-    private Mono<Message> sendSMS(Message message, Alert alert, Provider provider) {
+    private Mono<Message> sendSMS(Message message, Alert alert) {
         return Mono.just(Sms.builder()
                 .logKey(message.getLogKey())
                 .priority(alert.getPriority())
                 .to(Sms.To.builder().phoneNumber(message.getPhone())
                         .phoneIndicator(message.getPhoneIndicator()).build())
                 .message(alert.getMessage())
-                .provider(provider.getId())
+                .provider(alert.getProviderSms())
                 .urlForShortening(message.getUrl())
                 .build())
                 .flatMap(commandGateway::sendCommandAlertSms)

@@ -2,7 +2,7 @@ package co.com.bancolombia.events;
 
 import co.com.bancolombia.events.handlers.CommandsHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
-import org.reactivecommons.async.impl.communications.Message;
+import org.reactivecommons.async.commons.communications.Message;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
