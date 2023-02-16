@@ -1,28 +1,35 @@
 {
-  "retrieveInformation": false,
-  "client":{
-    "identification":{
-      "documentType": 1
-    }
-  },
+  "retrieveInformation": true,
   "message":{
+    "template": "compra",
+    "priority": 1,
     "parameters":{
-      "canal": "SVP",
-      "fecha": "2023-01-22",
-      "hora": "08:52:23"
-    },
-    "mail": {
-      "address": "davinson.mellizo@gmailcom"
-    },
-    "sms": {
-      "phone": "3217937584"
-    },
-    "push":{
-      "applicationCode": ""
+      "mensaje": "Su transaccion fue exitosa"
     }
   },
   "alertParameters":{
-    "alert": "60",
-    "consumer": "SVP"
-  }
+    "consumer": "SVP",
+    "transactionCode": "1234",
+    "amount": 50000000
+  },
+  "recipients": [
+    {
+      "identification":{
+        "documentType": 1,
+        "documentNumber": 2000000000
+      },
+      "contacts":{
+
+        "mail": {
+          "address": "davinson.mellizo@bancolomco.com.co"
+        },
+        "sms": {
+          "phone": "3217937584"
+        },
+        "push":{
+          "applicationCode": ""
+        }
+      }
+    }
+  ]
 }

@@ -11,7 +11,9 @@ import javax.validation.Valid;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ClientDTO {
+public class RecipientDTO {
     @Builder.Default
     private @Valid IdentificationDTO identification = new IdentificationDTO();
+    @Builder.Default
+    private ContactsDTO contacts = new ContactsDTO();
 }

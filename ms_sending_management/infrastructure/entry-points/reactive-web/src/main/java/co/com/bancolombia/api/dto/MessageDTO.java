@@ -40,12 +40,6 @@ public class MessageDTO {
     @Schema(description = "Obligatorio para envío de correo cuando no se envía, " +
             "Alerta o Consumidor y código de transacción")
     private String template = "";
-    @Builder.Default
-    private SmsDTO sms = new SmsDTO();
-    @Builder.Default
-    private MailDTO mail = new MailDTO();
-    @Builder.Default
-    @Schema(description = "Para el envío de push es obligatorio enviar la identificación del cliente")
-    private PushDTO push = new PushDTO();
+
 
 }

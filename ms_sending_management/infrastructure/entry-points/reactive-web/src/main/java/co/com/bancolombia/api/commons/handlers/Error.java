@@ -1,9 +1,11 @@
-package co.com.bancolombia.model.error;
+package co.com.bancolombia.api.commons.handlers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -17,5 +19,6 @@ public class Error implements Serializable {
     private String domain;
     private String code;
     private String message;
-    private String httpStatus;
+    @JsonIgnore
+    private HttpStatus httpStatus;
 }

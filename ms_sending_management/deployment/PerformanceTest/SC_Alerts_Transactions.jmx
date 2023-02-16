@@ -214,34 +214,37 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
     &quot;retrieveInformation&quot;: ${retrieveInformation},&#xd;
-    &quot;client&quot;:{&#xd;
-        &quot;identification&quot;:{&#xd;
-        	&quot;documentType&quot;: 1,&#xd;
-		&quot;documentNumber&quot;: ${document_number}&#xd;
-        }&#xd;
-    },&#xd;
     &quot;message&quot;:{&#xd;
-    	   &quot;template&quot;: &quot;compra&quot;,&#xd;
+        &quot;template&quot;: &quot;compra&quot;,&#xd;
     	   &quot;priority&quot;: 1,&#xd;
         &quot;parameters&quot;:{&#xd;
             &quot;mensaje&quot;: &quot;Su transaccion fue exitosa&quot;&#xd;
-        },&#xd;
-        &quot;mail&quot;: {&#xd;
-            &quot;address&quot;: &quot;davinson.mellizo@gmailcom&quot;&#xd;
-        },&#xd;
-        &quot;sms&quot;: {&#xd;
-            &quot;phone&quot;: &quot;3217937584&quot;&#xd;
-        },&#xd;
-        &quot;push&quot;:{&#xd;
-            &quot;applicationCode&quot;: &quot;&quot;&#xd;
         }&#xd;
     },&#xd;
     &quot;alertParameters&quot;:{&#xd;
-    	&quot;consumer&quot;: &quot;SVP&quot;,&#xd;
-    	&quot;transactionCode&quot;: &quot;${transaction}&quot;,&#xd;
-    	&quot;amount&quot;: 50000000&#xd;
-    }&#xd;
-    &#xd;
+	    	&quot;consumer&quot;: &quot;SVP&quot;,&#xd;
+	    	&quot;transactionCode&quot;: &quot;${transaction}&quot;,&#xd;
+	    	&quot;amount&quot;: 50000000&#xd;
+    },&#xd;
+    &quot;recipients&quot;: [&#xd;
+        {&#xd;
+            &quot;identification&quot;:{&#xd;
+	        	&quot;documentType&quot;: 1,&#xd;
+			&quot;documentNumber&quot;: ${document_number}&#xd;
+	       },&#xd;
+            &quot;contacts&quot;:{&#xd;
+	             &quot;mail&quot;: {&#xd;
+		            &quot;address&quot;: &quot;davinson.mellizo@gmailcom&quot;&#xd;
+		        },&#xd;
+		        &quot;sms&quot;: {&#xd;
+		            &quot;phone&quot;: &quot;3217937584&quot;&#xd;
+		        },&#xd;
+		        &quot;push&quot;:{&#xd;
+		            &quot;applicationCode&quot;: &quot;&quot;&#xd;
+		        }&#xd;
+            }&#xd;
+        }&#xd;
+    ]&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>

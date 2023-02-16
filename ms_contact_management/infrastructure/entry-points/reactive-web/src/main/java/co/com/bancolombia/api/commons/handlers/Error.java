@@ -1,5 +1,6 @@
-package co.com.bancolombia.model.error;
+package co.com.bancolombia.api.commons.handlers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class Error implements Serializable {
     private String domain;
     private String code;
     private String message;
+    @JsonIgnore
+    private String httpStatus;
 }
