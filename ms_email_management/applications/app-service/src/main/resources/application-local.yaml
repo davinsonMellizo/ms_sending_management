@@ -69,8 +69,10 @@ adapters:
       #endpointMasivianMail: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
+      endpointTemplate: http://localhost:8071/api/v1/templater/message
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
+    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
@@ -94,3 +96,7 @@ entrypoint:
     waitTimeSeconds: 20
     maxNumberOfMessages: 10
     numberOfThreads: 1
+d2b:
+  aws:
+    secrets-manager:
+      endpoint: http://localhost:4566

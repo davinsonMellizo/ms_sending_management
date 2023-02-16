@@ -22,5 +22,7 @@ public class ConsumerProperties {
     public static class Resources {
         private String endpointMasivianMail;
         private String endpointMasivToken;
+        private String endpointTemplate;
+
     }
 }

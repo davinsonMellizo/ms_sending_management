@@ -1,13 +1,13 @@
 package co.com.bancolombia.events;
 
 import co.com.bancolombia.model.log.Log;
+import co.com.bancolombia.rabbitmq.config.dual.sender.DirectAsyncDualGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reactivecommons.async.api.DirectAsyncGateway;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -20,7 +20,7 @@ class ReactiveEventsGatewayTest {
     @InjectMocks
     private ReactiveDirectAsyncGateway reactiveDirectAsyncGateway;
     @Mock
-    private DirectAsyncGateway directAsyncGateway;
+    private DirectAsyncDualGateway directAsyncGateway;
 
     @BeforeEach
     public void init() {
@@ -29,6 +29,6 @@ class ReactiveEventsGatewayTest {
 
     @Test
     void senEventLogTest() {
-        StepVerifier.create(reactiveDirectAsyncGateway.sendCommanLogSms(new Log())).verifyComplete();
+        StepVerifier.create(reactiveDirectAsyncGateway.sendCommandLogSms(new Log())).verifyComplete();
     }
 }

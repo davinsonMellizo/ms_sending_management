@@ -82,6 +82,7 @@ class SendingUseCaseTest {
         when(alertUseCase.getAlert(any())).thenReturn(Mono.just(alert));
         when(alertUseCase.getAlertsByTransactions(any())).thenReturn(Flux.just(alert));
         when(clientUseCase.validateDataContact(any())).thenReturn(Mono.just(message));
+
         StepVerifier.create(sendingUseCase.alertSendingManager(List.of(message)))
                 .verifyComplete();
     }
