@@ -12,6 +12,7 @@
   "sourcePath": "sourcePath",
   "creationUser": "lugomez",
   "dataEnrichment": true,
+  "priority": 1,
   "schedules": [
     {
       "scheduleType": "ON_DEMAND",

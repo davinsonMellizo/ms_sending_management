@@ -198,6 +198,7 @@ CREATE TABLE IF NOT EXISTS campaign (
     attachment_path VARCHAR(255),
     data_enrichment BOOLEAN NOT NULL,
     state CHAR(1) NOT NULL DEFAULT '1',
+    priority int2 NOT NULL,
     creation_user VARCHAR(20) NULL,
     created_date TIMESTAMP NOT NULL,
     modified_user VARCHAR(20) NULL,

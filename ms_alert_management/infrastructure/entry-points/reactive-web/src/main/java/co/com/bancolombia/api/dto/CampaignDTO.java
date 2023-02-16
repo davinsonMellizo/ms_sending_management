@@ -12,13 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +43,7 @@ public class CampaignDTO extends DTO<Campaign> {
     @NotNull(groups = {OnCreate.class, OnUpdate.class, OnDelete.class}, message = "no debe ser nulo")
     private String idConsumer;
 
-    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe se ser nulo o vacío")
+    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo o vacío")
     private JsonNode provider;
 
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "debe ser mayor que {value}")
@@ -96,6 +94,10 @@ public class CampaignDTO extends DTO<Campaign> {
                 this.schedules.stream().map(CampaignScheduleDTO::toModel).collect(Collectors.toList()) : null;
     }
 
+    @Range(min = 1, max = 5, groups = {OnCreate.class, OnUpdate.class}, message = "el valor de la  prioridad debe estar entre 1 y 5")
+    @NotNull( groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
+    private Integer priority;
+
     @Override
     public Mono<Campaign> toModel() {
         return Mono.just(Campaign.builder()
@@ -112,6 +114,7 @@ public class CampaignDTO extends DTO<Campaign> {
                 .state(this.state)
                 .creationUser(this.creationUser)
                 .modifiedUser(this.modifiedUser)
+                .priority(this.priority)
                 .schedules(this.schedulesToModel())
                 .build());
     }
