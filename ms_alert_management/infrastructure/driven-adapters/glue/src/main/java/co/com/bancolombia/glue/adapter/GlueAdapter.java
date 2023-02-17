@@ -37,6 +37,8 @@ public class GlueAdapter implements CampaignGlueGateway {
     private static final String PRIORITY = "--priority";
     private static final String PROVIDER = "--provider";
 
+    private static final String REMITTER = "--remitter";
+
     private String getTriggerName(String idCampaign, String idConsumer, Long idSchedule) {
         return String.format("tgr_%s_%s_%s", idCampaign, idConsumer, idSchedule);
     }
@@ -67,7 +69,8 @@ public class GlueAdapter implements CampaignGlueGateway {
                         DATA_ENRICHMENT, campaign.getDataEnrichment().toString(),
                         CONSUMER_ID, campaign.getIdConsumer(),
                         PROVIDER, campaign.getProvider(),
-                        PRIORITY, campaign.getPriority().toString()
+                        PRIORITY, campaign.getPriority().toString(),
+                        REMITTER, campaign.getIdRemitter().toString()
                 ))
                 .build();
     }
