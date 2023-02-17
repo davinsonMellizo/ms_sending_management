@@ -13,6 +13,7 @@
   "dataEnrichment": true,
   "creationUser": "lugomez",
   "state": "1",
+  "priority": 1,
   "schedules": [
     {
       "scheduleType": "DAILY",
