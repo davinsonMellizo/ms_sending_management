@@ -4,7 +4,6 @@ import co.com.bancolombia.consumer.RestConsumerInternal;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.alert.gateways.AlertGateway;
-import co.com.bancolombia.model.error.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;

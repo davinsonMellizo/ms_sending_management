@@ -73,14 +73,21 @@ public class SendingUseCase {
                 .then(Mono.empty());
     }
 
-    public Mono<Void> alertSendingManager(Message message) {
+    private Mono<Void> validateData(Message message){
         var sizeLogKey = 16;
         String logKey = LocalDate.now()+UUID.randomUUID().toString().substring(sizeLogKey);
         message.setLogKey(logKey);
+
         return Mono.zip(clientUseCase.validateDataContact(message), validateAlerts(message))
                 .flatMap(data -> sendAlerts(data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))
+                .then(Mono.empty());
+    }
+
+    public Mono<Void> alertSendingManager(List<Message> messages) {
+        return Flux.fromIterable(messages)
+                .flatMap(this::validateData)
                 .then(Mono.empty());
     }
 }

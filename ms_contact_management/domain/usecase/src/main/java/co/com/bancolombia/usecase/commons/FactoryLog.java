@@ -35,6 +35,7 @@ public class FactoryLog {
                 .responseCode(Response.SUCCESS_120.getCode())
                 .responseDescription(Response.SUCCESS_120.getDescription())
                 .voucher(Long.valueOf(voucher))
+                .previous(contact.getPrevious())
                 .build());
     }
 }

@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.services.contact;
 
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
-import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.api.commons.handlers.Error;
 import org.springdoc.core.fn.builders.parameter.Builder;
 
 import java.util.function.Consumer;
