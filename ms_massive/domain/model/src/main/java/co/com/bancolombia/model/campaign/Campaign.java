@@ -32,7 +32,7 @@ public class Campaign {
     private LocalDateTime createdDate;
     private String modifiedUser;
     private LocalDateTime modifiedDate;
-
+    private Integer priority;
     @With
     private List<Schedule> schedules;
 

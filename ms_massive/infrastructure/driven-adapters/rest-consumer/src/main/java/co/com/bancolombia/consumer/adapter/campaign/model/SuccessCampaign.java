@@ -57,6 +57,7 @@ public class SuccessCampaign {
         private LocalDateTime createdDate;
         private String modifiedUser;
         private LocalDateTime modifiedDate;
+        private Integer priority;
         private List<ScheduleResponse> schedules;
     }
 }
