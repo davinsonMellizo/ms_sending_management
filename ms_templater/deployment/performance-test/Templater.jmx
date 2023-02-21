@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="ms_templater" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -16,7 +16,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="path_base" elementType="Argument">
             <stringProp name="Argument.name">path_base</stringProp>
-            <stringProp name="Argument.value">${__P(path_base,https://canales-digitales-ext-qa.apps.ambientesbc.com/alertas/api/v1/templater)}</stringProp>
+            <stringProp name="Argument.value">${__P(path_base,https://canales-digitales-int-qa.apps.ambientesbc.com/alertas/api/v1/templater)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="get_template" elementType="Argument">
@@ -292,7 +292,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(Hilos,1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(HilosSend,1)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(Rampa,30)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duracion,60)}</stringProp>
