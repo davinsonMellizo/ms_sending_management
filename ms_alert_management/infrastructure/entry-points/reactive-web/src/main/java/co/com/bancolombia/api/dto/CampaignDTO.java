@@ -97,8 +97,8 @@ public class CampaignDTO extends DTO<Campaign> {
                 this.schedules.stream().map(CampaignScheduleDTO::toModel).collect(Collectors.toList()) : null;
     }
 
-    @Range(min = 1, max = 5, groups = {OnCreate.class, OnUpdate.class},
-            message = "el valor de la  prioridad debe estar entre 1 y 5")
+    @Range(min = 0, max = 5, groups = {OnCreate.class, OnUpdate.class},
+            message = "el valor de la  prioridad debe estar entre 0 y 5")
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Integer priority;
 
