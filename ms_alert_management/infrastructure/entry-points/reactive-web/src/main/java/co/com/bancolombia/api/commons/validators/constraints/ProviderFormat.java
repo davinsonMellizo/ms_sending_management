@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface ProviderFormat {
 
-    String message() default "El formato del provedor debe contener idProvider y channelType";
+    String message() default "el formato del proveedor debe contener idProvider y channelType";
 
     Class<?>[] groups() default {};
 

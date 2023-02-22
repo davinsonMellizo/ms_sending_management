@@ -49,7 +49,7 @@ public class CampaignDTO extends DTO<Campaign> {
     private String idConsumer;
 
     @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo o vacio")
-    @ProviderFormat(groups = {OnCreate.class, OnUpdate.class}, message = "El formato del provedor debe contener idProvider y channelType")
+    @ProviderFormat(groups = {OnCreate.class, OnUpdate.class})
     private JsonNode provider;
 
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "debe ser mayor que {value}")
@@ -101,7 +101,7 @@ public class CampaignDTO extends DTO<Campaign> {
     }
 
     @Range(min = 0, max = 5, groups = {OnCreate.class, OnUpdate.class},
-            message = "el valor de la  prioridad debe estar entre 0 y 5")
+            message = "el valor debe estar entre {min} y {max}")
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Integer priority;
 

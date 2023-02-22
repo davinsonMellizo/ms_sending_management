@@ -4,7 +4,6 @@ dependencies {
 	implementation project(':glue')
     implementation project(':rabbit-configurator')
     implementation project(':async-event-handler')
-    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     implementation project(':reactive-web')
     implementation project(':r2dbc-postgresql')
     implementation project(':model')
@@ -12,12 +11,13 @@ dependencies {
     implementation project(':log')
     implementation project(':cron-expression')
     implementation project(':secrets-manager')
-    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
-    runtimeOnly ("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.13'
+    implementation "org.springframework.boot:spring-boot-starter"
+    runtimeOnly ("org.springframework.boot:spring-boot-devtools")
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.14'
 }
 
-task explodedJar(type: Copy) {
+tasks.register('explodedJar', Copy) {
     with jar
     into "${buildDir}/exploded"
 }
