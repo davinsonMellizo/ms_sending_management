@@ -42,15 +42,12 @@ class SendAlertUseCaseTest {
 
     private Alert alert = new Alert();
     private TemplateSms templateSms =new TemplateSms();
-    private To to= new To();
+
 
     @BeforeEach
     public void init() {
-        templateSms.setBodyText("retiro");
-        to.setIndicative("57");
-        to.setPhone("3215982557");
-        alert.setTo(to);
-        alert.setUrl("URl");
+        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
+        alert.setUrlForShortening("URl");
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", "bancolombia", ""));

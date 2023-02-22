@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,11 +17,19 @@ public class Alert extends Request {
     private To to;
     private String message;
     private Template template;
-    private String url;
+    private String urlForShortening;
     private String provider;
-    private String logKey;
     private String category;
+    private String logKey;
     private Boolean isFlash;
     private Boolean isPremium;
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder(toBuilder = true)
+    public static class To implements Serializable {
+        private String phoneNumber;
+        private String phoneIndicator;
+    }
 }

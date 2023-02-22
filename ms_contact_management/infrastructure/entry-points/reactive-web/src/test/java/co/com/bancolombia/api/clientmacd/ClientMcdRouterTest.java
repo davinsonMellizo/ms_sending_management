@@ -4,6 +4,7 @@ import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.commons.parameters.Parameters;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.api.services.clientmacd.ClientMcdHandler;
 import co.com.bancolombia.api.services.clientmacd.ClientMcdRouter;
@@ -24,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,10 +35,11 @@ import static org.mockito.Mockito.when;
         ClientMcdRouter.class,
         ClientMcdHandler.class,
         ApiProperties.class,
+        Parameters.class,
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ClientMcdRouterTest extends BaseIntegration {
+class ClientMcdRouterTest extends BaseIntegration {
 
     @MockBean
     private ClientUseCase useCase;
@@ -66,14 +69,14 @@ public class ClientMcdRouterTest extends BaseIntegration {
     @Test
     void updateClient() {
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
-        when(useCase.updateClientMcd(any())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
+        when(useCase.updateClientMcd(any(), anyBoolean())).thenReturn(Mono.just(StatusResponse.<Enrol>builder()
                 .actual(Enrol.builder().client(client).build()).before(Enrol.builder().client(client).build()).build()));
         statusAssertionsWebClientPut(properties.getClient() + "-macd",
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).updateClientMcd(any());
+        verify(useCase).updateClientMcd(any(), anyBoolean());
     }
 
 }

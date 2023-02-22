@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners;
 import reactor.core.publisher.Mono;
-import reactor.function.Function3;
+import reactor.function.Function4;
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.BODY_MISSING_ERROR;
 import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
@@ -29,13 +29,13 @@ public class CommandsHandler {
     private final ValidatorHandler validatorBodyHandler;
 
     public Mono<Void> saveClient(Command<String> command){
-        return handleSendAlert(command.getData(), useCase::saveClientRequest);
+        return handleSendAlert(command.getData(), useCase::saveClient);
     }
     public Mono<Void> updateClient(Command<String> command){
-        return handleSendAlert(command.getData(), useCase::updateClientRequest);
+        return handleSendAlert(command.getData(), useCase::updateClient);
     }
 
-    private  <M, R> Mono<Void> handleSendAlert(String data, Function3<M,Boolean,String, Mono<R>> use) {
+    private  <M, R> Mono<Void> handleSendAlert(String data, Function4<M,Boolean,String, Boolean, Mono<R>> use) {
         var mapper = new ObjectMapper();
         try {
             Object mstCode = mapper.readValue(data, EnrolDTO.class);
@@ -44,7 +44,7 @@ public class CommandsHandler {
                     .doOnNext(validatorBodyHandler::validateObject)
                     .map(enrolIseriesMapper::toEntity)
                     .map(m  -> (M)m)
-                    .flatMap(m ->  use.apply(m, Boolean.TRUE, getVoucher()))
+                    .flatMap(m ->  use.apply(m, Boolean.TRUE, getVoucher(), Boolean.FALSE))
                     .onErrorResume(BusinessException.class, e -> Mono.empty())
                     .onErrorResume(TechnicalException.class, this::onErrorByData)
                     .then();

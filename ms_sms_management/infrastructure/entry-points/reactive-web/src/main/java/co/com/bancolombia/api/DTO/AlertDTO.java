@@ -3,7 +3,6 @@ package co.com.bancolombia.api.DTO;
 import co.com.bancolombia.Request;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Template;
-import co.com.bancolombia.model.message.To;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,10 +19,10 @@ import javax.validation.constraints.NotNull;
 public class AlertDTO extends Request {
     @NotNull
     private String priority;
-    private To to;
+    private Alert.To to;
     private String message;
     private Template template;
-    private String url;
+    private String urlForShortening;
     private String provider;
     private String logKey;
     private String category;
@@ -35,7 +35,7 @@ public class AlertDTO extends Request {
                 .to(this.to)
                 .message(this.message)
                 .template(this.template)
-                .url(this.url)
+                .urlForShortening(this.urlForShortening)
                 .provider(this.provider)
                 .logKey(this.logKey)
                 .category(this.category)
@@ -44,6 +44,7 @@ public class AlertDTO extends Request {
                 .isPremium(this.isPremium)
                 .build());
     }
+
 
 
 }

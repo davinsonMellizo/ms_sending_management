@@ -4,7 +4,7 @@ import co.com.bancolombia.api.dto.EnrolDTO;
 import co.com.bancolombia.api.dto.IdentificationDTO;
 import co.com.bancolombia.api.dto.ResponseContactsDTO;
 import co.com.bancolombia.model.client.ResponseUpdateClient;
-import co.com.bancolombia.model.error.Error;
+import co.com.bancolombia.api.commons.handlers.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;

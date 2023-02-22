@@ -9,8 +9,6 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -27,15 +25,6 @@ public class RestClient<T extends Request,R> {
                 .bodyValue(cleanHeader(request))
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
-                .bodyToMono(clazz);
-    }
-
-    public Mono<R> get(String route, T request, Class<R> clazz) {
-        Map<String,String> header = request.getHeaders();
-        return webClient.get()
-                .uri(route)
-                .headers(head -> head.setAll(header))
-                .retrieve()
                 .bodyToMono(clazz);
     }
 

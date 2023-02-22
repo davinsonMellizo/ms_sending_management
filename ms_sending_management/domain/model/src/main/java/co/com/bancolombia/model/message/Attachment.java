@@ -16,5 +16,4 @@ public class Attachment implements Serializable {
     private String value;
     private String filename;
     private String contentType;
-    private String path;
 }

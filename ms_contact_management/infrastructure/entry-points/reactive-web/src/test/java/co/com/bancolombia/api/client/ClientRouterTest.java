@@ -4,6 +4,7 @@ import co.com.bancolombia.api.ApiProperties;
 import co.com.bancolombia.api.BaseIntegration;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.commons.parameters.Parameters;
 import co.com.bancolombia.api.dto.IdentificationDTO;
 import co.com.bancolombia.api.mapper.EnrolMapper;
 import co.com.bancolombia.api.services.client.ClientHandler;
@@ -35,13 +36,14 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
+        Parameters.class,
         ClientRouter.class,
         ClientHandler.class,
         ApiProperties.class,
         ValidatorHandler.class,
         ExceptionHandler.class
 })
-public class ClientRouterTest extends BaseIntegration {
+class ClientRouterTest extends BaseIntegration {
 
     @MockBean
     private ClientUseCase useCase;
@@ -87,14 +89,14 @@ public class ClientRouterTest extends BaseIntegration {
 
     @Test
     void saveClient() {
-        when(useCase.saveClientRequest(any(), anyBoolean(), anyString())).thenReturn(Mono.just(responseUpdateClient));
+        when(useCase.saveClient(any(), anyBoolean(), anyString(), anyBoolean())).thenReturn(Mono.just(responseUpdateClient));
         when(enrolMapper.toEntity(any())).thenReturn(Enrol.builder().build());
         statusAssertionsWebClientPost(properties.getClient(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).saveClientRequest(any(), anyBoolean(), anyString());
+        verify(useCase).saveClient(any(), anyBoolean(), anyString(), anyBoolean());
     }
 
     @Test

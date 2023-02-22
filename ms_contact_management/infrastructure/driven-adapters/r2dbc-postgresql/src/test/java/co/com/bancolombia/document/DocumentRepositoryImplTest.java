@@ -9,7 +9,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class DocumentRepositoryImplTest {
+class DocumentRepositoryImplTest {
 
     @Autowired
     private DocumentRepositoryImplement documentRepositoryImplement;

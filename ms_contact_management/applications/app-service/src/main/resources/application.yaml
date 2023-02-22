@@ -41,6 +41,7 @@ adapters:
     timeout: 1000
     resources:
       retrieveInfo: "${RETRIEVE}"
+      sendAlert: "${SEND_ALERT_URL}"
 
 cloud:
   aws:
@@ -74,6 +75,10 @@ management:
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
+
+app:
+  parameters:
+    synchronizeIsiries: "${SYNCHRONIZE_ISIRIES}"
 
 d2b:
   secrets:

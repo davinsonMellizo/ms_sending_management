@@ -20,7 +20,11 @@ public class LogUseCase {
                 .logKey(alert.getLogKey())
                 .logType(SEND_230)
                 .medium(medium)
+<<<<<<< HEAD
                 .contact(alert.getTo().getIndicative().concat(alert.getTo().getPhone()))
+=======
+                .contact(alert.getTo().getPhoneIndicator()+alert.getTo().getPhoneNumber())
+>>>>>>> 93d5ab90ae225951ae542f2e8d7dfc37e6d2c286
                 .messageSent(alert.getMessage())
                 .provider(alert.getProvider())
                 .responseCode(response.getCode())

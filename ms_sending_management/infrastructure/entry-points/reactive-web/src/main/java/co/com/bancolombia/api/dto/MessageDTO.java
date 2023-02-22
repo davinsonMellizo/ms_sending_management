@@ -1,65 +1,45 @@
 package co.com.bancolombia.api.dto;
 
-import co.com.bancolombia.model.message.Attachment;
-import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class MessageDTO {
-    private Integer operation;
-    private Integer documentType;
-    private Long documentNumber;
-    @Builder.Default
-    private ArrayList<String> preferences= new ArrayList<>();
-    private String consumer;
-    private String alert;
-    private String transactionCode;
-    private Long amount;
-    @Builder.Default
-    private String url = "";
-    @Builder.Default
-    private String phone = "";
-    @Builder.Default
-    private String phoneIndicator = "";
-    @Builder.Default
-    private String mail = "";
-    @Builder.Default
-    private List<Parameter> parameters = new ArrayList<>();
-    @Builder.Default
-    private ArrayList<Attachment> attachments = new ArrayList<>();
-    private String remitter;
+    @Schema(description = "Obligatorio para envío de sms cuando no se envía, " +
+            "Alerta o Consumidor y código de transacción", allowableValues = {"1","2","3", "4", "5"})
+    @Max(value = 5, message = "{constraint.max}")
+    @Min(value = 1, message = "{constraint.min}")
     private Integer priority;
+    @Builder.Default
+    @Size(max = 20, message = "{constraint.size}")
+    private String category = "";
+    @Builder.Default
+    @Schema(allowableValues = {"MAIL", "SMS"})
+    private ArrayList<String> preferences= new ArrayList<>();
+    @Builder.Default
+    @Schema(description = "Mapa de parametros para construir el mensaje",
+            example = "{\"mensaje\": \"Actualización exitosa\"}")
+    @ArraySchema(minItems = 1)
+    private Map<String, String> parameters = new HashMap<>();
+    @Builder.Default
+    @Size(max = 100, message = "{constraint.size}")
+    @Schema(description = "Obligatorio para envío de correo cuando no se envía, " +
+            "Alerta o Consumidor y código de transacción")
+    private String template = "";
 
-    public Mono<Message> toModel(){
-        return Mono.just(Message.builder()
-                .operation(this.operation)
-                .documentNumber(this.documentNumber)
-                .documentType(this.documentType)
-                .preferences(this.preferences)
-                .consumer(this.consumer)
-                .alert(this.alert)
-                .transactionCode(this.transactionCode)
-                .amount(this.amount)
-                .url(this.url)
-                .phone(this.phone)
-                .phoneIndicator(this.phoneIndicator)
-                .mail(this.mail)
-                .parameters(this.parameters)
-                .attachments(this.attachments)
-                .remitter(this.remitter)
-                .priority(this.priority)
-                .build());
-    }
+
 }

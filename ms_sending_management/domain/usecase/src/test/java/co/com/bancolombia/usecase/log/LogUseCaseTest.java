@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,7 @@ class LogUseCaseTest {
 
     @BeforeEach
     public void init (){
-        message.setParameters(new ArrayList<>());
+        message.setParameters(new HashMap<>());
         when(logGateway.sendCommandLogAlert(any())).thenReturn(Mono.just(new Log()));
     }
 
@@ -57,6 +58,7 @@ class LogUseCaseTest {
     @Test
     void putLogSmsErrorTest(){
         StepVerifier.create(logUseCase.sendLogSMS(message, alert, "", response))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

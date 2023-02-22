@@ -20,7 +20,7 @@ springdoc:
   version: 1
 
 adapters:
-  days-hot-data: 90
+  days-hot-data: 30
   entries:
     reactive-web:
       log: /log

@@ -90,22 +90,27 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="send_alert_users" elementType="Argument">
             <stringProp name="Argument.name">send_alert_users</stringProp>
-            <stringProp name="Argument.value">${__P(users,300)}</stringProp>
+            <stringProp name="Argument.value">${__P(users,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_duration" elementType="Argument">
             <stringProp name="Argument.name">send_alert_duration</stringProp>
-            <stringProp name="Argument.value">${__P(duration,60)}</stringProp>
+            <stringProp name="Argument.value">${__P(duration,300)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_rampup" elementType="Argument">
             <stringProp name="Argument.name">send_alert_rampup</stringProp>
-            <stringProp name="Argument.value">${__P(rampup,60)}</stringProp>
+            <stringProp name="Argument.value">${__P(rampup,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="send_alert_data" elementType="Argument">
             <stringProp name="Argument.name">send_alert_data</stringProp>
             <stringProp name="Argument.value">${__P(dataSendAlert,DT_request_sending.csv)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="retrieveInformation" elementType="Argument">
+            <stringProp name="Argument.name">retrieveInformation</stringProp>
+            <stringProp name="Argument.value">${__P(retrieveInformation,true)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -208,36 +213,45 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;operation&quot;: 1,&#xd;
-    &quot;documentType&quot;: 0,&#xd;
-    &quot;documentNumber&quot;: 2000000000,&#xd;
-    &quot;preferences&quot;:[&quot;SMS&quot;, &quot;MAIL&quot;],&#xd;
-    &quot;alert&quot;: &quot;120&quot;, &#xd;
-    &quot;consumer&quot;: &quot;SVP&quot;,&#xd;
-    &quot;transactionCode&quot;: &quot;1000&quot;, &#xd;
-    &quot;amount&quot;: 6000, &#xd;
-    &quot;phone&quot;: &quot;3215058449&quot;, &#xd;
-    &quot;phoneIndicator&quot;: &quot;+57&quot;, &#xd;
-    &quot;mail&quot;: &quot;davinson.mellizo@gmailcom&quot;,&#xd;
-    &quot;template&quot;: &quot;compra&quot;,&#xd;
-    &quot;priority&quot;: &quot;18&quot;,&#xd;
-    &quot;remitter&quot;: &quot;davinson@pepe.com&quot;,&#xd;
-    &quot;url&quot;: &quot;www.google.com&quot;, &#xd;
-    &quot;parameters&quot;:[&#xd;
-        {&#xd;
-            &quot;name&quot;: &quot;name&quot;,&#xd;
-            &quot;value&quot;: &quot;Jorge&quot;&#xd;
+    &quot;retrieveInformation&quot;: ${retrieveInformation},&#xd;
+    &quot;message&quot;:{&#xd;
+        &quot;template&quot;: &quot;compra&quot;,&#xd;
+    	   &quot;priority&quot;: 1,&#xd;
+        &quot;parameters&quot;:{&#xd;
+            &quot;mensaje&quot;: &quot;Su transaccion fue exitosa&quot;&#xd;
         }&#xd;
-    ],&#xd;
-    &quot;attachments&quot;: [ ]&#xd;
-&#xd;
+    },&#xd;
+    &quot;alertParameters&quot;:{&#xd;
+	    	&quot;consumer&quot;: &quot;SVP&quot;,&#xd;
+	    	&quot;transactionCode&quot;: &quot;${transaction}&quot;,&#xd;
+	    	&quot;amount&quot;: 50000000&#xd;
+    },&#xd;
+    &quot;recipients&quot;: [&#xd;
+        {&#xd;
+            &quot;identification&quot;:{&#xd;
+	        	&quot;documentType&quot;: 1,&#xd;
+			&quot;documentNumber&quot;: ${document_number}&#xd;
+	       },&#xd;
+            &quot;contacts&quot;:{&#xd;
+	             &quot;mail&quot;: {&#xd;
+		            &quot;address&quot;: &quot;davinson.mellizo@gmailcom&quot;&#xd;
+		        },&#xd;
+		        &quot;sms&quot;: {&#xd;
+		            &quot;phone&quot;: &quot;3217937584&quot;&#xd;
+		        },&#xd;
+		        &quot;push&quot;:{&#xd;
+		            &quot;applicationCode&quot;: &quot;&quot;&#xd;
+		        }&#xd;
+            }&#xd;
+        }&#xd;
+    ]&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
           <stringProp name="HTTPSampler.domain">canales-digitales-int-qa.apps.ambientesbc.com</stringProp>
-          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">alertas/api/v1/sending-management/send</stringProp>
@@ -273,6 +287,18 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Dt_Request_send_alert" enabled="true">
+          <stringProp name="delimiter">;</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="filename">${send_alert_data}</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="variableNames">document_number,alert,transaction,operation</stringProp>
+        </CSVDataSet>
+        <hashTree/>
       </hashTree>
       <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="Thread Group Sending" enabled="false">
         <elementProp name="ThreadGroup.main_controller" elementType="com.blazemeter.jmeter.control.VirtualUserController"/>

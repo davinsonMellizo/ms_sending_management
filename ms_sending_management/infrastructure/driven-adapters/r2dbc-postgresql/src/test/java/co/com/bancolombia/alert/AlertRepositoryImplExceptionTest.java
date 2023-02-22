@@ -42,14 +42,12 @@ class AlertRepositoryImplExceptionTest {
     @BeforeEach
     public void init() {
         alert.setId("HGD");
-        alert.setCreatedDate(NOW);
         alertData.setId("HGD");
-        alertData.setCreatedDate(NOW);
     }
 
     @Test
     void findAlertByIdWithException() {
-        when(repository.findById(anyString()))
+        when(repository.findAlertById(anyString()))
                 .thenReturn(Mono.error(RuntimeException::new));
         repositoryImpl.findAlertById(alert.getId())
                 .as(StepVerifier::create)

@@ -16,12 +16,12 @@ import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.gateways.StateGateway;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
+import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CLIENT;
@@ -42,13 +42,14 @@ import static co.com.bancolombia.usecase.commons.BridgeContact.getVoucher;
 @RequiredArgsConstructor
 public class ClientUseCase {
 
-    private final ClientRepository clientRepository;
-    private final DocumentGateway documentGateway;
     private final StateGateway stateGateway;
     private final ContactUseCase contactUseCase;
     private final NewnessUseCase newnessUseCase;
     private final CommandGateway commandGateway;
     private final ConsumerGateway consumerGateway;
+    private final DocumentGateway documentGateway;
+    private final ClientRepository clientRepository;
+    private final SendAlertUseCase sendAlertUseCase;
 
     public Mono<Client> findClientByIdentification(Client client) {
         return clientRepository.findClientByIdentification(client)
@@ -65,12 +66,13 @@ public class ClientUseCase {
                 .flatMap(client -> getResponse(client.getVoucher(), SUCCESS_CHANGE));
     }
 
-    public Mono<ResponseUpdateClient> saveClientRequest(Enrol enrol, boolean isSeries, String voucher) {
+    public Mono<ResponseUpdateClient> saveClient(Enrol enrol, boolean isSeries, String voucher, Boolean sendAlert) {
         return clientRepository.findClientByIdentification(enrol.getClient())
                 .flatMap(this::validateClientStatus)
-                .flatMap(client -> updateClientAndContacts(enrol, client.toBuilder().voucher(voucher).build(), isSeries))
+                .map(client -> client.toBuilder().voucher(voucher).build())
+                .flatMap(client -> updateClientAndContacts(enrol, isSeries, sendAlert, client))
                 .flatMap(statusResponse -> getResponse(voucher, SUCCESS_UPDATE))
-                .switchIfEmpty(createClientAndContacts(enrol, voucher, isSeries)
+                .switchIfEmpty(createClientAndContacts(enrol, voucher, isSeries, sendAlert)
                         .then(getResponse(voucher, SUCCESS_ENROLL)));
 
     }
@@ -81,7 +83,8 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_REGISTERED)));
     }
 
-    private Mono<StatusResponse<Enrol>> createClientAndContacts(Enrol enrol, String voucher, boolean isIseries) {
+    private Mono<StatusResponse<Enrol>> createClientAndContacts(Enrol enrol, String voucher, boolean isIseries,
+                                                                Boolean sendAlert) {
         var enrolActual = Enrol.builder().contactData(new ArrayList<>()).build();
         var enrolBefore = Enrol.builder().contactData(new ArrayList<>()).build();
         StatusResponse<Enrol> responseCreate = new StatusResponse<>(SUCCESS_ENROLL.getCode(), enrolActual, enrolBefore);
@@ -100,8 +103,7 @@ public class ClientUseCase {
                 .flatMapMany(Flux::fromIterable)
                 .flatMap(contact -> contactUseCase.saveContact(contact, voucher))
                 .doOnNext(response -> responseCreate.getActual().getContactData().add(response))
-                .last()
-                .then(sendCreateToIseries(enrol, voucher, responseCreate, isIseries));
+                .then(sendCreateToIseries(enrol, voucher, responseCreate, isIseries, sendAlert));
     }
 
     private Mono<Enrol> validateDataClient(Enrol enrol) {
@@ -127,21 +129,24 @@ public class ClientUseCase {
                 .then(Mono.just(enrol));
     }
 
-    public Mono<StatusResponse<Enrol>> updateClientMcd(Enrol enrol) {
+    public Mono<StatusResponse<Enrol>> updateClientMcd(Enrol enrol, Boolean sendAlert) {
         return clientRepository.findClientByIdentification(enrol.getClient())
-                .flatMap(client -> updateClientAndContacts(enrol, client.toBuilder().voucher("0").build(), false))
-                .switchIfEmpty(Mono.defer(() -> createClientAndContacts(enrol, "0", false)));
+                .map(client -> client.toBuilder().voucher("0").build())
+                .flatMap(client -> updateClientAndContacts(enrol, false, sendAlert,client))
+                .switchIfEmpty(Mono.defer(() -> createClientAndContacts(enrol, "0", false, sendAlert)));
     }
 
-    public Mono<ResponseUpdateClient> updateClientRequest(Enrol enrol, boolean isISeries, String voucher) {
+    public Mono<ResponseUpdateClient> updateClient(Enrol enrol, boolean isISeries, String voucher, Boolean sendAlert) {
         return clientRepository.findClientByIdentification(enrol.getClient())
-                .flatMap(client -> updateClientAndContacts(enrol, client.toBuilder().voucher(voucher).build(), isISeries))
+                .map(client -> client.toBuilder().voucher(voucher).build())
+                .flatMap(client -> updateClientAndContacts(enrol, isISeries, sendAlert,client))
                 .flatMap(enrolStatusResponse -> getResponse(voucher, SUCCESS_UPDATE))
-                .switchIfEmpty(Mono.defer(() -> createClientAndContacts(enrol, voucher, isISeries)
+                .switchIfEmpty(Mono.defer(() -> createClientAndContacts(enrol, voucher, isISeries, sendAlert)
                         .flatMap(statusResponse -> getResponse(voucher, SUCCESS_ENROLL))));
     }
 
-    public Mono<StatusResponse<Enrol>> updateClientAndContacts(Enrol enrol, Client client, boolean isISeries) {
+    public Mono<StatusResponse<Enrol>> updateClientAndContacts(Enrol enrol, Boolean isIseries, Boolean sendAlert,
+                                                               Client client) {
         var enrolActual = Enrol.builder().contactData(new ArrayList<>()).build();
         var enrolBefore = Enrol.builder().contactData(new ArrayList<>()).build();
         StatusResponse<Enrol> responseUpdate = new StatusResponse<>(SUCCESS_ENROLL.getCode(), enrolActual, enrolBefore);
@@ -149,10 +154,10 @@ public class ClientUseCase {
                 .flatMap(this::validateCreationUserChannel)
                 .flatMap(contactUseCase::validatePhone)
                 .flatMap(contactUseCase::validateMail)
-                .flatMap(client1 -> updateClient(client, enrol))
+                .flatMap(client1 -> buildAndUpdateClient(client, enrol))
                 .doOnNext(responseClient -> responseUpdate.getActual().setClient(responseClient.getActual()))
                 .doOnNext(responseClient -> responseUpdate.getBefore().setClient(responseClient.getBefore()))
-                .flatMap(responseClient -> Flux.fromIterable(enrol.getContactData())
+                .flatMapMany(responseClient -> Flux.fromIterable(enrol.getContactData())
                         .map(contact -> contact.toBuilder().documentType(enrol.getClient().getDocumentType())
                                 .documentNumber(enrol.getClient().getDocumentNumber())
                                 .segment(enrol.getClient().getConsumerCode()).contactWayName(contact.getContactWay())
@@ -160,12 +165,12 @@ public class ClientUseCase {
                         .map(contact -> contact.toBuilder()
                                 .documentType(responseClient.getBefore().getDocumentType()).build())
                         .flatMap(contact -> contactUseCase.updateContactRequest(contact, client.getVoucher()))
-                        .doOnNext(response -> enrolBefore.getContactData().add(response.getActual()))
                         .doOnNext(response -> enrolActual.getContactData().add(response.getBefore()))
-                        .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate, isISeries)));
+                        .doOnNext(response -> enrolBefore.getContactData().add(response.getActual())))
+                .then(sendUpdateToIseries(enrol, client.getVoucher(), responseUpdate, isIseries, sendAlert));
     }
 
-    public Mono<StatusResponse<Client>> updateClient(Client client, Enrol enrol) {
+    public Mono<StatusResponse<Client>> buildAndUpdateClient(Client client, Enrol enrol) {
         return stateGateway.findState(enrol.getClient().getStateClient())
                 .switchIfEmpty(Mono.error(new BusinessException(STATE_NOT_FOUND)))
                 .flatMap(state -> buildRequestToUpdateClient(client, enrol.getClient().toBuilder()
@@ -175,19 +180,25 @@ public class ClientUseCase {
                         .thenReturn(res));
     }
 
-    private <T> Mono<T> sendUpdateToIseries(Enrol enrol, String voucher, T response, boolean isIseries) {
-        return Mono.just(isIseries)
-                .filter(aBoolean -> !isIseries)
+    private Mono<StatusResponse<Enrol>> sendUpdateToIseries(Enrol enrol, String voucher, StatusResponse<Enrol> response,
+                                                            boolean isIseries, Boolean synchronizeIsiries) {
+        return Mono.just(response)
+                .filter(aBoolean -> !isIseries && synchronizeIsiries)
+                .switchIfEmpty(sendAlertUseCase.sendAlerts(enrol, response, synchronizeIsiries))
                 .flatMap(aBoolean -> getMapConsumerPersons(enrol, voucher))
                 .flatMap(commandGateway::sendCommandUpdate)
+                .onErrorResume(throwable -> Mono.empty())
                 .then(Mono.just(response));
     }
 
-    private <T> Mono<T> sendCreateToIseries(Enrol enrol, String voucher, T response, boolean isIseries) {
-        return Mono.just(isIseries)
-                .filter(aBoolean -> !isIseries)
-                .flatMap(aBoolean -> getMapConsumerPersons(enrol, voucher))
+    private Mono<StatusResponse<Enrol>> sendCreateToIseries(Enrol enrol, String voucher, StatusResponse<Enrol> response,
+                                                            boolean isIseries, Boolean synchronizeIsiries) {
+        return Mono.just(response)
+                .filter(res -> !isIseries && synchronizeIsiries)
+                .switchIfEmpty(sendAlertUseCase.sendAlerts(enrol, response, synchronizeIsiries))
+                .flatMap(res -> getMapConsumerPersons(enrol, voucher))
                 .flatMap(commandGateway::sendCommandEnroll)
+                .onErrorResume(throwable -> Mono.empty())
                 .then(Mono.just(response));
     }
 
@@ -205,7 +216,6 @@ public class ClientUseCase {
                 .flatMap(consumer -> documentGateway.getDocument(enrol.getClient().getDocumentType()))
                 .map(document -> getMapToSendToBridgeMQ(enrol, voucher, document));
     }
-
 
     private Mono<StatusResponse<Client>> buildRequestToUpdateClient(Client before, Client actual) {
         return documentGateway.getDocument(actual.getDocumentType())

@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.services.sendalert;
 
-import co.com.bancolombia.model.error.Error;
-import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.api.dto.AlertDTO;
+import co.com.bancolombia.api.commons.handlers.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ public class SendAlertDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("SendAlert").summary(TAG)
                 .description("Service to Send Alert").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().required(true).implementation(Message.class))
+                .requestBody(requestBodyBuilder().required(true).implementation(AlertDTO.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }

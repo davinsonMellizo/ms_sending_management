@@ -6,14 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Message {
-    private Integer operation;
+    private Boolean retrieveInformation;
     private Integer documentType;
     private Long documentNumber;
     private ArrayList<String> preferences;
@@ -25,6 +25,8 @@ public class Message {
     private String template;
     private String remitter;
     private Integer priority;
+    private String applicationCode;
+    private String category;
     private String logKey;
 
     private String phone;
@@ -34,7 +36,7 @@ public class Message {
 
     private Boolean push;
 
-    private List<Parameter> parameters;
+    private Map<String, String> parameters;
     private ArrayList<Attachment> attachments;
 
 

@@ -3,12 +3,12 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Parameter;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
+import co.com.bancolombia.usecase.sendalert.routers.RouterProviderMailUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +19,11 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +44,7 @@ class RouterProviderMailUseCaseTest {
 
     @BeforeEach
     public void init(){
-        message.setOperation(1);
+        message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
         message.setConsumer("SVP");
@@ -56,10 +59,10 @@ class RouterProviderMailUseCaseTest {
         message.setPriority(2);
         message.setTemplate("compra");
         message.setAttachments(new ArrayList<>());
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        Parameter parameter = Parameter.builder().Name("name").Value("bancolombia").build();
-        parameters.add(parameter);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", "bancolombia");
         message.setParameters(parameters);
+        message.setPreferences(new ArrayList<>());
     }
 
 
@@ -69,13 +72,15 @@ class RouterProviderMailUseCaseTest {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .templateName("template")
+                .providerMail("TOD")
+                .remitter("davinson@bancolombia.com.co")
                 .build();
-        when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
+        when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
+
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -84,13 +89,12 @@ class RouterProviderMailUseCaseTest {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
-                .idProviderMail("TOD")
-                .idRemitter(0)
+                .providerMail("TOD")
+                .remitter("bancolombia@bancolombia.com.co")
                 .build();
-        when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.error(new Throwable("error")));
         when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
-        when(providerGateway.findProviderById(anyString())).thenReturn(Mono.just(provider));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 }

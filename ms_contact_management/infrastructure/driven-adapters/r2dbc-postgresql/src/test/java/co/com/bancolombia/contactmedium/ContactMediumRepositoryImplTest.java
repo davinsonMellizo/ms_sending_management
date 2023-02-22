@@ -10,7 +10,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ContactMediumRepositoryImplTest {
+class ContactMediumRepositoryImplTest {
 
     @Autowired
     private ContactMediumRepositoryImplement repositoryImplement;

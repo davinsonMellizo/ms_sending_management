@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.services.client;
 
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
+import co.com.bancolombia.api.commons.parameters.Parameters;
 import co.com.bancolombia.api.commons.util.ParamsUtil;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.api.dto.EnrolDTO;
@@ -24,6 +25,7 @@ public class ClientHandler {
     private final ClientUseCase clientUseCase;
     private final ValidatorHandler validatorHandler;
     private final EnrolMapper enrolMapper;
+    private final Parameters parameters;
 
     public Mono<ServerResponse> inactivateClient(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(IdentificationDTO.class)
@@ -40,17 +42,18 @@ public class ClientHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .map(enrolMapper::toEntity)
-                .flatMap(cc -> clientUseCase.saveClientRequest(cc, Boolean.FALSE, getVoucher()))
+                .flatMap(enrol -> clientUseCase.saveClient(enrol, Boolean.FALSE, getVoucher(),
+                        parameters.getSynchronizeIsiries()))
                 .flatMap(ResponseUtil::responseOk);
     }
-
 
     public Mono<ServerResponse> updateClient(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(EnrolDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .map(enrolMapper::toEntity)
-                .flatMap(cli -> clientUseCase.updateClientRequest(cli, Boolean.FALSE, getVoucher()))
+                .flatMap(enrol -> clientUseCase.updateClient(enrol, Boolean.FALSE, getVoucher(),
+                        parameters.getSynchronizeIsiries()))
                 .flatMap(ResponseUtil::responseOk);
     }
 

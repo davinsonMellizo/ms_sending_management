@@ -9,7 +9,6 @@ import org.reactivecommons.async.commons.communications.Message;
 import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners;
 import reactor.core.publisher.Mono;
 
-
 @EnableCommandListeners
 public class CommandsHandler extends Converter {
     private final SendAlertUseCase useCase;

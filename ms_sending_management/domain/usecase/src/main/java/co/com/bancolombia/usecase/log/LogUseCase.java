@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class LogUseCase {
     private final CommandGatewayLog commandGateway;
 
-    public <T> Mono<T> sendLogSMS(Message message, Alert alert, String logType, Response response) {
+    public Mono<Response> sendLogSMS(Message message, Alert alert, String logType, Response response) {
         return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
@@ -29,10 +29,9 @@ public class LogUseCase {
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .priority(alert.getPriority())
                 .build())
-                .then(Mono.empty());
+                .then(Mono.just(response));
     }
 
     public Mono<Response> sendLogPush(Message message, Alert alert, String logType, Response response) {
@@ -52,12 +51,11 @@ public class LogUseCase {
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .build())
                 .then(Mono.just(response));
     }
 
-    public <T> Mono<T>  sendLogMAIL(Message message, Alert alert, String logType, Response response) {
+    public Mono<Response>  sendLogMAIL(Message message, Alert alert, String logType, Response response) {
         return commandGateway.sendCommandLogAlert(Log.builder()
                 .logKey(message.getLogKey())
                 .documentType(message.getDocumentType())
@@ -74,7 +72,6 @@ public class LogUseCase {
                 .amount(message.getAmount())
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .build())
                 .then(Mono.empty());
     }
@@ -88,7 +85,6 @@ public class LogUseCase {
                 .logType(logType)
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
-                .operationId(message.getOperation())
                 .build())
                 .then(Mono.empty());
     }

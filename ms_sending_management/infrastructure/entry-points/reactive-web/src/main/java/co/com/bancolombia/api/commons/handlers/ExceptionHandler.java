@@ -3,7 +3,6 @@ package co.com.bancolombia.api.commons.handlers;
 import co.com.bancolombia.api.commons.util.ResponseUtil;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.model.error.Error;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
@@ -11,6 +10,7 @@ import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RequestPredicates;
@@ -59,7 +59,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                         .domain(request.path())
                         .build())
                 .doAfterTerminate(() -> logger.error(throwable))
-                .flatMap(ResponseUtil::responseFail);
+                .flatMap(error ->  ResponseUtil.responseFail(error.getHttpStatus(), error));
     }
 
     private Mono<Error> buildErrorResponse(TechnicalException ex) {
@@ -67,6 +67,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                 .reason(ex.getMessage())
                 .code(ex.getException().getCode())
                 .message(ex.getException().getMessage())
+                .httpStatus(HttpStatus.BAD_REQUEST)
                 .build()
         );
     }
@@ -76,6 +77,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                 .reason(ex.getMessage())
                 .code(ex.getBusinessErrorMessage().getCode())
                 .message(ex.getBusinessErrorMessage().getMessage())
+                .httpStatus(HttpStatus.BAD_REQUEST)
                 .build()
         );
     }
@@ -85,6 +87,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                 .reason(throwable.getMessage())
                 .code(INTERNAL_SERVER_ERROR.getCode())
                 .message(INTERNAL_SERVER_ERROR.getMessage())
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build()
         );
     }

@@ -56,7 +56,7 @@ class ListenerConfigurationTest {
             "                             ALBALB                                     30        00000000              " +
             "  3200002      TS0001                    N0000                                                          " +
             " ALERTAS000102000000000704871ISESMS       ACTIVO    3233620240                                          " +
-            "        MAIL      INACTIVO  emivelas@bancolombia.com.co                                 0123456789      " +
+            "        MAIL      INACTIVO  bancolom@bancolombia.com.co                                 0123456789      " +
             "     DDSPCCJCL";
 
     @BeforeEach

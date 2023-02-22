@@ -21,7 +21,6 @@ public class ContactData {
     private Integer id;
     @ReadOnlyProperty
     private String enrollmentContact;
-    @ReadOnlyProperty
     private String contactMedium;
     private Integer idEnrollmentContact;
     private Integer idContactMedium;
@@ -31,6 +30,7 @@ public class ContactData {
     @ReadOnlyProperty
     private String state;
     private Integer idState;
+    private Integer stateClient;
     private Boolean previous;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

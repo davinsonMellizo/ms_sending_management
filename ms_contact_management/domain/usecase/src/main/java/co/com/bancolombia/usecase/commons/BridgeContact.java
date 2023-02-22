@@ -7,6 +7,7 @@ import co.com.bancolombia.model.document.Document;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -25,9 +26,9 @@ public class BridgeContact {
                 .documentType(document.getId())
                 .documentNumber(String.valueOf(enrol.getClient().getDocumentNumber()))
                 .channel(enrol.getClient().getConsumerCode())
-                .valueSms(getValue(enrol, SMS))
-                .valueEmail(getValue(enrol, MAIL))
-                .valuePush(getValue(enrol, PUSH))
+                .valueSms(getValue(enrol.getContactData(), SMS))
+                .valueEmail(getValue(enrol.getContactData(), MAIL))
+                .valuePush(getValue(enrol.getContactData(), PUSH))
                 .stateSms(getState(enrol, SMS))
                 .stateEmail(getState(enrol, MAIL))
                 .statePush(getState(enrol, PUSH))
@@ -37,13 +38,13 @@ public class BridgeContact {
                 .build();
     }
 
-    private static String getValue(Enrol enrol, String contactWay) {
-        return enrol.getContactData().stream()
+    public static String getValue(List<Contact> contacts, String contactWay) {
+        return contacts.stream()
                 .filter(contact -> getName(contact).equals(contactWay))
                 .map(Contact::getValue)
                 .collect(Collectors.joining());
     }
-    private static String getName(Contact contact){
+    public static String getName(Contact contact){
         return contact.getContactWayName() != null ? contact.getContactWayName() : contact.getContactWay();
     }
 

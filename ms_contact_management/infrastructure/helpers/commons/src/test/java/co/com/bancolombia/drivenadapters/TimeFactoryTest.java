@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class TimeFactoryTest {
+class TimeFactoryTest {
     @InjectMocks
     private TimeFactory timeFactory;
 
