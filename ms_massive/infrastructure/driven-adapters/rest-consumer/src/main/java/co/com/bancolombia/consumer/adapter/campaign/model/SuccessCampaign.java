@@ -6,9 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -27,14 +24,6 @@ public class SuccessCampaign {
         private String idCampaign;
         private String idConsumer;
         private ScheduleType scheduleType;
-        private LocalDate startDate;
-        private LocalTime startTime;
-        private LocalDate endDate;
-        private LocalTime endTime;
-        private String creationUser;
-        private LocalDateTime createdDate;
-        private String modifiedUser;
-        private LocalDateTime modifiedDate;
     }
 
     @lombok.Data
@@ -44,20 +33,7 @@ public class SuccessCampaign {
     public static class Data {
         private String idCampaign;
         private String idConsumer;
-        private String provider;
-        private Integer idRemitter;
-        private String defaultTemplate;
-        private String description;
-        private String sourcePath;
-        private boolean attachment;
-        private String attachmentPath;
-        private boolean dataEnrichment;
         private String state;
-        private String creationUser;
-        private LocalDateTime createdDate;
-        private String modifiedUser;
-        private LocalDateTime modifiedDate;
-        private Integer priority;
         private List<ScheduleResponse> schedules;
     }
 }
