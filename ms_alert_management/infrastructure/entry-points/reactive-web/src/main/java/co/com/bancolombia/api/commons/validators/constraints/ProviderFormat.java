@@ -1,6 +1,6 @@
 package co.com.bancolombia.api.commons.validators.constraints;
 
-import co.com.bancolombia.api.commons.validators.JSONFieldNotNullValidator;
+import co.com.bancolombia.api.commons.validators.ProviderFormatValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -13,22 +13,20 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Constraint(validatedBy = JSONFieldNotNullValidator.class)
+@Constraint(validatedBy = ProviderFormatValidator.class)
 @Target({TYPE, FIELD})
 @Retention(RUNTIME)
-public @interface JSONFieldNotNull {
+public @interface ProviderFormat {
 
-    String message() default "JSON field must not be null or empty";
+    String message() default "El formato del provedor debe contener idProvider y channelType";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
     @Target({TYPE, FIELD})
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        JSONFieldNotNull[] value();
+        ProviderFormat[] value();
     }
-
 }

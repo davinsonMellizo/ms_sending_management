@@ -2,6 +2,7 @@ package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.api.commons.validators.constraints.CheckBooleanValueForFieldRequired;
 import co.com.bancolombia.api.commons.validators.constraints.JSONFieldNotNull;
+import co.com.bancolombia.api.commons.validators.constraints.ProviderFormat;
 import co.com.bancolombia.api.commons.validators.groups.OnCreate;
 import co.com.bancolombia.api.commons.validators.groups.OnDelete;
 import co.com.bancolombia.api.commons.validators.groups.OnUpdate;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
         message = "attachmentPath no debe ser nulo",
         groups = {OnCreate.class, OnUpdate.class}
 )
+
 public class CampaignDTO extends DTO<Campaign> {
 
     @Size(min = 1, max = 50, groups = {OnCreate.class, OnUpdate.class, OnDelete.class},
@@ -46,7 +48,8 @@ public class CampaignDTO extends DTO<Campaign> {
     @NotNull(groups = {OnCreate.class, OnUpdate.class, OnDelete.class}, message = "no debe ser nulo")
     private String idConsumer;
 
-    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo o vacío")
+    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo o vacio")
+    @ProviderFormat(groups = {OnCreate.class, OnUpdate.class}, message = "El formato del provedor debe contener idProvider y channelType")
     private JsonNode provider;
 
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "debe ser mayor que {value}")
