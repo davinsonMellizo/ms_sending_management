@@ -5,6 +5,7 @@ import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.TemplateSms;
+import co.com.bancolombia.model.message.To;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,12 +29,15 @@ class LogUseCaseTest {
     private Alert alert = new Alert();
     private TemplateSms templateEmail = new TemplateSms();
     private Response response = new Response();
+    private To to= new To();
 
     @BeforeEach
     public void init() {
+        to.setIndicative("57");
+        to.setPhoneNumber("3215982557");
         alert.setLogKey(UUID.randomUUID().toString());
         alert.setProvider("INA");
-        alert.setTo("number");
+        alert.setTo(to);
         response.setCode(1);
         response.setDescription("description");
         templateEmail.setBodyText("text");

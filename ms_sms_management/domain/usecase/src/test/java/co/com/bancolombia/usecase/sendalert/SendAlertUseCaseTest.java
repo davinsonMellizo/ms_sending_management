@@ -41,10 +41,15 @@ class SendAlertUseCaseTest {
     private InfobipGateway infobipGateway;
 
     private Alert alert = new Alert();
+    private TemplateSms templateSms =new TemplateSms();
+    private To to= new To();
 
     @BeforeEach
     public void init() {
-        alert.setTo("3215982557");
+        templateSms.setBodyText("retiro");
+        to.setIndicative("57");
+        to.setPhone("3215982557");
+        alert.setTo(to);
         alert.setUrl("URl");
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();
@@ -67,7 +72,7 @@ class SendAlertUseCaseTest {
         when(logUseCase.sendLog(any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .verifyComplete();
     }
 
@@ -87,7 +92,7 @@ class SendAlertUseCaseTest {
         when(logUseCase.sendLog(any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .verifyComplete();
     }
 
@@ -108,7 +113,7 @@ class SendAlertUseCaseTest {
         when(logUseCase.sendLog(any(), anyString(), any()))
                 .thenReturn(Mono.empty());
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .verifyComplete();
     }
 
@@ -120,7 +125,7 @@ class SendAlertUseCaseTest {
         when(masivianGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }
@@ -136,7 +141,7 @@ class SendAlertUseCaseTest {
         when(inalambriaGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }
@@ -152,7 +157,7 @@ class SendAlertUseCaseTest {
         when(inalambriaGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("500 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }
@@ -169,7 +174,7 @@ class SendAlertUseCaseTest {
         when(infobipGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }

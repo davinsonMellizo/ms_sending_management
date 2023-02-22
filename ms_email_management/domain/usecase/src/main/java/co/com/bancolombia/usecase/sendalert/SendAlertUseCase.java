@@ -38,6 +38,8 @@ public class SendAlertUseCase {
                 .log()
                 .concatWith(templateGateway.findTemplateEmail(alert))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail))
+                .onErrorResume(e ->ValidationLogUtil.validSendLog(alert, EMAIL, Response.builder().code(0)
+                                .description(e.getMessage()).build(), logUseCase,TemplateEmail.builder().build()))
                 .thenEmpty(Mono.empty());
     }
 

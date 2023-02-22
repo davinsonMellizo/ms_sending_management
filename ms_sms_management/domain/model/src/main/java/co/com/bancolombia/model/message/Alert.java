@@ -12,10 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class Alert extends Request {
     private String priority;
-    private String to;
+    private To to;
     private String message;
+    private Template template;
     private String url;
     private String provider;
     private String logKey;
+    private String category;
+    private Boolean isFlash;
+    private Boolean isPremium;
 
 }

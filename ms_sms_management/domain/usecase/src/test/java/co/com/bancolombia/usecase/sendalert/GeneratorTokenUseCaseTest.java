@@ -46,10 +46,12 @@ class GeneratorTokenUseCaseTest {
 
     private SMSInfobip smsInf = new SMSInfobip();
     private ArrayList<String> tokens = new ArrayList<>();
-
+    private  To to =new To();
     @BeforeEach
     public void init() {
-        alert.setTo("3136392246");
+        to.setIndicative("57");
+        to.setPhone("3215982557");
+        alert.setTo(to);
         alert.setUrl("");
         alert.setProvider("INA");
         ArrayList<Parameter> parameters = new ArrayList<>();

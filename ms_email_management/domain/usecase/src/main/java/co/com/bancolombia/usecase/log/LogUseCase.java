@@ -14,6 +14,7 @@ import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
 public class LogUseCase {
     private final CommandGateway commandGateway;
     private static final int CODE_RESPONSE_200 =200;
+    private static final int CODE_RESPONSE_0 =0;
 
     public <T> Mono<T> sendLog(Alert alert, TemplateEmail template, String medium, Response response) {
         return commandGateway.sendCommanLogEmail(Log.builder()
@@ -26,7 +27,7 @@ public class LogUseCase {
                         .responseDescription(response.getDescription())
                         .template(template.getBodyHtml())
                         .build())
-                .filter(log -> response.getCode() != CODE_RESPONSE_200)
+                .filter(log -> response.getCode() != CODE_RESPONSE_200 || response.getCode() != CODE_RESPONSE_0)
                 .flatMap(log -> Mono.error(new Throwable(response.getCode().toString())));
     }
 }

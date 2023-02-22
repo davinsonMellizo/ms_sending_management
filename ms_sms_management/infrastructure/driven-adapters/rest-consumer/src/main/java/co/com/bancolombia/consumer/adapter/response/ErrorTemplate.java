@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ErrorTemplate extends Throwable{
+public class ErrorTemplate {
     private Meta  meta;
     private Error error;
 
