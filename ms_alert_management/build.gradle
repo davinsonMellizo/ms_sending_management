@@ -7,7 +7,7 @@ buildscript {
         lombokVersion = '1.18.26'
         mapstructVersion = '1.5.3.Final'
         log4j2Version = '2.19.0'
-        awssdkVersion = '2.20.8'
+        awssdkVersion = '2.20.9'
     }
 }
 

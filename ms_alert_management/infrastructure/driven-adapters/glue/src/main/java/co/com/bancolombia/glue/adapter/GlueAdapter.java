@@ -30,14 +30,11 @@ public class GlueAdapter implements CampaignGlueGateway {
     private final GlueOperations glueOperations;
     private static final String ENV = "--env";
     private static final String SOURCE_MASSIVE_FILE = "--source_massive_file_path";
-    private static final String PROCESSED_FILE_PATH = "--processed_file_path";
     private static final String DATA_ENRICHMENT = "--data_enrichment";
     private static final String CONSUMER_ID = "--consumer_id";
-
     private static final String PRIORITY = "--priority";
     private static final String PROVIDER = "--provider";
-
-    private static final String REMITTER = "--remitter";
+    private static final String REMITTER_ID = "--remitter_id";
 
     private String getTriggerName(String idCampaign, String idConsumer, Long idSchedule) {
         return String.format("tgr_%s_%s_%s", idCampaign, idConsumer, idSchedule);
@@ -54,10 +51,6 @@ public class GlueAdapter implements CampaignGlueGateway {
         ) : null;
     }
 
-    private String getProcessedFilePath(String sourcePath) {
-        return sourcePath.replaceAll("(?i).csv", "");
-    }
-
     private Action getTriggerAction(Campaign campaign) {
         return Action
                 .builder()
@@ -65,12 +58,11 @@ public class GlueAdapter implements CampaignGlueGateway {
                 .arguments(Map.of(
                         ENV, properties.getEnv(),
                         SOURCE_MASSIVE_FILE, campaign.getSourcePath(),
-                        PROCESSED_FILE_PATH, this.getProcessedFilePath(campaign.getSourcePath()),
                         DATA_ENRICHMENT, campaign.getDataEnrichment().toString(),
                         CONSUMER_ID, campaign.getIdConsumer(),
                         PROVIDER, campaign.getProvider(),
                         PRIORITY, campaign.getPriority().toString(),
-                        REMITTER, campaign.getIdRemitter().toString()
+                        REMITTER_ID, campaign.getIdRemitter().toString()
                 ))
                 .build();
     }
@@ -139,6 +131,5 @@ public class GlueAdapter implements CampaignGlueGateway {
         return this.glueOperations.deleteTrigger(nameTrigger)
                 .thenReturn(nameTrigger);
     }
-
 
 }
