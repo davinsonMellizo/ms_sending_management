@@ -6,6 +6,7 @@ buildscript {
         jacocoVersion = '0.8.8'
         lombokVersion = '1.18.26'
         mapstructVersion = '1.5.3.Final'
+        springdocOpenapiVersion = '1.6.14'
         awssdkVersion = '2.20.9'
     }
 }
