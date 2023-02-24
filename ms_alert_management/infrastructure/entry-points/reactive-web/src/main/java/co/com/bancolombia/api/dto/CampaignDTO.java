@@ -79,6 +79,11 @@ public class CampaignDTO extends DTO<Campaign> {
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Boolean dataEnrichment;
 
+    @Range(min = 0, max = 5, groups = {OnCreate.class, OnUpdate.class},
+            message = "el valor debe estar entre {min} y {max}")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
+    private Integer priority;
+
     @Pattern(regexp = "^0$|^1$", message = "debe ser 0 o 1", groups = {OnCreate.class, OnUpdate.class})
     private String state;
 
@@ -100,11 +105,6 @@ public class CampaignDTO extends DTO<Campaign> {
                 this.schedules.stream().map(CampaignScheduleDTO::toModel).collect(Collectors.toList()) : null;
     }
 
-    @Range(min = 0, max = 5, groups = {OnCreate.class, OnUpdate.class},
-            message = "el valor debe estar entre {min} y {max}")
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
-    private Integer priority;
-
     @Override
     public Mono<Campaign> toModel() {
         return Mono.just(Campaign.builder()
@@ -118,10 +118,10 @@ public class CampaignDTO extends DTO<Campaign> {
                 .attachment(this.attachment != null && this.attachment)
                 .attachmentPath(this.attachmentPath)
                 .dataEnrichment(this.dataEnrichment != null && this.dataEnrichment)
+                .priority(this.priority)
                 .state(this.state)
                 .creationUser(this.creationUser)
                 .modifiedUser(this.modifiedUser)
-                .priority(this.priority)
                 .schedules(this.schedulesToModel())
                 .build());
     }

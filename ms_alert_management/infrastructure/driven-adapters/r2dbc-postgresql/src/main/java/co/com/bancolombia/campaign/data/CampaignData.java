@@ -32,12 +32,12 @@ public class CampaignData implements Persistable<String> {
     private boolean attachment;
     private String attachmentPath;
     private boolean dataEnrichment;
+    private Integer priority;
     private String state;
     private String creationUser;
     private LocalDateTime createdDate;
     private String modifiedUser;
     private LocalDateTime modifiedDate;
-    private Integer priority;
     @Transient
     private List<Schedule> schedules;
 
