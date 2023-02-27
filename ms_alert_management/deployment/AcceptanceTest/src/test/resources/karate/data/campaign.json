@@ -1,10 +1,20 @@
 {
   "idCampaign": "#(idCampaign)",
   "idConsumer": "#(idConsumer)",
-  "provider": {
-    "idProvider": "INA",
-    "channelType": "PUSH"
-  },
+  "provider": [
+    {
+      "idProvider": "TD1",
+      "channelType": "PUSH"
+    },
+    {
+      "idProvider": "TOD",
+      "channelType": "SMS"
+    },
+    {
+      "idProvider": "SVP",
+      "channelType": "EMAIL"
+    }
+  ],
   "idRemitter": 2,
   "defaultTemplate": "template_14",
   "sourcePath": "sourcePath",
@@ -13,6 +23,7 @@
   "dataEnrichment": true,
   "creationUser": "lugomez",
   "state": "1",
+  "priority": 1,
   "schedules": [
     {
       "scheduleType": "DAILY",

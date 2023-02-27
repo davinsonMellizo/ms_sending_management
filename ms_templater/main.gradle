@@ -12,27 +12,22 @@ subprojects {
     compileJava.dependsOn validateStructure
     sourceCompatibility = JavaVersion.VERSION_11
 
-    dependencies {
-        implementation 'io.projectreactor:reactor-core'
-        implementation 'io.projectreactor.addons:reactor-extra'
-
-        testImplementation 'io.projectreactor:reactor-test'
-        testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-        compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-    }
-
     test {
         useJUnitPlatform()
     }
 
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        }
+    dependencies {
+        implementation platform("software.amazon.awssdk:bom:${awssdkVersion}")
+        implementation 'io.projectreactor:reactor-core'
+        implementation 'io.projectreactor.addons:reactor-extra'
+
+        testImplementation 'io.projectreactor:reactor-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)
@@ -40,10 +35,10 @@ subprojects {
     jacocoTestReport {
         dependsOn test
         reports {
-            xml.enabled true
-            xml.destination file("${buildDir}/reports/jacoco.xml")
-            csv.enabled false
-            html.destination file("${buildDir}/reports/jacocoHtml")
+            xml.setRequired true
+            xml.setOutputLocation file("${buildDir}/reports/jacoco.xml")
+            csv.setRequired false
+            html.setOutputLocation file("${buildDir}/reports/jacocoHtml")
         }
     }
 
@@ -51,28 +46,30 @@ subprojects {
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDir = file("$buildDir/reports")
+    reportsDirectory = file("$buildDir/reports")
 }
 
-task jacocoMergedReport(type: JacocoReport) {
+tasks.register('jacocoMergedReport', JacocoReport) {
     dependsOn = subprojects.jacocoTestReport
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
     executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled true
+        xml.setRequired true
+        csv.setRequired false
+        html.setRequired true
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
+
 tasks.named('wrapper') {
-    gradleVersion = '7.5'
-    distributionUrl="https://artifactory.apps.bancolombia.com/gradlew/gradle-7.5-bin.zip"
- }
+    gradleVersion = '7.6'
+    distributionUrl = 'https://artifactory.apps.bancolombia.com/gradlew/gradle-7.6-bin.zip'
+}
+
