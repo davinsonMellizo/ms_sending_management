@@ -30,8 +30,7 @@ public class ContactRepositoryImplement
 
     @Override
     public Flux<Contact> findAllContactsByClient(Message message) {
-        return repository.findAllContactsByClient(message.getDocumentNumber(), message.getDocumentType(),
-                message.getConsumer())
+        return repository.findAllContactsByClient(message.getDocumentNumber(), message.getDocumentType())
                 .map(Mono::just)
                 .flatMap(this::doQuery)
                 .map(contact -> contact.toBuilder().id(null).build())

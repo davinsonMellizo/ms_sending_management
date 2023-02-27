@@ -56,7 +56,7 @@ class RouterProviderPushUseCaseTest {
         message.setLogKey("testKey");
         message.setPush(true);
         ArrayList<String> preferences = new ArrayList<>();
-        preferences.add("SMS");
+        preferences.add("PUSH");
         message.setPreferences(preferences);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
@@ -76,8 +76,7 @@ class RouterProviderPushUseCaseTest {
                 .description("success").code(200)
                 .build()));
         when(logUseCase.sendLogPush(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
-        when(documentGateway.getDocument(anyString())).thenReturn(Mono.just(Document.builder().code("testCode").build()));
-        StepVerifier.create(routerProviderPushUseCase.sendPush(message, alert))
+        StepVerifier.create(routerProviderPushUseCase.routeAlertPush(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }

@@ -46,7 +46,7 @@ public class AlertDTO {
                         .alert(alertParameters.getAlert())
                         .transactionCode(alertParameters.getTransactionCode())
                         .amount(alertParameters.getAmount())
-                        .url(recipient.getContacts().getSms().getUrl())
+                        .url(recipient.getContacts().getSms().getUrlForShortening())
                         .phone(recipient.getContacts().getSms().getPhone())
                         .phoneIndicator(recipient.getContacts().getSms().getPhoneIndicator())
                         .mail(recipient.getContacts().getMail().getAddress())

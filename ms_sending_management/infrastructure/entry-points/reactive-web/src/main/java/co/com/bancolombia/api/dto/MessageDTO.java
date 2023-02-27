@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,13 +29,13 @@ public class MessageDTO {
     @Size(max = 20, message = "{constraint.size}")
     private String category = "";
     @Builder.Default
-    @Schema(allowableValues = {"MAIL", "SMS"})
+    @Schema(allowableValues = {"MAIL", "SMS", "PUSH"})
     private ArrayList<String> preferences= new ArrayList<>();
-    @Builder.Default
     @Schema(description = "Mapa de parametros para construir el mensaje",
             example = "{\"mensaje\": \"Actualización exitosa\"}")
-    @ArraySchema(minItems = 1)
-    private Map<String, String> parameters = new HashMap<>();
+    @Size(min = 1, message = "{constraint.size}")
+    @NotNull(message = "{constraint.not_null}")
+    private Map<String, String> parameters;
     @Builder.Default
     @Size(max = 100, message = "{constraint.size}")
     @Schema(description = "Obligatorio para envío de correo cuando no se envía, " +

@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderPushUseCase;
@@ -70,18 +71,33 @@ class SendingUseCaseTest {
                 .basicKit(false)
                 .obligatory(false)
                 .build();
-
     }
 
     @Test
     void alertSendingManager(){
-        when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.empty());
-        when(routerProviderPushUseCase.sendPush(any(), any())).thenReturn(Mono.empty());
-        when(routerProviderSMSUseCase.routeAlertsSMS(any(), any())).thenReturn(Mono.empty());
+        Response response = new Response();
+        when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.just(response));
+        when(routerProviderPushUseCase.routeAlertPush(any(), any())).thenReturn(Mono.just(response));
+        when(routerProviderSMSUseCase.routeAlertsSMS(any(), any())).thenReturn(Mono.just(response));
         when(alertUseCase.validateAmount(any(), any())).thenReturn(Mono.empty());
         when(alertUseCase.getAlert(any())).thenReturn(Mono.just(alert));
         when(alertUseCase.getAlertsByTransactions(any())).thenReturn(Flux.just(alert));
-        when(clientUseCase.validateDataContact(any())).thenReturn(Mono.just(message));
+        when(clientUseCase.validateClientInformation(any())).thenReturn(Mono.just(message));
+
+        StepVerifier.create(sendingUseCase.alertSendingManager(List.of(message)))
+                .verifyComplete();
+    }
+
+    @Test
+    void alertSendingManagerByAlert(){
+        message.setTransactionCode("");
+        Response response = new Response();
+        when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.just(response));
+        when(routerProviderPushUseCase.routeAlertPush(any(), any())).thenReturn(Mono.just(response));
+        when(routerProviderSMSUseCase.routeAlertsSMS(any(), any())).thenReturn(Mono.just(response));
+        when(alertUseCase.validateAmount(any(), any())).thenReturn(Mono.empty());
+        when(alertUseCase.getAlert(any())).thenReturn(Mono.just(alert));
+        when(clientUseCase.validateClientInformation(any())).thenReturn(Mono.just(message));
 
         StepVerifier.create(sendingUseCase.alertSendingManager(List.of(message)))
                 .verifyComplete();

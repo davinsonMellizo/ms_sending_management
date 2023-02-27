@@ -45,6 +45,7 @@ class LogUseCaseTest {
     @Test
     void putLogEmailTest(){
         StepVerifier.create(logUseCase.sendLogMAIL(message, alert, "", response))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

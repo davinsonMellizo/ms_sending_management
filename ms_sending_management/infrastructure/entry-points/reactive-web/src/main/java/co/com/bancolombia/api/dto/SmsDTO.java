@@ -24,6 +24,6 @@ public class SmsDTO {
     @Builder.Default
     @Size(max = 500, message = "{constraint.size}")
     @Schema(description = "url que se adjunta al mensaje de texto")
-    private String url = "";
+    private String urlForShortening = "";
 
 }

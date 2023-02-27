@@ -5,7 +5,6 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.sendalert.commons.Util;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderMailUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderPushUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderSMSUseCase;
@@ -34,16 +33,17 @@ public class SendingUseCase {
 
     private Flux<Alert> validateObligation(Alert pAlert, Message message) {
         return Flux.just(pAlert)
-                .filter(alert -> (!alert.getObligatory() && !alert.getBasicKit()) || message.getTransactionCode().equals(TRX_580))
+                .filter(alert -> (!alert.getObligatory() && !alert.getBasicKit()) ||
+                        message.getTransactionCode().equals(TRX_580))
                 .filter(alert -> alert.getNature().equals(MONETARY))
                 .flatMap(alert -> alertUseCase.validateAmount(alert, message))
                 .switchIfEmpty(Mono.just(pAlert));
     }
 
     private Mono<Alert> routeAlert(Alert alert, Message message) {
-        return Mono.zip(routerProviderPushUseCase.sendPush(message, alert),
-                (routerProviderSMSUseCase.routeAlertsSMS(message, alert)),
-                (routerProviderMailUseCase.routeAlertMail(message, alert)))
+        return Mono.zip(routerProviderPushUseCase.routeAlertPush(message, alert),
+                routerProviderSMSUseCase.routeAlertsSMS(message, alert),
+                routerProviderMailUseCase.routeAlertMail(message, alert))
                 .thenReturn(alert);
     }
 
@@ -56,15 +56,7 @@ public class SendingUseCase {
                 .filter(alert -> alert.getIdState().equals(ACTIVE))
                 .switchIfEmpty(Mono.error(new BusinessException(INACTIVE_ALERT)))
                 .flatMap(alert -> validateObligation(alert, message))
-                .flatMap(alert -> buildMessageSms(alert, message))
                 .collectList();
-    }
-
-    private Mono<Alert> buildMessageSms(Alert alert, Message message){
-        return Mono.just(message)
-                .filter(message1 -> message1.getParameters().containsKey("mensaje"))
-                .map(message1 -> alert.toBuilder().message(message1.getParameters().get("mensaje")).build())
-                .switchIfEmpty(Util.replaceParameter(alert, message));
     }
 
     private Mono<Void> sendAlerts(Message message, List<Alert> alerts){
@@ -78,7 +70,7 @@ public class SendingUseCase {
         String logKey = LocalDate.now()+UUID.randomUUID().toString().substring(sizeLogKey);
         message.setLogKey(logKey);
 
-        return Mono.zip(clientUseCase.validateDataContact(message), validateAlerts(message))
+        return Mono.zip(clientUseCase.validateClientInformation(message), validateAlerts(message))
                 .flatMap(data -> sendAlerts(data.getT1(), data.getT2()))
                 .onErrorResume(e -> logUseCase.sendLogError(message.toBuilder().logKey(logKey).build(),
                         SEND_220, Response.builder().code(1).description(e.getMessage()).build()))

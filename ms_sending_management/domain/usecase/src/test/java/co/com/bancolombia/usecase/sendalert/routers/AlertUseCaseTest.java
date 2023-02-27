@@ -99,6 +99,7 @@ class AlertUseCaseTest {
                 .id("AFI")
                 .push("SI")
                 .providerMail("TOD")
+                .message("Señor <C1> su compra fue exitoso")
                 .remitter("bancolombia@bancolombia.com.co")
                 .build();
         when(alertGateway.findAlertById(anyString())).thenReturn(Mono.just(alert));

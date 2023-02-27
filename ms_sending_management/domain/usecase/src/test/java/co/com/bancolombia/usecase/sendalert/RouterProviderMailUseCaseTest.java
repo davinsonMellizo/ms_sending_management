@@ -3,6 +3,7 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.model.remitter.Remitter;
@@ -76,7 +77,7 @@ class RouterProviderMailUseCaseTest {
                 .providerMail("TOD")
                 .remitter("davinson@bancolombia.com.co")
                 .build();
-        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
@@ -92,7 +93,7 @@ class RouterProviderMailUseCaseTest {
                 .providerMail("TOD")
                 .remitter("bancolombia@bancolombia.com.co")
                 .build();
-        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

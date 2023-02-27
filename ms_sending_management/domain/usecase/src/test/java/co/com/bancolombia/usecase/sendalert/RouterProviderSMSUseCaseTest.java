@@ -3,6 +3,7 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
 import co.com.bancolombia.model.provider.Provider;
@@ -20,6 +21,7 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -53,27 +55,27 @@ class RouterProviderSMSUseCaseTest {
         message.setTransactionCode("580");
         message.setAmount(60000L);
         message.setUrl("");
-        message.setPhone("32158967");
+        message.setPhone("3210000000");
         message.setPhoneIndicator("57");
         message.setMail("bancolombia@com.co");
         message.setAttachments(new ArrayList<>());
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         message.setParameters(parameters);
-        message.setPreferences(new ArrayList<>());
+        ArrayList<String> preferences = new ArrayList<>();
+        preferences.add("SMS");
+        message.setPreferences(preferences);
     }
 
 
     @Test
     void routeAlertSmsTest(){
-        Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("NO")
                 .providerSms("MAS")
                 .priority(0)
                 .build();
-        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
-        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.just(new Response()));
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
@@ -83,15 +85,13 @@ class RouterProviderSMSUseCaseTest {
 
     @Test
     void routeAlertSmsErrorTest(){
-        Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
                 .providerSms("0")
                 .priority(0)
                 .build();
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
-                .expectNextCount(1)
-                .verifyComplete();
+                .expectError().verify();
     }
 
 }
