@@ -29,7 +29,7 @@ public class RouterProviderMailUseCase {
 
     private static final Predicate<Message> validatePreference = message ->
             (message.getRetrieveInformation() &&
-                    (message.getPreferences().contains(MAIL)) || message.getPreferences().isEmpty())||
+                    ((message.getPreferences().contains(MAIL)) || message.getPreferences().isEmpty()))||
                     (!message.getRetrieveInformation() && !message.getMail().isEmpty());
 
     private Mono<Message> validateData(Message message, Alert alert) {

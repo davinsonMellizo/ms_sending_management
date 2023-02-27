@@ -2,7 +2,9 @@ package co.com.bancolombia.usecase.sendalert.routers;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.model.message.Message;
+import co.com.bancolombia.model.message.Push;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.gateways.PushGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;

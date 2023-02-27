@@ -23,7 +23,7 @@ public class Util {
                 .map(ArrayList::new)
                 .map(parameters -> IntStream.range(0, parameters.size()).boxed()
                         .collect(Collectors.toMap(i -> i + 1, parameters::get)))
-                .flatMapMany(parameters -> Flux.fromIterable(parameters.entrySet().stream().collect(Collectors.toList())))
+                .flatMapMany(params -> Flux.fromIterable(params.entrySet().stream().collect(Collectors.toList())))
                 .flatMap(parameter -> validateParameter(alert.getMessage(), parameter))
                 .map(parameter -> alert.getMessage().replace("<C"+parameter.getKey()+">", parameter.getValue()))
                 .doOnNext(alert::setMessage)
