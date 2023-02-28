@@ -11,6 +11,7 @@ public enum BusinessErrorMessage {
     CLIENT_INACTIVE("373", "Inactive Client"),
     AMOUNT_NOT_EXCEEDED("373", "The client does not exceed the amount to send an alert"),
     INVALID_CONTACT("372", "Invalid Contact"),
+    INVALID_MESSAGE("372", "Invalid message"),
     ALERT_HAS_NO_PUSH("372", "Alert has no push"),
     CLIENT_HAS_NO_PUSH("372", "Client has not push"),
     APPLICATION_CODE_REQUIRED("372", "Application code is required"),

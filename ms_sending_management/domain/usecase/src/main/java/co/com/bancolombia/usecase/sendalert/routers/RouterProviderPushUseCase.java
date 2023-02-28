@@ -62,6 +62,7 @@ public class RouterProviderPushUseCase {
                 .flatMap(men -> logUseCase.sendLogPush(message, alert, SEND_220, response))
                 .switchIfEmpty(Mono.just(response))
                 .filter(res -> !message.getPreferences().contains(SMS) && message.getRetrieveInformation())
+                .filter(message1 -> !alert.getMessage().isEmpty())
                 .flatMap(res -> routerProviderSMSUseCase.sendAlertToSMS(alert, message))
                 .thenReturn(response);
     }
@@ -85,6 +86,8 @@ public class RouterProviderPushUseCase {
         return Mono.just(pMessage)
                 .filter(message -> !message.getApplicationCode().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(APPLICATION_CODE_REQUIRED)))
+                .filter(message1 -> !alert.getMessage().isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_MESSAGE)))
                 .filter(Message::getRetrieveInformation)
                 .flatMap(message -> validateClientAndAlertHavePush(pMessage, alert))
                 .switchIfEmpty(validateClient(pMessage));

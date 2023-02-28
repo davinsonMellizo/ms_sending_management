@@ -52,7 +52,7 @@ public class AlertDTO extends DTO<Alert> {
     @Size(min = 1, max = 2, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String nature;
-    @Size(min = 1, max = 500, message = "{constraint.size}")
+    @Size(min = 0, max = 500, message = "{constraint.size}")
     @NotNull(message = "{constraint.not_null}")
     private String message;
     @Size(min = 1, max = 50, message = "{constraint.size}")

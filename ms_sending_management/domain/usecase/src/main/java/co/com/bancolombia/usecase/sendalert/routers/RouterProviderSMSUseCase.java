@@ -47,6 +47,8 @@ public class RouterProviderSMSUseCase {
         return Mono.just(message)
                 .filter(isValidMobile)
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
+                .filter(message1 -> !alert.getMessage().isEmpty())
+                .switchIfEmpty(Mono.error(new BusinessException(INVALID_MESSAGE)))
                 .filter(message1 -> Objects.nonNull(alert.getPriority()))
                 .switchIfEmpty(Mono.error(new BusinessException(REQUIRED_PRIORITY)))
                 .map(message1 -> new Response(0, SUCCESS))
