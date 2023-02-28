@@ -23,7 +23,7 @@ public class Contact {
     private String state;
     private Integer idState;
     private Boolean previous;
-
+    private String consumer;
     private Integer stateClient;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

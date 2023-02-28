@@ -36,7 +36,7 @@ public class RouterProviderMailUseCase {
         return Mono.just(message)
                 .filter(isValidMailFormat)
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_CONTACT)))
-                .filter(message1 -> !message.getRemitter().isEmpty())
+                .filter(message1 -> !alert.getRemitter().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(REQUIRED_REMITTER)))
                 .filter(message1 -> !alert.getTemplateName().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(TEMPLATE_INVALID)));

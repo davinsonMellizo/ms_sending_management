@@ -68,6 +68,7 @@ class RouterProviderPushUseCaseTest {
     void routeAlertPushTest(){
         Alert alert = Alert.builder()
                 .push("SI")
+                .message("message")
                 .providerSms("ALM")
                 .idCategory(1)
                 .priority(0)

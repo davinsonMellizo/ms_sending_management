@@ -71,6 +71,7 @@ class RouterProviderSMSUseCaseTest {
         Alert alert = Alert.builder()
                 .push("NO")
                 .providerSms("MAS")
+                .message("message")
                 .priority(0)
                 .build();
         when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.just(new Response()));

@@ -25,16 +25,16 @@ public class ClientUseCase {
                 .filter(contact -> contact.getStateClient().equals(ACTIVE))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
                 .filter(contact -> Objects.nonNull(contact.getContactMedium()))
-                .filter(contact -> contact.getContactMedium().equals(message.getConsumer()))
+                .filter(contact -> contact.getConsumer().equals(message.getConsumer()))
                 .filter(contact -> contact.getIdState().equals(ACTIVE))
                 .filter(contact -> !contact.getPrevious())
                 .collectMap(Contact::getContactMedium)
                 .filter(contacts -> !contacts.isEmpty())
-                .map(contacts -> message.toBuilder()
-                        .phone(contacts.get(SMS) != null ? contacts.get(SMS).getValue() : "")
-                        .push(contacts.get(PUSH) != null)
-                        .mail(contacts.get(MAIL) != null ? contacts.get(MAIL).getValue() : "").build())
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)));
+                .doOnNext(contacts -> message.setPhone(contacts.get(SMS) != null ? contacts.get(SMS).getValue() : ""))
+                .doOnNext(contacts -> message.setPush(contacts.get(PUSH) != null))
+                .doOnNext(contacts -> message.setMail(contacts.get(MAIL) != null ? contacts.get(MAIL).getValue() : ""))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)))
+                .thenReturn(message);
     }
     public Mono<Message> validateClientInformation(Message message){
         return Mono.just(message)
