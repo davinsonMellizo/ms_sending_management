@@ -67,16 +67,23 @@ public class AlertUseCase {
                 .map(alert -> alert.toBuilder()
                         .priority(message.getPriority())
                         .templateName(message.getTemplate())
+                        .remitter(message.getRemitter())
                         .message(message.getParameters().entrySet().iterator().next().getValue())
                         .build());
+    }
+
+    private Mono<Alert> getAlertById(Message message) {
+        return Mono.just(message)
+                .map(Message::getAlert)
+                .flatMap(alertGateway::findAlertById)
+                .flatMap(alert -> UtilParameters.validateMessageAlert(alert, message))
+                .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
     }
 
     public Mono<Alert> getAlert(Message message) {
         return Mono.just(message)
                 .filter(message1 -> !message1.getAlert().isEmpty())
-                .map(Message::getAlert)
-                .flatMap(alertGateway::findAlertById)
-                .flatMap(alert -> UtilParameters.validateMessageAlert(alert, message))
+                .flatMap(this::getAlertById)
                 .switchIfEmpty(buildAlertGeneral(message))
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_NOT_FOUND)));
     }

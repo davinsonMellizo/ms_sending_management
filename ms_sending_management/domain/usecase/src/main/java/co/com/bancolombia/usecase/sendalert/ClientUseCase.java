@@ -11,16 +11,19 @@ import java.util.Objects;
 
 import static co.com.bancolombia.commons.constants.Medium.*;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_HAS_NO_CONTACTS;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.validateClient;
 
 @RequiredArgsConstructor
 public class ClientUseCase {
     private final ContactGateway contactGateway;
 
     private Mono<Message> validateDataContact(Message message) {
-        return contactGateway.findAllContactsByClient(message)
+        return Mono.just(message)
+                .filter(validateClient)
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_IDENTIFICATION_INVALID)))
+                .flatMapMany(contactGateway::findAllContactsByClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_NOT_FOUND)))
                 .filter(contact -> contact.getStateClient().equals(ACTIVE))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_INACTIVE)))
