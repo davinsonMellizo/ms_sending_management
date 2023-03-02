@@ -2,7 +2,9 @@
   "retrieveInformation": false,
   "message":{
     "parameters":{
-      "name": "Davinson"
+      "canal": "SVP",
+      "hora": "08:52:23",
+      "fecha": "2023-01-22"
     }
   },
   "alertParameters":{

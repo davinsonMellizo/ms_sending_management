@@ -12,6 +12,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+import static co.com.bancolombia.commons.constants.Constants.KEY_CLOSE;
+import static co.com.bancolombia.commons.constants.Constants.KEY_OPEN;
+
 @RequiredArgsConstructor
 public class CreateMessageUseCase {
 
@@ -32,9 +35,9 @@ public class CreateMessageUseCase {
 
     private Mono<Template> replaceData(Map<String, String> data, Template template) {
         data.forEach((s, s2) -> {
-            template.setMessageSubject(template.getMessageSubject().replace(s, s2));
-            template.setMessageBody(template.getMessageBody().replace(s, s2));
-            template.setPlainText(template.getPlainText().replace(s, s2));
+            template.setMessageSubject(template.getMessageSubject().replace(KEY_OPEN.concat(s).concat(KEY_CLOSE), s2));
+            template.setMessageBody(template.getMessageBody().replace(KEY_OPEN.concat(s).concat(KEY_CLOSE), s2));
+            template.setPlainText(template.getPlainText().replace(KEY_OPEN.concat(s).concat(KEY_CLOSE), s2));
         });
         return Mono.just(template);
     }

@@ -90,13 +90,11 @@ def existsOriginPath(path):
     originsPaths = client.list_objects(
         Bucket=bucketSourcePath, Delimiter='/', Prefix=path)
     if originsPaths.get('Contents') is None:
-        print("contents is none by :" +s3BucketSourcePath+path)
         return False
     else:
         existsFiles = False
         for idx, val in enumerate(originsPaths.get('Contents')):
             if val.get("StorageClass") == "STANDARD":
-                print("existsFiles for :"+path)
                 existsFiles = True
         return existsFiles
 
@@ -108,7 +106,6 @@ def sourcePathBuild():
         sourcePath = sourcePathRegex.format(date= start_date)
         sourcePaths.append(s3BucketSourcePath+sourcePath)
         start_date += delta
-    print(sourcePaths)
 
 def timeFilter(outFrame):
     if(outFrame.count() > 0):
@@ -137,17 +134,9 @@ def createDynamicFrame():
 df = createDynamicFrame()
 df.show()
 if df != None:
-    print("ini")
-    print(df.count())
     df = timeFilter(df)
-    print("pre")
-    print(df.count())
-    print("pos")
     df = df.toDF()
     df = dynamicFilter(df)
-    print("pasa del filtro", bucketDestinationPath)
-    print(df.count())
     df.coalesce(1).write.mode("overwrite").csv(f's3://{bucketDestinationPath}/test')
 
 job.commit()
-print("Proceso Terminado.")

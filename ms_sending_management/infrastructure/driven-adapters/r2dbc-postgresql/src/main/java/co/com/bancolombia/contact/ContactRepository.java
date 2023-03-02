@@ -10,10 +10,8 @@ public interface ContactRepository extends ReactiveCrudRepository<ContactData, I
 
     @Query("select c.* " +
             "from contact_view c " +
-            "where c.document_number::int8 = :documentNumber and c.id_document_type::int2 = :documentType " +
-            "and c.consumer = :consumer")
+            "where c.document_number::int8 = :documentNumber and c.id_document_type::int2 = :documentType ")
     Flux<ContactData> findAllContactsByClient(@Param("documentNumber") Long documentNumber,
-                                              @Param("documentType") Integer documentType,
-                                              @Param("consumer") String consumer);
+                                              @Param("documentType") Integer documentType);
 
 }

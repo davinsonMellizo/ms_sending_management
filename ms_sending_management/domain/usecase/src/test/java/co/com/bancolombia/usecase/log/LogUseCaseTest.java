@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,6 +44,7 @@ class LogUseCaseTest {
     @Test
     void putLogEmailTest(){
         StepVerifier.create(logUseCase.sendLogMAIL(message, alert, "", response))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

@@ -8,6 +8,8 @@ import co.com.bancolombia.model.message.Response;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import static co.com.bancolombia.commons.constants.Medium.*;
+
 @RequiredArgsConstructor
 public class LogUseCase {
     private final CommandGatewayLog commandGateway;
@@ -19,7 +21,7 @@ public class LogUseCase {
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())
                 .logType(logType)
-                .medium("SMS")
+                .medium(SMS)
                 .contact(message.getPhone())
                 .messageSent(alert.getMessage())
                 .alertId(alert.getId())
@@ -31,6 +33,7 @@ public class LogUseCase {
                 .responseDescription(response.getDescription())
                 .priority(alert.getPriority())
                 .build())
+                .onErrorResume(throwable -> Mono.empty())
                 .then(Mono.just(response));
     }
 
@@ -41,7 +44,7 @@ public class LogUseCase {
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())
                 .logType(logType)
-                .medium("PUSH")
+                .medium(PUSH)
                 .template(message.getTemplate())
                 .contact(message.getPhone())
                 .messageSent(alert.getMessage())
@@ -52,6 +55,7 @@ public class LogUseCase {
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 .build())
+                .onErrorResume(throwable -> Mono.empty())
                 .then(Mono.just(response));
     }
 
@@ -62,7 +66,7 @@ public class LogUseCase {
                 .documentNumber(message.getDocumentNumber())
                 .consumer(message.getConsumer())
                 .logType(logType)
-                .medium("MAIL")
+                .medium(MAIL)
                 .template(alert.getTemplateName())
                 .contact(message.getMail())
                 .messageSent(alert.getMessage())
@@ -73,7 +77,8 @@ public class LogUseCase {
                 .responseCode(response.getCode())
                 .responseDescription(response.getDescription())
                 .build())
-                .then(Mono.empty());
+                .onErrorResume(throwable -> Mono.empty())
+                .then(Mono.just(response));
     }
 
     public <T> Mono<T> sendLogError(Message message, String logType, Response response) {

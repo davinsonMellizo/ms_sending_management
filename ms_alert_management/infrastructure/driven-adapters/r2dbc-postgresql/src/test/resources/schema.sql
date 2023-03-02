@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS alert_client (
     CONSTRAINT alert_client_client_fkey FOREIGN KEY (document_number, id_document_type) REFERENCES client(document_number, id_document_type) on delete cascade on update cascade
 );
 
---CREATE TYPE IF NOT EXISTS"JSONB" as json;
+--CREATE TYPE IF NOT EXISTS "JSONB" as json;
 CREATE TABLE IF NOT EXISTS campaign (
     id_campaign VARCHAR(50) NOT NULL,
     id_consumer VARCHAR(10) NOT NULL,
@@ -198,6 +198,7 @@ CREATE TABLE IF NOT EXISTS campaign (
     attachment_path VARCHAR(255),
     data_enrichment BOOLEAN NOT NULL,
     state CHAR(1) NOT NULL DEFAULT '1',
+    priority int2 NOT NULL,
     creation_user VARCHAR(20) NULL,
     created_date TIMESTAMP NOT NULL,
     modified_user VARCHAR(20) NULL,

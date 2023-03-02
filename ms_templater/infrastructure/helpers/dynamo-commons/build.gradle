@@ -1,5 +1,5 @@
 dependencies {
     implementation project(':model')
-    implementation group: 'software.amazon.awssdk', name: 'dynamodb-enhanced', version: '2.14.13'
-    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
+    implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    implementation 'org.modelmapper:modelmapper:3.1.1'
 }

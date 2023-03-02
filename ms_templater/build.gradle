@@ -1,24 +1,20 @@
 buildscript {
-	ext {
-        cleanArchitectureVersion = '2.4.4'
-        springBootVersion = '2.7.3'
+    ext {
+        cleanArchitectureVersion = '2.4.10'
+        springBootVersion = '2.7.9'
         sonarVersion = '3.0'
         jacocoVersion = '0.8.8'
-        lombokVersion = '1.18.24'
-	}
-    repositories {
-        maven { url "https://artifactory.apps.bancolombia.com/maven-bancolombia" }
+        lombokVersion = '1.18.26'
+        awssdkVersion = '2.20.9'
     }
-
 }
 
 plugins {
-	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
-	id 'org.springframework.boot' version "${springBootVersion}"
-	id 'org.sonarqube' version "${sonarVersion}"
-	id 'jacoco'
+    id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'org.sonarqube' version "${sonarVersion}"
+    id 'jacoco'
 }
-
 
 sonarqube {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
@@ -32,11 +28,6 @@ sonarqube {
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
-}
-
-wrapper {
-    gradleVersion = '7.5'
-    distributionUrl = "https://artifactory.apps.bancolombia.com/gradlew/gradle-7.5-bin.zip"
 }
 
 apply from: './main.gradle'
