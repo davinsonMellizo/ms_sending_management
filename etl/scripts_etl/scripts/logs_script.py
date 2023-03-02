@@ -70,14 +70,11 @@ DBNAME=secret_json[DBNAME]
 # Obtener datos del Data Catalog
 logs_dyf = glueContext.create_dynamic_frame.from_catalog(database=glue_database,table_name=glue_database_table)
 
-print('Logs number dyf:', logs_dyf.count())
 
 date_compare = date.today() - timedelta(30)
 date_data = date.today() - timedelta(31)
-print(date_compare)
 
 logs_dyf = logs_dyf.filter(lambda x: x.date_creation.date() < date_compare)
-print('Logs number dyf filter:', logs_dyf.count())
 
 glueContext.write_dynamic_frame.from_options(
     frame=logs_dyf.coalesce(1),
@@ -104,7 +101,7 @@ try:
     conn.commit()
     cur.close()
 except Exception as e:
-    print("Database connection failed due to {}".format(e))   
+
 finally:
     if conn is not None:
         conn.close()
