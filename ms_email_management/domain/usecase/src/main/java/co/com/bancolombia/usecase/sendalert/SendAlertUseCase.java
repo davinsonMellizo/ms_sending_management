@@ -35,8 +35,7 @@ public class SendAlertUseCase {
 
     public Mono<Void> sendAlert(Alert alert) {
         return  Util.validTemplate(alert)
-                .log()
-                .concatWith(templateGateway.findTemplateEmail(alert))
+                .concatWith(validTemplate(alert))
                 .flatMap(templateEmail -> sendAlertToProviders(alert, templateEmail))
                 .onErrorResume(e ->ValidationLogUtil.validSendLog(alert, EMAIL, Response.builder().code(0)
                                 .description(e.getMessage()).build(), logUseCase,TemplateEmail.builder().build()))
@@ -128,5 +127,11 @@ public class SendAlertUseCase {
     private Mono<String> generatePresignedUrl(String filePath) {
         return masivianGateway.generatePresignedUrl(filePath)
                 .thenReturn(filePath);
+    }
+
+    private Mono<TemplateEmail> validTemplate(Alert pAlert){
+        return Mono.just(pAlert)
+                .filter(alert -> alert.getMessage() == null && alert.getTemplate() != null)
+                .flatMap(alert -> templateGateway.findTemplateEmail(alert));
     }
 }

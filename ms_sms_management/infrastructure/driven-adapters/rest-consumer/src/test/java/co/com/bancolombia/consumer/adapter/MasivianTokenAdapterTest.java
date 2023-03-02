@@ -35,7 +35,7 @@ class MasivianTokenAdapterTest {
     public void init() {
         String url = "localhost";
         when(properties.getResources())
-                .thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url , url));
+                .thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url , url, url));
 
         account.setPassword("passwordTest");
         account.setUsername("usernameTest");

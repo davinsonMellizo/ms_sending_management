@@ -1,8 +1,8 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.binstash.api.ObjectCache;
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.message.Alert;
-import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.SMSInalambria;
 import co.com.bancolombia.model.message.SMSInfobip;
 import co.com.bancolombia.model.message.SMSMasiv;
@@ -11,8 +11,6 @@ import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
 import co.com.bancolombia.model.token.SecretGateway;
 import co.com.bancolombia.model.token.Token;
-import co.com.bancolombia.usecase.log.LogUseCase;
-import co.com.bancolombia.usecase.log.ValidationLogUtil;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -21,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SECRET_NAME_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.TOKEN_NOT_FOUND;
 
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase implements Serializable {
@@ -30,43 +29,35 @@ public class GeneratorTokenUseCase implements Serializable {
     private final transient InalambriaGateway inalambriaGateway;
     private final transient MasivianGateway masivianGateway;
     private final transient InfobipGateway infobipGateway;
-    private final LogUseCase logUseCase;
 
     public Mono<SMSInalambria> getTokenINA(SMSInalambria smsInalambria, Alert alert) {
         return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderINA(alert.getPriority().concat(alert.getProvider())))
-                .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
+                .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens -> tokens.get(0).toString())
                 .map(tokenInalambria1 -> Map.of("Authorization", "Bearer " + tokenInalambria1))
-                .map(headers -> setTokenINA(smsInalambria, headers))
-                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert, SMS, Response.builder().code(1)
-                        .description(e.getMessage()).build(), logUseCase))
-                ;
+                .map(headers -> setTokenINA(smsInalambria, headers));
     }
 
     public Mono<SMSMasiv> getTokenMAS(SMSMasiv smsMasiv, Alert alert) {
         return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderMAS(alert.getPriority().concat(alert.getProvider())))
-                .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
+                .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens -> tokens.get(0).toString())
                 .map(tokenMas -> Map.of("Authorization", "Bearer " + tokenMas))
-                .map(headers -> setTokenMAS(smsMasiv, headers))
-                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert, SMS, Response.builder().code(1)
-                        .description(e.getMessage()).build(), logUseCase));
+                .map(headers -> setTokenMAS(smsMasiv, headers));
     }
 
     public Mono<SMSInfobip> getTokenInf(SMSInfobip smsInfobip, Alert alert){
         return token.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderInf(alert.getPriority().concat(alert.getProvider())))
-                .switchIfEmpty(Mono.error(new RuntimeException("Not Token Found")))
+                .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenInf->Map.of("Authorization","Bearer "+tokenInf))
-                .map(headers-> setTokenINF(smsInfobip,headers))
-                .onErrorResume(e -> ValidationLogUtil.validSendLog(alert, SMS, Response.builder().code(1)
-                        .description(e.getMessage()).build(), logUseCase));
+                .map(headers-> setTokenINF(smsInfobip,headers));
     }
 
     public Mono<Void> deleteToken(String usedToken, Alert alert) {
@@ -93,18 +84,21 @@ public class GeneratorTokenUseCase implements Serializable {
 
     private Mono<ArrayList> getTokenByProviderINA(String key) {
         return secretGateway.getSecretName(key)
+                .switchIfEmpty(Mono.error(new BusinessException(SECRET_NAME_NOT_FOUND)))
                 .flatMap(inalambriaGateway::getToken)
                 .flatMap(token -> saveTokenCache(token, key));
     }
 
     private Mono<ArrayList> getTokenByProviderMAS(String key) {
         return secretGateway.getSecretName(key)
+                .switchIfEmpty(Mono.error(new BusinessException(SECRET_NAME_NOT_FOUND)))
                 .flatMap(masivianGateway::getToken)
                 .flatMap(token -> saveTokenCache(token, key));
     }
 
     private Mono<ArrayList> getTokenByProviderInf(String key){
         return secretGateway.getSecretName(key)
+                .switchIfEmpty(Mono.error(new BusinessException(SECRET_NAME_NOT_FOUND)))
                 .flatMap(infobipGateway::getToken)
                 .flatMap(token->saveTokenCache(token,key));
     }

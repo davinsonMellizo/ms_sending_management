@@ -27,7 +27,8 @@ public class LogUseCase {
                         .responseDescription(response.getDescription())
                         .template(template.getBodyHtml())
                         .build())
-                .filter(log -> response.getCode() != CODE_RESPONSE_200 || response.getCode() != CODE_RESPONSE_0)
+                .filter(log -> response.getCode() != CODE_RESPONSE_200 )
+                .filter(log -> response.getCode() != CODE_RESPONSE_0 )
                 .flatMap(log -> Mono.error(new Throwable(response.getCode().toString())));
     }
 }

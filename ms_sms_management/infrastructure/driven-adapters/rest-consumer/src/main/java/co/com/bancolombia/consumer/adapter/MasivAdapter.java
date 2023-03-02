@@ -1,5 +1,6 @@
 package co.com.bancolombia.consumer.adapter;
 
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import co.com.bancolombia.consumer.adapter.response.ErrorMasivianSMS;
@@ -20,12 +21,14 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_EXCEPTION;
+
 @Repository
 @RequiredArgsConstructor
 public class MasivAdapter implements MasivianGateway {
 
     private static final Integer STATUS_OK = 200;
-    private static final Integer STATUS_ERROR = 1;
+    private static final Integer STATUS_UNAUTHORIZED = 401;
     private final ConsumerProperties properties;
     private final RestClient<SMSMasiv, SuccessMasivianSMS> clientSms;
     private final RestClient<TokenMasivData,TokenMasivData> clientToken;
@@ -37,12 +40,15 @@ public class MasivAdapter implements MasivianGateway {
                 SuccessMasivianSMS.class, ErrorMasivianSMS.class)
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getStatusMessage()).build())
-                .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorMasivianSMS)e.getData()).getStatusMessage())
-                        .build()))
-                .onErrorResume(e -> Mono.just(Response.builder()
-                        .code(Integer.parseInt(e.getMessage().substring(0,CONSTANT))).description(e.getMessage())
-                        .build()));
+                .onErrorResume(e -> (e instanceof Error) && ((Error) e).getHttpsStatus().equals(STATUS_UNAUTHORIZED),
+                        e -> Mono.just(Response.builder()
+                                .token(smsMasiv.getHeaders().toString())
+                                .code( ((Error) e).getHttpsStatus()).description(((ErrorMasivianSMS)
+                                        ((Error) e).getData()).getStatusMessage())
+                                .build()))
+                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorMasivianSMS) e.getData()).getStatusMessage(),
+                        TECHNICAL_EXCEPTION,e.getHttpsStatus()))
+                .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
     }
 
     @Override
@@ -56,7 +62,9 @@ public class MasivAdapter implements MasivianGateway {
                 .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
                         requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
                 .flatMap(TokenMasivData::toModel)
-                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
+                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorMasivianSMS) e.getData()).getStatusMessage(),
+                        TECHNICAL_EXCEPTION,e.getHttpsStatus()))
+                .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
 
     }
 

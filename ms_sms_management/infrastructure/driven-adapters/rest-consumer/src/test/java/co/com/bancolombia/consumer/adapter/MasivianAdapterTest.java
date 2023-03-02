@@ -33,7 +33,7 @@ class MasivianAdapterTest {
     @BeforeEach
     public void init() {
         String url = "localhost";
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url, url));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url, url, url));
     }
 
     @Test
@@ -54,8 +54,8 @@ class MasivianAdapterTest {
                         .data(new ErrorMasivianSMS("error", "error authentication"))
                         .build()));
         StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
-                .assertNext(response -> response.getDescription().equals("error authentication"))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
 
     @Test
@@ -63,8 +63,8 @@ class MasivianAdapterTest {
         when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
         StepVerifier.create(masivianAdapter.sendSMS(new SMSMasiv()))
-                .assertNext(response -> response.getDescription().contains("123"))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
 
 

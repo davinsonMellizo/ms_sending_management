@@ -1,4 +1,4 @@
-package co.com.bancolombia.events.handlers;
+package co.com.bancolombia.api;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
@@ -24,9 +24,11 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-class CommandsHandlerTest {
+public class HandlerTest {
+
     @InjectMocks
-    private CommandsHandler commandsHandler;
+    private Handler handler;
+
     @Mock
     private SendAlertUseCase useCase;
 
@@ -51,7 +53,7 @@ class CommandsHandlerTest {
     @Test
     void handleSendAlert() {
         when(useCase.sendAlert(any())).thenReturn(Mono.empty());
-        StepVerifier.create(commandsHandler.sendAlert(alert))
+        StepVerifier.create(handler.sendAlert(alert))
                 .verifyComplete();
     }
 
@@ -59,11 +61,11 @@ class CommandsHandlerTest {
     void handleExceptionsBusiness() {
         when(logUseCase.handlerLog(any(),anyString(),any(),anyBoolean()))
                 .thenReturn(Mono.just(Response.builder()
-                .code(200)
-                .description("success")
-                .build()));
+                        .code(200)
+                        .description("success")
+                        .build()));
         when(useCase.sendAlert(any())).thenReturn(Mono.error(businessException));
-        StepVerifier.create(commandsHandler.sendAlert(alert))
+        StepVerifier.create(handler.sendAlert(alert))
                 .expectError();
     }
     @Test
@@ -74,10 +76,7 @@ class CommandsHandlerTest {
                         .description("success")
                         .build()));
         when(useCase.sendAlert(any())).thenReturn(Mono.error(technicalException));
-        StepVerifier.create(commandsHandler.sendAlert(alert))
+        StepVerifier.create(handler.sendAlert(alert))
                 .expectError();
     }
-
-
-
 }

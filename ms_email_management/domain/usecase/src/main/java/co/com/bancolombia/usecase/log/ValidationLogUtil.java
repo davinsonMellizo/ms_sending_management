@@ -20,7 +20,7 @@ public class ValidationLogUtil {
             (alert.getHeaders().containsKey("x-death")) && ((Object)alert.getHeaders().get("x-death")).toString()
                     .contains("count="+alert.getHeaders().get("retryNumber"));
     public static final Predicate<Response> validateCodeResponse = response ->
-            ((response.getCode()!= CODE_RESPONSE_200) && (response.getCode()!= CODE_RESPONSE_202));
+            ((response.getCode()!= CODE_RESPONSE_200) && (response.getCode()!= CODE_RESPONSE_202) && (response.getCode()!= CODE_RESPONSE_0));
 
 public static  <T> Mono<T> validSendLog (Alert pAlert, String medium,  Response response,LogUseCase logUseCase, TemplateEmail template){
 

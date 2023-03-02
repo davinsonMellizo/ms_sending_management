@@ -31,16 +31,15 @@ public class TemplateAdapter implements TemplateGateway {
 
         String endpoint = properties.getResources().getEndpointTemplate();
 
-        return Mono.just(pAlert)
-                .filter(alert -> alert.getMessage() == null && alert.getTemplate() != null)
-                .flatMap(alert -> client.requestGet(endpoint, createParams(pAlert.getTemplate().getName()),
-                        pAlert.getTemplate().getParameters(), SuccessTemplate.class, ErrorTemplate.class))
+        return client.requestGet(endpoint, createParams(pAlert.getTemplate().getName()),
+                        pAlert.getTemplate().getParameters(), SuccessTemplate.class, ErrorTemplate.class)
                 .map(response -> TemplateEmail.builder().name(response.getData().getIdTemplate())
                         .bodyHtml(response.getData().getMessageBody()).subject(response.getData().getMessageSubject())
                         .build())
                 .onErrorMap(e -> (e instanceof ErrorTemplate), e-> new TechnicalException(((ErrorTemplate)e)
                         .getError().getTitle(),TEMPLATE_FIND_ERROR))
-                .onErrorMap(e-> new TechnicalException(e.getMessage(),TEMPLATE_FIND_ERROR));
+                .onErrorMap(e-> new TechnicalException(e.getMessage(),TEMPLATE_FIND_ERROR))
+                .onErrorMap(e-> new Throwable(e.getMessage()));
     }
 
     public MultiValueMap<String, String> createParams(String nameTemplate) {

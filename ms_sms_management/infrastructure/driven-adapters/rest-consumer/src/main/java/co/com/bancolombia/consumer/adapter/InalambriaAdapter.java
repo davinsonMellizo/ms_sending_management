@@ -1,5 +1,6 @@
 package co.com.bancolombia.consumer.adapter;
 
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import co.com.bancolombia.consumer.adapter.response.ErrorInalambriaSMS;
@@ -25,18 +26,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static co.com.bancolombia.commons.constants.GrandTypeToken.GRAND_TYPE;
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_EXCEPTION;
 
 @Repository
 @RequiredArgsConstructor
 public class InalambriaAdapter implements InalambriaGateway {
 
     private static final Integer STATUS_OK = 200;
-    private static final Integer STATUS_ERROR = 1;
+    private static final Integer STATUS_UNAUTHORIZED = 401;
     private final ConsumerProperties properties;
     private final RestClient<SMSInalambria, SuccessInalambriaSMS> client;
     private final RestClient<RequestTokenInalambriaData, TokenInalambriaData> clientToken;
     private static final Integer CONSTANT = 3;
     private static final Integer CONSTANT2 = 1000;
+
+
 
     private final Log LOGGER = LogFactory.getLog(InalambriaAdapter.class);
 
@@ -46,13 +50,15 @@ public class InalambriaAdapter implements InalambriaGateway {
                 SuccessInalambriaSMS.class, ErrorInalambriaSMS.class)
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getMessageText()).build())
-                .onErrorResume(Error.class, e -> Mono.just(Response.builder()
+                .onErrorResume(e -> (e instanceof Error) && ((Error) e).getHttpsStatus().equals(STATUS_UNAUTHORIZED),
+                        e -> Mono.just(Response.builder()
                         .token(sms.getHeaders().toString())
-                        .code(e.getHttpsStatus()).description(((ErrorInalambriaSMS) e.getData()).getMessageText())
+                        .code( ((Error) e).getHttpsStatus()).description(((ErrorInalambriaSMS)
+                                        ((Error) e).getData()).getMessageText())
                         .build()))
-                .onErrorResume(e -> Mono.just(Response.builder()
-                        .code(Integer.parseInt(e.getMessage().substring(0, CONSTANT))).description(e.getMessage())
-                        .build()));
+                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorInalambriaSMS) e.getData()).getMessageText(),
+                        TECHNICAL_EXCEPTION,e.getHttpsStatus()))
+                .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
     }
 
     @Override
@@ -68,7 +74,9 @@ public class InalambriaAdapter implements InalambriaGateway {
                         TokenInalambriaData.class, ErrorTokenRefreshInalambria.class))
                 .flatMap(TokenInalambriaData::toModel)
                 .flatMap(this::setExpiresIn)
-                .onErrorResume(e -> Mono.error(new RuntimeException(e.getMessage())));
+                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorTokenRefreshInalambria) e.getData()).getTitle()
+                       ,TECHNICAL_EXCEPTION ,e.getHttpsStatus()))
+                .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
     }
 
     private RequestTokenInalambriaData settingHeaders(Map<String, String> headers,
