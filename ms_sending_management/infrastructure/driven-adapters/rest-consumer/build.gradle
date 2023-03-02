@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':model')
-    implementation 'org.springframework:spring-context:5.3.18'
+    implementation "org.springframework:spring-context:${springContextVersion}"
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.8.0'

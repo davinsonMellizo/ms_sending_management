@@ -6,6 +6,7 @@ buildscript {
         sonarVersion = '3.0'
         jacocoVersion = '0.8.5'
         lombokVersion = '1.18.26'
+        springContextVersion = '5.3.25'
     }
 }
 

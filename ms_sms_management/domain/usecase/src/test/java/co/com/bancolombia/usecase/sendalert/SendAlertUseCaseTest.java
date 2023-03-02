@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +40,9 @@ class SendAlertUseCaseTest {
     private InfobipGateway infobipGateway;
 
     private Alert alert = new Alert();
+    private TemplateSms templateSms =new TemplateSms();
+    private Response response = new Response();
+
 
     @BeforeEach
     public void init() {
@@ -51,6 +53,9 @@ class SendAlertUseCaseTest {
         parameters.add(new Parameter("name", "bancolombia", ""));
         alert.setMessage("text to send");
         alert.setLogKey(UUID.randomUUID().toString());
+        templateSms.setBodyText("Message ");
+        response.setCode(1);
+        response.setDescription("description");
 
     }
 
@@ -64,10 +69,14 @@ class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), anyString(), any()))
-                .thenReturn(Mono.empty());
+        when(logUseCase.handlerLog(any(), anyString(), any(),anyBoolean()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -84,10 +93,14 @@ class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), anyString(), any()))
-                .thenReturn(Mono.empty());
+        when(logUseCase.handlerLog(any(), anyString(), any(),anyBoolean()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -105,10 +118,14 @@ class SendAlertUseCaseTest {
                         .code(200)
                         .description("success")
                         .build()));
-        when(logUseCase.sendLog(any(), anyString(), any()))
-                .thenReturn(Mono.empty());
+        when(logUseCase.handlerLog(any(), anyString(), any(),anyBoolean()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -120,7 +137,7 @@ class SendAlertUseCaseTest {
         when(masivianGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }
@@ -136,7 +153,7 @@ class SendAlertUseCaseTest {
         when(inalambriaGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }
@@ -152,7 +169,7 @@ class SendAlertUseCaseTest {
         when(inalambriaGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("500 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }
@@ -169,7 +186,7 @@ class SendAlertUseCaseTest {
         when(infobipGateway.sendSMS(any()))
                 .thenReturn(Mono.error(new Throwable("401 error")));
         StepVerifier
-                .create(useCase.sendAlert(alert))
+                .create(useCase.sendAlertToProviders(alert,templateSms))
                 .expectError()
                 .verify();
     }

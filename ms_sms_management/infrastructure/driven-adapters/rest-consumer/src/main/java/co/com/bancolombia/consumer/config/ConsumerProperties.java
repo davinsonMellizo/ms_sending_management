@@ -28,5 +28,6 @@ public class ConsumerProperties {
         private String endpointInalambriaRefreshToken;
         private String endpointInfobipSMS;
         private String endpointInfobipToken;
+        private String endpointTemplate;
     }
 }

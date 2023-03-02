@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Template {
-    private Map<String, String> parameters;
-    private String name;
+    @Builder.Default
+    private Map<String,Object> parameters = new HashMap<>();
+    @Builder.Default
+    private String name = "";
 }

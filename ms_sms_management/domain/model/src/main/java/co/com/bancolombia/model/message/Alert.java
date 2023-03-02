@@ -13,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Alert extends Request {
+
     private String priority;
     private To to;
     private String message;
@@ -21,6 +22,8 @@ public class Alert extends Request {
     private String provider;
     private String category;
     private String logKey;
+    private Boolean isFlash;
+    private Boolean isPremium;
 
     @Data
     @NoArgsConstructor

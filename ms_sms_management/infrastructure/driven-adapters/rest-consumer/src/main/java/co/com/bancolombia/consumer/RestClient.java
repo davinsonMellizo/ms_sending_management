@@ -7,12 +7,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import java.util.Map;
+
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_RESTCLIENT_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -45,6 +50,18 @@ public class RestClient<T extends Request, R> {
                     .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
                     .bodyToMono(clazz);
         }
+    }
+    public <E,S> Mono<E> requestGet(String route, MultiValueMap<String, String> query, Map<String, Object> body,
+                                    Class<E> clsSuccess, Class<S> clsError){
+        return WebClient.create(route)
+                .method(HttpMethod.GET)
+                .uri(uri -> uri.queryParams(query).build())
+                .contentType(APPLICATION_JSON)
+                .body(BodyInserters.fromValue(body))
+                .retrieve()
+                .onStatus(HttpStatus::isError, response -> replyError(response, clsError))
+                .bodyToMono(clsSuccess)
+                .onErrorMap(TECHNICAL_RESTCLIENT_ERROR::build);
     }
 
     private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError) {

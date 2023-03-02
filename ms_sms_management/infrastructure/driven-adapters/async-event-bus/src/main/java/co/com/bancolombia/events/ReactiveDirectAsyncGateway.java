@@ -19,12 +19,11 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     public static final String SEND_ALERT_LOG = "save.log.send.alert";
     private final DirectAsyncDualGateway gateway;
 
-
-
     @Override
     public Mono<Log> sendCommandLogSms(Log log) {
         Command command= new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
         return gateway.sendCommand(command,TARGET_NAME_LOG)
+                .onErrorResume(e ->Mono.empty())
                 .then(Mono.empty());
     }
 }

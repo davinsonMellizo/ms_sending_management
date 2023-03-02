@@ -46,7 +46,6 @@ class GeneratorTokenUseCaseTest {
 
     private SMSInfobip smsInf = new SMSInfobip();
     private ArrayList<String> tokens = new ArrayList<>();
-
     @BeforeEach
     public void init() {
         alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
