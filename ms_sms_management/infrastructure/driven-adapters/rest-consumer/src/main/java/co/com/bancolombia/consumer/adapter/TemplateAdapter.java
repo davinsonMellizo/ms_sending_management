@@ -3,7 +3,6 @@ package co.com.bancolombia.consumer.adapter;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
-import co.com.bancolombia.consumer.adapter.response.ErrorInalambriaSMS;
 import co.com.bancolombia.consumer.adapter.response.ErrorTemplate;
 import co.com.bancolombia.consumer.adapter.response.SuccessTemplate;
 import co.com.bancolombia.consumer.config.ConsumerProperties;

@@ -7,6 +7,8 @@ import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Template;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
+import org.reactivecommons.api.domain.Command;
+import org.reactivecommons.async.commons.communications.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -48,8 +50,16 @@ class CommandsHandlerTest {
         MockitoAnnotations.initMocks(this);
     }
 
+    /*@Test
+    void handleSendAlertTest() {
+        when(useCase.sendAlert(any())).thenReturn(Mono.empty());
+        StepVerifier.create(commandsHandler.handleSendAlert(new Command<Alert>("alert", "alert",
+                        Alert.)))
+                .verifyComplete();
+    }*/
+
     @Test
-    void handleSendAlert() {
+    void sendAlertTest() {
         when(useCase.sendAlert(any())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.sendAlert(alert))
                 .verifyComplete();

@@ -37,7 +37,6 @@ public class InalambriaAdapter implements InalambriaGateway {
     private final ConsumerProperties properties;
     private final RestClient<SMSInalambria, SuccessInalambriaSMS> client;
     private final RestClient<RequestTokenInalambriaData, TokenInalambriaData> clientToken;
-    private static final Integer CONSTANT = 3;
     private static final Integer CONSTANT2 = 1000;
 
 

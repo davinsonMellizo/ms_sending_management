@@ -4,6 +4,7 @@ import co.com.bancolombia.model.message.*;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
+import co.com.bancolombia.model.message.gateways.TemplateGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,8 @@ class SendAlertUseCaseTest {
 
     @Mock
     private InfobipGateway infobipGateway;
+    @Mock
+    private  TemplateGateway templateGateway;
 
     private Alert alert = new Alert();
     private TemplateSms templateSms =new TemplateSms();
@@ -57,6 +60,29 @@ class SendAlertUseCaseTest {
         response.setCode(1);
         response.setDescription("description");
 
+    }
+
+    @Test
+    void senAlert (){
+        when(generatorTokenUseCase.getTokenMAS(any(), any()))
+                .thenReturn(Mono.just(SMSMasiv.builder().customData("test").isFlash(false)
+                        .isLongmessage(false).isPremium(false).text("textTest").to("123456789").build()));
+        when(masivianGateway.sendSMS(any()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(logUseCase.handlerLog(any(), anyString(), any(),anyBoolean()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(templateGateway.findTemplateEmail(any()))
+                .thenReturn(Mono.just(TemplateSms.builder().bodyText("Mensaje de prueba ").build()));
+        StepVerifier
+                .create(useCase.sendAlert(alert))
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test

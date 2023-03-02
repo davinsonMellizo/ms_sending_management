@@ -3,7 +3,6 @@ package co.com.bancolombia.consumer.config;
 import co.com.bancolombia.d2b.model.secret.SyncSecretVault;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.s3bucket.S3AsynOperations;
-import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -70,22 +69,7 @@ public class RestConsumerConfig {
         return null;
     }
 
-    private ClientHttpConnector clientHttpConnectorWithoutSsl(int timeout) {
-        SslContext sslContext = null;
-        try {
-            sslContext = SslContextBuilder.forClient()
-                    .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                    .build();
 
-        } catch (SSLException e) {
-            throw new AssertionError(e);
-        }
-
-        var finalSslContext = sslContext;
-        return new ReactorClientHttpConnector(HttpClient.create()
-                .secure(t -> t.sslContext(finalSslContext))
-                .tcpConfiguration(tcpClient -> tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout)));
-    }
 
     @Bean
     @Primary
@@ -115,7 +99,7 @@ public class RestConsumerConfig {
     @Nullable
     public WebClient webClientConfigInaLocal(final ConsumerProperties consumerProperties) {
         return WebClient.builder()
-                .clientConnector(getClientHttpConnectorInsecure(consumerProperties.getTimeout()))
+                .clientConnector(getClientHttpConnectorLocal(consumerProperties.getTimeout()))
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
                 .build();
@@ -130,11 +114,10 @@ public class RestConsumerConfig {
         );
     }
 
-    private ClientHttpConnector getClientHttpConnectorInsecure(int timeout) {
+    private ClientHttpConnector getClientHttpConnectorLocal(int timeout) {
         try {
             var sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
                     .build();
-
             return new ReactorClientHttpConnector(HttpClient.create()
                     .secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
                     .compress(true)

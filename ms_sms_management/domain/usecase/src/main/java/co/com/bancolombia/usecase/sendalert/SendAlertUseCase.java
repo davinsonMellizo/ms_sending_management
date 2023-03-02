@@ -30,6 +30,7 @@ public class SendAlertUseCase {
     private final GeneratorTokenUseCase generatorTokenUseCase;
     private static final  Integer CONSTANT = 23;
     private static final String SENDER = "InfoSMS";
+    private static final String STATUS_UNAUTHORIZED ="401";
 
     public Mono<Response> sendAlert(Alert pAlert) {
         return  Mono.just(pAlert)
@@ -61,7 +62,7 @@ public class SendAlertUseCase {
                 .flatMap(data-> generatorTokenUseCase.getTokenINA(data, alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(inalambriaGateway::sendSMS)
-                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals("401")))
+                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals(STATUS_UNAUTHORIZED)))
                 .flatMap(response -> filterError(response, alert, tokenTemp[0],templateSms));
     }
 
@@ -81,7 +82,7 @@ public class SendAlertUseCase {
                 .flatMap(data->generatorTokenUseCase.getTokenMAS(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendSMS)
-                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals("401")))
+                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals(STATUS_UNAUTHORIZED)))
                 .flatMap(response -> filterError(response, alert, tokenTemp[0],templateSms));
     }
 
@@ -100,7 +101,7 @@ public class SendAlertUseCase {
                 .flatMap(data->generatorTokenUseCase.getTokenInf(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(infobipGateway::sendSMS)
-                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals("401")))
+                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals(STATUS_UNAUTHORIZED)))
                 .flatMap(response -> filterError(response, alert, tokenTemp[0],templateSms));
     }
 

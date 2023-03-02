@@ -1,5 +1,3 @@
-package co.com.bancolombia.events;
-
 import co.com.bancolombia.commons.enums.TechnicalExceptionEnum;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import org.junit.jupiter.api.Test;
