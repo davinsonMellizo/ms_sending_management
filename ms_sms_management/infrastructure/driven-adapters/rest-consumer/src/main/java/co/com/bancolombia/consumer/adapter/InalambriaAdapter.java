@@ -73,7 +73,8 @@ public class InalambriaAdapter implements InalambriaGateway {
                         TokenInalambriaData.class, ErrorTokenRefreshInalambria.class))
                 .flatMap(TokenInalambriaData::toModel)
                 .flatMap(this::setExpiresIn)
-                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorTokenRefreshInalambria) e.getData()).getTitle()
+                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorTokenRefreshInalambria) e.getData())
+                        .getTitle()
                        ,TECHNICAL_EXCEPTION ,e.getHttpsStatus()))
                 .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
     }

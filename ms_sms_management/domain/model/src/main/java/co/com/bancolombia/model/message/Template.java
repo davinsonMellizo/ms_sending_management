@@ -5,17 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Template {
+public class Template implements Serializable {
     @Builder.Default
-    private Map<String,Object> parameters = new HashMap<>();
+    private Map<String,String> parameters = new HashMap<>();
     @Builder.Default
     private String name = "";
 }

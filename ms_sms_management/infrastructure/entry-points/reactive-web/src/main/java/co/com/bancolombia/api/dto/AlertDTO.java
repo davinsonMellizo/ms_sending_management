@@ -1,4 +1,4 @@
-package co.com.bancolombia.api.DTO;
+package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.Request;
 import co.com.bancolombia.model.message.Alert;
@@ -13,9 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import reactor.core.publisher.Mono;
 

@@ -42,7 +42,7 @@ class CommandsHandlerTest {
     @BeforeEach
     public void init() {
         alert.setProvider("MAS");
-        Map<String, Object> parameters = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         alert.setTemplate(new Template( parameters, "Compra"));
         alert.setLogKey(UUID.randomUUID().toString());

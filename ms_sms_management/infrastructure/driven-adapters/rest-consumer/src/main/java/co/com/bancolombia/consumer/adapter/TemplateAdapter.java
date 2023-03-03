@@ -34,7 +34,8 @@ public class TemplateAdapter implements TemplateGateway {
                 .flatMap(alert -> client.requestGet(endpoint, createParams(pAlert.getTemplate().getName()),
                         pAlert.getTemplate().getParameters(), SuccessTemplate.class, ErrorTemplate.class))
                 .map(response-> TemplateSms.builder().bodyText(response.getData().getPlainText()).build())
-                .onErrorMap(Error.class, e -> new TechnicalException(((ErrorTemplate) e.getData()).getError().getReason(),
+                .onErrorMap(Error.class, e -> new TechnicalException(((ErrorTemplate) e.getData()).getError()
+                        .getReason(),
                         TECHNICAL_EXCEPTION,e.getHttpsStatus()))
                 .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
     }

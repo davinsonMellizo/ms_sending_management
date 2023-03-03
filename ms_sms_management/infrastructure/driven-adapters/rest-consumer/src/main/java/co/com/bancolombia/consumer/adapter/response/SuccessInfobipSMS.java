@@ -1,7 +1,10 @@
 package co.com.bancolombia.consumer.adapter.response;
 
 import co.com.bancolombia.model.message.SMSInfobip;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 

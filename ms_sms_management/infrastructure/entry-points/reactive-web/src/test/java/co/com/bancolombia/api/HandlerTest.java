@@ -24,7 +24,7 @@ import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-public class HandlerTest {
+class HandlerTest {
 
     @InjectMocks
     private Handler handler;
@@ -42,7 +42,7 @@ public class HandlerTest {
     @BeforeEach
     public void init() {
         alert.setProvider("MAS");
-        Map<String, Object> parameters = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         alert.setTemplate(new Template( parameters, "Compra"));
         alert.setLogKey(UUID.randomUUID().toString());

@@ -1,6 +1,6 @@
 package co.com.bancolombia.api;
 
-import co.com.bancolombia.api.DTO.AlertDTO;
+import co.com.bancolombia.api.dto.AlertDTO;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;

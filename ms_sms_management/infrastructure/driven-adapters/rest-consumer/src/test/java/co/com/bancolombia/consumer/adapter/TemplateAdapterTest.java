@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TemplateAdapterTest {
+class TemplateAdapterTest {
 
     @InjectMocks
     private TemplateAdapter templateAdapter;
@@ -48,7 +48,7 @@ public class TemplateAdapterTest {
         dat.setPlainText("HTML");
         dat.setMessageSubject("EMAIL");
         alert.setProvider("MAS");
-        Map <String, Object> parameters = new HashMap<>();
+        Map <String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         alert.setTemplate(new Template( parameters, "Compra"));
         alert.setLogKey(UUID.randomUUID().toString());

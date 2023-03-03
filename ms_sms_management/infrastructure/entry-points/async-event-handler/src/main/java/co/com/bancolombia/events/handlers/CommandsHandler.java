@@ -2,7 +2,7 @@ package co.com.bancolombia.events.handlers;
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.events.commons.Converter;
+import co.com.bancolombia.events.commons.AbstractConverter;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 import java.util.function.Predicate;
 
 @EnableCommandListeners
-public class CommandsHandler extends Converter {
+public class CommandsHandler extends AbstractConverter {
     private final SendAlertUseCase useCase;
     private final LogUseCase logUseCase;
 
@@ -61,7 +61,7 @@ public class CommandsHandler extends Converter {
     }
     private Mono<Response> handleExceptions(Throwable throwable, Alert pAlert) {
         return Mono.just(pAlert)
-                .filter(alert -> isValidCount.test(alert) )
+                .filter(isValidCount)
                 .flatMap(alert -> logUseCase.handlerLog(pAlert, "SMS", Response.builder().code(1)
                         .description(throwable.getMessage()).build(), true))
                 .switchIfEmpty(Mono.error(throwable));

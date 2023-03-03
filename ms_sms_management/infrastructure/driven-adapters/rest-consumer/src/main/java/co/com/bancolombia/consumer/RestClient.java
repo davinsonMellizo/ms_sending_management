@@ -17,7 +17,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import java.util.Map;
 
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_RESTCLIENT_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -36,7 +35,7 @@ public class RestClient<T extends Request, R> {
             return webClient.post()
                     .uri(route)
                     .contentType(APPLICATION_JSON)
-                    .headers(head -> head.setAll((Map) request.getHeaders()))
+                    .headers(head -> head.setAll( request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
                     .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
@@ -44,14 +43,14 @@ public class RestClient<T extends Request, R> {
         } else {
             return webClientConfigIna.post().uri(route)
                     .contentType(APPLICATION_JSON)
-                    .headers(head -> head.setAll((Map) request.getHeaders()))
+                    .headers(head -> head.setAll( request.getHeaders()))
                     .bodyValue(cleanHeader(request))
                     .retrieve()
                     .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
                     .bodyToMono(clazz);
         }
     }
-    public <E,S> Mono<E> requestGet(String route, MultiValueMap<String, String> query, Map<String, Object> body,
+    public <E,S> Mono<E> requestGet(String route, MultiValueMap<String, String> query, Map<String, String> body,
                                     Class<E> clsSuccess, Class<S> clsError){
         return WebClient.create(route)
                 .method(HttpMethod.GET)
@@ -60,8 +59,7 @@ public class RestClient<T extends Request, R> {
                 .body(BodyInserters.fromValue(body))
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> replyError(response, clsError))
-                .bodyToMono(clsSuccess)
-                .onErrorMap(TECHNICAL_RESTCLIENT_ERROR::build);
+                .bodyToMono(clsSuccess);
     }
 
     private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError) {
@@ -69,7 +67,7 @@ public class RestClient<T extends Request, R> {
                 .map(data -> new Error(clientResponse.statusCode().value(), data));
     }
 
-    private <T extends Request> T cleanHeader(T request) {
+    private T cleanHeader(T request) {
         request.setHeaders(null);
         return request;
     }

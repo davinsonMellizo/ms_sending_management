@@ -25,10 +25,6 @@ public enum TechnicalExceptionEnum {
     private final String code;
     private final String message;
     private final Boolean retry;
-    public TechnicalException build(Throwable throwable) {
-        return new TechnicalException(throwable, this);
-    }
-
 
 
 }

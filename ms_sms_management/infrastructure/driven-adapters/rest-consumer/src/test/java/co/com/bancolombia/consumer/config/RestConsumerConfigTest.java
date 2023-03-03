@@ -69,7 +69,7 @@ class RestConsumerConfigTest {
     }
 
     @Test
-    void ConfigMASTest() {
+    void configMASTest() {
         assertThat(restConsumerConfig.webClientConfig(new ConsumerProperties(3600, null))).isNotNull();
     }
 

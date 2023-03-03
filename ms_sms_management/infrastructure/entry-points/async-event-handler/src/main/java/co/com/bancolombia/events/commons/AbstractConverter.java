@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public abstract class Converter {
+public abstract class AbstractConverter {
 
     @Value("${app.async.maxRetries}")
     private String maxRetries;

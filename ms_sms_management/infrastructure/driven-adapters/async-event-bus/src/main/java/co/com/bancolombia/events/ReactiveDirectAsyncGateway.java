@@ -5,7 +5,6 @@ import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.rabbitmq.config.dual.sender.DirectAsyncDualGateway;
 import lombok.AllArgsConstructor;
 import org.reactivecommons.api.domain.Command;
-import org.reactivecommons.async.api.DirectAsyncGateway;
 import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;
 import reactor.core.publisher.Mono;
 
@@ -21,7 +20,7 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
 
     @Override
     public Mono<Log> sendCommandLogSms(Log log) {
-        Command command= new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
+        var command= new Command<>(SEND_ALERT_LOG, UUID.randomUUID().toString(), log);
         return gateway.sendCommand(command,TARGET_NAME_LOG)
                 .onErrorResume(e ->Mono.empty())
                 .then(Mono.empty());

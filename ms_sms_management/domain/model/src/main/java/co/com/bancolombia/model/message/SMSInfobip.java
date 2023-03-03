@@ -2,8 +2,16 @@ package co.com.bancolombia.model.message;
 
 
 import co.com.bancolombia.Request;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Singular;
 
+import java.io.Serializable;
 import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +27,7 @@ public class SMSInfobip extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class Message{
+    public static class Message implements Serializable {
         private String from;
         private @Singular List<Destination> destinations;
         private String text;
@@ -30,7 +38,7 @@ public class SMSInfobip extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class Destination{
+    public static class Destination implements Serializable{
         private String to;
     }
 
@@ -38,7 +46,7 @@ public class SMSInfobip extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class Response{
+    public static class Response implements Serializable{
         private String messageId;
         private Status status;
         private String to;
@@ -48,7 +56,7 @@ public class SMSInfobip extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class Status {
+    public static class Status implements Serializable{
         private String description;
         private String groupId;
         private String groupName;
@@ -60,7 +68,7 @@ public class SMSInfobip extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class RequestError{
+    public static class RequestError implements Serializable{
         private ServiceException serviceException;
     }
 
@@ -68,7 +76,7 @@ public class SMSInfobip extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class ServiceException{
+    public static class ServiceException implements Serializable{
         private String messageId;
         private String text;
     }

@@ -2,7 +2,12 @@ package co.com.bancolombia.usecase.sendalert;
 
 
 import co.com.bancolombia.commons.exceptions.BusinessException;
-import co.com.bancolombia.model.message.*;
+import co.com.bancolombia.model.message.Alert;
+import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.model.message.SMSInalambria;
+import co.com.bancolombia.model.message.SMSInfobip;
+import co.com.bancolombia.model.message.SMSMasiv;
+import co.com.bancolombia.model.message.TemplateSms;
 import co.com.bancolombia.model.message.gateways.InalambriaGateway;
 import co.com.bancolombia.model.message.gateways.InfobipGateway;
 import co.com.bancolombia.model.message.gateways.MasivianGateway;
@@ -11,10 +16,9 @@ import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-
+import static co.com.bancolombia.commons.constants.Provider.*;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.REQUIRED_MESSAGE_TEMPLATE;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.TEMPLATE_NOT_FOUND;
-import static co.com.bancolombia.commons.constants.Provider.*;
 import static co.com.bancolombia.usecase.sendalert.commons.Medium.SMS;
 
 @RequiredArgsConstructor
@@ -30,7 +34,7 @@ public class SendAlertUseCase {
     private final GeneratorTokenUseCase generatorTokenUseCase;
     private static final  Integer CONSTANT = 23;
     private static final String SENDER = "InfoSMS";
-    private static final String STATUS_UNAUTHORIZED ="401";
+    private static final Integer STATUS_UNAUTHORIZED =401;
 
     public Mono<Response> sendAlert(Alert pAlert) {
         return  Mono.just(pAlert)
@@ -62,7 +66,8 @@ public class SendAlertUseCase {
                 .flatMap(data-> generatorTokenUseCase.getTokenINA(data, alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(inalambriaGateway::sendSMS)
-                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals(STATUS_UNAUTHORIZED)))
+                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode()
+                        .equals(STATUS_UNAUTHORIZED)))
                 .flatMap(response -> filterError(response, alert, tokenTemp[0],templateSms));
     }
 
@@ -82,7 +87,8 @@ public class SendAlertUseCase {
                 .flatMap(data->generatorTokenUseCase.getTokenMAS(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(masivianGateway::sendSMS)
-                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals(STATUS_UNAUTHORIZED)))
+                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode()
+                        .equals(STATUS_UNAUTHORIZED)))
                 .flatMap(response -> filterError(response, alert, tokenTemp[0],templateSms));
     }
 
@@ -101,15 +107,16 @@ public class SendAlertUseCase {
                 .flatMap(data->generatorTokenUseCase.getTokenInf(data,alert))
                 .doOnNext(getHeaders-> tokenTemp[0] = String.valueOf(getHeaders.getHeaders()))
                 .flatMap(infobipGateway::sendSMS)
-                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode().equals(STATUS_UNAUTHORIZED)))
+                .flatMap(response -> logUseCase.handlerLog(alert, SMS, response, !response.getCode()
+                        .equals(STATUS_UNAUTHORIZED)))
                 .flatMap(response -> filterError(response, alert, tokenTemp[0],templateSms));
     }
 
     private Mono<Response> filterError( Response response, Alert alert, String tokentemp, TemplateSms templateSms){
         return Mono.just(response)
-                .filter(res -> res.getCode().equals("401"))
+                .filter(res -> res.getCode().equals(STATUS_UNAUTHORIZED))
                 .flatMap(renew-> replaceBadToken(alert,tokentemp.substring(tokentemp
-                        .indexOf("bearer")+23,tokentemp.indexOf("}")),templateSms))
+                        .indexOf("bearer")+CONSTANT,tokentemp.indexOf("}")),templateSms))
                 .switchIfEmpty(Mono.just(response));
     }
     private Mono<Response> replaceBadToken(Alert alert, String tokenTemp, TemplateSms templateSms){

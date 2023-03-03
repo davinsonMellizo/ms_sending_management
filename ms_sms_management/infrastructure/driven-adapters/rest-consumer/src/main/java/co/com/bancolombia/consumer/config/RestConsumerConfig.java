@@ -21,6 +21,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.time.Duration;
 
 import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
 import static org.springframework.http.HttpHeaders.ACCEPT;
@@ -58,7 +59,7 @@ public class RestConsumerConfig {
                     .build();
             return new ReactorClientHttpConnector(HttpClient.create()
                     .secure(t -> t.sslContext(sslContext))
-                    .tcpConfiguration(tcpClient -> tcpClient.option(CONNECT_TIMEOUT_MILLIS, timeout)));
+                    .responseTimeout(Duration.ofMillis(timeout)));
         } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | IOException e) {
             logger.error(e);
         }

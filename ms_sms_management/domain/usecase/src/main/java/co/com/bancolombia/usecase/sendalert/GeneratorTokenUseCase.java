@@ -24,46 +24,50 @@ import static co.com.bancolombia.commons.enums.BusinessErrorMessage.TOKEN_NOT_FO
 
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase implements Serializable {
-    private final transient ObjectCache<ArrayList> token;
+    private final transient ObjectCache<ArrayList> redisGateway;
     private final transient SecretGateway secretGateway;
     private final transient InalambriaGateway inalambriaGateway;
     private final transient MasivianGateway masivianGateway;
     private final transient InfobipGateway infobipGateway;
 
+    private static final String BEARER = "Bearer ";
+    private static final String AUTHORIZATION = "Authorization";
+
     public Mono<SMSInalambria> getTokenINA(SMSInalambria smsInalambria, Alert alert) {
-        return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
+        return redisGateway.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderINA(alert.getPriority().concat(alert.getProvider())))
                 .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens -> tokens.get(0).toString())
-                .map(tokenInalambria1 -> Map.of("Authorization", "Bearer " + tokenInalambria1))
+                .map(tokenInalambria1 -> Map.of(AUTHORIZATION, BEARER + tokenInalambria1))
                 .map(headers -> setTokenINA(smsInalambria, headers));
     }
 
     public Mono<SMSMasiv> getTokenMAS(SMSMasiv smsMasiv, Alert alert) {
-        return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
+        return redisGateway.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderMAS(alert.getPriority().concat(alert.getProvider())))
                 .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens -> tokens.get(0).toString())
-                .map(tokenMas -> Map.of("Authorization", "Bearer " + tokenMas))
+                .map(tokenMas -> Map.of(AUTHORIZATION, BEARER + tokenMas))
                 .map(headers -> setTokenMAS(smsMasiv, headers));
     }
 
     public Mono<SMSInfobip> getTokenInf(SMSInfobip smsInfobip, Alert alert){
-        return token.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
+        return redisGateway.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderInf(alert.getPriority().concat(alert.getProvider())))
                 .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens->tokens.get(0).toString())
-                .map(tokenInf->Map.of("Authorization","Bearer "+tokenInf))
+                .map(tokenInf->Map.of(AUTHORIZATION,BEARER + tokenInf))
                 .map(headers-> setTokenINF(smsInfobip,headers));
     }
 
     public Mono<Void> deleteToken(String usedToken, Alert alert) {
-        return token.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
+        return redisGateway.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .flatMap(lisTokens -> getArrayListArrayListFunction(usedToken, lisTokens))
-                .flatMap(data -> token.save(alert.getPriority().concat(alert.getProvider()), data))
+                .flatMap(data -> redisGateway.save(alert.getPriority().concat(alert.getProvider()),
+                        (ArrayList<String>) data))
                 .then(Mono.empty());
     }
 
@@ -105,16 +109,16 @@ public class GeneratorTokenUseCase implements Serializable {
 
 
     private Mono<ArrayList> saveTokenCache(Token token, String key) {
-        return this.token.get(key, ArrayList.class)
+        return this.redisGateway.get(key, ArrayList.class)
                 .map(listTokens -> {
                     listTokens.add(0, token.getAccessToken());
                     return listTokens;
                 })
                 .switchIfEmpty(Mono.just(new ArrayList<>(List.of(token.getAccessToken()))))
-                .flatMap(listTokens -> this.token.save(key, listTokens));
+                .flatMap(listTokens -> this.redisGateway.save(key, listTokens));
     }
 
-    private Mono<ArrayList> getArrayListArrayListFunction(String token, ArrayList array) {
+    private Mono<ArrayList<String>> getArrayListArrayListFunction(String token, ArrayList<String> array) {
         return Mono.just(array.indexOf(token))
                 .map(index -> array.remove(token))
                 .thenReturn(array);
