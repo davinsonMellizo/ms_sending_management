@@ -1,5 +1,4 @@
 adapters:
   entries:
     reactive-web:
-      path-base: /api/v1/alert-management
-      send: /send
+      send-sms: /send-sms

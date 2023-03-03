@@ -50,13 +50,6 @@ class CommandsHandlerTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    /*@Test
-    void handleSendAlertTest() {
-        when(useCase.sendAlert(any())).thenReturn(Mono.empty());
-        StepVerifier.create(commandsHandler.handleSendAlert(new Command<Alert>("alert", "alert",
-                        Alert.)))
-                .verifyComplete();
-    }*/
 
     @Test
     void sendAlertTest() {

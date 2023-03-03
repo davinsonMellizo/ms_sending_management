@@ -36,7 +36,8 @@ public class Handler {
                 .flatMap(useCase::sendAlert)
                 .onErrorResume(BusinessException.class, e -> handleExceptions(e, alert))
                 .onErrorResume(TechnicalException.class, e -> handleExceptions(e, alert))
-                .onErrorResume(e -> handleExceptions(e, alert))
+                .onErrorResume(e ->  !(e instanceof TechnicalException) && !(e instanceof BusinessException),
+                        e -> handleExceptions(e, alert))
                 .then(Mono.empty());
     }
     private Mono<Response> handleExceptions(BusinessException businessException, Alert pAlert) {

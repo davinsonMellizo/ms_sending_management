@@ -62,8 +62,8 @@ adapters:
       endpointMasivSms: https://api-sms.masivapp.com/send-message
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
-      endpointInalambriaSms: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/mtmessage
-      endpointInalambriaToken: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/token/
+      endpointInalambriaSms: https://restcert.inalambria.com/mtmessage
+      endpointInalambriaToken: https://restcert.inalambria.com/token/
       endpointInfobipSMS: https://ejl2nq.api.infobip.com/sms/2/text/advanced
       endpointInfobipToken: https://ejl2nq.api.infobip.com/auth/1/oauth2/token
       endpointTemplate: http://localhost:8071/api/v1/templater/message

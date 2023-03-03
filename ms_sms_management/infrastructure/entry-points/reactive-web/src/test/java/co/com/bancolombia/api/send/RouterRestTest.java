@@ -8,6 +8,7 @@ import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.commons.handlers.ValidatorHandler;
 import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Response;
+import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,11 +37,13 @@ import static org.mockito.Mockito.when;
 public class RouterRestTest extends BaseIntegration {
     @MockBean
     private SendAlertUseCase useCase;
-
+    @MockBean
+    private LogUseCase logUseCase;
     @MockBean
     private LoggerBuilder loggerBuilder;
     @Mock
     private ValidatorHandler validatorHandler;
+
 
     private String request;
 
@@ -48,7 +51,7 @@ public class RouterRestTest extends BaseIntegration {
     public void init() {
         request = loadFileConfig("Send.json", String.class);
     }
-/*
+
     @Test
     void findAlertsById() {
         when(useCase.sendAlert(any())).thenReturn(Mono.just(Response.builder().build()));
@@ -59,5 +62,5 @@ public class RouterRestTest extends BaseIntegration {
                 .returnResult();
         verify(useCase).sendAlert(any());
     }
-*/
+
 }

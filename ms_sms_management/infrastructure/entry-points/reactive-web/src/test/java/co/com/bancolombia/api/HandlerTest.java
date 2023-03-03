@@ -66,7 +66,8 @@ public class HandlerTest {
                         .build()));
         when(useCase.sendAlert(any())).thenReturn(Mono.error(businessException));
         StepVerifier.create(handler.sendAlert(alert))
-                .expectError();
+                .expectError()
+                .verify();
     }
     @Test
     void handleExceptionsTechnical() {
@@ -77,6 +78,7 @@ public class HandlerTest {
                         .build()));
         when(useCase.sendAlert(any())).thenReturn(Mono.error(technicalException));
         StepVerifier.create(handler.sendAlert(alert))
-                .expectError();
+                .expectError()
+                .verify();
     }
 }
