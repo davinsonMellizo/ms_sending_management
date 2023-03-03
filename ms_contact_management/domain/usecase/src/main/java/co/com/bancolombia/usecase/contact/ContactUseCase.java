@@ -31,6 +31,7 @@ import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
+import static co.com.bancolombia.usecase.commons.ValidateData.validatePhoneNumber;
 
 @RequiredArgsConstructor
 public class ContactUseCase {
@@ -205,7 +206,7 @@ public class ContactUseCase {
     public Mono<Enrol> validatePhone(Enrol enrol) {
         return Flux.fromIterable(enrol.getContactData())
                 .filter(cnt -> SMS.equals(cnt.getContactWay()) )
-                .filter(cnt -> cnt.getValue().length() < 10)
+                .filter(validatePhoneNumber)
                 .next()
                 .flatMap(contact -> Mono.error(new BusinessException(INVALID_PHONE)))
                 .map(contact -> enrol)

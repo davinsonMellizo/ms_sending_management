@@ -244,7 +244,7 @@ class ContactUseCaseTest {
     @Test
     void validatePhone() {
         contact.setContactWay("SMS");
-        contact.setValue("3207288544");
+        contact.setValue("(+57)3207288544");
         enrol.setContactData(List.of(contact));
         StepVerifier
                 .create(useCase.validatePhone(enrol))
