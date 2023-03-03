@@ -81,4 +81,16 @@ class HandlerTest {
                 .expectError()
                 .verify();
     }
+    @Test
+    void handleExceptionsThrowable() {
+        when(logUseCase.handlerLog(any(),anyString(),any(),anyBoolean()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(useCase.sendAlert(any())).thenReturn(Mono.error(new Throwable()));
+        StepVerifier.create(handler.sendAlert(alert))
+                .expectError()
+                .verify();
+    }
 }

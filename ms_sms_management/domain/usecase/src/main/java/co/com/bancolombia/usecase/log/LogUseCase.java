@@ -21,7 +21,7 @@ public class LogUseCase {
                         .logKey(alert.getLogKey())
                         .logType(SEND_230)
                         .medium(medium)
-                        .contact(alert.getTo().getPhoneIndicator()+alert.getTo().getPhoneNumber())
+                        .contact(alert.getDestination().getPrefix()+alert.getDestination().getPhoneNumber())
                         .messageSent(alert.getMessage())
                         .provider(alert.getProvider())
                         .responseCode(response.getCode())

@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Alert extends Request {
 
     private String priority;
-    private To to;
+    private To destination;
     private String message;
     private Template template;
     private String urlForShortening;
@@ -24,6 +24,7 @@ public class Alert extends Request {
     private String logKey;
     private Boolean isFlash;
     private Boolean isPremium;
+    private Boolean isLongMessage;
 
     @Data
     @NoArgsConstructor
@@ -31,6 +32,6 @@ public class Alert extends Request {
     @Builder(toBuilder = true)
     public static class To implements Serializable {
         private String phoneNumber;
-        private String phoneIndicator;
+        private String prefix;
     }
 }

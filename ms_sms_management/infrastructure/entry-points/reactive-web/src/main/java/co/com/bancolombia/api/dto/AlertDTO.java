@@ -8,15 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import reactor.core.publisher.Mono;
-
 
 
 @Data
@@ -25,37 +23,40 @@ import reactor.core.publisher.Mono;
 @Builder(toBuilder = true)
 public class AlertDTO extends Request {
     @Schema(description = "Obligatorio para envío de sms "
-            , allowableValues = {"0","1","2","3", "4", "5"})
+            , allowableValues = {"0", "1", "2", "3", "4", "5"})
     @Max(value = 5, message = "{constraint.max}")
     @Min(value = 0, message = "{constraint.min}")
     @NotNull(message = "{constraint.not_null}")
-    @NotBlank(message ="{constraint.not_blank}" )
+    @NotBlank(message = "{constraint.not_blank}")
     private String priority;
     @NotNull(message = "{constraint.not_null}")
-    private  @Valid Alert.To to;
+    private @Valid Alert.To to;
     @Builder.Default
-    private String message="";
+    private String message = "";
     @Builder.Default
-    private Template template =new Template();
+    private Template template = new Template();
     @Builder.Default
     private String urlForShortening = "";
     @NotNull(message = "{constraint.not_null}")
-    @NotBlank(message ="{constraint.not_blank}" )
+    @NotBlank(message = "{constraint.not_blank}")
     private String provider;
     @NotNull(message = "{constraint.not_null}")
-    @NotBlank(message ="{constraint.not_blank}" )
+    @NotBlank(message = "{constraint.not_blank}")
     private String logKey;
     @Builder.Default
-    private String category="";
+    private String category = "";
     @Builder.Default
-    private Boolean isFlash=false;
+    private Boolean isFlash = false;
     @Builder.Default
-    private Boolean isPremium= false;
+    private Boolean isPremium = false;
 
-    public Mono<Alert> toModel(){
-        return  Mono.just(Alert.builder()
+    @Builder.Default
+    private Boolean isLongMessage = false;
+
+    public Mono<Alert> toModel() {
+        return Mono.just(Alert.builder()
                 .priority(this.priority)
-                .to(this.to)
+                .destination(this.to)
                 .message(this.message)
                 .template(this.template)
                 .urlForShortening(this.urlForShortening)
@@ -65,9 +66,9 @@ public class AlertDTO extends Request {
                 .category(this.category)
                 .isFlash(this.isFlash)
                 .isPremium(this.isPremium)
+                .isLongMessage(this.isLongMessage)
                 .build());
     }
-
 
 
 }
