@@ -35,8 +35,10 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value("${cloud.aws.rds.postgresql.schema}") String schema,
-                                                                       @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+    public ConnectionFactoryOptions buildConnectionWriterConfiguration(
+            @Value("${cloud.aws.rds.postgresql.schema}") String schema,
+            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+
         PostgresqlConnectionProperties properties =  postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)
@@ -53,9 +55,11 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value("${cloud.aws.rds.postgresql.schema}") String schema,
-                                                                       @Value("${cloud.aws.rds.postgresql.hostRead}") String hostRead,
-                                                                       @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+    public ConnectionFactoryOptions buildConnectionReaderConfiguration(
+            @Value("${cloud.aws.rds.postgresql.schema}") String schema,
+            @Value("${cloud.aws.rds.postgresql.hostRead}") String hostRead,
+            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+
         PostgresqlConnectionProperties properties =  postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)

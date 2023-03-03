@@ -1,9 +1,8 @@
 package co.com.bancolombia.log;
 
 
-import co.com.bancolombia.log.data.LogMapper;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import co.com.bancolombia.log.reader.LogRepositoryReader;
+import co.com.bancolombia.log.data.LogMapper;
 import co.com.bancolombia.log.writer.LogRepository;
 import co.com.bancolombia.model.log.Log;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest("spring.application.name=ms_Log_management")
-public class LogRepositoryImplWithExceptionTest {
+class LogRepositoryImplWithExceptionTest {
 
     @InjectMocks
     private LogRepositoryImplement logRepositoryImplement;
@@ -30,7 +29,7 @@ public class LogRepositoryImplWithExceptionTest {
     private final Log log= new Log();
 
     @Test
-    public void findStateByNameWithException() {
+    void findStateByNameWithException() {
 
         logRepositoryImplement.saveLog(log)
                 .as(StepVerifier::create)

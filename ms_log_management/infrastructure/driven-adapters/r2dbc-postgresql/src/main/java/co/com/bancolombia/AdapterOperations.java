@@ -1,11 +1,11 @@
 package co.com.bancolombia;
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
 
-public class AdapterOperations<E, D, I, R extends ReactiveCrudRepository<D, I>, O extends ReactiveCrudRepository<D, I>> {
+public class AdapterOperations<E, D, I, R extends ReactiveCrudRepository<D, I>, O extends ReactiveCrudRepository<D, I>>
+{
 
     protected R repository;
     protected O repositoryRead;

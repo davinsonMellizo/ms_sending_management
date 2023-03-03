@@ -42,7 +42,7 @@ public class LogRouterTest extends BaseIntegrationTest {
     private LoggerBuilder loggerBuilder;
 
     @Test
-    public void findAllContactsByClient() {
+    void findAllContactsByClient() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.just(List.of()));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")
@@ -52,7 +52,7 @@ public class LogRouterTest extends BaseIntegrationTest {
         verify(useCase).findLogsByDate(any());
     }
     @Test
-    public void findAllContactsByClientTechExc() {
+    void findAllContactsByClientTechExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.FIND_LOG_ERROR)));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")
@@ -61,7 +61,7 @@ public class LogRouterTest extends BaseIntegrationTest {
         spec.expectStatus().is5xxServerError();
     }
     @Test
-    public void findAllContactsByClientBisExc() {
+    void findAllContactsByClientBisExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new BusinessException(BusinessErrorMessage.INVALID_DATA)));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")
@@ -71,7 +71,7 @@ public class LogRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void findAllContactsByClientThrExc() {
+    void findAllContactsByClientThrExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new Throwable("Error")));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")

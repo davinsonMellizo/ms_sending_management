@@ -30,7 +30,7 @@ public class PostgreSQLAdapterConfig{
     @Bean
     public R2dbcEntityOperations writerR2dbcEntityOperations(@Qualifier("Writer")ConnectionFactory connectionFactory) {
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
+        var databaseClient = DatabaseClient.create(connectionFactory);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
 
     }

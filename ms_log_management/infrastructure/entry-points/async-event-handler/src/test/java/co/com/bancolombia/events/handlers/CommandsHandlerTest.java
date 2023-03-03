@@ -5,11 +5,9 @@ import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.reactivecommons.api.domain.Command;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -19,7 +17,7 @@ import javax.xml.validation.ValidatorHandler;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class CommandsHandlerTest {
+class CommandsHandlerTest {
     @InjectMocks
     private CommandsHandler commandsHandler;
     @Mock
