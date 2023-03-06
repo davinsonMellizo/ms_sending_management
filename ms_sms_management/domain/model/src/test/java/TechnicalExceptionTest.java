@@ -1,7 +1,6 @@
 import co.com.bancolombia.commons.exceptions.TechnicalException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+
 
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_EXCEPTION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,8 +14,6 @@ public class TechnicalExceptionTest {
     TechnicalException technicalExceptionMessCode = new TechnicalException("Error",40);
     TechnicalException technicalExceptionMessCod = new TechnicalException("Error",TECHNICAL_EXCEPTION,40);
 
-    @BeforeEach
-    public void init() {}
 
     @Test
     void  technicalExceptionTest (){
