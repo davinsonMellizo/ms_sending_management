@@ -7,8 +7,6 @@ import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Template;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
-import org.reactivecommons.api.domain.Command;
-import org.reactivecommons.async.commons.communications.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -67,7 +65,8 @@ class CommandsHandlerTest {
                 .build()));
         when(useCase.sendAlert(any())).thenReturn(Mono.error(businessException));
         StepVerifier.create(commandsHandler.sendAlert(alert))
-                .expectError();
+                .expectError()
+                .verifyLater();
     }
     @Test
     void handleExceptionsTechnical() {
@@ -78,9 +77,21 @@ class CommandsHandlerTest {
                         .build()));
         when(useCase.sendAlert(any())).thenReturn(Mono.error(technicalException));
         StepVerifier.create(commandsHandler.sendAlert(alert))
-                .expectError();
+                .expectError()
+                .verifyLater();
     }
-
+    @Test
+    void handleExceptionsThrowable() {
+        when(logUseCase.handlerLog(any(),anyString(),any(),anyBoolean()))
+                .thenReturn(Mono.just(Response.builder()
+                        .code(200)
+                        .description("success")
+                        .build()));
+        when(useCase.sendAlert(any())).thenReturn(Mono.error(new Throwable()));
+        StepVerifier.create(commandsHandler.sendAlert(alert))
+                .expectError()
+                .verifyLater();
+    }
 
 
 }

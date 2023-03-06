@@ -40,7 +40,8 @@ public class CommandsHandler extends AbstractConverter {
                 .flatMap(useCase::sendAlert)
                 .onErrorResume(BusinessException.class, e -> handleExceptions(e, alert))
                 .onErrorResume(TechnicalException.class, e -> handleExceptions(e, alert))
-                .onErrorResume(e -> handleExceptions(e, alert))
+                .onErrorResume(e ->  !(e instanceof TechnicalException) && !(e instanceof BusinessException),
+                        e -> handleExceptions(e, alert))
                 .then(Mono.empty());
     }
 
