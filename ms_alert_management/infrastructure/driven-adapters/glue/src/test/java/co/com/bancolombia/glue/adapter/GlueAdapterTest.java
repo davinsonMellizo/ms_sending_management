@@ -68,6 +68,7 @@ class GlueAdapterTest {
         campaign.setDataEnrichment(true);
         campaign.setState("1");
         campaign.setCreatedDate(NOW);
+        campaign.setPriority(1);
         campaign.setCreationUser("lugomez");
 
         schedule.setIdCampaign("1");

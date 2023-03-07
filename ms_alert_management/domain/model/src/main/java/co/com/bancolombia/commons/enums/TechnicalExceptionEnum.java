@@ -53,9 +53,9 @@ public enum TechnicalExceptionEnum {
     FIND_SCHEDULE_BY_ID_ERROR("DST0049", "Ocurrio un error al encontrar el horario"),
     SECRET_EXCEPTION("302", "An error occurred while trying to get AWS secrets"),
     INTERNAL_SERVER_ERROR("302", "Internal server error"),
-    BODY_MISSING_ERROR("301", "Missing parameters per body"),
+    BODY_MISSING_ERROR("301", "Missing parameters in the body"),
     INVALID_HEADER_ERROR("301", "Invalid headers"),
-    HEADER_MISSING_ERROR("301", "Missing parameters per header"),
+    HEADER_MISSING_ERROR("301", "Missing parameters in the header"),
     PARAM_MISSING_ERROR("301", "Missing parameters");
 
     private final String code;

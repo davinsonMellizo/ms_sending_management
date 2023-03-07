@@ -61,10 +61,7 @@ public class MasivAdapter implements MasivianGateway {
                 .map(requestTokenMasiv-> settingHeaders(headers, requestTokenMasiv))
                 .flatMap(requestTokenMasiv->clientToken.post(properties.getResources().getEndpointMasivToken(),
                         requestTokenMasiv,TokenMasivData.class,ErrorTokenMasivRequest.class))
-                .flatMap(TokenMasivData::toModel)
-                .onErrorMap(Error.class,e -> new TechnicalException(((ErrorMasivianSMS) e.getData()).getStatusMessage(),
-                        TECHNICAL_EXCEPTION,e.getHttpsStatus()))
-                .onErrorMap(e -> new TechnicalException(e.getMessage(),TECHNICAL_EXCEPTION,1));
+                .flatMap(TokenMasivData::toModel);
 
     }
 

@@ -25,7 +25,7 @@ public class ContactDTO {
     @NotNull(message = "{constraint.value_is_required}")
     @Size(min = 1, max = 60, message = "{constraint.size}")
     @JsonProperty("dataValue")
-    @Schema(example = "+573217937584 o 3217937584 o dmellizo@bancolombia.com.co",
+    @Schema(example = "+573217937584 o 3217937584 o banco@bancolombia.com.co",
             description = "Valor del contacto (SMS, EMAIL o PUSH), SMS: puede enviar " +
                     "el telefono o agregar el indicativo del país junto al signo +, como se muestra en el ejemplo")
     private String value;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="ms_templater" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -16,7 +16,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="path_base" elementType="Argument">
             <stringProp name="Argument.name">path_base</stringProp>
-            <stringProp name="Argument.value">${__P(path_base,https://canales-digitales-ext-qa.apps.ambientesbc.com/alertas/api/v1/templater)}</stringProp>
+            <stringProp name="Argument.value">${__P(path_base,https://canales-digitales-int-qa.apps.ambientesbc.com/alertas/api/v1/templater)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="get_template" elementType="Argument">
@@ -159,7 +159,7 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;idTemplate&quot;: &quot;0001&quot;,&#xd;
+    &quot;idTemplate&quot;: &quot;${__Random(0000000000,9999999999)}&quot;,&#xd;
     &quot;messageType&quot;: &quot;TEST&quot;,&#xd;
     &quot;version&quot;: &quot;1&quot;,&#xd;
     &quot;idConsumer&quot;: &quot;1&quot;,&#xd;
@@ -188,18 +188,7 @@
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
-        <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="HTTP Status Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="51517">409</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
-            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-        </hashTree>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Tx_GetTemplate" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
@@ -292,7 +281,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(Hilos,1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(HilosSend,1)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(Rampa,30)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duracion,60)}</stringProp>

@@ -32,6 +32,7 @@ public class ContactData {
     private Integer idState;
     private Integer stateClient;
     private Boolean previous;
+    private String consumer;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 }

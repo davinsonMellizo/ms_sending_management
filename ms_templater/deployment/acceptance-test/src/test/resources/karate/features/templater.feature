@@ -8,26 +8,6 @@ Feature: management of microservice templater
     * def resp = read("../data/response.json")
     * def msgResp = read("../data/messageResponse.json")
 
-  @GetWithId
-  Scenario: Get template with id
-    * def pathUser = '/get'
-    * param idTemplate = '0001'
-    Given path pathUser
-    When method get
-    Then status 200
-    * print response
-    And match response.data == resp
-
-  @GetWithIdNotFound
-  Scenario: Get template not found
-    * def pathUser = '/get'
-    * param idTemplate = '0002'
-    Given path pathUser
-    When method get
-    Then status 409
-    * print response
-    And match response.error.title == "TEMPLATE_NOT_FOUND"
-
   @PostSuccessfulCase
   Scenario: Create template
     * def pathUser = '/create'
@@ -46,6 +26,26 @@ Feature: management of microservice templater
     Then status 409
     * print response
     And match response.error.title == "TEMPLATE_ALREADY_EXISTS"
+
+  @GetWithId
+  Scenario: Get template with id
+    * def pathUser = '/get'
+    * param idTemplate = '0001'
+    Given path pathUser
+    When method get
+    Then status 200
+    * print response
+    And match response.data == resp
+
+  @GetWithIdNotFound
+  Scenario: Get template not found
+    * def pathUser = '/get'
+    * param idTemplate = '9876543210987'
+    Given path pathUser
+    When method get
+    Then status 409
+    * print response
+    And match response.error.title == "TEMPLATE_NOT_FOUND"
 
   @PostAlternativeCaseWithABadStatus
   Scenario: create template with a bad status

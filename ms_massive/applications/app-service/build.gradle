@@ -9,7 +9,7 @@ dependencies {
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.13'
+    implementation "org.springdoc:springdoc-openapi-webflux-ui:${springdocOpenapiVersion}"
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
 
@@ -19,7 +19,7 @@ configurations {
     }
 }
 
-task explodedJar(type: Copy) {
+tasks.register('explodedJar', Copy) {
     with jar
     into "${buildDir}/exploded"
 }

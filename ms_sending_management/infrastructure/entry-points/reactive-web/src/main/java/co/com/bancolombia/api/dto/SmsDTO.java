@@ -16,7 +16,7 @@ public class SmsDTO {
 
     @Builder.Default
     @Size(max = 60, message = "{constraint.size}")
-    private String phone = "";
+    private String phoneNumber = "";
     @Builder.Default
     @Size(max = 10, message = "{constraint.size}")
     @Schema(description = "Indicador de pais del telefono", example = "+57")
@@ -24,6 +24,6 @@ public class SmsDTO {
     @Builder.Default
     @Size(max = 500, message = "{constraint.size}")
     @Schema(description = "url que se adjunta al mensaje de texto")
-    private String url = "";
+    private String urlForShortening = "";
 
 }
