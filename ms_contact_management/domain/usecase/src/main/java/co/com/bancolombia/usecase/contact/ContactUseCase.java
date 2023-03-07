@@ -25,13 +25,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static co.com.bancolombia.commons.constants.ContactWay.MAIL;
-import static co.com.bancolombia.commons.constants.ContactWay.SMS;
 import static co.com.bancolombia.commons.constants.Transaction.CREATE_CONTACT;
 import static co.com.bancolombia.commons.constants.Transaction.UPDATE_CONTACT;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
 import static co.com.bancolombia.commons.enums.State.ACTIVE;
 import static co.com.bancolombia.commons.enums.State.INACTIVE;
-import static co.com.bancolombia.usecase.commons.ValidateData.validatePhoneNumber;
 
 @RequiredArgsConstructor
 public class ContactUseCase {
@@ -141,7 +139,6 @@ public class ContactUseCase {
 
     public Mono<Contact> saveContact(Contact pContact, String voucher) {
         return Mono.just(pContact)
-                .flatMap(this::validateCountryCode)
                 .flatMap(contactGateway::saveContact)
                 .flatMap(contact -> newnessUseCase.saveNewness(contact, CREATE_CONTACT, voucher));
     }
@@ -175,11 +172,10 @@ public class ContactUseCase {
                                                                String voucher) {
         return stateGateway.findState(newContact.getStateContact())
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_DATA)))
-                .zipWith(validateCountryCode(newContact))
-                .map(data -> response.getActual().toBuilder().value(data.getT2().getValue())
-                        .stateContact(data.getT1().getId().toString())
+                .map(state -> response.getActual().toBuilder().value(newContact.getValue())
+                        .stateContact(state.getId().toString())
                         .contactWayName(newContact.getContactWay())
-                        .environmentType(data.getT2().getEnvironmentType())
+                        .environmentType(newContact.getEnvironmentType())
                         .build())
                 .flatMap(contactGateway::updateContact)
                 .flatMap(contactResponse -> newnessUseCase.saveNewness(contactResponse, UPDATE_CONTACT, voucher))
@@ -201,42 +197,6 @@ public class ContactUseCase {
                 .flatMap(previous -> newnessUseCase.saveNewness(previous, UPDATE_CONTACT, voucher))
                 .switchIfEmpty(contactGateway.saveContact(contacts.get(0).toBuilder().id(null).previous(true).build()))
                 .thenReturn(response);
-    }
-
-    public Mono<Enrol> validatePhone(Enrol enrol) {
-        return Flux.fromIterable(enrol.getContactData())
-                .filter(cnt -> SMS.equals(cnt.getContactWay()) )
-                .filter(validatePhoneNumber)
-                .next()
-                .flatMap(contact -> Mono.error(new BusinessException(INVALID_PHONE)))
-                .map(contact -> enrol)
-                .switchIfEmpty(Mono.just(enrol));
-    }
-
-    private Mono<Contact> validateCountryCode(Contact contact){
-        return Mono.just(contact)
-                .filter(contact1 -> contact1.getContactWayName().equals(SMS))
-                .filter(contact1 -> !"+".equals(contact1.getValue().substring(0,1)))
-                .map(contact1 -> contact1.toBuilder().value("+57"+contact.getValue()).build())
-                .switchIfEmpty(Mono.just(contact));
-    }
-
-    public Mono<Enrol> validateMail(Enrol enrol) {
-        final var pattern = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
-        return Flux.fromIterable(enrol.getContactData())
-                .filter(cnt -> MAIL.equals(cnt.getContactWay()))
-                .flatMap(this::validateEnvironment)
-                .filter(cnt -> !Pattern.compile(pattern).matcher(cnt.getValue()).matches())
-                .next()
-                .flatMap(contact -> Mono.error(new BusinessException(INVALID_EMAIL)))
-                .map(o -> enrol)
-                .switchIfEmpty(Mono.just(enrol));
-    }
-
-    private Mono<Contact> validateEnvironment(Contact contact) {
-        return Mono.just(contact)
-                .filter(cnt -> !cnt.getEnvironmentType().isEmpty())
-                .switchIfEmpty(Mono.error(new BusinessException(INVALID_ENVIRONMENT)));
     }
 
     public Mono<Enrol> validateContacts(Enrol enrol) {
@@ -264,7 +224,6 @@ public class ContactUseCase {
                         .contactWayName(data.getT2().getCode())
                         .previous(false)
                         .segment(data.getT3().getSegment())
-                        .build())
-                ;
+                        .build());
     }
 }

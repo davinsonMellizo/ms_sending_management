@@ -18,6 +18,7 @@ import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.commons.ValidateContact;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
@@ -157,9 +158,9 @@ class ClientUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(contactUseCase.validateContacts(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
-        when(contactUseCase.validatePhone(any()))
+        when(ValidateContact.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
-        when(contactUseCase.validateMail(any()))
+        when(ValidateContact.validateMail(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
         when(commandGateway.sendCommandEnroll(any())).thenReturn(Mono.empty());
         when(stateGateway.findState(any()))
@@ -180,11 +181,11 @@ class ClientUseCaseTest {
 
     @Test
     void updateClient() {
-        when(contactUseCase.validatePhone(any()))
+        when(ValidateContact.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(contactUseCase.validateMail(any()))
+        when(ValidateContact.validateMail(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
@@ -215,9 +216,9 @@ class ClientUseCaseTest {
     void updateClientMono() {
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(contactUseCase.validatePhone(any()))
+        when(ValidateContact.validatePhone(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
-        when(contactUseCase.validateMail(any()))
+        when(ValidateContact.validateMail(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));

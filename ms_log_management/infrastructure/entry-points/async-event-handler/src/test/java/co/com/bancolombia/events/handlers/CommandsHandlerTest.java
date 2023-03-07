@@ -1,6 +1,7 @@
 package co.com.bancolombia.events.handlers;
 
 
+import co.com.bancolombia.events.dto.FiltersDTO;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,14 @@ class CommandsHandlerTest {
         when(useCase.saveLog(any())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.saveLog(new Command<Log>("alert", "alert",
                         new Log())))
+                .verifyComplete();
+    }
+
+    @Test
+    void retrieveLogs() {
+        when(useCase.retrieveLogsS3(any())).thenReturn(Mono.empty());
+        StepVerifier.create(commandsHandler.retrieveLogs(new Command<FiltersDTO>("alert", "alert",
+                        new FiltersDTO())))
                 .verifyComplete();
     }
 
