@@ -54,7 +54,7 @@ public class JobExecutor implements RetrieveLogsGateway {
         startJobRunRequest.addArgumentsEntry("--document_number", validateEmpty(filter.getDocumentNumber()));
         startJobRunRequest.addArgumentsEntry("--start_date", filter.getStartDate().toString());
         startJobRunRequest.addArgumentsEntry("--end_date", filter.getEndDate().toString());
-        startJobRunRequest.addArgumentsEntry("--contact",  validateEmpty(filter.getContact()));
+        startJobRunRequest.addArgumentsEntry("--contact", validateEmpty(filter.getContact()));
         startJobRunRequest.addArgumentsEntry("--consumer", validateEmpty(filter.getConsumer()));
         startJobRunRequest.addArgumentsEntry("--provider", validateEmpty(filter.getProvider()));
         return startJobRunRequest;
@@ -62,22 +62,19 @@ public class JobExecutor implements RetrieveLogsGateway {
 
     private Optional<String> validateHistoricalFilter(Filters filter) {
         String message;
-       if(filter.getStartDate() == null){
-           message = "start date is null";
-       }
-       else if (filter.getEndDate()==null) {
-           message = "end date is null";
-       }
-        else if (filter.getStartDate().isAfter(filter.getEndDate())) {
+        if (filter.getStartDate() == null) {
+            message = "start date is null";
+        } else if (filter.getEndDate() == null) {
+            message = "end date is null";
+        } else if (filter.getStartDate().isAfter(filter.getEndDate())) {
             message = "start date must be less than end date";
-        }
-        else {
+        } else {
             return Optional.empty();
         }
         return Optional.of(message);
     }
 
-    private String validateEmpty(String value){
-        return value.isEmpty()?" ": value;
+    private String validateEmpty(String value) {
+        return value.isEmpty() ? " " : value;
     }
 }

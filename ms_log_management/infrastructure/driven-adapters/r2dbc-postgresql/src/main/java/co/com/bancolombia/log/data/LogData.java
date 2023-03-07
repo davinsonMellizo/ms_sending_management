@@ -21,14 +21,14 @@ public class LogData {
     @Builder.Default
     private String documentType = "";
     @Builder.Default
-    private Long documentNumber=0L;
+    private Long documentNumber = 0L;
     private String logType;
     private String medium;
     @Builder.Default
-    private String contact="";
+    private String contact = "";
     private String messageSent;
     @Builder.Default
-    private String consumer="";
+    private String consumer = "";
     private String alertId;
     private String alertDescription;
     private String transactionId;
@@ -37,7 +37,7 @@ public class LogData {
     private String responseDescription;
     private Integer priority;
     @Builder.Default
-    private String provider="";
+    private String provider = "";
     private String template;
     private Integer operationId;
     private String operationDescription;

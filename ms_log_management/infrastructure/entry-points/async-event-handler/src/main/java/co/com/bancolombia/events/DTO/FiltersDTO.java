@@ -16,29 +16,29 @@ import java.time.LocalDateTime;
 public class FiltersDTO {
     private String transactionIdentifier;
     @Builder.Default
-    private String documentType="";
+    private String documentType = "";
     @Builder.Default
-    private String documentNumber="";
+    private String documentNumber = "";
     @Builder.Default
-    private String contact="";
+    private String contact = "";
     @Builder.Default
-    private String consumer="";
+    private String consumer = "";
     @Builder.Default
-    private String provider="";
+    private String provider = "";
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public Mono<Filters> toModel(){
+    public Mono<Filters> toModel() {
         return Mono.just(Filters.builder()
-              .transactionIdentifier(this.transactionIdentifier)
-              .documentNumber(this.documentNumber)
-              .documentType(this.documentType)
-              .contact(this.contact)
-              .provider(this.provider)
-              .consumer(this.consumer)
-              .startDate(this.startDate)
-              .endDate(this.endDate)
-              .build()
+                .transactionIdentifier(this.transactionIdentifier)
+                .documentNumber(this.documentNumber)
+                .documentType(this.documentType)
+                .contact(this.contact)
+                .provider(this.provider)
+                .consumer(this.consumer)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .build()
         );
     }
 }

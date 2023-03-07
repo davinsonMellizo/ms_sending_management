@@ -47,12 +47,12 @@ class PostgreSQLConnectionConfigHelperTest {
 
     @Test
     void getConnectionReadConfig() throws SecretException {
-        assertNotNull(helper.buildConnectionReaderConfiguration("schema","host", 1));
+        assertNotNull(helper.buildConnectionReaderConfiguration("schema", "host", 1));
     }
 
     @Test
     void getConnectionWriterConfig() throws SecretException {
-        assertNotNull(helper.buildConnectionWriterConfiguration("schema",1));
+        assertNotNull(helper.buildConnectionWriterConfiguration("schema", 1));
     }
 
 }

@@ -15,7 +15,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 @RequiredArgsConstructor
-public class RouterLog extends LogDocumentationApi{
+public class RouterLog extends LogDocumentationApi {
     private final ApiProperties apiProperties;
     @Value("${adapters.days-hot-data}")
     private Integer daysHotDate;

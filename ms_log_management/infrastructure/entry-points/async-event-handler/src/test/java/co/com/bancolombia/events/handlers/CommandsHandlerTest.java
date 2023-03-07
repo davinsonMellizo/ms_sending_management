@@ -27,7 +27,7 @@ class CommandsHandlerTest {
 
 
     @BeforeEach
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -35,7 +35,7 @@ class CommandsHandlerTest {
     void handleSendSaveClient() {
         when(useCase.saveLog(any())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.saveLog(new Command<Log>("alert", "alert",
-                new Log())))
+                        new Log())))
                 .verifyComplete();
     }
 

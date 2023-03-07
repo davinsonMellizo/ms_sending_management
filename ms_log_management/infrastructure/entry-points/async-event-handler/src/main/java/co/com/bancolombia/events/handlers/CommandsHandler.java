@@ -14,10 +14,11 @@ public class CommandsHandler {
 
     private final LogUseCase useCase;
 
-    public Mono<Void> saveLog(Command<Log> command){
+    public Mono<Void> saveLog(Command<Log> command) {
         return useCase.saveLog(command.getData());
     }
-    public Mono<Void> retrieveLogs(Command<FiltersDTO> command){
+
+    public Mono<Void> retrieveLogs(Command<FiltersDTO> command) {
         return Mono.just(command.getData())
                 .flatMap(FiltersDTO::toModel)
                 .map(useCase::retrieveLogsS3)

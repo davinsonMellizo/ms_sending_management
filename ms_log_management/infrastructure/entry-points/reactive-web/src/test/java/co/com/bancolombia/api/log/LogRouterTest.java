@@ -51,6 +51,7 @@ public class LogRouterTest extends BaseIntegrationTest {
         spec.expectStatus().isOk();
         verify(useCase).findLogsByDate(any());
     }
+
     @Test
     void findAllContactsByClientTechExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.FIND_LOG_ERROR)));
@@ -60,6 +61,7 @@ public class LogRouterTest extends BaseIntegrationTest {
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }
+
     @Test
     void findAllContactsByClientBisExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new BusinessException(BusinessErrorMessage.INVALID_DATA)));

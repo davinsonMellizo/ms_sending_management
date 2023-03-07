@@ -26,7 +26,7 @@ class LogRepositoryImplWithExceptionTest {
     private LogRepository repository;
     @Spy
     private LogMapper mapper = Mappers.getMapper(LogMapper.class);
-    private final Log log= new Log();
+    private final Log log = new Log();
 
     @Test
     void findStateByNameWithException() {

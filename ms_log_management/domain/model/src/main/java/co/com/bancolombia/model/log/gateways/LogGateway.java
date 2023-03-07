@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface LogGateway {
     Mono<Log> saveLog(Log log);
+
     Mono<List<Log>> findLog(QueryLog queryLog);
 
 }

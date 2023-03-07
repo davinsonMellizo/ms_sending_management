@@ -29,7 +29,6 @@ public class PostgreSQLConnectionConfigHelper {
     private String secretName;
 
 
-
     private PostgresqlConnectionProperties postgresProperties() {
         return syncSecretVault.getSecret(secretName, PostgresqlConnectionProperties.class);
     }
@@ -37,17 +36,17 @@ public class PostgreSQLConnectionConfigHelper {
     @Bean
     public ConnectionFactoryOptions buildConnectionWriterConfiguration(
             @Value("${cloud.aws.rds.postgresql.schema}") String schema,
-            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max) {
 
-        PostgresqlConnectionProperties properties =  postgresProperties();
+        PostgresqlConnectionProperties properties = postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)
-                .option(DRIVER,"pool")
+                .option(DRIVER, "pool")
                 .option(PROTOCOL, "postgresql")
                 .option(HOST, properties.getHost())
                 .option(PORT, properties.getPort())
-                .option(USER,properties.getUsername())
-                .option(PASSWORD,properties.getPassword())
+                .option(USER, properties.getUsername())
+                .option(PASSWORD, properties.getPassword())
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "verify-full")
                 .option(Option.valueOf("schema"), schema)
@@ -58,17 +57,17 @@ public class PostgreSQLConnectionConfigHelper {
     public ConnectionFactoryOptions buildConnectionReaderConfiguration(
             @Value("${cloud.aws.rds.postgresql.schema}") String schema,
             @Value("${cloud.aws.rds.postgresql.hostRead}") String hostRead,
-            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max){
+            @Value("${cloud.aws.rds.postgresql.pool.max}") Integer max) {
 
-        PostgresqlConnectionProperties properties =  postgresProperties();
+        PostgresqlConnectionProperties properties = postgresProperties();
         return ConnectionFactoryOptions.builder()
                 .option(MAX_SIZE, max)
-                .option(DRIVER,"pool")
+                .option(DRIVER, "pool")
                 .option(PROTOCOL, "postgresql")
                 .option(HOST, hostRead)
                 .option(PORT, properties.getPort())
-                .option(USER,properties.getUsername())
-                .option(PASSWORD,properties.getPassword())
+                .option(USER, properties.getUsername())
+                .option(PASSWORD, properties.getPassword())
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "verify-full")
                 .option(Option.valueOf("schema"), schema)

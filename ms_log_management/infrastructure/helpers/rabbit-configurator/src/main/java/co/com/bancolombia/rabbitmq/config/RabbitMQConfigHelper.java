@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @RequiredArgsConstructor
-public class RabbitMQConfigHelper{
+public class RabbitMQConfigHelper {
     private final LoggerBuilder logger;
     private final SyncSecretVault syncSecretVault;
     private static final String TLS = "TLSv1.2";
@@ -33,7 +33,7 @@ public class RabbitMQConfigHelper{
 
     @Primary
     @Bean
-    public ConnectionFactoryProvider getConnectionFactoryProvider(){
+    public ConnectionFactoryProvider getConnectionFactoryProvider() {
         RabbitMQConnectionProperties properties = rabbitProperties();
         final ConnectionFactory factory = new ConnectionFactory();
         PropertyMapper map = PropertyMapper.get();
@@ -47,13 +47,13 @@ public class RabbitMQConfigHelper{
         return () -> factory;
     }
 
-    private void configureSsl(ConnectionFactory factory)  {
+    private void configureSsl(ConnectionFactory factory) {
         try {
             SSLContext c = SSLContext.getInstance(TLS);
             c.init(null, null, null);
 
             factory.useSslProtocol(c);
-        } catch (NoSuchAlgorithmException | KeyManagementException e ) {
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }
     }
