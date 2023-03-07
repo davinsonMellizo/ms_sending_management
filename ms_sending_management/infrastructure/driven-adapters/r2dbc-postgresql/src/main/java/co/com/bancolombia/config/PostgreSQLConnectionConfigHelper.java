@@ -34,15 +34,15 @@ public class PostgreSQLConnectionConfigHelper {
     }
 
     @Bean
-    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value(SCHEMA_NAME) String schema){
-        PostgresqlConnectionProperties properties =  postgresProperties();
-        logger.info("data secret rds:"+properties);
+    public ConnectionFactoryOptions buildConnectionWriterConfiguration(@Value(SCHEMA_NAME) String schema) {
+        PostgresqlConnectionProperties properties = postgresProperties();
+        logger.info("data secret rds:" + properties);
         return ConnectionFactoryOptions.builder()
-                .option(DRIVER,"postgresql")
+                .option(DRIVER, "postgresql")
                 .option(HOST, properties.getHost())
                 .option(PORT, properties.getPort())
-                .option(USER,properties.getUsername())
-                .option(PASSWORD,properties.getPassword())
+                .option(USER, properties.getUsername())
+                .option(PASSWORD, properties.getPassword())
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "disable")
                 .option(Option.valueOf("schema"), schema)
@@ -51,14 +51,14 @@ public class PostgreSQLConnectionConfigHelper {
 
     @Bean
     public ConnectionFactoryOptions buildConnectionReaderConfiguration(@Value(SCHEMA_NAME) String schema,
-                                                                       @Value(HOST_NAME) String hostRead){
-        PostgresqlConnectionProperties properties =  postgresProperties();
+                                                                       @Value(HOST_NAME) String hostRead) {
+        PostgresqlConnectionProperties properties = postgresProperties();
         return ConnectionFactoryOptions.builder()
-                .option(DRIVER,"postgresql")
+                .option(DRIVER, "postgresql")
                 .option(HOST, hostRead)
                 .option(PORT, properties.getPort())
-                .option(USER,properties.getUsername())
-                .option(PASSWORD,properties.getPassword())
+                .option(USER, properties.getUsername())
+                .option(PASSWORD, properties.getPassword())
                 .option(DATABASE, properties.getDbname())
                 .option(Option.valueOf("sslmode"), "disable")
                 .option(Option.valueOf("schema"), schema)

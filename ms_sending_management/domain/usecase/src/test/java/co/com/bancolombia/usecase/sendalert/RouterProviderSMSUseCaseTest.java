@@ -4,9 +4,7 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.priority.Priority;
 import co.com.bancolombia.model.priority.gateways.PriorityGateway;
-import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderSMSUseCase;
@@ -44,7 +42,7 @@ class RouterProviderSMSUseCaseTest {
     private Message message = new Message();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -67,14 +65,14 @@ class RouterProviderSMSUseCaseTest {
 
 
     @Test
-    void routeAlertSmsTest(){
+    void routeAlertSmsTest() {
         Alert alert = Alert.builder()
                 .push("NO")
                 .providerSms("MAS")
                 .message("message")
                 .priority(0)
                 .build();
-        when(logUseCase.sendLogSMS(any(), any(),anyString(), any())).thenReturn(Mono.just(new Response()));
+        when(logUseCase.sendLogSMS(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         when(commandGateway.sendCommandAlertSms(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderSMSUseCase.routeAlertsSMS(message, alert))
@@ -83,7 +81,7 @@ class RouterProviderSMSUseCaseTest {
     }
 
     @Test
-    void routeAlertSmsErrorTest(){
+    void routeAlertSmsErrorTest() {
         Alert alert = Alert.builder()
                 .push("SI")
                 .providerSms("0")

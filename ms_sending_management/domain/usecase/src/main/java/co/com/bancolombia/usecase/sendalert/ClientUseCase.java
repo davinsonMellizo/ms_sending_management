@@ -9,10 +9,14 @@ import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
-import static co.com.bancolombia.commons.constants.Medium.*;
+import static co.com.bancolombia.commons.constants.Medium.MAIL;
+import static co.com.bancolombia.commons.constants.Medium.PUSH;
+import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
-
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_HAS_NO_CONTACTS;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_IDENTIFICATION_INVALID;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.validateClient;
 
 @RequiredArgsConstructor
@@ -39,7 +43,8 @@ public class ClientUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)))
                 .thenReturn(message);
     }
-    public Mono<Message> validateClientInformation(Message message){
+
+    public Mono<Message> validateClientInformation(Message message) {
         return Mono.just(message)
                 .filter(Message::getRetrieveInformation)
                 .flatMap(this::validateDataContact)

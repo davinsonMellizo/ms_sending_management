@@ -16,6 +16,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @RequiredArgsConstructor
 public class SendAlertRouter extends SendAlertDocumentationApi {
     private final ApiProperties apiProperties;
+
     @Bean
     public RouterFunction<ServerResponse> routerFunctionSendAlert(SendAlertHandler handler) {
         final String url = apiProperties.getSend();

@@ -35,7 +35,7 @@ class ClientUseCaseTest {
     private final Message message = new Message();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -59,7 +59,7 @@ class ClientUseCaseTest {
     }
 
     @Test
-    void validateClientTest(){
+    void validateClientTest() {
         Contact contactSms = Contact.builder().contactMedium("SMS").value("").idState(1).previous(false)
                 .stateClient(1).documentNumber(10000000000L).documentType(1).consumer("SVP")
                 .build();
@@ -69,7 +69,7 @@ class ClientUseCaseTest {
         Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false)
                 .stateClient(1).documentNumber(10000000000L).documentType(1).consumer("SVP")
                 .build();
-        when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms,contactEmail,contactPush));
+        when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms, contactEmail, contactPush));
 
         StepVerifier.create(clientUseCase.validateClientInformation(message))
                 .expectNextCount(1)
@@ -77,7 +77,7 @@ class ClientUseCaseTest {
     }
 
     @Test
-    void validateContactsErrorTest(){
+    void validateContactsErrorTest() {
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.empty());
         StepVerifier.create(clientUseCase.validateClientInformation(message))
                 .expectError().verify();

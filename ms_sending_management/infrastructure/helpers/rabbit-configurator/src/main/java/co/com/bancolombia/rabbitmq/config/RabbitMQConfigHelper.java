@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @RequiredArgsConstructor
-public class RabbitMQConfigHelper{
+public class RabbitMQConfigHelper {
     private final LoggerBuilder logger;
     private final SyncSecretVault secretsManager;
     private static final String TLS = "TLSv1.2";
@@ -33,7 +33,7 @@ public class RabbitMQConfigHelper{
 
     @Bean
     @Primary
-    public ConnectionFactoryProvider getConnectionFactoryProvider(){
+    public ConnectionFactoryProvider getConnectionFactoryProvider() {
         RabbitMQConnectionProperties properties = rabbitProperties();
 
         final var factory = new ConnectionFactory();

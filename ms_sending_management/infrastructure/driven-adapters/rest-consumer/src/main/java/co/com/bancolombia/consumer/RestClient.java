@@ -13,7 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
-public class RestClient<T extends Request,R> {
+public class RestClient<T extends Request, R> {
 
     private final WebClient webClient;
 
@@ -28,12 +28,12 @@ public class RestClient<T extends Request,R> {
                 .bodyToMono(clazz);
     }
 
-    private T cleanHeader(T request){
+    private T cleanHeader(T request) {
         request.setHeaders(null);
         return request;
     }
 
-    private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError){
+    private <S> Mono<Throwable> replyError(ClientResponse clientResponse, Class<S> clazzError) {
         return clientResponse.bodyToMono(clazzError)
                 .map(data -> new Error(clientResponse.statusCode().value(), data));
     }

@@ -15,12 +15,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static co.com.bancolombia.commons.constants.Constants.*;
+import static co.com.bancolombia.commons.constants.Constants.NOT_SENT;
+import static co.com.bancolombia.commons.constants.Constants.PUSH_BY_SMS;
+import static co.com.bancolombia.commons.constants.Constants.SI;
+import static co.com.bancolombia.commons.constants.Constants.SMS_WAS_NOT_SENT;
+import static co.com.bancolombia.commons.constants.Constants.SUCCESS;
 import static co.com.bancolombia.commons.constants.Medium.PUSH;
 import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_230;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_HAS_NO_PUSH;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.APPLICATION_CODE_REQUIRED;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_HAS_NO_PUSH;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_IDENTIFICATION_INVALID;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_MESSAGE;
 
 @RequiredArgsConstructor
 public class RouterProviderPushUseCase {
@@ -36,12 +44,11 @@ public class RouterProviderPushUseCase {
             (message.getRetrieveInformation().equals(Boolean.TRUE) && message.getPreferences().contains(PUSH)) ||
                     (message.getRetrieveInformation().equals(Boolean.FALSE) && !message.getApplicationCode().isEmpty());
 
-    public Mono<Response> sendPush(Message message, Alert alert) {
+    public Mono<Response> sendPush(Message message, Alert alert, Response response) {
         Map<String, String> headers = new HashMap<>();
-        headers.put("message-id",message.getLogKey());
+        headers.put("message-id", message.getLogKey());
         message.setPush(true);
-        return Mono.just(new Response(0, SUCCESS))
-                .flatMap(response -> logUseCase.sendLogPush(message, alert, SEND_220, response))
+        return logUseCase.sendLogPush(message, alert, SEND_220, response)
                 .map(message1 -> Push.builder()
                         .applicationCode(message.getApplicationCode())
                         .categoryId(alert.getIdCategory().toString())
@@ -53,10 +60,11 @@ public class RouterProviderPushUseCase {
                 .doOnNext(push -> push.setHeaders(headers))
                 .flatMap(pushGateway::sendPush)
                 .onErrorResume(e -> Mono.just(Response.builder().code(1).description(e.toString()).build()))
-                .flatMap(response -> logUseCase.sendLogPush(message, alert, SEND_230, response));
+                .flatMap(responsePush -> logUseCase.sendLogPush(message, alert, SEND_230, responsePush))
+                .thenReturn(response);
     }
 
-    private Mono<Response> sendContingencySms(Message message, Alert alert, Response response){
+    private Mono<Response> sendContingencySms(Message message, Alert alert, Response response) {
         return Mono.just(message)
                 .filter(validatePreferencesWithoutEmpty)
                 .flatMap(men -> logUseCase.sendLogPush(message, alert, SEND_220, response))
@@ -64,17 +72,20 @@ public class RouterProviderPushUseCase {
                 .filter(res -> !message.getPreferences().contains(SMS) && message.getRetrieveInformation())
                 .filter(message1 -> !alert.getMessage().isEmpty())
                 .flatMap(res -> routerProviderSMSUseCase.sendAlertToSMS(alert, message))
-                .thenReturn(response);
+                .map(res -> response.toBuilder().description(response.getDescription() + PUSH_BY_SMS).build())
+                .switchIfEmpty(Mono.just(response))
+                .onErrorResume(e -> Mono.just(response.toBuilder()
+                        .description(response.getDescription() + SMS_WAS_NOT_SENT + e.getMessage()).build()));
     }
 
-    private Mono<Message> validateClient(Message pMessage){
+    private Mono<Message> validateClient(Message pMessage) {
         return Mono.just(pMessage)
                 .filter(message1 -> Objects.nonNull(pMessage.getDocumentNumber()))
                 .filter(message1 -> Objects.nonNull(pMessage.getDocumentType()))
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_IDENTIFICATION_INVALID)));
     }
 
-    private Mono<Message> validateClientAndAlertHavePush(Message pMessage, Alert alert){
+    private Mono<Message> validateClientAndAlertHavePush(Message pMessage, Alert alert) {
         return Mono.just(pMessage)
                 .filter(Message::getPush)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_PUSH)))
@@ -82,7 +93,7 @@ public class RouterProviderPushUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_HAS_NO_PUSH)));
     }
 
-    private Mono<Message> validateSendPush(Message pMessage, Alert alert){
+    private Mono<Message> validateSendPush(Message pMessage, Alert alert) {
         return Mono.just(pMessage)
                 .filter(message -> !message.getApplicationCode().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(APPLICATION_CODE_REQUIRED)))
@@ -96,9 +107,11 @@ public class RouterProviderPushUseCase {
     public Mono<Response> routeAlertPush(Message pMessage, Alert alert) {
         return Mono.just(pMessage)
                 .filter(validatePreferences)
-                .flatMap(message -> validateSendPush(pMessage,alert))
-                .flatMap(message -> sendPush(pMessage, alert))
-                .onErrorResume(e -> sendContingencySms(pMessage, alert, new Response(1, e.getMessage())))
-                .switchIfEmpty(Mono.just(new Response(1, NOT_SENT)));
+                .flatMap(message -> validateSendPush(pMessage, alert))
+                .map(message -> new Response(0, SUCCESS, PUSH, alert.getId()))
+                .flatMap(response -> sendPush(pMessage, alert, response))
+                .onErrorResume(e -> sendContingencySms(pMessage, alert,
+                        new Response(1, e.getMessage(), PUSH, alert.getId())))
+                .switchIfEmpty(Mono.just(new Response(1, NOT_SENT, PUSH, alert.getId())));
     }
 }

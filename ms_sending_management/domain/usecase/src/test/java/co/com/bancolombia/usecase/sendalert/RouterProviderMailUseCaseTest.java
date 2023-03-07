@@ -43,7 +43,7 @@ class RouterProviderMailUseCaseTest {
     private Message message = new Message();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -67,7 +67,7 @@ class RouterProviderMailUseCaseTest {
 
 
     @Test
-    void routeAlertMailTest(){
+    void routeAlertMailTest() {
         Remitter remitter = Remitter.builder().mail("bancolombia@com.co").build();
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
@@ -76,7 +76,7 @@ class RouterProviderMailUseCaseTest {
                 .providerMail("TOD")
                 .remitter("davinson@bancolombia.com.co")
                 .build();
-        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
+        when(logUseCase.sendLogMAIL(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
@@ -85,14 +85,14 @@ class RouterProviderMailUseCaseTest {
     }
 
     @Test
-    void routeAlertMailErrorTest(){
+    void routeAlertMailErrorTest() {
         Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
                 .providerMail("TOD")
                 .remitter("bancolombia@bancolombia.com.co")
                 .build();
-        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
+        when(logUseCase.sendLogMAIL(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

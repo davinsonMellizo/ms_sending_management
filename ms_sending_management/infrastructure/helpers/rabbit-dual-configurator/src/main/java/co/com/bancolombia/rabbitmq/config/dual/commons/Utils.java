@@ -13,6 +13,7 @@ import java.time.Duration;
 public class Utils {
     private static final Integer BACK_OF_DURATION = 300;
     private static final Integer MAX_BACKOFF_DURATION = 3000;
+
     public static Mono<Connection> createConnectionMono(ConnectionFactory factory, String connectionPrefix,
                                                         String connectionType, LoggerBuilder logger) {
         return Mono.fromCallable(() -> factory.newConnection(connectionPrefix + " " + connectionType))

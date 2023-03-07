@@ -22,7 +22,7 @@ class AsyncGatewayLogTest {
 
     @InjectMocks
     private AsyncGatewayLog asyncGatewayLogTest;
-    
+
     @Mock
     private DirectAsyncDualGateway directAsyncGateway;
 
@@ -38,8 +38,6 @@ class AsyncGatewayLogTest {
     void sendEventLogTest() {
         StepVerifier.create(asyncGatewayLogTest.sendCommandLogAlert(new Log())).verifyComplete();
     }
-
-
 
 
 }

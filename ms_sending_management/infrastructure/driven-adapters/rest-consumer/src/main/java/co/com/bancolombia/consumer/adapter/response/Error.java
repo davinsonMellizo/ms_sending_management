@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Error extends RuntimeException{
+public class Error extends RuntimeException {
     private int httpsStatus;
     private Object data;
 

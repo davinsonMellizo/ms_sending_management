@@ -34,14 +34,14 @@ class PushAdapterTest {
     private RestClient<Push, SuccessPush> client;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         String url = "localhost";
         when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url));
     }
 
     @Test
-    void sendSmsMasivianSuccessTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendSmsMasivianSuccessTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.just(SuccessPush.builder()
                         .data(new SuccessPush.Data(SuccessPush.SendMessageResponse
                                 .builder()
@@ -54,8 +54,8 @@ class PushAdapterTest {
     }
 
     @Test
-    void sendMAILErrorMasivianTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendMAILErrorMasivianTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
                         .httpsStatus(400)
                         .data(new ErrorPush("error", "error", new ArrayList<>()))
@@ -66,8 +66,8 @@ class PushAdapterTest {
     }
 
     @Test
-    void sendMAILErrorWebClientTest(){
-        when(client.post(anyString(), any(), any(),any()))
+    void sendMAILErrorWebClientTest() {
+        when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("timeout")));
         StepVerifier.create(pushAdapter.sendPush(new Push()))
                 .assertNext(response -> response.getDescription().equals("timeout"))

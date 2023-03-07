@@ -14,7 +14,7 @@ public class ResponseUtil {
         return buildResponse(HttpStatus.OK, response);
     }
 
-    public static <T> Mono<ServerResponse> responseFail(HttpStatus status,T body) {
+    public static <T> Mono<ServerResponse> responseFail(HttpStatus status, T body) {
         return buildResponse(status, body);
     }
 

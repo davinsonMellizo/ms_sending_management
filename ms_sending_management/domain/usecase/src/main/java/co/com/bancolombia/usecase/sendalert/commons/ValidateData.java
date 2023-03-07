@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static co.com.bancolombia.commons.constants.Medium.SMS;
 
 @UtilityClass
 public class ValidateData {
@@ -16,7 +15,7 @@ public class ValidateData {
     private static final String PATTERN = "^\\w++([-._+&]\\w++)*+@\\w++([.]\\w++)++$";
     private static final String PATTERN_PARAMETER = "<C\\d++>";
     public static final Predicate<Message> isValidMobile = message ->
-            isNotEmpty(message.getPhone()) && message.getPhone().length()>7;
+            isNotEmpty(message.getPhone()) && message.getPhone().length() > 7;
 
     public static final Predicate<Message> isValidMailFormat = message ->
             isNotEmpty(message.getMail()) && Pattern.compile(PATTERN).matcher(message.getMail()).matches();

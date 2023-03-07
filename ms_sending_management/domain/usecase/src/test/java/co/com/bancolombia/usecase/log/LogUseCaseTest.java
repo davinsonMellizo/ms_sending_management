@@ -30,33 +30,34 @@ class LogUseCaseTest {
     private Alert alert = new Alert();
 
     @BeforeEach
-    public void init (){
+    public void init() {
         message.setParameters(new HashMap<>());
         when(logGateway.sendCommandLogAlert(any())).thenReturn(Mono.just(new Log()));
     }
 
     @Test
-     void putLogErrorTest(){
+    void putLogErrorTest() {
         StepVerifier.create(logUseCase.sendLogError(message, "", response))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    void putLogEmailTest(){
+    void putLogEmailTest() {
         StepVerifier.create(logUseCase.sendLogMAIL(message, alert, "", response))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    void putLogPushTest(){
+    void putLogPushTest() {
         StepVerifier.create(logUseCase.sendLogPush(message, alert, "", response))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    void putLogSmsErrorTest(){
+    void putLogSmsErrorTest() {
         StepVerifier.create(logUseCase.sendLogSMS(message, alert, "", response))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface CommandGateway {
     Mono<Response> sendCommandAlertEmail(Mail mail);
+
     Mono<Response> sendCommandAlertSms(Sms sms);
 }

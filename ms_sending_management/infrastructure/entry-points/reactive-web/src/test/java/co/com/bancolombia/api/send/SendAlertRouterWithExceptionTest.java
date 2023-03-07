@@ -52,10 +52,10 @@ class SendAlertRouterWithExceptionTest extends BaseIntegration {
 
     @Test
     void saveAlertWithException() {
-        when(useCase.alertSendingManager(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
+        when(useCase.sendAlertManager(any())).thenReturn(Mono.error(new TechnicalException(INTERNAL_SERVER_ERROR)));
         statusAssertionsWebClientPost(properties.getSend(), request)
                 .isBadRequest();
-        verify(useCase).alertSendingManager(any());
+        verify(useCase).sendAlertManager(any());
     }
 
 

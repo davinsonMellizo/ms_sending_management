@@ -12,9 +12,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_CLIENT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.ALERT_TRANSACTION_NOT_FOUND;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.AMOUNT_NOT_EXCEEDED;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_IDENTIFICATION_INVALID;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.REQUIRED_MESSAGE;
+import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.validateClient;
 
 @RequiredArgsConstructor
 public class AlertUseCase {
@@ -33,11 +38,10 @@ public class AlertUseCase {
 
     public Mono<Alert> validateAmount(Alert alert, Message pMessage) {
         return Mono.just(pMessage)
-                .filter(message1 -> Objects.nonNull(pMessage.getDocumentNumber()))
-                .filter(message1 -> Objects.nonNull(pMessage.getDocumentType()))
+                .filter(validateClient)
                 .switchIfEmpty(Mono.error(new BusinessException(CLIENT_IDENTIFICATION_INVALID)))
                 .map(message -> AlertClient.builder().idAlert(alert.getId()).documentType(pMessage.getDocumentType())
-                .documentNumber(pMessage.getDocumentNumber()).build())
+                        .documentNumber(pMessage.getDocumentNumber()).build())
                 .flatMap(alertClientGateway::findAlertClient)
                 .flatMap(this::restartAccumulated)
                 .map(alertClient -> alertClient.toBuilder()
@@ -58,7 +62,7 @@ public class AlertUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(ALERT_TRANSACTION_NOT_FOUND)));
     }
 
-    private Mono<Alert> buildAlertGeneral(Message message){
+    private Mono<Alert> buildAlertGeneral(Message message) {
         return Mono.just(message)
                 .filter(message1 -> !message1.getParameters().values().isEmpty())
                 .switchIfEmpty(Mono.error(new BusinessException(REQUIRED_MESSAGE)))

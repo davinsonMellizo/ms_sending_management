@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.services.sendalert;
 
-import co.com.bancolombia.api.dto.AlertDTO;
 import co.com.bancolombia.api.commons.handlers.Error;
+import co.com.bancolombia.api.dto.AlertDTO;
 import org.springdoc.core.fn.builders.operation.Builder;
 
 import java.util.function.Consumer;

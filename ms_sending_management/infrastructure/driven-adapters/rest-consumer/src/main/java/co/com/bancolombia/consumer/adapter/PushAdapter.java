@@ -24,14 +24,14 @@ public class PushAdapter implements PushGateway {
     @Override
     public Mono<Response> sendPush(Push push) {
         return client.post(properties.getResources().getEndpointPush(), push,
-                SuccessPush.class, ErrorPush.class)
+                        SuccessPush.class, ErrorPush.class)
                 .map(response -> Response.builder().code(STATUS_OK)
                         .description(response.getData().getSendMessageResponse().getMessage()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorPush)e.getData()).getErrors().toString())
+                        .code(e.getHttpsStatus()).description(((ErrorPush) e.getData()).getErrors().toString())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
-                            .code(STATUS_ERROR).description(e.getMessage())
-                            .build()));
+                        .code(STATUS_ERROR).description(e.getMessage())
+                        .build()));
     }
 }
