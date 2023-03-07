@@ -13,10 +13,10 @@ import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 
 public class LogDocumentationApi {
 
-    private final String TAG = "Log";
-    private final String ERROR = "Error";
-    private final String SUCCESSFUL = "successful";
-    private final String EXAMPLE = "2022-11-21T10:11:25.584569 Format: yyyy-MM-ddTHH:mm:ss.SSSSSS";
+    private static final String TAG = "Log";
+    private static final String ERROR = "Error";
+    private static final String SUCCESSFUL = "successful";
+    private static final String EXAMPLE = "2022-11-21T10:11:25.584569 Format: yyyy-MM-ddTHH:mm:ss.SSSSSS";
 
 
     protected Consumer<Builder> find() {

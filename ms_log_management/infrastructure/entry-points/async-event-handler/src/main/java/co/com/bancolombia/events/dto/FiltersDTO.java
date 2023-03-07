@@ -1,4 +1,4 @@
-package co.com.bancolombia.events.DTO;
+package co.com.bancolombia.events.dto;
 
 import co.com.bancolombia.model.log.Filters;
 import lombok.AllArgsConstructor;

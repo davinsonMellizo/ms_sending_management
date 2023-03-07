@@ -20,7 +20,8 @@ import org.springframework.r2dbc.core.DatabaseClient;
 public class PostgreSQLReaderAdapterConfig {
 
     @Bean("Reader")
-    public ConnectionFactory initializer(@Qualifier("buildConnectionReaderConfiguration") final ConnectionFactoryOptions options) {
+    public ConnectionFactory initializer(
+            @Qualifier("buildConnectionReaderConfiguration") final ConnectionFactoryOptions options) {
         return ConnectionFactories.get(options);
     }
 

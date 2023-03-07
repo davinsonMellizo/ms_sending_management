@@ -1,7 +1,6 @@
 package co.com.bancolombia.api.log;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.services.log.HandlerLog;
 import co.com.bancolombia.api.services.log.RouterLog;
@@ -13,6 +12,7 @@ import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,12 +34,18 @@ import static org.mockito.Mockito.when;
         ApiProperties.class,
         ExceptionHandler.class
 })
-public class LogRouterTest extends BaseIntegrationTest {
+public class LogRouterTest{
 
     @MockBean
     private LogUseCase useCase;
     @MockBean
     private LoggerBuilder loggerBuilder;
+
+    @Autowired
+    protected ApiProperties properties;
+
+    @Autowired
+    protected WebTestClient webTestClient;
 
     @Test
     void findAllContactsByClient() {

@@ -1,6 +1,6 @@
 package co.com.bancolombia.events.handlers;
 
-import co.com.bancolombia.events.DTO.FiltersDTO;
+import co.com.bancolombia.events.dto.FiltersDTO;
 import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.AllArgsConstructor;

@@ -15,13 +15,13 @@ import java.util.Optional;
 public class ParamsUtil {
 
 
-    private final static String DOCUMENT_NUMBER = "document-number";
-    private final static String DOCUMENT_TYPE = "document-type";
-    private final static String CONTACT = "contact";
-    private final static String CONSUMER = "consumer";
-    private final static String PROVIDER = "provider";
-    private final static String START_DATE = "start-date";
-    private final static String END_DATE = "end-date";
+    private static final String DOCUMENT_NUMBER = "document-number";
+    private static final String DOCUMENT_TYPE = "document-type";
+    private static final String CONTACT = "contact";
+    private static final String CONSUMER = "consumer";
+    private static final String PROVIDER = "provider";
+    private static final String START_DATE = "start-date";
+    private static final String END_DATE = "end-date";
 
 
     private static Optional<String> ofEmpty(String value) {
@@ -29,7 +29,7 @@ public class ParamsUtil {
     }
 
     private static Mono<LocalDateTime> ofEmptyDate(String value) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         return (value == null || value.isEmpty()) ? Mono.empty() : Mono.just(LocalDateTime.parse(value, formatter));
     }
 

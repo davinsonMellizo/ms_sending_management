@@ -41,8 +41,8 @@ public class LogRepositoryImplement
     @Override
     public Mono<List<Log>> findLog(QueryLog queryLog) {
         return repositoryRead.findAllLogByFilters(queryLog.getDocumentNumber(), queryLog.getDocumentType(),
-                        queryLog.getContactValue(), queryLog.getConsumer(), queryLog.getProvider(), queryLog.getStartDate(),
-                        queryLog.getEndDate())
+                        queryLog.getContactValue(), queryLog.getConsumer(), queryLog.getProvider(),
+                        queryLog.getStartDate(), queryLog.getEndDate())
                 .collectList()
                 .onErrorMap(e -> new TechnicalException(e, FIND_LOG_ERROR));
     }
