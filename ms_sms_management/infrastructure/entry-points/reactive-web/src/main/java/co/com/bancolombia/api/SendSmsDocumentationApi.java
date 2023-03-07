@@ -1,5 +1,6 @@
 package co.com.bancolombia.api;
 
+import co.com.bancolombia.api.DTO.AlertDTO;
 import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
@@ -20,7 +21,7 @@ public class SendSmsDocumentationApi {
         return ops -> ops.tag(TAG)
                 .operationId("SendAlert").summary(TAG)
                 .description("Service to Send Alert").tags(new String[]{TAG})
-                .requestBody(requestBodyBuilder().required(true).implementation(String.class))
+                .requestBody(requestBodyBuilder().required(true).implementation(AlertDTO.class))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }

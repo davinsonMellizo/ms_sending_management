@@ -9,8 +9,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorInfobipSMS {
-
     private SMSInfobip.RequestError requestError;
-
-
 }

@@ -1,6 +1,5 @@
 package co.com.bancolombia.api.DTO;
 
-import co.com.bancolombia.Request;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Template;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +24,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class AlertDTO extends Request {
+public class AlertDTO {
     @Schema(description = "Obligatorio para envío de sms "
             , allowableValues = {"0","1","2","3", "4", "5"})
     @Max(value = 5, message = "{constraint.max}")
@@ -69,7 +68,4 @@ public class AlertDTO extends Request {
                 .isPremium(this.isPremium)
                 .build());
     }
-
-
-
 }
