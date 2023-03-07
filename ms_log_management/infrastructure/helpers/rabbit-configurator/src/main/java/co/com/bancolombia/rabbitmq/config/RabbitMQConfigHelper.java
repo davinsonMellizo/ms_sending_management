@@ -34,8 +34,8 @@ public class RabbitMQConfigHelper {
     @Primary
     @Bean
     public ConnectionFactoryProvider getConnectionFactoryProvider() {
-        var properties = rabbitProperties();
-        final ConnectionFactory factory = new ConnectionFactory();
+        RabbitMQConnectionProperties properties = rabbitProperties();
+        final var factory = new ConnectionFactory();
         var map = PropertyMapper.get();
 
         map.from(properties::getHostname).whenNonNull().to(factory::setHost);
