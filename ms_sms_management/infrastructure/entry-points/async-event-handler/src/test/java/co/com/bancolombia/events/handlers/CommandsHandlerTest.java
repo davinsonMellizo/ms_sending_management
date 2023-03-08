@@ -35,6 +35,7 @@ class CommandsHandlerTest {
 
     private Alert alert = new Alert();
     private Map<String, String> headers= Map.of("x-death", "count=1","retryNumber","1");
+    //private Command<Message> command = new  Command<>("alert", "alert", message);
     BusinessException businessException = new BusinessException(TEMPLATE_NOT_FOUND);
     TechnicalException technicalException=new TechnicalException(TECHNICAL_EXCEPTION);
     @BeforeEach
@@ -43,11 +44,17 @@ class CommandsHandlerTest {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         alert.setTemplate(new Template( parameters, "Compra"));
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
         alert.setHeaders(headers);
         MockitoAnnotations.initMocks(this);
     }
 
+   /* @Test
+    void handlerSendAlertTest() {
+        when(useCase.sendAlert(any())).thenReturn(Mono.empty());
+        StepVerifier.create(commandsHandler.handleSendAlert(command))
+                .verifyComplete();
+    }*/
 
     @Test
     void sendAlertTest() {

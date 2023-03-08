@@ -30,7 +30,7 @@ public class AlertDTO extends Request {
     @NotBlank(message = "{constraint.not_blank}")
     private String priority;
     @NotNull(message = "{constraint.not_null}")
-    private @Valid Alert.To to;
+    private @Valid Alert.To destination;
     @Builder.Default
     private String message = "";
     @Builder.Default
@@ -42,26 +42,25 @@ public class AlertDTO extends Request {
     private String provider;
     @NotNull(message = "{constraint.not_null}")
     @NotBlank(message = "{constraint.not_blank}")
-    private String logKey;
+    private String trackId;
     @Builder.Default
     private String category = "";
     @Builder.Default
     private Boolean isFlash = false;
     @Builder.Default
     private Boolean isPremium = false;
-
     @Builder.Default
     private Boolean isLongMessage = false;
 
     public Mono<Alert> toModel() {
         return Mono.just(Alert.builder()
                 .priority(this.priority)
-                .destination(this.to)
+                .destination(this.destination)
                 .message(this.message)
                 .template(this.template)
                 .urlForShortening(this.urlForShortening)
                 .provider(this.provider)
-                .logKey(this.logKey)
+                .trackId(this.trackId)
                 .category(this.category)
                 .category(this.category)
                 .isFlash(this.isFlash)
