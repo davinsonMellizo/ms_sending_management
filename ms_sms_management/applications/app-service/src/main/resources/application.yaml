@@ -1,25 +1,25 @@
 server:
-  port: ${SERVER_PORT}
+  port: "${SERVER_PORT}"
   servlet:
     encoding:
-      charset: UTF-8
+      charset: "UTF-8"
       force: true
 springdoc:
   version: 1
 spring:
   application:
-    name: ${APPLICATION_NAME}
+    name: "${APPLICATION_NAME}"
   devtools:
     add-properties: false
   jackson:
-    default-property-inclusion: NON_NULL
+    default-property-inclusion: "NON_NULL"
   profiles:
-    active: ${SPRING_PROFILE_ACTIVE:local}
+    active: "${SPRING_PROFILE_ACTIVE:local}"
   webflux:
-    base-path: ${PATH_BASE}
+    base-path: "${PATH_BASE}"
   logging:
     level:
-      root: ${LOG4J_LEVEL}
+      root: "${LOG4J_LEVEL}"
       reactor:
         netty: false
 app.async.withDLQRetry: true
@@ -35,6 +35,8 @@ management:
       enabled: true
       cache:
         time-to-live: "10s"
+      probes:
+        enabled: true
   endpoints:
     web:
       exposure:
@@ -44,45 +46,47 @@ management:
         health: "health"
         liveness: "liveness"
         readiness: "readiness"
-
 adapters:
   repositories:
     tables:
       namesmap:
         secret-priority: "${TABLE_NAME_SECRET_PRIORITY}"
   async-sqs:
-    url: ${SQS_URL}
-    timeout: ${SQS_TIMEOUT}
-    pool-size: ${SQS_POOL_SIZE}
-    region-aws: ${REGION_AWS}
+    url: "${SQS_URL}"
+    timeout: "${SQS_TIMEOUT}"
+    pool-size: "${SQS_POOL_SIZE}"
+    region-aws: "${REGION_AWS}"
   dynamo-repository:
-    region-aws: ${REGION_AWS}
-    endpoint: http://localhost:4566
+    region-aws: "${REGION_AWS}"
+    endpoint: "http://localhost:4566"
   rest-client:
     timeout: 1000
     resources:
-      endpointMasivSms: https://api-sms.masivapp.com/send-message
-      endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
-      endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
-      endpointInalambriaSms: ${ENDPOINT_INALAMBRIA_SMS}
-      endpointInalambriaToken: ${ENDPOINT_INALAMBRIA_TOKEN}
-      endpointInfobipSMS: ${ENDPOINT_INFOBIP_SMS}
-      endpointInfobipToken: ${ENDPOINT_INFOBIP_TOKEN}
+      endpointMasivSms: "https://api-sms.masivapp.com/send-message"
+      endpointMasivAutToken: "https://auth.masivapp.com/authentication/v1/login"
+      endpointMasivToken: "https://auth.masivapp.com/authentication/v1/login"
+      endpointInalambriaSms: "${ENDPOINT_INALAMBRIA_SMS}"
+      endpointInalambriaToken: "${ENDPOINT_INALAMBRIA_TOKEN}"
+      endpointInfobipSMS: "${ENDPOINT_INFOBIP_SMS}"
+      endpointInfobipToken: "${ENDPOINT_INFOBIP_TOKEN}"
   secrets-manager:
-    secret-rabbit: ${SECRET-RABBIT}
-    secret-rabbit-dual: ${SECRET_RABBIT_DUAL}
-    #secret-inalambria: ${SECRET-INALAMBRIA}
-    cache-size: ${CACHE_SECRETS_SIZE}
-    cache-time: ${CACHE_SECRETS_SECONDS}
-    endpoint: http://localhost:4566
+    secret-rabbit: "${SECRET-RABBIT}"
+    secret-rabbit-dual: "${SECRET_RABBIT_DUAL}"
+    cache-size: "${CACHE_SECRETS_SIZE}"
+    cache-time: "${CACHE_SECRETS_SECONDS}"
+    endpoint: "http://localhost:4566"
+  entries:
+    reactive-web:
+      path-base: ${PATH_BASE}
+      send: ${SEND}
 aws:
-  region: ${REGION_AWS}
-  nameSecretBucketSsl: ${NAME-SECRET-BUCKET-SSL}
+  region: "${REGION_AWS}"
+  nameSecretBucketSsl: "${NAME-SECRET-BUCKET-SSL}"
   s3:
-    endpoint: http://localhost:4566
-    bucket: ${S3-BUCKET}
+    endpoint: "http://localhost:4566"
+    bucket: "${S3-BUCKET}"
 stash:
   redis:
-    expireTime: ${EXPIRE_TIME_CACHE}
-    host: ${CACHE}
-    port: ${CACHE_PORT}
+    expireTime: "${EXPIRE_TIME_CACHE}"
+    host: "${CACHE}"
+    port: "${CACHE_PORT}"

@@ -1,5 +1,7 @@
 package co.com.bancolombia.consumer.adapter;
 
+
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.ErrorTemplate;
 import co.com.bancolombia.consumer.adapter.response.SuccessTemplate;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
+
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TEMPLATE_FIND_ERROR;
 
 
 @Repository
@@ -27,14 +31,15 @@ public class TemplateAdapter implements TemplateGateway {
 
         String endpoint = properties.getResources().getEndpointTemplate();
 
-        return Mono.just(pAlert)
-                .filter(alert -> alert.getMessage() == null && alert.getTemplate() != null)
-                .flatMap(alert -> client.requestGet(endpoint, createParams(pAlert.getTemplate().getName()),
-                        pAlert.getTemplate().getParameters(), SuccessTemplate.class, ErrorTemplate.class))
+        return client.requestGet(endpoint, createParams(pAlert.getTemplate().getName()),
+                        pAlert.getTemplate().getParameters(), SuccessTemplate.class, ErrorTemplate.class)
                 .map(response -> TemplateEmail.builder().name(response.getData().getIdTemplate())
                         .bodyHtml(response.getData().getMessageBody()).subject(response.getData().getMessageSubject())
                         .build())
-                .onErrorResume(e -> Mono.error(new RuntimeException(e.getMessage())));
+                .onErrorMap(e -> (e instanceof ErrorTemplate), e-> new TechnicalException(((ErrorTemplate)e)
+                        .getError().getTitle(),TEMPLATE_FIND_ERROR))
+                .onErrorMap(e-> new TechnicalException(e.getMessage(),TEMPLATE_FIND_ERROR))
+                .onErrorMap(e-> new Throwable(e.getMessage()));
     }
 
     public MultiValueMap<String, String> createParams(String nameTemplate) {

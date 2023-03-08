@@ -46,16 +46,15 @@ class GeneratorTokenUseCaseTest {
 
     private SMSInfobip smsInf = new SMSInfobip();
     private ArrayList<String> tokens = new ArrayList<>();
-
     @BeforeEach
     public void init() {
-        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
+        alert.setDestination(Alert.To.builder().phoneNumber("number").prefix("123").build());
         alert.setUrlForShortening("");
         alert.setProvider("INA");
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", "bancolombia", ""));
         alert.setMessage("text to send");
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
         alert.setPriority("1");
 
         tokens.add("tokenTest");

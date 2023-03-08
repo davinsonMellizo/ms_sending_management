@@ -51,5 +51,11 @@ class LogUseCaseTest {
         StepVerifier.create(logUseCase.sendLog(alert, templateEmail, "", response))
                 .verifyComplete();
     }
+    @Test
+    void putLogCerTestError(){
+        response.setCode(0);
+        StepVerifier.create(logUseCase.sendLog(alert, templateEmail, "", response))
+                .verifyComplete();
+    }
 
 }

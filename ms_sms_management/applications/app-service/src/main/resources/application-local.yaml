@@ -62,17 +62,22 @@ adapters:
       endpointMasivSms: https://api-sms.masivapp.com/send-message
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
-      endpointInalambriaSms: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/mtmessage
-      endpointInalambriaToken: https://vpce-058c2530a2466bd2b-ld0nnmgj.vpce-svc-04efa2c8c91e6a976.us-east-1.vpce.amazonaws.com/token/
+      endpointInalambriaSms: https://restcert.inalambria.com/mtmessage
+      endpointInalambriaToken: https://restcert.inalambria.com/token/
       endpointInfobipSMS: https://ejl2nq.api.infobip.com/sms/2/text/advanced
       endpointInfobipToken: https://ejl2nq.api.infobip.com/auth/1/oauth2/token
+      endpointTemplate: http://localhost:8071/api/v1/templater/message
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
-    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
+    secret-rabbit-dual: alertas-local-secretrabbit-dual-CNX
     #secret-inalambria: ${SECRET-INALAMBRIA}
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
+  entries:
+    reactive-web:
+      path-base: /api/v1/sending-management
+      send-sms: /send-sms
 aws:
   region: us-east-1
   nameSecretBucketSsl: bucket-masi-ssl

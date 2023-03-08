@@ -1,0 +1,4 @@
+adapters:
+  entries:
+    reactive-web:
+      send-sms: /send-sms

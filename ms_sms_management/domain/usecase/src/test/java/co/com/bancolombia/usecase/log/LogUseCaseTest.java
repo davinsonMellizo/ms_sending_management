@@ -31,32 +31,28 @@ class LogUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
         alert.setProvider("INA");
-        alert.setTo(Alert.To.builder().phoneNumber("number").phoneIndicator("123").build());
+        alert.setDestination(Alert.To.builder().phoneNumber("number").prefix("123").build());
         response.setCode(1);
         response.setDescription("description");
         templateEmail.setBodyText("text");
-        when(commandGateway.sendCommandLogSms(any())).thenReturn(Mono.just(new Log()));
+
     }
 
     @Test
     void putLogTest() {
-        StepVerifier.create(logUseCase.sendLog(alert, "", response))
-                .expectError();
-    }
-
-    @Test
-    void putLogTestWithCode200() {
-        response.setCode(200);
-        StepVerifier.create(logUseCase.sendLog(alert, "", response))
+        when(commandGateway.sendCommandLogSms(any())).thenReturn(Mono.just(new Log()));
+        StepVerifier.create(logUseCase.handlerLog(alert, "SMS", response,true))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    void putLogTestWithCode202() {
-        response.setCode(202);
-        StepVerifier.create(logUseCase.sendLog(alert, "", response))
+    void putLogTestWithFalse() {
+        StepVerifier.create(logUseCase.handlerLog(alert, "", response,false))
+                .expectNextCount(1)
                 .verifyComplete();
     }
+
 }

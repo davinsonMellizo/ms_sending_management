@@ -1,0 +1,23 @@
+{
+  "priority": "1",
+  "destination" : {
+    "phoneIndicator" :"57",
+    "phoneNumber":"3058880797"
+  },
+  "template": {
+    "parameters": {
+      "name": "nombre",
+      "value": "Rafael Becerra",
+      "type": "Esto es un mensaje de prueba"
+    },
+    "name": "TEST_CREATE_MSG2"
+  },
+  "message": "Bancolombia le informa el retiro por 100 En la fecha ${name}. gracias.",
+  "urlForShortening": "https://www.google.com/?hl=es",
+  "provider": "MAS",
+  "trackId": "123456",
+  "category": "agregar",
+  "isFlash" : false,
+  "isPremium": false,
+  "isLongMessage": false
+}

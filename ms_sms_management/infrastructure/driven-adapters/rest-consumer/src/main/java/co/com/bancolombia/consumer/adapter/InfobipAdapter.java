@@ -39,7 +39,8 @@ public class InfobipAdapter implements InfobipGateway {
                 .map(response -> Response.builder().code(STATUS_OK)
                         .messages(response.getMessages()).build())
                 .onErrorResume(Error.class, e -> Mono.just(Response.builder()
-                        .code(e.getHttpsStatus()).description(((ErrorInfobipSMS)e.getData()).getRequestError().getServiceException().getText())
+                        .code(e.getHttpsStatus()).description(((ErrorInfobipSMS)e.getData())
+                                .getRequestError().getServiceException().getText())
                         .build()))
                 .onErrorResume(e -> Mono.just(Response.builder()
                         .code(Integer.parseInt(e.getMessage().substring(0,CONSTANT))).description(e.getMessage())
@@ -54,8 +55,7 @@ public class InfobipAdapter implements InfobipGateway {
         formData.add("grant_type", "client_credentials");
         return Mono.just(new TokenInfobipData())
                 .flatMap(requestTokenInfo->clientToken.post(properties.getResources().getEndpointInfobipToken(),
-                        formData,TokenInfobipData.class,null))
-                .flatMap(TokenInfobipData::toModel)
-                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
+                        formData,TokenInfobipData.class,ErrorTokenInfobipRequest.class))
+                .flatMap(TokenInfobipData::toModel);
     }
 }

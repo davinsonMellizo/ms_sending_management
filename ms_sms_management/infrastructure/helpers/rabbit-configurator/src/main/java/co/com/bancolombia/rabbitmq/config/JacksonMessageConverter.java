@@ -95,12 +95,12 @@ public class JacksonMessageConverter implements MessageConverter {
     public Message toMessage(Object object) {
         byte[] bytes;
         try {
-            String jsonString = this.objectMapper.writeValueAsString(object);
+            var jsonString = this.objectMapper.writeValueAsString(object);
             bytes = jsonString.getBytes(ENCODING);
         } catch (IOException e) {
             throw new MessageConversionException(FAILED_MESSAGE, e);
         }
-        RabbitMessage.RabbitMessageProperties props = new RabbitMessage.RabbitMessageProperties();
+        var props = new RabbitMessage.RabbitMessageProperties();
         props.setContentType(CONTENT_TYPE);
         props.setContentEncoding(ENCODING);
         props.setContentLength(bytes.length);

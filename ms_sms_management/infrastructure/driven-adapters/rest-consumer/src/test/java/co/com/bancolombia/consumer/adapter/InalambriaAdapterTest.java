@@ -1,5 +1,6 @@
 package co.com.bancolombia.consumer.adapter;
 
+import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import co.com.bancolombia.consumer.adapter.response.ErrorInalambriaSMS;
@@ -17,6 +18,7 @@ import reactor.test.StepVerifier;
 
 import java.util.Map;
 
+import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_EXCEPTION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -37,7 +39,8 @@ class InalambriaAdapterTest {
     @BeforeEach
     public void init() {
         String url = "localhost";
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url, url));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url,
+                url, url,url));
         sms = new SMSInalambria();
         sms.setHeaders(Map.of("header", "test"));
     }
@@ -63,19 +66,19 @@ class InalambriaAdapterTest {
                         .build()));
 
         StepVerifier.create(inalambriaAdapter.sendSMS(sms))
-                .assertNext(response -> response.getDescription().equals("error authentication"))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
 
     @Test
     void sendSmsErrorWebClientTest() {
         when(client.post(anyString(), any(), any(), any()))
-                .thenReturn(Mono.error(new Throwable("123timeout")));
+                .thenReturn(Mono.error(new TechnicalException("timeout",TECHNICAL_EXCEPTION,1)));
+
         StepVerifier
                 .create(inalambriaAdapter.sendSMS(new SMSInalambria()))
-                .assertNext(response -> response.getDescription().equals(123))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
-
 
 }

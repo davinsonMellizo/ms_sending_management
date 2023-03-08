@@ -1,10 +1,11 @@
 package co.com.bancolombia.consumer.adapter.response.model;
 
-import co.com.bancolombia.consumer.adapter.mapper.Request;
 import co.com.bancolombia.model.token.Token;
-import co.com.bancolombia.model.token.TokenInfobip;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @Data

@@ -5,8 +5,6 @@ import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.rabbitmq.config.model.RabbitMQConnectionProperties;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.reactivecommons.async.rabbit.config.ConnectionFactoryProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.PropertyMapper;
@@ -28,7 +26,7 @@ public class RabbitMQConfigHelper{
 
     private static final String TLS = "TLSv1.2";
     private static final String FAIL_MSG = "Error creating ConnectionFactoryProvider in Security_Filters";
-    private final Log LOGGER = LogFactory.getLog(RabbitMQConfigHelper.class);
+
     @Value("${adapters.secrets-manager.secret-rabbit}")
     private String secretName;
 
@@ -57,7 +55,7 @@ public class RabbitMQConfigHelper{
 
     private void configureSsl(ConnectionFactory factory) {
         try {
-            SSLContext c = SSLContext.getInstance(TLS);
+            var c = SSLContext.getInstance(TLS);
             c.init(null, null, null);
 
             factory.useSslProtocol(c);

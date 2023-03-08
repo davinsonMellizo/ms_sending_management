@@ -36,7 +36,8 @@ class InfobipAdapterTest {
     @BeforeEach
     public void init() {
         String url = "localhost";
-        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url, url));
+        when(properties.getResources()).thenReturn(new ConsumerProperties.Resources(url, url, url, url, url, url, url,
+                url,url));
     }
 
     @Test
