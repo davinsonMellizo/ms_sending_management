@@ -15,16 +15,16 @@ public class LogUseCase {
     private final LogGateway logGateway;
     private final RetrieveLogsGateway retrieveLogsGateway;
 
-    public Mono<Void> saveLog(Log log){
+    public Mono<Void> saveLog(Log log) {
         return logGateway.saveLog(log)
                 .flatMap(logSaved -> Mono.empty());
     }
 
-    public Mono<List<Log>> findLogsByDate(QueryLog queryLog){
+    public Mono<List<Log>> findLogsByDate(QueryLog queryLog) {
         return logGateway.findLog(queryLog);
     }
 
-    public Mono<String> retrieveLogsS3(Filters filters){
+    public Mono<String> retrieveLogsS3(Filters filters) {
         return retrieveLogsGateway.retrieveLogsS3(filters);
     }
 

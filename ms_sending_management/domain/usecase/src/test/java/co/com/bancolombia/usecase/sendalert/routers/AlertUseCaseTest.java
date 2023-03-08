@@ -36,7 +36,7 @@ class AlertUseCaseTest {
     private Message message = new Message();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -56,7 +56,7 @@ class AlertUseCaseTest {
 
 
     @Test
-    void validateAmountErrorTest(){
+    void validateAmountErrorTest() {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
@@ -75,7 +75,7 @@ class AlertUseCaseTest {
     }
 
     @Test
-    void validateAmountTest(){
+    void validateAmountTest() {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
@@ -94,7 +94,7 @@ class AlertUseCaseTest {
     }
 
     @Test
-    void getAlertTest(){
+    void getAlertTest() {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")
@@ -109,7 +109,7 @@ class AlertUseCaseTest {
     }
 
     @Test
-    void getAlertGnrTest(){
+    void getAlertGnrTest() {
         Alert alert = Alert.builder()
                 .id("AFI")
                 .push("SI")

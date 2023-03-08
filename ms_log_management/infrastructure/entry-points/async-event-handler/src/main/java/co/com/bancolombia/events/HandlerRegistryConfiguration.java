@@ -1,6 +1,6 @@
 package co.com.bancolombia.events;
 
-import co.com.bancolombia.events.DTO.FiltersDTO;
+import co.com.bancolombia.events.dto.FiltersDTO;
 import co.com.bancolombia.events.handlers.CommandsHandler;
 import co.com.bancolombia.model.log.Log;
 import org.reactivecommons.async.api.HandlerRegistry;

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("alert_client")
-public class AlertClientData{
+public class AlertClientData {
 
     private String idAlert;
     @ReadOnlyProperty

@@ -25,7 +25,7 @@ public class SendAlertHandler {
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
                 .doOnNext(validatorHandler::validateObject)
                 .flatMap(AlertDTO::toModel)
-                .flatMap(useCase::alertSendingManager)
+                .flatMap(useCase::sendAlertManager)
                 .flatMap(ResponseUtil::responseOk);
     }
 

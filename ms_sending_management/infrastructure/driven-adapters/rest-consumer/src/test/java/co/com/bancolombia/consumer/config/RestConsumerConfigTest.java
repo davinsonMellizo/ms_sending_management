@@ -18,7 +18,7 @@ class RestConsumerConfigTest {
     }
 
     @Test
-    void sesConfigTest(){
+    void sesConfigTest() {
         assertThat(restConsumerConfig.webClientConfig(new ConsumerProperties(3600, null))).isNotNull();
     }
 }

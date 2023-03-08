@@ -1,53 +1,78 @@
-/*package co.com.bancolombia.log;
+package co.com.bancolombia.log;
 
 
+import co.com.bancolombia.commons.exceptions.TechnicalException;
+import co.com.bancolombia.log.data.LogMapper;
+import co.com.bancolombia.log.reader.LogRepositoryReader;
+import co.com.bancolombia.log.writer.LogRepository;
 import co.com.bancolombia.model.log.Log;
-import com.sun.source.tree.ModuleTree;
+import co.com.bancolombia.model.log.QueryLog;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest("spring.application.name=ms_Log_management")
-public class LogRepositoryImplTest {
+class LogRepositoryImplTest {
 
-    @Autowired
+    @InjectMocks
     private LogRepositoryImplement logRepositoryImplement;
+    @Mock
+    private LogRepository repository;
 
+    @Mock
+    private LogRepositoryReader repositoryReader;
+    @Spy
+    private LogMapper mapper = Mappers.getMapper(LogMapper.class);
     private final Log log = new Log();
 
     @Test
-    public void saveLog() {
-        log.setDocumentType(0);
-        log.setDocumentNumber(111L);
-        log.setAlertId("A");
-        log.setIdAlert("A");
-        log.setAlertType("T");
-        log.setAlertDestination("D");
-        log.setMessageType("T");
-        log.setMessageSent("S");
-        log.setAccountType("T");
-        log.setAccountNumber(1);
-        log.setOperationChannel("C");
-        log.setOperationDescription("D");
-        log.setOperationCode("C");
-        log.setOperationNumber(1);
-        log.setEnabledAmount(1L);
-        log.setSendResponseCode(1);
-        log.setSendResponseDescription("D");
-        log.setPriority(1);
-        log.setTemplate("D");
-        log.setAlertIndicator(1);
-        log.setIndicatorDescription("D");
-        log.setApplicationCode("A");
-        StepVerifier.create(logRepositoryImplement.saveLog(log))
-                        .consumeNextWith(log1 -> assertEquals(log.getDocumentNumber(),log1.getDocumentNumber()))
-                        .verifyComplete();
+    void saveLog() {
+        logRepositoryImplement.saveLog(log)
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
     }
-}*/
+
+    @Test
+    void findLogTest() {
+        when(repositoryReader.findAllLogByFilters(anyString(), anyString(), anyString(), anyString(), anyString(),
+                any(), any())).thenReturn(Flux.just(new Log()));
+
+        logRepositoryImplement.findLog(QueryLog.builder()
+                        .consumer("").contactValue("").documentNumber("").documentType("")
+                        .endDate(LocalDateTime.now()).endDate(LocalDateTime.now()).provider("")
+                        .build())
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void findLogErrorTest() {
+        when(repositoryReader.findAllLogByFilters(anyString(), anyString(), anyString(), anyString(), anyString(),
+                any(), any())).thenReturn(Flux.error(new Throwable()));
+
+        logRepositoryImplement.findLog(QueryLog.builder()
+                        .consumer("").contactValue("").documentNumber("").documentType("")
+                        .endDate(LocalDateTime.now()).endDate(LocalDateTime.now()).provider("")
+                        .build())
+                .as(StepVerifier::create)
+                .expectError(TechnicalException.class)
+                .verify();
+    }
+}

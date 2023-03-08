@@ -42,7 +42,7 @@ class AlertClientRepositoryImplTest {
 
 
     @Test
-    void findAlertClient(){
+    void findAlertClient() {
         alertClient.setIdAlert("HGD");
         alertClient.setDocumentNumber(1061772353L);
         alertClient.setDocumentType(0);

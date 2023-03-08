@@ -49,7 +49,7 @@ class PostgreSQLConnectionConfigHelperTest {
 
     @Test
     void getConnectionReadConfig() {
-        assertNotNull(helper.buildConnectionReaderConfiguration("schema","localhost"));
+        assertNotNull(helper.buildConnectionReaderConfiguration("schema", "localhost"));
     }
 
     @Test
@@ -57,7 +57,7 @@ class PostgreSQLConnectionConfigHelperTest {
         assertNotNull(helper.buildConnectionWriterConfiguration("schema"));
     }
 
-    private PostgresqlConnectionProperties properties(){
+    private PostgresqlConnectionProperties properties() {
         PostgresqlConnectionProperties properties = new PostgresqlConnectionProperties();
         properties.setHost(host);
         properties.setDbname(database);

@@ -18,6 +18,7 @@ import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.commons.ValidateContact;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
@@ -93,7 +94,7 @@ class ClientUseCaseTest {
         contact.setSegment("SVP");
         contact.setDocumentNumber(1061772353L);
         contact.setDocumentType("CC");
-        contact.setValue("3217958455");
+        contact.setValue("(+57)3217958455");
         contact.setStateContact("Active");
         contact.setId(1);
         contact.setPrevious(false);
@@ -157,10 +158,6 @@ class ClientUseCaseTest {
                 .thenReturn(Mono.just(contact));
         when(contactUseCase.validateContacts(any()))
                 .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
-        when(contactUseCase.validatePhone(any()))
-                .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
-        when(contactUseCase.validateMail(any()))
-                .thenReturn(Mono.just(Enrol.builder().client(client).contactData(List.of(contact)).build()));
         when(commandGateway.sendCommandEnroll(any())).thenReturn(Mono.empty());
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
@@ -180,12 +177,9 @@ class ClientUseCaseTest {
 
     @Test
     void updateClient() {
-        when(contactUseCase.validatePhone(any()))
-                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
+
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(contactUseCase.validateMail(any()))
-                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))
@@ -215,10 +209,6 @@ class ClientUseCaseTest {
     void updateClientMono() {
         when(stateGateway.findState(any()))
                 .thenReturn(Mono.just(state));
-        when(contactUseCase.validatePhone(any()))
-                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
-        when(contactUseCase.validateMail(any()))
-                .thenReturn(Mono.just(Enrol.builder().client(client).build()));
         when(clientRepository.findClientByIdentification(any()))
                 .thenReturn(Mono.just(client));
         when(documentGateway.getDocument(anyString()))

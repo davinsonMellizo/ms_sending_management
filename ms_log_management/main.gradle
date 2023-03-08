@@ -19,16 +19,16 @@ subprojects {
         testImplementation 'io.projectreactor:reactor-test'
         testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
     ext['log4j2.version'] = '2.17.1'
 
     configurations {
-        compile.exclude group: "org.apache.logging.log4j", module:"log4j-to-slf4j"
+        compile.exclude group: "org.apache.logging.log4j", module: "log4j-to-slf4j"
         compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
 
@@ -81,5 +81,5 @@ tasks.withType(JavaCompile) {
     ]
 }
 tasks.named('wrapper') {
-  gradleVersion = '7.6'
- }
+    gradleVersion = '7.6'
+}

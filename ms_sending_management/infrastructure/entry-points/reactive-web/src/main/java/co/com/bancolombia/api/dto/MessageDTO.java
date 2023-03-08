@@ -19,7 +19,7 @@ import java.util.Map;
 @Builder(toBuilder = true)
 public class MessageDTO {
     @Schema(description = "Obligatorio para envío de sms cuando no se envía, " +
-            "Alerta o Consumidor y código de transacción", allowableValues = {"1","2","3", "4", "5"})
+            "Alerta o Consumidor y código de transacción", allowableValues = {"1", "2", "3", "4", "5"})
     @Max(value = 5, message = "{constraint.max}")
     @Min(value = 1, message = "{constraint.min}")
     private Integer priority;
@@ -28,7 +28,7 @@ public class MessageDTO {
     private String category = "";
     @Builder.Default
     @Schema(allowableValues = {"MAIL", "SMS", "PUSH"})
-    private ArrayList<String> preferences= new ArrayList<>();
+    private ArrayList<String> preferences = new ArrayList<>();
     @Schema(description = "Mapa de parametros para construir el mensaje",
             example = "{\"mensaje\": \"Actualización exitosa\"}")
     @Size(min = 1, message = "{constraint.size}")

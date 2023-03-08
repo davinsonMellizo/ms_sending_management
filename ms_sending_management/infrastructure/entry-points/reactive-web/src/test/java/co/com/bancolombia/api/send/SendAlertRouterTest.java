@@ -51,13 +51,13 @@ class SendAlertRouterTest extends BaseIntegration {
 
     @Test
     void findAlertsById() {
-        when(useCase.alertSendingManager(any())).thenReturn(Mono.empty());
+        when(useCase.sendAlertManager(any())).thenReturn(Mono.empty());
         statusAssertionsWebClientPost(properties.getSend(),
                 request)
                 .isOk()
                 .expectBody(JsonNode.class)
                 .returnResult();
-        verify(useCase).alertSendingManager(any());
+        verify(useCase).sendAlertManager(any());
     }
 
 }

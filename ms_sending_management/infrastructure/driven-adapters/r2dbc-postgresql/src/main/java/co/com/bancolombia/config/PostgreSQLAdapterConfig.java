@@ -19,14 +19,14 @@ import java.time.Duration;
 
 @Configuration
 @EnableR2dbcRepositories(entityOperationsRef = "readerR2dbcEntityOperations",
-        basePackages={"co.com.bancolombia.remitter","co.com.bancolombia.provider",
-                "co.com.bancolombia.priority","co.com.bancolombia.document",
-                "co.com.bancolombia.contact","co.com.bancolombia.consumer",
-                "co.com.bancolombia.client","co.com.bancolombia.category",
-                "co.com.bancolombia.alert","co.com.bancolombia.alerttransaction"
+        basePackages = {"co.com.bancolombia.remitter", "co.com.bancolombia.provider",
+                "co.com.bancolombia.priority", "co.com.bancolombia.document",
+                "co.com.bancolombia.contact", "co.com.bancolombia.consumer",
+                "co.com.bancolombia.client", "co.com.bancolombia.category",
+                "co.com.bancolombia.alert", "co.com.bancolombia.alerttransaction"
         })
 @RequiredArgsConstructor
-public class PostgreSQLAdapterConfig{
+public class PostgreSQLAdapterConfig {
     private static final Integer MAX_IDLE_TIME = 1000;
 
     @Value("${adapters.postgresql.pool.initial}")
@@ -36,8 +36,7 @@ public class PostgreSQLAdapterConfig{
     private Integer maxSize;
 
     @Bean("Reader")
-    public ConnectionPool initializer(@Qualifier("buildConnectionReaderConfiguration")
-                                          final ConnectionFactoryOptions pool) {
+    public ConnectionPool initializer(@Qualifier("buildConnectionReaderConfiguration") final ConnectionFactoryOptions pool) {
         var connectionFactory = ConnectionFactories.get(pool);
         ConnectionPoolConfiguration configuration = ConnectionPoolConfiguration.builder(connectionFactory)
                 .maxIdleTime(Duration.ofMillis(MAX_IDLE_TIME))
@@ -49,7 +48,7 @@ public class PostgreSQLAdapterConfig{
     }
 
     @Bean
-    public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader")ConnectionPool connectionPool) {
+    public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader") ConnectionPool connectionPool) {
 
         var databaseClient = DatabaseClient.create(connectionPool);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);

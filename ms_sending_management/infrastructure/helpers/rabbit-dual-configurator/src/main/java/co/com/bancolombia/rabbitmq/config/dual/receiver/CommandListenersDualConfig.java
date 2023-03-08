@@ -44,8 +44,8 @@ public class CommandListenersDualConfig {
         ReactiveMessageListener listener = messageListenerDual(factory);
         var commandListener = new ApplicationCommandListener
                 (listener, appName, resolver, asyncProps.getDirect().getExchange(), converter,
-                asyncProps.getWithDLQRetry(),asyncProps.getMaxRetries(), asyncProps.getRetryDelay(),
-                asyncProps.getDirect().getMaxLengthBytes(), discardNotifier, errorReporter);
+                        asyncProps.getWithDLQRetry(), asyncProps.getMaxRetries(), asyncProps.getRetryDelay(),
+                        asyncProps.getDirect().getMaxLengthBytes(), discardNotifier, errorReporter);
 
         commandListener.startListener();
         return commandListener;
