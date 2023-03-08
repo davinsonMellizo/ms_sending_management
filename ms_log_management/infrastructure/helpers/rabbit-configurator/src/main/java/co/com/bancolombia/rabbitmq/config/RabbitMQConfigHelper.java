@@ -11,7 +11,6 @@ import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 
 import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
@@ -19,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @RequiredArgsConstructor
-public class RabbitMQConfigHelper{
+public class RabbitMQConfigHelper {
     private final LoggerBuilder logger;
     private final SyncSecretVault syncSecretVault;
     private static final String TLS = "TLSv1.2";
@@ -34,10 +33,10 @@ public class RabbitMQConfigHelper{
 
     @Primary
     @Bean
-    public ConnectionFactoryProvider getConnectionFactoryProvider(){
+    public ConnectionFactoryProvider getConnectionFactoryProvider() {
         RabbitMQConnectionProperties properties = rabbitProperties();
-        final ConnectionFactory factory = new ConnectionFactory();
-        PropertyMapper map = PropertyMapper.get();
+        final var factory = new ConnectionFactory();
+        var map = PropertyMapper.get();
 
         map.from(properties::getHostname).whenNonNull().to(factory::setHost);
         map.from(properties::getPort).to(factory::setPort);
@@ -48,13 +47,13 @@ public class RabbitMQConfigHelper{
         return () -> factory;
     }
 
-    private void configureSsl(ConnectionFactory factory)  {
+    private void configureSsl(ConnectionFactory factory) {
         try {
-            SSLContext c = SSLContext.getInstance(TLS);
+            var c = SSLContext.getInstance(TLS);
             c.init(null, null, null);
 
             factory.useSslProtocol(c);
-        } catch (NoSuchAlgorithmException | KeyManagementException e ) {
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
             logger.info(String.format(FAIL_MSG, e));
         }
     }

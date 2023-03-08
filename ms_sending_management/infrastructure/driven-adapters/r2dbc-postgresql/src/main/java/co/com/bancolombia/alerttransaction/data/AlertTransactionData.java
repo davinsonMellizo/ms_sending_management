@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("alert_transaction")
-public class AlertTransactionData{
+public class AlertTransactionData {
 
     private String idAlert;
     private String idConsumer;

@@ -16,6 +16,7 @@ import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.state.State;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.commons.ValidateContact;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -244,10 +245,10 @@ class ContactUseCaseTest {
     @Test
     void validatePhone() {
         contact.setContactWay("SMS");
-        contact.setValue("3207288544");
+        contact.setValue("(+57)3207288544");
         enrol.setContactData(List.of(contact));
         StepVerifier
-                .create(useCase.validatePhone(enrol))
+                .create(ValidateContact.validatePhone(enrol))
                 .assertNext(response -> response.getClient()
                         .getConsumerCode()
                         .equals(client.getConsumerCode()))
@@ -261,7 +262,7 @@ class ContactUseCaseTest {
         contact.setEnvironmentType("Personal");
         enrol.setContactData(List.of(contact));
         StepVerifier
-                .create(useCase.validateMail(enrol))
+                .create(ValidateContact.validateMail(enrol))
                 .assertNext(response -> response.getClient()
                         .getConsumerCode()
                         .equals(client.getConsumerCode()))
@@ -273,7 +274,7 @@ class ContactUseCaseTest {
         contact.setContactWay("SMS");
         contact.setValue("1235");
         enrol.setContactData(List.of(contact));
-        useCase.validatePhone(enrol)
+        ValidateContact.validatePhone(enrol)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();
@@ -285,7 +286,7 @@ class ContactUseCaseTest {
         contact.setValue("zzzzz");
         contact.setEnvironmentType("Personal");
         enrol.setContactData(List.of(contact));
-        useCase.validateMail(enrol)
+        ValidateContact.validateMail(enrol)
                 .as(StepVerifier::create)
                 .expectError(BusinessException.class)
                 .verify();

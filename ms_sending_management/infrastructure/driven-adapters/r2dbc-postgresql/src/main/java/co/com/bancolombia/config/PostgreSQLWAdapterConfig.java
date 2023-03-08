@@ -20,7 +20,7 @@ import java.time.Duration;
 @Configuration
 @EnableR2dbcRepositories(
         entityOperationsRef = "writerR2dbcEntityOperations",
-        basePackages={"co.com.bancolombia.alertclient"})
+        basePackages = {"co.com.bancolombia.alertclient"})
 @RequiredArgsConstructor
 public class PostgreSQLWAdapterConfig {
 
@@ -33,8 +33,7 @@ public class PostgreSQLWAdapterConfig {
 
 
     @Bean("Writer")
-    public ConnectionPool initializer(@Qualifier("buildConnectionWriterConfiguration")
-                                          final ConnectionFactoryOptions pool) {
+    public ConnectionPool initializer(@Qualifier("buildConnectionWriterConfiguration") final ConnectionFactoryOptions pool) {
         var connectionFactory = ConnectionFactories.get(pool);
         ConnectionPoolConfiguration configuration = ConnectionPoolConfiguration.builder(connectionFactory)
                 .maxIdleTime(Duration.ofMillis(MAX_IDLE_TIME))
@@ -46,7 +45,7 @@ public class PostgreSQLWAdapterConfig {
     }
 
     @Bean
-    public R2dbcEntityOperations writerR2dbcEntityOperations(@Qualifier("Writer")ConnectionPool connectionPool) {
+    public R2dbcEntityOperations writerR2dbcEntityOperations(@Qualifier("Writer") ConnectionPool connectionPool) {
 
         var databaseClient = DatabaseClient.create(connectionPool);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);

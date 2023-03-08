@@ -13,7 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table("alert")
-public class AlertData{
+public class AlertData {
 
     @Id
     private String id;

@@ -14,6 +14,7 @@ import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.response.StatusResponse;
 import co.com.bancolombia.model.state.gateways.StateGateway;
+import co.com.bancolombia.usecase.commons.ValidateContact;
 import co.com.bancolombia.usecase.contact.ContactUseCase;
 import co.com.bancolombia.usecase.log.NewnessUseCase;
 import co.com.bancolombia.usecase.sendalert.SendAlertUseCase;
@@ -89,8 +90,8 @@ public class ClientUseCase {
         var enrolBefore = Enrol.builder().contactData(new ArrayList<>()).build();
         StatusResponse<Enrol> responseCreate = new StatusResponse<>(SUCCESS_ENROLL.getCode(), enrolActual, enrolBefore);
         return validateDataClient(enrol)
-                .flatMap(contactUseCase::validatePhone)
-                .flatMap(contactUseCase::validateMail)
+                .flatMap(ValidateContact::validatePhone)
+                .flatMap(ValidateContact::validateMail)
                 .flatMap(contactUseCase::validateContacts)
                 .doOnNext(enrolValidated -> enrol.setContactData(enrolValidated.getContactData()))
                 .flatMap(this::validateCreationUserChannel)
@@ -152,8 +153,8 @@ public class ClientUseCase {
         StatusResponse<Enrol> responseUpdate = new StatusResponse<>(SUCCESS_ENROLL.getCode(), enrolActual, enrolBefore);
         return Mono.just(enrol)
                 .flatMap(this::validateCreationUserChannel)
-                .flatMap(contactUseCase::validatePhone)
-                .flatMap(contactUseCase::validateMail)
+                .flatMap(ValidateContact::validatePhone)
+                .flatMap(ValidateContact::validateMail)
                 .flatMap(client1 -> buildAndUpdateClient(client, enrol))
                 .doOnNext(responseClient -> responseUpdate.getActual().setClient(responseClient.getActual()))
                 .doOnNext(responseClient -> responseUpdate.getBefore().setClient(responseClient.getBefore()))

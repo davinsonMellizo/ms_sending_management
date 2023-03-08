@@ -23,7 +23,7 @@ public interface LogRepositoryReader extends ReactiveCrudRepository<LogData, Str
                                   @Param("contact") String contact,
                                   @Param("consumer") String consumer,
                                   @Param("provider") String provider,
-                                  @Param("startDate")LocalDateTime startDate,
+                                  @Param("startDate") LocalDateTime startDate,
                                   @Param("endDate") LocalDateTime endDate);
 
 }

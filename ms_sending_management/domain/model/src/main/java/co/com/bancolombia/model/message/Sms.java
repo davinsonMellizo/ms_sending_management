@@ -14,13 +14,13 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 public class Sms extends Request {
     private Integer priority;
-    private To to;
+    private To destination;
     private String message;
     private Template template;
-    private String urlForShortening;
+    private String url;
     private String provider;
     private String category;
-    private String logKey;
+    private String trackId;
 
     @Data
     @NoArgsConstructor
@@ -28,6 +28,6 @@ public class Sms extends Request {
     @Builder(toBuilder = true)
     public static class To implements Serializable {
         private String phoneNumber;
-        private String phoneIndicator;
+        private String prefix;
     }
 }

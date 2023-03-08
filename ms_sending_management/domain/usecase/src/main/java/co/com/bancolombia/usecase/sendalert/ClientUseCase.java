@@ -7,17 +7,42 @@ import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Objects;
 
-import static co.com.bancolombia.commons.constants.Medium.*;
+import static co.com.bancolombia.commons.constants.Medium.MAIL;
+import static co.com.bancolombia.commons.constants.Medium.PUSH;
+import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.State.ACTIVE;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
-
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_HAS_NO_CONTACTS;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_IDENTIFICATION_INVALID;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_INACTIVE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.CLIENT_NOT_FOUND;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.validateClient;
 
 @RequiredArgsConstructor
 public class ClientUseCase {
     private final ContactGateway contactGateway;
+    private static final String REGEX_NUMBER = "^\\(\\+\\d{1,4}+\\)";
+    private static final String REGEX_PREFIX = "\\)\\d++$";
+
+    private String getPhone(Map<String, Contact> contacts){
+        try {
+            return contacts.get(SMS).getValue().split(REGEX_NUMBER)[1];
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e){
+            return  "";
+        }
+
+    }
+
+    private String getPrefix(Map<String, Contact> contacts){
+        try {
+            return contacts.get(SMS).getValue().split(REGEX_PREFIX)[0].substring(1);
+        } catch (StringIndexOutOfBoundsException | NullPointerException e){
+            return  "";
+        }
+
+    }
 
     private Mono<Message> validateDataContact(Message message) {
         return Mono.just(message)
@@ -33,13 +58,15 @@ public class ClientUseCase {
                 .filter(contact -> !contact.getPrevious())
                 .collectMap(Contact::getContactMedium)
                 .filter(contacts -> !contacts.isEmpty())
-                .doOnNext(contacts -> message.setPhone(contacts.get(SMS) != null ? contacts.get(SMS).getValue() : ""))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)))
                 .doOnNext(contacts -> message.setPush(contacts.get(PUSH) != null))
                 .doOnNext(contacts -> message.setMail(contacts.get(MAIL) != null ? contacts.get(MAIL).getValue() : ""))
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)))
+                .doOnNext(contacts -> message.setPhone(getPhone(contacts)))
+                .doOnNext(contacts -> message.setPhoneIndicator(getPrefix(contacts)))
                 .thenReturn(message);
     }
-    public Mono<Message> validateClientInformation(Message message){
+
+    public Mono<Message> validateClientInformation(Message message) {
         return Mono.just(message)
                 .filter(Message::getRetrieveInformation)
                 .flatMap(this::validateDataContact)

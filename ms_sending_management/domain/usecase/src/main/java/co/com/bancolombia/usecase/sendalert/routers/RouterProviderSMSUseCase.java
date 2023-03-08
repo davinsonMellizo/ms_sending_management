@@ -18,7 +18,9 @@ import static co.com.bancolombia.commons.constants.Constants.NOT_SENT;
 import static co.com.bancolombia.commons.constants.Constants.SUCCESS;
 import static co.com.bancolombia.commons.constants.Medium.SMS;
 import static co.com.bancolombia.commons.constants.TypeLogSend.SEND_220;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.*;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_CONTACT;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.INVALID_MESSAGE;
+import static co.com.bancolombia.commons.enums.BusinessErrorMessage.REQUIRED_PRIORITY;
 import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.isValidMobile;
 
 @RequiredArgsConstructor
@@ -32,17 +34,18 @@ public class RouterProviderSMSUseCase {
 
     private Mono<Response> sendSMS(Message message, Alert alert, Response response) {
         return Mono.just(Sms.builder()
-                        .logKey(message.getLogKey())
+                        .trackId(message.getLogKey())
                         .priority(alert.getPriority())
-                        .to(Sms.To.builder().phoneNumber(message.getPhone())
-                                .phoneIndicator(message.getPhoneIndicator()).build())
+                        .destination(Sms.To.builder().phoneNumber(message.getPhone())
+                                .prefix(message.getPhoneIndicator()).build())
                         .message(alert.getMessage())
                         .provider(alert.getProviderSms())
-                        .urlForShortening(message.getUrl())
+                        .url(message.getUrl())
                         .build())
                 .flatMap(commandGateway::sendCommandAlertSms)
                 .thenReturn(response);
     }
+
     public Mono<Response> sendAlertToSMS(Alert alert, Message message) {
         return Mono.just(message)
                 .filter(isValidMobile)
@@ -51,7 +54,7 @@ public class RouterProviderSMSUseCase {
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_MESSAGE)))
                 .filter(message1 -> Objects.nonNull(alert.getPriority()))
                 .switchIfEmpty(Mono.error(new BusinessException(REQUIRED_PRIORITY)))
-                .map(message1 -> new Response(0, SUCCESS))
+                .map(message1 -> new Response(0, SUCCESS, SMS, alert.getId()))
                 .flatMap(response -> logUseCase.sendLogSMS(message, alert, SEND_220, response))
                 .flatMap(response -> sendSMS(message, alert, response));
     }
@@ -60,9 +63,9 @@ public class RouterProviderSMSUseCase {
         return Mono.just(pMessage)
                 .filter(validatePreference)
                 .flatMap(message -> sendAlertToSMS(alert, message))
-                .switchIfEmpty(Mono.just(new Response(1, NOT_SENT)))
+                .switchIfEmpty(Mono.just(new Response(1, NOT_SENT, SMS, alert.getId())))
                 .onErrorResume(e -> logUseCase.sendLogSMS(pMessage, alert, SEND_220,
-                        new Response(1, e.getMessage())));
+                        new Response(1, e.getMessage(), SMS, alert.getId())));
     }
 
 }

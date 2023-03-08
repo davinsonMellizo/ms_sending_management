@@ -1,7 +1,6 @@
 package co.com.bancolombia.api.log;
 
 import co.com.bancolombia.api.ApiProperties;
-import co.com.bancolombia.api.BaseIntegrationTest;
 import co.com.bancolombia.api.commons.handlers.ExceptionHandler;
 import co.com.bancolombia.api.services.log.HandlerLog;
 import co.com.bancolombia.api.services.log.RouterLog;
@@ -13,6 +12,7 @@ import co.com.bancolombia.log.LoggerBuilder;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,15 +34,21 @@ import static org.mockito.Mockito.when;
         ApiProperties.class,
         ExceptionHandler.class
 })
-public class LogRouterTest extends BaseIntegrationTest {
+public class LogRouterTest{
 
     @MockBean
     private LogUseCase useCase;
     @MockBean
     private LoggerBuilder loggerBuilder;
 
+    @Autowired
+    protected ApiProperties properties;
+
+    @Autowired
+    protected WebTestClient webTestClient;
+
     @Test
-    public void findAllContactsByClient() {
+    void findAllContactsByClient() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.just(List.of()));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")
@@ -51,8 +57,9 @@ public class LogRouterTest extends BaseIntegrationTest {
         spec.expectStatus().isOk();
         verify(useCase).findLogsByDate(any());
     }
+
     @Test
-    public void findAllContactsByClientTechExc() {
+    void findAllContactsByClientTechExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new TechnicalException(TechnicalExceptionEnum.FIND_LOG_ERROR)));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")
@@ -60,8 +67,9 @@ public class LogRouterTest extends BaseIntegrationTest {
                 .exchange();
         spec.expectStatus().is5xxServerError();
     }
+
     @Test
-    public void findAllContactsByClientBisExc() {
+    void findAllContactsByClientBisExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new BusinessException(BusinessErrorMessage.INVALID_DATA)));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")
@@ -71,7 +79,7 @@ public class LogRouterTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void findAllContactsByClientThrExc() {
+    void findAllContactsByClientThrExc() {
         when(useCase.findLogsByDate(any())).thenReturn(Mono.error(new Throwable("Error")));
         final WebTestClient.ResponseSpec spec = webTestClient.get().uri(properties.getLog())
                 .header("document-number", "1061772353")

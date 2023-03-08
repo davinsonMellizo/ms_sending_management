@@ -47,7 +47,7 @@ class SendingUseCaseTest {
 
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -74,7 +74,7 @@ class SendingUseCaseTest {
     }
 
     @Test
-    void alertSendingManager(){
+    void alertSendingManager() {
         Response response = new Response();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.just(response));
         when(routerProviderPushUseCase.routeAlertPush(any(), any())).thenReturn(Mono.just(response));
@@ -84,12 +84,13 @@ class SendingUseCaseTest {
         when(alertUseCase.getAlertsByTransactions(any())).thenReturn(Flux.just(alert));
         when(clientUseCase.validateClientInformation(any())).thenReturn(Mono.just(message));
 
-        StepVerifier.create(sendingUseCase.alertSendingManager(List.of(message)))
+        StepVerifier.create(sendingUseCase.sendAlertManager(List.of(message)))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
-    void alertSendingManagerByAlert(){
+    void alertSendingManagerByAlert() {
         message.setTransactionCode("");
         Response response = new Response();
         when(routerProviderMailUseCase.routeAlertMail(any(), any())).thenReturn(Mono.just(response));
@@ -99,7 +100,8 @@ class SendingUseCaseTest {
         when(alertUseCase.getAlert(any())).thenReturn(Mono.just(alert));
         when(clientUseCase.validateClientInformation(any())).thenReturn(Mono.just(message));
 
-        StepVerifier.create(sendingUseCase.alertSendingManager(List.of(message)))
+        StepVerifier.create(sendingUseCase.sendAlertManager(List.of(message)))
+                .expectNextCount(1)
                 .verifyComplete();
     }
 }

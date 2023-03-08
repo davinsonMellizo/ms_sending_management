@@ -31,12 +31,12 @@ class RabbitMQConfigHelperTest {
     }
 
     @Test
-    void connectionRabbitWhenSecretExistTest(){
+    void connectionRabbitWhenSecretExistTest() {
         when(secretsManager.getSecret(anyString(), any())).thenReturn(properties());
         assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
     }
 
-    private RabbitMQConnectionProperties properties(){
+    private RabbitMQConnectionProperties properties() {
         RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
         properties.setHostname("any-host");
         properties.setUsername("this-is-for-test");

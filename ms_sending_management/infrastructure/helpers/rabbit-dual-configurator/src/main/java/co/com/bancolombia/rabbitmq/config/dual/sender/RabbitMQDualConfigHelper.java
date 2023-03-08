@@ -52,9 +52,9 @@ public class RabbitMQDualConfigHelper {
                                                                  BrokerConfigProps brokerConfigProps,
                                                                  RabbitProperties rabbitProperties,
                                                                  ConnectionFactory factory,
-                                                                 MessageConverter converter){
+                                                                 MessageConverter converter) {
         final ConnectionFactoryProvider provider = () -> factory;
-        var senderOptions =  buildSenderOptions(provider, rabbitProperties);
+        var senderOptions = buildSenderOptions(provider, rabbitProperties);
         ReactiveMessageSender sender = messageSender(converter, brokerConfigProps, senderOptions);
 
         return new RabbitDirectAsyncGateway(config, router, sender, props.getDirectMessagesExchangeName(), converter);
@@ -65,7 +65,7 @@ public class RabbitMQDualConfigHelper {
     }
 
     @Bean
-    public ConnectionFactory connectionFactoryProvider(){
+    public ConnectionFactory connectionFactoryProvider() {
         RabbitMQConnectionProperties properties = rabbitProperties();
         final var factory = new ConnectionFactory();
         var map = PropertyMapper.get();

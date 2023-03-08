@@ -25,6 +25,7 @@ public class UtilParameters {
                 .flatMap(alert1 -> replaceParameter(alert, message))
                 .switchIfEmpty(Mono.just(alert));
     }
+
     private Mono<Alert> replaceParameter(Alert alert, Message message) {
         return Mono.just(message.getParameters().values())
                 .map(ArrayList::new)
@@ -34,7 +35,7 @@ public class UtilParameters {
                 .map(ArrayList::new)
                 .flatMapMany(Flux::fromIterable)
                 .flatMap(parameter -> validateParameter(alert.getMessage(), parameter))
-                .map(parameter -> alert.getMessage().replace("<C"+parameter.getKey()+">", parameter.getValue()))
+                .map(parameter -> alert.getMessage().replace("<C" + parameter.getKey() + ">", parameter.getValue()))
                 .doOnNext(alert::setMessage)
                 .then(Mono.just(alert))
                 .switchIfEmpty(Mono.just(alert))
@@ -43,17 +44,17 @@ public class UtilParameters {
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_PARAMETER)));
     }
 
-    private Mono<Map.Entry<Integer, String>> validateParameter(String message, Map.Entry<Integer, String> pParameter){
+    private Mono<Map.Entry<Integer, String>> validateParameter(String message, Map.Entry<Integer, String> pParameter) {
         return Mono.just(pParameter)
-                .filter(parameter -> message.contains("<C"+parameter.getKey()+">"))
+                .filter(parameter -> message.contains("<C" + parameter.getKey() + ">"))
                 .switchIfEmpty(Mono.error(new BusinessException(INVALID_PARAMETER)));
     }
 
-    private Mono<Alert>  setParameters(Alert alert, Message message){
+    private Mono<Alert> setParameters(Alert alert, Message message) {
         return Mono.just(new HashMap<String, String>())
                 .doOnNext(parameters -> parameters.put("message", alert.getMessage()))
                 .doOnNext(message::setParameters)
                 .thenReturn(alert);
-        }
+    }
 
 }

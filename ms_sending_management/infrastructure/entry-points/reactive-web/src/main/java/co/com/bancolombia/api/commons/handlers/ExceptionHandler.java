@@ -59,7 +59,7 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
                         .domain(request.path())
                         .build())
                 .doAfterTerminate(() -> logger.error(throwable))
-                .flatMap(error ->  ResponseUtil.responseFail(error.getHttpStatus(), error));
+                .flatMap(error -> ResponseUtil.responseFail(error.getHttpStatus(), error));
     }
 
     private Mono<Error> buildErrorResponse(TechnicalException ex) {

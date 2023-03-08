@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.test.StepVerifier;
 
-
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +40,7 @@ class JobExecutorTest {
     private ArgumentCaptor<StartJobRunRequest> glueJobCaptor;
 
     @BeforeEach
-    void init(){
+    void init() {
         when(properties.getJobName()).thenReturn("job");
     }
 
@@ -51,7 +50,7 @@ class JobExecutorTest {
                 TechnicalExceptionEnum.ERROR_GLUE_ETL_AWS_SDK));
         StepVerifier.create(jobExecutor.retrieveLogsS3(createHistoricalFilterWithAllFields()))
                 .expectErrorMatches(throwable -> throwable instanceof TechnicalException
-                        && ((TechnicalException)throwable).getException()
+                        && ((TechnicalException) throwable).getException()
                         .equals(TechnicalExceptionEnum.ERROR_GLUE_ETL_AWS_SDK))
                 .verify();
     }
@@ -61,7 +60,7 @@ class JobExecutorTest {
         Filters historicalFilter = Filters.builder().transactionIdentifier("request_id").endDate(LocalDateTime.now()).build();
         StepVerifier.create(jobExecutor.retrieveLogsS3(historicalFilter))
                 .expectErrorMatches(throwable -> throwable instanceof TechnicalException
-                        && ((TechnicalException)throwable).getException()
+                        && ((TechnicalException) throwable).getException()
                         .equals(TechnicalExceptionEnum.ERROR_GLUE_ETL_MISSING_MANDATORY_ARGUMENTS))
                 .verify();
     }
@@ -71,7 +70,7 @@ class JobExecutorTest {
         Filters historicalFilter = Filters.builder().startDate(LocalDateTime.now().minusDays(1)).transactionIdentifier("request_id").build();
         StepVerifier.create(jobExecutor.retrieveLogsS3(historicalFilter))
                 .expectErrorMatches(throwable -> throwable instanceof TechnicalException
-                        && ((TechnicalException)throwable).getException()
+                        && ((TechnicalException) throwable).getException()
                         .equals(TechnicalExceptionEnum.ERROR_GLUE_ETL_MISSING_MANDATORY_ARGUMENTS))
                 .verify();
     }

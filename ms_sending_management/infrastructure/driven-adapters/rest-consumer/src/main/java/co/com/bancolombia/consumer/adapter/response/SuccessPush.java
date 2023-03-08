@@ -17,7 +17,7 @@ public class SuccessPush {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class SendMessageResponse{
+    public static class SendMessageResponse {
         private String applicationCode;
         private String categoryId;
         private String message;
@@ -27,7 +27,7 @@ public class SuccessPush {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class Data{
+    public static class Data {
         private SendMessageResponse sendMessageResponse;
     }
 }

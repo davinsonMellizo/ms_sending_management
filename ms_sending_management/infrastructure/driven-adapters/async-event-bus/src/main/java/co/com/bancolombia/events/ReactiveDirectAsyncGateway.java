@@ -25,14 +25,14 @@ public class ReactiveDirectAsyncGateway implements CommandGateway {
     @Override
     public Mono<Response> sendCommandAlertSms(Sms sms) {
         var command = new Command<>(SEND_ALERT_SMS, UUID.randomUUID().toString(), sms);
-        return gateway.sendCommand(command,TARGET_NAME_SMS)
+        return gateway.sendCommand(command, TARGET_NAME_SMS)
                 .then(Mono.empty());
     }
 
     @Override
     public Mono<Response> sendCommandAlertEmail(Mail mail) {
         var command = new Command<>(SEND_ALERT_EMAIL, UUID.randomUUID().toString(), mail);
-        return gateway.sendCommand(command,TARGET_NAME_EMAIL)
+        return gateway.sendCommand(command, TARGET_NAME_EMAIL)
                 .then(Mono.empty());
     }
 

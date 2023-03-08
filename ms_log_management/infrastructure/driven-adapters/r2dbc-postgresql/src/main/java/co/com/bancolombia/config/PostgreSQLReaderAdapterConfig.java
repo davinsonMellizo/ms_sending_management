@@ -16,19 +16,19 @@ import org.springframework.r2dbc.core.DatabaseClient;
 @Configuration
 @RequiredArgsConstructor
 @EnableR2dbcRepositories(entityOperationsRef = "readerR2dbcEntityOperations",
-        basePackages={"co.com.bancolombia.log.reader"})
+        basePackages = {"co.com.bancolombia.log.reader"})
 public class PostgreSQLReaderAdapterConfig {
 
     @Bean("Reader")
-    public ConnectionFactory initializer(@Qualifier("buildConnectionReaderConfiguration")
-                                             final ConnectionFactoryOptions options) {
+    public ConnectionFactory initializer(
+            @Qualifier("buildConnectionReaderConfiguration") final ConnectionFactoryOptions options) {
         return ConnectionFactories.get(options);
     }
 
     @Bean
-    public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader")ConnectionFactory connectionFactory) {
+    public R2dbcEntityOperations readerR2dbcEntityOperations(@Qualifier("Reader") ConnectionFactory connectionFactory) {
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
+        var databaseClient = DatabaseClient.create(connectionFactory);
         return new R2dbcEntityTemplate(databaseClient, PostgresDialect.INSTANCE);
     }
 

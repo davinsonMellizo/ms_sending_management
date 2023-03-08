@@ -32,7 +32,7 @@ class RestClientTest {
         mockServer.url(getBaseUrl(mockServer.getPort()));
     }
 
-    public static String getBaseUrl(int port){
+    public static String getBaseUrl(int port) {
         return String.format(HOST, port);
     }
 

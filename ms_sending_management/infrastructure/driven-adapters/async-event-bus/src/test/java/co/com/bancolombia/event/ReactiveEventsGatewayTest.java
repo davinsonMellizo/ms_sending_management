@@ -23,7 +23,7 @@ class ReactiveEventsGatewayTest {
 
     @InjectMocks
     private ReactiveDirectAsyncGateway reactiveDirectAsyncGateway;
-    
+
     @Mock
     private DirectAsyncGateway directAsyncGateway;
 
@@ -44,7 +44,6 @@ class ReactiveEventsGatewayTest {
     void sendEventEMAILTest() {
         StepVerifier.create(reactiveDirectAsyncGateway.sendCommandAlertEmail(new Mail())).verifyComplete();
     }
-
 
 
 }

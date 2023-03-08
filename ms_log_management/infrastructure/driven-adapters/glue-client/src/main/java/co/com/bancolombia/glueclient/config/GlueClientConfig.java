@@ -18,11 +18,11 @@ public class GlueClientConfig {
     @Bean
     public AWSGlue getGlueClient() {
         var builder = AWSGlueClient.builder();
-        if(Objects.nonNull(awsProperties.getEndpoint())){
+        if (Objects.nonNull(awsProperties.getEndpoint())) {
             var configuration =
                     new AwsClientBuilder.EndpointConfiguration(awsProperties.getEndpoint(), awsProperties.getRegion());
             return builder.withEndpointConfiguration(configuration).build();
-        }else{
+        } else {
             return builder.withRegion(awsProperties.getRegion()).build();
         }
     }
