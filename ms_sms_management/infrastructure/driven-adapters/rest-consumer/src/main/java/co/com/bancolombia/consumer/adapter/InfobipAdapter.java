@@ -1,6 +1,5 @@
 package co.com.bancolombia.consumer.adapter;
 
-import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.RestClientForm;
 import co.com.bancolombia.consumer.adapter.response.*;
@@ -15,14 +14,10 @@ import co.com.bancolombia.model.token.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_EXCEPTION;
 
 @Log
 @Repository

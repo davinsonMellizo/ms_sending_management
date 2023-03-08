@@ -69,7 +69,7 @@ adapters:
       endpointTemplate: http://localhost:8071/api/v1/templater/message
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
-    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
+    secret-rabbit-dual: alertas-local-secretrabbit-dual-CNX
     #secret-inalambria: ${SECRET-INALAMBRIA}
     cache-size: 300
     cache-time: 2

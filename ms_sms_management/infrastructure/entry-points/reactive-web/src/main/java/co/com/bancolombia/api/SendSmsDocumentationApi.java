@@ -1,6 +1,6 @@
 package co.com.bancolombia.api;
 
-import co.com.bancolombia.api.DTO.AlertDTO;
+import co.com.bancolombia.api.dto.AlertDTO;
 import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
