@@ -81,7 +81,7 @@ public class TemplateAdapterTest {
                 .create(templateAdapter.findTemplateEmail(alert))
                 .expectError()
                 .verify();
-    }
+    } 
 
 
 

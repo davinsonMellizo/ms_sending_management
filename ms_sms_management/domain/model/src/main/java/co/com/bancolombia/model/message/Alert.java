@@ -21,7 +21,7 @@ public class Alert extends Request {
     private String urlForShortening;
     private String provider;
     private String category;
-    private String logKey;
+    private String trackId;
     private Boolean isFlash;
     private Boolean isPremium;
     private Boolean isLongMessage;

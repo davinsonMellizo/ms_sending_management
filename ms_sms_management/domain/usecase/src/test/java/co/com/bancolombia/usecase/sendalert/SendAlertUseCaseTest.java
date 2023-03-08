@@ -55,7 +55,7 @@ class SendAlertUseCaseTest {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", "bancolombia", ""));
         alert.setMessage("text to send");
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
         templateSms.setBodyText("Message ");
         response.setCode(1);
         response.setDescription("description");

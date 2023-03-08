@@ -18,7 +18,7 @@ public class LogUseCase {
         return Mono.just(sendLog)
                 .filter(Boolean::booleanValue)
                 .map(e-> Log.builder()
-                        .logKey(alert.getLogKey())
+                        .logKey(alert.getTrackId())
                         .logType(SEND_230)
                         .medium(medium)
                         .contact(alert.getDestination().getPrefix()+alert.getDestination().getPhoneNumber())

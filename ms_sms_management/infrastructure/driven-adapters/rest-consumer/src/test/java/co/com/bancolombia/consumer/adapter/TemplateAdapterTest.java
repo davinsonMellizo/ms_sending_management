@@ -51,7 +51,7 @@ class TemplateAdapterTest {
         Map <String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
         alert.setTemplate(new Template( parameters, "Compra"));
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
     }
 
     @Test

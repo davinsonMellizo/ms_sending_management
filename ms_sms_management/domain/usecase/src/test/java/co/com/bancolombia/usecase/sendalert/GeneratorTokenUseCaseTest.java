@@ -54,7 +54,7 @@ class GeneratorTokenUseCaseTest {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", "bancolombia", ""));
         alert.setMessage("text to send");
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
         alert.setPriority("1");
 
         tokens.add("tokenTest");

@@ -31,7 +31,7 @@ class LogUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alert.setLogKey(UUID.randomUUID().toString());
+        alert.setTrackId(UUID.randomUUID().toString());
         alert.setProvider("INA");
         alert.setDestination(Alert.To.builder().phoneNumber("number").prefix("123").build());
         response.setCode(1);
