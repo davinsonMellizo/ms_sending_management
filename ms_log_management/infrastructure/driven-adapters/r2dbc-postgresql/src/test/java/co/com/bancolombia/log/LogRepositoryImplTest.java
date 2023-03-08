@@ -15,9 +15,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(SpringExtension.class)
@@ -44,7 +49,24 @@ class LogRepositoryImplTest {
     }
 
     @Test
-    void findLog() {
+    void findLogTest() {
+        when(repositoryReader.findAllLogByFilters(anyString(), anyString(), anyString(), anyString(), anyString(),
+                any(), any())).thenReturn(Flux.just(new Log()));
+
+        logRepositoryImplement.findLog(QueryLog.builder()
+                        .consumer("").contactValue("").documentNumber("").documentType("")
+                        .endDate(LocalDateTime.now()).endDate(LocalDateTime.now()).provider("")
+                        .build())
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void findLogErrorTest() {
+        when(repositoryReader.findAllLogByFilters(anyString(), anyString(), anyString(), anyString(), anyString(),
+                any(), any())).thenReturn(Flux.error(new Throwable()));
+
         logRepositoryImplement.findLog(QueryLog.builder()
                         .consumer("").contactValue("").documentNumber("").documentType("")
                         .endDate(LocalDateTime.now()).endDate(LocalDateTime.now()).provider("")
