@@ -1,6 +1,6 @@
 {
   "priority": "1",
-  "to" : {
+  "destination" : {
     "phoneIndicator" :"57",
     "phoneNumber":"3058880797"
   },
@@ -15,8 +15,9 @@
   "message": "Bancolombia le informa el retiro por 100 En la fecha ${name}. gracias.",
   "urlForShortening": "https://www.google.com/?hl=es",
   "provider": "MAS",
-  "logKey": "123456",
+  "trackId": "123456",
   "category": "agregar",
   "isFlash" : false,
-  "isPremium": false
+  "isPremium": false,
+  "isLongMessage": false
 }
