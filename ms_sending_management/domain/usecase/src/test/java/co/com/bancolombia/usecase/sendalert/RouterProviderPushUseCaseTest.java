@@ -76,6 +76,7 @@ class RouterProviderPushUseCaseTest {
                 .description("success").code(200)
                 .build()));
         when(logUseCase.sendLogPush(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
+
         StepVerifier.create(routerProviderPushUseCase.routeAlertPush(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

@@ -4,9 +4,7 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
-import co.com.bancolombia.model.provider.Provider;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderMailUseCase;
@@ -68,8 +66,6 @@ class RouterProviderMailUseCaseTest {
 
     @Test
     void routeAlertMailTest() {
-        Remitter remitter = Remitter.builder().mail("bancolombia@com.co").build();
-        Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
                 .templateName("template")
@@ -86,7 +82,6 @@ class RouterProviderMailUseCaseTest {
 
     @Test
     void routeAlertMailErrorTest() {
-        Provider provider = Provider.builder().id("MAS").build();
         Alert alert = Alert.builder()
                 .push("SI")
                 .providerMail("TOD")

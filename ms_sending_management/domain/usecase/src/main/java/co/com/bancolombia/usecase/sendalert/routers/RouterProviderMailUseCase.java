@@ -5,14 +5,12 @@ import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Mail;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.message.Recipient;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.message.Template;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.function.Predicate;
 
 import static co.com.bancolombia.commons.constants.Constants.NOT_SENT;
@@ -45,8 +43,6 @@ public class RouterProviderMailUseCase {
     }
 
     public Mono<Mail> buildMail(Message message, Alert alert) {
-        ArrayList<Recipient> recipients = new ArrayList<>();
-        recipients.add(new Recipient(message.getMail()));
         return Mono.just(Mail.builder()
                 .logKey(message.getLogKey())
                 .provider(alert.getProviderMail())
@@ -73,5 +69,7 @@ public class RouterProviderMailUseCase {
                 .onErrorResume(e -> logUseCase.sendLogMAIL(message, alert, SEND_220,
                         new Response(1, e.getMessage(), MAIL, alert.getId())))
                 .switchIfEmpty(Mono.just(new Response(1, NOT_SENT, MAIL, alert.getId())));
+
     }
+
 }

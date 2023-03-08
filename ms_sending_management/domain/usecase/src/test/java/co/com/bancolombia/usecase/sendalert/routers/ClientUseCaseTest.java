@@ -69,6 +69,7 @@ class ClientUseCaseTest {
         Contact contactEmail = Contact.builder().contactMedium("MAIL").value("").idState(1).previous(false)
                 .stateClient(1).documentNumber(10000000000L).documentType(1).consumer("SVP")
                 .build();
+
         when(contactGateway.findAllContactsByClient(any())).thenReturn(Flux.just(contactSms, contactEmail, contactPush));
 
         StepVerifier.create(clientUseCase.validateClientInformation(message))

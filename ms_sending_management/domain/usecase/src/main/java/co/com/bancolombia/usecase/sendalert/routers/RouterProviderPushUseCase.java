@@ -48,6 +48,7 @@ public class RouterProviderPushUseCase {
         Map<String, String> headers = new HashMap<>();
         headers.put("message-id", message.getLogKey());
         message.setPush(true);
+
         return logUseCase.sendLogPush(message, alert, SEND_220, response)
                 .map(message1 -> Push.builder()
                         .applicationCode(message.getApplicationCode())
