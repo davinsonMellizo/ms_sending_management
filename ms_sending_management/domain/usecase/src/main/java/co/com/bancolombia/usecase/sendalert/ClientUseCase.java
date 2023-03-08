@@ -7,6 +7,7 @@ import co.com.bancolombia.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static co.com.bancolombia.commons.constants.Medium.MAIL;
@@ -22,6 +23,26 @@ import static co.com.bancolombia.usecase.sendalert.commons.ValidateData.validate
 @RequiredArgsConstructor
 public class ClientUseCase {
     private final ContactGateway contactGateway;
+    private static final String REGEX_NUMBER = "^\\(\\+\\d{1,4}+\\)";
+    private static final String REGEX_PREFIX = "\\)\\d++$";
+
+    private String getPhone(Map<String, Contact> contacts){
+        try {
+            return contacts.get(SMS).getValue().split(REGEX_NUMBER)[1];
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e){
+            return  "";
+        }
+
+    }
+
+    private String getPrefix(Map<String, Contact> contacts){
+        try {
+            return contacts.get(SMS).getValue().split(REGEX_PREFIX)[0].substring(1);
+        } catch (StringIndexOutOfBoundsException | NullPointerException e){
+            return  "";
+        }
+
+    }
 
     private Mono<Message> validateDataContact(Message message) {
         return Mono.just(message)
@@ -37,10 +58,11 @@ public class ClientUseCase {
                 .filter(contact -> !contact.getPrevious())
                 .collectMap(Contact::getContactMedium)
                 .filter(contacts -> !contacts.isEmpty())
-                .doOnNext(contacts -> message.setPhone(contacts.get(SMS) != null ? contacts.get(SMS).getValue() : ""))
+                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)))
                 .doOnNext(contacts -> message.setPush(contacts.get(PUSH) != null))
                 .doOnNext(contacts -> message.setMail(contacts.get(MAIL) != null ? contacts.get(MAIL).getValue() : ""))
-                .switchIfEmpty(Mono.error(new BusinessException(CLIENT_HAS_NO_CONTACTS)))
+                .doOnNext(contacts -> message.setPhone(getPhone(contacts)))
+                .doOnNext(contacts -> message.setPhoneIndicator(getPrefix(contacts)))
                 .thenReturn(message);
     }
 
