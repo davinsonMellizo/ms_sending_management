@@ -78,7 +78,7 @@ adapters:
   entries:
     reactive-web:
       path-base: ${PATH_BASE}
-      send: ${SEND}
+      send-sms: ${SEND_SMS}
 aws:
   region: "${REGION_AWS}"
   nameSecretBucketSsl: "${NAME-SECRET-BUCKET-SSL}"
