@@ -76,7 +76,6 @@ adapters:
     endpoint: http://localhost:4566
   entries:
     reactive-web:
-      path-base: /api/v1/sending-management
       send-sms: /send-sms
 aws:
   region: us-east-1
