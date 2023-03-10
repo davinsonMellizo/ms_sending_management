@@ -1,5 +1,3 @@
-package karate.processed_to_contacts;
-
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import net.masterthought.cucumber.Configuration;
@@ -14,12 +12,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ProcessedContactsRunner {
+public class ManagementAcceptanceTest {
 
     @Test
-    void central_repository() {
-
-        Results results = Runner.path("classpath:karate/processed_to_contacts")
+    void testAll() {
+        Results results = Runner.path("classpath:karate")
                 .outputCucumberJson(true)
                 .tags("~@ignore")
                 .parallel(1);
@@ -32,7 +29,7 @@ public class ProcessedContactsRunner {
         Collection<File> jsonFiles = FileUtils.listFiles(new File(karateOutputPath), new String[]{"json"}, true);
         List<String> jsonPaths = new ArrayList<>(jsonFiles.size());
         jsonFiles.forEach(file -> jsonPaths.add(file.getAbsolutePath()));
-        Configuration config = new Configuration(new File("build"), "central repository");
+        Configuration config = new Configuration(new File("build"), "alertas etl");
         ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, config);
         reportBuilder.generateReports();
     }

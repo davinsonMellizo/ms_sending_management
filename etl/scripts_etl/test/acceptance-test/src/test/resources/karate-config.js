@@ -12,6 +12,7 @@ function () {
                 bucketNameSource: 'nu0154001-alertas-dev-glue-source-data',
                 bucketNameTarget: 'nu0154001-alertas-dev-glue-processed-data',
                 massivePrefix: 'test',
+                massiveErrorPrefix: 'test/error/formato_masivos',
                 emailPrefix: 'email/test/formato_masivos',
                 smsPrefix: 'sms/test/formato_masivos',
                 pushPrefix: 'push/test/formato_masivos'
