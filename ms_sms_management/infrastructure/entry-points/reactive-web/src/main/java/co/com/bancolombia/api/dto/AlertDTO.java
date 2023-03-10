@@ -30,7 +30,7 @@ public class AlertDTO extends Request {
     @NotBlank(message = "{constraint.not_blank}")
     private String priority;
     @NotNull(message = "{constraint.not_null}")
-    private @Valid Alert.To destination;
+    private @Valid Alert.Destination destination;
     @Builder.Default
     private String message = "";
     @Builder.Default

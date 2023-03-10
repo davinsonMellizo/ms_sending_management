@@ -49,7 +49,7 @@ class SendAlertUseCaseTest {
 
     @BeforeEach
     public void init() {
-        alert.setDestination(Alert.To.builder().phoneNumber("number").prefix("123").build());
+        alert.setDestination(Alert.Destination.builder().phoneNumber("number").prefix("123").build());
         alert.setUrlForShortening("URl");
         alert.setProvider("MAS");
         ArrayList<Parameter> parameters = new ArrayList<>();

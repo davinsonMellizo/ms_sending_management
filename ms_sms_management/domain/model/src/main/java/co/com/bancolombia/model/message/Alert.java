@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Alert extends Request {
 
     private String priority;
-    private To destination;
+    private Destination destination;
     private String message;
     private Template template;
     private String urlForShortening;
@@ -30,7 +30,7 @@ public class Alert extends Request {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder(toBuilder = true)
-    public static class To implements Serializable {
+    public static class Destination implements Serializable {
         private String phoneNumber;
         private String prefix;
     }

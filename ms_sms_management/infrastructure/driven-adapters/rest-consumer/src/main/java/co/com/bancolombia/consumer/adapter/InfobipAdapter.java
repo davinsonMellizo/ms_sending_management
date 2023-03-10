@@ -2,8 +2,9 @@ package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.RestClientForm;
-import co.com.bancolombia.consumer.adapter.response.*;
 import co.com.bancolombia.consumer.adapter.response.Error;
+import co.com.bancolombia.consumer.adapter.response.ErrorInfobipSMS;
+import co.com.bancolombia.consumer.adapter.response.SuccessInfobipSMS;
 import co.com.bancolombia.consumer.adapter.response.model.TokenInfobipData;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.message.Response;
