@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.REQUIRED_MESSAGE_TEMPLATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BusinessExceptionTest {
+class BusinessExceptionTest {
 
     BusinessException businessException= new BusinessException(REQUIRED_MESSAGE_TEMPLATE);
 
     @Test
-    void BusinessExceptionTest(){
+    void BusinessETest(){
         assertThat(businessException).isNotNull();
     }
 

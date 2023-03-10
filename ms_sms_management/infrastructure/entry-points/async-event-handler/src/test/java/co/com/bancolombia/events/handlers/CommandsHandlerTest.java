@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.reactivecommons.api.domain.Command;
+import org.reactivecommons.async.commons.communications.Message;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -35,7 +37,7 @@ class CommandsHandlerTest {
 
     private Alert alert = new Alert();
     private Map<String, String> headers= Map.of("x-death", "count=1","retryNumber","1");
-    //private Command<Message> command = new  Command<>("alert", "alert", message);
+    //private Command<Message> command = new Command<>("alert", "alert", "{}");
     BusinessException businessException = new BusinessException(TEMPLATE_NOT_FOUND);
     TechnicalException technicalException=new TechnicalException(TECHNICAL_EXCEPTION);
     @BeforeEach
@@ -49,7 +51,7 @@ class CommandsHandlerTest {
         MockitoAnnotations.initMocks(this);
     }
 
-   /* @Test
+    /*@Test
     void handlerSendAlertTest() {
         when(useCase.sendAlert(any())).thenReturn(Mono.empty());
         StepVerifier.create(commandsHandler.handleSendAlert(command))

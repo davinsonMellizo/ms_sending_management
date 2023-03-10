@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static co.com.bancolombia.commons.enums.TechnicalExceptionEnum.TECHNICAL_EXCEPTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TechnicalExceptionTest {
+class TechnicalExceptionTest {
 
 
     TechnicalException technicalException = new TechnicalException(TECHNICAL_EXCEPTION);
@@ -16,23 +16,23 @@ public class TechnicalExceptionTest {
 
 
     @Test
-    void  technicalExceptionTest (){
+    void  technicalETest (){
         assertThat(technicalException).isNotNull();
     }
     @Test
-    void  TechnicalExceptionMessTest (){
+    void  TechnicalEMessTest (){
         assertThat(technicalExceptionMess).isNotNull();
     }
     @Test
-    void  TechnicalExceptionMessCodeTest (){
+    void  TechnicalEMessCodeTest (){
         assertThat(technicalExceptionMessCode).isNotNull();
     }
     @Test
-    void  TechnicalExceptionMessCodTest (){
+    void  TechnicalEMessCodTest (){
         assertThat(technicalExceptionMessCod).isNotNull();
     }
     @Test
-    void  TechnicalExceptionTowTest (){
+    void  TechnicalETowTest (){
         assertThat(technicalExceptionTow).isNotNull();
     }
 

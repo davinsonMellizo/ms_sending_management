@@ -48,7 +48,7 @@ class GeneratorTokenUseCaseTest {
     private ArrayList<String> tokens = new ArrayList<>();
     @BeforeEach
     public void init() {
-        alert.setDestination(Alert.To.builder().phoneNumber("number").prefix("123").build());
+        alert.setDestination(Alert.Destination.builder().phoneNumber("number").prefix("123").build());
         alert.setUrlForShortening("");
         alert.setProvider("INA");
         ArrayList<Parameter> parameters = new ArrayList<>();

@@ -1,14 +1,12 @@
 {
   "priority": "1",
   "destination" : {
-    "phoneIndicator" :"57",
+    "prefix" :"57",
     "phoneNumber":"3058880797"
   },
   "template": {
     "parameters": {
-      "name": "nombre",
-      "value": "Rafael Becerra",
-      "type": "Esto es un mensaje de prueba"
+      "name": "nombre"
     },
     "name": "TEST_CREATE_MSG2"
   },
@@ -18,6 +16,6 @@
   "trackId": "123456",
   "category": "agregar",
   "isFlash" : false,
-  "isPremium": false,
-  "isLongMessage": false
+  "isLongMessage":false,
+  "isPremium": false
 }

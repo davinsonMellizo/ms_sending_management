@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public abstract class AbstractConverter {
-
+    
     @Value("${app.async.maxRetries}")
     private String maxRetries;
     private final ObjectMapper objectMapper;
