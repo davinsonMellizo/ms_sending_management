@@ -13,10 +13,10 @@ import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 
 public class LogDocumentationApi {
 
-    private final String TAG = "Log";
-    private final String ERROR = "Error";
-    private final String SUCCESSFUL = "successful";
-    private final String EXAMPLE = "2022-11-21T10:11:25.584569 Format: yyyy-MM-ddTHH:mm:ss.SSSSSS";
+    private static final String TAG = "Log";
+    private static final String ERROR = "Error";
+    private static final String SUCCESSFUL = "successful";
+    private static final String EXAMPLE = "2022-11-21T10:11:25.584569 Format: yyyy-MM-ddTHH:mm:ss.SSSSSS";
 
 
     protected Consumer<Builder> find() {
@@ -25,13 +25,13 @@ public class LogDocumentationApi {
                 .operationId("findLogs")
                 .summary("Find logs")
                 .description("Search for records less than a month old").tags(new String[]{TAG})
-                .parameter(createHeader(String.class,"", "document-number", "Document number"))
-                .parameter(createHeader(String.class,"", "document-type", "Document Type"))
-                .parameter(createHeader(String.class,"", "contact", "contact value"))
-                .parameter(createHeader(String.class,"", "consumer", "Consumer code"))
-                .parameter(createHeader(String.class,"", "provider", "Provider code"))
-                .parameter(createHeader(String.class,EXAMPLE, "start-date", "Initial search date"))
-                .parameter(createHeader(String.class,EXAMPLE, "end-date", "Search end date"))
+                .parameter(createHeader(String.class, "", "document-number", "Document number"))
+                .parameter(createHeader(String.class, "", "document-type", "Document Type"))
+                .parameter(createHeader(String.class, "", "contact", "contact value"))
+                .parameter(createHeader(String.class, "", "consumer", "Consumer code"))
+                .parameter(createHeader(String.class, "", "provider", "Provider code"))
+                .parameter(createHeader(String.class, EXAMPLE, "start-date", "Initial search date"))
+                .parameter(createHeader(String.class, EXAMPLE, "end-date", "Search end date"))
                 .response(responseBuilder().responseCode("200").description(SUCCESSFUL)
                         .implementationArray(Log.class))
                 .response(responseBuilder().responseCode("500").description(ERROR)

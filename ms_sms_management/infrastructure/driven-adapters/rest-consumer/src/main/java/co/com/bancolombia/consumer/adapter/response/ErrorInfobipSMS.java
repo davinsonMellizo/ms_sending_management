@@ -9,8 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorInfobipSMS {
-
     private SMSInfobip.RequestError requestError;
-
-
 }

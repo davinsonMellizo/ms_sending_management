@@ -4,7 +4,6 @@ import co.com.bancolombia.model.log.Log;
 import co.com.bancolombia.model.log.QueryLog;
 import co.com.bancolombia.model.log.gateways.LogGateway;
 import co.com.bancolombia.model.log.gateways.RetrieveLogsGateway;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LogUseCaseTest {
+class LogUseCaseTest {
 
     @InjectMocks
     private LogUseCase useCase;
@@ -32,7 +31,7 @@ public class LogUseCaseTest {
     private final Log log = new Log();
 
     @Test
-    public void saveLogTest() {
+    void saveLogTest() {
         when(logGateway.saveLog(any()))
                 .thenReturn(Mono.just(log));
         StepVerifier
@@ -43,7 +42,7 @@ public class LogUseCaseTest {
     }
 
     @Test
-    public void findLogHotTest() {
+    void findLogHotTest() {
         when(logGateway.findLog(any()))
                 .thenReturn(Mono.just(List.of(log)));
         QueryLog query = QueryLog.builder()

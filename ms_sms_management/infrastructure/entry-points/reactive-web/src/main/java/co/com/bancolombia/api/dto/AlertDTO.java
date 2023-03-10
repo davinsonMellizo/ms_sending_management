@@ -62,7 +62,6 @@ public class AlertDTO extends Request {
                 .provider(this.provider)
                 .trackId(this.trackId)
                 .category(this.category)
-                .category(this.category)
                 .isFlash(this.isFlash)
                 .isPremium(this.isPremium)
                 .isLongMessage(this.isLongMessage)

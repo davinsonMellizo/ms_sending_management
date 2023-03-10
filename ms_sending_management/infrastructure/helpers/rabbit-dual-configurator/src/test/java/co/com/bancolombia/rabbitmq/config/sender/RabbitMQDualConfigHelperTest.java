@@ -32,7 +32,7 @@ class RabbitMQDualConfigHelperTest {
 
     private final RabbitProperties properties = new RabbitProperties();
     private final BrokerConfigProps props = mock(BrokerConfigProps.class);
-    private final SyncSecretVault secretsManager =  mock(SyncSecretVault.class);
+    private final SyncSecretVault secretsManager = mock(SyncSecretVault.class);
     private RabbitMQDualConfigHelper config;
 
     private final BrokerConfig brokerConfig = mock(BrokerConfig.class);
@@ -73,7 +73,7 @@ class RabbitMQDualConfigHelperTest {
         Assertions.assertThat(factory).isNotNull();
     }
 
-    private RabbitMQConnectionProperties properties(){
+    private RabbitMQConnectionProperties properties() {
         RabbitMQConnectionProperties properties = new RabbitMQConnectionProperties();
         properties.setHostname("any-host");
         properties.setUsername("this-is-for-test");

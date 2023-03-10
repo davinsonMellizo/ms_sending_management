@@ -40,7 +40,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,prometheus"
+        include: "health, liveness, readiness"
       base-path: "/"
       path-mapping:
         health: "health"
@@ -77,7 +77,8 @@ adapters:
     endpoint: "http://localhost:4566"
   entries:
     reactive-web:
-      send-sms: /send-sms
+      path-base: ${PATH_BASE}
+      send-sms: ${SEND_SMS}
 aws:
   region: "${REGION_AWS}"
   nameSecretBucketSsl: "${NAME-SECRET-BUCKET-SSL}"

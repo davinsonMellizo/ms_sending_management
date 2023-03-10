@@ -1,28 +1,30 @@
 {
   "retrieveInformation": false,
-  "message":{
-    "parameters":{
-      "name": "Davinson"
+  "message": {
+    "parameters": {
+      "canal": "SVP",
+      "hora": "08:52:23",
+      "fecha": "2023-01-22"
     }
   },
-  "alertParameters":{
+  "alertParameters": {
     "alert": "120",
     "consumer": "SVP"
   },
   "recipients": [
     {
-      "identification":{
+      "identification": {
         "documentType": 0,
         "documentNumber": 2000100000
       },
-      "contacts":{
+      "contacts": {
         "mail": {
           "address": "dmellizo@bancolombia.com.co"
         },
         "sms": {
           "phone": "3217937584"
         },
-        "push":{
+        "push": {
           "applicationCode": ""
         }
       }

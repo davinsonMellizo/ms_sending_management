@@ -13,12 +13,11 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_11
 
     dependencies {
-        implementation 'io.projectreactor:reactor-core'
-        implementation 'io.projectreactor.addons:reactor-extra'
-        implementation platform('software.amazon.awssdk:bom:2.19.8') {
+        implementation platform("software.amazon.awssdk:bom:${awssdkVersion}") {
             force = true
         }
-
+        implementation 'io.projectreactor:reactor-core'
+        implementation 'io.projectreactor.addons:reactor-extra'
         testImplementation 'io.projectreactor:reactor-test'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -37,13 +36,6 @@ subprojects {
 
     test {
         useJUnitPlatform()
-    }
-
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        }
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)
@@ -65,7 +57,7 @@ jacoco {
     reportsDirectory = file("$buildDir/reports")
 }
 
-task jacocoMergedReport(type: JacocoReport) {
+tasks.register('jacocoMergedReport', JacocoReport) {
     dependsOn = subprojects.jacocoTestReport
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
@@ -86,5 +78,5 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named('wrapper') {
     gradleVersion = '7.6'
-    distributionUrl = "https://artifactory.apps.bancolombia.com/gradlew/gradle-7.6-bin.zip"
+    distributionUrl = 'https://artifactory.apps.bancolombia.com/gradlew/gradle-7.6-bin.zip'
 }

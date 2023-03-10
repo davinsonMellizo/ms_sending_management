@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RabbitMQConfigHelperTest {
+class RabbitMQConfigHelperTest {
     @Mock
     private SyncSecretVault secretsManager;
     @Mock
@@ -23,7 +23,7 @@ public class RabbitMQConfigHelperTest {
     private RabbitMQConfigHelper rabbitMQConfigHelper;
 
     @Test
-    public void connectionRabbitWhenSecretExistTest() {
+    void connectionRabbitWhenSecretExistTest() {
         when(secretsManager.getSecret(any(), any())).thenReturn(properties());
         assertThat(rabbitMQConfigHelper.getConnectionFactoryProvider()).isNotNull();
     }

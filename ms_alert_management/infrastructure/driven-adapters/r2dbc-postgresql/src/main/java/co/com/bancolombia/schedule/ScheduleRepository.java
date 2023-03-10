@@ -17,7 +17,7 @@ public interface ScheduleRepository extends ReactiveCrudRepository<ScheduleData,
 
     @Query("SELECT id_campaign, id_consumer, provider, id_remitter, default_template, description, source_path, " +
             "attachment, attachment_path, state, creation_user, created_date, modified_user, modified_date, " +
-            "data_enrichment FROM campaign WHERE id_campaign = $1 AND id_consumer = $2")
+            "data_enrichment, priority FROM campaign WHERE id_campaign = $1 AND id_consumer = $2")
     Mono<CampaignData> findCampaignById(String idCampaign, String idConsumer);
 
     @Query("SELECT id, id_campaign, id_consumer, schedule_type, start_date, start_time, end_date, end_time, " +

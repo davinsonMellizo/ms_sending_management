@@ -16,7 +16,7 @@ public class PostgresqlConnectionPropertiesTest {
     public static final Integer port = 5432;
 
     @Test
-    public void propertiesPlainObject() {
+    void propertiesPlainObject() {
         properties = new PostgresqlConnectionProperties();
         properties.setHost(host);
         properties.setDbname(database);

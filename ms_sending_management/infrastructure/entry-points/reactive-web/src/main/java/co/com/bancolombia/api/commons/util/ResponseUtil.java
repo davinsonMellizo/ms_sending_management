@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @UtilityClass
@@ -15,7 +14,7 @@ public class ResponseUtil {
         return buildResponse(HttpStatus.OK, response);
     }
 
-    public static <T> Mono<ServerResponse> responseFail(HttpStatus status,T body) {
+    public static <T> Mono<ServerResponse> responseFail(HttpStatus status, T body) {
         return buildResponse(status, body);
     }
 

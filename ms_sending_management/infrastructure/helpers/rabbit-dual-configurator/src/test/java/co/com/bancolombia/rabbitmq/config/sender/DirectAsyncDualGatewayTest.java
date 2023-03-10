@@ -45,7 +45,7 @@ class DirectAsyncDualGatewayTest {
     void sendCommandTest() {
         when(sender.sendWithConfirm(any(), anyString(), anyString(), any(), anyBoolean())).thenReturn(Mono.empty());
         Command command = new Command<>("name", "id", "data");
-        StepVerifier.create(rabbitDirectAsyncGateway.sendCommand(command,"")).verifyComplete();
+        StepVerifier.create(rabbitDirectAsyncGateway.sendCommand(command, "")).verifyComplete();
     }
 
     @Test
@@ -54,7 +54,7 @@ class DirectAsyncDualGatewayTest {
         From from = new From();
         from.setReplyID("");
         from.setCorrelationID("");
-        StepVerifier.create(rabbitDirectAsyncGateway.reply("",from)).verifyComplete();
+        StepVerifier.create(rabbitDirectAsyncGateway.reply("", from)).verifyComplete();
     }
 
     @Test
@@ -63,6 +63,6 @@ class DirectAsyncDualGatewayTest {
         when(router.register(anyString())).thenReturn(Mono.empty());
         when(messageConverter.readValue(any(), any())).thenReturn("mensaje");
         AsyncQuery asyncQuery = new AsyncQuery("name", "id");
-        StepVerifier.create(rabbitDirectAsyncGateway.requestReply(asyncQuery,"", String.class)).verifyComplete();
+        StepVerifier.create(rabbitDirectAsyncGateway.requestReply(asyncQuery, "", String.class)).verifyComplete();
     }
 }

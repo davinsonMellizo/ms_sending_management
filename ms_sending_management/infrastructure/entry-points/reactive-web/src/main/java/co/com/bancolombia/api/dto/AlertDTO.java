@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,8 +45,8 @@ public class AlertDTO {
                         .alert(alertParameters.getAlert())
                         .transactionCode(alertParameters.getTransactionCode())
                         .amount(alertParameters.getAmount())
-                        .url(recipient.getContacts().getSms().getUrl())
-                        .phone(recipient.getContacts().getSms().getPhone())
+                        .url(recipient.getContacts().getSms().getUrlForShortening())
+                        .phone(recipient.getContacts().getSms().getPhoneNumber())
                         .phoneIndicator(recipient.getContacts().getSms().getPhoneIndicator())
                         .mail(recipient.getContacts().getMail().getAddress())
                         .parameters(message.getParameters())

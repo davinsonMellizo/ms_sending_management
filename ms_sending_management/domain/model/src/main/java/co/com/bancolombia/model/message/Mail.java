@@ -37,7 +37,7 @@ public class Mail extends Request {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder(toBuilder = true)
-    public static class Message implements Serializable{
+    public static class Message implements Serializable {
         private String subject;
         private String body;
     }

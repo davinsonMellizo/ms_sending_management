@@ -56,8 +56,7 @@ public class InfobipAdapter implements InfobipGateway {
         formData.add("grant_type", "client_credentials");
         return Mono.just(new TokenInfobipData())
                 .flatMap(requestTokenInfo->clientToken.post(properties.getResources().getEndpointInfobipToken(),
-                        formData,TokenInfobipData.class,null))
-                .flatMap(TokenInfobipData::toModel)
-                .onErrorResume(e-> Mono.error(new RuntimeException(e.getMessage())));
+                        formData,TokenInfobipData.class,ErrorTokenInfobipRequest.class))
+                .flatMap(TokenInfobipData::toModel);
     }
 }

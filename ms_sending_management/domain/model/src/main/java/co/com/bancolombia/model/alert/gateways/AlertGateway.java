@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface AlertGateway {
     Mono<Alert> findAlertById(String id);
+
     Flux<Alert> findAlertByTrx(Message message);
 }

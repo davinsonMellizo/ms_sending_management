@@ -56,7 +56,6 @@ jobs:
           extraProperties: |
             sonar.sources=$(Build.SourcesDirectory)/$(artifactName)/src/main/java
             sonar.junit.reportPaths=$(Build.SourcesDirectory)/$(artifactName)/applications/app-service/build/test-results/test
-            sonar.branch.name=$(Build.SourceBranchName)
             sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/$(artifactName)/build/jacoco/report.xml
 
       - task: Gradle@2

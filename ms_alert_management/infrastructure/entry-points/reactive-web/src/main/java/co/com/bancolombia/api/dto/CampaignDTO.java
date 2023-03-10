@@ -2,6 +2,7 @@ package co.com.bancolombia.api.dto;
 
 import co.com.bancolombia.api.commons.validators.constraints.CheckBooleanValueForFieldRequired;
 import co.com.bancolombia.api.commons.validators.constraints.JSONFieldNotNull;
+import co.com.bancolombia.api.commons.validators.constraints.ProviderFormat;
 import co.com.bancolombia.api.commons.validators.groups.OnCreate;
 import co.com.bancolombia.api.commons.validators.groups.OnDelete;
 import co.com.bancolombia.api.commons.validators.groups.OnUpdate;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
         message = "attachmentPath no debe ser nulo",
         groups = {OnCreate.class, OnUpdate.class}
 )
+
 public class CampaignDTO extends DTO<Campaign> {
 
     @Size(min = 1, max = 50, groups = {OnCreate.class, OnUpdate.class, OnDelete.class},
@@ -45,7 +48,8 @@ public class CampaignDTO extends DTO<Campaign> {
     @NotNull(groups = {OnCreate.class, OnUpdate.class, OnDelete.class}, message = "no debe ser nulo")
     private String idConsumer;
 
-    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe se ser nulo o vacío")
+    @JSONFieldNotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo o vacio")
+    @ProviderFormat(groups = {OnCreate.class, OnUpdate.class})
     private JsonNode provider;
 
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "debe ser mayor que {value}")
@@ -74,6 +78,11 @@ public class CampaignDTO extends DTO<Campaign> {
 
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
     private Boolean dataEnrichment;
+
+    @Range(min = 0, max = 5, groups = {OnCreate.class, OnUpdate.class},
+            message = "el valor debe estar entre {min} y {max}")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "no debe ser nulo")
+    private Integer priority;
 
     @Pattern(regexp = "^0$|^1$", message = "debe ser 0 o 1", groups = {OnCreate.class, OnUpdate.class})
     private String state;
@@ -109,6 +118,7 @@ public class CampaignDTO extends DTO<Campaign> {
                 .attachment(this.attachment != null && this.attachment)
                 .attachmentPath(this.attachmentPath)
                 .dataEnrichment(this.dataEnrichment != null && this.dataEnrichment)
+                .priority(this.priority)
                 .state(this.state)
                 .creationUser(this.creationUser)
                 .modifiedUser(this.modifiedUser)

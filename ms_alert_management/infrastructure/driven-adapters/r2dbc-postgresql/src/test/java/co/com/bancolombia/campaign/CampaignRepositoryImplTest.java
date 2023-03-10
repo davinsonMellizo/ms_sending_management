@@ -44,6 +44,7 @@ class CampaignRepositoryImplTest {
         campaign.setAttachmentPath("attachment_path");
         campaign.setState("1");
         campaign.setCreatedDate(NOW);
+        campaign.setPriority(1);
         campaign.setCreationUser("lugomez");
 
         schedule.setIdCampaign(campaign.getIdCampaign());

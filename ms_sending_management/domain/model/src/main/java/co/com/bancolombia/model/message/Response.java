@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class Response {
     private Integer code;
     private String description;
+    private String medium;
+    private String alert;
 
     public Response(Integer code, BusinessErrorMessage message) {
         this.code = code;

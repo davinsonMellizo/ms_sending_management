@@ -1,32 +1,31 @@
 {
   "retrieveInformation": true,
-  "message":{
+  "message": {
     "template": "compra",
     "priority": 1,
-    "parameters":{
+    "parameters": {
       "mensaje": "Su transaccion fue exitosa"
     }
   },
-  "alertParameters":{
+  "alertParameters": {
     "consumer": "SVP",
     "transactionCode": "1234",
     "amount": 50000000
   },
   "recipients": [
     {
-      "identification":{
+      "identification": {
         "documentType": 1,
         "documentNumber": 2000000000
       },
-      "contacts":{
-
+      "contacts": {
         "mail": {
           "address": "davinson.mellizo@bancolomco.com.co"
         },
         "sms": {
           "phone": "3217937584"
         },
-        "push":{
+        "push": {
           "applicationCode": ""
         }
       }

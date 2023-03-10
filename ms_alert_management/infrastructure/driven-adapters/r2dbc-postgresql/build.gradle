@@ -4,12 +4,10 @@ dependencies {
     implementation project(':commons')
     implementation project(':secrets-manager')
     implementation 'org.springframework:spring-context'
-    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
     implementation 'io.r2dbc:r2dbc-postgresql'
-    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-    implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
-    implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
-    implementation 'io.r2dbc:r2dbc-pool:1.0.0.RELEASE'
-    implementation 'io.r2dbc:r2dbc-h2:0.9.0.M1'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    implementation 'io.r2dbc:r2dbc-pool'
+    implementation 'io.r2dbc:r2dbc-h2'
 }

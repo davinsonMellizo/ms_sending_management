@@ -1,7 +1,6 @@
 package co.com.bancolombia.usecase.sendalert;
 
 import co.com.bancolombia.model.alert.Alert;
-import co.com.bancolombia.model.document.Document;
 import co.com.bancolombia.model.document.gateways.DocumentGateway;
 import co.com.bancolombia.model.message.Message;
 import co.com.bancolombia.model.message.Response;
@@ -39,7 +38,7 @@ class RouterProviderPushUseCaseTest {
     private Message message = new Message();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -56,7 +55,7 @@ class RouterProviderPushUseCaseTest {
         message.setLogKey("testKey");
         message.setPush(true);
         ArrayList<String> preferences = new ArrayList<>();
-        preferences.add("SMS");
+        preferences.add("PUSH");
         message.setPreferences(preferences);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", "bancolombia");
@@ -65,9 +64,10 @@ class RouterProviderPushUseCaseTest {
 
 
     @Test
-    void routeAlertPushTest(){
+    void routeAlertPushTest() {
         Alert alert = Alert.builder()
                 .push("SI")
+                .message("message")
                 .providerSms("ALM")
                 .idCategory(1)
                 .priority(0)
@@ -75,9 +75,9 @@ class RouterProviderPushUseCaseTest {
         when(pushGateway.sendPush(any())).thenReturn(Mono.just(Response.builder()
                 .description("success").code(200)
                 .build()));
-        when(logUseCase.sendLogPush(any(),any(), anyString(), any())).thenReturn(Mono.just(new Response()));
-        when(documentGateway.getDocument(anyString())).thenReturn(Mono.just(Document.builder().code("testCode").build()));
-        StepVerifier.create(routerProviderPushUseCase.sendPush(message, alert))
+        when(logUseCase.sendLogPush(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
+
+        StepVerifier.create(routerProviderPushUseCase.routeAlertPush(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();
     }

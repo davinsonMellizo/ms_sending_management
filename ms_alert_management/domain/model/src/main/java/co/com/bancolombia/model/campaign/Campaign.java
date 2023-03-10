@@ -27,12 +27,12 @@ public class Campaign {
     private boolean attachment;
     private String attachmentPath;
     private Boolean dataEnrichment;
+    private Integer priority;
     private String state;
     private String creationUser;
     private LocalDateTime createdDate;
     private String modifiedUser;
     private LocalDateTime modifiedDate;
-
     @With
     private List<Schedule> schedules;
 

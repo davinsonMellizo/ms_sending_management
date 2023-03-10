@@ -3,9 +3,8 @@ package co.com.bancolombia.usecase.sendalert;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;
 import co.com.bancolombia.model.message.Message;
-import co.com.bancolombia.model.provider.Provider;
+import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.model.provider.gateways.ProviderGateway;
-import co.com.bancolombia.model.remitter.Remitter;
 import co.com.bancolombia.model.remitter.gateways.RemitterGateway;
 import co.com.bancolombia.usecase.log.LogUseCase;
 import co.com.bancolombia.usecase.sendalert.routers.RouterProviderMailUseCase;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -43,7 +41,7 @@ class RouterProviderMailUseCaseTest {
     private Message message = new Message();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         message.setRetrieveInformation(true);
         message.setDocumentType(0);
         message.setDocumentNumber(1061781558L);
@@ -67,16 +65,14 @@ class RouterProviderMailUseCaseTest {
 
 
     @Test
-    void routeAlertMailTest(){
-        Remitter remitter = Remitter.builder().mail("bancolombia@com.co").build();
-        Provider provider = Provider.builder().id("MAS").build();
+    void routeAlertMailTest() {
         Alert alert = Alert.builder()
                 .push("SI")
                 .templateName("template")
                 .providerMail("TOD")
                 .remitter("davinson@bancolombia.com.co")
                 .build();
-        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogMAIL(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         when(commandGateway.sendCommandAlertEmail(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
@@ -85,14 +81,13 @@ class RouterProviderMailUseCaseTest {
     }
 
     @Test
-    void routeAlertMailErrorTest(){
-        Provider provider = Provider.builder().id("MAS").build();
+    void routeAlertMailErrorTest() {
         Alert alert = Alert.builder()
                 .push("SI")
                 .providerMail("TOD")
                 .remitter("bancolombia@bancolombia.com.co")
                 .build();
-        when(logUseCase.sendLogMAIL(any(),any(), anyString(), any())).thenReturn(Mono.empty());
+        when(logUseCase.sendLogMAIL(any(), any(), anyString(), any())).thenReturn(Mono.just(new Response()));
         StepVerifier.create(routerProviderMailUseCase.routeAlertMail(message, alert))
                 .expectNextCount(1)
                 .verifyComplete();

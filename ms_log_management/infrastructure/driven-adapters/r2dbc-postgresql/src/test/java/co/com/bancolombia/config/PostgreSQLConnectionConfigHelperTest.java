@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PostgreSQLConnectionConfigHelperTest {
+class PostgreSQLConnectionConfigHelperTest {
 
     public static final String host = "example.com";
     public static final String database = "database-name";
@@ -47,12 +47,12 @@ public class PostgreSQLConnectionConfigHelperTest {
 
     @Test
     void getConnectionReadConfig() throws SecretException {
-        assertNotNull(helper.buildConnectionReaderConfiguration("schema","host", 1));
+        assertNotNull(helper.buildConnectionReaderConfiguration("schema", "host", 1));
     }
 
     @Test
     void getConnectionWriterConfig() throws SecretException {
-        assertNotNull(helper.buildConnectionWriterConfiguration("schema",1));
+        assertNotNull(helper.buildConnectionWriterConfiguration("schema", 1));
     }
 
 }

@@ -16,12 +16,13 @@ import org.springframework.context.annotation.FilterType;
         },
         useDefaultFilters = false)
 public class UseCasesConfig {
-        @Bean
-        public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
-                return new OpenAPI()
-                        .schema("", new Schema())
-                        .info(new Info().title("Alerts - Log Management").version(appVersion)
-                                .description("Logs management micro service"));
-        }
+    @Bean
+    public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
+        var schema = new Schema<String>();
+        return new OpenAPI()
+            .schema("", schema)
+            .info(new Info().title("Alerts - Log Management").version(appVersion)
+                .description("Logs management micro service"));
+    }
 
 }

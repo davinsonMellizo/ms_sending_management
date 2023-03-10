@@ -51,21 +51,19 @@ class PostgreSQLWAdapterConfigTest {
         assertNotNull(adapterConfig.writerR2dbcEntityOperations(pool));
     }
 
-    public ConnectionFactoryOptions buildConnectionWriterConfiguration(){
+    public ConnectionFactoryOptions buildConnectionWriterConfiguration() {
 
         return ConnectionFactoryOptions.builder()
-                .option(DRIVER,"postgresql")
+                .option(DRIVER, "postgresql")
                 .option(HOST, "localhost")
                 .option(PORT, 1010)
-                .option(USER,"userName")
-                .option(PASSWORD,"password")
+                .option(USER, "userName")
+                .option(PASSWORD, "password")
                 .option(DATABASE, "alertas")
                 .option(Option.valueOf("sslmode"), "disable")
                 .option(Option.valueOf("schema"), "alertas")
                 .build();
     }
-
-
 
 
 }
