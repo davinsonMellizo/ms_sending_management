@@ -4,6 +4,7 @@ import co.com.bancolombia.consumer.RestClient;
 import co.com.bancolombia.consumer.RestClientForm;
 import co.com.bancolombia.consumer.adapter.response.Error;
 import co.com.bancolombia.consumer.adapter.response.ErrorInfobipSMS;
+import co.com.bancolombia.consumer.adapter.response.ErrorTokenInfobipRequest;
 import co.com.bancolombia.consumer.adapter.response.SuccessInfobipSMS;
 import co.com.bancolombia.consumer.adapter.response.model.TokenInfobipData;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
@@ -56,7 +57,7 @@ public class InfobipAdapter implements InfobipGateway {
         formData.add("grant_type", "client_credentials");
         return Mono.just(new TokenInfobipData())
                 .flatMap(requestTokenInfo->clientToken.post(properties.getResources().getEndpointInfobipToken(),
-                        formData,TokenInfobipData.class,ErrorTokenInfobipRequest.class))
+                        formData,TokenInfobipData.class, ErrorTokenInfobipRequest.class))
                 .flatMap(TokenInfobipData::toModel);
     }
 }
