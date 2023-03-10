@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class HandlerRegistryConfigurationTest {
+class HandlerRegistryConfigurationTest {
     @InjectMocks
     HandlerRegistryConfiguration configuration;
     @Mock
