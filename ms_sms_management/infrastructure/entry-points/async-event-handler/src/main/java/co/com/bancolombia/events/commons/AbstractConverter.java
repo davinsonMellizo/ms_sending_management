@@ -17,8 +17,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public abstract class AbstractConverter {
-
-    private String ERROR="Failed to convert Message content";
+    
     @Value("${app.async.maxRetries}")
     private String maxRetries;
     private final ObjectMapper objectMapper;
@@ -32,7 +31,7 @@ public abstract class AbstractConverter {
             value.setHeaders(headers);
             return Mono.just(value);
         } catch (IOException e) {
-            throw new MessageConversionException(ERROR, e);
+            throw new MessageConversionException("Failed to convert Message content", e);
         }
     }
 
