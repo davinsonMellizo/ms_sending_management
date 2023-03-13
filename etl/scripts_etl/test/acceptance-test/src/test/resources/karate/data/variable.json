@@ -2,6 +2,7 @@
   "bucketNameSource": "#{bucket-scripts-data}#",
   "bucketNameTarget": "#{bucket-processed-data}#",
   "massivePrefix": "#{massive-prefix}#",
+  "massiveErrorPrefix": "#{massive-error-prefix}#",
   "emailPrefix": "#{email-prefix}#",
   "smsPrefix": "#{sms-prefix}#",
   "pushPrefix": "#{push-prefix}#"
