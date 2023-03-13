@@ -1,6 +1,7 @@
 package co.com.bancolombia.events.commons;
 
 import co.com.bancolombia.Request;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -21,6 +22,7 @@ public abstract class AbstractConverter {
     @Value("${app.async.maxRetries}")
     private String maxRetries;
     private final ObjectMapper objectMapper;
+    private final LoggerBuilder loggerBuilder;
 
     protected <T extends Request> Mono<T> converterMessage(Message message, Class<T> valueClass) {
         try {
@@ -31,8 +33,9 @@ public abstract class AbstractConverter {
             value.setHeaders(headers);
             return Mono.just(value);
         } catch (IOException e) {
-            throw new MessageConversionException("Failed to convert Message content", e);
+            loggerBuilder.error(new Throwable("Failed to convert Message content"+e));
         }
+        return null;
     }
 
     private Map<String, Object> addHeader(Map<String, Object> headers, String key, String value) {
