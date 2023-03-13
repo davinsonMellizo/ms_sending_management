@@ -3,6 +3,7 @@ package co.com.bancolombia.events.handlers;
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import co.com.bancolombia.events.commons.AbstractConverter;
+import co.com.bancolombia.model.log.LoggerBuilder;
 import co.com.bancolombia.model.message.Alert;
 import co.com.bancolombia.model.message.Response;
 import co.com.bancolombia.usecase.log.LogUseCase;
@@ -24,8 +25,9 @@ public class CommandsHandler extends AbstractConverter {
             (alert.getHeaders().containsKey("x-death")) && ((Object) alert.getHeaders().get("x-death")).toString()
                     .contains("count=" + alert.getHeaders().get("retryNumber"));
 
-    public CommandsHandler(ObjectMapper objectMapper, SendAlertUseCase useCase, LogUseCase logUseCase) {
-        super(objectMapper);
+    public CommandsHandler(ObjectMapper objectMapper, LoggerBuilder loggerBuilder, SendAlertUseCase useCase,
+                           LogUseCase logUseCase) {
+        super(objectMapper,loggerBuilder);
         this.useCase = useCase;
         this.logUseCase = logUseCase;
     }
@@ -67,7 +69,5 @@ public class CommandsHandler extends AbstractConverter {
                         .description(throwable.getMessage()).build(), true))
                 .switchIfEmpty(Mono.error(throwable));
     }
-
-
 
 }

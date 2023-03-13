@@ -71,7 +71,7 @@ adapters:
     secret-rabbit: alertas-local-secretrabbit-CNX
     secret-rabbit-dual: alertas-local-secretrabbit-dual-CNX
     #secret-inalambria: ${SECRET-INALAMBRIA}
-    cache-size: 300
+    cache-size:  300
     cache-time: 2
     endpoint: http://localhost:4566
   entries:

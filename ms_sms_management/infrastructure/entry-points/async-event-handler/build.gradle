@@ -1,6 +1,7 @@
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
+    implementation project(':log')
     implementation 'org.reactivecommons:async-commons-rabbit-starter:1.0.5'
     implementation 'org.springframework:spring-context'
 }

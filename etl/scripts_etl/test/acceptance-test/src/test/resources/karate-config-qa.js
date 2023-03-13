@@ -13,6 +13,7 @@ function () {
                 bucketNameSource: envData.bucketNameSource,
                 bucketNameTarget: envData.bucketNameTarget,
                 massivePrefix: envData.massivePrefix,
+                massiveErrorPrefix: envData.massiveErrorPrefix,
                 emailPrefix: envData.emailPrefix,
                 smsPrefix: envData.smsPrefix,
                 pushPrefix: envData.pushPrefix

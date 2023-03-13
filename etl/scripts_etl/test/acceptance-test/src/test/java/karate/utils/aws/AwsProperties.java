@@ -1,5 +1,6 @@
-package karate.infrastructure.aws;
+package karate.utils.aws;
 
+import karate.utils.aws.s3.S3Properties;
 import lombok.Builder;
 import lombok.Value;
 
@@ -16,8 +17,8 @@ public class AwsProperties {
     @SuppressWarnings("unchecked")
     public static AwsProperties fromMap(Map<String, Object> properties) {
         return AwsProperties.builder()
-                .region((String) properties.get("region"))
-                .endpoint((String) properties.get("endpoint"))
+                .region(properties.get("region").toString())
+                .endpoint(properties.get("endpoint").toString())
                 .s3(S3Properties.fromMap((Map<String, Object>) properties.get("s3")))
                 .build();
     }
@@ -26,7 +27,4 @@ public class AwsProperties {
         return getEndpoint() != null && !getEndpoint().isEmpty();
     }
 
-    public boolean hasRegion() {
-        return getRegion() != null && !getRegion().isEmpty();
-    }
 }
