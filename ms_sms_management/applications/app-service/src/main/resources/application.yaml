@@ -77,7 +77,6 @@ adapters:
     endpoint: "http://localhost:4566"
   entries:
     reactive-web:
-      path-base: ${PATH_BASE}
       send-sms: ${SEND_SMS}
 aws:
   region: "${REGION_AWS}"
