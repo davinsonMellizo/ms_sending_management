@@ -77,7 +77,7 @@ adapters:
     endpoint: "http://localhost:4566"
   entries:
     reactive-web:
-      send-sms: ${SEND_SMS}
+      send-sms: "${SEND_SMS}"
 aws:
   region: "${REGION_AWS}"
   nameSecretBucketSsl: "${NAME-SECRET-BUCKET-SSL}"

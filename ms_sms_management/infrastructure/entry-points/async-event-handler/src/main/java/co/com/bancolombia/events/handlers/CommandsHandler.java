@@ -25,7 +25,8 @@ public class CommandsHandler extends AbstractConverter {
             (alert.getHeaders().containsKey("x-death")) && ((Object) alert.getHeaders().get("x-death")).toString()
                     .contains("count=" + alert.getHeaders().get("retryNumber"));
 
-    public CommandsHandler(ObjectMapper objectMapper, LoggerBuilder loggerBuilder, SendAlertUseCase useCase, LogUseCase logUseCase) {
+    public CommandsHandler(ObjectMapper objectMapper, LoggerBuilder loggerBuilder, SendAlertUseCase useCase,
+                           LogUseCase logUseCase) {
         super(objectMapper,loggerBuilder);
         this.useCase = useCase;
         this.logUseCase = logUseCase;
