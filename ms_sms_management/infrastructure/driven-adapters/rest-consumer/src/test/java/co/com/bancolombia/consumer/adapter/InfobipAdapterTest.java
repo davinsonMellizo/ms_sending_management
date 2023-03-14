@@ -69,6 +69,21 @@ class InfobipAdapterTest {
     }
 
     @Test
+    void sendSmsErrorTokenInfobipTest() {
+        when(client.post(anyString(), any(), any(), any()))
+                .thenReturn(Mono.error(Error.builder()
+                        .httpsStatus(500)
+                        .data(new ErrorTokenInfobipRequest
+                                ("Access denied",SMSInfobip.RequestError.builder().serviceException
+                                        (SMSInfobip.ServiceException.builder().text("Access denied")
+                                                .build()).build()))
+                        .build()));
+        StepVerifier.create(infobipAdapter.sendSMS(new SMSInfobip()))
+                .expectError()
+                .verify();
+    }
+
+    @Test
     void sendSmsErrorWebClientTest() {
         when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
