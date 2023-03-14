@@ -11,12 +11,12 @@ from pyspark.context import SparkContext
 from pyspark.sql.functions import col, explode, from_json, lit, map_keys, regexp_replace
 from pyspark.sql.types import MapType, StringType
 
-
 # Glue Context
 args = getResolvedOptions(sys.argv, ["JOB_NAME", "env", "source_file_path"])
 
 glueContext = GlueContext(SparkContext.getOrCreate())
 spark = glueContext.spark_session
+logger = glueContext.get_logger()
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
@@ -34,7 +34,7 @@ TEMPLATE_TYPE = "masiv-template/html"
 
 email_df = spark.read.options(header=True, delimiter=";").csv(f"s3://{BUCKET_SOURCE}/{source_file_path}")
 
-print("EMAIL_COUNT: ", email_df.count() - 1)
+logger.info(f"EMAIL_COUNT: {email_df.count() - 1}")
 
 first_row = email_df.first()
 
@@ -65,5 +65,3 @@ key_cols = list(map(lambda x: col("Data").getItem(x).alias(str(x)), keys_list))
 email_df = email_df.select(
     "correo", "remitente", "Asunto", "tipo", "plantilla", *key_cols, "Attachment", "Url", "Message"
 )
-
-

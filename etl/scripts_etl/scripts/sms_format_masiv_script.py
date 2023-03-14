@@ -10,12 +10,12 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from pyspark.sql.functions import concat, regexp_replace
 
-
 # Glue Context
 args = getResolvedOptions(sys.argv, ["JOB_NAME", "env", "source_file_path"])
 
 glueContext = GlueContext(SparkContext.getOrCreate())
 spark = glueContext.spark_session
+logger = glueContext.get_logger()
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
@@ -42,7 +42,7 @@ def get_processed_file_path() -> str:
 
 sms_df = spark.read.options(header=True, delimiter=";").csv(f"s3://{BUCKET_SOURCE}/{source_file_path}")
 
-print("SMS_COUNT: ", sms_df.count() - 1)
+logger.info(f"SMS_COUNT: {sms_df.count() - 1}")
 
 first_row = sms_df.first()
 
