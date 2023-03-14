@@ -1,21 +1,14 @@
 package co.com.bancolombia.consumer.adapter.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import co.com.bancolombia.model.message.SMSInfobip;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorTokenInfobipRequest {
-    private String Error;
-    private serviceException requestError;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class serviceException{
-        private String messageId;
-        private String text;
-    }
+    public String Error;
+    private SMSInfobip.RequestError requestError;
+
 }
