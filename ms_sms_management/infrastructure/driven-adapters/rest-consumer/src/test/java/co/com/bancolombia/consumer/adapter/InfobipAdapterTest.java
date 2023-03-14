@@ -1,11 +1,14 @@
 package co.com.bancolombia.consumer.adapter;
 
 import co.com.bancolombia.consumer.RestClient;
-import co.com.bancolombia.consumer.adapter.response.*;
+import co.com.bancolombia.consumer.RestClientForm;
 import co.com.bancolombia.consumer.adapter.response.Error;
+import co.com.bancolombia.consumer.adapter.response.ErrorInfobipSMS;
+import co.com.bancolombia.consumer.adapter.response.ErrorTokenInfobipRequest;
+import co.com.bancolombia.consumer.adapter.response.SuccessInfobipSMS;
 import co.com.bancolombia.consumer.config.ConsumerProperties;
 import co.com.bancolombia.model.message.SMSInfobip;
-import co.com.bancolombia.model.message.SMSMasiv;
+import co.com.bancolombia.model.token.Account;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,6 +34,13 @@ class InfobipAdapterTest {
     private ConsumerProperties properties;
     @Mock
     private RestClient<SMSInfobip, SuccessInfobipSMS> client;
+
+    @Mock
+    private RestClientForm<SMSInfobip,ErrorTokenInfobipRequest > clientToken;
+
+    @Mock
+    private Account account;
+
 
     @BeforeEach
     public void init() {
@@ -70,15 +79,17 @@ class InfobipAdapterTest {
 
     @Test
     void sendSmsErrorTokenInfobipTest() {
-        when(client.post(anyString(), any(), any(), any()))
+        when(account.getUsername()).thenReturn("aso");
+        when(account.getPassword()).thenReturn("123");
+        when(clientToken.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
-                        .httpsStatus(500)
+                        .httpsStatus(401)
                         .data(new ErrorTokenInfobipRequest
                                 ("Access denied",SMSInfobip.RequestError.builder().serviceException
                                         (SMSInfobip.ServiceException.builder().text("Access denied")
                                                 .build()).build()))
                         .build()));
-        StepVerifier.create(infobipAdapter.sendSMS(new SMSInfobip()))
+        StepVerifier.create(infobipAdapter.getToken(account))
                 .expectError()
                 .verify();
     }
