@@ -57,15 +57,15 @@ class InfobipAdapterTest {
     void sendSmsErrorInfobipTest() {
         when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(Error.builder()
-                        .httpsStatus(401)
+                        .httpsStatus(500)
                         .data(new ErrorInfobipSMS
                                 (SMSInfobip.RequestError.builder().serviceException
-                                        (SMSInfobip.ServiceException.builder().messageId("UNAUTHORIZED").text("Invalid login details")
+                                        (SMSInfobip.ServiceException.builder().text("Invalid login details")
                                                 .build()).build()))
                         .build()));
         StepVerifier.create(infobipAdapter.sendSMS(new SMSInfobip()))
-                .assertNext(response -> response.getDescription().equals("Invalid login details"))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
 
     @Test
@@ -73,8 +73,8 @@ class InfobipAdapterTest {
         when(client.post(anyString(), any(), any(), any()))
                 .thenReturn(Mono.error(new Throwable("123timeout")));
         StepVerifier.create(infobipAdapter.sendSMS(new SMSInfobip()))
-                .assertNext(response -> response.getDescription().contains("123"))
-                .verifyComplete();
+                .expectError()
+                .verify();
     }
 
 
