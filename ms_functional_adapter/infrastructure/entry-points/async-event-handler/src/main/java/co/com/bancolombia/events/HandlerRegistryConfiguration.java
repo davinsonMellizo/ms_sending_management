@@ -3,7 +3,7 @@ package co.com.bancolombia.events;
 import co.com.bancolombia.commons.utils.JsonUtils;
 import co.com.bancolombia.events.handlers.Handler;
 import co.com.bancolombia.events.model.ResourceQuery;
-import co.com.bancolombia.s3bucket.S3AsynOperations;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class HandlerRegistryConfiguration {
 
-    private final S3AsynOperations s3AsynOperations;
+    private final S3AsyncOperations s3AsyncOperations;
     private final Handler handler;
 
     @Bean
@@ -22,7 +22,7 @@ public class HandlerRegistryConfiguration {
                                         @Value("${aws.s3.bucket}") String bucketName) {
         HandlerRegistry register = HandlerRegistry.register();
         ResourceQuery resourceQuery = JsonUtils.stringToType(
-                s3AsynOperations.getFileAsString(bucketName, configMQKey).block(), ResourceQuery.class);
+                s3AsyncOperations.getFileAsString(bucketName, configMQKey).block(), ResourceQuery.class);
 
         resourceQuery.getData().forEach(resource -> handler.listenerMessage(resource, register));
         return register;

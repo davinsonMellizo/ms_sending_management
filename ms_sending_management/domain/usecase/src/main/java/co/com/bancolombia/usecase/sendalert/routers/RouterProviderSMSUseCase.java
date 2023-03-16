@@ -1,6 +1,5 @@
 package co.com.bancolombia.usecase.sendalert.routers;
 
-
 import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.model.alert.Alert;
 import co.com.bancolombia.model.events.gateways.CommandGateway;

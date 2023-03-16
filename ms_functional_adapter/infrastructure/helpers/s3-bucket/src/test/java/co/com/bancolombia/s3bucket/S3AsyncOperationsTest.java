@@ -20,9 +20,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class S3AsynOperationsTest {
+class S3AsyncOperationsTest {
     @InjectMocks
-    private S3AsynOperations s3AsynOperations;
+    private S3AsyncOperations s3AsyncOperations;
     @Mock
     private S3AsyncClient s3AsyncClient;
     private static final String bucketName = "bucket1";
@@ -37,7 +37,7 @@ class S3AsynOperationsTest {
     void getFileAsStringTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
-        StepVerifier.create(s3AsynOperations.getFileAsString(bucketName, ccdtKey))
+        StepVerifier.create(s3AsyncOperations.getFileAsString(bucketName, ccdtKey))
                 .expectNext("test").verifyComplete();
     }
 
@@ -45,7 +45,7 @@ class S3AsynOperationsTest {
     void getFileAsStringErrorTest(){
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(Mono.error(new Throwable("testError")).toFuture());
-        StepVerifier.create(s3AsynOperations.getFileAsString(bucketName, ccdtKey))
+        StepVerifier.create(s3AsyncOperations.getFileAsString(bucketName, ccdtKey))
                 .expectError()
                 .verify();
     }
@@ -54,7 +54,7 @@ class S3AsynOperationsTest {
     void getFileAsInputStreamTest() {
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(completableFuture);
-        StepVerifier.create(s3AsynOperations.getFileAsInputStream(bucketName, ccdtKey))
+        StepVerifier.create(s3AsyncOperations.getFileAsInputStream(bucketName, ccdtKey))
                 .expectNextMatches(v -> Objects.nonNull(v))
                 .verifyComplete();
     }
@@ -63,7 +63,7 @@ class S3AsynOperationsTest {
     void getFileAsInputStreamErrorTest(){
         when(s3AsyncClient.getObject(any(GetObjectRequest.class), any(ByteArrayAsyncResponseTransformer.class)))
                 .thenReturn(Mono.error(new Throwable("testError")).toFuture());
-        StepVerifier.create(s3AsynOperations.getFileAsInputStream(bucketName, ccdtKey))
+        StepVerifier.create(s3AsyncOperations.getFileAsInputStream(bucketName, ccdtKey))
                 .expectError()
                 .verify();
     }

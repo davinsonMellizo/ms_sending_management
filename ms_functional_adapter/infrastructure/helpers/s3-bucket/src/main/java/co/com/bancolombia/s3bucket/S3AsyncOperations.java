@@ -17,7 +17,7 @@ import static software.amazon.awssdk.core.ResponseBytes.fromByteArray;
 
 @Component
 @RequiredArgsConstructor
-public class S3AsynOperations {
+public class S3AsyncOperations {
 
     private final S3AsyncClient s3AsyncClient;
 

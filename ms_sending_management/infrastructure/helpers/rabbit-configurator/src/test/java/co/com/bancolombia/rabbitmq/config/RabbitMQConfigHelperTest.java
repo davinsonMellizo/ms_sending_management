@@ -18,9 +18,9 @@ import static org.mockito.Mockito.when;
 class RabbitMQConfigHelperTest {
     public static final String SECRET = "any-secret-dev";
 
-    private SyncSecretVault secretsManager = mock(SyncSecretVault.class);
+    private final SyncSecretVault secretsManager = mock(SyncSecretVault.class);
 
-    private RabbitMQConfigHelper rabbitMQConfigHelper = new RabbitMQConfigHelper(null, secretsManager);
+    private final RabbitMQConfigHelper rabbitMQConfigHelper = new RabbitMQConfigHelper(null, secretsManager);
 
     @BeforeEach
     public void init() throws NoSuchFieldException, IllegalAccessException {

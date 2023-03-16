@@ -24,3 +24,4 @@ jobs:
         inputs:
           PathtoPublish: 'etl/scripts_etl/test/acceptance-test'
           ArtifactName: AcceptanceTest
+        
