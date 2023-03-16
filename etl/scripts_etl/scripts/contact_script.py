@@ -135,7 +135,7 @@ def write_df(df: DataFrame, channel: str, is_df_error=False) -> None:
 
 
 def add_header_row(df: DataFrame, channel: str) -> DataFrame:
-    """Agregar fila con datos del consumidor y proveedor"""
+    """Add row with consumer and provider data"""
     if df.count() == 0:
         return df
 
@@ -343,5 +343,5 @@ write_df(email_df, CHANNEL_EMAIL)
 write_df(sms_df, CHANNEL_SMS)
 write_df(push_df, CHANNEL_PUSH)
 
-# Finalizar Job
+# Finish Job
 job.commit()
