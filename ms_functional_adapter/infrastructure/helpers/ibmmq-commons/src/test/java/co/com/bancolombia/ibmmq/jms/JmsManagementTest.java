@@ -3,7 +3,7 @@ package co.com.bancolombia.ibmmq.jms;
 import co.com.bancolombia.commons.config.AwsProperties;
 import co.com.bancolombia.ibmmq.model.QueueDto;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.s3bucket.S3AsynOperations;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import com.ibm.mq.jms.MQQueue;
 import com.ibm.mq.jms.MQTemporaryQueue;
 import com.ibm.msg.client.jms.JmsConnectionFactory;
@@ -51,7 +51,7 @@ class JmsManagementTest {
     @InjectMocks
     private JmsManagement management;
     @Mock
-    private S3AsynOperations s3AsynOperations;
+    private S3AsyncOperations s3AsyncOperations;
     @Mock
     private JmsExtConnectionFactory connectionFactory;
     @Mock
@@ -94,9 +94,9 @@ class JmsManagementTest {
     @BeforeEach
     public void init() {
         ReflectionTestUtils.setField(management, "exceptionListener", exceptionListener);
-        when(s3AsynOperations.getFileAsInputStream(any(), any()))
+        when(s3AsyncOperations.getFileAsInputStream(any(), any()))
                 .thenReturn(Mono.just(getInputStream("s3_config-listener-mq.json")));
-        when(s3AsynOperations.getFileAsString(any(), any()))
+        when(s3AsyncOperations.getFileAsString(any(), any()))
                 .thenReturn(Mono.just(loadFileConfig("s3_config-listener-mq.json")));
         when(connectionFactory.connectionFactory(any())).thenReturn(jmsConnectionFactory);
         try {

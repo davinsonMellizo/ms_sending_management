@@ -24,3 +24,15 @@ jobs:
         inputs:
           PathtoPublish: 'etl/scripts_etl/test/acceptance-test'
           ArtifactName: AcceptanceTest
+        
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Acceptance Test log'
+        inputs:
+          PathtoPublish: 'etl/scripts_etl/test-logs/acceptance-test'
+          ArtifactName: AcceptanceTestLogs
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Acceptance Test log sql'
+        inputs:
+          PathtoPublish: 'ms_log_management/deployment/sql_acceptance_test'
+          ArtifactName: AcceptanceTestLogsSQL
