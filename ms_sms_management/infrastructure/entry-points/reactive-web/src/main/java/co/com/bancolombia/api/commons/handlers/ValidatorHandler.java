@@ -1,5 +1,6 @@
 package co.com.bancolombia.api.commons.handlers;
 
+import co.com.bancolombia.commons.exceptions.BusinessException;
 import co.com.bancolombia.commons.exceptions.TechnicalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

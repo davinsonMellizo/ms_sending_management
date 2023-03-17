@@ -37,9 +37,11 @@ public class TemplateAdapter implements TemplateGateway {
                         .bodyHtml(response.getData().getMessageBody()).subject(response.getData().getMessageSubject())
                         .build())
                 .onErrorMap(e -> (e instanceof ErrorTemplate), e-> new TechnicalException(((ErrorTemplate)e)
-                        .getError().getTitle(),TEMPLATE_FIND_ERROR))
-                .onErrorMap(e-> new TechnicalException(e.getMessage(),TEMPLATE_FIND_ERROR))
-                .onErrorMap(e-> new Throwable(e.getMessage()));
+                        .getError().getReason(),TEMPLATE_FIND_ERROR))
+                .onErrorMap(e-> new TechnicalException(((ErrorTemplate)e)
+                        .getError().getReason(),TEMPLATE_FIND_ERROR))
+                .onErrorMap(e-> new Throwable(((ErrorTemplate)e)
+                        .getError().getReason()));
     }
 
     public MultiValueMap<String, String> createParams(String nameTemplate) {

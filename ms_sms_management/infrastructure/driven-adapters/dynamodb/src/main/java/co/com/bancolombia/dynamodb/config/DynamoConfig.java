@@ -32,7 +32,7 @@ public class DynamoConfig {
                     .dynamoDbClient(ddb)
                     .build();
         } catch (TechnicalException e) {
-            throw new TechnicalException(TechnicalExceptionEnum.SEND_LOG_SQS_ERROR);
+            throw new TechnicalException(TechnicalExceptionEnum.TECHNICAL_DYNAMO_EXCEPTION);
         }
     }
 
