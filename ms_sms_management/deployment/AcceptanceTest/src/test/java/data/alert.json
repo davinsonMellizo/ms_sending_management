@@ -1,28 +1,11 @@
 {
-  "retrieveInformation": false,
-  "client":{
-    "identification":{
-      "documentType": 0,
-      "documentNumber": 2000100000
-    }
+  "priority":"1",
+  "destination":{
+    "phoneNumber":"3166190122",
+    "prefix":"57"
   },
-  "message":{
-    "parameters":{
-      "Nombre": "User"
-    },
-    "mail": {
-      "address": "user@bancolombia.com.co"
-    },
-    "sms": {
-      "phone": "3172550373",
-      "phoneIndicator": "57"
-    },
-    "push":{
-      "applicationCode": ""
-    }
-  },
-  "alertParameters":{
-    "alert": "200",
-    "consumer": "SVP"
-  }
+  "message":"test 14/03/23 09:33",
+  "urlForShortening":"",
+  "provider":"MAS",
+  "trackId":"1"
 }

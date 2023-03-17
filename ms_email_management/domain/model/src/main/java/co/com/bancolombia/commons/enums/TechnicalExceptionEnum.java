@@ -14,6 +14,7 @@ public enum TechnicalExceptionEnum {
     CREATE_CLIENT_PINPOINT_ERROR("DST0040", "An error occurred while create a client pinpoint "),
     TECHNICAL_JSON_CONVERT("DST0041", "An error occurred while converting object to json "),
     SECRET_EXCEPTION("302", "An error occurred while trying to get AWS secrets"),
+    TEMPLATE_FIND_ERROR ("B001", "An error occurred while trying to get template "),
     TECHNICAL_S3_EXCEPTION("DMT0006", "An error occurred while trying to get S3 object");
 
     private final String code;

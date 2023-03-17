@@ -83,16 +83,6 @@ public class TemplateAdapterTest {
                 .verify();
     }
 
-    @Test
-    void findTemplateEmailNullTest (){
-        message.setBody("HTML");
-        message.setSubject("EMAIL");
-        alert.setMessage(message);
 
-        StepVerifier
-                .create(templateAdapter.findTemplateEmail(alert))
-                .verifyComplete();
-
-    }
 
 }

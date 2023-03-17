@@ -6,11 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 import software.amazon.awssdk.regions.Region;
 
 import java.io.IOException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,12 +32,12 @@ class S3ConnectionConfigTest {
 
     @Test
     void s3AsyncClientTest() throws IOException {
-        Assert.notNull(s3ConnectionConfigMock.s3AsyncClient());
+        assertThat(s3ConnectionConfigMock.s3AsyncClient()).isNotNull();
     }
 
     @Test
     void s3AsyncClientLocalTest() throws IOException {
         when(s3ConnectionProperties.getEndpoint()).thenReturn("http://localhost:4566");
-        Assert.notNull(s3ConnectionConfigMock.s3AsyncClientLocal());
+        assertThat(s3ConnectionConfigMock.s3AsyncClientLocal()).isNotNull();
     }
 }

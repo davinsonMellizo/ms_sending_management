@@ -52,7 +52,7 @@ public class CentralizedCacheConfig<V extends Object> {
     }
 
     @Bean
-    public ObjectCache<ArrayList> tokenCacheInalambria(CentralizedCacheFactory<ArrayList> centralizedCacheFactory) {
+    public ObjectCache<ArrayList<String>> tokenCacheInalambria(CentralizedCacheFactory<ArrayList<String>> centralizedCacheFactory) {
         return centralizedCacheFactory.newObjectCache();
     }
 

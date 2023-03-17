@@ -1,0 +1,21 @@
+{
+  "priority": "1",
+  "destination" : {
+    "prefix" :"57",
+    "phoneNumber":"3058880797"
+  },
+  "template": {
+    "parameters": {
+      "name": "nombre"
+    },
+    "name": "TEST_CREATE_MSG2"
+  },
+  "message": "Bancolombia le informa el retiro por 100 En la fecha ${name}. gracias.",
+  "urlForShortening": "https://www.google.com/?hl=es",
+  "provider": "MAS",
+  "trackId": "123456",
+  "category": "agregar",
+  "isFlash" : false,
+  "isLongMessage":false,
+  "isPremium": false
+}

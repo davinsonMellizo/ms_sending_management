@@ -18,8 +18,9 @@ import org.springframework.context.annotation.FilterType;
 public class UseCasesConfig {
     @Bean
     public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
+        var schema = new Schema<String>();
         return new OpenAPI()
-                .schema("", new Schema())
+                .schema("", schema)
                 .info(new Info().title("Alerts - Sending Management").version(appVersion)
                         .description("Alert Sending management micro service"));
     }

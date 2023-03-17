@@ -2,6 +2,7 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.consumer.adapter.response.Error;
 
+import co.com.bancolombia.consumer.adapter.response.ErrorTokenInfobipRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,7 +34,7 @@ public class RestClientForm<T,R> {
                     .contentType(APPLICATION_FORM_URLENCODED)
                     .body(BodyInserters.fromFormData(formData))
                     .retrieve()
-                    .onStatus(HttpStatus::isError, response -> replyError(response, clazzError))
+                    .onStatus(HttpStatus::isError, response -> replyError(response,clazzError))
                     .bodyToMono(clazz);
     }
 
