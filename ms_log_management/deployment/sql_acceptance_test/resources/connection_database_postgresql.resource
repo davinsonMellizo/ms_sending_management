@@ -4,7 +4,7 @@ Library     OperatingSystem
 Library    secret.py
 
 *** Variables ***
-${secretName}    %{secret_name}
+${secretName}    %{secret-name}
 *** Keywords ***
 Setup
     ${config}=    get_secret    ${secretName}
