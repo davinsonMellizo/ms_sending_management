@@ -1,5 +1,5 @@
 """
-Script to transform the data to the EMAIL format of the Masivian provider.
+Script to transform the data to the EMAIL format of the Masivian provider
 """
 
 import sys

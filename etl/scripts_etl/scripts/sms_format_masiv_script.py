@@ -1,5 +1,5 @@
 """
-Script to transform the data to the SMS format of the provider Masivian.
+Script to transform the data to the SMS format of the Masivian provider
 """
 
 import sys

@@ -1,5 +1,5 @@
 """
-Script to fill in the missing user contact data in the CSV file.
+Script to fill in the missing user contact data in the CSV file
 """
 import json
 import sys
