@@ -2,17 +2,17 @@
 Script to transform the data to the SMS format of the Inalambria provider
 """
 
-import json
 import sys
+from datetime import datetime
 
 import numpy as np
-import s3fs
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import concat, regexp_replace
+from s3fs import S3FileSystem
 
 spark = SparkSession.builder.appName("SparkByExamples").getOrCreate()
 
@@ -28,6 +28,7 @@ job.init(args["JOB_NAME"], args)
 # Job parameters
 env: str = args["env"]
 source_file_path: str = args["source_file_path"]
+logger.info(f"FILE_PATH = {source_file_path}")
 
 # Buckets
 BUCKET_SOURCE: str = f"nu0154001-alertas-{env}-glue-processed-data"
@@ -38,13 +39,8 @@ BUCKET_TARGET: str = f"nu0154001-alertas-{env}-processed-masiv"
 # Functions
 def get_processed_file_path() -> str:
     """Gets the path to the processed file"""
-    processed_file_path = source_file_path
-    if source_file_path[0] == "/":
-        processed_file_path = source_file_path.removeprefix("/")
-
-    path_list = processed_file_path.split("/")
-    path_list.pop()
-    return "/".join(path_list)
+    date_format: str = datetime.now().strftime("%Y%m%d%H:%M:%S")
+    return date_format
 
 
 def write_df(df: DataFrame) -> None:
@@ -52,7 +48,7 @@ def write_df(df: DataFrame) -> None:
     file_path = f"s3://{BUCKET_TARGET}/hola.txt"
     df = df.drop("Attachment", "Message")
     sms_pd = df.toPandas()
-    s3 = s3fs.S3FileSystem()
+    s3 = S3FileSystem()
     with s3.open(file_path, "w") as f:
         np.savetxt(
             f,

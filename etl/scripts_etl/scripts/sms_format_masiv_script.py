@@ -23,6 +23,7 @@ job.init(args["JOB_NAME"], args)
 # Job parameters
 env: str = args["env"]
 source_file_path: str = args["source_file_path"]
+logger.info(f"FILE_PATH = {source_file_path}")
 
 # Buckets
 BUCKET_SOURCE: str = f"nu0154001-alertas-{env}-glue-processed-data"

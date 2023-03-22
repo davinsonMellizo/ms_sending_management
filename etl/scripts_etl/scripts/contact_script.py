@@ -42,6 +42,7 @@ consumer_id: str = f"|{args['consumer_id']}"
 provider: str = args["provider"]
 priority: str = args["priority"]
 remitter_id: int = int(args["remitter_id"])
+logger.info(f"MASSIVE_FILE_PATH = {source_massive_file_path}")
 
 # Glue
 GLUE_DATABASE: str = f"nu0154001-alertas-{env}-db"
