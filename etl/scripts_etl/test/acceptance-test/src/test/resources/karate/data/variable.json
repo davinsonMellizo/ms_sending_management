@@ -1,9 +1,12 @@
 {
   "bucketNameSource": "#{bucket-scripts-data}#",
   "bucketNameTarget": "#{bucket-processed-data}#",
+  "bucketProcessedMasiv": "#{bucket-processed-masiv}#",
   "massivePrefix": "#{massive-prefix}#",
   "massiveErrorPrefix": "#{massive-error-prefix}#",
   "emailPrefix": "#{email-prefix}#",
   "smsPrefix": "#{sms-prefix}#",
-  "pushPrefix": "#{push-prefix}#"
+  "pushPrefix": "#{push-prefix}#",
+  "emailMasivPrefix": "#{email-masiv-prefix}#",
+  "smsMasivPrefix": "#{sms-masiv-prefix}#"
 }

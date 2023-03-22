@@ -18,7 +18,7 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.26'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
-    implementation platform('software.amazon.awssdk:bom:2.20.21')
+    implementation platform('software.amazon.awssdk:bom:2.20.28')
     testImplementation 'software.amazon.awssdk:s3'
     testImplementation 'org.apache.spark:spark-sql_2.13:3.3.2'
 }

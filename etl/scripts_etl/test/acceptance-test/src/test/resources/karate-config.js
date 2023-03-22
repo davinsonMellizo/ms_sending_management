@@ -11,11 +11,14 @@ function () {
             s3: {
                 bucketNameSource: 'nu0154001-alertas-local-glue-source-data',
                 bucketNameTarget: 'nu0154001-alertas-local-glue-processed-data',
+                bucketProcessedMasiv: 'nu0154001-alertas-local-processed-masiv',
                 massivePrefix: 'test',
                 massiveErrorPrefix: 'test/error/formato_masivos',
                 emailPrefix: 'email/test/formato_masivos',
                 smsPrefix: 'sms/test/formato_masivos',
-                pushPrefix: 'push/test/formato_masivos'
+                pushPrefix: 'push/test/formato_masivos',
+                emailMasivPrefix: 'email/email-format-masiv.csv',
+                smsMasivPrefix: 'sms/sms-format-masiv.csv',
             }
         },
     }

@@ -11,7 +11,6 @@ public class ProcessContacts {
 
     private final S3Client s3Client;
     private final Spark spark;
-
     private static final int HEADER_ROW = 1;
     private static final int ERRORS_PER_CHANNEL = 2;
     private static final int TOTAL_ERRORS = 6;
