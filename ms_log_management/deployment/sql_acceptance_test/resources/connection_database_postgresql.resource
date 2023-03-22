@@ -5,9 +5,11 @@ Library    secret.py
 
 *** Variables ***
 ${secretName}    %{secret-name}
+${arnRole}    %{arn-role}
+
 *** Keywords ***
 Setup
-    ${config}=    get_secret    ${secretName}
+    ${config}=    get_secret    ${secretName}    ${arnRole}
     ${DBName}=        Set Variable    ${config['dbname']}
     ${DBHost}=        Set Variable    ${config['host']}
     ${DBPort}=        Set Variable    ${config['port']}
