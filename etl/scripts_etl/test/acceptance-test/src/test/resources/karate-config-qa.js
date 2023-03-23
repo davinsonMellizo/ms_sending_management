@@ -12,11 +12,14 @@ function () {
             s3: {
                 bucketNameSource: envData.bucketNameSource,
                 bucketNameTarget: envData.bucketNameTarget,
+                bucketProcessedMasiv: envData.bucketProcessedMasiv,
                 massivePrefix: envData.massivePrefix,
                 massiveErrorPrefix: envData.massiveErrorPrefix,
                 emailPrefix: envData.emailPrefix,
                 smsPrefix: envData.smsPrefix,
-                pushPrefix: envData.pushPrefix
+                pushPrefix: envData.pushPrefix,
+                emailMasivPrefix: envData.emailMasivPrefix,
+                smsMasivPrefix: smsMasivPrefix.smsMasivPrefix
             }
         },
     }
