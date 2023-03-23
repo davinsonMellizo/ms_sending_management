@@ -49,7 +49,8 @@ public class S3Client {
     }
 
     public List<S3Object> getObject() {
-        String prefix = LocalDate.now().minus(31, ChronoUnit.DAYS).toString().concat("/");
+        String prefix = s3Properties.getBucketPrefix().concat("/")
+                .concat(LocalDate.now().minus(31, ChronoUnit.DAYS).toString()) .concat("/");
         return awsS3Client
                 .listObjects(ListObjectsRequest.builder()
                         .bucket(s3Properties.getBucketNameData())

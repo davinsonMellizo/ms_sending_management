@@ -10,7 +10,8 @@ function () {
         aws: {
             region: 'us-east-1',
             s3: {
-                bucketNameData: envData.bucketNameData
+                bucketNameData: envData.bucketNameData,
+                bucketPrefix: envData.bucketPrefix
             }
         },
     }

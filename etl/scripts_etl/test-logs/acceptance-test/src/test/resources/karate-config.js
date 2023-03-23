@@ -10,6 +10,7 @@ function () {
             region: 'us-east-1',
             s3: {
                 bucketNameData:'nu0151001-alert-local-glue-logs-alert',
+                bucketPrefix: 'test'
             }
         },
     }

@@ -1,3 +1,4 @@
 {
-  "bucketNameData": "#{bucket-processed-data}#"
+  "bucketNameData": "#{bucket-processed-data}#",
+  "bucketPrefix": "#{bucket-prefix}#"
 }
