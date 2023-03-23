@@ -9,7 +9,7 @@ import co.com.bancolombia.ibmmq.model.ConnectionData;
 import co.com.bancolombia.ibmmq.model.QueueDto;
 import co.com.bancolombia.ibmmq.supervisor.ReconnectSupervisor;
 import co.com.bancolombia.model.log.LoggerBuilder;
-import co.com.bancolombia.s3bucket.S3AsynOperations;
+import co.com.bancolombia.s3bucket.S3AsyncOperations;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JmsManagement {
 
-    private final S3AsynOperations s3AsynOperations;
+    private final S3AsyncOperations s3AsyncOperations;
     @Getter
     private final JmsExtConnectionFactory connectionFactory;
     private final LoggerBuilder loggerBuilder;
@@ -67,7 +67,7 @@ public class JmsManagement {
     @PostConstruct
     public void init() {
         AwsProperties.S3 s3 = awsProperties.getS3();
-        connectionData = connectionsMQ(s3AsynOperations, s3.getBucket(), s3.getConfigListenerMqKey());
+        connectionData = connectionsMQ(s3AsyncOperations, s3.getBucket(), s3.getConfigListenerMqKey());
         downloadConfigFiles(connectionData.getConnections());
         connections = connectionsMap();
         producerManagement = new ProducerManagement(connections);
@@ -75,8 +75,8 @@ public class JmsManagement {
         exceptionListener = new ReconnectSupervisor(this, listener, loggerBuilder);
     }
 
-    private ConnectionData connectionsMQ(S3AsynOperations s3AsynOperations, String bucket, String listerMQKey) {
-        return JsonUtils.stringToType(s3AsynOperations.getFileAsString(bucket, listerMQKey).block(),
+    private ConnectionData connectionsMQ(S3AsyncOperations s3AsyncOperations, String bucket, String listerMQKey) {
+        return JsonUtils.stringToType(s3AsyncOperations.getFileAsString(bucket, listerMQKey).block(),
                 ConnectionData.class);
     }
 
@@ -137,7 +137,7 @@ public class JmsManagement {
     }
 
     private String downloadFile(String key) throws IOException {
-        InputStream stream = s3AsynOperations.getFileAsInputStream(awsProperties.getS3().getBucket(), key).block();
+        InputStream stream = s3AsyncOperations.getFileAsInputStream(awsProperties.getS3().getBucket(), key).block();
         String path = Optional.ofNullable(localPath).orElse("") + key;
         saveToFile(stream, path);
         return path;

@@ -125,7 +125,7 @@
           </elementProp>
           <elementProp name="endDate" elementType="Argument">
             <stringProp name="Argument.name">endDate</stringProp>
-            <stringProp name="Argument.value">${__P(startDate,2023-03-02T12:11:52.222222)}</stringProp>
+            <stringProp name="Argument.value">${__P(endDate,2023-03-02T12:11:52.222222)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="documentNumber" elementType="Argument">

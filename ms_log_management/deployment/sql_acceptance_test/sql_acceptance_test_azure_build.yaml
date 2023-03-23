@@ -1,0 +1,41 @@
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+variables:
+  - name: 'artifactory.Repository'
+    value: 'build-NU0154_AlertasyNotificaciones/NU0154001_ALERT_SQL'
+  - name: 'projectName'
+    value: 'sql_acceptance_test'
+
+resources:
+  - repo: self
+
+trigger:
+  branches:
+    include:
+      - trunk
+      - feature/*
+  paths:
+    include:
+      - 'sql_acceptance_test/*'
+
+jobs:
+  - job: BuildJob
+    displayName: 'Build'
+    pool:
+      name: Build
+    steps:
+
+      - task: CopyFiles@2
+        displayName: 'Copy Deployment Files'
+        inputs:
+          SourceFolder: $(projectName)
+          Contents: |
+            /**
+          TargetFolder: $(Build.repository.LocalPath)/build/sqltest
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact: SQLTestU'
+        inputs:
+          PathtoPublish: ' $(Build.repository.LocalPath)/build/sqltest'
+          ArtifactName: sql-test-artifact
+        condition: succeeded()

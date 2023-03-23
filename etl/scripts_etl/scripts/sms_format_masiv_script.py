@@ -1,5 +1,5 @@
 """
-Script to transform the data to the SMS format of the provider Masivian.
+Script to transform the data to the SMS format of the Masivian provider
 """
 
 import sys
@@ -8,26 +8,28 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
+from pyspark.sql import DataFrame
 from pyspark.sql.functions import concat, regexp_replace
-
 
 # Glue Context
 args = getResolvedOptions(sys.argv, ["JOB_NAME", "env", "source_file_path"])
 
 glueContext = GlueContext(SparkContext.getOrCreate())
 spark = glueContext.spark_session
+logger = glueContext.get_logger()
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
 # Job parameters
 env: str = args["env"]
 source_file_path: str = args["source_file_path"]
+logger.info(f"FILE_PATH = {source_file_path}")
 
 # Buckets
 BUCKET_SOURCE: str = f"nu0154001-alertas-{env}-glue-processed-data"
-BUCKET_TARGET: str = f"nu0154001-alertas-{env}-glue-processed-masiv"
+BUCKET_TARGET: str = f"nu0154001-alertas-{env}-processed-masiv"
 
-# TODO: revisar la ruta de acuerdo a la prioridad
+
 # Functions
 def get_processed_file_path() -> str:
     """Gets the path to the processed file"""
@@ -37,12 +39,21 @@ def get_processed_file_path() -> str:
 
     path_list = processed_file_path.split("/")
     path_list.pop()
+    if 'test' in path_list:
+        return "/".join(path_list[:2])
     return "/".join(path_list)
 
 
-sms_df = spark.read.options(header=True, delimiter=";").csv(f"s3://{BUCKET_SOURCE}/{source_file_path}")
+def write_df(df: DataFrame) -> None:
+    """Writes the DataFrame to an S3 bucket in CSV file format"""
+    file_path = f"s3://{BUCKET_TARGET}/{get_processed_file_path()}"
+    df = df.drop("Attachment", "Message")
+    df.coalesce(1).write.options(header=True, delimiter=";", quote="").mode("append").csv(file_path)
 
-print("SMS_COUNT: ", sms_df.count() - 1)
+
+# Read file to process
+sms_df = spark.read.options(header=True, delimiter=";").csv(f"s3://{BUCKET_SOURCE}/{source_file_path}")
+logger.info(f"SMS_COUNT: {sms_df.count() - 1}")
 
 first_row = sms_df.first()
 
@@ -59,7 +70,7 @@ sms_df = sms_df.select(
 # Select the fields with the provider's format
 sms_df = sms_df.withColumnRenamed("Message", "mensaje").select("numero", "mensaje")
 
-# Write CSV separated by channel type to S3
-# TODO: Validar si el formato para SMS es TXT y se usa cualquier separador
-file_path = f"s3://{BUCKET_TARGET}/sms"
-sms_df.coalesce(1).write.options(header=True, delimiter=";", quote="").mode("append").csv(file_path)
+write_df(sms_df)
+
+# Finish Job
+job.commit()

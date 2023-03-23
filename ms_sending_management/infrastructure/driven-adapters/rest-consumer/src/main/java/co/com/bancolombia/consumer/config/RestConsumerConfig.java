@@ -21,7 +21,7 @@ public class RestConsumerConfig {
     }
 
     @Bean
-    public WebClient webClientConfig(final co.com.bancolombia.consumer.config.ConsumerProperties consumerProperties) {
+    public WebClient webClientConfig(final ConsumerProperties consumerProperties) {
         return WebClient.builder()
                 .clientConnector(clientHttpConnector(consumerProperties.getTimeout()))
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)

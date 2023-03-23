@@ -1,5 +1,5 @@
 """
-Script to fill in the missing user contact data in the CSV file.
+Script to fill in the missing user contact data in the CSV file
 """
 import json
 import sys
@@ -30,6 +30,7 @@ args = getResolvedOptions(
 
 glueContext = GlueContext(SparkContext.getOrCreate())
 spark = glueContext.spark_session
+logger = glueContext.get_logger()
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
@@ -41,6 +42,7 @@ consumer_id: str = f"|{args['consumer_id']}"
 provider: str = args["provider"]
 priority: str = args["priority"]
 remitter_id: int = int(args["remitter_id"])
+logger.info(f"MASSIVE_FILE_PATH = {source_massive_file_path}")
 
 # Glue
 GLUE_DATABASE: str = f"nu0154001-alertas-{env}-db"
@@ -117,7 +119,7 @@ def add_remitter_value(df: DataFrame) -> DataFrame:
     remitter_df = remitter_df.filter(lambda x: x.state == "Activo" and x.id == remitter_id).select_fields(["mail"])
 
     if remitter_df.count() == 0:
-        print("REMITTER NOT FOUND")
+        logger.info("REMITTER NOT FOUND")
         return df
 
     return df.withColumn("Subject", lit(remitter_df.toDF().first()["mail"]))
@@ -134,7 +136,7 @@ def write_df(df: DataFrame, channel: str, is_df_error=False) -> None:
 
 
 def add_header_row(df: DataFrame, channel: str) -> DataFrame:
-    """Agregar fila con datos del consumidor y proveedor"""
+    """Add row with consumer and provider data"""
     if df.count() == 0:
         return df
 
@@ -246,7 +248,7 @@ def complete_data(df: DataFrame) -> DataFrame:
 
 # Read CSV file with data to be processed
 massive_df = spark.read.options(header=True, delimiter=";").csv(f"s3://{BUCKET_SOURCE}/{source_massive_file_path}")
-print("MASSIVE_COUNT = ", massive_df.count())
+logger.info(f"MASSIVE_COUNT = {massive_df.count()}")
 
 # Get Dataframes by channel type
 email_df = massive_df.filter(col("ChannelType") == CHANNEL_EMAIL)
@@ -320,10 +322,10 @@ if data_enrichment == "true":
     # Get error logs
     massive_error_df = massive_df.filter(col("Error").isNotNull())
 
-    print("MASSIVE_ERROR_COUNT = ", massive_error_df.count())
-    print("* EMAIL_ERROR_COUNT = ", massive_error_df.filter(col("ChannelType") == CHANNEL_EMAIL).count())
-    print("* SMS_ERROR_COUNT = ", massive_error_df.filter(col("ChannelType") == CHANNEL_SMS).count())
-    print("* PUSH_ERROR_COUNT = ", massive_error_df.filter(col("ChannelType") == CHANNEL_PUSH).count())
+    logger.info(f"MASSIVE_ERROR_COUNT = {massive_error_df.count()}")
+    logger.info(f'* EMAIL_ERROR_COUNT = {massive_error_df.filter(col("ChannelType") == CHANNEL_EMAIL).count()}"')
+    logger.info(f'* SMS_ERROR_COUNT = {massive_error_df.filter(col("ChannelType") == CHANNEL_SMS).count()}')
+    logger.info(f'* PUSH_ERROR_COUNT = {massive_error_df.filter(col("ChannelType") == CHANNEL_PUSH).count()}')
 
     # Write error logs
     write_df(massive_error_df, "", True)
@@ -333,14 +335,14 @@ email_df = add_header_row(email_df, CHANNEL_EMAIL)
 sms_df = add_header_row(sms_df, CHANNEL_SMS)
 push_df = add_header_row(push_df, CHANNEL_PUSH)
 
-print("EMAIL_COUNT = ", email_df.count() - 1)
-print("SMS_COUNT = ", sms_df.count() - 1)
-print("PUSH_COUNT = ", push_df.count() - 1)
+logger.info(f"EMAIL_COUNT = {email_df.count() - 1}")
+logger.info(f"SMS_COUNT = {sms_df.count() - 1}")
+logger.info(f"PUSH_COUNT = {push_df.count() - 1}")
 
 # Write CSV separated by channel type to S3
 write_df(email_df, CHANNEL_EMAIL)
 write_df(sms_df, CHANNEL_SMS)
 write_df(push_df, CHANNEL_PUSH)
 
-# Finalizar Job
+# Finish Job
 job.commit()
