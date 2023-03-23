@@ -1,6 +1,7 @@
 package co.com.bancolombia.api;
 
 import co.com.bancolombia.api.dto.AlertDTO;
+import co.com.bancolombia.api.dto.ResponseDTO;
 import co.com.bancolombia.model.error.Error;
 import org.springdoc.core.fn.builders.operation.Builder;
 
@@ -13,18 +14,16 @@ import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuil
 
 public class SendSmsDocumentationApi {
 
-    private static final String TAG = "Send Alert";
+    private static final String TAG = "Send Sms";
     private static final String ERROR = "Error";
     private static final String SUCCESSFUL = "successful";
 
     protected Consumer<Builder> send() {
         return ops -> ops.tag(TAG)
-                .operationId("SendAlert").summary(TAG)
-                .description("Service to Send Alert").tags(new String[]{TAG})
+                .operationId("SendSms").summary(TAG)
+                .description("Service to Send SMS").tags(new String[]{TAG})
                 .requestBody(requestBodyBuilder().required(true).implementation(AlertDTO.class))
-                .response(responseBuilder().responseCode("200").description(SUCCESSFUL).implementation(Boolean.class))
+                .response(responseBuilder().responseCode("B0004").description(SUCCESSFUL).implementation(ResponseDTO.class))
                 .response(responseBuilder().responseCode("500").description(ERROR).implementation(Error.class));
     }
-
-
 }

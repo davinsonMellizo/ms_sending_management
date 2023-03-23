@@ -20,6 +20,9 @@ spring:
       root: INFO
       reactor:
         netty: false
+  output:
+    ansi:
+      enabled: ALWAYS
 app.async.withDLQRetry: true
 app.async.retryDelay: 1000
 app.async.maxRetries: 1
@@ -48,11 +51,6 @@ adapters:
     tables:
       namesmap:
         secret-priority: secret-priority
-  async-sqs:
-    url: http://localhost:4566/000000000000/logs-alert
-    timeout: 3000
-    pool-size: 2
-    region-aws: us-east-1
   dynamo-repository:
     region-aws: us-east-1
     endpoint: http://localhost:4566

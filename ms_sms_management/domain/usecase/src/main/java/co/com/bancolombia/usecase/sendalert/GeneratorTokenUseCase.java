@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static co.com.bancolombia.commons.enums.BusinessErrorMessage.SECRET_NAME_NOT_FOUND;
-import static co.com.bancolombia.commons.enums.BusinessErrorMessage.TOKEN_NOT_FOUND;
+
 
 @RequiredArgsConstructor
 public class GeneratorTokenUseCase implements Serializable {
@@ -37,7 +37,6 @@ public class GeneratorTokenUseCase implements Serializable {
         return redisGateway.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderINA(alert.getPriority().concat(alert.getProvider())))
-                .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens -> tokens.get(0).toString())
                 .map(tokenInalambria1 -> Map.of(AUTHORIZATION, BEARER + tokenInalambria1))
                 .map(headers -> setTokenINA(smsInalambria, headers));
@@ -47,7 +46,6 @@ public class GeneratorTokenUseCase implements Serializable {
         return redisGateway.get(alert.getPriority().concat(alert.getProvider()), ArrayList.class)
                 .filter(lisToken -> !lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderMAS(alert.getPriority().concat(alert.getProvider())))
-                .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens -> tokens.get(0).toString())
                 .map(tokenMas -> Map.of(AUTHORIZATION, BEARER + tokenMas))
                 .map(headers -> setTokenMAS(smsMasiv, headers));
@@ -57,7 +55,6 @@ public class GeneratorTokenUseCase implements Serializable {
         return redisGateway.get(alert.getPriority().concat(alert.getProvider()),ArrayList.class)
                 .filter(lisToken->!lisToken.isEmpty())
                 .switchIfEmpty(getTokenByProviderInf(alert.getPriority().concat(alert.getProvider())))
-                .switchIfEmpty(Mono.error(new BusinessException(TOKEN_NOT_FOUND)))
                 .map(tokens->tokens.get(0).toString())
                 .map(tokenInf->Map.of(AUTHORIZATION,BEARER + tokenInf))
                 .map(headers-> setTokenINF(smsInfobip,headers));
