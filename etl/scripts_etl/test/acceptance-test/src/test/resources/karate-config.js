@@ -17,8 +17,8 @@ function () {
                 emailPrefix: 'email/test/formato_masivos',
                 smsPrefix: 'sms/test/formato_masivos',
                 pushPrefix: 'push/test/formato_masivos',
-                emailMasivPrefix: 'email/email-format-masiv.csv',
-                smsMasivPrefix: 'sms/sms-format-masiv.csv',
+                emailMasivPrefix: 'email/test/email-format-masiv.csv',
+                smsMasivPrefix: 'sms/test/sms-format-masiv.csv',
             }
         },
     }
