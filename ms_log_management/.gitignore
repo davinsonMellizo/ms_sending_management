@@ -93,6 +93,8 @@ local.properties
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+deployment/sql_acceptance_test/resources/__pycache__/secret.cpython-311.pyc
+
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
