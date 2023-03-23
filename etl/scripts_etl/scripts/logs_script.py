@@ -21,11 +21,13 @@ from botocore.exceptions import ClientError
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'glue_database', 'glue_database_table', 'bucket_destination_path'])
 
 glueContext = GlueContext(SparkContext())
+logger = glueContext.get_logger()
 spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # Job parameters
+env = args['JOB_NAME'].split("-")[2]
 glue_database = args['glue_database']
 glue_database_table = args['glue_database_table']
 bucket_destination_path = args['bucket_destination_path']
@@ -41,7 +43,7 @@ PWD = "password"
 #Obtener secretos
 def get_secret():
 
-    secret_name = "alertas-logs-dev-secretrds-CNX"
+    secret_name = "alertas-logs-"+env+"-secretrds-CNX"
     region_name = "us-east-1"
     session = boto3.session.Session()
     client = session.client(
@@ -101,6 +103,7 @@ try:
     conn.commit()
     cur.close()
 except Exception as e:
+    logger.info(e)
 
 finally:
     if conn is not None:
