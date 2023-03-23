@@ -74,7 +74,7 @@ CSV_ROWS_LIMIT: int = 6700
 CONTACTS_COLUMNS: List[str] = ["document_number", "id_contact_medium", "value"]
 
 # Output fields in EMAIL files
-EMAIL_COLUMNS: List[str] = ["Email", "Attachment", "Template", "Subject", "Data", "Message"]
+EMAIL_COLUMNS: List[str] = ["Email", "Attachment", "Template", "Subject", "Data"]
 
 # Output fields in SMS files
 SMS_COLUMNS: List[str] = ["PhoneIndicator", "Phone", "Template", "Data", "Url", "Message"]

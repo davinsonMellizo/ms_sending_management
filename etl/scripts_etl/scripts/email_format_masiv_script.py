@@ -51,7 +51,7 @@ def get_processed_file_path() -> str:
 def write_df(df: DataFrame) -> None:
     """Writes the DataFrame to an S3 bucket in CSV file format"""
     file_path = f"s3://{BUCKET_TARGET}/{get_processed_file_path()}"
-    df = df.drop("Attachment", "Message")
+    df = df.drop("Attachment")
     df.coalesce(1).write.options(header=True, delimiter=";", quote="").mode("append").csv(file_path)
 
 
@@ -86,7 +86,7 @@ keys_df = email_df.select(explode(map_keys(email_df.Data))).distinct()
 keys_list = sorted(keys_df.rdd.map(lambda x: x[0]).collect())
 key_cols = list(map(lambda x: col("Data").getItem(x).alias(str(x)), keys_list))
 email_df = email_df.select(
-    "correo", "remitente", "Asunto", "tipo", "plantilla", *key_cols, "Attachment", "Url", "Message"
+    "correo", "remitente", "Asunto", "tipo", "plantilla", *key_cols, "Attachment", "Url"
 )
 
 write_df(email_df)
