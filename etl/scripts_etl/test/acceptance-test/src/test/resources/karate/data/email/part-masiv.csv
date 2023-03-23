@@ -1,12 +1,12 @@
-Email;Attachment;Template;Subject;Data;Message
-|SVP;MSV;1;pruebas@bancolombia.com.co;;
-juan@gmail.com;;100020;Asunto del email 1;"{""C1"":""5.000"",""C0"":""20/12/1998""}";
-dmellizo@bamcolombia.comc.co;;100020;Asunto del email 2;"{""C1"":""información"",""C0"":""fecha"", ""C2"":""""}";
-john@yahoo.com;;100020;Asunto del email 3;"{""C2"":""5.000"",""C0"":""20/03/1998"", ""C3"":""20/03/1998""}";;
-carlos@yahoo.com;;100020;Asunto del email 4;"{""C1"":""proveedor"",""C4"":""ahorro""}";
-maria@hotmail.com;;100020;Asunto del email 5;"{""C1"":""5.000"",""C3"":""turismo""}";
-oscar23@outlook.com;;100020;Asunto del email 6;"{""C1"":""Datos"",""C0"":""computador""}";
-ana354@gmail.com;;100020;Asunto del email 7;"{""C2"":""5.000"",""C3"":""20/20/1998""}";
-maquijan@gmail.com;;100020;Asunto del email 8;"{""C1"":""notificación"",""C2"":""alertas""}";
-vjojoa@yahoo.com;;100020;Asunto del email 9;"{""C2"":""5.000"",""C3"":""teclado""}";
-pepito4@hotmail.com;;100020;Asunto del email 10;"{""C1"":""20"",""C4"":""internet""}";
+Email;Attachment;Template;Subject;Data
+|SVP;MSV;1;pruebas@bancolombia.com.co
+juan@gmail.com;;100020;Asunto del email 1;"{""C1"":""5.000"",""C0"":""20/12/1998""}"
+dmellizo@bamcolombia.comc.co;;100020;Asunto del email 2;"{""C1"":""información"",""C0"":""fecha"", ""C2"":""""}"
+john@yahoo.com;;100020;Asunto del email 3;"{""C2"":""5.000"",""C0"":""20/03/1998"", ""C3"":""20/03/1998""}"
+carlos@yahoo.com;;100020;Asunto del email 4;"{""C1"":""proveedor"",""C4"":""ahorro""}"
+maria@hotmail.com;;100020;Asunto del email 5;"{""C1"":""5.000"",""C3"":""turismo""}"
+oscar23@outlook.com;;100020;Asunto del email 6;"{""C1"":""Datos"",""C0"":""computador""}"
+ana354@gmail.com;;100020;Asunto del email 7;"{""C2"":""5.000"",""C3"":""20/20/1998""}"
+maquijan@gmail.com;;100020;Asunto del email 8;"{""C1"":""notificación"",""C2"":""alertas""}"
+vjojoa@yahoo.com;;100020;Asunto del email 9;"{""C2"":""5.000"",""C3"":""teclado""}"
+pepito4@hotmail.com;;100020;Asunto del email 10;"{""C1"":""20"",""C4"":""internet""}"
