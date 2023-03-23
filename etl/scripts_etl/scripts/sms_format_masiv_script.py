@@ -39,6 +39,8 @@ def get_processed_file_path() -> str:
 
     path_list = processed_file_path.split("/")
     path_list.pop()
+    if 'test' in path_list:
+        return "/".join(path_list[:2])
     return "/".join(path_list)
 
 
