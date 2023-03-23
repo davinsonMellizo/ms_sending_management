@@ -58,7 +58,7 @@ public class S3Client {
                 .contents()
                 .stream()
                 .filter(x -> x.lastModified()
-                        .isAfter(Instant.now().minus(10, ChronoUnit.MINUTES)))
+                        .isAfter(Instant.now().minus(20, ChronoUnit.MINUTES)))
                 .collect(toList());
     }
 }
