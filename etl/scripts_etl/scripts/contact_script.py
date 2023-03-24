@@ -1,5 +1,5 @@
 """
-Script to fill in the missing user contact data in the CSV file.
+Script to fill in the missing user contact data in the CSV file
 """
 import json
 import sys
@@ -42,6 +42,7 @@ consumer_id: str = f"|{args['consumer_id']}"
 provider: str = args["provider"]
 priority: str = args["priority"]
 remitter_id: int = int(args["remitter_id"])
+logger.info(f"MASSIVE_FILE_PATH = {source_massive_file_path}")
 
 # Glue
 GLUE_DATABASE: str = f"nu0154001-alertas-{env}-db"
@@ -73,7 +74,7 @@ CSV_ROWS_LIMIT: int = 6700
 CONTACTS_COLUMNS: List[str] = ["document_number", "id_contact_medium", "value"]
 
 # Output fields in EMAIL files
-EMAIL_COLUMNS: List[str] = ["Email", "Attachment", "Template", "Subject", "Data", "Message"]
+EMAIL_COLUMNS: List[str] = ["Email", "Attachment", "Template", "Subject", "Data"]
 
 # Output fields in SMS files
 SMS_COLUMNS: List[str] = ["PhoneIndicator", "Phone", "Template", "Data", "Url", "Message"]
@@ -135,7 +136,7 @@ def write_df(df: DataFrame, channel: str, is_df_error=False) -> None:
 
 
 def add_header_row(df: DataFrame, channel: str) -> DataFrame:
-    """Agregar fila con datos del consumidor y proveedor"""
+    """Add row with consumer and provider data"""
     if df.count() == 0:
         return df
 
@@ -343,5 +344,5 @@ write_df(email_df, CHANNEL_EMAIL)
 write_df(sms_df, CHANNEL_SMS)
 write_df(push_df, CHANNEL_PUSH)
 
-# Finalizar Job
+# Finish Job
 job.commit()

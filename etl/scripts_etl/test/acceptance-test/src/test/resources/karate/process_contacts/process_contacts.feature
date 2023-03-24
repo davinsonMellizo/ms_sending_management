@@ -1,4 +1,4 @@
-Feature: Generate central repository Acceptance test
+Feature: Fill in the missing user contact data in the CSV file
 
   Scenario: Validate number of processed EMAIL, SMS and Push records
     * def csvValidateFields =

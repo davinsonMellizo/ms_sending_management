@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import karate.utils.aws.s3.S3Operations;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -19,8 +20,9 @@ import java.util.stream.Stream;
 public class Spark {
 
     private final SparkSession spark;
-
     private final S3Operations s3Operations;
+    @Getter
+    private String[] fileColumns;
 
     public Spark(S3Operations s3Operations) {
         this.spark = SparkSession
@@ -29,6 +31,7 @@ public class Spark {
                 .config("spark.master", "local")
                 .getOrCreate();
         this.s3Operations = s3Operations;
+        this.fileColumns = new String[0];
     }
 
     private Map<String, Object> rowToMap(String[] columns, Row row) {
@@ -41,12 +44,13 @@ public class Spark {
 
     private Multimap<String, Map<String, Object>> readFile(String fileName, Function<Row, String> keyRow) {
         Dataset<Row> csvFileDF = spark.read().option("header", "true").option("delimiter", ";").csv(fileName);
+        this.fileColumns = csvFileDF.columns();
         return csvFileDF.collectAsList().stream()
-                .collect(Multimaps.toMultimap(keyRow, v -> rowToMap(csvFileDF.columns(), v), HashMultimap::create));
+                .collect(Multimaps.toMultimap(keyRow, v -> rowToMap(this.fileColumns, v), HashMultimap::create));
     }
 
     @SneakyThrows
-    public Multimap<String, Map<String, Object>> readFileFromBucket(String bucketName, String prefix){
+    public Multimap<String, Map<String, Object>> readFileFromBucket(String bucketName, String prefix) {
         Optional<S3Object> optionalS3Object = s3Operations.getRecordsFromBucket(bucketName, prefix);
         if (optionalS3Object.isPresent()) {
             S3Object s3obj = optionalS3Object.get();

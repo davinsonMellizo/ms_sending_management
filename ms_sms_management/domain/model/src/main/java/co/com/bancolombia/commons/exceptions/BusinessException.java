@@ -11,4 +11,5 @@ public class BusinessException extends Exception {
         super(businessErrorMessage.getMessage());
         this.businessErrorMessage = businessErrorMessage;
     }
+
 }

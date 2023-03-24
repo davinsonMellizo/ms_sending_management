@@ -14,7 +14,7 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
   webflux:
-    base-path: /api/v1/sms-management
+    base-path: /api/v1/email-management
   logging:
     level:
       root: INFO
@@ -57,11 +57,6 @@ adapters:
   aws:
     region-aws: us-east-1
     endpoint: http://localhost:4566
-  async-sqs:
-    url: http://localhost:4566/000000000000/logs-alert
-    timeout: 3000
-    pool-size: 2
-    region-aws: us-east-1
   rest-client:
     timeout: 1000
     resources:
@@ -72,7 +67,7 @@ adapters:
       endpointTemplate: http://localhost:8071/api/v1/templater/message
   secrets-manager:
     secret-rabbit: alertas-local-secretrabbit-CNX
-    secret-rabbit-dual: alertas-local-secret-rabbit-dual-CNX
+    secret-rabbit-dual: alertas-local-secretrabbit-dual-CNX
     cache-size: 300
     cache-time: 2
     endpoint: http://localhost:4566
