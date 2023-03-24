@@ -337,3 +337,5 @@ gradle-wrapper.jar
 # -----
 *.hprof
 
+deployment/sql_acceptance_test/resources/__pycache__/
+
