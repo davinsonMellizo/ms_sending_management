@@ -33,3 +33,4 @@ data:
   ENDPOINT_INALAMBRIA_TOKEN: #{endpoint-inalambria-token}#
   ENDPOINT_INFOBIP_SMS: #{endpoint-infobip-sms}#
   ENDPOINT_INFOBIP_TOKEN: #{endpoint-infobip-token}#
+  ENDPOINT_TEMPLATE: "#{endpoint-template}#"

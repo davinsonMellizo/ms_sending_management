@@ -69,6 +69,7 @@ adapters:
       endpointInalambriaToken: "${ENDPOINT_INALAMBRIA_TOKEN}"
       endpointInfobipSMS: "${ENDPOINT_INFOBIP_SMS}"
       endpointInfobipToken: "${ENDPOINT_INFOBIP_TOKEN}"
+      endpointTemplate: ${ENDPOINT_TEMPLATE}
   secrets-manager:
     secret-rabbit: "${SECRET-RABBIT}"
     secret-rabbit-dual: "${SECRET_RABBIT_DUAL}"
