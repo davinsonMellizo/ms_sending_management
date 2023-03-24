@@ -63,7 +63,6 @@ adapters:
     timeout: 1000
     resources:
       endpointMasivianMail: https://api.masiv.masivian.com/email/v1/delivery
-      #endpointMasivianMail: https://250635b5-202a-49aa-9fe4-8818107ef9fe.mock.pstmn.io
       endpointMasivAutToken: https://auth.masivapp.com/authentication/v1/login
       endpointMasivToken: https://auth.masivapp.com/authentication/v1/login
       endpointTemplate: ${ENDPOINT_TEMPLATE}
