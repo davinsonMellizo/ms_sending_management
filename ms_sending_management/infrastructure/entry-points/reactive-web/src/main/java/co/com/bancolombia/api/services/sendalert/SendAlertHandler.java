@@ -19,7 +19,17 @@ public class SendAlertHandler {
     private final SendingUseCase useCase;
     private final ValidatorHandler validatorHandler;
 
-    public Mono<ServerResponse> sendAlert(ServerRequest serverRequest) {
+    public Mono<ServerResponse> sendAlertByClient(ServerRequest serverRequest) {
+
+        return serverRequest.bodyToMono(AlertDTO.class)
+                .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))
+                .doOnNext(validatorHandler::validateObject)
+                .flatMap(AlertDTO::toModel)
+                .flatMap(useCase::sendAlertManager)
+                .flatMap(ResponseUtil::responseOk);
+    }
+
+    public Mono<ServerResponse> sendAlertByContacts(ServerRequest serverRequest) {
 
         return serverRequest.bodyToMono(AlertDTO.class)
                 .switchIfEmpty(Mono.error(new TechnicalException(BODY_MISSING_ERROR)))

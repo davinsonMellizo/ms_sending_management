@@ -15,4 +15,5 @@ public class ApiProperties {
     private String pathBase;
     private String send;
 
+
 }
